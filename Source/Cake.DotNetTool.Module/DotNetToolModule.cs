@@ -2,16 +2,16 @@
 using Cake.Core.Annotations;
 using Cake.Core.Composition;
 using Cake.Core.Packaging;
-using Cake.DotNet.Module;
+using Cake.DotNetTool.Module;
 
-[assembly: CakeModule(typeof(DotNetModule))]
-namespace Cake.DotNet.Module
+[assembly: CakeModule(typeof(DotNetToolModule))]
+namespace Cake.DotNetTool.Module
 {
     /// <summary>
     /// The module responsible for registering
-    /// default types in the Cake.DotNet.Module assembly.
+    /// default types in the Cake.DotNetTool.Module assembly.
     /// </summary>
-    public sealed class DotNetModule : ICakeModule
+    public sealed class DotNetToolModule : ICakeModule
     {
         /// <summary>
         /// Performs custom registrations in the provided registrar.
@@ -24,8 +24,8 @@ namespace Cake.DotNet.Module
                 throw new ArgumentNullException(nameof(registrar));
             }
 
-            registrar.RegisterType<DotNetPackageInstaller>().As<IPackageInstaller>().Singleton();
-            registrar.RegisterType<DotNetContentResolver>().As<IDotNetContentResolver>().Singleton();
+            registrar.RegisterType<DotNetToolPackageInstaller>().As<IPackageInstaller>().Singleton();
+            registrar.RegisterType<DotNetToolContentResolver>().As<IDotNetToolContentResolver>().Singleton();
         }
     }
 }

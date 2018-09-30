@@ -6,7 +6,7 @@
 using System.Reflection;
 
 [assembly: AssemblyCompany("Cake Contributions")]
-[assembly: AssemblyProduct("Cake.DotNet.Module")]
+[assembly: AssemblyProduct("Cake.DotNetTool.Module")]
 [assembly: AssemblyVersion("0.1.0")]
 [assembly: AssemblyFileVersion("0.1.0")]
 [assembly: AssemblyInformationalVersion("0.1.0")]

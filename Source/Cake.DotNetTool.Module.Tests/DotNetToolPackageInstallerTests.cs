@@ -6,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Cake.DotNet.Module.Tests
+namespace Cake.DotNetTool.Module.Tests
 {
     /// <summary>
-    /// DotNetPackageInstaller unit tests
+    /// DotNetToolPackageInstaller unit tests
     /// </summary>
-    public sealed class DotNetPackageInstallerTests
+    public sealed class DotNetToolPackageInstallerTests
     {
         public sealed class TheConstructor
         {
@@ -19,7 +19,7 @@ namespace Cake.DotNet.Module.Tests
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given
-                var fixture = new DotNetPackageInstallerFixture();
+                var fixture = new DotNetToolPackageInstallerFixture();
                 fixture.Environment = null;
 
                 // When
@@ -34,7 +34,7 @@ namespace Cake.DotNet.Module.Tests
             public void Should_Throw_If_Process_Runner_Is_Null()
             {
                 // Given
-                var fixture = new DotNetPackageInstallerFixture();
+                var fixture = new DotNetToolPackageInstallerFixture();
                 fixture.ProcessRunner = null;
 
                 // When
@@ -49,7 +49,7 @@ namespace Cake.DotNet.Module.Tests
             public void Should_Throw_If_Content_Resolver_Is_Null()
             {
                 // Given
-                var fixture = new DotNetPackageInstallerFixture();
+                var fixture = new DotNetToolPackageInstallerFixture();
                 fixture.ContentResolver = null;
 
                 // When
@@ -64,7 +64,7 @@ namespace Cake.DotNet.Module.Tests
             public void Should_Throw_If_Log_Is_Null()
             {
                 // Given
-                var fixture = new DotNetPackageInstallerFixture();
+                var fixture = new DotNetToolPackageInstallerFixture();
                 fixture.Log = null;
 
                 // When
@@ -81,7 +81,7 @@ namespace Cake.DotNet.Module.Tests
             public void Should_Throw_If_URI_Is_Null()
             {
                 // Given
-                var fixture = new DotNetPackageInstallerFixture();
+                var fixture = new DotNetToolPackageInstallerFixture();
                 fixture.Package = null;
 
                 // When
@@ -96,7 +96,7 @@ namespace Cake.DotNet.Module.Tests
             public void Should_Be_Able_To_Install_If_Scheme_Is_Correct()
             {
                 // Given
-                var fixture = new DotNetPackageInstallerFixture();
+                var fixture = new DotNetToolPackageInstallerFixture();
                 fixture.Package = new PackageReference("dotnet:?package=Octopus.DotNet.Cli");
 
                 // When
@@ -110,7 +110,7 @@ namespace Cake.DotNet.Module.Tests
             public void Should_Not_Be_Able_To_Install_If_Scheme_Is_Incorrect()
             {
                 // Given
-                var fixture = new DotNetPackageInstallerFixture();
+                var fixture = new DotNetToolPackageInstallerFixture();
                 fixture.Package = new PackageReference("homebrew:?package=windirstat");
 
                 // When
@@ -127,7 +127,7 @@ namespace Cake.DotNet.Module.Tests
             public void Should_Throw_If_Uri_Is_Null()
             {
                 // Given
-                var fixture = new DotNetPackageInstallerFixture();
+                var fixture = new DotNetToolPackageInstallerFixture();
                 fixture.Package = null;
 
                 // When
@@ -142,7 +142,7 @@ namespace Cake.DotNet.Module.Tests
             public void Should_Throw_If_Install_Path_Is_Null()
             {
                 // Given
-                var fixture = new DotNetPackageInstallerFixture();
+                var fixture = new DotNetToolPackageInstallerFixture();
                 fixture.InstallPath = null;
 
                 // When

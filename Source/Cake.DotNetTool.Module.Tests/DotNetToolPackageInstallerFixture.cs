@@ -7,17 +7,17 @@ using Cake.Testing;
 using NSubstitute;
 using System.Collections.Generic;
 
-namespace Cake.DotNet.Module.Tests
+namespace Cake.DotNetTool.Module.Tests
 {
     /// <summary>
-    /// Fixture used for testing DotNetPackageInstaller
+    /// Fixture used for testing DotNetToolPackageInstaller
     /// </summary>
-    internal sealed class DotNetPackageInstallerFixture
+    internal sealed class DotNetToolPackageInstallerFixture
     {
         public ICakeEnvironment Environment { get; set; }
         public IFileSystem FileSystem { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
-        public IDotNetContentResolver ContentResolver { get; set; }
+        public IDotNetToolContentResolver ContentResolver { get; set; }
         public ICakeLog Log { get; set; }
 
         public PackageReference Package { get; set; }
@@ -27,14 +27,14 @@ namespace Cake.DotNet.Module.Tests
         public ICakeConfiguration Config { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetPackageInstallerFixture"/> class.
+        /// Initializes a new instance of the <see cref="DotNetToolPackageInstallerFixture"/> class.
         /// </summary>
-        internal DotNetPackageInstallerFixture()
+        internal DotNetToolPackageInstallerFixture()
         {
             Environment = FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
             ProcessRunner = Substitute.For<IProcessRunner>();
-            ContentResolver = Substitute.For<IDotNetContentResolver>();
+            ContentResolver = Substitute.For<IDotNetToolContentResolver>();
             Log = new FakeLog();
             Config = Substitute.For<ICakeConfiguration>();
             Package = new PackageReference("dotnet:?package=windirstat");
@@ -45,10 +45,10 @@ namespace Cake.DotNet.Module.Tests
         /// <summary>
         /// Create the installer.
         /// </summary>
-        /// <returns>The DotNet package installer.</returns>
-        internal DotNetPackageInstaller CreateInstaller()
+        /// <returns>The dotnet Tool package installer.</returns>
+        internal DotNetToolPackageInstaller CreateInstaller()
         {
-            return new DotNetPackageInstaller(Environment, ProcessRunner, Log, ContentResolver, Config, FileSystem);
+            return new DotNetToolPackageInstaller(Environment, ProcessRunner, Log, ContentResolver, Config, FileSystem);
         }
 
         /// <summary>DotNetPackageInstallerFixture

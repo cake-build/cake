@@ -5,10 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.28.0">
+    <PackageReference Include="Cake.Core" Version="0.30.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Cake.Testing" Version="0.28.0">
+    <PackageReference Include="Cake.Testing" Version="0.30.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cake.DotNet.Module\Cake.DotNet.Module.csproj" />
+    <ProjectReference Include="..\Cake.DotNetTool.Module\Cake.DotNetTool.Module.csproj" />
   </ItemGroup>
 
 </Project>

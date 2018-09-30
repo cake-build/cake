@@ -2,67 +2,76 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 
-namespace Cake.DotNet.Module
+namespace Cake.DotNetTool.Module
 {
     /// <summary>
-    /// Locates and lists contents of DotNet Packages.
+    /// Locates and lists contents of dotnet Tool Packages.
     /// </summary>
-    public class DotNetContentResolver : IDotNetContentResolver
+    public class DotNetToolContentResolver : IDotNetToolContentResolver
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly ICakeLog _log;
 
+        private readonly ICakeConfiguration _config;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetContentResolver"/> class.
+        /// Initializes a new instance of the <see cref="DotNetToolContentResolver"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The Globber.</param>
         /// <param name="log">The Log</param>
-        public DotNetContentResolver(
+        /// <param name="config">the configuration</param>
+        public DotNetToolContentResolver(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IGlobber globber,
-            ICakeLog log)
+            ICakeLog log,
+            ICakeConfiguration config)
         {
             _fileSystem = fileSystem;
             _environment = environment;
             _globber = globber;
             _log = log;
+            _config = config;
         }
 
         /// <summary>
-        /// Collects all the files for the given DotNet Package.
+        /// Collects all the files for the given dotnet Tool Package.
         /// </summary>
-        /// <param name="package">The DotNet Package.</param>
-        /// <param name="type">The type of DotNet Package.</param>
+        /// <param name="package">The dotnet Tool Package.</param>
+        /// <param name="type">The type of dotnet Tool Package.</param>
         /// <returns>All the files for the Package.</returns>
         public IReadOnlyCollection<IFile> GetFiles(PackageReference package, PackageType type)
         {
             if (type == PackageType.Addin)
             {
-                throw new InvalidOperationException("DotNet Module does not support Addins'");
+                throw new InvalidOperationException("DotNetTool Module does not support Addins'");
             }
 
             if (type == PackageType.Tool)
             {
-                if(package.Parameters.ContainsKey("toolpath"))
+                if(package.Parameters.ContainsKey("global"))
                 {
-                    return GetToolFiles(new DirectoryPath(package.Parameters["toolpath"].First()), package);
-                }
-                else if(_environment.Platform.IsUnix())
-                {
-                    return GetToolFiles(new DirectoryPath(_environment.GetEnvironmentVariable("HOME")).Combine(".dotnet/tools"), package);
+                    if(_environment.Platform.IsUnix())
+                    {
+                        return GetToolFiles(new DirectoryPath(_environment.GetEnvironmentVariable("HOME")).Combine(".dotnet/tools"), package);
+                    }
+                    else
+                    {
+                        return GetToolFiles(new DirectoryPath(_environment.GetEnvironmentVariable("USERPROFILE")).Combine(".dotnet/tools"), package);
+                    }
                 }
                 else
                 {
-                    return GetToolFiles(new DirectoryPath(_environment.GetEnvironmentVariable("USERPROFILE")).Combine(".dotnet/tools"), package);
+                    return GetToolFiles(_config.GetToolPath(_environment.WorkingDirectory, _environment), package);
                 }
             }
 

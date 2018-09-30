@@ -8,30 +8,30 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 
-namespace Cake.DotNet.Module
+namespace Cake.DotNetTool.Module
 {
     /// <summary>
-    /// Installer for DotNet Packages.
+    /// Installer for dotnet Tool Packages.
     /// </summary>
-    public sealed class DotNetPackageInstaller : IPackageInstaller
+    public sealed class DotNetToolPackageInstaller : IPackageInstaller
     {
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _processRunner;
         private readonly ICakeLog _log;
-        private readonly IDotNetContentResolver _contentResolver;
+        private readonly IDotNetToolContentResolver _contentResolver;
         private readonly ICakeConfiguration _config;
         private readonly IFileSystem _fileSystem;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetPackageInstaller"/> class.
+        /// Initializes a new instance of the <see cref="DotNetToolPackageInstaller"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="log">The log.</param>
-        /// <param name="contentResolver">The DotNet Package Content Resolver.</param>
+        /// <param name="contentResolver">The DotNetTool Package Content Resolver.</param>
         /// <param name="config">the configuration</param>
         /// <param name="fileSystem">The file system.</param>
-        public DotNetPackageInstaller(ICakeEnvironment environment, IProcessRunner processRunner, ICakeLog log, IDotNetContentResolver contentResolver, ICakeConfiguration config, IFileSystem fileSystem)
+        public DotNetToolPackageInstaller(ICakeEnvironment environment, IProcessRunner processRunner, ICakeLog log, IDotNetToolContentResolver contentResolver, ICakeConfiguration config, IFileSystem fileSystem)
         {
             if (environment == null)
             {
@@ -96,10 +96,15 @@ namespace Cake.DotNet.Module
                 throw new ArgumentNullException(nameof(path));
             }
 
-            var toolLocation = "--global";
-            if(package.Parameters.ContainsKey("toolpath"))
+            // We are going to assume that the default install location is the
+            // currently configured location for the Cake Tools Folder
+            var toolsFolderDirectoryPath = _config.GetToolPath(_environment.WorkingDirectory, _environment);
+            _log.Information("Configured Tools Folder: {0}", toolsFolderDirectoryPath);
+
+            var toolLocation = toolsFolderDirectoryPath.FullPath;
+            if(package.Parameters.ContainsKey("global"))
             {
-                toolLocation = string.Format("--tool-path {0}", package.Parameters["toolpath"].First());
+                toolLocation = "global";
             }
 
             // First we need to check if the Tool is already installed
@@ -112,7 +117,7 @@ namespace Cake.DotNet.Module
             }
             else
             {
-                InstallTool(package);
+                InstallTool(package, toolsFolderDirectoryPath);
             }
 
             var result = _contentResolver.GetFiles(package, type);
@@ -127,8 +132,10 @@ namespace Cake.DotNet.Module
 
         private List<string> GetInstalledTools(string toolLocation)
         {
-            if(toolLocation != "--global")
+            var toolLocationArgument = string.Empty;
+            if(toolLocation != "global")
             {
+                toolLocationArgument = string.Format("--tool-path \"{0}\"", toolLocation);
                 var toolLocationDirectoryPath = new DirectoryPath(toolLocation).MakeAbsolute(_environment);
                 var toolLocationDirectory = _fileSystem.GetDirectory(toolLocationDirectoryPath);
 
@@ -136,14 +143,19 @@ namespace Cake.DotNet.Module
                 // installed there, so simply return an empty list.
                 if(!toolLocationDirectory.Exists)
                 {
+                    _log.Information("Specified installation location doesn't currently exist.");
                     return new List<string>();
                 }
+            }
+            else
+            {
+                toolLocationArgument = "--global";
             }
 
             var isInstalledProcess = _processRunner.Start(
                 "dotnet",
                 new ProcessSettings {
-                    Arguments = string.Format("tool list {0}", toolLocation),
+                    Arguments = string.Format("tool list {0}", toolLocationArgument),
                     RedirectStandardOutput = true,
                     Silent = _log.Verbosity < Verbosity.Diagnostic });
 
@@ -167,47 +179,52 @@ namespace Cake.DotNet.Module
             return installedToolNames;
         }
 
-        private void InstallTool(PackageReference package)
+        private void InstallTool(PackageReference package, DirectoryPath toolsFolderDirectoryPath)
         {
             // Install the tool....
             _log.Debug("Installing dotnet tool: {0}...", package.Package);
             var process = _processRunner.Start(
                 "dotnet",
-                new ProcessSettings { Arguments = GetArguments(package, _log), RedirectStandardOutput = true, Silent = _log.Verbosity < Verbosity.Diagnostic });
+                new ProcessSettings {
+                    Arguments = GetArguments(package, _log, toolsFolderDirectoryPath),
+                    RedirectStandardOutput = true,
+                    Silent = _log.Verbosity < Verbosity.Diagnostic,
+                    NoWorkingDirectory = true });
 
             process.WaitForExit();
 
             var exitCode = process.GetExitCode();
             if (exitCode != 0)
             {
-                _log.Warning("DotNet exited with {0}", exitCode);
+                _log.Warning("dotnet exited with {0}", exitCode);
                 var output = string.Join(Environment.NewLine, process.GetStandardError());
                 _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
             }
         }
         private static ProcessArgumentBuilder GetArguments(
             PackageReference definition,
-            ICakeLog log)
+            ICakeLog log,
+            DirectoryPath toolDirectoryPath)
         {
             var arguments = new ProcessArgumentBuilder();
 
             arguments.Append("tool install");
             arguments.AppendQuoted(definition.Package);
 
-            if(definition.Parameters.ContainsKey("toolpath"))
+            if(definition.Parameters.ContainsKey("global"))
             {
-                arguments.Append("--tool-path");
-                arguments.Append(definition.Parameters["toolpath"].First());
+                arguments.Append("--global");
             }
             else
             {
-                arguments.Append("--global");
+                arguments.Append("--tool-path");
+                arguments.AppendQuoted(toolDirectoryPath.FullPath);
             }
 
             if (definition.Address != null)
             {
                 arguments.Append("--add-source");
-                arguments.Append(definition.Address.AbsoluteUri);
+                arguments.AppendQuoted(definition.Address.AbsoluteUri);
             }
 
             // Version
@@ -221,7 +238,7 @@ namespace Cake.DotNet.Module
             if(definition.Parameters.ContainsKey("configfile"))
             {
                 arguments.Append("--config-file");
-                arguments.Append(definition.Parameters["configfile"].First());
+                arguments.AppendQuoted(definition.Parameters["configfile"].First());
             }
 
             // Framework
