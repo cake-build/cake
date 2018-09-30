@@ -90,6 +90,69 @@ namespace Cake.Common.Tools.WiX
         }
 
         /// <summary>
+        /// TODO: Create a Summary.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// InsigniaSettings settings = new InsigniaSettings {
+        ///     Architecture = Architecture.X64,
+        ///     Verbose = true
+        ///     };
+        /// WiXInsignia("./src/*.wxs", settings);
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The globbing pattern.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Insignia")]
+        public static void WiXInsignia(this ICakeContext context, string pattern, InsigniaSettings settings = null)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var files = context.Globber.GetFiles(pattern).ToArray();
+            if (files.Length == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any files.");
+                return;
+            }
+
+            WiXInsignia(context, files, settings ?? new InsigniaSettings());
+        }
+
+        /// <summary>
+        /// TODO: Create a summary.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var files = GetFiles("./src/*.wxs");
+        /// InsigniaSettings settings = new InsigniaSettings {
+        ///     Architecture = Architecture.X64,
+        ///     Verbose = true
+        ///     };
+        /// WiXInsignia(files, settings);
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="sourceFiles">The source files.</param>
+        /// <param name="settings">The settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Insignia")]
+        public static void WiXInsignia(this ICakeContext context, IEnumerable<FilePath> sourceFiles, InsigniaSettings settings = null)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var runner = new InsigniaRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            runner.Run(sourceFiles, settings ?? new InsigniaSettings());
+        }
+
+        /// <summary>
         /// Links all <c>.wixobj</c> files matching the specified pattern.
         /// </summary>
         /// <example>
