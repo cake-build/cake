@@ -244,6 +244,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.ShadowCopy = true;
                 fixture.Settings.Agents = 3;
                 fixture.Settings.TraceLevel = NUnitInternalTraceLevel.Debug;
+                fixture.Settings.ConfigFile = "app.config";
                 fixture.Settings.Params = new Dictionary<string, string>
                 {
                     ["one"] = "1",
@@ -266,6 +267,7 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                         "--dispose-runners --shadowcopy --agents=3 " +
                         "--process=InProcess --domain=Single " +
                         "--trace=verbose " +
+                        "\"--configfile=/Working/app.config\" " +
                         "\"--params=one=1\" " +
                         "\"--params=two=2\" " +
                         "\"--params=three=3\"", result.Args);
