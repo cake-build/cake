@@ -36,7 +36,7 @@ namespace Cake.Common.NuSpec
         ///                                Files                    = new [] { new NuSpecContent {Source = "bin/TestNuget.dll", Target = "bin"}, },
         ///                          };
         ///
-        ///     NuGetNuSpec("./nuspec/TestNuget.nuspec", nuGetPackSettings);
+        ///     NuSpec("./nuspec/TestNuget.nuspec", nuGetPackSettings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -78,7 +78,7 @@ namespace Cake.Common.NuSpec
         ///                                Files                    = new [] { new NuSpecContent {Source = "bin/TestNuget.dll", Target = "bin"}, },
         ///                          };
         ///
-        ///     NuGetNuSpec(nuGetPackSettings);
+        ///     NuSpec(nuGetPackSettings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
