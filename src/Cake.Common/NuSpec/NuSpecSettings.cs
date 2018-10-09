@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cake.Common.Tools.NuGet.Pack;
 
 namespace Cake.Common.NuSpec
 {

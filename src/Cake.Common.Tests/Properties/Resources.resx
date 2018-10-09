@@ -1078,4 +1078,196 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
   &lt;/files&gt;
 &lt;/package&gt;</value>
   </data>
+  <data name="Nuspec_Metadata_WithReferences" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;developmentDependency&gt;false&lt;/developmentDependency&gt;
+    &lt;requireLicenseAcceptance&gt;false&lt;/requireLicenseAcceptance&gt;
+    &lt;references&gt;
+      &lt;group targetFramework=&quot;net452&quot;&gt;
+        &lt;dependency file=&quot;Cake.Core.dll&quot; /&gt;
+      &lt;/group&gt;
+      &lt;group targetFramework=&quot;net46&quot;&gt;
+        &lt;dependency file=&quot;Cake.Core.dll&quot; /&gt;
+      &lt;/group&gt;
+    &lt;/references&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.pdb&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;LICENSE&quot; /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_Metadata_WithoutNamespaces_WithReferences" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;package&gt;
+  &lt;metadata&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;developmentDependency&gt;false&lt;/developmentDependency&gt;
+    &lt;requireLicenseAcceptance&gt;false&lt;/requireLicenseAcceptance&gt;
+    &lt;references&gt;
+      &lt;group targetFramework=&quot;net452&quot;&gt;
+        &lt;dependency file=&quot;Cake.Core.dll&quot; /&gt;
+      &lt;/group&gt;
+      &lt;group targetFramework=&quot;net46&quot;&gt;
+        &lt;dependency file=&quot;Cake.Core.dll&quot; /&gt;
+      &lt;/group&gt;
+    &lt;/references&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.pdb&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;LICENSE&quot; /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_Metadata_WithPackageTypes" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;developmentDependency&gt;false&lt;/developmentDependency&gt;
+    &lt;requireLicenseAcceptance&gt;false&lt;/requireLicenseAcceptance&gt;
+    &lt;packageTypes&gt;
+      &lt;packageType name=&quot;Cake.Core&quot; version=&quot;1.0.0&quot; /&gt;
+      &lt;packageType name=&quot;Cake.Core&quot; version=&quot;2.0.0&quot; /&gt;
+    &lt;/packageTypes&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.pdb&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;LICENSE&quot; /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_Metadata_WithoutNamespaces_WithPackageTypes" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;package&gt;
+  &lt;metadata&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;developmentDependency&gt;false&lt;/developmentDependency&gt;
+    &lt;requireLicenseAcceptance&gt;false&lt;/requireLicenseAcceptance&gt;
+    &lt;packageTypes&gt;
+      &lt;packageType name=&quot;Cake.Core&quot; version=&quot;1.0.0&quot; /&gt;
+      &lt;packageType name=&quot;Cake.Core&quot; version=&quot;2.0.0&quot; /&gt;
+    &lt;/packageTypes&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.pdb&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;LICENSE&quot; /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_Metadata_WithFrameworkAssemblies" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;developmentDependency&gt;false&lt;/developmentDependency&gt;
+    &lt;requireLicenseAcceptance&gt;false&lt;/requireLicenseAcceptance&gt;
+    &lt;frameworkAssemblies&gt;
+      &lt;frameworkAssembly assemblyName=&quot;Cake.Core.dll&quot; targetFramework=&quot;net452&quot; /&gt;
+      &lt;frameworkAssembly assemblyName=&quot;Cake.Core.dll&quot; targetFramework=&quot;net46&quot; /&gt;
+    &lt;/frameworkAssemblies&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.pdb&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;LICENSE&quot; /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_Metadata_WithoutNamespaces_WithFrameworkAssemblies" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;package&gt;
+  &lt;metadata&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;developmentDependency&gt;false&lt;/developmentDependency&gt;
+    &lt;requireLicenseAcceptance&gt;false&lt;/requireLicenseAcceptance&gt;
+    &lt;frameworkAssemblies&gt;
+      &lt;frameworkAssembly assemblyName=&quot;Cake.Core.dll&quot; targetFramework=&quot;net452&quot; /&gt;
+      &lt;frameworkAssembly assemblyName=&quot;Cake.Core.dll&quot; targetFramework=&quot;net46&quot; /&gt;
+    &lt;/frameworkAssemblies&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.pdb&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;LICENSE&quot; /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_Metadata_WithContentFiles" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;developmentDependency&gt;false&lt;/developmentDependency&gt;
+    &lt;requireLicenseAcceptance&gt;false&lt;/requireLicenseAcceptance&gt;
+    &lt;contentFiles&gt;
+      &lt;files include=&quot;*.Core.dll&quot; copyToOutput=&quot;false&quot; flatten=&quot;false&quot; /&gt;
+      &lt;files include=&quot;*.Core.pdb.dll&quot; copyToOutput=&quot;false&quot; flatten=&quot;false&quot; /&gt;
+    &lt;/contentFiles&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.pdb&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;LICENSE&quot; /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_Metadata_WithoutNamespaces_WithContentFiles" xml:space="preserve">
+    <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;package&gt;
+  &lt;metadata&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;developmentDependency&gt;false&lt;/developmentDependency&gt;
+    &lt;requireLicenseAcceptance&gt;false&lt;/requireLicenseAcceptance&gt;
+    &lt;contentFiles&gt;
+      &lt;files include=&quot;*.Core.dll&quot; copyToOutput=&quot;false&quot; flatten=&quot;false&quot; /&gt;
+      &lt;files include=&quot;*.Core.pdb.dll&quot; copyToOutput=&quot;false&quot; flatten=&quot;false&quot; /&gt;
+    &lt;/contentFiles&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;Cake.Core.pdb&quot; target=&quot;lib/net45&quot; /&gt;
+    &lt;file src=&quot;LICENSE&quot; /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
 </root>
