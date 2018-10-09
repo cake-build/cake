@@ -1,9 +1,10 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
 using System.Linq;
+using Cake.Common.NuSpec;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -19,7 +20,7 @@ namespace Cake.Common.Tools.NuGet.Pack
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly NuspecProcessor _processor;
+        private readonly NuSpecProcessor _processor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPacker"/> class.
@@ -40,7 +41,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         {
             _fileSystem = fileSystem;
             _environment = environment;
-            _processor = new NuspecProcessor(_fileSystem, _environment, log);
+            _processor = new NuSpecProcessor(_fileSystem, _environment, log);
         }
 
         /// <summary>
@@ -52,10 +53,6 @@ namespace Cake.Common.Tools.NuGet.Pack
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
-            }
-            if (settings.OutputDirectory == null || !_fileSystem.Exist(settings.OutputDirectory))
-            {
-                throw new CakeException("Required setting OutputDirectory not specified or doesn't exists.");
             }
             if (string.IsNullOrWhiteSpace(settings.Id))
             {
@@ -78,7 +75,7 @@ namespace Cake.Common.Tools.NuGet.Pack
                 throw new CakeException("Required setting Files not specified.");
             }
 
-            Pack(settings, () => _processor.Process(settings));
+            Pack(settings, () => _processor.Process(settings.OutputDirectory, settings.NuSpecSettings));
         }
 
         /// <summary>
@@ -107,7 +104,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             }
             else
             {
-                Pack(settings, () => _processor.Process(filePath, settings));
+                Pack(settings, () => _processor.Process(filePath, settings.NuSpecSettings));
             }
         }
 

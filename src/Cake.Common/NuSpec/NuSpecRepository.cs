@@ -1,9 +1,9 @@
-﻿namespace Cake.Common.Tools.NuGet.Pack
+﻿namespace Cake.Common.NuSpec
 {
     /// <summary>
     /// Specifies the package's source code location, allowing IDEs to download and debug the code.
     /// </summary>
-    public class NuGetRepository
+    public class NuSpecRepository
     {
         /// <summary>
         /// Gets or sets the type of repository e.g. git.

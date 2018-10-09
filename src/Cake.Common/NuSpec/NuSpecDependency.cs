@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.NuGet.Pack
+namespace Cake.Common.NuSpec
 {
     /// <summary>
     /// Represents a NuGet nuspec dependency
@@ -26,5 +26,17 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// </summary>
         /// <value>The target framework for the dependency.</value>
         public string TargetFramework { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dependency's include pattern.
+        /// </summary>
+        /// <value>The dependency's include pattern.</value>
+        public string Include { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dependency's exclude pattern.
+        /// </summary>
+        /// <value>The dependency's exclude pattern.</value>
+        public string Exclude { get; set; }
     }
 }

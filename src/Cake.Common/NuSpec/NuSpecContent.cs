@@ -2,12 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.Chocolatey.Pack
+namespace Cake.Common.NuSpec
 {
     /// <summary>
-    /// Represents a Chocolatey nuspec file
+    /// Represents a NuGet nuspec file
     /// </summary>
-    public sealed class ChocolateyNuSpecContent
+    public sealed class NuSpecContent
     {
         /// <summary>
         /// Gets or sets the location of the file or files to include.

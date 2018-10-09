@@ -4,6 +4,7 @@
 
 using System;
 using System.Globalization;
+using Cake.Common.NuSpec;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -18,7 +19,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
-        private readonly ChocolateyNuSpecProcessor _processor;
+        private readonly NuSpecProcessor _processor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChocolateyPacker"/> class.
@@ -39,7 +40,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         {
             _fileSystem = fileSystem;
             _environment = environment;
-            _processor = new ChocolateyNuSpecProcessor(_fileSystem, _environment, log);
+            _processor = new NuSpecProcessor(_fileSystem, _environment, log);
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
                 throw new CakeException("Required setting Files not specified.");
             }
 
-            Pack(settings, () => _processor.Process(settings));
+            Pack(settings, () => _processor.Process(settings.OutputDirectory, settings.NuSpecSettings));
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            Pack(settings, () => _processor.Process(nuspecFilePath, settings));
+            Pack(settings, () => _processor.Process(nuspecFilePath, settings.NuSpecSettings));
         }
 
         private void Pack(ChocolateyPackSettings settings, Func<FilePath> process)

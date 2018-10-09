@@ -1,13 +1,13 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
 using System.Collections.Generic;
+using Cake.Common.NuSpec;
 using Cake.Common.Tests.Fixtures.Tools.NuGet.Packer;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.NuGet;
-using Cake.Common.Tools.NuGet.Pack;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
@@ -353,7 +353,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
                     fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
                     fixture.Settings.Language = "en-us";
-                    fixture.Settings.Repository = new NuGetRepository { Url = "https://test", Branch = "master", Commit = "0000000000000000000000000000000000000000", Type = "git" };
+                    fixture.Settings.Repository = new NuSpecRepository { Url = "https://test", Branch = "master", Commit = "0000000000000000000000000000000000000000", Type = "git" };
 
                     // When
                     var result = fixture.Run();
@@ -977,7 +977,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 {
                     // Given
                     var fixture = new NuGetPackerWithoutNuSpecFixture();
-                    fixture.Settings.OutputDirectory = "/Working/";
                     fixture.Settings.Id = "nonexisting";
                     fixture.Settings.Version = "1.0.0";
                     fixture.Settings.Description = "The description";
@@ -991,7 +990,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     var result = fixture.Run();
 
                     // Then
-                    Assert.Equal("pack -Version \"1.0.0\" -OutputDirectory \"/Working\" " +
+                    Assert.Equal("pack -Version \"1.0.0\" " +
                                  "\"/Working/nonexisting.temp.nuspec\"", result.Args);
                 }
 
@@ -1017,19 +1016,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     // Then
                     Assert.Equal("pack -Version \"1.0.0\" -OutputDirectory \"/Working\" " +
                                  "\"/Working/nonexisting.temp.nuspec\"", result.Args);
-                }
-
-                [Fact]
-                public void Should_Throw_If_OutputDirectory_Setting_Not_Specified()
-                {
-                    // Given
-                    var fixture = new NuGetPackerWithoutNuSpecFixture();
-
-                    // When
-                    var result = Record.Exception(() => fixture.Run());
-
-                    // Then
-                    AssertEx.IsCakeException(result, "Required setting OutputDirectory not specified or doesn't exists.");
                 }
 
                 [Fact]

@@ -10,7 +10,6 @@
 
 namespace Cake.Common.Tests.Properties {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace Cake.Common.Tests.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cake.Common.Tests.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cake.Common.Tests.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -64,14 +63,14 @@ namespace Cake.Common.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
-        ///&lt;package xmlns=&quot;http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd&quot;&gt;
+        ///&lt;package xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
         ///  &lt;metadata&gt;
         ///    &lt;id&gt;The ID&lt;/id&gt;
-        ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-        ///    &lt;summary&gt;The summa [rest of string was truncated]&quot;;.
+        ///    &lt;description&gt;The d [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ChocolateyNuspec_Metadata {
             get {
@@ -85,12 +84,12 @@ namespace Cake.Common.Tests.Properties {
         ///&lt;package&gt;
         ///  &lt;metadata&gt;
         ///    &lt;id&gt;The ID&lt;/id&gt;
-        ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-        ///    &lt;summary&gt;The summary&lt;/summary&gt;
         ///    &lt;description&gt;The description&lt;/description&gt;
+        ///    &lt;summary&gt;The summary&lt;/summary&gt;
         ///     [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ChocolateyNuspec_Metadata_WithoutNamespaces {
@@ -102,7 +101,7 @@ namespace Cake.Common.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
-        ///&lt;package xmlns=&quot;http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd&quot;&gt;
+        ///&lt;package xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
         ///  &lt;files&gt;
         ///    &lt;file src=&quot;tools\**&quot; target=&quot;tools&quot; /&gt;
         ///  &lt;/files&gt;
@@ -117,7 +116,7 @@ namespace Cake.Common.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. --&gt;
-        ///&lt;package xmlns=&quot;http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd&quot;&gt;
+        ///&lt;package xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
         ///  &lt;metadata /&gt;
         ///  &lt;files&gt;
         ///    &lt;file src=&quot;tools\**&quot; target=&quot;tools&quot; /&gt;
@@ -281,7 +280,7 @@ namespace Cake.Common.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
         ///    &lt;id&gt;The ID&lt;/id&gt;
         ///    &lt;version&gt;The version&lt;/version&gt;
         ///    &lt;title&gt;The title&lt;/title&gt;
@@ -300,7 +299,7 @@ namespace Cake.Common.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
         ///    &lt;id&gt;The ID&lt;/id&gt;
         ///    &lt;version&gt;The version&lt;/version&gt;
         ///    &lt;title&gt;The title&lt;/title&gt;
@@ -385,7 +384,7 @@ namespace Cake.Common.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
         ///    &lt;id&gt;nonexisting&lt;/id&gt;
         ///    &lt;version&gt;1.0.0&lt;/version&gt;
         ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
@@ -403,7 +402,7 @@ namespace Cake.Common.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
         ///    &lt;id&gt;The ID&lt;/id&gt;
         ///    &lt;version&gt;The version&lt;/version&gt;
         ///    &lt;title&gt;The title&lt;/title&gt;
@@ -439,7 +438,7 @@ namespace Cake.Common.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot; /&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot; /&gt;
         ///  &lt;files&gt;
         ///    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
         ///    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
@@ -492,7 +491,7 @@ namespace Cake.Common.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd&quot;&gt;
         ///    &lt;id&gt;The ID&lt;/id&gt;
         ///    &lt;version&gt;The version&lt;/version&gt;
         ///    &lt;title&gt;The title&lt;/title&gt;

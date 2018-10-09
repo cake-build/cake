@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using Cake.Common.NuSpec;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -54,93 +55,149 @@ namespace Cake.Common.Tools.NuGet.Pack
         public bool Symbols { get; set; }
 
         /// <summary>
-        /// Gets or sets the package ID.
-        /// </summary>
-        /// <value>The package ID.</value>
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Nuspec version.
-        /// </summary>
-        /// <value>The Nuspec version.</value>
-        public string Version { get; set; }
-
-        /// <summary>
         /// Gets or sets the Nuspec version suffix.
         /// </summary>
         /// <value>The Nuspec version suffix.</value>
         public string Suffix { get; set; }
 
         /// <summary>
+        /// Gets or sets the package ID.
+        /// </summary>
+        /// <value>The package ID.</value>
+        public string Id
+        {
+            get => NuSpecSettings.Id;
+            set => NuSpecSettings.Id = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the Nuspec version.
+        /// </summary>
+        /// <value>The Nuspec version.</value>
+        public string Version
+        {
+            get => NuSpecSettings.Version;
+            set => NuSpecSettings.Version = value;
+        }
+
+        /// <summary>
         /// Gets or sets the package title.
         /// </summary>
         /// <value>The package title.</value>
-        public string Title { get; set; }
+        public string Title
+        {
+            get => NuSpecSettings.Title;
+            set => NuSpecSettings.Title = value;
+        }
 
         /// <summary>
         /// Gets or sets the package authors.
         /// </summary>
         /// <value>The package authors.</value>
-        public ICollection<string> Authors { get; set; }
+        public ICollection<string> Authors
+        {
+            get => NuSpecSettings.Authors;
+            set => NuSpecSettings.Authors = value;
+        }
 
         /// <summary>
         /// Gets or sets the package owners.
         /// </summary>
         /// <value>The package owners.</value>
-        public ICollection<string> Owners { get; set; }
+        public ICollection<string> Owners
+        {
+            get => NuSpecSettings.Owners;
+            set => NuSpecSettings.Owners = value;
+        }
 
         /// <summary>
         /// Gets or sets the package description.
         /// </summary>
         /// <value>The package description.</value>
-        public string Description { get; set; }
+        public string Description
+        {
+            get => NuSpecSettings.Description;
+            set => NuSpecSettings.Description = value;
+        }
 
         /// <summary>
         /// Gets or sets the package summary.
         /// </summary>
         /// <value>The package summary.</value>
-        public string Summary { get; set; }
+        public string Summary
+        {
+            get => NuSpecSettings.Summary;
+            set => NuSpecSettings.Summary = value;
+        }
 
         /// <summary>
         /// Gets or sets the package project URL.
         /// </summary>
         /// <value>The package project URL.</value>
-        public Uri ProjectUrl { get; set; }
+        public Uri ProjectUrl
+        {
+            get => NuSpecSettings.ProjectUrl;
+            set => NuSpecSettings.ProjectUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets the package icon URL.
         /// </summary>
         /// <value>The package icon URL.</value>
-        public Uri IconUrl { get; set; }
+        public Uri IconUrl
+        {
+            get => NuSpecSettings.IconUrl;
+            set => NuSpecSettings.IconUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets the package license URL.
         /// </summary>
         /// <value>The package license URL.</value>
-        public Uri LicenseUrl { get; set; }
+        public Uri LicenseUrl
+        {
+            get => NuSpecSettings.LicenseUrl;
+            set => NuSpecSettings.LicenseUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets the package copyright.
         /// </summary>
         /// <value>The package copyright.</value>
-        public string Copyright { get; set; }
+        public string Copyright
+        {
+            get => NuSpecSettings.Copyright;
+            set => NuSpecSettings.Copyright = value;
+        }
 
         /// <summary>
         /// Gets or sets the package release notes.
         /// </summary>
         /// <value>The package release notes.</value>
-        public ICollection<string> ReleaseNotes { get; set; }
+        public ICollection<string> ReleaseNotes
+        {
+            get => NuSpecSettings.ReleaseNotes;
+            set => NuSpecSettings.ReleaseNotes = value;
+        }
 
         /// <summary>
         /// Gets or sets the package tags.
         /// </summary>
         /// <value>The package tags.</value>
-        public ICollection<string> Tags { get; set; }
+        public ICollection<string> Tags
+        {
+            get => NuSpecSettings.Tags;
+            set => NuSpecSettings.Tags = value;
+        }
 
         /// <summary>
         /// Gets or sets the package repository data
         /// </summary>
-        public NuGetRepository Repository { get; set; }
+        public NuSpecRepository Repository
+        {
+            get => NuSpecSettings.Repository;
+            set => NuSpecSettings.Repository = value;
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this package should be marked as a development dependency.
@@ -148,7 +205,11 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <value>
         ///   <c>true</c> if a development dependency; otherwise, <c>false</c>.
         /// </value>
-        public bool DevelopmentDependency { get; set; }
+        public bool DevelopmentDependency
+        {
+            get => NuSpecSettings.DevelopmentDependency;
+            set => NuSpecSettings.DevelopmentDependency = value;
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether users has to accept the package license.
@@ -156,19 +217,41 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <value>
         /// <c>true</c> if users has to accept the package license; otherwise, <c>false</c>.
         /// </value>
-        public bool RequireLicenseAcceptance { get; set; }
+        public bool RequireLicenseAcceptance
+        {
+            get => NuSpecSettings.RequireLicenseAcceptance;
+            set => NuSpecSettings.RequireLicenseAcceptance = value;
+        }
 
         /// <summary>
         /// Gets or sets the package files.
         /// </summary>
         /// <value>The package files.</value>
-        public ICollection<NuSpecContent> Files { get; set; }
+        public ICollection<NuSpecContent> Files
+        {
+            get => NuSpecSettings.Files;
+            set => NuSpecSettings.Files = value;
+        }
 
         /// <summary>
         /// Gets or sets the package dependencies.
         /// </summary>
         /// <value>The package files.</value>
-        public ICollection<NuSpecDependency> Dependencies { get; set; }
+        public ICollection<NuSpecDependency> Dependencies
+        {
+            get => NuSpecSettings.Dependencies;
+            set => NuSpecSettings.Dependencies = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the package language.
+        /// </summary>
+        /// <value>The package language.</value>
+        public string Language
+        {
+            get => NuSpecSettings.Language;
+            set => NuSpecSettings.Language = value;
+        }
 
         /// <summary>
         /// Gets or sets the verbosity.
@@ -202,12 +285,6 @@ namespace Cake.Common.Tools.NuGet.Pack
         public bool KeepTemporaryNuSpecFile { get; set; }
 
         /// <summary>
-        /// Gets or sets the package language.
-        /// </summary>
-        /// <value>The package language.</value>
-        public string Language { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the files should be packed into the tool folder.
         /// Defaults to <c>false</c>.
         /// </summary>
@@ -215,5 +292,13 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <c>true</c> if the output should be placed in the tool folder inside the nuget package; otherwise <c>false</c>.
         /// </value>
         public bool OutputToToolFolder { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the Nuspec settings.
+        /// </summary>
+        /// <value>
+        /// The nuspec settings.
+        /// </value>
+        public NuSpecSettings NuSpecSettings { get; set; } = new NuSpecSettings();
     }
 }

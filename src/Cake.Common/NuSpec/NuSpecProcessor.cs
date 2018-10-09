@@ -8,33 +8,33 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.Chocolatey.Pack
+namespace Cake.Common.NuSpec
 {
-    internal sealed class ChocolateyNuSpecProcessor
+    internal sealed class NuSpecProcessor
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
 
-        public ChocolateyNuSpecProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
+        public NuSpecProcessor(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
         {
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
         }
 
-        public FilePath Process(ChocolateyPackSettings settings)
+        public FilePath Process(DirectoryPath outputDir, NuSpecSettings settings)
         {
-            var nuspecFilePath = _environment.WorkingDirectory
-                                    .CombineWithFilePath(string.Concat(settings.Id, ".nuspec"))
-                                    .MakeAbsolute(_environment);
+            var nuspecFilePath = (outputDir ?? _environment.WorkingDirectory)
+                .CombineWithFilePath(string.Concat(settings.Id, ".nuspec"))
+                .MakeAbsolute(_environment);
 
             var xml = LoadEmptyNuSpec();
 
             return ProcessXml(nuspecFilePath, settings, xml);
         }
 
-        public FilePath Process(FilePath nuspecFilePath, ChocolateyPackSettings settings)
+        public FilePath Process(FilePath nuspecFilePath, NuSpecSettings settings)
         {
             // Make the nuspec file path absolute.
             nuspecFilePath = nuspecFilePath.MakeAbsolute(_environment);
@@ -54,11 +54,11 @@ namespace Cake.Common.Tools.Chocolatey.Pack
             return ProcessXml(nuspecFilePath, settings, xml);
         }
 
-        private FilePath ProcessXml(FilePath nuspecFilePath, ChocolateyPackSettings settings, XmlDocument xml)
+        private FilePath ProcessXml(FilePath nuspecFilePath, NuSpecSettings settings, XmlDocument xml)
         {
             // Process the XML.
             _log.Debug("Transforming nuspec...");
-            ChocolateyNuSpecTransformer.Transform(xml, settings);
+            NuSpecTransformer.Transform(xml, settings);
 
             // Return the file of the new nuspec.
             _log.Debug("Writing temporary nuspec...");
@@ -77,10 +77,10 @@ namespace Cake.Common.Tools.Chocolatey.Pack
 
         private static XmlDocument LoadEmptyNuSpec()
         {
-            XmlDocument xml = new XmlDocument();
+            var xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" encoding=""utf-8""?>
 <package xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <metadata xmlns=""http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"">
+  <metadata xmlns=""http://schemas.microsoft.com/packaging/2016/06/nuspec.xsd"">
     <id></id>
     <version>0.0.0</version>
     <authors></authors>

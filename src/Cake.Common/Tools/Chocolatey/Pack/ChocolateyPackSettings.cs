@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using Cake.Common.NuSpec;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -18,103 +19,167 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// Gets or sets the package ID.
         /// </summary>
         /// <value>The package ID.</value>
-        public string Id { get; set; }
+        public string Id
+        {
+            get => NuSpecSettings.Id;
+            set => NuSpecSettings.Id = value;
+        }
 
         /// <summary>
         /// Gets or sets the package title.
         /// </summary>
         /// <value>The package title.</value>
-        public string Title { get; set; }
+        public string Title
+        {
+            get => NuSpecSettings.Title;
+            set => NuSpecSettings.Title = value;
+        }
 
         /// <summary>
         /// Gets or sets the Nuspec version.
         /// </summary>
         /// <value>The Nuspec version.</value>
-        public string Version { get; set; }
+        public string Version
+        {
+            get => NuSpecSettings.Version;
+            set => NuSpecSettings.Version = value;
+        }
 
         /// <summary>
         /// Gets or sets the package authors.
         /// </summary>
         /// <value>The package authors.</value>
-        public ICollection<string> Authors { get; set; }
+        public ICollection<string> Authors
+        {
+            get => NuSpecSettings.Authors;
+            set => NuSpecSettings.Authors = value;
+        }
 
         /// <summary>
         /// Gets or sets the package owners.
         /// </summary>
         /// <value>The package owners.</value>
-        public ICollection<string> Owners { get; set; }
+        public ICollection<string> Owners
+        {
+            get => NuSpecSettings.Owners;
+            set => NuSpecSettings.Owners = value;
+        }
 
         /// <summary>
         /// Gets or sets the package summary.
         /// </summary>
         /// <value>The package summary.</value>
-        public string Summary { get; set; }
+        public string Summary
+        {
+            get => NuSpecSettings.Summary;
+            set => NuSpecSettings.Summary = value;
+        }
 
         /// <summary>
         /// Gets or sets the package description.
         /// </summary>
         /// <value>The package description.</value>
         /// <remarks>Markdown format is allowed for this property</remarks>
-        public string Description { get; set; }
+        public string Description
+        {
+            get => NuSpecSettings.Description;
+            set => NuSpecSettings.Description = value;
+        }
 
         /// <summary>
         /// Gets or sets the package project URL.
         /// </summary>
         /// <value>The package project URL.</value>
-        public Uri ProjectUrl { get; set; }
+        public Uri ProjectUrl
+        {
+            get => NuSpecSettings.ProjectUrl;
+            set => NuSpecSettings.ProjectUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets the package Source URL.
         /// </summary>
         /// <value>The package Source URL.</value>
         /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
-        public Uri PackageSourceUrl { get; set; }
+        public Uri PackageSourceUrl
+        {
+            get => NuSpecSettings.PackageSourceUrl;
+            set => NuSpecSettings.PackageSourceUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets the package project Source URL.
         /// </summary>
         /// <value>The package project Source URL.</value>
         /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
-        public Uri ProjectSourceUrl { get; set; }
+        public Uri ProjectSourceUrl
+        {
+            get => NuSpecSettings.ProjectSourceUrl;
+            set => NuSpecSettings.ProjectSourceUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets the package documentation URL.
         /// </summary>
         /// <value>The package documenation URL.</value>
         /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
-        public Uri DocsUrl { get; set; }
+        public Uri DocsUrl
+        {
+            get => NuSpecSettings.DocsUrl;
+            set => NuSpecSettings.DocsUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets the package mailing list URL.
         /// </summary>
         /// <value>The package mailing list URL.</value>
         /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
-        public Uri MailingListUrl { get; set; }
+        public Uri MailingListUrl
+        {
+            get => NuSpecSettings.MailingListUrl;
+            set => NuSpecSettings.MailingListUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets the package bug tracker URL.
         /// </summary>
         /// <value>The package bug tracker URL.</value>
         /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
-        public Uri BugTrackerUrl { get; set; }
+        public Uri BugTrackerUrl
+        {
+            get => NuSpecSettings.BugTrackerUrl;
+            set => NuSpecSettings.BugTrackerUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets the package tags.
         /// </summary>
         /// <value>The package tags.</value>
-        public ICollection<string> Tags { get; set; }
+        public ICollection<string> Tags
+        {
+            get => NuSpecSettings.Tags;
+            set => NuSpecSettings.Tags = value;
+        }
 
         /// <summary>
         /// Gets or sets the package copyright.
         /// </summary>
         /// <value>The package copyright.</value>
-        public string Copyright { get; set; }
+        public string Copyright
+        {
+            get => NuSpecSettings.Copyright;
+            set => NuSpecSettings.Copyright = value;
+        }
 
         /// <summary>
         /// Gets or sets the package license URL.
         /// </summary>
         /// <value>The package license URL.</value>
-        public Uri LicenseUrl { get; set; }
+        public Uri LicenseUrl
+        {
+            get => NuSpecSettings.LicenseUrl;
+            set => NuSpecSettings.LicenseUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether users has to accept the package license.
@@ -122,32 +187,52 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// <value>
         /// <c>true</c> if users has to accept the package license; otherwise, <c>false</c>.
         /// </value>
-        public bool RequireLicenseAcceptance { get; set; }
+        public bool RequireLicenseAcceptance
+        {
+            get => NuSpecSettings.RequireLicenseAcceptance;
+            set => NuSpecSettings.RequireLicenseAcceptance = value;
+        }
 
         /// <summary>
         /// Gets or sets the package icon URL.
         /// </summary>
         /// <value>The package icon URL.</value>
-        public Uri IconUrl { get; set; }
+        public Uri IconUrl
+        {
+            get => NuSpecSettings.IconUrl;
+            set => NuSpecSettings.IconUrl = value;
+        }
 
         /// <summary>
         /// Gets or sets the package release notes.
         /// </summary>
         /// <value>The package release notes.</value>
         /// <remarks>Markdown format is allowed for this property</remarks>
-        public ICollection<string> ReleaseNotes { get; set; }
+        public ICollection<string> ReleaseNotes
+        {
+            get => NuSpecSettings.ReleaseNotes;
+            set => NuSpecSettings.ReleaseNotes = value;
+        }
 
         /// <summary>
         /// Gets or sets the package files.
         /// </summary>
         /// <value>The package files.</value>
-        public ICollection<ChocolateyNuSpecContent> Files { get; set; }
+        public ICollection<NuSpecContent> Files
+        {
+            get => NuSpecSettings.Files;
+            set => NuSpecSettings.Files = value;
+        }
 
         /// <summary>
         /// Gets or sets the package dependencies.
         /// </summary>
         /// <value>The package files.</value>
-        public ICollection<ChocolateyNuSpecDependency> Dependencies { get; set; }
+        public ICollection<NuSpecDependency> Dependencies
+        {
+            get => NuSpecSettings.Dependencies;
+            set => NuSpecSettings.Dependencies = value;
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether to run in debug mode.
@@ -202,5 +287,13 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// Gets or sets a value indicating the Working Directory that should be used while running choco.exe.
         /// </summary>
         public DirectoryPath OutputDirectory { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the Nuspec settings.
+        /// </summary>
+        /// <value>
+        /// The nuspec settings.
+        /// </value>
+        public NuSpecSettings NuSpecSettings { get; set; } = new NuSpecSettings();
     }
 }
