@@ -99,7 +99,7 @@ namespace Cake.DotNetTool.Module
             // We are going to assume that the default install location is the
             // currently configured location for the Cake Tools Folder
             var toolsFolderDirectoryPath = _config.GetToolPath(_environment.WorkingDirectory, _environment);
-            _log.Information("Configured Tools Folder: {0}", toolsFolderDirectoryPath);
+            _log.Debug("Configured Tools Folder: {0}", toolsFolderDirectoryPath);
 
             var toolLocation = toolsFolderDirectoryPath.FullPath;
             if(package.Parameters.ContainsKey("global"))
@@ -143,7 +143,7 @@ namespace Cake.DotNetTool.Module
                 // installed there, so simply return an empty list.
                 if(!toolLocationDirectory.Exists)
                 {
-                    _log.Information("Specified installation location doesn't currently exist.");
+                    _log.Debug("Specified installation location doesn't currently exist.");
                     return new List<string>();
                 }
             }
