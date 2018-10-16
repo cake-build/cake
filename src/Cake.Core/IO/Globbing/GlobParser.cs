@@ -28,7 +28,7 @@ namespace Cake.Core.IO.Globbing
         {
             var buffer = GlobTokenizer.Tokenize(pattern);
             var isCaseSensitive = settings.IsCaseSensitive ?? _environment.Platform.IsUnix();
-            return Parse(new GlobParserContext(buffer, isCaseSensitive));
+            return Parse(new GlobParserContext(pattern, buffer, isCaseSensitive));
         }
 
         private GlobNode Parse(GlobParserContext context)
@@ -43,15 +43,15 @@ namespace Cake.Core.IO.Globbing
             }
 
             // Parse all path segments.
-            while (context.CurrentToken?.Kind == GlobTokenKind.PathSeparator)
+            while (context.TokenCount > 0 && context.CurrentToken?.Kind == GlobTokenKind.PathSeparator)
             {
                 context.Accept();
                 items.Add(ParseNode(context));
             }
 
             // Rewrite the items into a linked list.
-            var result = GlobNodeRewriter.Rewrite(items);
-            GlobNodeValidator.Validate(result);
+            var result = GlobNodeRewriter.Rewrite(context.Pattern, items);
+            GlobNodeValidator.Validate(context.Pattern, result);
             return result;
         }
 
@@ -72,7 +72,8 @@ namespace Cake.Core.IO.Globbing
                 {
                     if (context.Peek().Kind == GlobTokenKind.PathSeparator)
                     {
-                        throw new NotSupportedException("UNC paths are not supported.");
+                        context.Accept();
+                        return new UncRootNode(null);
                     }
 
                     // Get the drive from the working directory.

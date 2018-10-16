@@ -10,9 +10,35 @@ namespace Cake.Core.IO.Globbing
 {
     internal static class GlobNodeRewriter
     {
-        public static GlobNode Rewrite(IEnumerable<GlobNode> nodes)
+        public static GlobNode Rewrite(string pattern, IEnumerable<GlobNode> nodes)
         {
-            return CreateLinkedList(RewriteSingleWildcards(nodes));
+            return RewriteUncRoot(pattern, CreateLinkedList(
+                    RewriteSingleWildcards(nodes)));
+        }
+
+        private static GlobNode RewriteUncRoot(string pattern, GlobNode root)
+        {
+            if (root is UncRootNode unc && unc.Server == null)
+            {
+                var next = unc.Next;
+                if (next == null)
+                {
+                    throw new CakeException($"The pattern '{pattern}' has no server part specified.");
+                }
+                else if (next is PathNode path && path.IsIdentifier)
+                {
+                    // Rewrite the root node.
+                    return new UncRootNode(path.GetPath())
+                    {
+                        Next = next.Next
+                    };
+                }
+                else
+                {
+                    throw new CakeException($"The pattern '{pattern}' has an invalid server part specified.");
+                }
+            }
+            return root;
         }
 
         private static GlobNode CreateLinkedList(IEnumerable<GlobNode> nodes)
@@ -36,9 +62,9 @@ namespace Cake.Core.IO.Globbing
             foreach (var node in nodes)
             {
                 var segmentNode = node as PathNode;
-                if (segmentNode?.Tokens.Count == 1)
+                if (segmentNode?.Segments.Count == 1)
                 {
-                    if (segmentNode.Tokens[0] is WildcardSegment)
+                    if (segmentNode.Segments[0] is WildcardSegment)
                     {
                         yield return new WildcardNode();
                         continue;
