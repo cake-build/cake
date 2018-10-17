@@ -7,8 +7,16 @@ using System.Globalization;
 
 namespace Cake.Core.Graph
 {
+    /// <summary>
+    /// Responsible for building the Cake task graph.
+    /// </summary>
     internal static class CakeGraphBuilder
     {
+        /// <summary>
+        /// Builds a <see cref="CakeGraph"/> from the specified tasks.
+        /// </summary>
+        /// <param name="tasks">The tasks to build the graph from.</param>
+        /// <returns>An assembled graph.</returns>
         public static CakeGraph Build(IReadOnlyCollection<ICakeTaskInfo> tasks)
         {
             var graph = new CakeGraph();

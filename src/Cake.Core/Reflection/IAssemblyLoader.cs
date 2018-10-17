@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Reflection;
+using Cake.Core.Configuration;
 using Cake.Core.IO;
 
 namespace Cake.Core.Reflection

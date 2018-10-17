@@ -42,10 +42,22 @@ Task("Cake.Common.ArgumentAliases.Argument.WithDefaultValue")
     Assert.Equal("foo", arg);
 });
 
+Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments")
+    .Does(() =>
+{
+    
+    // Given, When
+    var arg = Arguments<string>("multipleargs");
+
+    // Then
+    Assert.Equal(new[] {"a", "b"}, arg);
+});
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Common.ArgumentAliases")
   .IsDependentOn("Cake.Common.ArgumentAliases.HasArgument")
   .IsDependentOn("Cake.Common.ArgumentAliases.HasArgument.ThatDoNotExist")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument")
-  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.WithDefaultValue");
+  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.WithDefaultValue")
+  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.MultipleArguments");

@@ -9,11 +9,19 @@ using Cake.Core.Diagnostics;
 
 namespace Cake.Core.Reflection
 {
-    internal sealed class AssemblyVerifier : IAssemblyVerifier
+    /// <summary>
+    /// Responsible for verifying assemblies.
+    /// </summary>
+    public sealed class AssemblyVerifier : IAssemblyVerifier
     {
         private readonly ICakeLog _log;
         private readonly bool _skipVerification;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssemblyVerifier"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="log">The log.</param>
         public AssemblyVerifier(ICakeConfiguration configuration, ICakeLog log)
         {
             _log = log;
@@ -21,6 +29,10 @@ namespace Cake.Core.Reflection
             _skipVerification = skip != null && skip.Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// Verifies an assembly.
+        /// </summary>
+        /// <param name="assembly">The target assembly.</param>
         public void Verify(Assembly assembly)
         {
             _log.Debug(_skipVerification ? "Skipping verification of assembly '{0}'." : "Verifying assembly '{0}'.", assembly.FullName);

@@ -117,7 +117,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run(null, fixture.Script, fixture.ArgumentDictionary));
+                var result = Record.Exception(() => runner.Run(null, fixture.Script));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "host");
@@ -131,24 +131,10 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                var result = Record.Exception(() => runner.Run(fixture.Host, null, fixture.ArgumentDictionary));
+                var result = Record.Exception(() => runner.Run(fixture.Host, null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "scriptPath");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Arguments_Are_Null()
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                var runner = fixture.CreateScriptRunner();
-
-                // When
-                var result = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "arguments");
             }
 
             [Fact]
@@ -159,7 +145,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 fixture.Engine.Received(1).CreateSession(fixture.Host);
@@ -173,7 +159,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 Assert.Equal("/build", fixture.Environment.WorkingDirectory.FullPath);
@@ -194,7 +180,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 fixture.Session.Received(1).AddReference(
@@ -220,7 +206,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 fixture.Session.Received(1).ImportNamespace(@namespace);
@@ -234,7 +220,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 fixture.AliasFinder.Received(1).FindAliases(
@@ -249,7 +235,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 fixture.Session.Received(1).Execute(Arg.Any<Script>());
@@ -269,7 +255,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 fixture.ScriptAnalyzer.Received(1).Analyze(
@@ -284,7 +270,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallTools(
@@ -301,7 +287,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallTools(
@@ -317,7 +303,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallAddins(
@@ -334,7 +320,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, fixture.Script);
 
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallAddins(
@@ -350,7 +336,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                runner.Run(fixture.Host, "./foo/build.cake", fixture.ArgumentDictionary);
+                runner.Run(fixture.Host, "./foo/build.cake");
 
                 // Then
                 fixture.ScriptProcessor.Received(1).InstallTools(
@@ -373,7 +359,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var runner = fixture.CreateScriptRunner();
 
                 // When
-                var exception = Record.Exception(() => runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary));
+                var exception = Record.Exception(() => runner.Run(fixture.Host, fixture.Script));
 
                 // Then
                 AssertEx.IsCakeException(exception, "Errors occurred while analyzing script.");
