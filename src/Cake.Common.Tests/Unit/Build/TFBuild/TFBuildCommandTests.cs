@@ -465,11 +465,103 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
                     PublishRunAttachments = true,
                     TestRunner = TFTestRunnerType.XUnit,
                     TestRunTitle = "Cake Test Run 1 [master]",
-                    TestResultsFiles = new string[]
+                    TestResultsFiles = new FilePath[]
                      {
-                         FilePath.FromString("./artifacts/resultsXUnit.trx").ToString(),
-                         FilePath.FromString("./artifacts/resultsJs.trx").ToString()
+                         "./artifacts/resultsXUnit.trx",
+                         "./artifacts/resultsJs.trx"
                      }
+                };
+
+                // When
+                service.Commands.PublishTestResults(data);
+
+                // Then
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [Fact]
+            public void Should_Publish_Test_Results_If_File_Path_Is_Relative()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+                var data = new TFBuildPublishTestResultsData
+                {
+                    Configuration = "Debug",
+                    MergeTestResults = true,
+                    Platform = "x86",
+                    PublishRunAttachments = true,
+                    TestRunner = TFTestRunnerType.XUnit,
+                    TestRunTitle = "Cake Test Run 1 [master]",
+                    TestResultsFiles = new FilePath[]
+                    {
+                        "./artifacts/resultsXUnit.trx",
+                        "./artifacts/resultsJs.trx"
+                    }
+                };
+
+                // When
+                service.Commands.PublishTestResults(data);
+
+                // Then
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [Fact]
+            public void Should_Publish_Test_Results_If_File_Path_Is_Absolute()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                fixture.Environment.WorkingDirectory.Returns("/build/CAKE-CAKE-JOB1");
+                fixture.Environment.Platform.Family.Returns(PlatformFamily.OSX);
+                var service = fixture.CreateTFBuildService();
+                var data = new TFBuildPublishTestResultsData
+                {
+                    Configuration = "Debug",
+                    MergeTestResults = true,
+                    Platform = "x86",
+                    PublishRunAttachments = true,
+                    TestRunner = TFTestRunnerType.XUnit,
+                    TestRunTitle = "Cake Test Run 1 [master]",
+                    TestResultsFiles = new FilePath[]
+                    {
+                        "/build/CAKE-CAKE-JOB1/artifacts/resultsXUnit.trx",
+                        "/build/CAKE-CAKE-JOB1/artifacts/resultsJs.trx"
+                    }
+                };
+
+                // When
+                service.Commands.PublishTestResults(data);
+
+                // Then
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=/build/CAKE-CAKE-JOB1/artifacts/resultsXUnit.trx,/build/CAKE-CAKE-JOB1/artifacts/resultsJs.trx;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('/', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [WindowsFact]
+            public void Should_Publish_Test_Results_If_File_Path_Is_Absolute_Windows()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+                var data = new TFBuildPublishTestResultsData
+                {
+                    Configuration = "Debug",
+                    MergeTestResults = true,
+                    Platform = "x86",
+                    PublishRunAttachments = true,
+                    TestRunner = TFTestRunnerType.XUnit,
+                    TestRunTitle = "Cake Test Run 1 [master]",
+                    TestResultsFiles = new FilePath[]
+                    {
+                        "C:\\build\\CAKE-CAKE-JOB1\\artifacts\\resultsXUnit.trx",
+                        "C:\\build\\CAKE-CAKE-JOB1\\artifacts\\resultsJs.trx"
+                    }
                 };
 
                 // When
@@ -481,6 +573,8 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
                 Assert.Equal(expected, actual?.Message);
             }
 
+            // TODO: Windows Fact, OSX Fact
+            // TODO: TestResultFilePaths
             [Fact]
             public void Should_Publish_Code_Coverage()
             {

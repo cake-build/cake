@@ -23,7 +23,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <summary>
         /// Gets or sets the list of Test Result files to publish.
         /// </summary>
-        public string[] TestResultsFiles { get; set; }
+        public ICollection<FilePath> TestResultsFiles { get; set; } = new List<FilePath>();
 
         /// <summary>
         /// Gets or Sets whether to merge all Test Result Files into one run
@@ -85,8 +85,15 @@ namespace Cake.Common.Build.TFBuild.Data
             }
             if (TestResultsFiles != null && TestResultsFiles.Any())
             {
-                properties.Add("resultFiles", string.Join(",", TestResultsFiles.Select(filePath => new FilePath(filePath).MakeAbsolute(environment).FullPath.Replace("/", "\\"))));
+                properties.Add("resultFiles",
+                    string.Join(",",
+                        TestResultsFiles.Select(filePath =>
+                            filePath
+                                .MakeAbsolute(environment)
+                                .FullPath
+                                .Replace(filePath.Separator, System.IO.Path.DirectorySeparatorChar))));
             }
+
             return properties;
         }
     }
