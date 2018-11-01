@@ -283,12 +283,27 @@ namespace Cake.Common.Build.TFBuild
         /// <inheritdoc />
         public void UploadArtifactDirectory(DirectoryPath directory)
         {
+            if (directory == null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
             UploadArtifactDirectory(directory, directory.GetDirectoryName());
         }
 
         /// <inheritdoc />
         public void UploadArtifactDirectory(DirectoryPath directory, string artifactName)
         {
+            if (directory == null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
+            if (artifactName == null)
+            {
+                throw new ArgumentNullException(nameof(artifactName));
+            }
+
             WriteLoggingCommand("artifact.upload", new Dictionary<string, string>
             {
                 ["containerfolder"] = artifactName,

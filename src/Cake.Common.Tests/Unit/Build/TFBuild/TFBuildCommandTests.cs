@@ -335,6 +335,20 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
             }
 
             [Fact]
+            public void UploadArtifactDirectory_Should_Throw_If_Directory_Is_Null()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+
+                // When
+                var result = Record.Exception(() => service.Commands.UploadArtifactDirectory(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "directory");
+            }
+
+            [Fact]
             public void Should_Upload_Directory_As_Container()
             {
                 // Given
@@ -347,6 +361,34 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
 
                 // Then
                 Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[artifact.upload containerfolder=Packages;artifactname=Packages;]{path}");
+            }
+
+            [Fact]
+            public void UploadArtifactDirectory_With_ArtifactName_Should_Throw_If_Directory_Is_Null()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+
+                // When
+                var result = Record.Exception(() => service.Commands.UploadArtifactDirectory(null, "Packages"));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "directory");
+            }
+
+            [Fact]
+            public void UploadArtifactDirectory_Should_Throw_If_ArtifactName_Is_Null()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+
+                // When
+                var result = Record.Exception(() => service.Commands.UploadArtifactDirectory("./artifacts/Packages", null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "artifactName");
             }
 
             [Fact]
