@@ -150,6 +150,19 @@ namespace Cake.Common.Build.TFBuild
         void UploadArtifact(string folderName, FilePath file, string artifactName);
 
         /// <summary>
+        /// Upload local directory as a container folder, and create an artifact.
+        /// </summary>
+        /// <param name="directory">Path to the local directory.</param>
+        void UploadArtifactDirectory(DirectoryPath directory);
+
+        /// <summary>
+        /// Upload local directory as a container folder, and create an artifact with the specified name.
+        /// </summary>
+        /// <param name="directory">Path to the local directory.</param>
+        /// <param name="artifactName">The artifact name.</param>
+        void UploadArtifactDirectory(DirectoryPath directory, string artifactName);
+
+        /// <summary>
         /// Upload additional log to build container's <c>logs/tool</c> folder.
         /// </summary>
         /// <param name="logFile">The log file.</param>

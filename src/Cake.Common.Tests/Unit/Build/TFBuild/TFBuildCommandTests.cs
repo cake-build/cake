@@ -335,6 +335,36 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
             }
 
             [Fact]
+            public void Should_Upload_Directory_As_Container()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+                var path = DirectoryPath.FromString("./artifacts/Packages").MakeAbsolute(fixture.Environment).FullPath;
+
+                // When
+                service.Commands.UploadArtifactDirectory("./artifacts/Packages");
+
+                // Then
+                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[artifact.upload containerfolder=Packages;artifactname=Packages;]{path}");
+            }
+
+            [Fact]
+            public void Should_Upload_Directory_As_Container_Artifact()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+                var path = DirectoryPath.FromString("./artifacts/Packages").MakeAbsolute(fixture.Environment).FullPath;
+
+                // When
+                service.Commands.UploadArtifactDirectory("./artifacts/Packages", "NuGet");
+
+                // Then
+                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[artifact.upload containerfolder=NuGet;artifactname=NuGet;]{path}");
+            }
+
+            [Fact]
             public void Should_Upload_Build_Log()
             {
                 // Given
