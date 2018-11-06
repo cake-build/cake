@@ -280,6 +280,37 @@ namespace Cake.Common.Build.TFBuild
             }, file.MakeAbsolute(_environment).FullPath);
         }
 
+        /// <inheritdoc />
+        public void UploadArtifactDirectory(DirectoryPath directory)
+        {
+            if (directory == null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
+            UploadArtifactDirectory(directory, directory.GetDirectoryName());
+        }
+
+        /// <inheritdoc />
+        public void UploadArtifactDirectory(DirectoryPath directory, string artifactName)
+        {
+            if (directory == null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
+            if (artifactName == null)
+            {
+                throw new ArgumentNullException(nameof(artifactName));
+            }
+
+            WriteLoggingCommand("artifact.upload", new Dictionary<string, string>
+            {
+                ["containerfolder"] = artifactName,
+                ["artifactname"] = artifactName
+            }, directory.MakeAbsolute(_environment).FullPath);
+        }
+
         /// <summary>
         /// Upload additional log to build container's <c>logs/tool</c> folder.
         /// </summary>
