@@ -236,6 +236,37 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Single(provider.GetRepositories());
                 Assert.Contains(provider.GetRepositories(), p => p.PackageSource.Source == settingsApi);
             }
+
+            [Fact]
+            public void Should_Use_Feed_Specified_In_NuGet_Config_If_Available()
+            {
+                var feed = "https://foo.bar/api.json";
+                var package = new PackageReference($"nuget:{feed}?package=First.Package");
+                var settings = Substitute.For<ISettings>();
+                settings.GetSettingValues(ConfigurationConstants.PackageSources, Arg.Any<bool>())
+                    .Returns(new List<SettingValue>
+                    {
+                        new SettingValue("foobar", feed, false)
+                    });
+                settings.GetNestedValues(ConfigurationConstants.CredentialsSectionName, "foobar")
+                    .Returns(new Dictionary<string, string>()
+                    {
+                        ["Username"] = "foo@bar.baz",
+                        ["ClearTextPassword"] = "p455w0rdz"
+                    }.ToList());
+                var configuration = new CakeConfiguration(new Dictionary<string, string>()
+                {
+                    [Constants.NuGet.Source] = string.Empty,
+                });
+
+                var provider = new NuGetSourceRepositoryProvider(settings, configuration, package);
+
+                Assert.Single(provider.GetRepositories());
+                Assert.Contains(provider.GetRepositories(), p =>
+                    p.PackageSource.Source == feed &&
+                    p.PackageSource.Credentials.Username == "foo@bar.baz" &&
+                    p.PackageSource.Credentials.Password == "p455w0rdz");
+            }
         }
     }
 }
