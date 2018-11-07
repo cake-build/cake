@@ -122,13 +122,13 @@ namespace Cake.Common.Tools.DotNetCore.Publish
             // Self contained
             if (settings.SelfContained.HasValue)
             {
+                builder.Append("--self-contained");
                 if (settings.SelfContained.Value)
                 {
-                    builder.Append("--self-contained");
+                    builder.Append("true");
                 }
                 else
                 {
-                    builder.Append("--self-contained");
                     builder.Append("false");
                 }
             }
