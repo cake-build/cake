@@ -70,6 +70,12 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append("/noconlog");
             }
 
+            // Set the no logo flag.
+            if (settings.NoLogo.GetValueOrDefault())
+            {
+                builder.Append("/nologo");
+            }
+
             // Set the verbosity.
             builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", settings.Verbosity.GetMSBuildVerbosityName()));
 
