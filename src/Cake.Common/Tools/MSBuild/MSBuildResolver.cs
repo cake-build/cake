@@ -21,6 +21,13 @@ namespace Cake.Common.Tools.MSBuild
                     return macMSBuildPath;
                 }
 
+                var brewMSBuildPath = new FilePath("/usr/local/bin/msbuild");
+
+                if (fileSystem.Exist(brewMSBuildPath))
+                {
+                    return brewMSBuildPath;
+                }
+
                 throw new CakeException("Could not resolve MSBuild.");
             }
             else if (environment.Platform.Family == PlatformFamily.Linux)
