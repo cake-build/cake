@@ -9,5 +9,9 @@ namespace Cake.Common.Tools.VSWhere.Latest
     /// </summary>
     public sealed class VSWhereLatestSettings : VSWhereSettings
     {
+        /// <summary>
+        /// Gets or sets the products to find. Defaults to Community, Professional, and Enterprise. Specify "*" by itself to search all product instances installed.
+        /// </summary>
+        public string Products { get; set; }
     }
 }
