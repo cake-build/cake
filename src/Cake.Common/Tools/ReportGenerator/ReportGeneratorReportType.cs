@@ -47,6 +47,41 @@ namespace Cake.Common.Tools.ReportGenerator
         /// <summary>
         /// Xml summary report.
         /// </summary>
-        XmlSummary = 8
+        XmlSummary = 8,
+
+        /// <summary>
+        /// Cobertura report
+        /// </summary>
+        Cobertura = 9,
+
+        /// <summary>
+        /// CSV summary report
+        /// </summary>
+        CsvSummary = 10,
+
+        /// <summary>
+        /// HTML Chart report
+        /// </summary>
+        HtmlChart = 11,
+
+        /// <summary>
+        /// Html report with inline CSS and JavaScript
+        /// </summary>
+        HtmlInline = 12,
+
+        /// <summary>
+        /// Same as HTMLInline but with modified CSS that matches the look and feel of Azure Pipelines.
+        /// </summary>
+        HtmlInline_AzurePipelines = 13,
+
+        /// <summary>
+        /// Same as HTML but packaged into a single MHTML file.
+        /// </summary>
+        MHtml = 13,
+
+        /// <summary>
+        /// A single PNG file containing a chart with historic coverage information.
+        /// </summary>
+        PngChart = 14
     }
 }
