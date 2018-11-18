@@ -33,9 +33,9 @@ Param(
 
 $CakeVersion = "0.30.0"
 $DotNetChannel = "Current";
-$DotNetVersion = "2.1.403";
+$DotNetVersion = "2.1.500";
 $DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
-$NugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+$NugetUrl = "https://dist.nuget.org/win-x86-commandline/v4.9.0-rc1/nuget.exe"
 
 # SSL FIX
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
@@ -99,6 +99,16 @@ $env:DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 # Make sure nuget.exe exists.
 $NugetPath = Join-Path $ToolPath "nuget.exe"
+if (Test-Path $NugetPath)
+{
+    [Version] $minVersion = [Version]'4.9.0.0'
+    [Version] $nugetVersion = Get-ChildItem $NugetPath | % VersionInfo| % FileVersion
+    if ($minVersion -gt $nugetVersion)
+    {
+        Write-Host "NuGet.exe version $nugetVersion to old deleting $NugetPath..."    
+        Remove-Item $NugetPath
+    }
+}
 if (!(Test-Path $NugetPath)) {
     Write-Host "Downloading NuGet.exe..."
     (New-Object System.Net.WebClient).DownloadFile($NugetUrl, $NugetPath);
