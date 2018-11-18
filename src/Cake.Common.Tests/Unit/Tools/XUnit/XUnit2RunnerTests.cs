@@ -514,6 +514,87 @@ namespace Cake.Common.Tests.Unit.Tools.XUnit
             }
 
             [Fact]
+            public void Should_Throw_If_JUnitReport_Is_Set_But_OutputDirectory_Is_Null()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.JUnitReport = true;
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Cannot generate JUnit XML report when no output directory has been set.", result?.Message);
+            }
+
+            [Fact]
+            public void Should_Generate_JUnit_Xml_Report_With_Correct_Name_For_Single_Assembly()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.JUnitReport = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -junit \"/Output/Test1.dll.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Generate_JUnit_Xml_Report_With_Correct_Name_For_Single_Assembly_ReportName()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.JUnitReport = true;
+                fixture.Settings.ReportName = "xUnitReport";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" -junit \"/Output/xUnitReport.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Generate_JUnit_Xml_Report_With_Correct_Name_For_Multiple_Assemblies()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.AssemblyPaths = new FilePath[] { "./Test1.dll", "./Test2.dll" };
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.JUnitReport = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
+                             "-junit \"/Output/TestResults.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Generate_JUnit_Xml_Report_With_Correct_Name_For_Multiple_Assemblies_ReportName()
+            {
+                // Given
+                var fixture = new XUnit2RunnerFixture();
+                fixture.AssemblyPaths = new FilePath[] { "./Test1.dll", "./Test2.dll" };
+                fixture.Settings.OutputDirectory = "/Output";
+                fixture.Settings.JUnitReport = true;
+                fixture.Settings.ReportName = "xUnitReport";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/Test1.dll\" \"/Working/Test2.dll\" " +
+                             "-junit \"/Output/xUnitReport.xml\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Not_Use_Shadow_Copying_If_Disabled_In_Settings()
             {
                 // Given
