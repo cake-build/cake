@@ -11,20 +11,24 @@ namespace Cake.Frosting.Internal.Commands
         private readonly IFrostingContext _context;
         private readonly IExecutionStrategy _strategy;
         private readonly ICakeReportPrinter _printer;
+        private readonly ExecutionSettings _executionSettings;
 
         public RunCommand(
             IFrostingContext context,
             IExecutionStrategy strategy,
-            ICakeReportPrinter printer)
+            ICakeReportPrinter printer
+            )
         {
             _context = context;
             _strategy = strategy;
             _printer = printer;
+            _executionSettings = new ExecutionSettings();
         }
 
         public override bool Execute(ICakeEngine engine, CakeHostOptions options)
         {
-            var report = engine.RunTargetAsync(_context, _strategy, options.Target).GetAwaiter().GetResult();
+            _executionSettings.SetTarget(options.Target);
+            var report = engine.RunTargetAsync(_context, _strategy, _executionSettings).GetAwaiter().GetResult();
             if (report != null && !report.IsEmpty)
             {
                 _printer.Write(report);

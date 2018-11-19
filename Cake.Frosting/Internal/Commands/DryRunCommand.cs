@@ -11,21 +11,25 @@ namespace Cake.Frosting.Internal.Commands
     {
         private readonly IFrostingContext _context;
         private readonly ICakeLog _log;
+        private readonly ExecutionSettings _executionSettings;
 
         public DryRunCommand(IFrostingContext context, ICakeLog log)
         {
             _context = context;
             _log = log;
+            _executionSettings = new ExecutionSettings();
         }
 
         public override bool Execute(ICakeEngine engine, CakeHostOptions options)
         {
+            _executionSettings.SetTarget(options.Target);
+            
             _log.Information("Performing dry run...");
             _log.Information("Target is: {0}", options.Target);
             _log.Information(string.Empty);
 
             var strategy = new DryRunExecutionStrategy(_log);
-            engine.RunTargetAsync(_context, strategy, options.Target).GetAwaiter().GetResult();
+            engine.RunTargetAsync(_context, strategy, _executionSettings).GetAwaiter().GetResult();
 
             _log.Information(string.Empty);
             _log.Information("This was a dry run.");
