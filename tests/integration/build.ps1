@@ -55,7 +55,7 @@ $Script = (Join-Path $PSScriptRoot "windows.cake")
 $ToolsPath = Join-Path $PSScriptRoot "tools"
 $NuGetPath = Join-Path $ToolsPath "nuget.exe"
 $DotNetChannel = "Current"
-$DotNetVersion = "2.1.403";
+$DotNetVersion = "2.1.500";
 $DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
 $NuGetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
