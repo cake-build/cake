@@ -40,6 +40,14 @@ namespace Cake.Common.Tools.XUnit
         public bool NUnitReport { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether an JUnit style XML report should be generated.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if an JUnit Style XML report should be generated; otherwise, <c>false</c>.
+        /// </value>
+        public bool JUnitReport { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether an XML report should be generated.
         /// </summary>
         /// <value>
