@@ -36,13 +36,13 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// Gets or sets the package authors.
         /// </summary>
         /// <value>The package authors.</value>
-        public ICollection<string> Authors { get; set; }
+        public ICollection<string> Authors { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the package owners.
         /// </summary>
         /// <value>The package owners.</value>
-        public ICollection<string> Owners { get; set; }
+        public ICollection<string> Owners { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the package summary.
@@ -102,7 +102,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// Gets or sets the package tags.
         /// </summary>
         /// <value>The package tags.</value>
-        public ICollection<string> Tags { get; set; }
+        public ICollection<string> Tags { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the package copyright.
@@ -135,19 +135,19 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// </summary>
         /// <value>The package release notes.</value>
         /// <remarks>Markdown format is allowed for this property</remarks>
-        public ICollection<string> ReleaseNotes { get; set; }
+        public ICollection<string> ReleaseNotes { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the package files.
         /// </summary>
         /// <value>The package files.</value>
-        public ICollection<ChocolateyNuSpecContent> Files { get; set; }
+        public ICollection<ChocolateyNuSpecContent> Files { get; set; } = new List<ChocolateyNuSpecContent>();
 
         /// <summary>
         /// Gets or sets the package dependencies.
         /// </summary>
         /// <value>The package files.</value>
-        public ICollection<ChocolateyNuSpecDependency> Dependencies { get; set; }
+        public ICollection<ChocolateyNuSpecDependency> Dependencies { get; set; } = new List<ChocolateyNuSpecDependency>();
 
         /// <summary>
         /// Gets or sets a value indicating whether to run in debug mode.

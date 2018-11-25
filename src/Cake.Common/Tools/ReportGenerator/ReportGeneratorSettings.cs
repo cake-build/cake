@@ -16,13 +16,13 @@ namespace Cake.Common.Tools.ReportGenerator
         /// <summary>
         /// Gets or sets the list of coverage reports that should be parsed.
         /// </summary>
-        public ICollection<ReportGeneratorReportType> ReportTypes { get; set; }
+        public ICollection<ReportGeneratorReportType> ReportTypes { get; set; } = new List<ReportGeneratorReportType>();
 
         /// <summary>
         /// Gets or sets the directories which contain the corresponding source code.
         /// The source files are used if coverage report contains classes without path information.
         /// </summary>
-        public ICollection<DirectoryPath> SourceDirectories { get; set; }
+        public ICollection<DirectoryPath> SourceDirectories { get; set; } = new List<DirectoryPath>();
 
         /// <summary>
         /// Gets or sets the directory for storing persistent coverage information.
@@ -35,14 +35,14 @@ namespace Cake.Common.Tools.ReportGenerator
         /// Exclusion filters take precedence over inclusion filters.
         /// Wildcards are allowed.
         /// </summary>
-        public ICollection<string> AssemblyFilters { get; set; }
+        public ICollection<string> AssemblyFilters { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the list of classes that should be included or excluded in the report.
         /// Exclusion filters take precedence over inclusion filters.
         /// Wildcards are allowed.
         /// </summary>
-        public ICollection<string> ClassFilters { get; set; }
+        public ICollection<string> ClassFilters { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the verbosity level of the log messages.

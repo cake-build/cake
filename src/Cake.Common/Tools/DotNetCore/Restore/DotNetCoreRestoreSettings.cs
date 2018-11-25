@@ -16,7 +16,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         /// <summary>
         /// Gets or sets the specified NuGet package sources to use during the restore.
         /// </summary>
-        public ICollection<string> Sources { get; set; }
+        public ICollection<string> Sources { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the NuGet configuration file to use.
