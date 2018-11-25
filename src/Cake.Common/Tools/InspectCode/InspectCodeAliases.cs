@@ -23,7 +23,7 @@ namespace Cake.Common.Tools.InspectCode
     public static class InspectCodeAliases
     {
         /// <summary>
-        /// Analyses the specified solution with Resharper's InspectCode.
+        /// Analyses the specified solution with ReSharper's InspectCode.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution.</param>
@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.InspectCode
         }
 
         /// <summary>
-        /// Analyses the specified solution with Resharper's InspectCode,
+        /// Analyses the specified solution with ReSharper's InspectCode,
         /// using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>

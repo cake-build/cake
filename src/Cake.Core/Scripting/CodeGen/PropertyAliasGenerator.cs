@@ -46,7 +46,7 @@ namespace Cake.Core.Scripting.CodeGen
 
         private static void ValidateMethod(MethodInfo method)
         {
-            Debug.Assert(method.DeclaringType != null, "method.DeclaringType != null"); // Resharper
+            Debug.Assert(method.DeclaringType != null, "method.DeclaringType != null"); // ReSharper
 
             if (!method.DeclaringType.IsStatic())
             {
