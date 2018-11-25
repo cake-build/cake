@@ -110,12 +110,12 @@ namespace Cake.Common.Tools.GitVersion
         public string Sha { get; set; }
 
         /// <summary>
-        /// Gets or sets the nuget version for v2.
+        /// Gets or sets the NuGet version for v2.
         /// </summary>
         public string NuGetVersionV2 { get; set; }
 
         /// <summary>
-        /// Gets or sets the nuget version.
+        /// Gets or sets the NuGet version.
         /// </summary>
         public string NuGetVersion { get; set; }
 

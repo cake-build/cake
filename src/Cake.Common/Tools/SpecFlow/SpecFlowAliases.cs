@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.SpecFlow
     /// <para>Contains functionality related to <see href="http://www.specflow.org/">SpecFlow</see>.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the appropriate settings class:
+    /// install from nuget.org, or specify the ToolPath within the appropriate settings class:
     /// <code>
     /// #tool "nuget:?package=SpecFlow"
     /// </code>

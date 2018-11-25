@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.InspectCode
     /// <para>Contains functionality related to ReSharper's <see href="https://www.jetbrains.com/help/resharper/2016.1/InspectCode.html">InspectCode</see> tool.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the <see cref="InspectCodeSettings" /> class:
+    /// install from nuget.org, or specify the ToolPath within the <see cref="InspectCodeSettings" /> class:
     /// <code>
     /// #tool "nuget:?package=JetBrains.ReSharper.CommandLineTools"
     /// </code>

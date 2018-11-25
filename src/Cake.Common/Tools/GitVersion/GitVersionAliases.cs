@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.GitVersion
     /// <para>Contains functionality related to <see href="https://github.com/gittools/gitversion">GitVersion</see>.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the <see cref="GitVersionSettings" /> class:
+    /// install from nuget.org, or specify the ToolPath within the <see cref="GitVersionSettings" /> class:
     /// <code>
     /// #tool "nuget:?package=GitVersion.CommandLine"
     /// </code>
@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.GitVersion
         ///         Branch = "develop"
         ///         Commit = EnviromentVariable("MY_COMMIT")
         ///     });
-        ///     // Use result for building nuget packages, setting build server version, etc...
+        ///     // Use result for building NuGet packages, setting build server version, etc...
         /// });
         /// ]]>
         /// </code>
@@ -104,7 +104,7 @@ namespace Cake.Common.Tools.GitVersion
         ///         Branch = "develop"
         ///         Commit = EnviromentVariable("MY_COMMIT")
         ///     });
-        ///     // Use result for building nuget packages, setting build server version, etc...
+        ///     // Use result for building NuGet packages, setting build server version, etc...
         /// });
         /// ]]>
         /// </code>

@@ -118,13 +118,13 @@
 ### New in 0.27.0 (Released 2018/04/19)
 
 * 2078 Support expand environment variables in script pre-processor directives
-* 2047 Specify version during Nuget Updating
+* 2047 Specify version during NuGet Updating
 * 2005 Add entries for Setup/Teardown in report
 * 1908 Octopus Deploy tool does not support list-deployments call for octo.exe
 * 2116 Loading Newtonsoft.Json in Cake.CoreCLR throws during assembly loading
 * 2084 Cake does not load dependencies in correct order
 * 2082 Investigate NuGet local V3 cache
-* 2081 Possibility to override default nuget sources
+* 2081 Possibility to override default NuGet sources
 * 2079 Default sources not loaded if nuget_source is empty
 * 2119 DotNetCore Publish misses Force / Self contained / Sources settings
 * 2113 Error when loading tools without internet connection
@@ -187,7 +187,7 @@
 * 1943 Chocolatey package dependencies cannot be set using the ChocolateyPackSettings
 * 1936 Move to signing service v2
 * 1931 Allow passing a nuget.config as environment variable or in cake.config
-* 1924 Set UserAgent for in process nuget
+* 1924 Set UserAgent for in-process NuGet
 * 1922 GitVersion is missing AssemblySemFileVer
 * 1912 Support for DotCover Process Filter
 * 1910 MSBuild property values should escape carriage return and line feed
@@ -208,7 +208,7 @@
 * 1853 The "using static" directive doesn't compile
 * 1843 NuGetContentResolver should not return ref assemblies.
 * 1842 Params in URI pre-processor directives are case sensitive
-* 1838 Dependencies are installed but have no references added when using LoadDependencies=true with in process nuget client
+* 1838 Dependencies are installed but have no references added when using LoadDependencies=true with in process NuGet client
 * 1831 CleanDirectories Throws NullReferenceException When Token Is Null
 * 1815 Exception Message should be shown rather than "One or more errors occurred."
 * 1404 MsBuildSettings.WithProperty does not escape values
@@ -277,7 +277,7 @@
 * 1787 Add opt-out config information to assembly version verification error message
 * 1780 Fix typo in version.cake
 * 1727 Incorrect documentation for XmlPeek Alias
-* 1700 Update nuget license url
+* 1700 Update NuGet license url
 * 1525 Updated examples for DotNetCoreTest
 
 ### New in 0.21.1 (Released 2017/07/15)
@@ -637,7 +637,7 @@
 * Add DotCover Cover support
 * Add SpecFlow support
 * Add Jenkins CI build system support
-* Use V3 Nuget in bootstrapper
+* Use V3 NuGet in bootstrapper
 * Remove logging from task setup/teardown.
 * Update ReleaseNotes.md
 * Removed year from © in readme
@@ -664,7 +664,7 @@
 * Replace #if !UNIX with [WindowsFact]
 * Don't show delegating tasks in summary
 * Task Summary should include skipped tasks
-* Support for nuget packing of project files
+* Support for NuGet packing of project files
 * Add method to get relative paths (for paths)
 * Full Build/Publish Automation for Cake
 * Add GitVersion into build.cake
@@ -724,7 +724,7 @@
 * Got support for .cake files in GitHub.
 * Created a Visual Studio Code extension for Cake.
 * Created a VSTS extension for Cake.
-* Fixed issue with external nugets used directly via #addin directive.
+* Fixed issue with external NuGet packages used directly via #addin directive.
 * DupFinder: Added ability to fail the build on detected issues.
 * InspectCode: Added ability to fail the build on detected issues.
 * TextTransform now handles Regex special characters.

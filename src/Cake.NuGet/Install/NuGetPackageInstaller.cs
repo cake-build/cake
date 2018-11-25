@@ -107,7 +107,7 @@ namespace Cake.NuGet.Install
             var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;
             var sourceRepositoryProvider = new NuGetSourceRepositoryProvider(_nugetSettings, _config, package);
             var pathResolver = new PackagePathResolver(packageRoot);
-            var project = new NugetFolderProject(_fileSystem, _contentResolver, _log, pathResolver, packageRoot, targetFramework);
+            var project = new NuGetFolderProject(_fileSystem, _contentResolver, _log, pathResolver, packageRoot, targetFramework);
             var packageManager = new NuGetPackageManager(sourceRepositoryProvider, _nugetSettings, project.Root)
             {
                 PackagesFolderNuGetProject = project
