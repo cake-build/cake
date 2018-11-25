@@ -105,7 +105,7 @@ namespace Cake.Common.Tools.GitVersion
         public string BranchName { get; set; }
 
         /// <summary>
-        /// Gets or sets the git sha.
+        /// Gets or sets the Git SHA.
         /// </summary>
         public string Sha { get; set; }
 

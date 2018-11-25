@@ -25,7 +25,7 @@ namespace Cake.Common.Tools.GitVersion
         /// Retrieves the GitVersion output.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns>The git version info.</returns>
+        /// <returns>The Git version info.</returns>
         /// <example>
         /// <para>Update the assembly info files for the project.</para>
         /// <para>Cake task:</para>
@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.GitVersion
         /// });
         /// ]]>
         /// </code>
-        /// <para>Get the git version info for the project using a dynamic repository.</para>
+        /// <para>Get the Git version info for the project using a dynamic repository.</para>
         /// <para>Cake task:</para>
         /// <code>
         /// <![CDATA[
@@ -75,7 +75,7 @@ namespace Cake.Common.Tools.GitVersion
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="settings">The GitVersion settings.</param>
-        /// <returns>The git version info.</returns>
+        /// <returns>The Git version info.</returns>
         /// <example>
         /// <para>Update the assembly info files for the project.</para>
         /// <para>Cake task:</para>
@@ -90,7 +90,7 @@ namespace Cake.Common.Tools.GitVersion
         /// });
         /// ]]>
         /// </code>
-        /// <para>Get the git version info for the project using a dynamic repository.</para>
+        /// <para>Get the Git version info for the project using a dynamic repository.</para>
         /// <para>Cake task:</para>
         /// <code>
         /// <![CDATA[

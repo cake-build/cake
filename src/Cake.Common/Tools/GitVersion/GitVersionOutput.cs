@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.GitVersion
 {
     /// <summary>
-    /// The git version output type.
+    /// The Git version output type.
     /// </summary>
     public enum GitVersionOutput
     {

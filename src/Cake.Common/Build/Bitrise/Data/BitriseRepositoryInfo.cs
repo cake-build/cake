@@ -12,34 +12,34 @@ namespace Cake.Common.Build.Bitrise.Data
     public class BitriseRepositoryInfo : BitriseInfo
     {
         /// <summary>
-        /// Gets the git repository URL.
+        /// Gets the Git repository URL.
         /// </summary>
         /// <value>
-        /// The git repository URL.
+        /// The Git repository URL.
         /// </value>
         public string GitRepositoryUrl => GetEnvironmentString("GIT_REPOSITORY_URL");
 
         /// <summary>
-        /// Gets the git branch.
+        /// Gets the Git branch.
         /// </summary>
         /// <value>
-        /// The git branch.
+        /// The Git branch.
         /// </value>
         public string GitBranch => GetEnvironmentString("BITRISE_GIT_BRANCH");
 
         /// <summary>
-        /// Gets the git tag.
+        /// Gets the Git tag.
         /// </summary>
         /// <value>
-        /// The git tag.
+        /// The Git tag.
         /// </value>
         public string GitTag => GetEnvironmentString("BITRISE_GIT_TAG");
 
         /// <summary>
-        /// Gets the git commit.
+        /// Gets the Git commit.
         /// </summary>
         /// <value>
-        /// The git commit.
+        /// The Git commit.
         /// </value>
         public string GitCommit => GetEnvironmentString("BITRISE_GIT_COMMIT");
 

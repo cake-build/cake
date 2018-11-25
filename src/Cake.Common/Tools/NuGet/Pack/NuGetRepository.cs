@@ -6,7 +6,7 @@
     public class NuGetRepository
     {
         /// <summary>
-        /// Gets or sets the type of repository e.g. git.
+        /// Gets or sets the type of repository e.g. Git.
         /// </summary>
         public string Type { get; set; }
 
