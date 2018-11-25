@@ -9,7 +9,7 @@ namespace Cake.Core
     public sealed class SetupContext : CakeContextAdapter, ISetupContext
     {
         /// <summary>
-        /// Gets target / initating task.
+        /// Gets target (initiating) task.
         /// </summary>
         public ICakeTaskInfo TargetTask { get;  }
 
@@ -22,7 +22,7 @@ namespace Cake.Core
         /// Initializes a new instance of the <see cref="SetupContext"/> class.
         /// </summary>
         /// <param name="context">The Cake context.</param>
-        /// <param name="targetTask">The target / initating task.</param>
+        /// <param name="targetTask">The target (initiating) task.</param>
         /// <param name="tasksToExecute">The tasks to execute.</param>
         public SetupContext(ICakeContext context,
             ICakeTaskInfo targetTask,

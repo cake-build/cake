@@ -79,7 +79,7 @@ namespace Cake.Core.Scripting.Analysis
         public HashSet<PackageReference> Modules { get; }
 
         /// <summary>
-        /// Gets a value indicating whether to analysis succeded without errors.
+        /// Gets a value indicating whether to analysis succeeded without errors.
         /// </summary>
         public bool Succeeded { get; }
 

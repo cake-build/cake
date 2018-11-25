@@ -170,7 +170,7 @@ namespace Cake.Common
         /// {
         ///     throw new Exception(
         ///         string.Format(
-        ///             "Errors ocurred: {0}",
+        ///             "Errors occurred: {0}",
         ///             string.Join(", ", redirectedErrorOutput));
         /// }
         ///

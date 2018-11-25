@@ -8,7 +8,7 @@ namespace Cake.Core
     public interface ISetupContext : ICakeContext
     {
         /// <summary>
-        /// Gets target / initating task.
+        /// Gets target (initiating) task.
         /// </summary>
         ICakeTaskInfo TargetTask { get; }
 

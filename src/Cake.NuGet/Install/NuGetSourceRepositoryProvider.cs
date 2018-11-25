@@ -77,7 +77,7 @@ namespace Cake.NuGet.Install
             }
             else
             {
-                // Only add sources added via NuGet.Config's if nuget_source configuration value is not specified.
+                // Only add sources added via NuGet.config if nuget_source configuration value is not specified.
                 foreach (var source in packageSources)
                 {
                     if (source.IsEnabled)

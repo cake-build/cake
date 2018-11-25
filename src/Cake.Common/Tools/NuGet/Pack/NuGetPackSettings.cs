@@ -60,15 +60,15 @@ namespace Cake.Common.Tools.NuGet.Pack
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the Nuspec version.
+        /// Gets or sets the nuspec version.
         /// </summary>
-        /// <value>The Nuspec version.</value>
+        /// <value>The nuspec version.</value>
         public string Version { get; set; }
 
         /// <summary>
-        /// Gets or sets the Nuspec version suffix.
+        /// Gets or sets the nuspec version suffix.
         /// </summary>
-        /// <value>The Nuspec version suffix.</value>
+        /// <value>The nuspec version suffix.</value>
         public string Suffix { get; set; }
 
         /// <summary>

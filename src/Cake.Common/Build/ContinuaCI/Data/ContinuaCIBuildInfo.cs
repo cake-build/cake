@@ -20,7 +20,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// Initializes a new instance of the <see cref="ContinuaCIBuildInfo"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        /// <param name="prefix">The prefix for environment variables in this clas</param>
+        /// <param name="prefix">The prefix for environment variables in this class.</param>
         public ContinuaCIBuildInfo(ICakeEnvironment environment, string prefix)
             : base(environment)
         {

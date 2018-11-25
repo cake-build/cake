@@ -135,7 +135,7 @@ namespace Cake.Core.IO.Globbing
                 throw new InvalidOperationException($"Expected '{last}' but reached end of pattern.");
             }
 
-            // Consume the last characer.
+            // Consume the last character.
             current = (char)reader.Read();
             Debug.Assert(current == last, "Unexpected token.");
 

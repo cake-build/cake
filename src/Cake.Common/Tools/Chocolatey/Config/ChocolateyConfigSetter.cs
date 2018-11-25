@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.Chocolatey.Config
         }
 
         /// <summary>
-        /// Sets Chocolatey configuration paramaters using the settings.
+        /// Sets Chocolatey configuration parameters using the settings.
         /// </summary>
         /// <param name="name">The name of the config parameter.</param>
         /// <param name="value">The value to assign to the parameter.</param>

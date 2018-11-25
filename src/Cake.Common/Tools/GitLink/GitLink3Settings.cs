@@ -29,7 +29,7 @@ namespace Cake.Common.Tools.GitLink
 
         /// <summary>
         /// Gets or sets a value indicating whether the Use PowerShell Command option should be enabled.
-        /// This option will use PowerShell instead of HTTP in SRCSRV to retreive the source code.
+        /// This option will use PowerShell instead of HTTP in SRCSRV to retrieve the source code.
         /// </summary>
         public bool UsePowerShell { get; set; }
 

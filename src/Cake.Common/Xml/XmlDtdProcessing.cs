@@ -5,7 +5,7 @@
 namespace Cake.Common.Xml
 {
     /// <summary>
-    /// Speficies how will an XmlReader handle DTDs in the XML document.
+    /// Specifies how will an XmlReader handle DTDs in the XML document.
     /// </summary>
     public enum XmlDtdProcessing
     {
