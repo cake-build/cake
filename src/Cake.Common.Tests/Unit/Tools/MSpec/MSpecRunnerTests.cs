@@ -343,8 +343,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSpec
                 fixture.Settings.Wait = true;
                 fixture.Settings.TeamCity = true;
                 fixture.Settings.NoTeamCity = true;
-                fixture.Settings.Appveyor = true;
-                fixture.Settings.NoAppveyor = true;
+                fixture.Settings.AppVeyor = true;
+                fixture.Settings.NoAppVeyor = true;
                 fixture.Settings.HtmlReport = true;
                 fixture.Settings.XmlReport = true;
                 fixture.Settings.ReportName = "UnitTests";
