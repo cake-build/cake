@@ -16,7 +16,7 @@ namespace Cake.Common.Build.TFBuild.Data
     public class TFBuildPublishTestResultsData
     {
         /// <summary>
-        /// Gets or Sets the type test runner the results are formated in
+        /// Gets or Sets the type test runner the results are formatted in
         /// </summary>
         public TFTestRunnerType? TestRunner { get; set; }
 

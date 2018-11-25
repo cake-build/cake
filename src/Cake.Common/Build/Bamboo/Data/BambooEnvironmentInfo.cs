@@ -100,9 +100,8 @@ namespace Cake.Common.Build.Bamboo.Data
         ///         BuildSystem.Bamboo.Environment.Build.ResultKey,
         ///         BuildSystem.Bamboo.Environment.Build.ResultsUrl,
         ///         BuildSystem.Bamboo.Environment.Build.BuildTimestamp,
-        ///         BuildSystem.Bamboo.Environment.Build.CustomBuild.IsCustomBuld,
-        ///         BuildSystem.Bamboo.Environment.Build.CustomBuild.RevisionName
-        ///         );
+        ///         BuildSystem.Bamboo.Environment.Build.CustomBuild.IsCustomBuild,
+        ///         BuildSystem.Bamboo.Environment.Build.CustomBuild.RevisionName);
         /// }
         /// else
         /// {
@@ -131,9 +130,8 @@ namespace Cake.Common.Build.Bamboo.Data
         ///         Bamboo.Environment.Build.ResultKey,
         ///         Bamboo.Environment.Build.ResultsUrl,
         ///         Bamboo.Environment.Build.BuildTimestamp,
-        ///         Bamboo.Environment.Build.CustomBuild.IsCustomBuld,
-        ///         Bamboo.Environment.Build.CustomBuild.RevisionName
-        ///         );
+        ///         Bamboo.Environment.Build.CustomBuild.IsCustomBuild,
+        ///         Bamboo.Environment.Build.CustomBuild.RevisionName);
         /// }
         /// else
         /// {

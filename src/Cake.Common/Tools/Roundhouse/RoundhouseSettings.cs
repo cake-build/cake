@@ -207,7 +207,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// Gets or sets the environment for RH to be scoped.
         /// </summary>
         /// <value>
-        /// This allows RH to be environment aware and only run scripts that are in a particular environment based on the namingof the script. LOCAL.something**.ENV.**sql would only be run in the LOCAL environment.
+        /// This allows RH to be environment aware and only run scripts that are in a particular environment based on the naming of the script. LOCAL.something**.ENV.**sql would only be run in the LOCAL environment.
         /// </value>
         public string Environment { get; set; }
 

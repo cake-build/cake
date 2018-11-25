@@ -28,7 +28,7 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
         public bool AllVersions { get; set; }
 
         /// <summary>
-        /// Gets or sets the uinstall arguments to pass to native installer.
+        /// Gets or sets the uninstall arguments to pass to native installer.
         /// </summary>
         public string UninstallArguments { get; set; }
 
@@ -51,7 +51,7 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
         public bool ForceDependencies { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to Exit with a 0 for success and 1 for non-succes
+        /// Gets or sets a value indicating whether to Exit with a 0 for success and 1 for non-success
         /// no matter what package scripts provide for exit codes.
         /// </summary>
         /// <value>The ignore package exit codes flag</value>

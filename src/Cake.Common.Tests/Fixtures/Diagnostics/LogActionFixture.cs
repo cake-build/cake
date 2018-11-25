@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Fixtures.Diagnostics
         {
             if (Evaluated)
             {
-                throw new Exception("Message allready evaluated");
+                throw new Exception("Message already evaluated");
             }
             Evaluated = true;
             actionEntry(Format, Args);

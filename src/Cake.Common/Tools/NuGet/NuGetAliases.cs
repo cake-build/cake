@@ -27,13 +27,13 @@ namespace Cake.Common.Tools.NuGet
     /// </summary>
     /// <para>
     /// Since Cake requires NuGet to be available very early in the build pipeline, we recommend that NuGet is made
-    /// available via the <see href="https://github.com/cake-build/resources">Cake BootStrapper</see>.
+    /// available via the <see href="https://github.com/cake-build/resources">Cake Bootstrapper</see>.
     /// </para>
     [CakeAliasCategory("NuGet")]
     public static class NuGetAliases
     {
         /// <summary>
-        /// Creates a NuGet package using the specified Nuspec or project file.
+        /// Creates a NuGet package using the specified nuspec or project file.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePath">The nuspec or project file path.</param>
@@ -83,7 +83,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Creates NuGet packages using the specified Nuspec or project files.
+        /// Creates NuGet packages using the specified nuspec or project files.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="filePaths">The nuspec or project file paths.</param>
