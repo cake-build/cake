@@ -81,7 +81,7 @@
 
 * 2140 DotNetCorePublish does not respect SelfContained DotNetCorePublishSettings property.
 * 2203 Add Octopus Deploy Promote release support.
-* 2095 Add "--skipnontestassemblies" funcionality to CAKE's NUnit3Settings as it exists in original nunit3 test runner.
+* 2095 Add "--skipnontestassemblies" funcionality to Cake's NUnit3Settings as it exists in original NUnit 3 test runner.
 * 2094 Add support for executing a single task without dependencies.
 * 2196 NuGet Repository information not settable in NuGet Pack.
 * 2185 Try to find vswhere.exe on the system if the tool is not registered.
