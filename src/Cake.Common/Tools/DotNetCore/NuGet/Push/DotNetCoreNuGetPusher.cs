@@ -10,7 +10,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.DotNetCore.NuGet.Push
 {
     /// <summary>
-    /// .NET Core nuget pusher, pushes a package and it's symbols to the server.
+    /// .NET Core nuget pusher. Pushes a package and its symbols to the server.
     /// </summary>
     public sealed class DotNetCoreNuGetPusher : DotNetCoreTool<DotNetCoreNuGetPushSettings>
     {
