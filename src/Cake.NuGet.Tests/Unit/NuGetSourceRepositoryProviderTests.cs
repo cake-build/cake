@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.Configuration;
 using Cake.Core.Packaging;
@@ -125,12 +126,24 @@ namespace Cake.NuGet.Tests.Unit
                 var primaryApi = "https://foo.bar/api.json";
                 var package = new PackageReference($"nuget:{primaryApi}?package=First.Package");
                 var settings = Substitute.For<ISettings>();
-                settings.GetSettingValues(ConfigurationConstants.PackageSources, Arg.Any<bool>())
-                    .Returns(new List<SettingValue>
+                var settingSection = Activator.CreateInstance(
+                    type: typeof(VirtualSettingSection),
+                    bindingAttr: System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                    binder: null,
+                    args: new object[]
                     {
-                        new SettingValue("V3", nugetV3Api, true),
-                        new SettingValue("V2", nugetV2Api, true),
-                    });
+                        ConfigurationConstants.PackageSources,
+                        (IReadOnlyDictionary<string, string>)null,
+                        new[]
+                        {
+                            new SourceItem("V3", nugetV3Api),
+                            new SourceItem("V2", nugetV2Api),
+                        }
+                    },
+                    culture: null);
+
+                settings.GetSection(ConfigurationConstants.PackageSources).Returns(settingSection);
+
                 var configuration = new CakeConfiguration(new Dictionary<string, string>()
                 {
                     [Constants.NuGet.Source] = string.Empty,
@@ -172,12 +185,24 @@ namespace Cake.NuGet.Tests.Unit
                 var nugetV2Api = "https://packages.nuget.org/api/v2";
                 var package = new PackageReference($"nuget:?package=First.Package");
                 var settings = Substitute.For<ISettings>();
-                settings.GetSettingValues(ConfigurationConstants.PackageSources, Arg.Any<bool>())
-                    .Returns(new List<SettingValue>
+                var settingSection = Activator.CreateInstance(
+                    type: typeof(VirtualSettingSection),
+                    bindingAttr: System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                    binder: null,
+                    args: new object[]
                     {
-                        new SettingValue("V3", nugetV3Api, true),
-                        new SettingValue("V2", nugetV2Api, true),
-                    });
+                        ConfigurationConstants.PackageSources,
+                        (IReadOnlyDictionary<string, string>)null,
+                        new[]
+                        {
+                            new SourceItem("V3", nugetV3Api),
+                            new SourceItem("V2", nugetV2Api)
+                        }
+                    },
+                    culture: null);
+
+                settings.GetSection(ConfigurationConstants.PackageSources).Returns(settingSection);
+
                 var configuration = new CakeConfiguration(new Dictionary<string, string>()
                 {
                     [Constants.NuGet.Source] = string.Empty,
@@ -198,11 +223,23 @@ namespace Cake.NuGet.Tests.Unit
                 var settingsApi = "https://foo.bar/api.json";
                 var package = new PackageReference($"nuget:?package=First.Package");
                 var settings = Substitute.For<ISettings>();
-                settings.GetSettingValues(ConfigurationConstants.PackageSources, Arg.Any<bool>())
-                    .Returns(new List<SettingValue>
+                var settingSection = Activator.CreateInstance(
+                    type: typeof(VirtualSettingSection),
+                    bindingAttr: System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                    binder: null,
+                    args: new object[]
                     {
-                        new SettingValue("foobar", settingsApi, true)
-                    });
+                        ConfigurationConstants.PackageSources,
+                        (IReadOnlyDictionary<string, string>)null,
+                        new[]
+                        {
+                            new SourceItem("foobar", settingsApi)
+                        }
+                    },
+                    culture: null);
+
+                settings.GetSection(ConfigurationConstants.PackageSources).Returns(settingSection);
+
                 var configuration = new CakeConfiguration(new Dictionary<string, string>()
                 {
                     [Constants.NuGet.Source] = $"{nugetV3Api};{nugetV2Api}",
@@ -221,11 +258,23 @@ namespace Cake.NuGet.Tests.Unit
                 var settingsApi = "https://foo.bar/api.json";
                 var package = new PackageReference($"nuget:?package=First.Package");
                 var settings = Substitute.For<ISettings>();
-                settings.GetSettingValues(ConfigurationConstants.PackageSources, Arg.Any<bool>())
-                    .Returns(new List<SettingValue>
+                var settingSection = Activator.CreateInstance(
+                    type: typeof(VirtualSettingSection),
+                    bindingAttr: System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                    binder: null,
+                    args: new object[]
                     {
-                        new SettingValue("foobar", settingsApi, true)
-                    });
+                        ConfigurationConstants.PackageSources,
+                        (IReadOnlyDictionary<string, string>)null,
+                        new[]
+                        {
+                            new SourceItem("foobar", settingsApi)
+                        }
+                    },
+                    culture: null);
+
+                settings.GetSection(ConfigurationConstants.PackageSources).Returns(settingSection);
+
                 var configuration = new CakeConfiguration(new Dictionary<string, string>()
                 {
                     [Constants.NuGet.Source] = string.Empty,
@@ -243,17 +292,38 @@ namespace Cake.NuGet.Tests.Unit
                 var feed = "https://foo.bar/api.json";
                 var package = new PackageReference($"nuget:{feed}?package=First.Package");
                 var settings = Substitute.For<ISettings>();
-                settings.GetSettingValues(ConfigurationConstants.PackageSources, Arg.Any<bool>())
-                    .Returns(new List<SettingValue>
+                var packageSourceSection = Activator.CreateInstance(
+                    type: typeof(VirtualSettingSection),
+                    bindingAttr: System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                    binder: null,
+                    args: new object[]
                     {
-                        new SettingValue("foobar", feed, false)
-                    });
-                settings.GetNestedValues(ConfigurationConstants.CredentialsSectionName, "foobar")
-                    .Returns(new Dictionary<string, string>()
+                        ConfigurationConstants.PackageSources,
+                        (IReadOnlyDictionary<string, string>)null,
+                        new[]
+                        {
+                            new SourceItem("foobar", feed)
+                        }
+                    },
+                    culture: null);
+                var credentialSection = Activator.CreateInstance(
+                    type: typeof(VirtualSettingSection),
+                    bindingAttr: System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                    binder: null,
+                    args: new object[]
                     {
-                        ["Username"] = "foo@bar.baz",
-                        ["ClearTextPassword"] = "p455w0rdz"
-                    }.ToList());
+                        ConfigurationConstants.CredentialsSectionName,
+                        (IReadOnlyDictionary<string, string>)null,
+                        new[]
+                        {
+                            new CredentialsItem("foobar", "foo@bar.baz", "p455w0rdz", true)
+                        }
+                    },
+                    culture: null);
+
+                settings.GetSection(ConfigurationConstants.PackageSources).Returns(packageSourceSection);
+                settings.GetSection(ConfigurationConstants.CredentialsSectionName).Returns(credentialSection);
+
                 var configuration = new CakeConfiguration(new Dictionary<string, string>()
                 {
                     [Constants.NuGet.Source] = string.Empty,
