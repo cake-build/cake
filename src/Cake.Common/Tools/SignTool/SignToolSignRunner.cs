@@ -220,6 +220,12 @@ namespace Cake.Common.Tools.SignTool
                 builder.Append("/as");
             }
 
+            // use machine store when requested
+            if (settings.UseMachineStore)
+            {
+                builder.Append("/sm");
+            }
+
             // Target Assemblies to sign.
             foreach (var path in absoluteAssemblyPaths)
             {
