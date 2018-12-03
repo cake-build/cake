@@ -293,7 +293,7 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
-        /// Treat warnnings as errors, if no codes specified all errors will be treated as errors.
+        /// Treat warnings as errors, if no codes specified all errors will be treated as errors.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="codes">Only treat specified warning codes as errors.</param>

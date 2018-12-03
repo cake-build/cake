@@ -10,12 +10,12 @@ namespace Cake.Common.Net
     public sealed class DownloadFileSettings
     {
         /// <summary>
-        /// Gets or sets the Username to use when downloading the file
+        /// Gets or sets the username to use when downloading the file
         /// </summary>
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the Password to use when downloading the file
+        /// Gets or sets the password to use when downloading the file
         /// </summary>
         public string Password { get; set; }
 
@@ -23,7 +23,7 @@ namespace Cake.Common.Net
         /// Gets or sets a value indicating whether default credentials are sent when downloading the file
         /// </summary>
         /// <remarks>
-        /// If set to true, any Username and Password that has been speficied will be ignored.
+        /// If set to true, any username and password that has been specified will be ignored.
         /// </remarks>
         public bool UseDefaultCredentials { get; set; }
     }

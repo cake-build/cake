@@ -28,7 +28,7 @@ namespace Cake.Common
         ///     if (!context.IsDryRun())
         ///     {
         ///         // Do things that you don't want to
-        ///         // do when script is being dry runned.
+        ///         // do during a dry run.
         ///     }
         /// });
         /// </code>

@@ -169,7 +169,7 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
-            // Treat errors as warníngs?
+            // Treat errors as warnings?
             if (settings.WarningsAsErrorCodes.Any())
             {
                 var codes = string.Join(";", settings.WarningsAsErrorCodes);

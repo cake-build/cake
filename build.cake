@@ -353,7 +353,7 @@ Task("Create-NuGet-Packages")
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
         Symbols = false,
         NoPackageAnalysis = true,
-        Files = GetFiles(netFxFullArtifactPath + "/*.*")
+        Files = GetFiles(netFxFullArtifactPath + "/*")
                                 .Select(file=>file.FullPath.Substring(netFxFullArtifactPathLength))
                                 .Select(file=> new NuSpecContent { Source = file, Target = file })
                                 .ToArray()

@@ -6,7 +6,7 @@
     <authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger and contributors</authors>
     <description>The Cake script runner.</description>
     <summary>Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.</summary>
-    <licenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://cakebuild.net</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,5 +18,6 @@
     <file src="Cake.exe" target="lib/net46" />
     <file src="Cake.pdb" target="lib/net46" />
     <file src="Cake.xml" target="lib/net46" />
+    <file src="LICENSE" />
   </files>
 </package>
