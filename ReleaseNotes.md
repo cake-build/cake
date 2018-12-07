@@ -568,7 +568,7 @@
 ### New in 0.10.0 (Released 2016/03/16)
 
 * XUnit command line bug
-* Cake does not find it's own nuget.exe on Linux
+* Cake does not find its own nuget.exe on Linux
 * Sanitization in TeamCity Provider places extra apostrophe if '[' is used.
 * Path segment bug (or test bug, choose your own adventure!)
 * Add support for importing coverage to TeamCity
@@ -750,7 +750,7 @@
 * Added filter predicate to globber and clean directory methods.
 * Added Unzip alias.
 * Added DownloadFile alias.
-* Added method to retrieve filename without it's extension.
+* Added method to retrieve filename without its extension.
 * Added support for InternalsVisibleToAttribute when generating assembly info.
 * Added extension methods to ProcessSettings.
 * Fixed formatting in build report.

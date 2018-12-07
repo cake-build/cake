@@ -112,7 +112,7 @@ namespace Cake.Core.IO
                 {
                     if (Segments.Length > 0)
                     {
-                        // Treat \\ as it's own segment.
+                        // Treat \\ as its own segment.
                         var segments = new string[Segments.Length + 1];
                         segments[0] = @"\\";
                         Segments.CopyTo(segments, 1);
