@@ -636,6 +636,21 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Use_No_Logo_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.NoLogo = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/nologo /v:normal /target:Build " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Append_Targets_To_Process_Arguments()
             {
                 // Given
