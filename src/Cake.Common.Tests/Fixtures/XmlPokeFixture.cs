@@ -4,7 +4,6 @@
 
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Xml;
@@ -17,7 +16,7 @@ namespace Cake.Common.Tests.Fixtures
 {
     internal sealed class XmlPokeFixture
     {
-        public IFileSystem FileSystem { get; set; }
+        public FakeFileSystem FileSystem { get; set; }
         public ICakeContext Context { get; set; }
         public FilePath XmlPath { get; set; }
         public XmlPokeSettings Settings { get; set; }
@@ -106,23 +105,15 @@ namespace Cake.Common.Tests.Fixtures
             }
         }
 
+        // ReSharper disable once InconsistentNaming
         public bool TestIsUTF8WithBOM()
         {
-            var reader = new StreamReader(FileSystem.GetFile(XmlPath).OpenRead());
-
-            using (var memstream = new MemoryStream())
-            {
-                reader.BaseStream.CopyTo(memstream);
-                var bytes = memstream.ToArray();
-                var encoding = new UTF8Encoding(true);
-                var preamble = encoding.GetPreamble();
-                return preamble.Where((p, i) => p == bytes[i]).Any();
-            }
+            return FileSystem.GetFile(XmlPath).HasUTF8BOM();
         }
 
         private string GetFullXml()
         {
-            return new StreamReader(FileSystem.GetFile(XmlPath).OpenRead()).ReadToEnd();
+            return FileSystem.GetFile(XmlPath).GetTextContent();
         }
 
         /// <summary>

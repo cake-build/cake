@@ -7,7 +7,6 @@ using System.Text;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Xml;
-using Cake.Testing.Xunit;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.XML
