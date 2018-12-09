@@ -81,13 +81,18 @@ namespace Cake.Common.Tools.NuGet.List
                 filterPredicates.Add(item => string.Equals(item.Name, packageId, StringComparison.OrdinalIgnoreCase));
             }
 
-            if (settings.VersionFilters.Any())
+            if (settings.VersionFilters?.Count > 0)
             {
                 // Only one version has to be match
                 filterPredicates.Add(
                     item => settings.VersionFilters.Any(
                         versionFilter =>
                             string.Equals(item.Version, versionFilter, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            if (settings.FilterPredicates?.Count > 0)
+            {
+                filterPredicates.AddRange(settings.FilterPredicates);
             }
 
             return nugetListItems.Where(item => filterPredicates.All(predicate => predicate(item)));

@@ -2,6 +2,8 @@
 using Cake.Common.Tools.NuGet.List;
 using Cake.Testing;
 using Cake.Testing.Xunit;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.List
@@ -345,6 +347,35 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.List
                     {
                         Assert.Equal(item.Name, "Cake.Core");
                         Assert.Equal(item.Version, "0.30.0");
+                    });
+            }
+
+            [Fact]
+            public void Should_Return_Filtered_List_From_Filter_Predicates()
+            {
+                // Given
+                var fixture = new NuGetListFixture
+                {
+                    PackageId = "Cake.Core",
+                };
+
+                fixture.Settings.FilterPredicates = new List<Func<NuGetListItem, bool>>()
+                {
+                    item => item.Name.StartsWith("Cak"),
+                    item => item.Version.Contains("alpha"),
+                };
+
+                fixture.GivenMultibleVersionsInPackageResult();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Collection(fixture.Result,
+                    item =>
+                    {
+                        Assert.Equal(item.Name, "Cake");
+                        Assert.Equal(item.Version, "0.31.0-alpha0075");
                     });
             }
         }

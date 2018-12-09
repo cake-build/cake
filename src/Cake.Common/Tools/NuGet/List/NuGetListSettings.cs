@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -43,5 +44,10 @@ namespace Cake.Common.Tools.NuGet.List
         /// Gets or sets a list of package versions to filter for.
         /// </summary>
         public ICollection<string> VersionFilters { get; set; }
+
+        /// <summary>
+        /// Gets or sets multiple predicates to filter <see cref="NuGetListItem"/>
+        /// </summary>
+        public ICollection<Func<NuGetListItem, bool>> FilterPredicates { get; set; }
     }
 }
