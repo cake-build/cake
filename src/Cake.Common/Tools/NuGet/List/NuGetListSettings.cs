@@ -38,5 +38,10 @@ namespace Cake.Common.Tools.NuGet.List
         /// Gets or sets the way to resolve a Package ID
         /// </summary>
         public PackageIdCompare PackageIdComparison { get; set; }
+
+        /// <summary>
+        /// Gets or sets a list of package versions to filter for.
+        /// </summary>
+        public ICollection<string> VersionFilters { get; set; }
     }
 }

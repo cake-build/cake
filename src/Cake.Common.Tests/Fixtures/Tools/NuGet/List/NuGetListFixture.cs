@@ -24,6 +24,20 @@ namespace Cake.Common.Tests.Fixtures.Tools.NuGet.List
             });
         }
 
+        public void GivenMultibleVersionsInPackageResult()
+        {
+            ProcessRunner.Process.SetStandardOutput(new string[]
+            {
+                "Cake 0.31.0-alpha0075",
+                "Cake 0.30.0",
+                "Cake 0.22.2",
+                "Cake.Core 0.30.0",
+                "Cake.Core 0.22.2",
+                "Cake.CoreCLR 0.30.0",
+                "Cake.CoreCLR 0.22.2",
+            });
+        }
+
         protected override void RunTool()
         {
             var tool = new NuGetList(FileSystem, Environment, ProcessRunner, Tools, Resolver);

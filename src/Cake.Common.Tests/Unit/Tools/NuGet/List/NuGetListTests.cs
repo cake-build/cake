@@ -271,6 +271,82 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.List
                         Assert.Equal(item.Version, "0.22.2");
                     });
             }
+
+            [Fact]
+            public void Should_Return_Filtered_List_By_PackageVersion_Of_NuGetListItems()
+            {
+                // Given
+                var fixture = new NuGetListFixture
+                {
+                    PackageId = "Cake.Core",
+                };
+
+                fixture.Settings.AllVersions = true;
+                fixture.Settings.VersionFilters = new[]
+                {
+                    "0.30.0",
+                    "0.31.0-alpha0075"
+                };
+
+                fixture.GivenMultibleVersionsInPackageResult();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Collection(fixture.Result,
+                    item =>
+                    {
+                        Assert.Equal(item.Name, "Cake");
+                        Assert.Equal(item.Version, "0.31.0-alpha0075");
+                    },
+                    item =>
+                    {
+                        Assert.Equal(item.Name, "Cake");
+                        Assert.Equal(item.Version, "0.30.0");
+                    },
+                    item =>
+                    {
+                        Assert.Equal(item.Name, "Cake.Core");
+                        Assert.Equal(item.Version, "0.30.0");
+                    },
+                    item =>
+                    {
+                        Assert.Equal(item.Name, "Cake.CoreCLR");
+                        Assert.Equal(item.Version, "0.30.0");
+                    });
+            }
+
+            [Fact]
+            public void Should_Return_Filtered_List_By_PackageId_And_Version_Of_NuGetListItems()
+            {
+                // Given
+                var fixture = new NuGetListFixture
+                {
+                    PackageId = "Cake.Core",
+                };
+
+                fixture.Settings.AllVersions = true;
+                fixture.Settings.PackageIdComparison = PackageIdCompare.Equals;
+                fixture.Settings.VersionFilters = new[]
+                {
+                    "0.30.0",
+                    "0.31.0-alpha0075"
+                };
+
+                fixture.GivenMultibleVersionsInPackageResult();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Collection(fixture.Result,
+                    item =>
+                    {
+                        Assert.Equal(item.Name, "Cake.Core");
+                        Assert.Equal(item.Version, "0.30.0");
+                    });
+            }
         }
     }
 }

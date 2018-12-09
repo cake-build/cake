@@ -74,12 +74,23 @@ namespace Cake.Common.Tools.NuGet.List
 
         private IEnumerable<NuGetListItem> FilterResults(string packageId, NuGetListSettings settings, IEnumerable<NuGetListItem> nugetListItems)
         {
+            List<Func<NuGetListItem, bool>> filterPredicates = new List<Func<NuGetListItem, bool>>();
+
             if (settings.PackageIdComparison == PackageIdCompare.Equals)
             {
-                return nugetListItems.Where(i => string.Equals(i.Name, packageId, StringComparison.OrdinalIgnoreCase));
+                filterPredicates.Add(item => string.Equals(item.Name, packageId, StringComparison.OrdinalIgnoreCase));
             }
 
-            return nugetListItems;
+            if (settings.VersionFilters.Any())
+            {
+                // Only one version has to be match
+                filterPredicates.Add(
+                    item => settings.VersionFilters.Any(
+                        versionFilter =>
+                            string.Equals(item.Version, versionFilter, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            return nugetListItems.Where(item => filterPredicates.All(predicate => predicate(item)));
         }
 
         private NuGetListItem ConvertToNuGetListItem(string line)
