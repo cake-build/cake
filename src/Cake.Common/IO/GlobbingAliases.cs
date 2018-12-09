@@ -40,9 +40,7 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException(nameof(context));
             }
 
-            return new FilePathCollection(
-                context.Globber.Match(pattern).OfType<FilePath>(),
-                new PathComparer(context.Environment.Platform.IsUnix()));
+            return new FilePathCollection(context.Globber.Match(pattern).OfType<FilePath>());
         }
 
         /// <summary>
@@ -75,9 +73,7 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException(nameof(context));
             }
 
-            return new FilePathCollection(
-                context.Globber.Match(pattern, predicate).OfType<FilePath>(),
-                new PathComparer(context.Environment.Platform.IsUnix()));
+            return new FilePathCollection(context.Globber.Match(pattern, predicate).OfType<FilePath>());
         }
 
         /// <summary>
@@ -109,13 +105,11 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException(nameof(context));
             }
 
-            return new FilePathCollection(
-                context.Globber.Match(pattern, settings).OfType<FilePath>(),
-                new PathComparer(context.Environment.Platform.IsUnix()));
+            return new FilePathCollection(context.Globber.Match(pattern, settings).OfType<FilePath>());
         }
 
         /// <summary>
-        /// Gets all directory matching the specified pattern.
+        /// Gets all directories matching the specified pattern.
         /// </summary>
         /// <example>
         /// <code>
@@ -138,12 +132,11 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException(nameof(context));
             }
 
-            return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>(),
-                new PathComparer(context.Environment.Platform.IsUnix()));
+            return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>());
         }
 
         /// <summary>
-        /// Gets all directory matching the specified pattern.
+        /// Gets all directories matching the specified pattern.
         /// </summary>
         /// <example>
         /// <code>
@@ -172,13 +165,11 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException(nameof(context));
             }
 
-            return new DirectoryPathCollection(
-                context.Globber.Match(pattern, predicate).OfType<DirectoryPath>(),
-                new PathComparer(context.Environment.Platform.IsUnix()));
+            return new DirectoryPathCollection(context.Globber.Match(pattern, predicate).OfType<DirectoryPath>());
         }
 
         /// <summary>
-        /// Gets all directory matching the specified pattern.
+        /// Gets all directories matching the specified pattern.
         /// </summary>
         /// <example>
         /// <code>
@@ -206,9 +197,66 @@ namespace Cake.Common.IO
                 throw new ArgumentNullException(nameof(context));
             }
 
-            return new DirectoryPathCollection(
-                context.Globber.Match(pattern, settings).OfType<DirectoryPath>(),
-                new PathComparer(context.Environment.Platform.IsUnix()));
+            return new DirectoryPathCollection(context.Globber.Match(pattern, settings).OfType<DirectoryPath>());
+        }
+
+        /// <summary>
+        /// Gets all paths matching the specified pattern.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var paths = GetPaths("./src/**/obj/*");
+        /// foreach(var paths in paths)
+        /// {
+        ///     Information("Path: {0}", path);
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The glob pattern to match.</param>
+        /// <returns>A <see cref="PathCollection" />.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Paths")]
+        public static PathCollection GetPaths(this ICakeContext context, string pattern)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            return new PathCollection(context.Globber.Match(pattern));
+        }
+
+        /// <summary>
+        /// Gets all paths matching the specified pattern.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
+        ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
+        ///         "node_modules", StringComparison.OrdinalIgnoreCase);
+        ///
+        /// var paths = GetPaths("./src/**/obj/*", new GlobberSettings { Predicate = exclude_node_modules });
+        /// foreach(var paths in paths)
+        /// {
+        ///     Information("Path: {0}", path);
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The glob pattern to match.</param>
+        /// <param name="settings">The globber settings.</param>
+        /// <returns>A <see cref="PathCollection" />.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Paths")]
+        public static PathCollection GetPaths(this ICakeContext context, string pattern, GlobberSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            return new PathCollection(context.Globber.Match(pattern, settings));
         }
     }
 }

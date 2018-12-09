@@ -19,6 +19,24 @@ Task("Cake.Common.IO.ZipAliases.Unzip")
     Assert.True(PathExists(targetFile), "Exists: " + targetFile.FullPath);
 });
 
+Task("Cake.Common.IO.ZipAliases.Zip.Directory")
+    .Does(() =>
+{
+    // Given
+    var sourcePath = Paths.Resources.Combine("Cake.Common/IO/Root");
+    EnsureDirectoryExist(sourcePath.Combine("Dir0")); // empty directory
+
+    var targetPath = Paths.Temp.Combine("Cake.Common.IO.ZipAliases/Directory");
+    var targetFile = targetPath.CombineWithFilePath("testfile.zip");
+    EnsureDirectoryExist(targetPath);
+
+    // When
+    Zip(sourcePath, targetFile);
+
+    // Then
+    Assert.True(PathExists(targetFile), "Exists: " + targetFile.FullPath);
+});
+
 Task("Cake.Common.IO.ZipAliases.Zip.FilePaths")
     .Does(() =>
 {
@@ -76,6 +94,7 @@ Task("Cake.Common.IO.ZipAliases.Zip.Pattern")
 
 Task("Cake.Common.IO.ZipAliases")
     .IsDependentOn("Cake.Common.IO.ZipAliases.Unzip")
+    .IsDependentOn("Cake.Common.IO.ZipAliases.Zip.Directory")
     .IsDependentOn("Cake.Common.IO.ZipAliases.Zip.FilePaths")
     .IsDependentOn("Cake.Common.IO.ZipAliases.Zip.Strings")
     .IsDependentOn("Cake.Common.IO.ZipAliases.Zip.Pattern");

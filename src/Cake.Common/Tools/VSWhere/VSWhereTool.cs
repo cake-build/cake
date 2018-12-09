@@ -87,8 +87,7 @@ namespace Cake.Common.Tools.VSWhere
             Run(settings, builder, new ProcessSettings { RedirectStandardOutput = true },
                 process => installationPaths = process.GetStandardOutput());
 
-            return new DirectoryPathCollection(installationPaths?.Select(DirectoryPath.FromString) ?? Enumerable.Empty<DirectoryPath>(),
-                PathComparer.Default);
+            return new DirectoryPathCollection(installationPaths?.Select(DirectoryPath.FromString) ?? Enumerable.Empty<DirectoryPath>());
         }
 
         /// <summary>

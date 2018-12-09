@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Linq;
 using Cake.Core.IO;
 using Xunit;
 
@@ -13,13 +12,13 @@ namespace Cake.Core.Tests.Unit.IO
         public sealed class TheConstructor
         {
             [Fact]
-            public void Should_Throw_If_Comparer_Is_Null()
+            public void Should_Use_PathComparer_Default_If_Comparer_Is_Null()
             {
-                // Given, When
-                var result = Record.Exception(() => new FilePathCollection(Enumerable.Empty<FilePath>(), null));
+                // Given
+                var collection = new FilePathCollection();
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "comparer");
+                Assert.Equal(PathComparer.Default, collection.Comparer);
             }
         }
 
@@ -29,9 +28,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_The_Number_Of_Paths_In_The_Collection()
             {
                 // Given
-                var collection = new FilePathCollection(
-                    new[] { new FilePath("A.txt"), new FilePath("B.txt") },
-                    new PathComparer(false));
+                var collection = new FilePathCollection(new FilePath[] { "A.txt", "B.txt" }, new PathComparer(false));
 
                 // When, Then
                 Assert.Equal(2, collection.Count);
@@ -46,11 +43,10 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Add_Path_If_Not_Already_Present()
                 {
                     // Given
-                    var collection = new FilePathCollection(new PathComparer(false));
-                    collection.Add(new FilePath("B.txt"));
+                    var collection = new FilePathCollection(new FilePath[] { "A.txt" }, new PathComparer(false));
 
                     // When
-                    collection.Add(new FilePath("A.txt"));
+                    collection.Add(new FilePath("B.txt"));
 
                     // Then
                     Assert.Equal(2, collection.Count);
@@ -62,8 +58,7 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Path(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var collection = new FilePathCollection(new PathComparer(caseSensitive));
-                    collection.Add(new FilePath("A.TXT"));
+                    var collection = new FilePathCollection(new FilePath[] { "A.TXT" }, new PathComparer(caseSensitive));
 
                     // When
                     collection.Add(new FilePath("a.txt"));
@@ -79,10 +74,10 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Add_Paths_That_Are_Not_Present()
                 {
                     // Given
-                    var collection = new FilePathCollection(new FilePath[] { "A.TXT", "B.TXT" }, new PathComparer(false));
+                    var collection = new FilePathCollection(new FilePath[] { "A.txt", "B.txt" }, new PathComparer(false));
 
                     // When
-                    collection.Add(new FilePath[] { "A.TXT", "B.TXT", "C.TXT" });
+                    collection.Add(new FilePath[] { "A.txt", "B.txt", "C.txt" });
 
                     // Then
                     Assert.Equal(3, collection.Count);
@@ -115,8 +110,7 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Respect_File_System_Case_Sensitivity_When_Removing_Path(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var collection = new FilePathCollection(new PathComparer(caseSensitive));
-                    collection.Add(new FilePath("A.TXT"));
+                    var collection = new FilePathCollection(new FilePath[] { "A.TXT" }, new PathComparer(caseSensitive));
 
                     // When
                     collection.Remove(new FilePath("a.txt"));
@@ -149,28 +143,29 @@ namespace Cake.Core.Tests.Unit.IO
         {
             public sealed class WithSinglePath
             {
-                [Fact]
-                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Path()
+                [Theory]
+                [InlineData(true, 2)]
+                [InlineData(false, 1)]
+                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Path(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var collection = new FilePathCollection(new PathComparer(false));
-                    collection.Add("B.txt");
+                    var collection = new FilePathCollection(new FilePath[] { "A.TXT" }, new PathComparer(caseSensitive));
 
                     // When
-                    var result = collection + new FilePath("A.txt");
+                    var result = collection + new FilePath("a.txt");
 
                     // Then
-                    Assert.Equal(2, result.Count);
+                    Assert.Equal(expectedCount, result.Count);
                 }
 
                 [Fact]
-                public void Should_Return_New_Collection()
+                public void Should_Return_New_Collection_When_Adding_Path()
                 {
                     // Given
-                    var collection = new FilePathCollection(new PathComparer(false));
+                    var collection = new FilePathCollection(new FilePath[] { "A.txt" }, new PathComparer(false));
 
                     // When
-                    var result = collection + new FilePath("A.txt");
+                    var result = collection + new FilePath("B.txt");
 
                     // Then
                     Assert.False(ReferenceEquals(result, collection));
@@ -179,31 +174,29 @@ namespace Cake.Core.Tests.Unit.IO
 
             public sealed class WithMultiplePaths
             {
-                [Fact]
-                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Paths()
+                [Theory]
+                [InlineData(true, 5)]
+                [InlineData(false, 3)]
+                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Paths(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var comparer = new PathComparer(false);
-                    var collection = new FilePathCollection(comparer);
-                    var second = new FilePathCollection(new FilePath[] { "A.txt", "B.txt" }, comparer);
+                    var collection = new FilePathCollection(new FilePath[] { "A.TXT", "B.TXT" }, new PathComparer(caseSensitive));
 
                     // When
-                    var result = collection + second;
+                    var result = collection + new FilePath[] { "a.txt", "b.txt", "c.txt" };
 
                     // Then
-                    Assert.Equal(2, result.Count);
+                    Assert.Equal(expectedCount, result.Count);
                 }
 
                 [Fact]
-                public void Should_Return_New_Collection()
+                public void Should_Return_New_Collection_When_Adding_Paths()
                 {
                     // Given
-                    var comparer = new PathComparer(false);
-                    var collection = new FilePathCollection(comparer);
-                    var second = new FilePathCollection(new FilePath[] { "A.txt", "B.txt" }, comparer);
+                    var collection = new FilePathCollection(new FilePath[] { "A.txt", "B.txt" }, new PathComparer(false));
 
                     // When
-                    var result = collection + second;
+                    var result = collection + new FilePath[] { "C.txt", "D.txt" };
 
                     // Then
                     Assert.False(ReferenceEquals(result, collection));
@@ -218,13 +211,10 @@ namespace Cake.Core.Tests.Unit.IO
                 [Theory]
                 [InlineData(true, 2)]
                 [InlineData(false, 1)]
-                public void Should_Respect_File_System_Case_Sensitivity_When_Removing_Paths(bool caseSensitive, int expectedCount)
+                public void Should_Respect_File_System_Case_Sensitivity_When_Removing_Path(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var comparer = new PathComparer(caseSensitive);
-                    var collection = new FilePathCollection(comparer);
-                    collection.Add("A.txt");
-                    collection.Add("B.txt");
+                    var collection = new FilePathCollection(new FilePath[] { "A.TXT", "B.TXT" }, new PathComparer(caseSensitive));
 
                     // When
                     var result = collection - new FilePath("a.txt");
@@ -234,12 +224,10 @@ namespace Cake.Core.Tests.Unit.IO
                 }
 
                 [Fact]
-                public void Should_Return_New_Collection()
+                public void Should_Return_New_Collection_When_Removing_Path()
                 {
                     // Given
-                    var collection = new FilePathCollection(new PathComparer(false));
-                    collection.Add("A.txt");
-                    collection.Add("B.txt");
+                    var collection = new FilePathCollection(new FilePath[] { "A.txt", "B.txt" }, new PathComparer(false));
 
                     // When
                     var result = collection - new FilePath("A.txt");
@@ -257,29 +245,23 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Respect_File_System_Case_Sensitivity_When_Removing_Paths(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var collection = new FilePathCollection(new PathComparer(caseSensitive));
-                    collection.Add("A.txt");
-                    collection.Add("B.txt");
-                    collection.Add("C.txt");
+                    var collection = new FilePathCollection(new FilePath[] { "A.TXT", "B.TXT", "C.TXT" }, new PathComparer(caseSensitive));
 
                     // When
-                    var result = collection - new[] { new FilePath("b.txt"), new FilePath("c.txt") };
+                    var result = collection - new FilePath[] { "b.txt", "c.txt" };
 
                     // Then
                     Assert.Equal(expectedCount, result.Count);
                 }
 
                 [Fact]
-                public void Should_Return_New_Collection()
+                public void Should_Return_New_Collection_When_Removing_Paths()
                 {
                     // Given
-                    var collection = new FilePathCollection(new PathComparer(false));
-                    collection.Add("A.txt");
-                    collection.Add("B.txt");
-                    collection.Add("C.txt");
+                    var collection = new FilePathCollection(new FilePath[] { "A.txt", "B.txt", "C.txt" }, new PathComparer(false));
 
                     // When
-                    var result = collection - new[] { new FilePath("B.txt"), new FilePath("C.txt") };
+                    var result = collection - new FilePath[] { "B.txt", "C.txt" };
 
                     // Then
                     Assert.False(ReferenceEquals(result, collection));

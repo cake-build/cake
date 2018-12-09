@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -32,6 +33,12 @@ namespace Cake.Testing
         ///   <c>true</c> if the entry is hidden; otherwise, <c>false</c>.
         /// </value>
         public bool Hidden { get; internal set; }
+
+        /// <summary>
+        /// Gets the time when this <see cref="IFileSystemInfo"/> was last written to.
+        /// </summary>
+        /// <value>The last write time.</value>
+        public DateTime LastWriteTime { get; internal set; }
 
         /// <summary>
         /// Gets the path to the directory.
