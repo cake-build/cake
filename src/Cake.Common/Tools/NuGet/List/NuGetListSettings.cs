@@ -33,5 +33,10 @@ namespace Cake.Common.Tools.NuGet.List
         /// Gets or sets a list of packages sources to search.
         /// </summary>
         public ICollection<string> Source { get; set; }
+
+        /// <summary>
+        /// Gets or sets the way to resolve a Package ID
+        /// </summary>
+        public PackageIdCompare PackageIdComparison { get; set; }
     }
 }

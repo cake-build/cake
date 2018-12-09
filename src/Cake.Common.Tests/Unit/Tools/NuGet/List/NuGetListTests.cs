@@ -1,4 +1,5 @@
 ﻿using Cake.Common.Tests.Fixtures.Tools.NuGet.List;
+using Cake.Common.Tools.NuGet.List;
 using Cake.Testing;
 using Cake.Testing.Xunit;
 using Xunit;
@@ -242,6 +243,31 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.List
                     item =>
                     {
                         Assert.Equal(item.Name, "Cake.CoreCLR");
+                        Assert.Equal(item.Version, "0.22.2");
+                    });
+            }
+
+            [Fact]
+            public void Should_Return_Filtered_List_By_PackageId_Of_NuGetListItems()
+            {
+                // Given
+                var fixture = new NuGetListFixture
+                {
+                    PackageId = "Cake.Core",
+                };
+
+                fixture.Settings.PackageIdComparison = PackageIdCompare.Equals;
+
+                fixture.GivenNormalPackageResult();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Collection(fixture.Result,
+                    item =>
+                    {
+                        Assert.Equal(item.Name, "Cake.Core");
                         Assert.Equal(item.Version, "0.22.2");
                     });
             }

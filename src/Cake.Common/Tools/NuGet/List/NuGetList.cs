@@ -69,7 +69,17 @@ namespace Cake.Common.Tools.NuGet.List
             Run(settings, GetHasArguments(packageId, settings), processSettings,
                 process => result = process.GetStandardOutput());
 
-            return result.Select(line => ConvertToNuGetListItem(line)).ToList();
+            return FilterResults(packageId, settings, result.Select(line => ConvertToNuGetListItem(line))).ToList();
+        }
+
+        private IEnumerable<NuGetListItem> FilterResults(string packageId, NuGetListSettings settings, IEnumerable<NuGetListItem> nugetListItems)
+        {
+            if (settings.PackageIdComparison == PackageIdCompare.Equals)
+            {
+                return nugetListItems.Where(i => string.Equals(i.Name, packageId, StringComparison.OrdinalIgnoreCase));
+            }
+
+            return nugetListItems;
         }
 
         private NuGetListItem ConvertToNuGetListItem(string line)
