@@ -1,9 +1,9 @@
-﻿using Cake.Common.Tests.Fixtures.Tools.NuGet.List;
+﻿using System;
+using System.Collections.Generic;
+using Cake.Common.Tests.Fixtures.Tools.NuGet.List;
 using Cake.Common.Tools.NuGet.List;
 using Cake.Testing;
 using Cake.Testing.Xunit;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.List
