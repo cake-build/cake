@@ -177,7 +177,7 @@ namespace Cake.Common.Tools.GitVersion
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "GitVersion.exe" };
+            return new[] { "GitVersion.exe", "dotnet-gitversion", "dotnet-gitversion.exe" };
         }
     }
 }
