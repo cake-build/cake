@@ -121,7 +121,7 @@ namespace Cake.NuGet.Install
 
             var includePrerelease = package.IsPrerelease();
             var dependencyBehavior = GetDependencyBehavior(type, package);
-            var projectContext = new NuGetProjectContext(_log);
+            var projectContext = new NuGetProjectContext(_nugetSettings, _log);
             var resolutionContext = new ResolutionContext(dependencyBehavior, includePrerelease, false, VersionConstraints.None, _gatherCache, _sourceCacheContext);
             var downloadContext = new PackageDownloadContext(_sourceCacheContext);
 

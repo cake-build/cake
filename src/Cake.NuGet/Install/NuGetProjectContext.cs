@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Cake.Core.Diagnostics;
+using NuGet.Configuration;
 using NuGet.Packaging;
 using NuGet.Packaging.Signing;
 using NuGet.ProjectManagement;
@@ -17,15 +18,15 @@ namespace Cake.NuGet.Install
     {
         private readonly ICakeLog _log;
 
-        public NuGetProjectContext(ICakeLog log)
+        public NuGetProjectContext(ISettings settings, ICakeLog log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
+            var nuGetLogger = new NuGetLogger(_log);
             PackageExtractionContext = new PackageExtractionContext(
                 PackageSaveMode.Nuspec | PackageSaveMode.Files | PackageSaveMode.Nupkg,
                 XmlDocFileSaveMode.None,
-                new NuGetLogger(_log),
-                new PackageSignatureVerifier(SignatureVerificationProviderFactory.GetSignatureVerificationProviders()),
-                SignedPackageVerifierSettings.GetDefault());
+                ClientPolicyContext.GetClientPolicy(settings, nuGetLogger),
+                nuGetLogger);
         }
 
         public void Log(MessageLevel level, string message, params object[] args)
