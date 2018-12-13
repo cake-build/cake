@@ -31,7 +31,7 @@ Param(
     [string[]]$ScriptArgs
 )
 
-$CakeVersion = "0.30.0"
+$CakeVersion = "0.31.0"
 $DotNetChannel = "Current";
 $DotNetVersion = "2.1.500";
 $DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
@@ -105,7 +105,7 @@ if (Test-Path $NugetPath)
     [Version] $nugetVersion = Get-ChildItem $NugetPath | % VersionInfo| % FileVersion
     if ($minVersion -gt $nugetVersion)
     {
-        Write-Host "NuGet.exe version $nugetVersion to old deleting $NugetPath..."    
+        Write-Host "NuGet.exe version $nugetVersion to old deleting $NugetPath..."
         Remove-Item $NugetPath
     }
 }
