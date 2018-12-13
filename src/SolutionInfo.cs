@@ -10,7 +10,7 @@
 using System.Reflection;
 
 [assembly: AssemblyProduct("Cake")]
-[assembly: AssemblyVersion("0.30.0.0")]
-[assembly: AssemblyFileVersion("0.30.0.0")]
-[assembly: AssemblyInformationalVersion("0.30.0-beta.1+0.Branch.release/0.30.0.Sha.dce0412c4e26d4c92657fec330392a7c41a864aa")]
+[assembly: AssemblyVersion("0.31.0.0")]
+[assembly: AssemblyFileVersion("0.31.0.0")]
+[assembly: AssemblyInformationalVersion("0.31.0-beta.1+0.Branch.release/0.31.0.Sha.50881e2b97cd8ac0631b9bdc52f09fdaa4772d86")]
 [assembly: AssemblyCopyright("Copyright (c) .NET Foundation and Contributors")]
