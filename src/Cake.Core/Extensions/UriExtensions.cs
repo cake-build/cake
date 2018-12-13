@@ -18,7 +18,7 @@ namespace Cake.Core
         /// Extracts query string of <see cref="System.Uri"/>
         /// </summary>
         /// <param name="uri">The URI</param>
-        /// <returns>Collection of parameters and it's values</returns>
+        /// <returns>Collection of parameters and their values</returns>
         public static IReadOnlyDictionary<string, IReadOnlyList<string>> GetQueryString(this Uri uri)
         {
             var result = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);

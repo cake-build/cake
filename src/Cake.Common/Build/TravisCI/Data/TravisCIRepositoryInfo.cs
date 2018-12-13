@@ -36,7 +36,7 @@ namespace Cake.Common.Build.TravisCI.Data
         public string PullRequest => GetEnvironmentString("TRAVIS_PULL_REQUEST");
 
         /// <summary>
-        /// Gets the slug of the respository currently being built.
+        /// Gets the slug of the repository currently being built.
         /// </summary>
         /// <value>
         /// The slug.

@@ -7,24 +7,20 @@ using System.Diagnostics;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
-    [DebuggerDisplay("{Drive,nq}:")]
-    internal sealed class WindowsRoot : GlobNode
+    [DebuggerDisplay(@"\\")]
+    internal sealed class UncRootNode : GlobNode
     {
-        public string Drive { get; }
+        public string Server { get; }
 
-        public WindowsRoot(string drive)
+        public UncRootNode(string server)
         {
-            if (drive == null)
-            {
-                throw new ArgumentNullException(nameof(drive));
-            }
-            Drive = drive;
+            Server = server;
         }
 
         [DebuggerStepThrough]
         public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
         {
-            visitor.VisitWindowsRoot(this, context);
+            visitor.VisitUncRoot(this, context);
         }
     }
 }

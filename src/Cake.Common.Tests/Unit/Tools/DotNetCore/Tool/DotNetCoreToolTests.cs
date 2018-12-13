@@ -15,18 +15,15 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Tool
         public sealed class TheToolMethod
         {
             [Fact]
-            public void Should_Throw_If_ProjectPath_IsNull()
+            public void Should_Not_Throw_If_ProjectPath_IsNull()
             {
                 // Given
                 var fixture = new DotNetCoreToolFixture();
+                fixture.Command = "cake";
                 fixture.ProjectPath = null;
-                fixture.GivenDefaultToolDoNotExist();
 
                 // When
-                var result = Record.Exception(() => fixture.Run());
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "projectPath");
+                fixture.Run();
             }
 
             [Theory]

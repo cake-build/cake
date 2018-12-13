@@ -200,9 +200,9 @@ namespace Cake.Common.Tools.NuGet.Pack
             return value?.ToString().TrimEnd('/');
         }
 
-        private static string ToString(bool value)
+        private static string ToString(bool? value)
         {
-            return value.ToString().ToLowerInvariant();
+            return value?.ToString().ToLowerInvariant();
         }
 
         private static string ToCommaSeparatedString(IEnumerable<string> values)

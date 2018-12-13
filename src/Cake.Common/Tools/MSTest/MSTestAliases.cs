@@ -17,7 +17,7 @@ namespace Cake.Common.Tools.MSTest
     /// <para>
     /// In order to use the commands for this alias, MSTest will need to be installed on the machine where
     /// the Cake script is being executed.  This is typically achieved by having either Visual Studio installed, or by
-    /// using the Micrsoft Build Tools, for example, for <see href="https://www.microsoft.com/en-us/download/details.aspx?id=48159">2015</see>.
+    /// using the Microsoft Build Tools, for example, for <see href="https://www.microsoft.com/en-us/download/details.aspx?id=48159">2015</see>.
     /// </para>
     /// </summary>
     [CakeAliasCategory("MSTest")]

@@ -85,7 +85,7 @@ namespace Cake.Common.Tests.Unit.Build.BitbucketPipelines.Data
                 var result = info.Tag;
 
                 // Then
-                Assert.Equal("BitbucketPiplines", result);
+                Assert.Equal("BitbucketPipelines", result);
             }
         }
     }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -13,10 +12,8 @@ namespace Cake.Common.Tools.OctopusDeploy
     /// <summary>
     /// The Octopus Deploy Promote Release runner. This class facilitates promoting existing releases in Octopus Deploy.
     /// </summary>
-    public sealed class OctopusDeployReleasePromoter : Tool<OctopusDeployPromoteReleaseSettings>
+    public sealed class OctopusDeployReleasePromoter : OctopusDeployTool<OctopusDeployPromoteReleaseSettings>
     {
-        private readonly ICakeEnvironment _environment;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OctopusDeployReleasePromoter"/> class.
         /// </summary>
@@ -24,10 +21,13 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="tools">The tool locator.</param>
-        public OctopusDeployReleasePromoter(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolLocator tools)
+        public OctopusDeployReleasePromoter(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            IProcessRunner processRunner,
+            IToolLocator tools)
             : base(fileSystem, environment, processRunner, tools)
         {
-            _environment = environment;
         }
 
         /// <summary>
@@ -71,26 +71,8 @@ namespace Cake.Common.Tools.OctopusDeploy
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            var argumentBuilder = new PromoteReleaseArgumentBuilder(server, apiKey, projectName, deployFrom, deployTo, settings, _environment);
+            var argumentBuilder = new PromoteReleaseArgumentBuilder(server, apiKey, projectName, deployFrom, deployTo, settings, Environment);
             Run(settings, argumentBuilder.Get());
-        }
-
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
-        {
-            return "Octo";
-        }
-
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return new[] { "Octo.exe" };
         }
     }
 }

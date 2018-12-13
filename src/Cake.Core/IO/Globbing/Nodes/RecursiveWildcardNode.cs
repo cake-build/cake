@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Cake.Core.IO.Globbing.Nodes
 {
     [DebuggerDisplay("**")]
-    internal sealed class RecursiveWildcardSegment : MatchableNode
+    internal sealed class RecursiveWildcardNode : MatchableNode
     {
         [DebuggerStepThrough]
         public override void Accept(GlobVisitor globber, GlobVisitorContext context)

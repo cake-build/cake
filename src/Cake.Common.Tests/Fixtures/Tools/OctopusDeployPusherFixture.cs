@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public List<FilePath> Packages { get; set; }
 
         public OctopusDeployPusherFixture()
-            : base("Octo.exe")
+            : base("octo.exe")
         {
             Packages = new List<FilePath>
             {

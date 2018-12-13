@@ -14,10 +14,11 @@ namespace Cake.Core.Tests.Unit.IO
     {
         public sealed class TheGetDirectoryNameMethod
         {
-            [Theory]
+            [WindowsTheory]
             [InlineData("C:/Data", "Data")]
             [InlineData("C:/Data/Work", "Work")]
             [InlineData("C:/Data/Work/file.txt", "file.txt")]
+            [InlineData(@"\\Data\Work", "Work")]
             public void Should_Return_Directory_Name(string directoryPath, string name)
             {
                 // Given
@@ -57,6 +58,8 @@ namespace Cake.Core.Tests.Unit.IO
             [InlineData("assets/shaders", "test/simple.frag", "assets/shaders/simple.frag")]
             [InlineData("assets/shaders/", "test/simple.frag", "assets/shaders/simple.frag")]
             [InlineData("/assets/shaders/", "test/simple.frag", "/assets/shaders/simple.frag")]
+            [InlineData(@"\\foo\bar", "qux.txt", @"\\foo\bar\qux.txt")]
+            [InlineData(@"\\foo\bar", "baz/qux.txt", @"\\foo\bar\qux.txt")]
             public void Should_Combine_Paths(string first, string second, string expected)
             {
                 // Given
@@ -86,17 +89,35 @@ namespace Cake.Core.Tests.Unit.IO
             }
 
             [Theory]
-            [InlineData("c:/assets/shaders/", "simple.frag", "c:/assets/shaders/simple.frag")]
-            [InlineData("c:/", "simple.frag", "c:/simple.frag")]
-            [InlineData("c:/assets/shaders/", "test/simple.frag", "c:/assets/shaders/test/simple.frag")]
-            [InlineData("c:/", "test/simple.frag", "c:/test/simple.frag")]
             [InlineData("assets/shaders", "simple.frag", "assets/shaders/simple.frag")]
             [InlineData("assets/shaders/", "simple.frag", "assets/shaders/simple.frag")]
             [InlineData("/assets/shaders/", "simple.frag", "/assets/shaders/simple.frag")]
             [InlineData("assets/shaders", "test/simple.frag", "assets/shaders/test/simple.frag")]
             [InlineData("assets/shaders/", "test/simple.frag", "assets/shaders/test/simple.frag")]
             [InlineData("/assets/shaders/", "test/simple.frag", "/assets/shaders/test/simple.frag")]
+            [InlineData("/", "test/simple.frag", "/test/simple.frag")]
             public void Should_Combine_Paths(string first, string second, string expected)
+            {
+                // Given
+                var path = new DirectoryPath(first);
+
+                // When
+                var result = path.CombineWithFilePath(new FilePath(second));
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("c:/assets/shaders/", "simple.frag", "c:/assets/shaders/simple.frag")]
+            [InlineData("c:/", "simple.frag", "c:/simple.frag")]
+            [InlineData("c:/assets/shaders/", "test/simple.frag", "c:/assets/shaders/test/simple.frag")]
+            [InlineData("c:/", "test/simple.frag", "c:/test/simple.frag")]
+            [InlineData(@"\\", "qux.txt", @"\\qux.txt")]
+            [InlineData(@"\\foo\bar", "qux.txt", @"\\foo\bar\qux.txt")]
+            [InlineData(@"\\", "baz/qux.txt", @"\\baz\qux.txt")]
+            [InlineData(@"\\foo\bar", "baz/qux.txt", @"\\foo\bar\baz\qux.txt")]
+            public void Should_Combine_Windows_Paths(string first, string second, string expected)
             {
                 // Given
                 var path = new DirectoryPath(first);
@@ -112,26 +133,57 @@ namespace Cake.Core.Tests.Unit.IO
             public void Can_Not_Combine_Directory_Path_With_Absolute_File_Path()
             {
                 // Given
-                var path = new DirectoryPath("assets");
+                var path = new DirectoryPath("foo");
 
                 // When
                 var result = Record.Exception(() => path.CombineWithFilePath(new FilePath("/other/asset.txt")));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Cannot combine a directory path with an absolute file path.", result?.Message);
+            }
+
+            [WindowsFact]
+            public void Can_Not_Combine_Directory_Path_With_Absolute_UNC_File_Path()
+            {
+                // Given
+                var path = new DirectoryPath(@"\\foo");
+
+                // When
+                var result = Record.Exception(() => path.CombineWithFilePath(new FilePath("/other/asset.txt")));
+
+                // Then
+                Assert.IsType<InvalidOperationException>(result);
             }
         }
 
-        public sealed class TheCombineWithDirectoryPathMethod
+        public sealed class TheCombineMethod
         {
             [Theory]
-            [InlineData("c:/assets/shaders/", "simple", "c:/assets/shaders/simple")]
-            [InlineData("c:/", "simple", "c:/simple")]
             [InlineData("assets/shaders", "simple", "assets/shaders/simple")]
             [InlineData("assets/shaders/", "simple", "assets/shaders/simple")]
             [InlineData("/assets/shaders/", "simple", "/assets/shaders/simple")]
             public void Should_Combine_Paths(string first, string second, string expected)
+            {
+                // Given
+                var path = new DirectoryPath(first);
+
+                // When
+                var result = path.Combine(new DirectoryPath(second));
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("c:/assets/shaders/", "simple", "c:/assets/shaders/simple")]
+            [InlineData("c:/", "simple", "c:/simple")]
+            [InlineData(@"\\", "foo", @"\\foo")]
+            [InlineData(@"\\", "foo/", @"\\foo")]
+            [InlineData(@"\\", "foo\\", @"\\foo")]
+            [InlineData(@"\\foo", "bar", @"\\foo\bar")]
+            [InlineData(@"\\foo", "bar/", @"\\foo\bar")]
+            [InlineData(@"\\foo", "bar\\", @"\\foo\bar")]
+            public void Should_Combine_Windows_Paths(string first, string second, string expected)
             {
                 // Given
                 var path = new DirectoryPath(first);
@@ -164,6 +216,22 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // When
                 var result = Record.Exception(() => path.Combine(new DirectoryPath("/other/assets")));
+
+                // Then
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Cannot combine a directory path with an absolute directory path.", result?.Message);
+            }
+
+            [WindowsTheory]
+            [InlineData("C:/foo/bar")]
+            [InlineData(@"\\foo\bar")]
+            public void Can_Not_Combine_Directory_Path_With_Absolute_Windows_Directory_Path(string input)
+            {
+                // Given
+                var path = new DirectoryPath("assets");
+
+                // When
+                var result = Record.Exception(() => path.Combine(new DirectoryPath(input)));
 
                 // Then
                 Assert.IsType<InvalidOperationException>(result);
@@ -216,6 +284,23 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.Equal("/assets", result.FullPath);
+                }
+
+                [WindowsTheory]
+                [InlineData("C:/foo")]
+                [InlineData(@"\\foo")]
+                public void Should_Create_New_Absolute_Windows_Path_Identical_To_The_Path(string fullPath)
+                {
+                    // Given
+                    var environment = Substitute.For<ICakeEnvironment>();
+                    var path = new DirectoryPath(fullPath);
+
+                    // When
+                    var result = path.MakeAbsolute(environment);
+
+                    // Then
+                    Assert.Equal(fullPath, result.FullPath);
+                    Assert.NotSame(path, result);
                 }
             }
 
@@ -290,6 +375,12 @@ namespace Cake.Core.Tests.Unit.IO
                     [InlineData("C:/A/B/C", "C:/", "../../..")]
                     [InlineData("C:/A/B/C/D/E/F", "C:/A/B/C", "../../..")]
                     [InlineData("C:/A/B/C", "C:/A/B/C/D/E/F", "D/E/F")]
+                    [InlineData(@"\\A\B\C", @"\\A\B\C", ".")]
+                    [InlineData(@"\\", @"\\", ".")]
+                    [InlineData(@"\\A\B\C", @"\\A\D\E", "../../D/E")]
+                    [InlineData(@"\\A\B\C", @"\\", "../../..")]
+                    [InlineData(@"\\A\B\C/D/E/F", @"\\A\B\C", "../../..")]
+                    [InlineData(@"\\A\B\C", @"\\A\B\C\D\E\F", "D/E/F")]
                     public void Should_Returns_Relative_Path_Between_Paths(string from, string to, string expected)
                     {
                         // Given
@@ -306,6 +397,9 @@ namespace Cake.Core.Tests.Unit.IO
                     [InlineData("C:/A/B/C", "D:/A/B/C")]
                     [InlineData("C:/A/B", "D:/E/")]
                     [InlineData("C:/", "B:/")]
+                    [InlineData(@"\\A\B\C", "D:/A/B/C")]
+                    [InlineData(@"\\A\B", "D:/E/")]
+                    [InlineData(@"\\", "B:/")]
                     public void Should_Throw_If_No_Relative_Path_Can_Be_Found(string from, string to)
                     {
                         // Given
@@ -346,11 +440,13 @@ namespace Cake.Core.Tests.Unit.IO
                         Assert.Equal("Source path must be an absolute path.", result?.Message);
                     }
 
-                    [WindowsFact]
-                    public void Should_Throw_If_Target_DirectoryPath_Is_Relative()
+                    [WindowsTheory]
+                    [InlineData("C:/A/B/C")]
+                    [InlineData(@"\\A\B\C")]
+                    public void Should_Throw_If_Target_DirectoryPath_Is_Relative(string input)
                     {
                         // Given
-                        var path = new DirectoryPath("C:/A/B/C");
+                        var path = new DirectoryPath(input);
 
                         // When
                         var result = Record.Exception(() => path.GetRelativePath(new DirectoryPath("D")));
@@ -453,6 +549,11 @@ namespace Cake.Core.Tests.Unit.IO
                     [InlineData("C:/A/B/C", "C:/hello.txt", "../../../hello.txt")]
                     [InlineData("C:/A/B/C/D/E/F", "C:/A/B/C/hello.txt", "../../../hello.txt")]
                     [InlineData("C:/A/B/C", "C:/A/B/C/D/E/F/hello.txt", "D/E/F/hello.txt")]
+                    [InlineData(@"\\A\B\C", @"\\A\B\C\D\E\F\hello.txt", "D/E/F/hello.txt")]
+                    [InlineData(@"\\", @"\\hello.txt", "hello.txt")]
+                    [InlineData(@"\\A\B\C", @"\\A\D\E\hello.txt", "../../D/E/hello.txt")]
+                    [InlineData(@"\\A\B\C", @"\\hello.txt", "../../../hello.txt")]
+                    [InlineData(@"\\A\B\C\D\E\F", @"\\A\B\C\hello.txt", "../../../hello.txt")]
                     public void Should_Returns_Relative_Path_Between_Paths(string from, string to, string expected)
                     {
                         // Given
@@ -469,6 +570,9 @@ namespace Cake.Core.Tests.Unit.IO
                     [InlineData("C:/A/B/C", "D:/A/B/C/hello.txt")]
                     [InlineData("C:/A/B", "D:/E/hello.txt")]
                     [InlineData("C:/", "B:/hello.txt")]
+                    [InlineData(@"\\A\B\C", "D:/A/B/C/hello.txt")]
+                    [InlineData(@"\\A\B", "D:/E/hello.txt")]
+                    [InlineData(@"\\", "B:/hello.txt")]
                     public void Should_Throw_If_No_Relative_Path_Can_Be_Found(string from, string to)
                     {
                         // Given
@@ -509,11 +613,13 @@ namespace Cake.Core.Tests.Unit.IO
                         Assert.Equal("Source path must be an absolute path.", result?.Message);
                     }
 
-                    [WindowsFact]
-                    public void Should_Throw_If_Target_FilePath_Is_Relative()
+                    [WindowsTheory]
+                    [InlineData("C:/A/B/C")]
+                    [InlineData(@"\\A\B\C")]
+                    public void Should_Throw_If_Target_FilePath_Is_Relative(string input)
                     {
                         // Given
-                        var path = new DirectoryPath("C:/A/B/C");
+                        var path = new DirectoryPath(input);
 
                         // When
                         var result = Record.Exception(() => path.GetRelativePath(new FilePath("D/hello.txt")));

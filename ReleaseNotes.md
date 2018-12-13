@@ -1,3 +1,43 @@
+### New in 0.31.0 (Released 2018/12/13)
+
+* 2320 Alias for ScriptCallerInfo
+* 2286 Add .NET build server shutdown alias "DotNetCoreBuildServerShutdown"
+* 2277 Add basic implementation of info command
+* 2201 Extend supported globber patterns
+* 2200 Support UNC paths
+* 2198 Add GlobberSettings
+* 2197 Don't rely on System.IO namespace for FilePath/DirectoryPath
+* 1976 Add MSBuildSettings.NoLogo
+* 1383 Add command line option to display build target graph
+* 2342 Provide value for self-contained to support succeeding parameters
+* 2310 Cake.Testing.Xunit RuntimeFact and RuntimeTheory doesn't work for .NET Core App
+* 2252 Cake fails to start on posix systems if script / current directory is root ( / )
+* 2391 Upgrade to NuGet 4.9.2
+* 2387 Extend GetTooolExecutableNames for GitVersion
+* 2384 Add homebrew fallback path for MSBuild tool resolver
+* 2369 Update Roslyn to 2.10.0
+* 2350 In-process NuGet client should reuse package sources as specified in NuGet.Config if available
+* 2341 Add support for JUnit Output Format
+* 2332 TFBuild UploadArtifact commands should support directories
+* 2312 Add method to expand environment variables to FilePath/DirectoryPath
+* 2308 Use Mono for full framework executables if running on Unix & .NET Core
+* 2306 Add VSTestReportPath to DotNetCoreTestSettings
+* 2300 Make DotNetCoreTool alias project path optional add overloads without.
+* 2297 NUnit3Settings does not provide an option to specify the configuration file to load
+* 2284 --version should only return sem/nuget version
+* 2272 Update in-process NuGet client to support offline environments
+* 2268 Add .NET Core tool support for Octopus aliases
+* 2265 Update Roslyn to 2.9.0
+* 2257 NuGetPack should have a version suffix setting
+* 2255 Show warning when referenced package is missing version number
+* 2246 Add NuGet projectUrl to nuspec/csproj packages
+* 2245 Add symbols for Cake.Tool package
+* 2061 NuGetPack overwrites developmentDependency and requireLicenseAcceptance from nuspec.
+* 1875 Folder structure of tools and addins can cause too long paths on Windows
+* 2385 Typo in BuildSystem.TeamCity property example
+* 2365 Fixed typos
+* 2267 Fix more 'occured' and 'occuring' typos
+
 ### New in 0.30.0 (Released 2018/08/22)
 
 * 2067 Publish as .NET Core Global Tool.
@@ -568,7 +608,7 @@
 ### New in 0.10.0 (Released 2016/03/16)
 
 * XUnit command line bug
-* Cake does not find it's own nuget.exe on Linux
+* Cake does not find its own nuget.exe on Linux
 * Sanitization in TeamCity Provider places extra apostrophe if '[' is used.
 * Path segment bug (or test bug, choose your own adventure!)
 * Add support for importing coverage to TeamCity
@@ -750,7 +790,7 @@
 * Added filter predicate to globber and clean directory methods.
 * Added Unzip alias.
 * Added DownloadFile alias.
-* Added method to retrieve filename without it's extension.
+* Added method to retrieve filename without its extension.
 * Added support for InternalsVisibleToAttribute when generating assembly info.
 * Added extension methods to ProcessSettings.
 * Fixed formatting in build report.

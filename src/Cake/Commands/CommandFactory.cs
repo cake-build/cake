@@ -10,26 +10,32 @@ namespace Cake.Commands
         private readonly BuildCommand.Factory _buildCommandFactory;
         private readonly DebugCommand.Factory _debugCommandFactory;
         private readonly DescriptionCommand.Factory _descriptionCommandFactory;
+        private readonly TaskTreeCommand.Factory _taskTreeCommandFactory;
         private readonly DryRunCommand.Factory _dryRunCommandFactory;
         private readonly HelpCommand.Factory _helpCommandFactory;
         private readonly VersionCommand.Factory _versionCommandFactory;
+        private readonly InfoCommand.Factory _infoCommandFactory;
 
         public CommandFactory(
             BootstrapCommand.Factory bootstrapCommandFactory,
             BuildCommand.Factory buildCommandFactory,
             DebugCommand.Factory debugCommandFactory,
             DescriptionCommand.Factory descriptionCommandFactory,
+            TaskTreeCommand.Factory taskTreeCommandFactory,
             DryRunCommand.Factory dryRunCommandFactory,
             HelpCommand.Factory helpCommandFactory,
-            VersionCommand.Factory versionCommandFactory)
+            VersionCommand.Factory versionCommandFactory,
+            InfoCommand.Factory infoCommandFactory)
         {
             _bootstrapCommandFactory = bootstrapCommandFactory;
             _buildCommandFactory = buildCommandFactory;
             _debugCommandFactory = debugCommandFactory;
             _descriptionCommandFactory = descriptionCommandFactory;
+            _taskTreeCommandFactory = taskTreeCommandFactory;
             _dryRunCommandFactory = dryRunCommandFactory;
             _helpCommandFactory = helpCommandFactory;
             _versionCommandFactory = versionCommandFactory;
+            _infoCommandFactory = infoCommandFactory;
         }
 
         public ICommand CreateBootstrapCommand()
@@ -52,6 +58,11 @@ namespace Cake.Commands
             return _descriptionCommandFactory();
         }
 
+        public ICommand CreateTaskTreeCommand()
+        {
+            return _taskTreeCommandFactory();
+        }
+
         public ICommand CreateDryRunCommand()
         {
             return _dryRunCommandFactory();
@@ -65,6 +76,11 @@ namespace Cake.Commands
         public ICommand CreateVersionCommand()
         {
             return _versionCommandFactory();
+        }
+
+        public ICommand CreateInfoCommand()
+        {
+            return _infoCommandFactory();
         }
     }
 }

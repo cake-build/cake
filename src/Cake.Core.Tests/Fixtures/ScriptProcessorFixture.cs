@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
@@ -21,6 +22,7 @@ namespace Cake.Core.Tests.Fixtures
         public ICakeLog Log { get; set; }
         public IToolLocator ToolLocator { get; set; }
         public IPackageInstaller Installer { get; set; }
+        public ICakeConfiguration Configuration { get; set; }
 
         public List<PackageReference> Addins { get; set; }
         public List<PackageReference> Tools { get; set; }
@@ -32,6 +34,7 @@ namespace Cake.Core.Tests.Fixtures
             FileSystem = new FakeFileSystem(Environment);
             Log = Substitute.For<ICakeLog>();
             ToolLocator = Substitute.For<IToolLocator>();
+            Configuration = Substitute.For<ICakeConfiguration>();
 
             Installer = Substitute.For<IPackageInstaller>();
             Installer.CanInstall(Arg.Any<PackageReference>(), Arg.Any<PackageType>()).Returns(true);
@@ -60,7 +63,7 @@ namespace Cake.Core.Tests.Fixtures
             {
                 installers.Add(Installer);
             }
-            return new ScriptProcessor(FileSystem, Environment, Log, ToolLocator, installers);
+            return new ScriptProcessor(FileSystem, Environment, Log, ToolLocator, installers, Configuration);
         }
 
         public void InstallAddins()

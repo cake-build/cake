@@ -142,7 +142,7 @@ namespace Cake.Common.Tests.Unit.XML
                 Assert.False(fixture.TestIsUTF8WithBOM());
             }
 
-            [RuntimeFact(TestRuntime.Clr)]
+            [Fact]
             public void Should_Change_Attribute_From_Xml_File_With_Dtd()
             {
                 // Given
@@ -156,20 +156,6 @@ namespace Cake.Common.Tests.Unit.XML
                 Assert.True(fixture.TestIsValue(
                     "/plist/dict/string/text()",
                     "Cake Version"));
-            }
-
-            [RuntimeFact(TestRuntime.CoreClr)]
-            public void Should_Throw_On_Net_Core_Change_Attribute_From_Xml_File_With_Dtd()
-            {
-                // Given
-                var fixture = new XmlPokeFixture(xmlWithDtd: true);
-                fixture.Settings.DtdProcessing = XmlDtdProcessing.Parse;
-
-                // When
-                var result = Record.Exception(() => fixture.Poke("/plist/dict/string", "Cake Version"));
-
-                // Then
-                AssertEx.IsCakeException(result, "DtdProcessing is not available on .NET Core.");
             }
 
             [Fact]

@@ -47,11 +47,11 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Adds the criteria to the task's criterias.
+        /// Adds to the task's criteria.
         /// </summary>
         /// <param name="task">The task.</param>
-        /// <param name="predicate">The criteria's predicate.</param>
-        /// <param name="message">The criteria's message if skipped.</param>
+        /// <param name="predicate">The criteria predicate.</param>
+        /// <param name="message">The criteria message if skipped.</param>
         public static void AddCriteria(this CakeTask task, Func<ICakeContext, bool> predicate, string message = null)
         {
             task.Criterias.Add(new CakeTaskCriteria(predicate, message));

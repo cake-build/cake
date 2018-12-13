@@ -90,6 +90,11 @@ namespace Cake.Common.Tools.MSBuild
         public bool? NoConsoleLogger { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to show copyright information at the start of the program.
+        /// </summary>
+        public bool? NoLogo { get; set; }
+
+        /// <summary>
         /// Gets or sets the amount of information to display in the build log.
         /// Each logger displays events based on the verbosity level that you set for that logger.
         /// </summary>

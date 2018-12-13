@@ -28,7 +28,7 @@ Function BuildCake([string]$ScriptRoot)
         Set-Location $RootDirectory
         Invoke-Expression "./build.ps1 -Target Copy-Files" | Out-Null
         if($LASTEXITCODE -ne 0) {
-            Throw "An error occured while building Cake."
+            Throw "An error occurred while building Cake."
         }
     }
     finally {
@@ -55,7 +55,7 @@ $Script = (Join-Path $PSScriptRoot "windows.cake")
 $ToolsPath = Join-Path $PSScriptRoot "tools"
 $NuGetPath = Join-Path $ToolsPath "nuget.exe"
 $DotNetChannel = "Current"
-$DotNetVersion = "2.1.400";
+$DotNetVersion = "2.1.500";
 $DotNetInstallerUri = "https://dot.net/v1/dotnet-install.ps1";
 $NuGetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 

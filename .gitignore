@@ -89,3 +89,9 @@ packages
 
 # Windows
 Thumbs.db
+
+# Mac
+.DS_Store
+
+# Generated Assembly info
+AssemblyInfo.Generated.cs

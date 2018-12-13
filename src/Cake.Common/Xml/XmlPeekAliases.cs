@@ -56,13 +56,13 @@ namespace Cake.Common.Xml
         /// </code>
         /// <para>XmlPeek usage:</para>
         /// <code>
-        /// string version = XmlPeek("./pastery.xml", "/pastery:pastery/pastery:cake/@price",
+        /// string version = XmlPeek("./pastry.xml", "/pastry:pastry/pastry:cake/@price",
         ///     new XmlPeekSettings {
-        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "https://cakebuild.net/pastery" }}
+        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastry", "https://cakebuild.net/pastry" }}
         ///     });
-        /// string unknown = XmlPeek("./pastery.xml", "/pastery:pastery/pastery:cake/@recipe",
+        /// string unknown = XmlPeek("./pastry.xml", "/pastry:pastry/pastry:cake/@recipe",
         ///     new XmlPeekSettings {
-        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastery", "https://cakebuild.net/pastery" }},
+        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastry", "https://cakebuild.net/pastry" }},
         ///         SuppressWarning = true
         ///     });
         /// </code>

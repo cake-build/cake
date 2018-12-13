@@ -62,6 +62,10 @@ namespace Cake
                 {
                     return _commandFactory.CreateVersionCommand();
                 }
+                if (options.ShowInfo)
+                {
+                    return _commandFactory.CreateInfoCommand();
+                }
                 if (options.Bootstrap)
                 {
                     return _commandFactory.CreateBootstrapCommand();
@@ -73,6 +77,10 @@ namespace Cake
                 if (options.ShowDescription)
                 {
                     return _commandFactory.CreateDescriptionCommand();
+                }
+                if (options.ShowTree)
+                {
+                    return _commandFactory.CreateTaskTreeCommand();
                 }
                 if (options.PerformDebug)
                 {

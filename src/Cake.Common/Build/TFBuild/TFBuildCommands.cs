@@ -150,7 +150,7 @@ namespace Cake.Common.Build.TFBuild
         /// <param name="type">Type of the new timeline record.</param>
         /// <param name="order">Order of the timeline record.</param>
         /// <param name="data">Additional data for the new timeline record.</param>
-        /// <returns>The timeilne record ID.</returns>
+        /// <returns>The timeline record ID.</returns>
         public Guid CreateNewRecord(string name, string type, int order, TFBuildRecordData data)
         {
             var guid = Guid.NewGuid();
@@ -278,6 +278,37 @@ namespace Cake.Common.Build.TFBuild
                 ["containerfolder"] = folderName,
                 ["artifactname"] = artifactName
             }, file.MakeAbsolute(_environment).FullPath);
+        }
+
+        /// <inheritdoc />
+        public void UploadArtifactDirectory(DirectoryPath directory)
+        {
+            if (directory == null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
+            UploadArtifactDirectory(directory, directory.GetDirectoryName());
+        }
+
+        /// <inheritdoc />
+        public void UploadArtifactDirectory(DirectoryPath directory, string artifactName)
+        {
+            if (directory == null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
+            if (artifactName == null)
+            {
+                throw new ArgumentNullException(nameof(artifactName));
+            }
+
+            WriteLoggingCommand("artifact.upload", new Dictionary<string, string>
+            {
+                ["containerfolder"] = artifactName,
+                ["artifactname"] = artifactName
+            }, directory.MakeAbsolute(_environment).FullPath);
         }
 
         /// <summary>

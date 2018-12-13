@@ -3,14 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
-using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.IO
+namespace Cake.Core.Tests.Unit.IO.Globbing
 {
     public sealed class GlobberTests
     {
@@ -43,143 +41,13 @@ namespace Cake.Core.Tests.Unit.IO
 
         public sealed class TheMatchMethod
         {
-            public sealed class WindowsSpecific
-            {
-                [WindowsFact]
-                public void Will_Fix_Root_If_Drive_Is_Missing_By_Using_The_Drive_From_The_Working_Directory()
-                {
-                    // Given
-                    var fixture = new GlobberFixture(windows: true);
-
-                    // When
-                    var result = fixture.Match("/Working/Foo/Bar/Qux.c");
-
-                    // Then
-                    Assert.Single(result);
-                    AssertEx.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
-                }
-
-                [WindowsFact]
-                public void Should_Throw_If_Unc_Root_Was_Encountered()
-                {
-                    // Given
-                    var fixture = new GlobberFixture(windows: true);
-
-                    // When
-                    var result = Record.Exception(() => fixture.Match("//Foo/Bar/Qux.c"));
-
-                    // Then
-                    Assert.IsType<NotSupportedException>(result);
-                    Assert.Equal("UNC paths are not supported.", result?.Message);
-                }
-
-                [WindowsFact]
-                public void Should_Ignore_Case_Sensitivity_On_Case_Insensitive_Operative_System()
-                {
-                    // Given
-                    var fixture = new GlobberFixture(windows: true);
-
-                    // When
-                    var result = fixture.Match("C:/Working/**/qux.c");
-
-                    // Then
-                    Assert.Single(result);
-                    Assert.IsType<FilePath>(result[0]);
-                    AssertEx.ContainsFilePath(result, "C:/Working/Foo/Bar/Qux.c");
-                }
-
-                [WindowsFact]
-                public void Should_Parse_Glob_Expressions_With_Parenthesis_In_Them()
-                {
-                    // Given
-                    var fixture = new GlobberFixture(windows: true);
-
-                    // When
-                    var result = fixture.Match("C:/Program Files (x86)/Foo.*");
-
-                    // Then
-                    Assert.Single(result);
-                    AssertEx.ContainsFilePath(result, "C:/Program Files (x86)/Foo.c");
-                }
-
-                [WindowsFact]
-                public void Should_Parse_Glob_Expressions_With_Ampersand_In_Them()
-                {
-                  // Given
-                  var fixture = new GlobberFixture(windows: true);
-
-                  // When
-                  var result = fixture.Match("C:/Tools & Services/*.dll");
-
-                  // Then
-                  Assert.Single(result);
-                  AssertEx.ContainsFilePath(result, "C:/Tools & Services/MyTool.dll");
-                }
-
-                [WindowsFact]
-                public void Should_Parse_Glob_Expressions_With_Plus_In_Them()
-                {
-                  // Given
-                  var fixture = new GlobberFixture(windows: true);
-
-                  // When
-                  var result = fixture.Match("C:/Tools + Services/*.dll");
-
-                  // Then
-                  Assert.Single(result);
-                  AssertEx.ContainsFilePath(result, "C:/Tools + Services/MyTool.dll");
-                }
-
-                [WindowsFact]
-                public void Should_Parse_Glob_Expressions_With_Percent_In_Them()
-                {
-                  // Given
-                  var fixture = new GlobberFixture(windows: true);
-
-                  // When
-                  var result = fixture.Match("C:/Some %2F Directory/*.dll");
-
-                  // Then
-                  Assert.Single(result);
-                  AssertEx.ContainsFilePath(result, "C:/Some %2F Directory/MyTool.dll");
-                }
-
-                [WindowsFact]
-                public void Should_Parse_Glob_Expressions_With_Exclamation_In_Them()
-                {
-                    // Given
-                    var fixture = new GlobberFixture(windows: true);
-
-                    // When
-                    var result = fixture.Match("C:/Some ! Directory/*.dll");
-
-                    // Then
-                    Assert.Single(result);
-                    AssertEx.ContainsFilePath(result, "C:/Some ! Directory/MyTool.dll");
-                }
-
-                [WindowsFact]
-                public void Should_Parse_Glob_Expressions_With_AtSign_In_Them()
-                {
-                    // Given
-                    var fixture = new GlobberFixture(windows: true);
-
-                    // When
-                    var result = fixture.Match("C:/Some@Directory/*.dll");
-
-                    // Then
-                    Assert.Single(result);
-                    AssertEx.ContainsFilePath(result, "C:/Some@Directory/MyTool.dll");
-                }
-            }
-
             public sealed class WithPredicate
             {
                 [Fact]
                 public void Should_Return_Paths_Not_Affected_By_Walker_Hints()
                 {
                     // Given
-                    var fixture = new GlobberFixture();
+                    var fixture = GlobberFixture.UnixLike();
                     var predicate = new Func<IFileSystemInfo, bool>(i =>
                         i.Path.FullPath != "/Working/Bar");
 
@@ -195,7 +63,7 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Not_Return_Path_If_Walker_Hint_Matches_Part_Of_Pattern()
                 {
                     // Given
-                    var fixture = new GlobberFixture();
+                    var fixture = GlobberFixture.UnixLike();
                     var predicate = new Func<IFileSystemInfo, bool>(i =>
                         i.Path.FullPath != "/Working/Bar");
 
@@ -210,7 +78,7 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Not_Return_Path_If_Walker_Hint_Exactly_Match_Pattern()
                 {
                     // Given
-                    var fixture = new GlobberFixture();
+                    var fixture = GlobberFixture.UnixLike();
                     var predicate = new Func<IFileSystemInfo, bool>(i =>
                         i.Path.FullPath != "/Working/Bar");
 
@@ -226,7 +94,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Throw_If_Pattern_Is_Null()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = Record.Exception(() => fixture.Match(null));
@@ -239,7 +107,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Empty_Result_If_Pattern_Is_Empty()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match(string.Empty);
@@ -252,7 +120,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Empty_Result_If_Pattern_Is_Invalid()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("pattern/");
@@ -265,7 +133,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Can_Traverse_Recursively()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/**/*.c");
@@ -283,7 +151,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Will_Append_Relative_Root_With_Implicit_Working_Directory()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("Foo/Bar/Qux.c");
@@ -297,7 +165,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Be_Able_To_Visit_Parent_Using_Double_Dots()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/Foo/../Foo/Bar/Qux.c");
@@ -312,7 +180,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Throw_If_Visiting_Parent_That_Is_Recursive_Wildcard()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = Record.Exception(() => fixture.Match("/Working/Foo/**/../Foo/Bar/Qux.c"));
@@ -327,7 +195,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Single_Path_For_Absolute_File_Path_Without_Glob_Pattern()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/Foo/Bar/Qux.c");
@@ -342,7 +210,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Single_Path_For_Absolute_Directory_Path_Without_Glob_Pattern()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/Foo/Bar");
@@ -356,7 +224,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Single_Path_For_Relative_File_Path_Without_Glob_Pattern()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
                 fixture.SetWorkingDirectory("/Working/Foo");
 
                 // When
@@ -371,7 +239,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Single_Path_For_Relative_Directory_Path_Without_Glob_Pattern()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
                 fixture.SetWorkingDirectory("/Working/Foo");
 
                 // When
@@ -386,13 +254,13 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Files_And_Folders_For_Pattern_Ending_With_Wildcard()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/**/*");
 
                 // Then
-                Assert.Equal(15, result.Length);
+                Assert.Equal(18, result.Length);
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Baz");
@@ -408,13 +276,16 @@ namespace Cake.Core.Tests.Unit.IO
                 AssertEx.ContainsFilePath(result, "/Working/Quz.FooTest.dll");
                 AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
                 AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.h");
+                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
+                AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
             }
 
             [Fact]
             public void Should_Return_Files_And_Folders_For_Pattern_Containing_Wildcard()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/Foo/*/Qux.c");
@@ -429,7 +300,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Files_And_Folders_For_Pattern_Ending_With_Character_Wildcard()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/Foo/Bar/Q?x.c");
@@ -444,7 +315,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Files_And_Folders_For_Pattern_Containing_Character_Wildcard()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/Foo/Ba?/Qux.c");
@@ -459,7 +330,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Files_For_Pattern_Ending_With_Character_Wildcard_And_Dot()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/*.Test.dll");
@@ -470,26 +341,11 @@ namespace Cake.Core.Tests.Unit.IO
                 AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
             }
 
-            [WindowsFact]
-            public void Should_Return_Files_For_Pattern_Ending_With_Character_Wildcard_And_Dot_On_Windows()
-            {
-                // Given
-                var fixture = new GlobberFixture(true);
-
-                // When
-                var result = fixture.Match("C:/Working/*.Test.dll");
-
-                // Then
-                Assert.Equal(2, result.Length);
-                AssertEx.ContainsFilePath(result, "C:/Working/Project.A.Test.dll");
-                AssertEx.ContainsFilePath(result, "C:/Working/Project.B.Test.dll");
-            }
-
             [Fact]
             public void Should_Return_File_For_Recursive_Wildcard_Pattern_Ending_With_Wildcard_Regex()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/**/*.c");
@@ -507,7 +363,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_Only_Folders_For_Pattern_Ending_With_Recursive_Wildcard()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/**");
@@ -526,7 +382,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Include_Files_In_Root_Folder_When_Using_Recursive_Wildcard()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Foo/**/Bar.baz");
@@ -540,7 +396,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Include_Folder_In_Root_Folder_When_Using_Recursive_Wildcard()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Foo/**/Bar");
@@ -554,7 +410,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Parse_Glob_Expressions_With_Parenthesis_In_Them()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Foo (Bar)/Baz.*");
@@ -568,7 +424,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Parse_Glob_Expressions_With_AtSign_In_Them()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Foo@Bar/Baz.*");
@@ -582,7 +438,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Parse_Glob_Expressions_With_Relative_Directory_Not_At_The_Beginning()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/Working/./*.Test.dll");
@@ -597,7 +453,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Parse_Glob_Expressions_With_Unicode_Characters_And_Ending_With_Identifier()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/嵌套/**/文件.延期");
@@ -611,7 +467,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Parse_Glob_Expressions_With_Unicode_Characters_And_Not_Ending_With_Identifier()
             {
                 // Given
-                var fixture = new GlobberFixture();
+                var fixture = GlobberFixture.UnixLike();
 
                 // When
                 var result = fixture.Match("/嵌套/**/文件.*");
@@ -619,6 +475,51 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.Single(result);
                 AssertEx.ContainsFilePath(result, "/嵌套/目录/文件.延期");
+            }
+
+            [Fact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Bracket_Wildcard()
+            {
+                // Given
+                var fixture = GlobberFixture.UnixLike();
+
+                // When
+                var result = fixture.Match("/Working/fooba[rz].rs");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
+            }
+
+            [Fact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Brace_Expansion()
+            {
+                // Given
+                var fixture = GlobberFixture.UnixLike();
+
+                // When
+                var result = fixture.Match("/Working/foo{bar,bax}.rs");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
+            }
+
+            [Fact]
+            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Negated_Bracket_Wildcard()
+            {
+                // Given
+                var fixture = GlobberFixture.UnixLike();
+
+                // When
+                var result = fixture.Match("/Working/fooba[!x].rs");
+
+                // Then
+                Assert.Equal(2, result.Length);
+                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+                AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
             }
         }
     }

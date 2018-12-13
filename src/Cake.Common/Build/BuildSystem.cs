@@ -169,7 +169,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnTeamCiy)
+        /// if(BuildSystem.IsRunningOnTeamCity)
         /// {
         ///     // Set the build number.
         ///     BuildSystem.TeamCity.SetBuildNumber("1.2.3.4");

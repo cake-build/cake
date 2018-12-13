@@ -191,6 +191,22 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets whether or not copyright information at the start of the program should be shown.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="noLogo"><c>true</c> if no copyright information at the start of the program should be shown; otherwise <c>false</c>.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetNoLogo(this MSBuildSettings settings, bool noLogo)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.NoLogo = noLogo;
+            return settings;
+        }
+
+        /// <summary>
         /// Sets the build log verbosity.
         /// </summary>
         /// <param name="settings">The settings.</param>
@@ -277,7 +293,7 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
-        /// Treat warnnings as errors, if no codes specified all errors will be treated as errors.
+        /// Treat warnings as errors, if no codes specified all errors will be treated as errors.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="codes">Only treat specified warning codes as errors.</param>

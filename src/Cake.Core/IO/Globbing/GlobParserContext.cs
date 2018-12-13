@@ -10,15 +10,18 @@ namespace Cake.Core.IO.Globbing
 {
     internal sealed class GlobParserContext
     {
-        private readonly GlobTokenizer _tokenizer;
+        private readonly GlobTokenBuffer _buffer;
 
+        public string Pattern { get; }
+        public int TokenCount => _buffer.Count;
         public GlobToken CurrentToken { get; private set; }
-
         public RegexOptions Options { get; }
 
-        public GlobParserContext(string pattern, bool caseSensitive)
+        public GlobParserContext(string pattern, GlobTokenBuffer buffer, bool caseSensitive)
         {
-            _tokenizer = new GlobTokenizer(pattern);
+            _buffer = buffer;
+
+            Pattern = pattern;
             CurrentToken = null;
             Options = RegexOptions.Compiled | RegexOptions.Singleline;
 
@@ -28,33 +31,25 @@ namespace Cake.Core.IO.Globbing
             }
         }
 
-        /// <summary>
-        /// Gets the next GlobToken from the context
-        /// </summary>
-        /// <returns>The Peek'd token</returns>
         public GlobToken Peek()
         {
-            return _tokenizer.Peek();
+            return _buffer.Peek();
         }
 
-        /// <summary>
-        /// Accepts the current GlobToken and loads the next into CurrentToken
-        /// </summary>
-        public void Accept()
+        public GlobToken Accept()
         {
-            CurrentToken = _tokenizer.Scan();
+            var result = CurrentToken;
+            CurrentToken = _buffer.Read();
+            return result;
         }
 
-        /// <summary>
-        /// Accepts the CurrentToken if it is of the specified TokenKind(s), and fetches the next token.
-        /// </summary>
-        /// <param name="kind">The types of acceptable <see cref="GlobTokenKind"/></param>
-        public void Accept(params GlobTokenKind[] kind)
+        public GlobToken Accept(params GlobTokenKind[] kind)
         {
             if (kind.Any(k => k == CurrentToken.Kind))
             {
+                var result = CurrentToken;
                 Accept();
-                return;
+                return result;
             }
 
             throw new InvalidOperationException("Unexpected token kind.");

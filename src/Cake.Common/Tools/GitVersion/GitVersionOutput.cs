@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.GitVersion
         Json,
 
         /// <summary>
-        /// Outputs to the stdout in a way usuable by a detected buildserver.
+        /// Outputs to the stdout in a way usable by a detected build server.
         /// </summary>
         BuildServer
     }

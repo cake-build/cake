@@ -100,5 +100,52 @@ namespace Cake.Core.IO
                 return result;
             }
         }
+
+        /// <summary>
+        /// Checks if file has CLR PE Header.
+        /// </summary>
+        /// <param name="file">The file to be read from.</param>
+        /// <returns><c>true</c> if file is CLR assembly; otherwise, <c>false</c>.</returns>
+        /// <remarks>
+        /// See <a href="https://docs.microsoft.com/en-us/windows/desktop/Debug/pe-format">https://docs.microsoft.com/en-us/windows/desktop/Debug/pe-format</a> for more information.
+        /// </remarks>
+        public static bool IsClrAssembly(this IFile file)
+        {
+            if (!file.Exists || file.Length < 365)
+            {
+                return false;
+            }
+
+            using (var fs = file.OpenRead())
+            {
+                using (var reader = new System.IO.BinaryReader(fs))
+                {
+                    const uint MagicOffset = 0x18;
+                    const uint Magic32Bit = 0x10b;
+                    const int Offset32Bit = 0x5e;
+                    const int Offset64Bit = 0x6e;
+                    const int OffsetDictionary = 0x70;
+
+                    // PE Header Start
+                    fs.Position = 0x3C;
+
+                    // Go to Magic header
+                    fs.Position = reader.ReadUInt32() + MagicOffset;
+
+                    // Check magic to get 32 / 64 bit offset
+                    var is32Bit = reader.ReadUInt16() == Magic32Bit;
+                    var offset = fs.Position + (is32Bit ? Offset32Bit : Offset64Bit) + OffsetDictionary;
+
+                    if (offset + 4 > fs.Length)
+                    {
+                        return false;
+                    }
+
+                    // Go to dictionary start
+                    fs.Position = offset;
+                    return reader.ReadUInt32() > 0;
+                }
+            }
+        }
     }
 }

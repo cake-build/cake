@@ -48,9 +48,11 @@ namespace Cake.NuGet.Install
             _repositories = new HashSet<SourceRepository>(new SourceRepositoryComparer());
             _primaryRepositories = new HashSet<SourceRepository>(new SourceRepositoryComparer());
 
+            var packageSources = PackageSourceProvider.LoadPackageSources().ToList();
+
             if (package.Address != null)
             {
-                var repository = CreateRepository(package.Address.AbsoluteUri);
+                var repository = GetOrCreateRepository(package.Address.AbsoluteUri);
 
                 // Sources specified in directive is always primary.
                 _primaryRepositories.Add(repository);
@@ -63,7 +65,7 @@ namespace Cake.NuGet.Install
                 {
                     if (!string.IsNullOrWhiteSpace(nugetSource))
                     {
-                        var repository = CreateRepository(nugetSource);
+                        var repository = GetOrCreateRepository(nugetSource);
 
                         // If source is not specified in directive, add it as primary source.
                         if (package.Address == null)
@@ -75,8 +77,8 @@ namespace Cake.NuGet.Install
             }
             else
             {
-                // Only add sources added via NuGet.Config's if nuget_source configuration value is not specified.
-                foreach (var source in PackageSourceProvider.LoadPackageSources())
+                // Only add sources added via NuGet.config if nuget_source configuration value is not specified.
+                foreach (var source in packageSources)
                 {
                     if (source.IsEnabled)
                     {
@@ -89,6 +91,17 @@ namespace Cake.NuGet.Install
                         }
                     }
                 }
+            }
+
+            SourceRepository GetOrCreateRepository(string source)
+            {
+                var packageSource = packageSources
+                    .Where(p => p.IsEnabled)
+                    .FirstOrDefault(p => p.Source.Equals(source, StringComparison.OrdinalIgnoreCase));
+
+                return packageSource == null ?
+                    CreateRepository(source) :
+                    CreateRepository(packageSource);
             }
         }
 

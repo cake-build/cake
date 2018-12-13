@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -180,7 +179,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         ///         WaitForDeployment = true,
         ///         DeploymentTimeout = TimeSpan.FromMinutes(1),
         ///         CancelOnTimeout = true,
-        ///         DeploymentChecksLeepCycle = TimeSpan.FromMinutes(77),
+        ///         DeploymentChecksLeapCycle = TimeSpan.FromMinutes(77),
         ///         GuidedFailure = true,
         ///         SpecificMachines = new string[] { "Machine1", "Machine2" },
         ///         Force = true,
@@ -228,7 +227,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         ///         WaitForDeployment = true,
         ///         DeploymentTimeout = TimeSpan.FromMinutes(1),
         ///         CancelOnTimeout = true,
-        ///         DeploymentChecksLeepCycle = TimeSpan.FromMinutes(77),
+        ///         DeploymentChecksLeapCycle = TimeSpan.FromMinutes(77),
         ///         GuidedFailure = true,
         ///         SpecificMachines = new string[] { "Machine1", "Machine2" },
         ///         Force = true,

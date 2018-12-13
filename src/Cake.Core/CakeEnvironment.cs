@@ -61,7 +61,7 @@ namespace Cake.Core
 
             // Get the application root.
             var assembly = AssemblyHelper.GetExecutingAssembly();
-            var path = System.IO.Path.GetDirectoryName(assembly.Location);
+            var path = PathHelper.GetDirectoryName(assembly.Location);
             ApplicationRoot = new DirectoryPath(path);
 
             // Get the working directory.
@@ -106,8 +106,7 @@ namespace Cake.Core
                     {
                         var key = (string)entry.Key;
                         var value = entry.Value as string;
-                        string existingValue;
-                        if (dictionary.TryGetValue(key, out existingValue))
+                        if (dictionary.TryGetValue(key, out var existingValue))
                         {
                             if (!StringComparer.OrdinalIgnoreCase.Equals(value, existingValue))
                             {

@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.OctopusDeploy
     /// Contains settings used by <see cref="OctopusDeployReleaseCreator.CreateRelease"/>.
     /// See Octopus Deploy documentation <see href="http://docs.octopusdeploy.com/display/OD/Creating+releases">here</see>
     /// </summary>
-    public sealed class CreateReleaseSettings : OctopusDeploySettings
+    public sealed class CreateReleaseSettings : OctopusDeployCommonToolSettings
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateReleaseSettings"/> class.

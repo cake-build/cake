@@ -14,10 +14,8 @@ namespace Cake.Common.Tools.OctopusDeploy
     /// <summary>
     /// Allows you to query your Octopus Deploy server deployment history
     /// </summary>
-    public class OctopusDeployDeploymentQuerier : Tool<OctopusDeploymentQuerySettings>
+    public class OctopusDeployDeploymentQuerier : OctopusDeployTool<OctopusDeploymentQuerySettings>
     {
-        private readonly ICakeEnvironment _environment;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OctopusDeployDeploymentQuerier"/> class.
         /// </summary>
@@ -32,25 +30,6 @@ namespace Cake.Common.Tools.OctopusDeploy
             IToolLocator tools)
             : base(fileSystem, environment, processRunner, tools)
         {
-            _environment = environment;
-        }
-
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
-        {
-            return "Octo";
-        }
-
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return new[] { "Octo.exe" };
         }
 
         /// <summary>
@@ -79,7 +58,7 @@ namespace Cake.Common.Tools.OctopusDeploy
                 throw new ArgumentOutOfRangeException("Query must return at least one result", nameof(querySettings.Count));
             }
 
-            var builder = new OctopusDeploymentQueryArgumentBuilder(server, apiKey, _environment, querySettings);
+            var builder = new OctopusDeploymentQueryArgumentBuilder(server, apiKey, Environment, querySettings);
             var process = RunProcess(querySettings, builder.Get());
 
             if (querySettings.ToolTimeout.HasValue)

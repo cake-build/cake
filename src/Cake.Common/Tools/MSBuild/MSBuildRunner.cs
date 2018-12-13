@@ -70,6 +70,12 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append("/noconlog");
             }
 
+            // Set the no logo flag.
+            if (settings.NoLogo.GetValueOrDefault())
+            {
+                builder.Append("/nologo");
+            }
+
             // Set the verbosity.
             builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", settings.Verbosity.GetMSBuildVerbosityName()));
 
@@ -163,7 +169,7 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
-            // Treat errors as warníngs?
+            // Treat errors as warnings?
             if (settings.WarningsAsErrorCodes.Any())
             {
                 var codes = string.Join(";", settings.WarningsAsErrorCodes);

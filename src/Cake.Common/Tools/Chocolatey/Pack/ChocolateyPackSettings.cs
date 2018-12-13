@@ -80,7 +80,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// <summary>
         /// Gets or sets the package documentation URL.
         /// </summary>
-        /// <value>The package documenation URL.</value>
+        /// <value>The package documentation URL.</value>
         /// <remarks>Requires at least Chocolatey 0.9.9.7.</remarks>
         public Uri DocsUrl { get; set; }
 

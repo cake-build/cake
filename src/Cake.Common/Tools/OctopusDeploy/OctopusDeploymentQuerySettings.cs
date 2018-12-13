@@ -7,7 +7,7 @@ namespace Cake.Common.Tools.OctopusDeploy
     /// <summary>
     /// Contains settings used by <see cref="OctopusDeployDeploymentQuerier.QueryOctopusDeployments"/>.
     /// </summary>
-    public sealed class OctopusDeploymentQuerySettings : OctopusDeploySettings
+    public sealed class OctopusDeploymentQuerySettings : OctopusDeployCommonToolSettings
     {
         /// <summary>
         /// Gets or Sets a value that is an Octopus Environment Name to filter for.
@@ -20,7 +20,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         public string ProjectName { get; set; }
 
         /// <summary>
-        /// Gets or Sets a value that is an Octopus Tenamt Name to filter for.
+        /// Gets or Sets a value that is an Octopus Tenant Name to filter for.
         /// </summary>
         public string TenantName { get; set; }
 

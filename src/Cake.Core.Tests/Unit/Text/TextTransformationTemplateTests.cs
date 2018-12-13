@@ -213,7 +213,7 @@ namespace Cake.Core.Tests.Unit.Text
             }
 
             [Fact]
-            public void Should_Replace_Formated_Null_Token_Value_With_Empty_String()
+            public void Should_Replace_Formatted_Null_Token_Value_With_Empty_String()
             {
                 // Given
                 var transformation = new TextTransformationTemplate("Hello <%subject:foo%>!");

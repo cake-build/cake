@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.IO.Globbing.Nodes;
@@ -20,14 +19,14 @@ namespace Cake.Core.IO.Globbing
             _environment = environment;
         }
 
-        public IEnumerable<IFileSystemInfo> Walk(GlobNode node, Func<IDirectory, bool> predicate)
+        public IEnumerable<IFileSystemInfo> Walk(GlobNode node, GlobberSettings settings)
         {
-            var context = new GlobVisitorContext(_fileSystem, _environment, predicate);
+            var context = new GlobVisitorContext(_fileSystem, _environment, settings.Predicate);
             node.Accept(this, context);
             return context.Results;
         }
 
-        public void VisitRecursiveWildcardSegment(RecursiveWildcardSegment node, GlobVisitorContext context)
+        public void VisitRecursiveWildcardSegment(RecursiveWildcardNode node, GlobVisitorContext context)
         {
             var path = context.FileSystem.GetDirectory(context.Path);
             if (context.FileSystem.Exist(path.Path))
@@ -63,7 +62,7 @@ namespace Cake.Core.IO.Globbing
             }
         }
 
-        public void VisitRelativeRoot(RelativeRoot node, GlobVisitorContext context)
+        public void VisitRelativeRoot(RelativeRootNode node, GlobVisitorContext context)
         {
             // Push each path to the context.
             var pushedSegmentCount = 0;
@@ -83,7 +82,7 @@ namespace Cake.Core.IO.Globbing
             }
         }
 
-        public void VisitSegment(PathSegment node, GlobVisitorContext context)
+        public void VisitSegment(PathNode node, GlobVisitorContext context)
         {
             if (node.IsIdentifier)
             {
@@ -130,7 +129,7 @@ namespace Cake.Core.IO.Globbing
             }
             else
             {
-                if (node.Tokens.Count > 1)
+                if (node.Segments.Count > 1)
                 {
                     var path = context.FileSystem.GetDirectory(context.Path);
                     if (path.Exists)
@@ -153,14 +152,21 @@ namespace Cake.Core.IO.Globbing
             }
         }
 
-        public void VisitUnixRoot(UnixRoot node, GlobVisitorContext context)
+        public void VisitUnixRoot(UnixRootNode node, GlobVisitorContext context)
         {
             context.Push(string.Empty);
             node.Next.Accept(this, context);
             context.Pop();
         }
 
-        public void VisitWildcardSegmentNode(WildcardSegment node, GlobVisitorContext context)
+        public void VisitUncRoot(UncRootNode node, GlobVisitorContext context)
+        {
+            context.Push($@"\\{node.Server}");
+            node.Next.Accept(this, context);
+            context.Pop();
+        }
+
+        public void VisitWildcardSegmentNode(WildcardNode node, GlobVisitorContext context)
         {
             var path = context.FileSystem.GetDirectory(context.Path);
             if (context.FileSystem.Exist(path.Path))
@@ -181,14 +187,14 @@ namespace Cake.Core.IO.Globbing
             }
         }
 
-        public void VisitWindowsRoot(WindowsRoot node, GlobVisitorContext context)
+        public void VisitWindowsRoot(WindowsRootNode node, GlobVisitorContext context)
         {
             context.Push(node.Drive + ":");
             node.Next.Accept(this, context);
             context.Pop();
         }
 
-        public void VisitParent(ParentSegment node, GlobVisitorContext context)
+        public void VisitParent(ParentDirectoryNode node, GlobVisitorContext context)
         {
             // Back up one level.
             var last = context.Pop();
@@ -199,7 +205,7 @@ namespace Cake.Core.IO.Globbing
             context.Push(last);
         }
 
-        public void VisitCurrent(CurrentSegment node, GlobVisitorContext context)
+        public void VisitCurrent(CurrentDirectoryNode node, GlobVisitorContext context)
         {
             node.Next.Accept(this, context);
         }

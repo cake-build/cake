@@ -9,19 +9,28 @@ namespace Cake.Core.IO.Globbing
 {
     internal static class GlobNodeValidator
     {
-        public static void Validate(GlobNode node)
+        public static void Validate(string pattern, GlobNode node)
         {
             var previous = (GlobNode)null;
             var current = node;
             while (current != null)
             {
-                if (previous is RecursiveWildcardSegment)
+                if (previous is RecursiveWildcardNode)
                 {
-                    if (current is ParentSegment)
+                    if (current is ParentDirectoryNode)
                     {
                         throw new NotSupportedException("Visiting a parent that is a recursive wildcard is not supported.");
                     }
                 }
+
+                if (current is UncRootNode unc)
+                {
+                    if (string.IsNullOrWhiteSpace(unc.Server))
+                    {
+                        throw new CakeException($"The pattern '{pattern}' has no server part specified.");
+                    }
+                }
+
                 previous = current;
                 current = current.Next;
             }

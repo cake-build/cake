@@ -44,7 +44,7 @@ namespace Cake.Common.Tools.Chocolatey
         /// <returns>The path to choco.exe.</returns>
         public FilePath ResolvePath()
         {
-            // Check if path allready resolved
+            // Check if path already resolved
             if (_cachedPath != null && _cachedPath.Exists)
             {
                 return _cachedPath.Path;
@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.Chocolatey
             var chocolateyInstallationFolder = _environment.GetEnvironmentVariable("ChocolateyInstall");
             if (!string.IsNullOrWhiteSpace(chocolateyInstallationFolder))
             {
-                var envFile = _fileSystem.GetFile(System.IO.Path.Combine(chocolateyInstallationFolder, "choco.exe"));
+                var envFile = _fileSystem.GetFile(PathHelper.Combine(chocolateyInstallationFolder, "choco.exe"));
                 if (envFile.Exists)
                 {
                     _cachedPath = envFile;

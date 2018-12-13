@@ -252,7 +252,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, string pattern, Func<IFileSystemInfo, bool> predicate)
         {
-            var directories = context.GetDirectories(pattern, predicate);
+            var directories = context.GetDirectories(pattern, new GlobberSettings { Predicate = predicate });
             if (directories.Count == 0)
             {
                 context.Log.Verbose("The provided pattern did not match any directories.");
@@ -576,6 +576,34 @@ namespace Cake.Common.IO
 
             var directories = directory.GetDirectories("*", SearchScope.Current, fsi => true).Select(d => new DirectoryPath(d.Path.FullPath)).ToList();
             return new DirectoryPathCollection(directories, new PathComparer(context.Environment.Platform.IsUnix()));
+        }
+
+        /// <summary>
+        /// Expands all environment variables in the provided <see cref="DirectoryPath"/>.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var path = new DirectoryPath("%APPDATA%/foo");
+        /// var expanded = path.ExpandEnvironmentVariables(environment);
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="directoryPath">The path.</param>
+        /// <returns>A new <see cref="DirectoryPath"/> with each environment variable replaced by its value.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Path")]
+        public static DirectoryPath ExpandEnvironmentVariables(this ICakeContext context, DirectoryPath directoryPath)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (directoryPath == null)
+            {
+                throw new ArgumentNullException(nameof(directoryPath));
+            }
+
+            return directoryPath.ExpandEnvironmentVariables(context.Environment);
         }
     }
 }

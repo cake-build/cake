@@ -24,7 +24,7 @@ namespace Cake.Common.Xml
         /// <returns>Transformed XML string.</returns>
         /// <example>
         /// <code>
-        /// <para>This example code will convert xml to a new xml strucure using XmlTransform alias.</para>
+        /// <para>This example code will convert xml to a new xml structure using XmlTransform alias.</para>
         /// <![CDATA[
         /// string xsl = @"<xsl:stylesheet version=""1.0"" xmlns:xsl=""http://www.w3.org/1999/XSL/Transform"">
         ///   <xsl:output method=""xml"" omit-xml-declaration=""yes"" />

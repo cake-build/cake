@@ -45,10 +45,12 @@ namespace Cake.Commands
                     string.Join(", ", Enum.GetNames(typeof(Verbosity))));
                 _console.WriteLine("    --debug              Performs a debug.");
                 _console.WriteLine("    --showdescription    Shows description about tasks.");
+                _console.WriteLine("    --showtree           Shows the task dependency tree.");
                 _console.WriteLine("    --dryrun             Performs a dry run.");
                 _console.WriteLine("    --exclusive          Execute a single task without any dependencies.");
                 _console.WriteLine("    --bootstrap          Download/install modules defined by #module directives");
                 _console.WriteLine("    --version            Displays version information.");
+                _console.WriteLine("    --info               Displays additional information about Cake execution.");
                 _console.WriteLine("    --help               Displays usage information.");
                 _console.WriteLine();
             }

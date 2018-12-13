@@ -82,7 +82,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         }
 
         /// <summary>
-        /// Creates a NuGet package from the specified Nuspec or project file.
+        /// Creates a NuGet package from the specified nuspec or project file.
         /// </summary>
         /// <param name="filePath">The nuspec or project file path.</param>
         /// <param name="settings">The settings.</param>
@@ -146,6 +146,13 @@ namespace Cake.Common.Tools.NuGet.Pack
             {
                 builder.Append("-Version");
                 builder.AppendQuoted(settings.Version);
+            }
+
+            // Version suffix
+            if (!string.IsNullOrWhiteSpace(settings.Suffix))
+            {
+                builder.Append("-Suffix");
+                builder.AppendQuoted(settings.Suffix);
             }
 
             // Base path

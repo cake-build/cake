@@ -5,11 +5,12 @@
     <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
     <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger and contributors</Authors>
     <Company>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger and contributors</Company>
-    <PackageLicenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/cake-build/cake</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Cake;Script;Build</PackageTags>
+    <PackageProjectUrl>https://cakebuild.net</PackageProjectUrl>
   </PropertyGroup>
   <!-- Misc -->
   <PropertyGroup>
@@ -18,6 +19,7 @@
   <!-- Global solution information -->
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)SolutionInfo.cs" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)"/>
   </ItemGroup>
   <!-- Warnings as errors -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

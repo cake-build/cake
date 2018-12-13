@@ -34,6 +34,12 @@ namespace Cake.Commands
         ICommand CreateDescriptionCommand();
 
         /// <summary>
+        /// Creates the task tree command.
+        /// </summary>
+        /// <returns>The task tree command.</returns>
+        ICommand CreateTaskTreeCommand();
+
+        /// <summary>
         /// Creates the dry run command.
         /// </summary>
         /// <returns>The dry run command.</returns>
@@ -50,5 +56,11 @@ namespace Cake.Commands
         /// </summary>
         /// <returns>The version command.</returns>
         ICommand CreateVersionCommand();
+
+        /// <summary>
+        /// Create the info command.
+        /// </summary>
+        /// <returns>The info command.</returns>
+        ICommand CreateInfoCommand();
     }
 }

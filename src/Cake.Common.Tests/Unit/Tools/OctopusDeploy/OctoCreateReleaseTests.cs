@@ -128,7 +128,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/Octo.exe", result.Path.FullPath);
+                Assert.Equal("/Working/tools/octo.exe", result.Path.FullPath);
             }
 
             [Fact]

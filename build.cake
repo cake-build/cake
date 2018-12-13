@@ -52,6 +52,13 @@ Setup(context =>
                             .WithProperty("FileVersion", parameters.Version.Version)
                             .WithProperty("PackageReleaseNotes", string.Concat("\"", releaseNotes, "\""));
 
+    foreach(var assemblyInfo in GetFiles("./src/**/AssemblyInfo.cs"))
+    {
+        CreateAssemblyInfo(
+            assemblyInfo.ChangeExtension(".Generated.cs"),
+            new AssemblyInfoSettings { Description = parameters.Version.SemVersion });
+    }
+
     if(!parameters.IsRunningOnWindows)
     {
         var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
@@ -110,6 +117,8 @@ Teardown(context =>
 Task("Clean")
     .Does(() =>
 {
+    CleanDirectories("./src/**/bin/" + parameters.Configuration);
+    CleanDirectories("./src/**/obj");
     CleanDirectories(parameters.Paths.Directories.ToClean);
 });
 
@@ -120,10 +129,7 @@ Task("Restore-NuGet-Packages")
     DotNetCoreRestore("./src/Cake.sln", new DotNetCoreRestoreSettings
     {
         Verbosity = DotNetCoreVerbosity.Minimal,
-        Sources = new [] {
-            "https://www.myget.org/F/xunit/api/v3/index.json",
-            "https://api.nuget.org/v3/index.json"
-        },
+        Sources = new [] { "https://api.nuget.org/v3/index.json" },
         MSBuildSettings = msBuildSettings
     });
 });
@@ -149,13 +155,20 @@ Task("Run-Unit-Tests")
     var projects = GetFiles("./src/**/*.Tests.csproj");
     foreach(var project in projects)
     {
+        var projectName = project.GetFilenameWithoutExtension().FullPath;
+
+        FilePath
+            testResultsCore = MakeAbsolute(parameters.Paths.Directories.TestResults.CombineWithFilePath($"{projectName}_core_TestResults.xml")),
+            testResultsFull = MakeAbsolute(parameters.Paths.Directories.TestResults.CombineWithFilePath($"{projectName}_full_TestResults.xml"));
+
         // .NET Core
-        DotNetCoreTest(project.ToString(), new DotNetCoreTestSettings
+        DotNetCoreTest(project.FullPath, new DotNetCoreTestSettings
         {
             Framework = "netcoreapp2.0",
             NoBuild = true,
             NoRestore = true,
-            Configuration = parameters.Configuration
+            Configuration = parameters.Configuration,
+            ArgumentCustomization = args=>args.Append($"--logger trx;LogFileName=\"{testResultsCore}\"")
         });
 
         // .NET Framework/Mono
@@ -165,12 +178,13 @@ Task("Run-Unit-Tests")
             framework = "net461";
         }
 
-        DotNetCoreTest(project.ToString(), new DotNetCoreTestSettings
+        DotNetCoreTest(project.FullPath, new DotNetCoreTestSettings
         {
             Framework = framework,
             NoBuild = true,
             NoRestore = true,
-            Configuration = parameters.Configuration
+            Configuration = parameters.Configuration,
+            ArgumentCustomization = args=>args.Append($"--logger trx;LogFileName=\"{testResultsFull}\"")
         });
     }
 });
@@ -209,8 +223,56 @@ Task("Copy-Files")
     CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp2.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
-Task("Zip-Files")
+Task("Validate-Version")
     .IsDependentOn("Copy-Files")
+    .Does(() =>
+{
+    var fullFxExe = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx.CombineWithFilePath("Cake.exe"));
+    var coreFxExe = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCore.CombineWithFilePath("Cake.dll"));
+
+    IEnumerable<string> fullFxOutput;
+    var fullFxResult = StartProcess(
+         fullFxExe,
+         new ProcessSettings {
+             Arguments = "--version",
+             RedirectStandardOutput = true
+         },
+         out fullFxOutput
+     );
+    var fullFxVersion = string.Concat(fullFxOutput);
+
+    IEnumerable<string> coreFxOutput;
+    var coreFxResult = StartProcess(
+         "dotnet",
+         new ProcessSettings {
+             Arguments = $"\"{coreFxExe}\" --version",
+             RedirectStandardOutput = true
+         },
+         out coreFxOutput
+     );
+    var coreFxVersion = string.Concat(coreFxOutput);
+
+    Information("{0}, ExitCode: {1}, Version: {2}",
+        fullFxExe,
+        fullFxResult,
+        string.Concat(fullFxVersion)
+        );
+
+    Information("{0}, ExitCode: {1}, Version: {2}",
+        coreFxExe,
+        coreFxResult,
+        string.Concat(coreFxVersion)
+        );
+
+    if (parameters.Version.SemVersion != fullFxVersion || parameters.Version.SemVersion != coreFxVersion)
+    {
+        throw new Exception(
+            $"Invalid version, expected \"{parameters.Version.SemVersion}\", got .NET \"{fullFxVersion}\" and .NET Core \"{coreFxVersion}\"");
+    }
+});
+
+Task("Zip-Files")
+    .IsDependentOn("Validate-Version")
     .Does(() =>
 {
     // .NET 4.6
@@ -223,7 +285,7 @@ Task("Zip-Files")
 });
 
 Task("Create-Chocolatey-Packages")
-    .IsDependentOn("Copy-Files")
+    .IsDependentOn("Validate-Version")
     .IsDependentOn("Package")
     .WithCriteria(() => parameters.IsRunningOnWindows)
     .Does(() =>
@@ -238,8 +300,7 @@ Task("Create-Chocolatey-Packages")
             Version = parameters.Version.SemVersion,
             ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
-            Files = (GetFiles(netFxFullArtifactPath + "/**/*") + GetFiles("./nuspec/*.txt"))
-                                    .Where(file => file.FullPath.IndexOf("/runtimes/", StringComparison.OrdinalIgnoreCase) < 0)
+            Files = (GetFiles(netFxFullArtifactPath + "/*.*") + GetFiles("./nuspec/*.txt"))
                                     .Select(file=>"../" + file.FullPath.Substring(curDirLength))
                                     .Select(file=> new ChocolateyNuSpecContent { Source = file })
                                     .ToArray()
@@ -248,7 +309,7 @@ Task("Create-Chocolatey-Packages")
 });
 
 Task("Create-NuGet-Packages")
-    .IsDependentOn("Copy-Files")
+    .IsDependentOn("Validate-Version")
     .Does(() =>
 {
     // Build libraries
@@ -292,8 +353,7 @@ Task("Create-NuGet-Packages")
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
         Symbols = false,
         NoPackageAnalysis = true,
-        Files = GetFiles(netFxFullArtifactPath + "/**/*")
-                                .Where(file => file.FullPath.IndexOf("/runtimes/", StringComparison.OrdinalIgnoreCase) < 0)
+        Files = GetFiles(netFxFullArtifactPath + "/*")
                                 .Select(file=>file.FullPath.Substring(netFxFullArtifactPathLength))
                                 .Select(file=> new NuSpecContent { Source = file, Target = file })
                                 .ToArray()
@@ -329,6 +389,7 @@ Task("Create-NuGet-Packages")
     DotNetCorePack("./src/Cake/Cake.Tool.csproj", new DotNetCorePackSettings {
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        IncludeSymbols = true,
         MSBuildSettings = msBuildSettings
     });
 });

@@ -1504,5 +1504,47 @@ namespace Cake.Common.Tests.Unit.IO
                 }
             }
         }
+
+        public sealed class TheExpandEnvironmentVariablesMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => DirectoryAliases.ExpandEnvironmentVariables(null, "some file"));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => DirectoryAliases.ExpandEnvironmentVariables(context, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "directoryPath");
+            }
+
+            [Fact]
+            public void Should_Expand_Existing_Environment_Variables()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var environment = FakeEnvironment.CreateWindowsEnvironment();
+                environment.SetEnvironmentVariable("FOO", "bar");
+                context.Environment.Returns(environment);
+
+                // When
+                var result = DirectoryAliases.ExpandEnvironmentVariables(context, "/%FOO%/baz");
+
+                // Then
+                Assert.Equal("/bar/baz", result.FullPath);
+            }
+        }
     }
 }

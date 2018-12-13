@@ -60,10 +60,16 @@ namespace Cake.Common.Tools.NuGet.Pack
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the Nuspec version.
+        /// Gets or sets the nuspec version.
         /// </summary>
-        /// <value>The Nuspec version.</value>
+        /// <value>The nuspec version.</value>
         public string Version { get; set; }
+
+        /// <summary>
+        /// Gets or sets the nuspec version suffix.
+        /// </summary>
+        /// <value>The nuspec version suffix.</value>
+        public string Suffix { get; set; }
 
         /// <summary>
         /// Gets or sets the package title.
@@ -142,7 +148,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <value>
         ///   <c>true</c> if a development dependency; otherwise, <c>false</c>.
         /// </value>
-        public bool DevelopmentDependency { get; set; }
+        public bool? DevelopmentDependency { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether users has to accept the package license.
@@ -150,7 +156,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <value>
         /// <c>true</c> if users has to accept the package license; otherwise, <c>false</c>.
         /// </value>
-        public bool RequireLicenseAcceptance { get; set; }
+        public bool? RequireLicenseAcceptance { get; set; }
 
         /// <summary>
         /// Gets or sets the package files.

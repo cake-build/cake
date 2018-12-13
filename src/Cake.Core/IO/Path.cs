@@ -3,8 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Globalization;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace Cake.Core.IO
 {
@@ -14,8 +13,6 @@ namespace Cake.Core.IO
     /// </summary>
     public abstract class Path
     {
-        private static readonly char[] _invalidPathCharacters;
-
         /// <summary>
         /// Gets the full path.
         /// </summary>
@@ -23,12 +20,25 @@ namespace Cake.Core.IO
         public string FullPath { get; }
 
         /// <summary>
-        /// Gets a value indicating whether this path is relative.
+        /// Gets a value indicating whether or not this path is relative.
         /// </summary>
         /// <value>
         /// <c>true</c> if this path is relative; otherwise, <c>false</c>.
         /// </value>
         public bool IsRelative { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not this path is an UNC path.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this path is an UNC path; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsUNC { get; }
+
+        /// <summary>
+        /// Gets the separator this path was normalized with.
+        /// </summary>
+        public char Separator { get; }
 
         /// <summary>
         /// Gets the segments making up the path.
@@ -42,26 +52,21 @@ namespace Cake.Core.IO
         /// <param name="path">The path.</param>
         protected Path(string path)
         {
-            if (path == null)
+            path = path?.Trim() ?? string.Empty;
+
+            IsUNC = path.StartsWith(@"\\");
+            Separator = IsUNC ? '\\' : '/';
+
+            if (IsUNC)
             {
-                throw new ArgumentNullException(nameof(path));
+                FullPath = path.Replace('/', Separator).Trim();
             }
-            if (string.IsNullOrWhiteSpace(path))
+            else
             {
-                throw new ArgumentException("Path cannot be empty.", nameof(path));
+                FullPath = path.Replace('\\', Separator).Trim();
             }
 
-            // Validate the path.
-            foreach (var character in path)
-            {
-                if (_invalidPathCharacters.Contains(character))
-                {
-                    const string format = "Illegal characters in path ({0}).";
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, format, character), nameof(path));
-                }
-            }
-
-            FullPath = path.Replace('\\', '/').Trim();
+            // Relative paths are considered empty.
             FullPath = FullPath == "./" ? string.Empty : FullPath;
 
             // Remove relative part of a path.
@@ -71,27 +76,54 @@ namespace Cake.Core.IO
             }
 
             // Remove trailing slashes.
-            FullPath = FullPath.TrimEnd('/');
-
-            if (FullPath.EndsWith(":", StringComparison.OrdinalIgnoreCase))
+            if (FullPath.Length > 1)
             {
-                FullPath = string.Concat(FullPath, "/");
+                FullPath = FullPath.TrimEnd(Separator);
+                if (IsUNC && string.IsNullOrWhiteSpace(FullPath))
+                {
+                    FullPath = @"\\";
+                }
+            }
+
+            // Potential Windows path?
+            if (FullPath.Length == 2)
+            {
+                if (FullPath.EndsWith(":", StringComparison.OrdinalIgnoreCase))
+                {
+                    FullPath = string.Concat(FullPath, Separator);
+                }
             }
 
             // Relative path?
-            IsRelative = !System.IO.Path.IsPathRooted(FullPath);
+            IsRelative = !PathHelper.IsPathRooted(FullPath);
 
             // Extract path segments.
-            Segments = FullPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-            if (FullPath.StartsWith("/") && Segments.Length > 0)
+            Segments = FullPath.Split(new[] { Separator }, StringSplitOptions.RemoveEmptyEntries);
+            if (!IsUNC)
             {
-                Segments[0] = "/" + Segments[0];
+                if (FullPath.StartsWith("/") && Segments.Length > 0)
+                {
+                    Segments[0] = "/" + Segments[0];
+                }
             }
-        }
-
-        static Path()
-        {
-            _invalidPathCharacters = System.IO.Path.GetInvalidPathChars().Concat(new[] { '*', '?' }).ToArray();
+            else
+            {
+                if (FullPath.StartsWith(@"\\"))
+                {
+                    if (Segments.Length > 0)
+                    {
+                        // Treat \\ as its own segment.
+                        var segments = new string[Segments.Length + 1];
+                        segments[0] = @"\\";
+                        Segments.CopyTo(segments, 1);
+                        Segments = segments;
+                    }
+                    else
+                    {
+                        Segments = new[] { @"\\" };
+                    }
+                }
+            }
         }
 
         /// <summary>

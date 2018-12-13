@@ -291,6 +291,37 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheNoLogoMethod
+        {
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Set_No_Logo(bool noLogo)
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.SetNoLogo(noLogo);
+
+                // Then
+                Assert.Equal(noLogo, settings.NoLogo);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetNoLogo(true);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetVerbosityMethod
         {
             [Theory]
