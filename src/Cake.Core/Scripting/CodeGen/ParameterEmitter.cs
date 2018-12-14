@@ -5,8 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Cake.Core.Scripting.CodeGen
 {
@@ -38,6 +40,34 @@ namespace Cake.Core.Scripting.CodeGen
                 {
                     yield return "params ";
                 }
+
+                // if the parameter has attributes specified
+                var customAttrs = parameter.GetCustomAttributesData();
+                if (customAttrs.Count > 0)
+                {
+                    // filter out the any custom parameter attributes that will be emitted by other means.
+                    var exclusions = new[]
+                    {
+                        typeof(OptionalAttribute),
+                        typeof(OutAttribute),
+                        typeof(ParamArrayAttribute)
+                    };
+
+                    foreach (var item in customAttrs.Where(p => !exclusions.Contains(p.AttributeType)))
+                    {
+                        var attributeType = item.AttributeType.GetFullName();
+                        if (item.AttributeType.Name.EndsWith("Attribute", StringComparison.OrdinalIgnoreCase))
+                        {
+                            attributeType = attributeType.Substring(0, attributeType.LastIndexOf("Attribute", StringComparison.OrdinalIgnoreCase));
+                        }
+
+                        if (item.ConstructorArguments.Count < 1 && item.NamedArguments.Count < 1)
+                        {
+                            yield return $"[{attributeType}] ";
+                        }
+                    }
+                }
+
                 // if the parameter is 'out' (or implicitly, by ref),
                 // use GetElementType to get the correct value for codegen (instead of IDisposable& or similar)
                 if (parameter.ParameterType.IsByRef)

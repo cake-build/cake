@@ -5,7 +5,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using System.Resources;
+using System.Runtime.CompilerServices;
 using Cake.Core.Scripting.CodeGen;
 using Xunit;
 // ReSharper disable UnusedMember.Local
@@ -368,6 +368,14 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             {
                 arg = 0;
             }
+
+            public static void OptionalStringWithAttribute([CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
+            {
+            }
+
+            public static void OptionalInt32WithAttribute([CallerLineNumber] int sourceLineNumber = 0)
+            {
+            }
         }
 
         [Theory]
@@ -457,6 +465,8 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("OptionalNullableIntKeywordWithNullDefault", "System.Nullable<System.Int32> @new = null")]
         [InlineData("OutputParameterInterface", "out System.IDisposable arg")]
         [InlineData("OutputParameterInt32", "out System.Int32 arg")]
+        [InlineData("OptionalStringWithAttribute", "[System.Runtime.CompilerServices.CallerMemberName] System.String memberName = \"\"")]
+        [InlineData("OptionalInt32WithAttribute", "[System.Runtime.CompilerServices.CallerLineNumber] System.Int32 sourceLineNumber = (System.Int32)0")]
         public void Should_Return_Correct_Generated_Code_For_Method_Parameters(string methodName, string expected)
         {
             // Given
