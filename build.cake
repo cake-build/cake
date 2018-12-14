@@ -300,7 +300,7 @@ Task("Create-Chocolatey-Packages")
             Version = parameters.Version.SemVersion,
             ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
             OutputDirectory = parameters.Paths.Directories.NugetRoot,
-            Files = (GetFiles(netFxFullArtifactPath + "/*.*") + GetFiles("./nuspec/*.txt"))
+            Files = (GetFiles(netFxFullArtifactPath + "/*.*") + GetFiles("./nuspec/*.txt") + GetFiles("./LICENSE"))
                                     .Select(file=>"../" + file.FullPath.Substring(curDirLength))
                                     .Select(file=> new ChocolateyNuSpecContent { Source = file })
                                     .ToArray()
