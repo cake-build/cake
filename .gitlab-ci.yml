@@ -1,10 +1,8 @@
-image: devlead/gitlabs-dotnet
+image: cakebuild/cake:2.1-sdk-mono
 stages:
 - build
 
 build_job:
   stage: build
   script:
-  - mkdir tools
-  - ln -s /opt/nuget/nuget.exe ./tools
-  - cake  build.cake --target="Run-Unit-Tests"
+  - ./build.sh --target="Run-Unit-Tests"
