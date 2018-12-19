@@ -29,7 +29,7 @@ namespace Cake.Common.Tools.NuGet.Restore
         /// <summary>
         /// Gets or sets a list of packages sources to use for this command.
         /// </summary>
-        public ICollection<string> Source { get; set; }
+        public ICollection<string> Source { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets a value indicating whether or not to use the machine cache as the first package source.
@@ -63,7 +63,7 @@ namespace Cake.Common.Tools.NuGet.Restore
         /// This setting requires NuGet V3 or later.
         /// </summary>
         /// <value>The list of packages sources to use as fallbacks for this command.</value>
-        public ICollection<string> FallbackSource { get; set; }
+        public ICollection<string> FallbackSource { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the version of MSBuild to be used with this command.

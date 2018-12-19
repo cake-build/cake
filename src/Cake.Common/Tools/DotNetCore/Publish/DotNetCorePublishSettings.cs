@@ -86,7 +86,7 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         /// <remarks>
         /// Requires .NET Core 2.x or newer.
         /// </remarks>
-        public ICollection<string> Sources { get; set; }
+        public ICollection<string> Sources { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
