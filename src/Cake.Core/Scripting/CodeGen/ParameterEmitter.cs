@@ -50,7 +50,8 @@ namespace Cake.Core.Scripting.CodeGen
                     {
                         typeof(OptionalAttribute),
                         typeof(OutAttribute),
-                        typeof(ParamArrayAttribute)
+                        typeof(ParamArrayAttribute),
+                        typeof(DecimalConstantAttribute)
                     };
 
                     foreach (var item in customAttrs.Where(p => !exclusions.Contains(p.AttributeType)))
@@ -63,7 +64,29 @@ namespace Cake.Core.Scripting.CodeGen
 
                         if (item.ConstructorArguments.Count < 1 && item.NamedArguments.Count < 1)
                         {
+                            // basic case, empty constructor, just emit the decoration
                             yield return $"[{attributeType}] ";
+                        }
+                        else
+                        {
+                            // has ctor or named parameters.  we'll need to enumerate those options,
+                            // keeping in mind that we have to normalize the type names where it's appropriate.
+                            yield return $"[{attributeType}(";
+                            if (item.ConstructorArguments.Count > 0)
+                            {
+                                yield return string.Join(", ", item.ConstructorArguments.Select(NormalizeCustomAttributeTypedArgument));
+                            }
+
+                            if (item.NamedArguments.Count > 0)
+                            {
+                                if (item.ConstructorArguments.Count > 0)
+                                {
+                                    yield return ", ";
+                                }
+
+                                yield return string.Join(", ", item.NamedArguments.Select(x => $"{x.MemberName} = {NormalizeCustomAttributeTypedArgument(x.TypedValue)}"));
+                            }
+                            yield return ")] ";
                         }
                     }
                 }
@@ -89,6 +112,54 @@ namespace Cake.Core.Scripting.CodeGen
                 yield return " = ";
                 yield return BuildDefaultParameterValueToken(parameter);
             }
+        }
+
+        private static string NormalizeCustomAttributeTypedArgument(CustomAttributeTypedArgument arg)
+        {
+            if (arg.ArgumentType == null)
+            {
+                return arg.ToString();
+            }
+
+            var normalizedTypeName = arg.ArgumentType.GetFullName();
+
+            if (arg.ArgumentType.IsEnum)
+            {
+                // casting the value to int in the case of an enum
+                // solves the same issue as the same workaround solves in
+                // BuildDefaultParameterValueToken, below, on linux/mac
+                return $"({normalizedTypeName}){(int)arg.Value}";
+            }
+
+            if (arg.Value == null)
+            {
+                return $"({normalizedTypeName})null";
+            }
+
+            if (arg.ArgumentType == typeof(string))
+            {
+                return $"\"{arg.Value}\"";
+            }
+
+            if (arg.ArgumentType == typeof(char))
+            {
+                return $"'{arg.Value}'";
+            }
+
+            if (arg.ArgumentType == typeof(Type))
+            {
+                return $"typeof({normalizedTypeName})";
+            }
+
+            if (!arg.ArgumentType.IsArray)
+            {
+                return $"({normalizedTypeName}){arg.Value}";
+            }
+
+            // if it's an array, compose those tokens.
+            var argList = arg.Value as IList<CustomAttributeTypedArgument>;
+            var arrayType = arg.ArgumentType.GetElementType().GetFullName();
+            return $"new {arrayType}[{argList.Count}] {{ {string.Join(", ", argList.Select(NormalizeCustomAttributeTypedArgument))} }}";
         }
 
         private static string BuildDefaultParameterValueToken(ParameterInfo parameter)

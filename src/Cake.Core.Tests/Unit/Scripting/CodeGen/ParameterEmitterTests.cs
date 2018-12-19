@@ -14,11 +14,41 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 {
     public sealed class ParameterEmitterTests
     {
-        private enum TestEnum
+        public enum TestEnum
         {
             None,
             Some,
             All
+        }
+
+        [AttributeUsageAttribute(AttributeTargets.Parameter)]
+        public sealed class TestParameterAttribute : Attribute
+        {
+            public TestParameterAttribute(string name)
+            {
+            }
+
+            public TestParameterAttribute(int number)
+            {
+            }
+
+            public TestParameterAttribute(TestEnum value)
+            {
+            }
+
+            public TestParameterAttribute(TestEnum[] values)
+            {
+            }
+
+            public TestParameterAttribute()
+            {
+            }
+
+            public string StringProperty { get; set; }
+
+            public int Int32Property { get; set; }
+
+            public TestEnum EnumProperty { get; set; }
         }
 
         private static class ParameterFixture
@@ -376,6 +406,34 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             public static void OptionalInt32WithAttribute([CallerLineNumber] int sourceLineNumber = 0)
             {
             }
+
+            public static void RequiredStringWithCustomAttributeCalledWithInt32CtorParameter([TestParameter(19)] string value)
+            {
+            }
+
+            public static void RequiredStringWithCustomAttributeCalledWithStringCtorParameter([TestParameter("test")] string value)
+            {
+            }
+
+            public static void RequiredStringWithCustomAttributeCalledWithEnumCtorParameter([TestParameter(TestEnum.All)] string value)
+            {
+            }
+
+            public static void RequiredStringWithCustomAttributeCalledWithArrayCtorParameter([TestParameter(new[] { TestEnum.All, TestEnum.Some })] string value)
+            {
+            }
+
+            public static void RequiredStringWithCustomAttributeCalledWithInt32NamedArgument([TestParameter(Int32Property = 19)] string value)
+            {
+            }
+
+            public static void RequiredStringWithCustomAttributeCalledWithStringNamedArgument([TestParameter(StringProperty = "test")] string value)
+            {
+            }
+
+            public static void RequiredStringWithCustomAttributeCalledWithEnumNamedArgument([TestParameter(EnumProperty = TestEnum.All)] string value)
+            {
+            }
         }
 
         [Theory]
@@ -467,6 +525,13 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("OutputParameterInt32", "out System.Int32 arg")]
         [InlineData("OptionalStringWithAttribute", "[System.Runtime.CompilerServices.CallerMemberName] System.String memberName = \"\"")]
         [InlineData("OptionalInt32WithAttribute", "[System.Runtime.CompilerServices.CallerLineNumber] System.Int32 sourceLineNumber = (System.Int32)0")]
+        [InlineData("RequiredStringWithCustomAttributeCalledWithInt32CtorParameter", "[Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestParameter((System.Int32)19)] System.String value")]
+        [InlineData("RequiredStringWithCustomAttributeCalledWithStringCtorParameter", "[Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestParameter(\"test\")] System.String value")]
+        [InlineData("RequiredStringWithCustomAttributeCalledWithEnumCtorParameter", "[Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestParameter((Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum)2)] System.String value")]
+        [InlineData("RequiredStringWithCustomAttributeCalledWithArrayCtorParameter", "[Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestParameter(new Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum[2] { (Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum)2, (Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum)1 })] System.String value")]
+        [InlineData("RequiredStringWithCustomAttributeCalledWithInt32NamedArgument", "[Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestParameter(Int32Property = (System.Int32)19)] System.String value")]
+        [InlineData("RequiredStringWithCustomAttributeCalledWithStringNamedArgument", "[Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestParameter(StringProperty = \"test\")] System.String value")]
+        [InlineData("RequiredStringWithCustomAttributeCalledWithEnumNamedArgument", "[Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestParameter(EnumProperty = (Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum)2)] System.String value")]
         public void Should_Return_Correct_Generated_Code_For_Method_Parameters(string methodName, string expected)
         {
             // Given
