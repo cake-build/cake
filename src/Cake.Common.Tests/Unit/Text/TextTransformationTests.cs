@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Text;
 using Cake.Common.Tests.Fixtures;
 using Cake.Testing;
 using NSubstitute;
@@ -45,7 +46,7 @@ namespace Cake.Common.Tests.Unit.Text
             }
 
             [Fact]
-            public void Should_Render_Content_To_File()
+            public void Should_Render_Content_To_File_With_Default_Encoding()
             {
                 // Given
                 var expectedContent = "Hello World";
@@ -58,8 +59,26 @@ namespace Cake.Common.Tests.Unit.Text
 
                 // Then
                 var outputFile = fixture.FileSystem.GetFile("/Working/output.txt");
+                Assert.False(outputFile.HasUTF8BOM());
                 Assert.Equal(expectedContent, outputFile.GetTextContent());
-                Assert.Equal(expectedContent.Length, outputFile.Length);
+            }
+
+            [Fact]
+            public void Should_Render_Content_To_File_With_Specified_Encoding()
+            {
+                // Given
+                var expectedContent = "Hello World";
+                var fixture = new TextTransformationFixture();
+                fixture.TransformationTemplate.Render().Returns(expectedContent);
+                var transformation = fixture.CreateTextTransformation();
+
+                // When
+                transformation.Save("./output.txt", Encoding.UTF8);
+
+                // Then
+                var outputFile = fixture.FileSystem.GetFile("/Working/output.txt");
+                Assert.True(outputFile.HasUTF8BOM());
+                Assert.Equal(expectedContent, outputFile.GetTextContent(Encoding.UTF8));
             }
         }
 
