@@ -45,6 +45,12 @@ namespace Cake.Testing
         public bool Hidden { get; internal set; }
 
         /// <summary>
+        /// Gets the time when this <see cref="IFileSystemInfo"/> was last written to.
+        /// </summary>
+        /// <value>The last write time.</value>
+        public DateTime LastWriteTime { get; internal set; }
+
+        /// <summary>
         /// Gets the length of the file.
         /// </summary>
         /// <value>
@@ -181,6 +187,7 @@ namespace Cake.Testing
                     case FileMode.OpenOrCreate:
                         fileWasCreated = true;
                         Exists = true;
+                        LastWriteTime = DateTime.Now;
                         return Length;
                     case FileMode.Open:
                     case FileMode.Truncate:

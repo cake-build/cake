@@ -19,6 +19,8 @@ namespace Cake.Core.IO
 
         public bool Hidden => (_file.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
 
+        public DateTime LastWriteTime => _file.LastWriteTime;
+
         public long Length => _file.Length;
 
         public FileAttributes Attributes

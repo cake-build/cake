@@ -32,8 +32,14 @@ namespace Cake.Common.IO
         [CakeMethodAlias]
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath)
         {
-            var filePaths = context.GetFiles(string.Concat(rootPath, "/**/*"));
-            Zip(context, rootPath, outputPath, filePaths);
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var paths = context.GetPaths(string.Concat(rootPath, "/**/*"));
+            var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);
+            zipper.Zip(rootPath, outputPath, paths);
         }
 
         /// <summary>
@@ -45,7 +51,7 @@ namespace Cake.Common.IO
         /// <param name="pattern">The pattern.</param>
         /// <example>
         /// <code>
-        /// Zip("./", "xmlfiles.zip", "./*.xml");
+        /// Zip("./", "XmlFiles.zip", "./*.xml");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -70,7 +76,7 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// var files = GetFiles("./**/Cake.*.dll");
-        /// Zip("./", "cakeassemblies.zip", files);
+        /// Zip("./", "CakeAssemblies.zip", files);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -100,7 +106,7 @@ namespace Cake.Common.IO
         ///     "./src/Cake/bin/Debug/Cake.Core.dll",
         ///     "./src/Cake/bin/Debug/Cake.exe"
         /// };
-        /// Zip("./", "cakebinaries.zip", files);
+        /// Zip("./", "CakeBinaries.zip", files);
         /// </code>
         /// </example>
         [CakeMethodAlias]

@@ -575,7 +575,7 @@ namespace Cake.Common.IO
             }
 
             var directories = directory.GetDirectories("*", SearchScope.Current, fsi => true).Select(d => new DirectoryPath(d.Path.FullPath)).ToList();
-            return new DirectoryPathCollection(directories, new PathComparer(context.Environment.Platform.IsUnix()));
+            return new DirectoryPathCollection(directories);
         }
 
         /// <summary>
