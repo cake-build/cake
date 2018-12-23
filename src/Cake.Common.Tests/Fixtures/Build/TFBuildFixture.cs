@@ -5,6 +5,7 @@
 using Cake.Common.Build.TFBuild;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
 
@@ -13,6 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Build
     internal sealed class TFBuildFixture
     {
         public ICakeEnvironment Environment { get; set; }
+
         public FakeLog Log { get; set; }
 
         public TFBuildFixture()
@@ -35,9 +37,13 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("AGENT_NAME").Returns("On Premises");
         }
 
-        public TFBuildProvider CreateTFBuildService()
+        public TFBuildProvider CreateTFBuildService() => new TFBuildProvider(Environment, Log);
+
+        public TFBuildProvider CreateTFBuildService(PlatformFamily platformFamily, DirectoryPath workingDirectory)
         {
-            return new TFBuildProvider(Environment, Log);
+            Environment.Platform.Family.Returns(platformFamily);
+            Environment.WorkingDirectory.Returns(workingDirectory);
+            return CreateTFBuildService();
         }
     }
 }

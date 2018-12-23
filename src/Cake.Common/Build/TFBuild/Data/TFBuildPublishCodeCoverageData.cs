@@ -23,19 +23,19 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <summary>
         /// Gets or Sets the path ath of the summary file containing code coverage statistics, such as line, method, and class coverage.
         /// </summary>
-        public string SummaryFileLocation { get; set; }
+        public FilePath SummaryFileLocation { get; set; }
 
         /// <summary>
         /// Gets or Sets the Path of the code coverage HTML report directory. The report directory is published for later viewing as an artifact of the build.
         /// </summary>
-        public string ReportDirectory { get; set; }
+        public DirectoryPath ReportDirectory { get; set; }
 
         /// <summary>
         /// Gets or Sets the file paths for any additional code coverage files to be published as artifacts of the build.
         /// </summary>
-        public string[] AdditionalCodeCoverageFiles { get; set; }
+        public FilePath[] AdditionalCodeCoverageFiles { get; set; }
 
-        internal Dictionary<string, string> GetProperties(ICakeEnvironment environment)
+        internal Dictionary<string, string> GetProperties(ICakeEnvironment environment, FilePath summaryFilePath = null)
         {
             if (environment == null)
             {
@@ -48,18 +48,46 @@ namespace Cake.Common.Build.TFBuild.Data
             {
                 properties.Add("codecoveragetool", CodeCoverageTool.Value.ToString());
             }
-            if (!string.IsNullOrWhiteSpace(SummaryFileLocation))
+
+            if (summaryFilePath != null)
             {
-                properties.Add("summaryfile", new FilePath(SummaryFileLocation).MakeAbsolute(environment).FullPath.Replace("/", "\\"));
+                properties.Add("summaryfile",
+                    summaryFilePath
+                        .MakeAbsolute(environment)
+                        .FullPath
+                        .Replace(summaryFilePath.Separator, System.IO.Path.DirectorySeparatorChar));
             }
-            if (!string.IsNullOrWhiteSpace(ReportDirectory))
+
+            if (SummaryFileLocation != null && summaryFilePath == null)
             {
-                properties.Add("reportdirectory", new DirectoryPath(ReportDirectory).MakeAbsolute(environment).FullPath.Replace("/", "\\"));
+                properties.Add("summaryfile",
+                    SummaryFileLocation
+                        .MakeAbsolute(environment)
+                        .FullPath
+                        .Replace(SummaryFileLocation.Separator, System.IO.Path.DirectorySeparatorChar));
             }
+
+            if (ReportDirectory != null)
+            {
+                properties.Add("reportdirectory",
+                    ReportDirectory
+                        .MakeAbsolute(environment)
+                        .FullPath
+                        .Replace(ReportDirectory.Separator, System.IO.Path.DirectorySeparatorChar));
+            }
+
             if (AdditionalCodeCoverageFiles != null && AdditionalCodeCoverageFiles.Any())
             {
-                properties.Add("additionalcodecoveragefiles", string.Join(",", AdditionalCodeCoverageFiles.Select(filePath => new FilePath(filePath).MakeAbsolute(environment).FullPath.Replace("/", "\\"))));
+                properties.Add("additionalcodecoveragefiles",
+                    string.Join(",",
+                        AdditionalCodeCoverageFiles
+                            .Select(filePath =>
+                                filePath
+                                    .MakeAbsolute(environment)
+                                    .FullPath
+                                    .Replace(filePath.Separator, System.IO.Path.DirectorySeparatorChar))));
             }
+
             return properties;
         }
     }
