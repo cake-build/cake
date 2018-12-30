@@ -204,7 +204,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
             [Theory]
             [InlineData("/bin/tools/GitReleaseManager/GitReleaseManager.exe", "/bin/tools/GitReleaseManager/GitReleaseManager.exe")]
             [InlineData("./tools/GitReleaseManager/GitReleaseManager.exe", "/Working/tools/GitReleaseManager/GitReleaseManager.exe")]
-            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
+            public void Should_Use_GitReleaseManager_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
                 var fixture = new GitReleaseManagerPublisherFixture();
@@ -221,7 +221,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
             [Theory]
             [InlineData("/bin/tools/GitReleaseManager/GitReleaseManager.exe", "/bin/tools/GitReleaseManager/GitReleaseManager.exe")]
             [InlineData("./tools/GitReleaseManager/GitReleaseManager.exe", "/Working/tools/GitReleaseManager/GitReleaseManager.exe")]
-            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided_When_Using_Token(string toolPath, string expected)
+            public void Should_Use_GitReleaseManager_Executable_From_Tool_Path_If_Provided_When_Using_Token(string toolPath, string expected)
             {
                 // Given
                 var fixture = new GitReleaseManagerPublisherFixture();
@@ -238,7 +238,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
 
             [WindowsTheory]
             [InlineData("C:/GitReleaseManager/GitReleaseManager.exe", "C:/GitReleaseManager/GitReleaseManager.exe")]
-            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
+            public void Should_Use_GitReleaseManager_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
                 var fixture = new GitReleaseManagerPublisherFixture();
@@ -254,7 +254,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
 
             [WindowsTheory]
             [InlineData("C:/GitReleaseManager/GitReleaseManager.exe", "C:/GitReleaseManager/GitReleaseManager.exe")]
-            public void Should_Use_NuGet_Executable_From_Tool_Path_If_Provided_On_Windows_When_Using_Token(string toolPath, string expected)
+            public void Should_Use_GitReleaseManager_Executable_From_Tool_Path_If_Provided_On_Windows_When_Using_Token(string toolPath, string expected)
             {
                 // Given
                 var fixture = new GitReleaseManagerPublisherFixture();
