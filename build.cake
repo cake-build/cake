@@ -7,7 +7,6 @@
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.10.0"
 
 // Install tools.
-#tool "nuget:https://api.nuget.org/v3/index.json?package=gitreleasemanager&version=0.7.1"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.4.2"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.6.519"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.0.4"
@@ -16,6 +15,7 @@
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=4.0.1-beta1-58"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=SignClient&version=1.0.82"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.8.0"
 
 // Load other scripts.
 #load "./build/parameters.cake"
