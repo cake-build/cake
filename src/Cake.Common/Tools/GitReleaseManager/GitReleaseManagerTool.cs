@@ -46,7 +46,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         /// <returns>The tool executable name.</returns>
         protected sealed override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "GitReleaseManager.exe", "gitreleasemanager.exe", "grm.exe" };
+            return new[] { "GitReleaseManager.exe", "gitreleasemanager.exe", "grm.exe", "dotnet-gitreleasemanager", "dotnet-gitreleasemanager.exe" };
         }
     }
 }
