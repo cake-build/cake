@@ -82,6 +82,50 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
             Run(settings, GetArguments(userName, password, owner, repository, tagName, assets, settings));
         }
 
+        /// <summary>
+        /// Creates a Release using the specified and settings.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="tagName">The tag name.</param>
+        /// <param name="assets">The assets to upload.</param>
+        /// <param name="settings">The settings.</param>
+        public void AddAssets(string token, string owner, string repository, string tagName, string assets, GitReleaseManagerAddAssetsSettings settings)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new ArgumentNullException(nameof(token));
+            }
+
+            if (string.IsNullOrWhiteSpace(owner))
+            {
+                throw new ArgumentNullException(nameof(owner));
+            }
+
+            if (string.IsNullOrWhiteSpace(repository))
+            {
+                throw new ArgumentNullException(nameof(repository));
+            }
+
+            if (string.IsNullOrWhiteSpace(tagName))
+            {
+                throw new ArgumentNullException(nameof(tagName));
+            }
+
+            if (string.IsNullOrWhiteSpace(assets))
+            {
+                throw new ArgumentNullException(nameof(assets));
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            Run(settings, GetArguments(token, owner, repository, tagName, assets, settings));
+        }
+
         private ProcessArgumentBuilder GetArguments(string userName, string password, string owner, string repository, string tagName, string assets, GitReleaseManagerAddAssetsSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
@@ -94,6 +138,27 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
             builder.Append("-p");
             builder.AppendQuotedSecret(password);
 
+            ParseCommonArguments(builder, owner, repository, tagName, assets, settings);
+
+            return builder;
+        }
+
+        private ProcessArgumentBuilder GetArguments(string token, string owner, string repository, string tagName, string assets, GitReleaseManagerAddAssetsSettings settings)
+        {
+            var builder = new ProcessArgumentBuilder();
+
+            builder.Append("addasset");
+
+            builder.Append("--token");
+            builder.AppendQuoted(token);
+
+            ParseCommonArguments(builder, owner, repository, tagName, assets, settings);
+
+            return builder;
+        }
+
+        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, string tagName, string assets, GitReleaseManagerAddAssetsSettings settings)
+        {
             builder.Append("-o");
             builder.AppendQuoted(owner);
 
@@ -119,8 +184,6 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
                 builder.Append("-l");
                 builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
             }
-
-            return builder;
         }
     }
 }
