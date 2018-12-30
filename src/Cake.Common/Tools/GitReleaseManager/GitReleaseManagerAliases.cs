@@ -7,6 +7,7 @@ using Cake.Common.Tools.GitReleaseManager.AddAssets;
 using Cake.Common.Tools.GitReleaseManager.Close;
 using Cake.Common.Tools.GitReleaseManager.Create;
 using Cake.Common.Tools.GitReleaseManager.Export;
+using Cake.Common.Tools.GitReleaseManager.Label;
 using Cake.Common.Tools.GitReleaseManager.Publish;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -319,6 +320,58 @@ namespace Cake.Common.Tools.GitReleaseManager
 
             var publisher = new GitReleaseManagerExporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             publisher.Export(userName, password, owner, repository, fileOutputPath, settings);
+        }
+
+        /// <summary>
+        /// Deletes and creates labels.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerLabel("user", "password", "owner", "repo")
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Label")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Label")]
+        public static void GitReleaseManagerLabel(this ICakeContext context, string userName, string password, string owner, string repository)
+        {
+            GitReleaseManagerLabel(context, userName, password, owner, repository, new GitReleaseManagerLabelSettings());
+        }
+
+        /// <summary>
+        /// Deletes and creates labels using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerLabel("user", "password", "owner", "repo", new GitReleaseManagerLabelSettings {
+        ///     LogFilePath = "c:/temp/grm.log"
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Label")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Label")]
+        public static void GitReleaseManagerLabel(this ICakeContext context, string userName, string password, string owner, string repository, GitReleaseManagerLabelSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var labeller = new GitReleaseManagerLabeller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            labeller.Label(userName, password, owner, repository, settings);
         }
     }
 }
