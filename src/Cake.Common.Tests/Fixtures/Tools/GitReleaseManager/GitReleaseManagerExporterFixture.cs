@@ -9,8 +9,11 @@ namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
 {
     internal sealed class GitReleaseManagerExporterFixture : GitReleaseManagerFixture<GitReleaseManagerExportSettings>
     {
+        private bool _useToken = false;
+
         public string UserName { get; set; }
         public string Password { get; set; }
+        public string Token { get; set; }
         public string Owner { get; set; }
         public string Repository { get; set; }
         public FilePath FileOutputPath { get; set; }
@@ -19,15 +22,29 @@ namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
         {
             UserName = "bob";
             Password = "password";
+            Token = "token";
             Owner = "repoOwner";
             Repository = "repo";
             FileOutputPath = "/temp";
         }
 
+        public void UseToken()
+        {
+            _useToken = true;
+        }
+
         protected override void RunTool()
         {
             var tool = new GitReleaseManagerExporter(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Export(UserName, Password, Owner, Repository, FileOutputPath, Settings);
+
+            if (_useToken)
+            {
+                tool.Export(Token, Owner, Repository, FileOutputPath, Settings);
+            }
+            else
+            {
+                tool.Export(UserName, Password, Owner, Repository, FileOutputPath, Settings);
+            }
         }
     }
 }

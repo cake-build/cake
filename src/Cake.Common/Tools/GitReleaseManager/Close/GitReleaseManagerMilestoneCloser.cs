@@ -76,6 +76,44 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
             Run(settings, GetArguments(userName, password, owner, repository, milestone, settings));
         }
 
+        /// <summary>
+        /// Creates a Release using the specified settings.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="milestone">The milestone.</param>
+        /// <param name="settings">The settings.</param>
+        public void Close(string token, string owner, string repository, string milestone, GitReleaseManagerCloseMilestoneSettings settings)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new ArgumentNullException(nameof(token));
+            }
+
+            if (string.IsNullOrWhiteSpace(owner))
+            {
+                throw new ArgumentNullException(nameof(owner));
+            }
+
+            if (string.IsNullOrWhiteSpace(repository))
+            {
+                throw new ArgumentNullException(nameof(repository));
+            }
+
+            if (string.IsNullOrWhiteSpace(milestone))
+            {
+                throw new ArgumentNullException(nameof(milestone));
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            Run(settings, GetArguments(token, owner, repository, milestone, settings));
+        }
+
         private ProcessArgumentBuilder GetArguments(string userName, string password, string owner, string repository, string milestone, GitReleaseManagerCloseMilestoneSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
@@ -88,6 +126,27 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
             builder.Append("-p");
             builder.AppendQuotedSecret(password);
 
+            ParseCommonArguments(builder, owner, repository, milestone, settings);
+
+            return builder;
+        }
+
+        private ProcessArgumentBuilder GetArguments(string token, string owner, string repository, string milestone, GitReleaseManagerCloseMilestoneSettings settings)
+        {
+            var builder = new ProcessArgumentBuilder();
+
+            builder.Append("close");
+
+            builder.Append("--token");
+            builder.AppendQuoted(token);
+
+            ParseCommonArguments(builder, owner, repository, milestone, settings);
+
+            return builder;
+        }
+
+        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, string milestone, GitReleaseManagerCloseMilestoneSettings settings)
+        {
             builder.Append("-o");
             builder.AppendQuoted(owner);
 
@@ -110,8 +169,6 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
                 builder.Append("-l");
                 builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
             }
-
-            return builder;
         }
     }
 }
