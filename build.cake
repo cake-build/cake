@@ -1,15 +1,21 @@
+// Install modules
+#module nuget:?package=Cake.DotNetTool.Module&version=0.1.0
+
 // Install addins.
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=0.7.0"
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=0.6.0"
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.7.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=0.9.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=0.9.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.10.0"
 
 // Install tools.
-#tool "nuget:https://api.nuget.org/v3/index.json?package=gitreleasemanager&version=0.7.0"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=GitVersion.CommandLine&version=3.6.2"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.3.4"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=gitreleasemanager&version=0.7.1"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.4.2"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.6.519"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=2.4.5"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=SignClient&version=0.9.1&include=/tools/netcoreapp2.0/SignClient.dll"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.0.4"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=4.9.2"
+
+// Install .NET Core Global tools.
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=4.0.1-beta1-58"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=SignClient&version=1.0.82"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -61,14 +67,23 @@ Setup(context =>
 
     if(!parameters.IsRunningOnWindows)
     {
-        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+        var frameworkPathOverride = context.Environment.Runtime.IsCoreClr
+        								? 	new []{
+        										new DirectoryPath("/Library/Frameworks/Mono.framework/Versions/Current/lib/mono"),
+        										new DirectoryPath("/usr/lib/mono"),
+        										new DirectoryPath("/usr/local/lib/mono")
+        									}
+        									.Select(directory =>directory.Combine("4.5"))
+        									.FirstOrDefault(directory => context.DirectoryExists(directory))
+        									?.FullPath + "/"
+        								: new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
 
         // Use FrameworkPathOverride when not running on Windows.
         Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
         msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
     }
 
-      signClientPath = Context.Tools.Resolve("SignClient.dll") ?? throw new Exception("Failed to locate sign tool");
+      signClientPath = Context.Tools.Resolve("SignClient.exe") ?? Context.Tools.Resolve("SignClient") ?? throw new Exception("Failed to locate sign tool");
 });
 
 Teardown(context =>
@@ -428,7 +443,6 @@ Task("Sign-Binaries")
 
         // Build the argument list.
         var arguments = new ProcessArgumentBuilder()
-            .AppendQuoted(signClientPath.FullPath)
             .Append("sign")
             .AppendSwitchQuoted("-c", MakeAbsolute(settings.Path).FullPath)
             .AppendSwitchQuoted("-i", MakeAbsolute(file).FullPath)
@@ -440,7 +454,7 @@ Task("Sign-Binaries")
             .AppendSwitchQuoted("-u", "https://cakebuild.net");
 
         // Sign the binary.
-        var result = StartProcess("dotnet", new ProcessSettings {  Arguments = arguments });
+        var result = StartProcess(signClientPath.FullPath, new ProcessSettings {  Arguments = arguments });
         if(result != 0)
         {
             // We should not recover from this.
@@ -580,7 +594,7 @@ Task("Publish-HomeBrew")
     .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Zip-Files")
     .WithCriteria(() => parameters.ShouldPublish)
-	.Does(() =>
+    .Does(() =>
 {
     var hash = CalculateFileHash(parameters.Paths.Files.ZipArtifactPathDesktop).ToHex();
     Information("Hash for creating HomeBrew PullRequest: {0}", hash);
@@ -615,6 +629,42 @@ Task("Create-Release-Notes")
         TargetCommitish   = "main"
     });
 });
+
+Task("Prepare-Integration-Tests")
+    .IsDependentOn("Validate-Version")
+    .Does(() =>
+{
+   CopyDirectory(parameters.Paths.Directories.ArtifactsBinFullFx, parameters.Paths.Directories.IntegrationTestsBinFullFx);
+   CopyDirectory(parameters.Paths.Directories.ArtifactsBinNetCore, parameters.Paths.Directories.IntegrationTestsBinNetCore);
+});
+
+Task("Run-Integration-Tests")
+    .IsDependentOn("Prepare-Integration-Tests")
+    .DeferOnError()
+    .DoesForEach(
+        ()=> new[] {
+            parameters.Paths.Directories.IntegrationTestsBinFullFx.CombineWithFilePath("Cake.exe"),
+            parameters.Paths.Directories.IntegrationTestsBinNetCore.CombineWithFilePath("Cake.dll")
+        },
+        cakeAssembly=>
+{
+    Information("Testing: {0}", cakeAssembly);
+    CakeExecuteScript("./tests/integration/build.cake",
+        new CakeSettings {
+            ToolPath = cakeAssembly,
+            EnvironmentVariables = {
+                ["MyEnvironmentVariable"] = "Hello World",
+                ["CAKE_INTEGRATION_TEST_ROOT"] = "../.."
+            },
+            Arguments = {
+                ["target"] = Argument("integration-tests-target", "Run-All-Tests"),
+                ["verbosity"] = "quiet",
+                ["platform"] = parameters.IsRunningOnWindows ? "windows" : "posix",
+                ["customarg"] = "hello"
+            }
+    });
+});
+
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
