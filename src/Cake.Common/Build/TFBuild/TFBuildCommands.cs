@@ -364,6 +364,40 @@ namespace Cake.Common.Build.TFBuild
             WriteLoggingCommand("codecoverage.publish", properties, string.Empty);
         }
 
+        /// <summary>
+        /// Publishes and uploads code coverage results
+        /// </summary>
+        /// <param name="summaryFilePath">The code coverage summary file path.</param>
+        /// <param name="data">The code coverage data</param>
+        public void PublishCodeCoverage(FilePath summaryFilePath, TFBuildPublishCodeCoverageData data)
+        {
+            if (summaryFilePath == null)
+            {
+                throw new ArgumentNullException(nameof(summaryFilePath));
+            }
+
+            var properties = data.GetProperties(_environment, summaryFilePath);
+            WriteLoggingCommand("codecoverage.publish", properties, string.Empty);
+        }
+
+        /// <summary>
+        /// Publishes and uploads code coverage results
+        /// </summary>
+        /// <param name="summaryFilePath">The code coverage summary file path.</param>
+        /// <param name="action">The configuration action for the code coverage data.</param>
+        public void PublishCodeCoverage(FilePath summaryFilePath, Action<TFBuildPublishCodeCoverageData> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            var data = new TFBuildPublishCodeCoverageData();
+            action(data);
+
+            PublishCodeCoverage(summaryFilePath, data);
+        }
+
         private void WriteLoggingCommand(string actionName, string value)
         {
             WriteLoggingCommand(actionName, new Dictionary<string, string>(), value);

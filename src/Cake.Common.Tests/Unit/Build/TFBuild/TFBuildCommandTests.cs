@@ -11,6 +11,8 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Testing;
+using Cake.Testing.Xunit;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.TFBuild
@@ -484,12 +486,34 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
             {
                 // Given
                 var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService(PlatformFamily.OSX, "/build/CAKE-CAKE-JOB1");
+                var data = new TFBuildPublishCodeCoverageData
+                {
+                    CodeCoverageTool = TFCodeCoverageToolType.Cobertura,
+                    SummaryFileLocation = "./coverage/cobertura-coverage.xml",
+                    ReportDirectory = "./coverage/report"
+                };
+
+                // When
+                service.Commands.PublishCodeCoverage(data);
+
+                // Then
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=/build/CAKE-CAKE-JOB1/coverage/cobertura-coverage.xml;reportdirectory=/build/CAKE-CAKE-JOB1/coverage/report;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('/', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [WindowsFact]
+            public void Should_Publish_Code_Coverage_Windows()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
                 var service = fixture.CreateTFBuildService();
                 var data = new TFBuildPublishCodeCoverageData
                 {
                     CodeCoverageTool = TFCodeCoverageToolType.Cobertura,
-                    SummaryFileLocation = FilePath.FromString("./coverage/cobertura-coverage.xml").ToString(),
-                    ReportDirectory = DirectoryPath.FromString("./coverage/report").ToString()
+                    SummaryFileLocation = "./coverage/cobertura-coverage.xml",
+                    ReportDirectory = "./coverage/report"
                 };
 
                 // When
@@ -498,7 +522,49 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
                 // Then
                 const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
                 var actual = fixture.Log.Entries.FirstOrDefault();
-                Assert.Equal(expected, actual?.Message);
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [Fact]
+            public void Should_Publish_Code_Coverage_If_File_Path_Provided()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+                var data = new TFBuildPublishCodeCoverageData
+                {
+                    CodeCoverageTool = TFCodeCoverageToolType.Cobertura,
+                    ReportDirectory = "./coverage/report"
+                };
+
+                // When
+                service.Commands.PublishCodeCoverage("./coverage/cobertura-coverage.xml", data);
+
+                // Then
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [Fact]
+            public void Should_Publish_Code_Coverage_If_File_Path_And_Action_Provided()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+
+                // When
+                service.Commands.PublishCodeCoverage("./coverage/cobertura-coverage.xml",
+                    data =>
+                    {
+                        data.CodeCoverageTool = TFCodeCoverageToolType.Cobertura;
+                        data.ReportDirectory = "./coverage/report";
+                    });
+
+                // Then
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
             }
         }
     }
