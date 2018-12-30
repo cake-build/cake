@@ -25,6 +25,7 @@
 #load "./Cake.Common/Tools/Cake/CakeAliases.cake"
 #load "./Cake.Common/Tools/DotNetCore/DotNetCoreAliases.cake"
 #load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
+#load "./Cake.Common/Tools/TextTransform/TextTransformAliases.cake"
 #load "./Cake.Core/Scripting/AddinDirective.cake"
 #load "./Cake.Core/Scripting/DefineDirective.cake"
 #load "./Cake.Core/Scripting/LoadDirective.cake"
@@ -71,7 +72,8 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Text.TextTransformationAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases")
-    .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases");
+    .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases")
+    .IsDependentOn("Cake.Common.Tools.TextTransform.TextTransformAliases");
 
 Task("Run-All-Tests")
     .IsDependentOn("Setup-Tests")

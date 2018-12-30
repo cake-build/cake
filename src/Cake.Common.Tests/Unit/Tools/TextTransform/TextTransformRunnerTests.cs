@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.TextTransform;
 using Cake.Core;
 using Cake.Testing;
@@ -210,6 +211,38 @@ namespace Cake.Common.Tests.Unit.Tools.TextTransform
 
                 // Then
                 Assert.Equal("-I \"/Working/Transforms\" \"/Working/Test.tt\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Class_If_Provided()
+            {
+                // Given
+                var fixture = new TextTransformFixture();
+                fixture.Settings.Class = "HelloWorld";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("--class=\"HelloWorld\" \"/Working/Test.tt\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Properties_If_Provided()
+            {
+                // Given
+                var fixture = new TextTransformFixture();
+                fixture.Settings.Properties = new Dictionary<string, string>()
+                {
+                    { "FirstName", "John" },
+                    { "LastName", "Doe" }
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-p:\"FirstName\"=\"John\" -p:\"LastName\"=\"Doe\" \"/Working/Test.tt\"", result.Args);
             }
         }
     }

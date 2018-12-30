@@ -71,6 +71,23 @@ namespace Cake.Common.Tools.TextTransform
                 builder.AppendQuoted(settings.IncludeDirectory.MakeAbsolute(_environment).FullPath);
             }
 
+            if (settings.Class != null)
+            {
+                builder.AppendSwitchQuoted(
+                    "--class",
+                    "=",
+                    settings.Class);
+            }
+
+            if (settings.Properties != null)
+            {
+                foreach (var property in settings.Properties)
+                {
+                    builder.Append(
+                        $"-p:{property.Key.Quote()}={property.Value.Quote()}");
+                }
+            }
+
             builder.AppendQuoted(sourceFilePath.MakeAbsolute(_environment).FullPath);
 
             return builder;
@@ -89,12 +106,7 @@ namespace Cake.Common.Tools.TextTransform
             IProcessRunner processRunner,
             IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-
-            _environment = environment;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
         /// <summary>
@@ -112,7 +124,7 @@ namespace Cake.Common.Tools.TextTransform
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "TextTransform.exe" };
+            return new[] { "TextTransform.exe", "t4", "t4.exe" };
         }
     }
 }
