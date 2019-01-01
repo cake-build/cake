@@ -22,19 +22,20 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("C:\\build\\CAKE-CAKE-JOB1");
             Environment.GetEnvironmentVariable("TF_BUILD").Returns((string)null);
+            Environment.Platform.Family.Returns(PlatformFamily.Windows);
             Log = new FakeLog();
-        }
-
-        public void IsRunningOnVSTS()
-        {
-            Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
-            Environment.GetEnvironmentVariable("AGENT_NAME").Returns("Hosted Agent");
         }
 
         public void IsRunningOnTFS()
         {
             Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
             Environment.GetEnvironmentVariable("AGENT_NAME").Returns("On Premises");
+        }
+
+        public void IsRunningOnVSTS()
+        {
+            Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
+            Environment.GetEnvironmentVariable("AGENT_NAME").Returns("Hosted Agent");
         }
 
         public TFBuildProvider CreateTFBuildService() => new TFBuildProvider(Environment, Log);
