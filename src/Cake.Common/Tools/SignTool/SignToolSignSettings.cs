@@ -62,5 +62,10 @@ namespace Cake.Common.Tools.SignTool
         /// Gets or sets a value indicating whether the signature should be appended
         /// </summary>
         public bool AppendSignature { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a machine store, instead of a user store, is used.
+        /// </summary>
+        public bool UseMachineStore { get; set; }
     }
 }
