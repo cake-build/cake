@@ -46,6 +46,12 @@ namespace Cake.Common.Tools.VSWhere.Latest
         {
             var builder = new ProcessArgumentBuilder();
 
+            if (!string.IsNullOrWhiteSpace(settings.Products))
+            {
+                builder.Append("-products");
+                builder.AppendQuoted(settings.Products);
+            }
+
             builder.Append("-latest");
 
             AddCommonArguments(settings, builder);
