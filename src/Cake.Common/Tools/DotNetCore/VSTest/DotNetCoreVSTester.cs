@@ -133,10 +133,16 @@ namespace Cake.Common.Tools.DotNetCore.VSTest
                 builder.AppendSwitchQuoted("--Diag", ":", settings.DiagnosticFile.MakeAbsolute(_environment).FullPath);
             }
 
+            // Path to output test results
+            if (settings.ResultsDirectory != null)
+            {
+                builder.AppendSwitchQuoted("--ResultsDirectory", ":", settings.ResultsDirectory.MakeAbsolute(_environment).FullPath);
+            }
+
             // Extra arguments
             foreach (var argument in settings.Arguments)
             {
-                builder.AppendSwitchQuoted(argument.Key, "=", argument.Value);
+                builder.AppendSwitchQuoted(argument.Key, ":", argument.Value);
             }
 
             return builder;

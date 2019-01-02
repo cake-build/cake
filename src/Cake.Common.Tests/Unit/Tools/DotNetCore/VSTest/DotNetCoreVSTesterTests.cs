@@ -329,6 +329,26 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.VSTest
             }
 
             [Fact]
+            public void Should_Add_ResultsDirectory_Argument()
+            {
+                // Given
+                var fixture = new DotNetCoreVSTesterFixture
+                {
+                    TestFiles = new[] { (FilePath)"./test/unit.tests.csproj" },
+                    Settings = new DotNetCoreVSTestSettings
+                    {
+                        ResultsDirectory = "./artifacts/TestResults"
+                    }
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("vstest \"/Working/test/unit.tests.csproj\" --ResultsDirectory:\"/Working/artifacts/TestResults\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Extra_Argument()
             {
                 // Given
@@ -349,7 +369,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.VSTest
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("vstest \"/Working/test/unit.tests.csproj\" Arg1=\"Value1\" Arg2=\"Value2\"", result.Args);
+                Assert.Equal("vstest \"/Working/test/unit.tests.csproj\" Arg1:\"Value1\" Arg2:\"Value2\"", result.Args);
             }
 
             [Fact]
