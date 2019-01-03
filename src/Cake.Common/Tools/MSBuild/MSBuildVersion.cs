@@ -25,6 +25,9 @@ namespace Cake.Common.Tools.MSBuild
         MSBuild14 = 5,
 
         /// <summary>Version 15.0</summary>
-        MSBuild15 = 6
+        MSBuild15 = 6,
+
+        /// <summary>Version 16.0</summary>
+        MSBuild16 = 7
     }
 }

@@ -137,6 +137,25 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
+            [InlineData(MSBuildToolVersion.VS2019, PlatformTarget.x64, PlatformFamily.Windows, false, "/Program86/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2019, PlatformTarget.x86, PlatformFamily.Windows, false, "/Program86/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2019, PlatformTarget.x64, PlatformFamily.Linux, false, "/usr/bin/msbuild")]
+            [InlineData(MSBuildToolVersion.VS2019, PlatformTarget.x64, PlatformFamily.OSX, false, "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild")]
+            public void Should_Get_Correct_Path_To_MSBuild_Version_16(MSBuildToolVersion version, PlatformTarget target, PlatformFamily family, bool is64BitOperativeSystem, string expected)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, family);
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Path.FullPath);
+            }
+
+            [Theory]
             [InlineData(MSBuildToolVersion.NET40, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET40, PlatformTarget.MSIL, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET45, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
