@@ -1,3 +1,21 @@
+### New in 0.32.0 (Released 2019/01/04)
+
+* 2420 Add new label alias for GitReleaseManager
+* 2419 Extend GitReleaseManager aliases to use token parameter
+* 2424 Support computer cert store with SignTool
+* 2417 Extend GetToolExecutableNames for GitReleaseManager
+* 2412 TFBuildCommand PublishCodeCoverage API Changes
+* 2410 Add Global Tool and new arguments support in TextTemplatingAliases
+* 2398 Support MsBuild version (16)
+* 2381 Zip should behave by default like standard Zip utilities
+* 2379 Add an Encoding parameter to TextTransformation.Save
+* 2327 Missing report types for ReportGenerator
+* 2294 Add fluent API to enable MSBuild binary logger
+* 2249 Unhelpful error when * loading a missing nuget package
+* 2243 Missing ResultsDirectory when using DotNetCoreVSTest
+* 1973 Add Products prop to VSWhereSettings
+* 2397 Fix missing parenthesis and missing setting.
+
 ### New in 0.31.0 (Released 2018/12/13)
 
 * 2320 Alias for ScriptCallerInfo
