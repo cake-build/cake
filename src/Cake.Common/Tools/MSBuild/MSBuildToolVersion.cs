@@ -92,6 +92,11 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// MSBuild tool version: <c>Visual Studio 2017</c>
         /// </summary>
-        VS2017 = 6
+        VS2017 = 6,
+
+        /// <summary>
+        /// MSBuild tool version: <c>Visual Studio 2019</c>
+        /// </summary>
+        VS2019 = 7
     }
 }
