@@ -182,23 +182,23 @@ namespace Cake.Common.Tools.Chocolatey.Pack
             return value.ToString().ToLowerInvariant();
         }
 
-        private static string ToCommaSeparatedString(IEnumerable<string> values)
+        private static string ToCommaSeparatedString(ICollection<string> values)
         {
-            return values != null
+            return values != null && values.Count != 0
                 ? string.Join(",", values)
                 : null;
         }
 
-        private static string ToMultiLineString(IEnumerable<string> values)
+        private static string ToMultiLineString(ICollection<string> values)
         {
-            return values != null
+            return values != null && values.Count != 0
                 ? string.Join("\r\n", values).NormalizeLineEndings()
                 : null;
         }
 
-        private static string ToSpaceSeparatedString(IEnumerable<string> values)
+        private static string ToSpaceSeparatedString(ICollection<string> values)
         {
-            return values != null
+            return values != null && values.Count != 0
                 ? string.Join(" ", values.Select(x => x.Replace(" ", "-")))
                 : null;
         }
