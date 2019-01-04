@@ -1,3 +1,7 @@
+### New in 0.32.1 (Released 2019/01/04)
+
+* 2426 Chocolatey pack regression in Cake 0.32.0
+
 ### New in 0.32.0 (Released 2019/01/04)
 
 * 2420 Add new label alias for GitReleaseManager
