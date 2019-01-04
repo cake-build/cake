@@ -387,6 +387,20 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             }
 
             [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Use_Machine_Store()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.UseMachineStore = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret /sm \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Thumbprint_And_Multiple_Assemblies()
             {
                 // Given

@@ -126,7 +126,7 @@ namespace Cake.Common.Tools.NUnit
         /// Gets or sets the results that should be saved.
         /// </summary>
         /// <value>The package owners.</value>
-        public ICollection<NUnit3Result> Results { get; set; }
+        public ICollection<NUnit3Result> Results { get; set; } = new List<NUnit3Result>();
 
         /// <summary>
         /// Gets or sets a value indicating whether to generate the XML result file.

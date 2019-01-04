@@ -156,7 +156,8 @@ namespace Cake.Common
         ///         "ping",
         ///         new ProcessSettings {
         ///             Arguments = "localhost",
-        ///             RedirectStandardOutput = true
+        ///             RedirectStandardOutput = true,
+        ///             RedirectStandardError = true
         ///         },
         ///         out redirectedStandardOutput,
         ///         out redirectedErrorOutput
@@ -171,7 +172,7 @@ namespace Cake.Common
         ///     throw new Exception(
         ///         string.Format(
         ///             "Errors occurred: {0}",
-        ///             string.Join(", ", redirectedErrorOutput));
+        ///             string.Join(", ", redirectedErrorOutput)));
         /// }
         ///
         /// // This should output 0 as valid arguments supplied

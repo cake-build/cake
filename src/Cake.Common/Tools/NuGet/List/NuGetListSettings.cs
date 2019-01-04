@@ -32,6 +32,6 @@ namespace Cake.Common.Tools.NuGet.List
         /// <summary>
         /// Gets or sets a list of packages sources to search.
         /// </summary>
-        public ICollection<string> Source { get; set; }
+        public ICollection<string> Source { get; set; } = new List<string>();
     }
 }

@@ -187,7 +187,7 @@ namespace Cake.Common.Build.TFBuild
         void AddBuildTag(string tag);
 
         /// <summary>
-        /// Publishes and uploads tests results
+        /// Publishes and uploads tests results.
         /// </summary>
         /// <param name="data">The publish test results data</param>
         void PublishTestResults(TFBuildPublishTestResultsData data);
@@ -197,5 +197,19 @@ namespace Cake.Common.Build.TFBuild
         /// </summary>
         /// <param name="data">The code coverage data</param>
         void PublishCodeCoverage(TFBuildPublishCodeCoverageData data);
+
+        /// <summary>
+        /// Publishes and uploads code coverage results.
+        /// </summary>
+        /// <param name="summaryFilePath">The code coverage summary file path.</param>
+        /// <param name="data">The code coverage data</param>
+        void PublishCodeCoverage(FilePath summaryFilePath, TFBuildPublishCodeCoverageData data);
+
+        /// <summary>
+        /// Publishes and uploads code coverage results.
+        /// </summary>
+        /// <param name="summaryFilePath">The code coverage summary file path.</param>
+        /// <param name="action">The configuration action for the code coverage data.</param>
+        void PublishCodeCoverage(FilePath summaryFilePath, Action<TFBuildPublishCodeCoverageData> action);
     }
 }

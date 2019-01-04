@@ -70,6 +70,38 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
             Run(settings, GetArguments(userName, password, owner, repository, settings));
         }
 
+                /// <summary>
+        /// Creates a Release using the specified and settings.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="settings">The settings.</param>
+        public void Create(string token, string owner, string repository, GitReleaseManagerCreateSettings settings)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new ArgumentNullException(nameof(token));
+            }
+
+            if (string.IsNullOrWhiteSpace(owner))
+            {
+                throw new ArgumentNullException(nameof(owner));
+            }
+
+            if (string.IsNullOrWhiteSpace(repository))
+            {
+                throw new ArgumentNullException(nameof(repository));
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            Run(settings, GetArguments(token, owner, repository, settings));
+        }
+
         private ProcessArgumentBuilder GetArguments(string userName, string password, string owner, string repository, GitReleaseManagerCreateSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
@@ -82,6 +114,27 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
             builder.Append("-p");
             builder.AppendQuotedSecret(password);
 
+            ParseCommonArguments(builder, owner, repository, settings);
+
+            return builder;
+        }
+
+        private ProcessArgumentBuilder GetArguments(string token, string owner, string repository, GitReleaseManagerCreateSettings settings)
+        {
+            var builder = new ProcessArgumentBuilder();
+
+            builder.Append("create");
+
+            builder.Append("--token");
+            builder.AppendQuoted(token);
+
+            ParseCommonArguments(builder, owner, repository, settings);
+
+            return builder;
+        }
+
+        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, GitReleaseManagerCreateSettings settings)
+        {
             builder.Append("-o");
             builder.AppendQuoted(owner);
 
@@ -142,8 +195,6 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
                 builder.Append("-l");
                 builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
             }
-
-            return builder;
         }
     }
 }

@@ -27,6 +27,14 @@ namespace Cake.Core.IO
         /// <summary>
         /// Initializes a new instance of the <see cref="FilePathCollection"/> class.
         /// </summary>
+        public FilePathCollection()
+            : this(PathComparer.Default)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FilePathCollection"/> class.
+        /// </summary>
         /// <param name="comparer">The comparer.</param>
         public FilePathCollection(PathComparer comparer)
             : this(Enumerable.Empty<FilePath>(), comparer)
@@ -37,7 +45,17 @@ namespace Cake.Core.IO
         /// Initializes a new instance of the <see cref="FilePathCollection"/> class.
         /// </summary>
         /// <param name="paths">The paths.</param>
+        public FilePathCollection(IEnumerable<FilePath> paths)
+            : this(paths, PathComparer.Default)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FilePathCollection"/> class.
+        /// </summary>
+        /// <param name="paths">The paths.</param>
         /// <param name="comparer">The comparer.</param>
+        /// <exception cref="System.ArgumentNullException"><paramref name="comparer"/> is <c>null</c>.</exception>
         public FilePathCollection(IEnumerable<FilePath> paths, PathComparer comparer)
         {
             if (comparer == null)

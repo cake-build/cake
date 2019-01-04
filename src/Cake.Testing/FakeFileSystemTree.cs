@@ -34,7 +34,7 @@ namespace Cake.Testing
             }
             Comparer = new PathComparer(environment.Platform.IsUnix());
 
-            _root = new FakeDirectory(this, "/");
+            _root = new FakeDirectory(this, "/") { Exists = true, LastWriteTime = DateTime.Now };
             _root.Create();
         }
 
@@ -73,6 +73,7 @@ namespace Cake.Testing
                 }
 
                 current.Exists = true;
+                current.LastWriteTime = DateTime.Now;
                 children = current.Content;
             }
 
@@ -93,6 +94,7 @@ namespace Cake.Testing
             {
                 // Add the file to the directory.
                 file.Exists = true;
+                file.LastWriteTime = DateTime.Now;
                 directory.Content.Add(file);
             }
         }

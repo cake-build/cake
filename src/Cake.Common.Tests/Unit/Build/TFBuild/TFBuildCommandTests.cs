@@ -11,6 +11,8 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Testing;
+using Cake.Testing.Xunit;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.TFBuild
@@ -463,11 +465,103 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
                     PublishRunAttachments = true,
                     TestRunner = TFTestRunnerType.XUnit,
                     TestRunTitle = "Cake Test Run 1 [master]",
-                    TestResultsFiles = new string[]
+                    TestResultsFiles = new FilePath[]
                      {
-                         FilePath.FromString("./artifacts/resultsXUnit.trx").ToString(),
-                         FilePath.FromString("./artifacts/resultsJs.trx").ToString()
+                         "./artifacts/resultsXUnit.trx",
+                         "./artifacts/resultsJs.trx"
                      }
+                };
+
+                // When
+                service.Commands.PublishTestResults(data);
+
+                // Then
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [Fact]
+            public void Should_Publish_Test_Results_If_File_Path_Is_Relative()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+                var data = new TFBuildPublishTestResultsData
+                {
+                    Configuration = "Debug",
+                    MergeTestResults = true,
+                    Platform = "x86",
+                    PublishRunAttachments = true,
+                    TestRunner = TFTestRunnerType.XUnit,
+                    TestRunTitle = "Cake Test Run 1 [master]",
+                    TestResultsFiles = new FilePath[]
+                    {
+                        "./artifacts/resultsXUnit.trx",
+                        "./artifacts/resultsJs.trx"
+                    }
+                };
+
+                // When
+                service.Commands.PublishTestResults(data);
+
+                // Then
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [Fact]
+            public void Should_Publish_Test_Results_If_File_Path_Is_Absolute()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                fixture.Environment.WorkingDirectory.Returns("/build/CAKE-CAKE-JOB1");
+                fixture.Environment.Platform.Family.Returns(PlatformFamily.OSX);
+                var service = fixture.CreateTFBuildService();
+                var data = new TFBuildPublishTestResultsData
+                {
+                    Configuration = "Debug",
+                    MergeTestResults = true,
+                    Platform = "x86",
+                    PublishRunAttachments = true,
+                    TestRunner = TFTestRunnerType.XUnit,
+                    TestRunTitle = "Cake Test Run 1 [master]",
+                    TestResultsFiles = new FilePath[]
+                    {
+                        "/build/CAKE-CAKE-JOB1/artifacts/resultsXUnit.trx",
+                        "/build/CAKE-CAKE-JOB1/artifacts/resultsJs.trx"
+                    }
+                };
+
+                // When
+                service.Commands.PublishTestResults(data);
+
+                // Then
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=/build/CAKE-CAKE-JOB1/artifacts/resultsXUnit.trx,/build/CAKE-CAKE-JOB1/artifacts/resultsJs.trx;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('/', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [WindowsFact]
+            public void Should_Publish_Test_Results_If_File_Path_Is_Absolute_Windows()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+                var data = new TFBuildPublishTestResultsData
+                {
+                    Configuration = "Debug",
+                    MergeTestResults = true,
+                    Platform = "x86",
+                    PublishRunAttachments = true,
+                    TestRunner = TFTestRunnerType.XUnit,
+                    TestRunTitle = "Cake Test Run 1 [master]",
+                    TestResultsFiles = new FilePath[]
+                    {
+                        "C:\\build\\CAKE-CAKE-JOB1\\artifacts\\resultsXUnit.trx",
+                        "C:\\build\\CAKE-CAKE-JOB1\\artifacts\\resultsJs.trx"
+                    }
                 };
 
                 // When
@@ -479,8 +573,32 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
                 Assert.Equal(expected, actual?.Message);
             }
 
+            // TODO: Windows Fact, OSX Fact
+            // TODO: TestResultFilePaths
             [Fact]
             public void Should_Publish_Code_Coverage()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService(PlatformFamily.OSX, "/build/CAKE-CAKE-JOB1");
+                var data = new TFBuildPublishCodeCoverageData
+                {
+                    CodeCoverageTool = TFCodeCoverageToolType.Cobertura,
+                    SummaryFileLocation = "./coverage/cobertura-coverage.xml",
+                    ReportDirectory = "./coverage/report"
+                };
+
+                // When
+                service.Commands.PublishCodeCoverage(data);
+
+                // Then
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=/build/CAKE-CAKE-JOB1/coverage/cobertura-coverage.xml;reportdirectory=/build/CAKE-CAKE-JOB1/coverage/report;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('/', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [WindowsFact]
+            public void Should_Publish_Code_Coverage_Windows()
             {
                 // Given
                 var fixture = new TFBuildFixture();
@@ -488,8 +606,8 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
                 var data = new TFBuildPublishCodeCoverageData
                 {
                     CodeCoverageTool = TFCodeCoverageToolType.Cobertura,
-                    SummaryFileLocation = FilePath.FromString("./coverage/cobertura-coverage.xml").ToString(),
-                    ReportDirectory = DirectoryPath.FromString("./coverage/report").ToString()
+                    SummaryFileLocation = "./coverage/cobertura-coverage.xml",
+                    ReportDirectory = "./coverage/report"
                 };
 
                 // When
@@ -498,7 +616,49 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
                 // Then
                 const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
                 var actual = fixture.Log.Entries.FirstOrDefault();
-                Assert.Equal(expected, actual?.Message);
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [Fact]
+            public void Should_Publish_Code_Coverage_If_File_Path_Provided()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+                var data = new TFBuildPublishCodeCoverageData
+                {
+                    CodeCoverageTool = TFCodeCoverageToolType.Cobertura,
+                    ReportDirectory = "./coverage/report"
+                };
+
+                // When
+                service.Commands.PublishCodeCoverage("./coverage/cobertura-coverage.xml", data);
+
+                // Then
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+            }
+
+            [Fact]
+            public void Should_Publish_Code_Coverage_If_File_Path_And_Action_Provided()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                var service = fixture.CreateTFBuildService();
+
+                // When
+                service.Commands.PublishCodeCoverage("./coverage/cobertura-coverage.xml",
+                    data =>
+                    {
+                        data.CodeCoverageTool = TFCodeCoverageToolType.Cobertura;
+                        data.ReportDirectory = "./coverage/report";
+                    });
+
+                // Then
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
+                var actual = fixture.Log.Entries.FirstOrDefault();
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
             }
         }
     }

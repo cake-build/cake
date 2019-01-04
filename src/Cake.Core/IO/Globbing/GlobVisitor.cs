@@ -41,7 +41,7 @@ namespace Cake.Core.IO.Globbing
                     var pushed = false;
                     if (context.Path.FullPath != candidate.Path.FullPath)
                     {
-                        context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + 1));
+                        context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
                         pushed = true;
                     }
 

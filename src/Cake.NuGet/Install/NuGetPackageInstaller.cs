@@ -134,7 +134,7 @@ namespace Cake.NuGet.Install
                 projectContext,
                 sourceRepositoryProvider.GetPrimaryRepositories(),
                 sourceRepositoryProvider.GetRepositories(),
-                CancellationToken.None).Result;
+                CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Then install the packages.
             packageManager.ExecuteNuGetProjectActionsAsync(

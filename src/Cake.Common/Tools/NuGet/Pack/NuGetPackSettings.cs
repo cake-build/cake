@@ -81,13 +81,13 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// Gets or sets the package authors.
         /// </summary>
         /// <value>The package authors.</value>
-        public ICollection<string> Authors { get; set; }
+        public ICollection<string> Authors { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the package owners.
         /// </summary>
         /// <value>The package owners.</value>
-        public ICollection<string> Owners { get; set; }
+        public ICollection<string> Owners { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the package description.
@@ -129,13 +129,13 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// Gets or sets the package release notes.
         /// </summary>
         /// <value>The package release notes.</value>
-        public ICollection<string> ReleaseNotes { get; set; }
+        public ICollection<string> ReleaseNotes { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the package tags.
         /// </summary>
         /// <value>The package tags.</value>
-        public ICollection<string> Tags { get; set; }
+        public ICollection<string> Tags { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the package repository data
@@ -162,13 +162,13 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// Gets or sets the package files.
         /// </summary>
         /// <value>The package files.</value>
-        public ICollection<NuSpecContent> Files { get; set; }
+        public ICollection<NuSpecContent> Files { get; set; } = new List<NuSpecContent>();
 
         /// <summary>
         /// Gets or sets the package dependencies.
         /// </summary>
         /// <value>The package files.</value>
-        public ICollection<NuSpecDependency> Dependencies { get; set; }
+        public ICollection<NuSpecDependency> Dependencies { get; set; } = new List<NuSpecDependency>();
 
         /// <summary>
         /// Gets or sets the verbosity.

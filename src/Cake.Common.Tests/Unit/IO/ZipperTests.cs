@@ -8,6 +8,7 @@ using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Core.Tests.Fixtures;
 using Cake.Testing;
 using Cake.Testing.Xunit;
 using NSubstitute;
@@ -113,7 +114,7 @@ namespace Cake.Common.Tests.Unit.IO
             }
 
             [Fact]
-            public void Should_Throw_If_File_Is_Not_Relative_To_Root()
+            public void Should_Throw_If_Path_Is_Not_Relative_To_Root()
             {
                 // Given
                 var environment = FakeEnvironment.CreateUnixEnvironment();
@@ -127,7 +128,41 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("File '/NotRoot/file.txt' is not relative to root path '/Root'.", result?.Message);
+                Assert.Equal("Path '/NotRoot/file.txt' is not relative to root path '/Root'.", result?.Message);
+            }
+
+            [Fact]
+            public void Should_Zip_Provided_Directory()
+            {
+                // Given
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                var globber = new Globber(fileSystem, environment);
+                var context = new CakeContextFixture { Environment = environment, FileSystem = fileSystem, Globber = globber }.CreateContext();
+                fileSystem.CreateDirectory("/Dir0"); // empty directory
+                fileSystem.CreateFile("/File1.txt").SetContent("1");
+                fileSystem.CreateFile("/Dir1/File2.txt").SetContent("22");
+                fileSystem.CreateFile("/Dir2/File3.txt").SetContent("333");
+                fileSystem.CreateFile("/Dir2/Dir3/File4.txt").SetContent("4444");
+                fileSystem.CreateFile("/Dir2/Dir3/File5.txt").SetContent("55555");
+                var log = Substitute.For<ICakeLog>();
+                var zipper = new Zipper(fileSystem, environment, log);
+
+                // When
+                zipper.Zip("/", "/Root.zip", context.GetPaths("/**/*"));
+
+                // Then
+                var archive = new ZipArchive(fileSystem.GetFile("/Root.zip").Open(FileMode.Open, FileAccess.Read, FileShare.Read));
+                Assert.True(archive.Entries.Count == 9);
+                Assert.True(archive.GetEntry("Dir0/")?.Length == 0); // directory entries; includes empty directories
+                Assert.True(archive.GetEntry("Dir1/")?.Length == 0);
+                Assert.True(archive.GetEntry("Dir2/")?.Length == 0);
+                Assert.True(archive.GetEntry("Dir2/Dir3/")?.Length == 0);
+                Assert.True(archive.GetEntry("File1.txt")?.Length == 1); // file entries
+                Assert.True(archive.GetEntry("Dir1/File2.txt")?.Length == 2);
+                Assert.True(archive.GetEntry("Dir2/File3.txt")?.Length == 3);
+                Assert.True(archive.GetEntry("Dir2/Dir3/File4.txt")?.Length == 4);
+                Assert.True(archive.GetEntry("Dir2/Dir3/File5.txt")?.Length == 5);
             }
 
             [Fact]
@@ -136,15 +171,30 @@ namespace Cake.Common.Tests.Unit.IO
                 // Given
                 var environment = FakeEnvironment.CreateUnixEnvironment();
                 var fileSystem = new FakeFileSystem(environment);
-                fileSystem.CreateFile("/Root/file.txt").SetContent("HelloWorld");
+                var globber = new Globber(fileSystem, environment);
+                var context = new CakeContextFixture { Environment = environment, FileSystem = fileSystem, Globber = globber }.CreateContext();
+                fileSystem.CreateFile("/File1.txt").SetContent("1");
+                fileSystem.CreateFile("/Dir1/File2.txt").SetContent("22");
+                fileSystem.CreateFile("/Dir2/File3.txt").SetContent("333");
+                fileSystem.CreateFile("/Dir2/Dir3/File4.txt").SetContent("4444");
+                fileSystem.CreateFile("/Dir2/Dir3/File5.txt").SetContent("55555");
                 var log = Substitute.For<ICakeLog>();
                 var zipper = new Zipper(fileSystem, environment, log);
 
                 // When
-                zipper.Zip("/Root", "/file.zip", new FilePath[] { "/Root/file.txt" });
+                zipper.Zip("/", "/Root.zip", context.GetFiles("/**/*.txt"));
 
                 // Then
-                Assert.True(fileSystem.GetFile("/file.zip").Exists);
+                var archive = new ZipArchive(fileSystem.GetFile("/Root.zip").Open(FileMode.Open, FileAccess.Read, FileShare.Read));
+                Assert.True(archive.Entries.Count == 8);
+                Assert.True(archive.GetEntry("Dir1/")?.Length == 0); // directory entries
+                Assert.True(archive.GetEntry("Dir2/")?.Length == 0);
+                Assert.True(archive.GetEntry("Dir2/Dir3/")?.Length == 0);
+                Assert.True(archive.GetEntry("File1.txt")?.Length == 1); // file entries
+                Assert.True(archive.GetEntry("Dir1/File2.txt")?.Length == 2);
+                Assert.True(archive.GetEntry("Dir2/File3.txt")?.Length == 3);
+                Assert.True(archive.GetEntry("Dir2/Dir3/File4.txt")?.Length == 4);
+                Assert.True(archive.GetEntry("Dir2/Dir3/File5.txt")?.Length == 5);
             }
 
             [WindowsFact("Investigate why this fail on Mono 4.2.1.")]

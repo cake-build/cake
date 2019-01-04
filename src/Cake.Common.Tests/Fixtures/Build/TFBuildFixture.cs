@@ -5,6 +5,7 @@
 using Cake.Common.Build.TFBuild;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
 
@@ -13,6 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Build
     internal sealed class TFBuildFixture
     {
         public ICakeEnvironment Environment { get; set; }
+
         public FakeLog Log { get; set; }
 
         public TFBuildFixture()
@@ -20,13 +22,8 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("C:\\build\\CAKE-CAKE-JOB1");
             Environment.GetEnvironmentVariable("TF_BUILD").Returns((string)null);
+            Environment.Platform.Family.Returns(PlatformFamily.Windows);
             Log = new FakeLog();
-        }
-
-        public void IsRunningOnVSTS()
-        {
-            Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
-            Environment.GetEnvironmentVariable("AGENT_NAME").Returns("Hosted Agent");
         }
 
         public void IsRunningOnTFS()
@@ -35,9 +32,19 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("AGENT_NAME").Returns("On Premises");
         }
 
-        public TFBuildProvider CreateTFBuildService()
+        public void IsRunningOnVSTS()
         {
-            return new TFBuildProvider(Environment, Log);
+            Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
+            Environment.GetEnvironmentVariable("AGENT_NAME").Returns("Hosted Agent");
+        }
+
+        public TFBuildProvider CreateTFBuildService() => new TFBuildProvider(Environment, Log);
+
+        public TFBuildProvider CreateTFBuildService(PlatformFamily platformFamily, DirectoryPath workingDirectory)
+        {
+            Environment.Platform.Family.Returns(platformFamily);
+            Environment.WorkingDirectory.Returns(workingDirectory);
+            return CreateTFBuildService();
         }
     }
 }

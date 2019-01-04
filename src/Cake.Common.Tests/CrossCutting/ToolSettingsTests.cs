@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.CrossCutting
             from type in MemberTestingUtils.GetMembersToTest(typeof(ToolSettings), type =>
                 type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                     .Where(property => !property.PropertyType.IsArray
-                                       && property.PropertyType.ImplementsInterfaceDefinition(typeof(ICollection<>))))
+                                       && property.PropertyType.SatisfiesInterfaceDefinition(typeof(ICollection<>))))
             select new object[] { type };
     }
 }

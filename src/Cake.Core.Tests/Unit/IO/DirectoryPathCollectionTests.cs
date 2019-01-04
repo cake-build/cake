@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Linq;
 using Cake.Core.IO;
 using Xunit;
 
@@ -13,13 +12,13 @@ namespace Cake.Core.Tests.Unit.IO
         public sealed class TheConstructor
         {
             [Fact]
-            public void Should_Throw_If_Comparer_Is_Null()
+            public void Should_Use_PathComparer_Default_If_Comparer_Is_Null()
             {
-                // Given, When
-                var result = Record.Exception(() => new DirectoryPathCollection(Enumerable.Empty<DirectoryPath>(), null));
+                // Given
+                var collection = new DirectoryPathCollection();
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "comparer");
+                Assert.Equal(PathComparer.Default, collection.Comparer);
             }
         }
 
@@ -29,9 +28,7 @@ namespace Cake.Core.Tests.Unit.IO
             public void Should_Return_The_Number_Of_Paths_In_The_Collection()
             {
                 // Given
-                var collection = new DirectoryPathCollection(
-                    new[] { new DirectoryPath("A.txt"), new DirectoryPath("B.txt") },
-                    new PathComparer(false));
+                var collection = new DirectoryPathCollection(new DirectoryPath[] { "A", "B" }, new PathComparer(false));
 
                 // When, Then
                 Assert.Equal(2, collection.Count);
@@ -46,11 +43,10 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Add_Path_If_Not_Already_Present()
                 {
                     // Given
-                    var collection = new DirectoryPathCollection(new PathComparer(false));
-                    collection.Add(new DirectoryPath("B"));
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A" }, new PathComparer(false));
 
                     // When
-                    collection.Add(new DirectoryPath("A"));
+                    collection.Add(new DirectoryPath("B"));
 
                     // Then
                     Assert.Equal(2, collection.Count);
@@ -62,8 +58,7 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Path(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var collection = new DirectoryPathCollection(new PathComparer(caseSensitive));
-                    collection.Add(new DirectoryPath("A"));
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A" }, new PathComparer(caseSensitive));
 
                     // When
                     collection.Add(new DirectoryPath("a"));
@@ -115,8 +110,7 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Respect_File_System_Case_Sensitivity_When_Removing_Path(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var collection = new DirectoryPathCollection(new PathComparer(caseSensitive));
-                    collection.Add(new DirectoryPath("A"));
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A" }, new PathComparer(caseSensitive));
 
                     // When
                     collection.Remove(new DirectoryPath("a"));
@@ -149,28 +143,29 @@ namespace Cake.Core.Tests.Unit.IO
         {
             public sealed class WithSinglePath
             {
-                [Fact]
-                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Path()
+                [Theory]
+                [InlineData(true, 2)]
+                [InlineData(false, 1)]
+                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Path(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var collection = new DirectoryPathCollection(new PathComparer(false));
-                    collection.Add("B");
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A" }, new PathComparer(caseSensitive));
 
                     // When
-                    var result = collection + new DirectoryPath("A");
+                    var result = collection + new DirectoryPath("a");
 
                     // Then
-                    Assert.Equal(2, result.Count);
+                    Assert.Equal(expectedCount, result.Count);
                 }
 
                 [Fact]
-                public void Should_Return_New_Collection()
+                public void Should_Return_New_Collection_When_Adding_Path()
                 {
                     // Given
-                    var collection = new DirectoryPathCollection(new PathComparer(false));
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A" }, new PathComparer(false));
 
                     // When
-                    var result = collection + new DirectoryPath("A");
+                    var result = collection + new DirectoryPath("B");
 
                     // Then
                     Assert.False(ReferenceEquals(result, collection));
@@ -179,31 +174,29 @@ namespace Cake.Core.Tests.Unit.IO
 
             public sealed class WithMultiplePaths
             {
-                [Fact]
-                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Paths()
+                [Theory]
+                [InlineData(true, 5)]
+                [InlineData(false, 3)]
+                public void Should_Respect_File_System_Case_Sensitivity_When_Adding_Paths(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var comparer = new PathComparer(false);
-                    var collection = new DirectoryPathCollection(comparer);
-                    var second = new DirectoryPathCollection(new DirectoryPath[] { "A", "B" }, comparer);
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A", "B" }, new PathComparer(caseSensitive));
 
                     // When
-                    var result = collection + second;
+                    var result = collection + new DirectoryPath[] { "a", "b", "c" };
 
                     // Then
-                    Assert.Equal(2, result.Count);
+                    Assert.Equal(expectedCount, result.Count);
                 }
 
                 [Fact]
-                public void Should_Return_New_Collection()
+                public void Should_Return_New_Collection_When_Adding_Paths()
                 {
                     // Given
-                    var comparer = new PathComparer(false);
-                    var collection = new DirectoryPathCollection(comparer);
-                    var second = new DirectoryPathCollection(new DirectoryPath[] { "A", "B" }, comparer);
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A", "B" }, new PathComparer(false));
 
                     // When
-                    var result = collection + second;
+                    var result = collection + new DirectoryPath[] { "C", "D" };
 
                     // Then
                     Assert.False(ReferenceEquals(result, collection));
@@ -218,13 +211,10 @@ namespace Cake.Core.Tests.Unit.IO
                 [Theory]
                 [InlineData(true, 2)]
                 [InlineData(false, 1)]
-                public void Should_Respect_File_System_Case_Sensitivity_When_Removing_Paths(bool caseSensitive, int expectedCount)
+                public void Should_Respect_File_System_Case_Sensitivity_When_Removing_Path(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var comparer = new PathComparer(caseSensitive);
-                    var collection = new DirectoryPathCollection(comparer);
-                    collection.Add("A");
-                    collection.Add("B");
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A", "B" }, new PathComparer(caseSensitive));
 
                     // When
                     var result = collection - new DirectoryPath("a");
@@ -234,12 +224,10 @@ namespace Cake.Core.Tests.Unit.IO
                 }
 
                 [Fact]
-                public void Should_Return_New_Collection()
+                public void Should_Return_New_Collection_When_Removing_Path()
                 {
                     // Given
-                    var collection = new DirectoryPathCollection(new PathComparer(false));
-                    collection.Add("A");
-                    collection.Add("B");
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A", "B" }, new PathComparer(false));
 
                     // When
                     var result = collection - new DirectoryPath("A");
@@ -257,29 +245,23 @@ namespace Cake.Core.Tests.Unit.IO
                 public void Should_Respect_File_System_Case_Sensitivity_When_Removing_Paths(bool caseSensitive, int expectedCount)
                 {
                     // Given
-                    var collection = new DirectoryPathCollection(new PathComparer(caseSensitive));
-                    collection.Add("A");
-                    collection.Add("B");
-                    collection.Add("C");
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A", "B", "C" }, new PathComparer(caseSensitive));
 
                     // When
-                    var result = collection - new[] { new DirectoryPath("b"), new DirectoryPath("c") };
+                    var result = collection - new DirectoryPath[] { "b", "c" };
 
                     // Then
                     Assert.Equal(expectedCount, result.Count);
                 }
 
                 [Fact]
-                public void Should_Return_New_Collection()
+                public void Should_Return_New_Collection_When_Removing_Paths()
                 {
                     // Given
-                    var collection = new DirectoryPathCollection(new PathComparer(false));
-                    collection.Add("A");
-                    collection.Add("B");
-                    collection.Add("C");
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A", "B", "C" }, new PathComparer(false));
 
                     // When
-                    var result = collection - new[] { new DirectoryPath("B"), new DirectoryPath("C") };
+                    var result = collection - new DirectoryPath[] { "B", "C" };
 
                     // Then
                     Assert.False(ReferenceEquals(result, collection));

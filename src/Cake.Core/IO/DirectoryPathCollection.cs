@@ -27,9 +27,26 @@ namespace Cake.Core.IO
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectoryPathCollection"/> class.
         /// </summary>
+        public DirectoryPathCollection()
+            : this(PathComparer.Default)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirectoryPathCollection"/> class.
+        /// </summary>
         /// <param name="comparer">The comparer.</param>
         public DirectoryPathCollection(PathComparer comparer)
             : this(Enumerable.Empty<DirectoryPath>(), comparer)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirectoryPathCollection"/> class.
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        public DirectoryPathCollection(IEnumerable<DirectoryPath> paths)
+            : this(paths, PathComparer.Default)
         {
         }
 

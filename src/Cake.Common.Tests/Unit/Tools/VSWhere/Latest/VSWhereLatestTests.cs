@@ -183,6 +183,40 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Latest
                 // Then
                 Assert.Equal("-latest -property installationPath -prerelease -nologo", result.Args);
             }
+
+            [Theory]
+            [InlineData("Microsoft.VisualStudio.Product.BuildTools")]
+            [InlineData("Microsoft.VisualStudio.Product.BuildTools Microsoft.VisualStudio.Product.Enterprise")]
+            [InlineData("*")]
+            public void Should_Add_Products_To_Arguments_If_Set(string productFilter)
+            {
+                // Given
+                var fixture = new VSWhereLatestFixture();
+                fixture.Settings.Products = productFilter;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($"-products \"{productFilter}\" -latest -property installationPath -nologo", result.Args);
+            }
+
+            [Theory]
+            [InlineData("")]
+            [InlineData(null)]
+            [InlineData(" ")]
+            public void Should_Not_Include_Products_If_Set_To_Empty(string productFilter)
+            {
+                // Given
+                var fixture = new VSWhereLatestFixture();
+                fixture.Settings.Products = productFilter;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-latest -property installationPath -nologo", result.Args);
+            }
         }
     }
 }

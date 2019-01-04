@@ -9,6 +9,7 @@
   <Import Project="..\Shared.msbuild" />
   <!-- Project references -->
   <ItemGroup>
+    <ProjectReference Include="..\Cake.Core.Tests\Cake.Core.Tests.csproj" />
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
     <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj" />

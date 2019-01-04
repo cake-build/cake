@@ -59,6 +59,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             var versions = new[]
             {
+                // MSBuildVersion.MSBuild16, /*Since it's still in preview, do not search unless specified. Uncomment after stable version released*/
                 MSBuildVersion.MSBuild15,
                 MSBuildVersion.MSBuild14,
                 MSBuildVersion.MSBuild12,
@@ -82,6 +83,8 @@ namespace Cake.Common.Tools.MSBuild
         {
             switch (version)
             {
+                case MSBuildVersion.MSBuild16:
+                    return GetVisualStudio2019Path(fileSystem, environment, buildPlatform);
                 case MSBuildVersion.MSBuild15:
                     return GetVisualStudio2017Path(fileSystem, environment, buildPlatform);
                 case MSBuildVersion.MSBuild14:
@@ -152,6 +155,43 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
             return visualStudio2017Path.Combine("Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin");
+        }
+
+        private static DirectoryPath GetVisualStudio2019Path(IFileSystem fileSystem, ICakeEnvironment environment,
+            MSBuildPlatform buildPlatform)
+        {
+            var vsEditions = new[]
+            {
+                "Enterprise",
+                "Professional",
+                "Community",
+                "BuildTools",
+                "Preview" // Remove after stable version released
+            };
+
+            var visualStudio2019Path = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
+
+            foreach (var edition in vsEditions)
+            {
+                // Get the bin path.
+                var binPath = visualStudio2019Path.Combine(string.Concat("Microsoft Visual Studio/2019/", edition, "/MSBuild/Current/Bin")); // Change from Current to 16.0 after stable version released
+                if (fileSystem.Exist(binPath))
+                {
+                    if (buildPlatform == MSBuildPlatform.Automatic)
+                    {
+                        if (environment.Platform.Is64Bit)
+                        {
+                            binPath = binPath.Combine("amd64");
+                        }
+                    }
+                    if (buildPlatform == MSBuildPlatform.x64)
+                    {
+                        binPath = binPath.Combine("amd64");
+                    }
+                    return binPath;
+                }
+            }
+            return visualStudio2019Path.Combine("Microsoft Visual Studio/2019/Professional/MSBuild/16.0/Bin");
         }
 
         private static DirectoryPath GetFrameworkPath(ICakeEnvironment environment, MSBuildPlatform buildPlatform, string version)

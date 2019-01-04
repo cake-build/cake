@@ -28,7 +28,7 @@ namespace Cake.Testing.Extensions
         /// <returns>
         /// <see langword="true"/> if  the specified type implements the specified interface definition; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool ImplementsInterfaceDefinition(this Type type, Type interfaceTypeDefinition)
+        public static bool SatisfiesInterfaceDefinition(this Type type, Type interfaceTypeDefinition)
         {
             if (type == null)
             {
@@ -45,19 +45,29 @@ namespace Cake.Testing.Extensions
                 throw new ArgumentException("An interface type definition must be specified.", nameof(interfaceTypeDefinition));
             }
 
-            if (interfaceTypeDefinition.IsGenericType)
+            if (!interfaceTypeDefinition.IsGenericType)
             {
-                if (interfaceTypeDefinition.IsConstructedGenericType)
+                if (type == interfaceTypeDefinition)
                 {
-                    throw new ArgumentException("An interface type definition must be specified.", nameof(interfaceTypeDefinition));
+                    return true;
                 }
 
-                return type.GetInterfaces().Any(@interface =>
-                    @interface.IsGenericType
-                    && @interface.GetGenericTypeDefinition() == interfaceTypeDefinition);
+                return type.GetInterfaces().Contains(interfaceTypeDefinition);
             }
 
-            return type.GetInterfaces().Contains(interfaceTypeDefinition);
+            if (interfaceTypeDefinition.IsConstructedGenericType)
+            {
+                throw new ArgumentException("An interface type definition must be specified.", nameof(interfaceTypeDefinition));
+            }
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == interfaceTypeDefinition)
+            {
+                return true;
+            }
+
+            return type.GetInterfaces().Any(@interface =>
+                @interface.IsGenericType
+                && @interface.GetGenericTypeDefinition() == interfaceTypeDefinition);
         }
     }
 }

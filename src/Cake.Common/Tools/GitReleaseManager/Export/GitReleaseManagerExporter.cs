@@ -76,6 +76,44 @@ namespace Cake.Common.Tools.GitReleaseManager.Export
             Run(settings, GetArguments(userName, password, owner, repository, fileOutputPath, settings));
         }
 
+        /// <summary>
+        /// Creates a Release using the specified and settings.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="fileOutputPath">The output path.</param>
+        /// <param name="settings">The settings.</param>
+        public void Export(string token, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new ArgumentNullException(nameof(token));
+            }
+
+            if (string.IsNullOrWhiteSpace(owner))
+            {
+                throw new ArgumentNullException(nameof(owner));
+            }
+
+            if (string.IsNullOrWhiteSpace(repository))
+            {
+                throw new ArgumentNullException(nameof(repository));
+            }
+
+            if (fileOutputPath == null)
+            {
+                throw new ArgumentNullException(nameof(fileOutputPath));
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            Run(settings, GetArguments(token, owner, repository, fileOutputPath, settings));
+        }
+
         private ProcessArgumentBuilder GetArguments(string userName, string password, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
@@ -88,6 +126,27 @@ namespace Cake.Common.Tools.GitReleaseManager.Export
             builder.Append("-p");
             builder.AppendQuotedSecret(password);
 
+            ParseCommonArguments(builder, owner, repository, fileOutputPath, settings);
+
+            return builder;
+        }
+
+        private ProcessArgumentBuilder GetArguments(string token, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+        {
+            var builder = new ProcessArgumentBuilder();
+
+            builder.Append("export");
+
+            builder.Append("--token");
+            builder.AppendQuoted(token);
+
+            ParseCommonArguments(builder, owner, repository, fileOutputPath, settings);
+
+            return builder;
+        }
+
+        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+        {
             builder.Append("-o");
             builder.AppendQuoted(owner);
 
@@ -116,8 +175,6 @@ namespace Cake.Common.Tools.GitReleaseManager.Export
                 builder.Append("-l");
                 builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
             }
-
-            return builder;
         }
     }
 }

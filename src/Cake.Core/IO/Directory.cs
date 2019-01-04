@@ -21,6 +21,8 @@ namespace Cake.Core.IO
 
         public bool Hidden => (_directory.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
 
+        public DateTime LastWriteTime => _directory.LastWriteTime;
+
         public Directory(DirectoryPath path)
         {
             Path = path;
