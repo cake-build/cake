@@ -193,6 +193,12 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append("/restore");
             }
 
+            // Set restore locked mode?
+            if (settings.RestoreLockedMode.HasValue)
+            {
+                builder.Append(string.Concat("/p:RestoreLockedMode=", settings.RestoreLockedMode.Value ? "true" : "false"));
+            }
+
             // Got any console logger parameters?
             if (settings.ConsoleLoggerParameters.Count > 0)
             {

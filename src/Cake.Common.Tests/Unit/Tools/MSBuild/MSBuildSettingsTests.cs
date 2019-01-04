@@ -230,5 +230,18 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Empty(settings.ConsoleLoggerParameters);
             }
         }
+
+        public sealed class TheRestoreLockedModeProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.RestoreLockedMode);
+            }
+        }
     }
 }
