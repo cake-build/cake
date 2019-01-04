@@ -45,6 +45,10 @@ CAKE_INSTALLED_VERSION=$(dotnet-cake --version 2>&1)
 
 if [ "$CAKE_VERSION" != "$CAKE_INSTALLED_VERSION" ]; then
     if [ ! -f "$CAKE_EXE" ] || [ ! -d "$CAKE_PATH" ]; then
+        if [ -f "$CAKE_EXE" ]; then
+            dotnet tool uninstall --tool-path $TOOLS_DIR Cake.Tool
+        fi
+
         echo "Installing Cake $CAKE_VERSION..."
         dotnet tool install --tool-path $TOOLS_DIR --version $CAKE_VERSION Cake.Tool
         if [ $? -ne 0 ]; then
