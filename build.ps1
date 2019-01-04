@@ -119,7 +119,7 @@ else {
 
     if ((!(Test-Path -Path $CakePath -PathType Container)) -or (!(Test-Path $CakeExePath -PathType Leaf))) {
 
-        if (Test-Path $CakeExePath -PathType Leaf)
+        if ((![string]::IsNullOrEmpty($CakeExePath)) -and (Test-Path $CakeExePath -PathType Leaf))
         {
             & dotnet tool uninstall --tool-path $ToolPath Cake.Tool
         }
