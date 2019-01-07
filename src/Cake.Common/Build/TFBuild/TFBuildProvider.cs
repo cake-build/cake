@@ -77,8 +77,7 @@ namespace Cake.Common.Build.TFBuild
         /// <c>true</c> if the current build is running on a hosted agent; otherwise, <c>false</c>.
         /// </value>
         private bool IsHostedAgent
-            =>
-                !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("AGENT_NAME")) &&
-                _environment.GetEnvironmentVariable("AGENT_NAME") == "Hosted Agent";
+            => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("AGENT_NAME")) &&
+                _environment.GetEnvironmentVariable("AGENT_NAME").StartsWith("Hosted");
     }
 }
