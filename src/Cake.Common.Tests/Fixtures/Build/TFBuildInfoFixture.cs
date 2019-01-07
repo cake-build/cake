@@ -29,7 +29,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("AGENT_WORKFOLDER").Returns(@"c:\agent\_work");
             Environment.GetEnvironmentVariable("AGENT_ID").Returns("71");
             Environment.GetEnvironmentVariable("AGENT_NAME").Returns("Agent-1");
-            Environment.GetEnvironmentVariable("AGENT_MACHINE_NAME").Returns("BuildServer");
+            Environment.GetEnvironmentVariable("AGENT_MACHINENAME").Returns("BuildServer");
 
             // VSTS BuildInfo
             Environment.GetEnvironmentVariable("BUILD_BUILDID").Returns("100234");
