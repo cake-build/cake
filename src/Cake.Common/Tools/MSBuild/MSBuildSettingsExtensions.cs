@@ -444,6 +444,24 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets whether or not to lock the package dependency graph while restoring, using the packages.lock.json file.
+        /// This setting is available with atleast Visual Studio 2017 version 15.9 and above or NET SDK version 2.1.500 and above.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="restoreLockedMode"><c>true</c> if locked mode restore should be enabled; otherwise <c>false</c>.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetRestoreLockedMode(this MSBuildSettings settings, bool restoreLockedMode)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.RestoreLockedMode = restoreLockedMode;
+            return settings;
+        }
+
+        /// <summary>
         /// Adds a console logger parameter.
         /// </summary>
         /// <param name="settings">The settings.</param>

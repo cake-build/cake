@@ -322,6 +322,37 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheSetRestoreLockedModeMethod
+        {
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Set_RestoreLockedMode(bool restoreLockedMode)
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.SetRestoreLockedMode(restoreLockedMode);
+
+                // Then
+                Assert.Equal(restoreLockedMode, settings.RestoreLockedMode);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetRestoreLockedMode(true);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetVerbosityMethod
         {
             [Theory]
