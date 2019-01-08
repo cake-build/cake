@@ -67,5 +67,10 @@ namespace Cake.Common.Tools.SignTool
         /// Gets or sets a value indicating whether a machine store, instead of a user store, is used.
         /// </summary>
         public bool UseMachineStore { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path to an additional certificate that is to be added to the signature block.
+        /// </summary>
+        public FilePath AdditionalCertPath { get; set; }
     }
 }

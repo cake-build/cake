@@ -215,6 +215,21 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             }
 
             [Fact]
+            public void Should_Throw_If_Additional_Certificate_File_Does_Not_Exist()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.AdditionalCertPath = "/Working/ac.cer";
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("SignTool SIGN: The additional certificate '/Working/ac.cer' does not exist.", result?.Message);
+            }
+
+            [Fact]
             public void Should_Use_Default_Tool_Path_If_None_Is_Specified()
             {
                 // Given
@@ -420,6 +435,21 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
 
                 // Then
                 Assert.Equal("SIGN /sha1 \"ThumbprintTest\" \"/Working/a.dll\" \"/Working/foo/b.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Additional_Cert()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.FileSystem.CreateFile("/Working/ac.cer");
+                fixture.Settings.AdditionalCertPath = "/Working/ac.cer";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /ac \"/Working/ac.cer\" \"/Working/a.dll\"", result.Args);
             }
         }
     }

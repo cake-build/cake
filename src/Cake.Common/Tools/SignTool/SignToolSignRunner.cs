@@ -183,6 +183,25 @@ namespace Cake.Common.Tools.SignTool
                 }
             }
 
+            if (settings.AdditionalCertPath != null)
+            {
+                // Make additional certificate path absolute.
+                settings.AdditionalCertPath = settings.AdditionalCertPath.IsRelative
+                    ? settings.AdditionalCertPath.MakeAbsolute(_environment)
+                    : settings.AdditionalCertPath;
+
+                if (!_fileSystem.Exist(settings.AdditionalCertPath))
+                {
+                    const string format = "{0}: The additional certificate '{1}' does not exist.";
+                    var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName(), settings.AdditionalCertPath.FullPath);
+                    throw new CakeException(message);
+                }
+
+                // Path to additional certificate.
+                builder.Append("/ac");
+                builder.AppendQuoted(settings.AdditionalCertPath.MakeAbsolute(_environment).FullPath);
+            }
+
             // Certificate thumbprint.
             if (!string.IsNullOrEmpty(settings.CertThumbprint))
             {
