@@ -4,7 +4,6 @@
 
 using Cake.Common.Build.TFBuild;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
@@ -26,13 +25,17 @@ namespace Cake.Common.Tests.Fixtures.Build
             Log = new FakeLog();
         }
 
-        public void IsRunningOnTFS()
+        public void IsRunningOnTFS() => IsRunningOnAzurePipelines();
+
+        public void IsRunningOnVSTS() => IsRunningOnAzurePipelinesHosted();
+
+        public void IsRunningOnAzurePipelines()
         {
             Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
             Environment.GetEnvironmentVariable("AGENT_NAME").Returns("On Premises");
         }
 
-        public void IsRunningOnVSTS()
+        public void IsRunningOnAzurePipelinesHosted()
         {
             Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
             Environment.GetEnvironmentVariable("AGENT_NAME").Returns("Hosted Agent");
