@@ -241,6 +241,13 @@ namespace Cake.Common.Tools.SignTool
                 builder.Append("/sm");
             }
 
+            // open a specific certificate store
+            if (!string.IsNullOrWhiteSpace(settings.StoreName))
+            {
+                builder.Append("/s");
+                builder.AppendQuoted(settings.StoreName);
+            }
+
             // Target Assemblies to sign.
             foreach (var path in absoluteAssemblyPaths)
             {

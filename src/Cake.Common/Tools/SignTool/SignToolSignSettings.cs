@@ -72,5 +72,10 @@ namespace Cake.Common.Tools.SignTool
         /// Gets or sets the path to an additional certificate that is to be added to the signature block.
         /// </summary>
         public FilePath AdditionalCertPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the store to open when searching for the certificate.
+        /// </summary>
+        public string StoreName { get; set; }
     }
 }

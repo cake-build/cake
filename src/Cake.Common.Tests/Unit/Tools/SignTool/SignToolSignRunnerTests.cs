@@ -451,6 +451,35 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 // Then
                 Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /ac \"/Working/ac.cer\" \"/Working/a.dll\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Store_Name()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.StoreName = "Special Test Store";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /s \"Special Test Store\" \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Use_Machine_Store_And_Store_Name()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.UseMachineStore = true;
+                fixture.Settings.StoreName = "Special Test Store";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /sm /s \"Special Test Store\" \"/Working/a.dll\"", result.Args);
+            }
         }
     }
 }
