@@ -96,7 +96,7 @@ namespace Cake.Common.Tools.NuGet.Update
             if (settings.MSBuildVersion.HasValue)
             {
                 builder.Append("-MSBuildVersion");
-                builder.Append(settings.MSBuildVersion.Value.ToString("D"));
+                builder.Append(settings.MSBuildVersion.Value.GetNuGetMSBuildVersionString());
             }
 
             // Version

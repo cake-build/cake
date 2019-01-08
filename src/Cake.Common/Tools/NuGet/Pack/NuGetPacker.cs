@@ -201,7 +201,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             if (settings.MSBuildVersion.HasValue)
             {
                 builder.Append("-MSBuildVersion");
-                builder.Append(settings.MSBuildVersion.Value.ToString("D"));
+                builder.Append(settings.MSBuildVersion.Value.GetNuGetMSBuildVersionString());
             }
 
             // Use the tool folder
