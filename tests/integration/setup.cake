@@ -7,7 +7,7 @@
 // SETUP
 //////////////////////////////////////////////////
 
-Setup(setupContext => 
+Setup(setupContext =>
 {
     setupContext.Log.Information("Running regular setup.");
 });
@@ -17,10 +17,11 @@ Setup<ScriptContext>(setupContext =>
     // Output information from setup task
     setupContext.Log.Information(
         Verbosity.Quiet,
-        "Performing setup initated by {0} ({1} tasks to be executed beginning with {2})",
+        "Performing setup initated by {0} ({1} tasks to be executed beginning with {2}, performing {3} build)",
         setupContext.TargetTask?.Name,
         setupContext.TasksToExecute?.Count,
-        setupContext.TasksToExecute?.Select(task => task.Name).FirstOrDefault()
+        setupContext.TasksToExecute?.Select(task => task.Name).FirstOrDefault(),
+        BuildSystem.Provider
         );
 
     // Perform artifact cleanup
@@ -41,45 +42,45 @@ Setup<AlternativeScriptContext>(setupContext =>
 //////////////////////////////////////////////////
 
 Task("Can-Access-Typed-Data")
-    .Does<ScriptContext>(data => 
+    .Does<ScriptContext>(data =>
 {
     Assert.True(data.Initialized);
 });
 
 Task("Can-Access-Typed-Data-On-Alternative-Context")
-    .Does<AlternativeScriptContext>(data => 
+    .Does<AlternativeScriptContext>(data =>
 {
     Assert.True(data.EnginesStarted);
 });
 
 Task("Can-Access-Typed-Data-Async")
-    .Does<ScriptContext>(async data => 
+    .Does<ScriptContext>(async data =>
 {
     await System.Threading.Tasks.Task.Delay(0);
 });
 
 Task("Can-Access-Typed-Data-With-Context")
-    .Does<ScriptContext>((context, data) => 
+    .Does<ScriptContext>((context, data) =>
 {
     Assert.True(data.Initialized);
 });
 
 Task("Can-Access-Typed-Data-With-Context-Async")
-    .Does<ScriptContext>(async (context, data) => 
+    .Does<ScriptContext>(async (context, data) =>
 {
     await System.Threading.Tasks.Task.Delay(0);
 });
 
 Task("Can-Access-Typed-Data-WithCriteria-True")
     .WithCriteria<ScriptContext>((context, data) => data.Initialized)
-    .Does<ScriptContext>(data => 
+    .Does<ScriptContext>(data =>
 {
     Assert.True(data.Initialized);
 });
 
 Task("Can-Access-Typed-Data-WithCriteria-False-Message")
     .WithCriteria<ScriptContext>((context, data) => !data.Initialized, "Should only run if not initialized.")
-    .Does<ScriptContext>(data => 
+    .Does<ScriptContext>(data =>
 {
     Assert.False(data.Initialized);
 });
