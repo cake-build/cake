@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.SignTool
     public sealed class SignToolSignSettings : ToolSettings
     {
         /// <summary>
-        /// Gets or sets the timestamp server's URL.
+        /// Gets or sets the timestamp server's URL. Timestamp will only be added if <c>TimeStampUri</c> is set.
         /// </summary>
         public Uri TimeStampUri { get; set; }
 

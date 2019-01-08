@@ -92,13 +92,6 @@ namespace Cake.Common.Tools.SignTool
                 }
             }
 
-            if (settings.TimeStampUri == null)
-            {
-                const string format = "{0}: Timestamp server URL is required but not specified.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
-                throw new CakeException(message);
-            }
-
             var builder = new ProcessArgumentBuilder();
 
             // SIGN Command.
@@ -110,20 +103,23 @@ namespace Cake.Common.Tools.SignTool
                 builder.Append("/fd sha256");
             }
 
-            // TimeStamp server.
-            if (settings.TimeStampDigestAlgorithm == SignToolDigestAlgorithm.Sha256)
+            // TimeStamp.
+            if (settings.TimeStampUri != null)
             {
-                // If Sha256 use RFC 3161 timestamp server.
-                builder.Append("/tr");
-                builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
+                if (settings.TimeStampDigestAlgorithm == SignToolDigestAlgorithm.Sha256)
+                {
+                    // If Sha256 use RFC 3161 timestamp server.
+                    builder.Append("/tr");
+                    builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
 
-                builder.Append("/td sha256");
-            }
-            else
-            {
-                // Otherwise use SHA-1 Authenticode timestamp server
-                builder.Append("/t");
-                builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
+                    builder.Append("/td sha256");
+                }
+                else
+                {
+                    // Otherwise use SHA-1 Authenticode timestamp server
+                    builder.Append("/t");
+                    builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
+                }
             }
 
             if (settings.CertPath == null && string.IsNullOrEmpty(settings.CertThumbprint) && string.IsNullOrEmpty(settings.CertSubjectName))
