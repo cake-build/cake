@@ -118,7 +118,7 @@ namespace Cake.Common.Tools.NuGet.Restore
             if (settings.MSBuildVersion.HasValue)
             {
                 builder.Append("-MSBuildVersion");
-                builder.Append(settings.MSBuildVersion.Value.ToString("D"));
+                builder.Append(settings.MSBuildVersion.Value.GetNuGetMSBuildVersionString());
             }
 
             builder.Append("-NonInteractive");

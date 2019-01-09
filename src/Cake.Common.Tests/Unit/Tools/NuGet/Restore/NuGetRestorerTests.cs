@@ -269,6 +269,8 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             [InlineData(NuGetMSBuildVersion.MSBuild4, "restore \"/Working/project.sln\" -MSBuildVersion 4 -NonInteractive")]
             [InlineData(NuGetMSBuildVersion.MSBuild12, "restore \"/Working/project.sln\" -MSBuildVersion 12 -NonInteractive")]
             [InlineData(NuGetMSBuildVersion.MSBuild14, "restore \"/Working/project.sln\" -MSBuildVersion 14 -NonInteractive")]
+            [InlineData(NuGetMSBuildVersion.MSBuild15_9, "restore \"/Working/project.sln\" -MSBuildVersion 15.9 -NonInteractive")]
+            [InlineData(NuGetMSBuildVersion.MSBuild16_0, "restore \"/Working/project.sln\" -MSBuildVersion 16.0 -NonInteractive")]
             public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
             {
                 // Given

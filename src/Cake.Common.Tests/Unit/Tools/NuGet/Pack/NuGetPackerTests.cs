@@ -522,6 +522,8 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 [InlineData(NuGetMSBuildVersion.MSBuild4, "pack \"/Working/existing.temp.nuspec\" -MSBuildVersion 4")]
                 [InlineData(NuGetMSBuildVersion.MSBuild12, "pack \"/Working/existing.temp.nuspec\" -MSBuildVersion 12")]
                 [InlineData(NuGetMSBuildVersion.MSBuild14, "pack \"/Working/existing.temp.nuspec\" -MSBuildVersion 14")]
+                [InlineData(NuGetMSBuildVersion.MSBuild15_9, "pack \"/Working/existing.temp.nuspec\" -MSBuildVersion 15.9")]
+                [InlineData(NuGetMSBuildVersion.MSBuild16_0, "pack \"/Working/existing.temp.nuspec\" -MSBuildVersion 16.0")]
                 public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
                 {
                     // Given
@@ -956,6 +958,8 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                 [InlineData(NuGetMSBuildVersion.MSBuild4, "pack \"/Working/existing.csproj\" -MSBuildVersion 4")]
                 [InlineData(NuGetMSBuildVersion.MSBuild12, "pack \"/Working/existing.csproj\" -MSBuildVersion 12")]
                 [InlineData(NuGetMSBuildVersion.MSBuild14, "pack \"/Working/existing.csproj\" -MSBuildVersion 14")]
+                [InlineData(NuGetMSBuildVersion.MSBuild15_9, "pack \"/Working/existing.csproj\" -MSBuildVersion 15.9")]
+                [InlineData(NuGetMSBuildVersion.MSBuild16_0, "pack \"/Working/existing.csproj\" -MSBuildVersion 16.0")]
                 public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
                 {
                     // Given
