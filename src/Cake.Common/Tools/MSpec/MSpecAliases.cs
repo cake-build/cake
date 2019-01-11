@@ -18,7 +18,7 @@ namespace Cake.Common.Tools.MSpec
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
     /// install from NuGet.org, or specify the ToolPath within the <see cref="MSpecSettings" /> class:
     /// <code>
-    /// #tool "nuget:?package=mspec.runner.console"
+    /// #tool "nuget:?package=Machine.Specifications.Runner.Console"
     /// </code>
     /// </para>
     /// </summary>
