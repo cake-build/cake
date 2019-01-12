@@ -105,21 +105,6 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             }
 
             [Fact]
-            public void Should_Throw_If_No_Timestamp_Server_URL_Has_Been_Specified()
-            {
-                // Given
-                var fixture = new SignToolSignRunnerFixture();
-                fixture.Settings.TimeStampUri = null;
-
-                // When
-                var result = Record.Exception(() => fixture.Run());
-
-                // Then
-                Assert.IsType<CakeException>(result);
-                Assert.Equal("SignTool SIGN: Timestamp server URL is required but not specified.", result?.Message);
-            }
-
-            [Fact]
             public void Should_Throw_If_Certificate_Path_And_Thumbprint_And_Subject_Name_Are_Null()
             {
                 // Given
@@ -230,6 +215,21 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             }
 
             [Fact]
+            public void Should_Throw_If_Additional_Certificate_File_Does_Not_Exist()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.AdditionalCertPath = "/Working/ac.cer";
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("SignTool SIGN: The additional certificate '/Working/ac.cer' does not exist.", result?.Message);
+            }
+
+            [Fact]
             public void Should_Use_Default_Tool_Path_If_None_Is_Specified()
             {
                 // Given
@@ -267,7 +267,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\"", result.Args);
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\"", result.Args);
             }
 
             [Fact]
@@ -281,7 +281,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" \"/Working/a.dll\"", result.Args);
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" \"/Working/a.dll\"", result.Args);
             }
 
             [Fact]
@@ -295,7 +295,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret /d \"DescriptionTest\" \"/Working/a.dll\"", result.Args);
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /d \"DescriptionTest\" \"/Working/a.dll\"", result.Args);
             }
 
             [Fact]
@@ -309,7 +309,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret /du \"https://example.com/\" \"/Working/a.dll\"", result.Args);
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /du \"https://example.com/\" \"/Working/a.dll\"", result.Args);
             }
 
             [Fact]
@@ -325,7 +325,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("SIGN /t \"https://t.com/\" /sha1 \"ThumbprintTest\" \"/Working/a.dll\"", result.Args);
+                Assert.Equal("SIGN /sha1 \"ThumbprintTest\" \"/Working/a.dll\"", result.Args);
             }
 
             [Fact]
@@ -341,7 +341,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("SIGN /t \"https://t.com/\" /n \"SubjectNameTest\" \"/Working/a.dll\"", result.Args);
+                Assert.Equal("SIGN /n \"SubjectNameTest\" \"/Working/a.dll\"", result.Args);
             }
 
             [Fact]
@@ -355,7 +355,21 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("SIGN /fd sha256 /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\"", result.Args);
+                Assert.Equal("SIGN /fd sha256 /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Timestamp_Uri()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.TimeStampUri = new Uri("https://t.com");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret \"/Working/a.dll\"", result.Args);
             }
 
             [Fact]
@@ -363,6 +377,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
             {
                 // Given
                 var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.TimeStampUri = new Uri("https://t.com");
                 fixture.Settings.TimeStampDigestAlgorithm = SignToolDigestAlgorithm.Sha256;
 
                 // When
@@ -383,7 +398,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret /as \"/Working/a.dll\"", result.Args);
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /as \"/Working/a.dll\"", result.Args);
             }
 
             [Fact]
@@ -397,7 +412,7 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("SIGN /t \"https://t.com/\" /f \"/Working/cert.pfx\" /p secret /sm \"/Working/a.dll\"", result.Args);
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /sm \"/Working/a.dll\"", result.Args);
             }
 
             [Fact]
@@ -419,7 +434,51 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("SIGN /t \"https://t.com/\" /sha1 \"ThumbprintTest\" \"/Working/a.dll\" \"/Working/foo/b.dll\"", result.Args);
+                Assert.Equal("SIGN /sha1 \"ThumbprintTest\" \"/Working/a.dll\" \"/Working/foo/b.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Additional_Cert()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.FileSystem.CreateFile("/Working/ac.cer");
+                fixture.Settings.AdditionalCertPath = "/Working/ac.cer";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /ac \"/Working/ac.cer\" \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Store_Name()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.StoreName = "Special Test Store";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /s \"Special Test Store\" \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Use_Machine_Store_And_Store_Name()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.UseMachineStore = true;
+                fixture.Settings.StoreName = "Special Test Store";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /sm /s \"Special Test Store\" \"/Working/a.dll\"", result.Args);
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.SignTool
     public sealed class SignToolSignSettings : ToolSettings
     {
         /// <summary>
-        /// Gets or sets the timestamp server's URL.
+        /// Gets or sets the timestamp server's URL. Timestamp will only be added if <c>TimeStampUri</c> is set.
         /// </summary>
         public Uri TimeStampUri { get; set; }
 
@@ -67,5 +67,15 @@ namespace Cake.Common.Tools.SignTool
         /// Gets or sets a value indicating whether a machine store, instead of a user store, is used.
         /// </summary>
         public bool UseMachineStore { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path to an additional certificate that is to be added to the signature block.
+        /// </summary>
+        public FilePath AdditionalCertPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the store to open when searching for the certificate.
+        /// </summary>
+        public string StoreName { get; set; }
     }
 }
