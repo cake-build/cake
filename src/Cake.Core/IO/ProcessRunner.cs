@@ -70,16 +70,19 @@ namespace Cake.Core.IO
                 return null;
             }
 
-            var consoleOutputQueue = settings.RedirectStandardOutput
-                ? SubscribeStandardConsoleOutputQueue(process)
-                : null;
+            var processWrapper = new ProcessWrapper(process, _log, filterUnsafe, settings.RedirectedStandardOutputHandler,
+                filterUnsafe, settings.RedirectedStandardErrorHandler);
 
-            var consoleErrorQueue = settings.RedirectStandardError
-                ? SubscribeStandardConsoleErrorQueue(process)
-                : null;
+            if (settings.RedirectStandardOutput)
+            {
+                SubscribeStandardOutput(process, processWrapper);
+            }
+            if (settings.RedirectStandardError)
+            {
+                SubscribeStandardError(process, processWrapper);
+            }
 
-            return new ProcessWrapper(process, _log, filterUnsafe,
-                consoleOutputQueue, filterUnsafe, consoleErrorQueue);
+            return processWrapper;
         }
 
         internal ProcessStartInfo GetProcessStartInfo(FilePath filePath, ProcessSettings settings, out Func<string, string> filterUnsafe)
@@ -155,32 +158,22 @@ namespace Cake.Core.IO
             return info;
         }
 
-        private static ConcurrentQueue<string> SubscribeStandardConsoleErrorQueue(Process process)
+        private static void SubscribeStandardError(Process process, ProcessWrapper processWrapper)
         {
-            var consoleErrorQueue = new ConcurrentQueue<string>();
             process.ErrorDataReceived += (s, e) =>
             {
-                if (e.Data != null)
-                {
-                    consoleErrorQueue.Enqueue(e.Data);
-                }
+                processWrapper.StandardErrorReceived(e.Data);
             };
             process.BeginErrorReadLine();
-            return consoleErrorQueue;
         }
 
-        private static ConcurrentQueue<string> SubscribeStandardConsoleOutputQueue(Process process)
+        private static void SubscribeStandardOutput(Process process, ProcessWrapper processWrapper)
         {
-            var consoleOutputQueue = new ConcurrentQueue<string>();
             process.OutputDataReceived += (s, e) =>
             {
-                if (e.Data != null)
-                {
-                    consoleOutputQueue.Enqueue(e.Data);
-                }
+                processWrapper.StandardOutputReceived(e.Data);
             };
             process.BeginOutputReadLine();
-            return consoleOutputQueue;
         }
     }
 }
