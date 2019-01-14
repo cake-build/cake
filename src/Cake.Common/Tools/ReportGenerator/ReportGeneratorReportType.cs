@@ -72,16 +72,16 @@ namespace Cake.Common.Tools.ReportGenerator
         /// <summary>
         /// Same as HTMLInline but with modified CSS that matches the look and feel of Azure Pipelines.
         /// </summary>
-        HtmlInline_AzurePipelines = 13,
-
-        /// <summary>
-        /// Same as HTML but packaged into a single MHTML file.
-        /// </summary>
-        MHtml = 13,
+        HtmlInlineAzurePipelines = 13,
 
         /// <summary>
         /// A single PNG file containing a chart with historic coverage information.
         /// </summary>
-        PngChart = 14
+        PngChart = 14,
+
+        /// <summary>
+        /// Same as HTML but packaged into a single MHTML file.
+        /// </summary>
+        MHtml = 15
     }
 }
