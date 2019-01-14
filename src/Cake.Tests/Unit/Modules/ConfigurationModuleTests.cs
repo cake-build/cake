@@ -33,6 +33,23 @@ namespace Cake.Tests.Unit.Modules
                 // Then
                 fileSystem.Received(1).Exist(Arg.Is<FilePath>(f => f.FullPath == "/Working/foo/bar/cake.config"));
             }
+
+            [Fact]
+            public void Should_Throw_If_Registrar_Are_Null()
+            {
+                // Given
+                var fileSystem = Substitute.For<IFileSystem>();
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var provider = new CakeConfigurationProvider(fileSystem, environment);
+                var options = new CakeOptions();
+                var module = new ConfigurationModule(provider, options);
+
+                // When
+                var result = Record.Exception(() => module.Register(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "registrar");
+            }
         }
     }
 }
