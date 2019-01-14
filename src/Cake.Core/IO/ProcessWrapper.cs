@@ -18,15 +18,20 @@ namespace Cake.Core.IO
         private readonly Func<string, string> _filterOutput;
         private readonly ConcurrentQueue<string> _consoleErrorQueue;
         private readonly ConcurrentQueue<string> _consoleOutputQueue;
+        private readonly Func<string, string> _standardOutputHandler;
+        private readonly Func<string, string> _standardErrorHandler;
 
-        public ProcessWrapper(Process process, ICakeLog log, Func<string, string> filterOutput, ConcurrentQueue<string> consoleOutputQueue, Func<string, string> filterError, ConcurrentQueue<string> consoleErrorQueue)
+        public ProcessWrapper(Process process, ICakeLog log, Func<string, string> filterOutput, Func<string, string> standardOutputHandler,
+            Func<string, string> filterError, Func<string, string> standardErrorHandler)
         {
             _process = process;
             _log = log;
             _filterOutput = filterOutput ?? (source => "[REDACTED]");
-            _consoleOutputQueue = consoleOutputQueue;
+            _consoleOutputQueue = new ConcurrentQueue<string>();
+            _standardOutputHandler = standardOutputHandler ?? (output => output);
             _filterError = filterError ?? (source => "[REDACTED]");
-            _consoleErrorQueue = consoleErrorQueue;
+            _consoleErrorQueue = new ConcurrentQueue<string>();
+            _standardErrorHandler = standardErrorHandler ?? (output => output);
         }
 
         public void WaitForExit()
@@ -53,12 +58,18 @@ namespace Cake.Core.IO
             return _process.ExitCode;
         }
 
+        internal void StandardErrorReceived(string standardError)
+        {
+            var redirectedError = _standardErrorHandler(standardError);
+
+            if (redirectedError != null)
+            {
+                _consoleErrorQueue.Enqueue(redirectedError);
+            }
+        }
+
         public IEnumerable<string> GetStandardError()
         {
-            if (_consoleErrorQueue == null)
-            {
-                yield break;
-            }
             while (!_consoleErrorQueue.IsEmpty || !_process.HasExited)
             {
                 string line;
@@ -71,12 +82,18 @@ namespace Cake.Core.IO
             }
         }
 
+        internal void StandardOutputReceived(string standardOutput)
+        {
+            var redirectedOutput = _standardOutputHandler(standardOutput);
+
+            if (redirectedOutput != null)
+            {
+                _consoleOutputQueue.Enqueue(redirectedOutput);
+            }
+        }
+
         public IEnumerable<string> GetStandardOutput()
         {
-            if (_consoleOutputQueue == null)
-            {
-                yield break;
-            }
             while (!_consoleOutputQueue.IsEmpty || !_process.HasExited)
             {
                 string line;

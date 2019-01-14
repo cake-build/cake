@@ -36,11 +36,21 @@ namespace Cake.Core.Tests.Unit.IO
             [Theory]
             [InlineData(true, true)]
             [InlineData(false, false)]
-            public void Should_Return_Settings_With_Correct_Output(bool value, bool expected)
+            public void Should_Return_Settings_With_Correct_StandardOutput(bool value, bool expected)
             {
                 var settings = new ProcessSettings().SetRedirectStandardOutput(value);
 
                 Assert.Equal(expected, settings.RedirectStandardOutput);
+            }
+
+            [Theory]
+            [InlineData(true, true)]
+            [InlineData(false, false)]
+            public void Should_Return_Settings_With_Correct_StandardError(bool value, bool expected)
+            {
+                var settings = new ProcessSettings().SetRedirectStandardError(value);
+
+                Assert.Equal(expected, settings.RedirectStandardError);
             }
 
             [Theory]
