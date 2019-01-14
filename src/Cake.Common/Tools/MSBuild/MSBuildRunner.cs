@@ -262,6 +262,8 @@ namespace Cake.Common.Tools.MSBuild
                     return "x64";
                 case PlatformTarget.ARM:
                     return "arm";
+                case PlatformTarget.ARM64:
+                    return "arm64";
                 case PlatformTarget.Win32:
                     return "Win32";
                 default:
