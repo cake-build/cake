@@ -121,7 +121,11 @@ namespace Cake.Common.Tools.NuGet.Restore
                 builder.Append(settings.MSBuildVersion.Value.GetNuGetMSBuildVersionString());
             }
 
-            builder.Append("-NonInteractive");
+            // NonInteractive?
+            if (settings.NonInteractive)
+            {
+                builder.Append("-NonInteractive");
+            }
 
             return builder;
         }
