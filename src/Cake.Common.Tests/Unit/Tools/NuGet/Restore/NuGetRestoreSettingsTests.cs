@@ -30,6 +30,16 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 // Then
                 Assert.False(settings.RequireConsent);
             }
+
+            [Fact]
+            public void Should_Set_NonInteractive_To_True_By_Default()
+            {
+                // Given, When
+                var settings = new NuGetRestoreSettings();
+
+                // Then
+                Assert.True(settings.NonInteractive);
+            }
         }
     }
 }

@@ -72,5 +72,16 @@ namespace Cake.Common.Tools.NuGet.Restore
         /// </summary>
         /// <value>The version of MSBuild to be used with this command.</value>
         public NuGetMSBuildVersion? MSBuildVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not NuGet suppresses prompts for user input or confirmations.
+        /// </summary>
+        /// <remarks>
+        /// This setting is passed by NuGet.exe to any extensions such as authorization providers
+        /// </remarks>
+        /// <value>
+        /// <c>false</c> to allow NuGet to show prompts for user input or confirmations; otherwise, <c>true</c>.
+        /// </value>
+        public bool NonInteractive { get; set; } = true;
     }
 }
