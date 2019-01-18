@@ -493,6 +493,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
+                var bitriseEnvironment = new BitriseInfoFixture().CreateEnvironmentInfo();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
                 var goCDProvider = Substitute.For<IGoCDProvider>();
@@ -500,6 +501,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var tfBuildProvider = Substitute.For<ITFBuildProvider>();
 
                 bitriseProvider.IsRunningOnBitrise.Returns(true);
+                bitriseProvider.Environment.Returns(bitriseEnvironment);
 
                 // When
                 var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider);
@@ -788,6 +790,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
+                var bitriseEnvironment = new BitriseInfoFixture().CreateEnvironmentInfo();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
                 var bitbucketPipelinesEnvironment = new BitbucketPipelinesInfoFixture().CreateEnvironmentInfo();
@@ -806,6 +809,7 @@ namespace Cake.Common.Tests.Unit.Build
                 continuaCIProvider.IsRunningOnContinuaCI.Returns(continuaCI);
                 jenkinsProvider.IsRunningOnJenkins.Returns(jenkins);
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
+                bitriseProvider.Environment.Returns(bitriseEnvironment);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(bitbucketPipelines);
                 bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);
@@ -859,6 +863,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
+                var bitriseEnvironment = new BitriseInfoFixture().CreateEnvironmentInfo();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
                 var bitbucketPipelinesEnvironment = new BitbucketPipelinesInfoFixture().CreateEnvironmentInfo();
@@ -877,6 +882,7 @@ namespace Cake.Common.Tests.Unit.Build
                 continuaCIProvider.IsRunningOnContinuaCI.Returns(continuaCI);
                 jenkinsProvider.IsRunningOnJenkins.Returns(jenkins);
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
+                bitriseProvider.Environment.Returns(bitriseEnvironment);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(bitbucketPipelines);
                 bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);
@@ -909,7 +915,7 @@ namespace Cake.Common.Tests.Unit.Build
             [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)]
             [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)]
             [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true)]
             [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false)]
             [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, true)]
             [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false)]
@@ -930,6 +936,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
+                var bitriseEnvironment = new BitriseInfoFixture().CreateEnvironmentInfo();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
                 var bitbucketPipelinesEnvironment = new BitbucketPipelinesInfoFixture().CreateEnvironmentInfo();
@@ -948,6 +955,7 @@ namespace Cake.Common.Tests.Unit.Build
                 continuaCIProvider.IsRunningOnContinuaCI.Returns(continuaCI);
                 jenkinsProvider.IsRunningOnJenkins.Returns(jenkins);
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
+                bitriseProvider.Environment.Returns(bitriseEnvironment);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(bitbucketPipelines);
                 bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);

@@ -34,6 +34,17 @@ namespace Cake.Common.Build.Bitrise
         }
 
         /// <summary>
+        /// Gets an environment variable as a <see cref="System.Int32"/>.
+        /// </summary>
+        /// <param name="variable">The environment variable name.</param>
+        /// <returns>The environment variable.</returns>
+        protected int GetEnvironmentInteger(string variable)
+        {
+            var value = GetEnvironmentString(variable);
+            return !string.IsNullOrWhiteSpace(value) && int.TryParse(value, out var result) ? result : 0;
+        }
+
+        /// <summary>
         /// Gets an environment variable as a <see cref="System.Boolean"/>.
         /// </summary>
         /// <param name="variable">The environment variable name.</param>
@@ -41,11 +52,7 @@ namespace Cake.Common.Build.Bitrise
         protected bool GetEnvironmentBoolean(string variable)
         {
             var value = GetEnvironmentString(variable);
-            if (!string.IsNullOrWhiteSpace(value))
-            {
-                return value.Equals("true", StringComparison.OrdinalIgnoreCase);
-            }
-            return false;
+            return !string.IsNullOrWhiteSpace(value) && value.Equals("true", StringComparison.OrdinalIgnoreCase);
         }
     }
 }
