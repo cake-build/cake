@@ -62,6 +62,52 @@ namespace Cake.Common.Build.TravisCI.Data
         public TravisCIBuildInfo Build { get; }
 
         /// <summary>
+        /// Gets Travis CI pull request information.
+        /// </summary>
+        /// <value>
+        /// The Travis CI pull request information.
+        /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Id: {1}",
+        ///         BuildSystem.TravisCI.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.TravisCI.Environment.PullRequest.Id
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TravisCI</para>
+        /// <example>
+        /// <code>
+        /// if (TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Id: {1}",
+        ///         TravisCI.Environment.PullRequest.IsPullRequest,
+        ///         TravisCI.Environment.PullRequest.Id
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TravisCI");
+        /// }
+        /// </code>
+        /// </example>
+        public TravisCIPullRequestInfo PullRequest { get; }
+
+        /// <summary>
         /// Gets Travis CI job information for the current build.
         /// </summary>
         /// <value>
@@ -289,6 +335,7 @@ namespace Cake.Common.Build.TravisCI.Data
             : base(environment)
         {
             Build = new TravisCIBuildInfo(environment);
+            PullRequest = new TravisCIPullRequestInfo(environment);
             Job = new TravisCIJobInfo(environment);
             Repository = new TravisCIRepositoryInfo(environment);
         }

@@ -525,12 +525,14 @@ namespace Cake.Common.Tests.Unit.Build
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var travisCIEnvironment = new TravisCIInfoFixture().CreateEnvironmentInfo();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
                 var goCDProvider = Substitute.For<IGoCDProvider>();
                 var gitlabCIProvider = Substitute.For<IGitLabCIProvider>();
                 var tfBuildProvider = Substitute.For<ITFBuildProvider>();
 
                 travisCIProvider.IsRunningOnTravisCI.Returns(true);
+                travisCIProvider.Environment.Returns(travisCIEnvironment);
 
                 // When
                 var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider);
@@ -792,6 +794,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var bitriseEnvironment = new BitriseInfoFixture().CreateEnvironmentInfo();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var travisCIEnvironment = new TravisCIInfoFixture().CreateEnvironmentInfo();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
                 var bitbucketPipelinesEnvironment = new BitbucketPipelinesInfoFixture().CreateEnvironmentInfo();
                 var goCDProvider = Substitute.For<IGoCDProvider>();
@@ -811,6 +814,7 @@ namespace Cake.Common.Tests.Unit.Build
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
                 bitriseProvider.Environment.Returns(bitriseEnvironment);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
+                travisCIProvider.Environment.Returns(travisCIEnvironment);
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(bitbucketPipelines);
                 bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);
                 goCDProvider.IsRunningOnGoCD.Returns(goCD);
@@ -865,6 +869,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var bitriseEnvironment = new BitriseInfoFixture().CreateEnvironmentInfo();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var travisCIEnvironment = new TravisCIInfoFixture().CreateEnvironmentInfo();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
                 var bitbucketPipelinesEnvironment = new BitbucketPipelinesInfoFixture().CreateEnvironmentInfo();
                 var goCDProvider = Substitute.For<IGoCDProvider>();
@@ -884,6 +889,7 @@ namespace Cake.Common.Tests.Unit.Build
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
                 bitriseProvider.Environment.Returns(bitriseEnvironment);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
+                travisCIProvider.Environment.Returns(travisCIEnvironment);
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(bitbucketPipelines);
                 bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);
                 goCDProvider.IsRunningOnGoCD.Returns(goCD);
@@ -916,7 +922,7 @@ namespace Cake.Common.Tests.Unit.Build
             [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)]
             [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false)]
             [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true)]
-            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true)]
             [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, true)]
             [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false)]
             [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, true)]
@@ -938,6 +944,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var bitriseEnvironment = new BitriseInfoFixture().CreateEnvironmentInfo();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var travisCIEnvironment = new TravisCIInfoFixture().CreateEnvironmentInfo();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
                 var bitbucketPipelinesEnvironment = new BitbucketPipelinesInfoFixture().CreateEnvironmentInfo();
                 var goCDProvider = Substitute.For<IGoCDProvider>();
@@ -957,6 +964,7 @@ namespace Cake.Common.Tests.Unit.Build
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
                 bitriseProvider.Environment.Returns(bitriseEnvironment);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
+                travisCIProvider.Environment.Returns(travisCIEnvironment);
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(bitbucketPipelines);
                 bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);
                 goCDProvider.IsRunningOnGoCD.Returns(goCD);

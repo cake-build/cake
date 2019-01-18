@@ -134,6 +134,7 @@ namespace Cake.Common.Build
             IsPullRequest = ((Provider & BuildProvider.AppVeyor) != 0 && AppVeyor.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.TeamCity) != 0 && TeamCity.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.Bitrise) != 0 && Bitrise.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.TravisCI) != 0 && TravisCI.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.BitbucketPipelines) != 0 && BitbucketPipelines.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.GitLabCI) != 0 && GitLabCI.Environment.PullRequest.IsPullRequest)
                 || ((Provider & (BuildProvider.AzurePipelines | BuildProvider.AzurePipelinesHosted)) != 0 && TFBuild.Environment.PullRequest.IsPullRequest);
