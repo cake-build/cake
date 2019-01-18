@@ -37,6 +37,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("BUILD_BUILDURI").Returns("vstfs:///Build/Build/1430");
             Environment.GetEnvironmentVariable("BUILD_QUEUEDBY")
                 .Returns(@"[DefaultCollection]\Project Collection Service Accounts");
+            Environment.GetEnvironmentVariable("BUILD_REASON").Returns("Manual");
             Environment.GetEnvironmentVariable("BUILD_REQUESTEDFOR").Returns("Alistair Chapman");
             Environment.GetEnvironmentVariable("BUILD_REQUESTEDFOREMAIL").Returns("author@mail.com");
 
