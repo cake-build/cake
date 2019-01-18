@@ -553,11 +553,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
+                var bitbucketPipelinesEnvironment = new BitbucketPipelinesInfoFixture().CreateEnvironmentInfo();
                 var goCDProvider = Substitute.For<IGoCDProvider>();
                 var gitlabCIProvider = Substitute.For<IGitLabCIProvider>();
                 var tfBuildProvider = Substitute.For<ITFBuildProvider>();
 
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(true);
+                bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);
 
                 // When
                 var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider);
@@ -788,6 +790,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
+                var bitbucketPipelinesEnvironment = new BitbucketPipelinesInfoFixture().CreateEnvironmentInfo();
                 var goCDProvider = Substitute.For<IGoCDProvider>();
                 var gitlabCIProvider = Substitute.For<IGitLabCIProvider>();
                 var gitlabCIEnvironment = new GitLabCIInfoFixture().CreateEnvironmentInfo();
@@ -805,6 +808,7 @@ namespace Cake.Common.Tests.Unit.Build
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(bitbucketPipelines);
+                bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);
                 goCDProvider.IsRunningOnGoCD.Returns(goCD);
                 gitlabCIProvider.IsRunningOnGitLabCI.Returns(gitlabCI);
                 gitlabCIProvider.Environment.Returns(gitlabCIEnvironment);
@@ -857,6 +861,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
+                var bitbucketPipelinesEnvironment = new BitbucketPipelinesInfoFixture().CreateEnvironmentInfo();
                 var goCDProvider = Substitute.For<IGoCDProvider>();
                 var gitlabCIProvider = Substitute.For<IGitLabCIProvider>();
                 var gitlabCIEnvironment = new GitLabCIInfoFixture().CreateEnvironmentInfo();
@@ -874,6 +879,7 @@ namespace Cake.Common.Tests.Unit.Build
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(bitbucketPipelines);
+                bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);
                 goCDProvider.IsRunningOnGoCD.Returns(goCD);
                 gitlabCIProvider.IsRunningOnGitLabCI.Returns(gitlabCI);
                 gitlabCIProvider.Environment.Returns(gitlabCIEnvironment);
@@ -905,7 +911,7 @@ namespace Cake.Common.Tests.Unit.Build
             [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false)]
             [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false)]
             [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, true)]
             [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false)]
             [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, true)]
             [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, true)] // tfs
@@ -926,6 +932,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
+                var bitbucketPipelinesEnvironment = new BitbucketPipelinesInfoFixture().CreateEnvironmentInfo();
                 var goCDProvider = Substitute.For<IGoCDProvider>();
                 var gitlabCIProvider = Substitute.For<IGitLabCIProvider>();
                 var gitlabCIEnvironment = new GitLabCIInfoFixture().CreateEnvironmentInfo();
@@ -943,6 +950,7 @@ namespace Cake.Common.Tests.Unit.Build
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(bitbucketPipelines);
+                bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);
                 goCDProvider.IsRunningOnGoCD.Returns(goCD);
                 gitlabCIProvider.IsRunningOnGitLabCI.Returns(gitlabCI);
                 gitlabCIProvider.Environment.Returns(gitlabCIEnvironment);
