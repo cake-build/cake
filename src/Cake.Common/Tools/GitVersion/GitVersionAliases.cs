@@ -52,7 +52,7 @@ namespace Cake.Common.Tools.GitVersion
         ///         Password = "MyPassword,
         ///         Url = "http://git.myhost.com/myproject.git"
         ///         Branch = "develop"
-        ///         Commit = EnviromentVariable("MY_COMMIT")
+        ///         Commit = EnvironmentVariable("MY_COMMIT")
         ///     });
         ///     // Use result for building NuGet packages, setting build server version, etc...
         /// });
@@ -102,7 +102,7 @@ namespace Cake.Common.Tools.GitVersion
         ///         Password = "MyPassword,
         ///         Url = "http://git.myhost.com/myproject.git"
         ///         Branch = "develop"
-        ///         Commit = EnviromentVariable("MY_COMMIT")
+        ///         Commit = EnvironmentVariable("MY_COMMIT")
         ///     });
         ///     // Use result for building NuGet packages, setting build server version, etc...
         /// });
