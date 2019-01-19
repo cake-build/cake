@@ -444,5 +444,145 @@ namespace Cake.Common.Diagnostics
             }
             context.Log.Debug(value);
         }
+
+        /// <summary>
+        /// Sets the log verbosity to quiet and returns a disposable that restores the log verbosity on dispose.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <returns>A disposable that restores the log verbosity.</returns>
+        /// <example>
+        /// <code>
+        /// using (QuietVerbosity())
+        /// {
+        ///     Error("Show me.");
+        ///     Warning("Hide me.");
+        ///     Information("Hide me.");
+        ///     Verbose("Hide me.");
+        ///     Debug("Hide me.");
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Verbosity")]
+        public static IDisposable QuietVerbosity(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            return context.Log.QuietVerbosity();
+        }
+
+        /// <summary>
+        /// Sets the log verbosity to minimal and returns a disposable that restores the log verbosity on dispose.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <returns>A disposable that restores the log verbosity.</returns>
+        /// <example>
+        /// <code>
+        /// using (MinimalVerbosity())
+        /// {
+        ///     Error("Show me.");
+        ///     Warning("Show me.");
+        ///     Information("Hide me.");
+        ///     Verbose("Hide me.");
+        ///     Debug("Hide me.");
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Verbosity")]
+        public static IDisposable MinimalVerbosity(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            return context.Log.MinimalVerbosity();
+        }
+
+        /// <summary>
+        /// Sets the log verbosity to normal and returns a disposable that restores the log verbosity on dispose.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <returns>A disposable that restores the log verbosity.</returns>
+        /// <example>
+        /// <code>
+        /// using (NormalVerbosity())
+        /// {
+        ///     Error("Show me.");
+        ///     Warning("Show me.");
+        ///     Information("Show me.");
+        ///     Verbose("Hide me.");
+        ///     Debug("Hide me.");
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Verbosity")]
+        public static IDisposable NormalVerbosity(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            return context.Log.NormalVerbosity();
+        }
+
+        /// <summary>
+        /// Sets the log verbosity to verbose and returns a disposable that restores the log verbosity on dispose.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <returns>A disposable that restores the log verbosity.</returns>
+        /// <example>
+        /// <code>
+        /// using (VerboseVerbosity())
+        /// {
+        ///     Error("Show me.");
+        ///     Warning("Show me.");
+        ///     Information("Show me.");
+        ///     Verbose("Show me.");
+        ///     Debug("Hide me.");
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Verbosity")]
+        public static IDisposable VerboseVerbosity(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            return context.Log.VerboseVerbosity();
+        }
+
+        /// <summary>
+        /// Sets the log verbosity to diagnostic and returns a disposable that restores the log verbosity on dispose.
+        /// </summary>
+        /// <param name="context">the context.</param>
+        /// <returns>A disposable that restores the log verbosity.</returns>
+        /// <example>
+        /// <code>
+        /// using (DiagnosticVerbosity())
+        /// {
+        ///     Error("Show me.");
+        ///     Warning("Show me.");
+        ///     Information("Show me.");
+        ///     Verbose("Show me.");
+        ///     Debug("Show me.");
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Verbosity")]
+        public static IDisposable DiagnosticVerbosity(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            return context.Log.DiagnosticVerbosity();
+        }
     }
 }

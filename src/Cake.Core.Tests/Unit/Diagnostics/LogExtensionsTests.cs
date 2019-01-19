@@ -289,5 +289,227 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 Assert.Equal("Hello World", log.Message);
             }
         }
+
+        public sealed class TheQuietVerbosityMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Log_Null()
+            {
+                // When
+                var result = Record.Exception(() => LogExtensions.QuietVerbosity(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "log");
+            }
+
+            [Fact]
+            public void Should_Set_Log_Verbosity_To_Quiet()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Verbose };
+                log.QuietVerbosity();
+
+                // Then
+                Assert.Equal(Verbosity.Quiet, log.Verbosity);
+            }
+
+            [Fact]
+            public void Should_Return_Disposable_That_Restores_Log_Verbosity()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Verbose };
+                using (log.QuietVerbosity())
+                {
+                }
+
+                // Then
+                Assert.Equal(Verbosity.Verbose, log.Verbosity);
+            }
+        }
+
+        public sealed class TheMinimalVerbosityMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Log_Null()
+            {
+                // When
+                var result = Record.Exception(() => LogExtensions.MinimalVerbosity(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "log");
+            }
+
+            [Fact]
+            public void Should_Set_Log_Verbosity_To_Minimal()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Quiet };
+                log.MinimalVerbosity();
+
+                // Then
+                Assert.Equal(Verbosity.Minimal, log.Verbosity);
+            }
+
+            [Fact]
+            public void Should_Return_Disposable_That_Restores_Log_Verbosity()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Quiet };
+                using (log.MinimalVerbosity())
+                {
+                }
+
+                // Then
+                Assert.Equal(Verbosity.Quiet, log.Verbosity);
+            }
+        }
+
+        public sealed class TheNormalVerbosityMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Log_Null()
+            {
+                // When
+                var result = Record.Exception(() => LogExtensions.NormalVerbosity(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "log");
+            }
+
+            [Fact]
+            public void Should_Set_Log_Verbosity_To_Normal()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Quiet };
+                log.NormalVerbosity();
+
+                // Then
+                Assert.Equal(Verbosity.Normal, log.Verbosity);
+            }
+
+            [Fact]
+            public void Should_Return_Disposable_That_Restores_Log_Verbosity()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Quiet };
+                using (log.NormalVerbosity())
+                {
+                }
+
+                // Then
+                Assert.Equal(Verbosity.Quiet, log.Verbosity);
+            }
+        }
+
+        public sealed class TheVerboseVerbosityMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Log_Null()
+            {
+                // When
+                var result = Record.Exception(() => LogExtensions.VerboseVerbosity(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "log");
+            }
+
+            [Fact]
+            public void Should_Set_Log_Verbosity_To_Verbose()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Quiet };
+                log.VerboseVerbosity();
+
+                // Then
+                Assert.Equal(Verbosity.Verbose, log.Verbosity);
+            }
+
+            [Fact]
+            public void Should_Return_Disposable_That_Restores_Log_Verbosity()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Quiet };
+                using (log.VerboseVerbosity())
+                {
+                }
+
+                // Then
+                Assert.Equal(Verbosity.Quiet, log.Verbosity);
+            }
+        }
+
+        public sealed class TheDiagnosticVerbosityMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Log_Null()
+            {
+                // When
+                var result = Record.Exception(() => LogExtensions.DiagnosticVerbosity(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "log");
+            }
+
+            [Fact]
+            public void Should_Set_Log_Verbosity_To_Diagnostic()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Quiet };
+                log.DiagnosticVerbosity();
+
+                // Then
+                Assert.Equal(Verbosity.Diagnostic, log.Verbosity);
+            }
+
+            [Fact]
+            public void Should_Return_Disposable_That_Restores_Log_Verbosity()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Quiet };
+                using (log.DiagnosticVerbosity())
+                {
+                }
+
+                // Then
+                Assert.Equal(Verbosity.Quiet, log.Verbosity);
+            }
+        }
+
+        public sealed class TheWithVerbosityMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Log_Null()
+            {
+                // When
+                var result = Record.Exception(() => LogExtensions.WithVerbosity(null, Verbosity.Diagnostic));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "log");
+            }
+
+            [Fact]
+            public void Should_Set_Log_Verbosity_As_Specified()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Quiet };
+                log.WithVerbosity(Verbosity.Diagnostic);
+
+                // Then
+                Assert.Equal(Verbosity.Diagnostic, log.Verbosity);
+            }
+
+            [Fact]
+            public void Should_Return_Disposable_That_Restores_Log_Verbosity()
+            {
+                // When
+                var log = new TestLog { Verbosity = Verbosity.Quiet };
+                using (log.WithVerbosity(Verbosity.Diagnostic))
+                {
+                }
+
+                // Then
+                Assert.Equal(Verbosity.Quiet, log.Verbosity);
+            }
+        }
     }
 }
