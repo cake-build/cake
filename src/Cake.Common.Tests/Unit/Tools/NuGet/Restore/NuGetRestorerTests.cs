@@ -219,6 +219,20 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                              "-NonInteractive", result.Args);
             }
 
+            [Fact]
+            public void Should_Remove_NonInteractive_From_Arguments_If_False()
+            {
+                // Given
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.NonInteractive = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("restore \"/Working/project.sln\"", result.Args);
+            }
+
             [Theory]
             [InlineData(NuGetVerbosity.Detailed, "restore \"/Working/project.sln\" -Verbosity detailed -NonInteractive")]
             [InlineData(NuGetVerbosity.Normal, "restore \"/Working/project.sln\" -Verbosity normal -NonInteractive")]

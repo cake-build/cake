@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -35,6 +35,12 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Platform target: <c>Win32</c>
         /// </summary>
-        Win32 = 4
+        Win32 = 4,
+
+        /// <summary>
+        /// Platform target: <c>ARM64</c>
+        /// </summary>
+        // ReSharper disable once InconsistentNaming
+        ARM64 = 5
     }
 }
