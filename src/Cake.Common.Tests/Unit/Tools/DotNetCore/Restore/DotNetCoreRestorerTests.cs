@@ -129,7 +129,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                              " --source \"https://www.example.com/source2\"" +
                              " --configfile \"/Working/NuGet.config\"" +
                              " --no-cache --disable-parallel --ignore-failed-sources --no-dependencies --force" +
-                             " --verbosity Minimal", result.Args);
+                             " --verbosity minimal", result.Args);
             }
 
             [Fact]

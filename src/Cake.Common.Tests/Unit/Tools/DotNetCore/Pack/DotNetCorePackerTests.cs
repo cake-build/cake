@@ -120,7 +120,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack --output \"/Working/artifacts\" --no-build --no-dependencies --no-restore --include-symbols --include-source --configuration Release --version-suffix rc1 --serviceable --verbosity Minimal", result.Args);
+                Assert.Equal("pack --output \"/Working/artifacts\" --no-build --no-dependencies --no-restore --include-symbols --include-source --configuration Release --version-suffix rc1 --serviceable --verbosity minimal", result.Args);
             }
 
             [Fact]

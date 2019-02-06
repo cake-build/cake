@@ -106,7 +106,7 @@ namespace Cake.Common.Tools.DotNetCore
             if (settings.Verbosity.HasValue)
             {
                 builder.Append("--verbosity");
-                builder.Append(settings.Verbosity.ToString());
+                builder.Append(settings.Verbosity.ToString().ToLower());
             }
 
             return builder;
