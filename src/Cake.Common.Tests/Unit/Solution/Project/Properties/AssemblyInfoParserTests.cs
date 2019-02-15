@@ -373,6 +373,27 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 Assert.Equal(result.Copyright, "MonoDevelopCopyright");
                 Assert.Equal(result.Trademark, "MonoDevelopTrademark");
             }
+
+            [Fact]
+            public void Should_Read_FullyQualifiedAssemblyAttributes()
+            {
+                // Given
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.CreateAssemblyInfo = false;
+                fixture.WithAssemblyInfoContents(Resources.FullyQualifiedAssemblyInfo.NormalizeLineEndings());
+
+                // When
+                var result = fixture.Parse();
+
+                // Then
+                Assert.Equal("FullyQualifiedCompanyAttribute", result.Company);
+                Assert.Equal("FullyQualifiedConfigurationAttribute", result.Configuration);
+                Assert.Equal("1.3.0.0", result.AssemblyFileVersion);
+                Assert.Equal("1.3.0", result.AssemblyInformationalVersion);
+                Assert.Equal("FullyQualifiedProductAttribute", result.Product);
+                Assert.Equal("FullyQualifiedTitleAttribute", result.Title);
+                Assert.Equal("1.3.0.0", result.AssemblyVersion);
+            }
         }
     }
 }
