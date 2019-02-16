@@ -48,7 +48,7 @@ namespace Cake.Core
         /// Gets or sets the error handler.
         /// </summary>
         /// <value>The error handler.</value>
-        public Action<Exception> ErrorHandler { get; set; }
+        public Action<Exception, ICakeContext> ErrorHandler { get; set; }
 
         /// <summary>
         /// Gets or sets the error reporter.
