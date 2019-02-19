@@ -41,16 +41,16 @@ namespace Cake.Common.Tools.NuGet
         /// <example>
         /// <code>
         ///     var nuGetPackSettings   = new NuGetPackSettings {
-        ///                                     Id                      = "TestNuget",
+        ///                                     Id                      = "TestNuGet",
         ///                                     Version                 = "0.0.0.1",
         ///                                     Title                   = "The tile of the package",
         ///                                     Authors                 = new[] {"John Doe"},
         ///                                     Owners                  = new[] {"Contoso"},
         ///                                     Description             = "The description of the package",
         ///                                     Summary                 = "Excellent summary of what the package does",
-        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuget/"),
-        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuget/master/icons/testnuget.png"),
-        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuget/blob/master/LICENSE.md"),
+        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuGet/"),
+        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuGet/master/icons/testNuGet.png"),
+        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuGet/blob/master/LICENSE.md"),
         ///                                     Copyright               = "Some company 2015",
         ///                                     ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
         ///                                     Tags                    = new [] {"Cake", "Script", "Build"},
@@ -58,13 +58,13 @@ namespace Cake.Common.Tools.NuGet
         ///                                     Symbols                 = false,
         ///                                     NoPackageAnalysis       = true,
         ///                                     Files                   = new [] {
-        ///                                                                          new NuSpecContent {Source = "bin/TestNuget.dll", Target = "bin"},
+        ///                                                                          new NuSpecContent {Source = "bin/TestNuGet.dll", Target = "bin"},
         ///                                                                       },
-        ///                                     BasePath                = "./src/TestNuget/bin/release",
-        ///                                     OutputDirectory         = "./nuget"
+        ///                                     BasePath                = "./src/TestNuGet/bin/release",
+        ///                                     OutputDirectory         = "./NuGet"
         ///                                 };
         ///
-        ///     NuGetPack("./nuspec/TestNuget.nuspec", nuGetPackSettings);
+        ///     NuGetPack("./nuspec/TestNuGet.nuspec", nuGetPackSettings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -91,16 +91,16 @@ namespace Cake.Common.Tools.NuGet
         /// <example>
         /// <code>
         ///     var nuGetPackSettings   = new NuGetPackSettings {
-        ///                                     Id                      = "TestNuget",
+        ///                                     Id                      = "TestNuGet",
         ///                                     Version                 = "0.0.0.1",
         ///                                     Title                   = "The tile of the package",
         ///                                     Authors                 = new[] {"John Doe"},
         ///                                     Owners                  = new[] {"Contoso"},
         ///                                     Description             = "The description of the package",
         ///                                     Summary                 = "Excellent summary of what the package does",
-        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuget/"),
-        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuget/master/icons/testnuget.png"),
-        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuget/blob/master/LICENSE.md"),
+        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuGet/"),
+        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuGet/master/icons/testNuGet.png"),
+        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuGet/blob/master/LICENSE.md"),
         ///                                     Copyright               = "Some company 2015",
         ///                                     ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
         ///                                     Tags                    = new [] {"Cake", "Script", "Build"},
@@ -108,10 +108,10 @@ namespace Cake.Common.Tools.NuGet
         ///                                     Symbols                 = false,
         ///                                     NoPackageAnalysis       = true,
         ///                                     Files                   = new [] {
-        ///                                                                          new NuSpecContent {Source = "bin/TestNuget.dll", Target = "bin"},
+        ///                                                                          new NuSpecContent {Source = "bin/TestNuGet.dll", Target = "bin"},
         ///                                                                       },
-        ///                                     BasePath                = "./src/TestNuget/bin/release",
-        ///                                     OutputDirectory         = "./nuget"
+        ///                                     BasePath                = "./src/TestNuGet/bin/release",
+        ///                                     OutputDirectory         = "./NuGet"
         ///                                 };
         ///
         ///     var nuspecFiles = GetFiles("./**/*.nuspec");
@@ -142,16 +142,16 @@ namespace Cake.Common.Tools.NuGet
         /// <example>
         /// <code>
         ///     var nuGetPackSettings   = new NuGetPackSettings {
-        ///                                     Id                      = "TestNuget",
+        ///                                     Id                      = "TestNuGet",
         ///                                     Version                 = "0.0.0.1",
         ///                                     Title                   = "The tile of the package",
         ///                                     Authors                 = new[] {"John Doe"},
         ///                                     Owners                  = new[] {"Contoso"},
         ///                                     Description             = "The description of the package",
         ///                                     Summary                 = "Excellent summary of what the package does",
-        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuget/"),
-        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuget/master/icons/testnuget.png"),
-        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuget/blob/master/LICENSE.md"),
+        ///                                     ProjectUrl              = new Uri("https://github.com/SomeUser/TestNuGet/"),
+        ///                                     IconUrl                 = new Uri("http://cdn.rawgit.com/SomeUser/TestNuGet/master/icons/testNuGet.png"),
+        ///                                     LicenseUrl              = new Uri("https://github.com/SomeUser/TestNuGet/blob/master/LICENSE.md"),
         ///                                     Copyright               = "Some company 2015",
         ///                                     ReleaseNotes            = new [] {"Bug fixes", "Issue fixes", "Typos"},
         ///                                     Tags                    = new [] {"Cake", "Script", "Build"},
@@ -159,10 +159,10 @@ namespace Cake.Common.Tools.NuGet
         ///                                     Symbols                 = false,
         ///                                     NoPackageAnalysis       = true,
         ///                                     Files                   = new [] {
-        ///                                                                          new NuSpecContent {Source = "bin/TestNuget.dll", Target = "bin"},
+        ///                                                                          new NuSpecContent {Source = "bin/TestNuGet.dll", Target = "bin"},
         ///                                                                       },
-        ///                                     BasePath                = "./src/TestNuget/bin/release",
-        ///                                     OutputDirectory         = "./nuget"
+        ///                                     BasePath                = "./src/TestNuGet/bin/release",
+        ///                                     OutputDirectory         = "./NuGet"
         ///                                 };
         ///
         ///     NuGetPack(nuGetPackSettings);
@@ -591,7 +591,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="packageId">The id of the package to install.</param>
         /// <example>
         /// <code>
-        /// NuGetInstall("MyNugetPackage");
+        /// NuGetInstall("MyNuGetPackage");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -610,7 +610,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="packageIds">The id's of the package to install.</param>
         /// <example>
         /// <code>
-        /// NuGetInstall(new[] { "MyNugetPackage", "OtherNugetPackage" });
+        /// NuGetInstall(new[] { "MyNuGetPackage", "OtherNuGetPackage" });
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -630,7 +630,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        /// NuGetInstall("MyNugetPackage", new NuGetInstallSettings {
+        /// NuGetInstall("MyNuGetPackage", new NuGetInstallSettings {
         ///     ExcludeVersion  = true,
         ///     OutputDirectory = "./tools"
         ///     });
@@ -659,7 +659,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        /// NuGetInstall(new[] { "MyNugetPackage", "OtherNugetPackage" }, new NuGetInstallSettings {
+        /// NuGetInstall(new[] { "MyNuGetPackage", "OtherNuGetPackage" }, new NuGetInstallSettings {
         ///     ExcludeVersion  = true,
         ///     OutputDirectory = "./tools"
         ///     });
@@ -989,7 +989,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="source">Path to the local feed source.</param>
         /// <example>
         /// <code>
-        /// NuGetAdd("MyNugetPackage", "//bar/packages/");
+        /// NuGetAdd("MyNuGetPackage", "//bar/packages/");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -1017,7 +1017,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        /// NuGetAdd("MyNugetPackage", new NuGetAddSettings({
+        /// NuGetAdd("MyNuGetPackage", new NuGetAddSettings({
         ///     Source = "//bar/packages/"
         ///     });
         /// </code>

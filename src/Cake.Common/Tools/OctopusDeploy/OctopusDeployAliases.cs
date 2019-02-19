@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.OctopusDeploy
     /// <para>Contains functionality related to <see href="https://octopus.com/">Octopus Deploy</see>.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the appropriate settings class:
+    /// install from nuget.org, or specify the ToolPath within the appropriate settings class:
     /// <code>
     /// #tool "nuget:?package=OctopusTools"
     /// </code>
@@ -61,7 +61,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         ///                         { "PackageOne", "1.0.2.3" },
         ///                         { "PackageTwo", "5.2.3" }
         ///                     },
-        ///         PackagesFolder = @"C:\MyOtherNugetFeed",
+        ///         PackagesFolder = @"C:\MyOtherNuGetFeed",
         ///
         ///         // One or the other
         ///         ReleaseNotes = "Version 2.0 \n What a milestone we have ...",
