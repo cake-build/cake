@@ -126,6 +126,36 @@ namespace Cake.Common.Tools.DotNetCore.Restore
                 builder.Append("--force");
             }
 
+            // Interactive
+            if (settings.Interactive)
+            {
+                builder.Append("--interactive");
+            }
+
+            // Use lock file
+            if (settings.UseLockFile)
+            {
+                builder.Append("--use-lock-file");
+            }
+
+            // Locked mode
+            if (settings.LockedMode)
+            {
+                builder.Append("--locked-mode");
+            }
+
+            // Lock file path
+            if (settings.LockFilePath != null)
+            {
+                builder.AppendSwitchQuoted("--lock-file-path", " ", settings.LockFilePath.MakeAbsolute(_environment).FullPath);
+            }
+
+            // force evaluate
+            if (settings.ForceEvaluate)
+            {
+                builder.Append("--force-evaluate");
+            }
+
             if (settings.MSBuildSettings != null)
             {
                 builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
