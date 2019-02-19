@@ -128,5 +128,26 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
                     fixture.Log.AggregateLogMessages());
             }
         }
+
+        public sealed class TheBuildProblemMethod
+        {
+            [Theory]
+            [InlineData("A build problem", "identity_id", "description='A build problem' identity='identity_id'")]
+            [InlineData("A build problem", "", "description='A build problem'")]
+            [InlineData("A build problem", null, "description='A build problem'")]
+            public void BuildProblem_Should_Write_To_The_Log_Correctly(string description, string identity, string expected)
+            {
+                // Given
+                var fixture = new TeamCityFixture();
+                var teamCity = fixture.CreateTeamCityService();
+
+                // When
+                teamCity.BuildProblem(description, identity);
+
+                // Then
+                Assert.Equal($"##teamcity[buildProblem {expected}]" + Environment.NewLine,
+                    fixture.Log.AggregateLogMessages());
+            }
+        }
     }
 }
