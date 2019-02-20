@@ -297,6 +297,20 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
                 // Then
                 Assert.Equal(expected, result.Args);
             }
+
+            [Fact]
+            public void Should_Add_MSBuildPath_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new NuGetRestorerFixture();
+                fixture.Settings.MSBuildPath = "MSBuild/15.0/Bin";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("restore \"/Working/project.sln\" -MSBuildPath \"/Working/MSBuild/15.0/Bin\" -NonInteractive", result.Args);
+            }
         }
     }
 }
