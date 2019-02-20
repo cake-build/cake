@@ -303,7 +303,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Restore
             {
                 // Given
                 var fixture = new NuGetRestorerFixture();
-                fixture.Settings.MSDirectoryPath = "MSBuild/15.0/Bin";
+                fixture.Settings.MSBuildPath = "MSBuild/15.0/Bin";
 
                 // When
                 var result = fixture.Run();

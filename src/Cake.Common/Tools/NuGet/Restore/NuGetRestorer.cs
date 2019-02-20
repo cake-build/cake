@@ -121,11 +121,11 @@ namespace Cake.Common.Tools.NuGet.Restore
                 builder.Append(settings.MSBuildVersion.Value.GetNuGetMSBuildVersionString());
             }
 
-            // MSDirectoryPath
-            if (settings.MSDirectoryPath != null)
+            // MSBuildPath
+            if (settings.MSBuildPath != null)
             {
                 builder.Append("-MSBuildPath");
-                builder.AppendQuoted(settings.MSDirectoryPath.MakeAbsolute(_environment).FullPath);
+                builder.AppendQuoted(settings.MSBuildPath.MakeAbsolute(_environment).FullPath);
             }
 
             // NonInteractive?
