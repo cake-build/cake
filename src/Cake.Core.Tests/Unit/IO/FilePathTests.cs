@@ -12,6 +12,22 @@ namespace Cake.Core.Tests.Unit.IO
 {
     public sealed class FilePathTests
     {
+        public sealed class TheConversionFromStringOperator
+        {
+            [Fact]
+            public void Null_String_Converts_To_Null_FilePath()
+            {
+                // Given
+                const string nullString = null;
+
+                // When
+                var path = (FilePath)nullString;
+
+                // Then
+                Assert.Null(path);
+            }
+        }
+
         public sealed class TheHasExtensionProperty
         {
             [Theory]

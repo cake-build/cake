@@ -12,6 +12,22 @@ namespace Cake.Core.Tests.Unit.IO
 {
     public sealed class DirectoryPathTests
     {
+        public sealed class TheConversionFromStringOperator
+        {
+            [Fact]
+            public void Null_String_Converts_To_Null_DirectoryPath()
+            {
+                // Given
+                const string nullString = null;
+
+                // When
+                var path = (DirectoryPath)nullString;
+
+                // Then
+                Assert.Null(path);
+            }
+        }
+
         public sealed class TheGetDirectoryNameMethod
         {
             [WindowsTheory]
