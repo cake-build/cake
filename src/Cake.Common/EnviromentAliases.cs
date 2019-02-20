@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -39,6 +40,35 @@ namespace Cake.Common
                 throw new ArgumentNullException(nameof(variable));
             }
             return context.Environment.GetEnvironmentVariable(variable);
+        }
+
+        /// <summary>
+        /// Retrieves the value of the environment variable or <paramref name="defaultValue"/> if the environment variable does not exist.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// Information(EnvironmentVariable&lt;int&gt;("BUILD_NUMBER", 42));
+        /// </code>
+        /// </example>
+        /// <typeparam name="T">The environment variable type.</typeparam>
+        /// <param name="context">The context.</param>
+        /// <param name="variable">The environment variable.</param>
+        /// <param name="defaultValue">The value to return if the environment variable does not exist.</param>
+        /// <returns>The environment variable or <paramref name="defaultValue"/> if the environment variable does not exist.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Environment Variables")]
+        public static T EnvironmentVariable<T>(this ICakeContext context, string variable, T defaultValue)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (variable == null)
+            {
+                throw new ArgumentNullException(nameof(variable));
+            }
+            var value = context.Environment.GetEnvironmentVariable(variable);
+            return value == null ? defaultValue : Convert<T>(value);
         }
 
         /// <summary>
@@ -154,6 +184,12 @@ namespace Cake.Common
                 throw new ArgumentNullException(nameof(context));
             }
             return context.Environment.Platform.IsUnix();
+        }
+
+        private static T Convert<T>(string value)
+        {
+            var converter = TypeDescriptor.GetConverter(typeof(T));
+            return (T)converter.ConvertFromInvariantString(value);
         }
     }
 }
