@@ -855,6 +855,22 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                              "--server http://octopus --apiKey API-12345 " +
                              "--progress", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Space_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.Settings.Space = "spacename";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--space \"spacename\"", result.Args);
+            }
         }
     }
 }
