@@ -23,6 +23,7 @@ namespace Cake.Core.IO
         private readonly IToolLocator _tools;
         private readonly ICakeConfiguration _configuration;
         private readonly bool _noMonoCoersion;
+        private readonly bool _showCommandLine;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessRunner" /> class.
@@ -42,6 +43,8 @@ namespace Cake.Core.IO
 
             var noMonoCoersion = configuration.GetValue(Constants.Settings.NoMonoCoersion);
             _noMonoCoersion = noMonoCoersion != null && noMonoCoersion.Equals("true", StringComparison.OrdinalIgnoreCase);
+            var showCommandLine = configuration.GetValue(Constants.Settings.ShowProcessCommandLine);
+            _showCommandLine = showCommandLine != null && showCommandLine.Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -125,7 +128,7 @@ namespace Cake.Core.IO
             {
                 // Log the filename and arguments.
                 var message = string.Concat(fileName, " ", arguments.RenderSafe().TrimEnd());
-                _log.Verbose(Verbosity.Diagnostic, "Executing: {0}", message);
+                _log.Verbose(_showCommandLine ? _log.Verbosity : Verbosity.Diagnostic, "Executing: {0}", message);
             }
 
             // Create the process start info.
