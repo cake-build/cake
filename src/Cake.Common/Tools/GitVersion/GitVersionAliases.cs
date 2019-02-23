@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.GitVersion
     /// <para>Contains functionality related to <see href="https://github.com/gittools/gitversion">GitVersion</see>.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the <see cref="GitVersionSettings" /> class:
+    /// install from nuget.org, or specify the ToolPath within the <see cref="GitVersionSettings" /> class:
     /// <code>
     /// #tool "nuget:?package=GitVersion.CommandLine"
     /// </code>
@@ -25,7 +25,7 @@ namespace Cake.Common.Tools.GitVersion
         /// Retrieves the GitVersion output.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns>The git version info.</returns>
+        /// <returns>The Git version info.</returns>
         /// <example>
         /// <para>Update the assembly info files for the project.</para>
         /// <para>Cake task:</para>
@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.GitVersion
         /// });
         /// ]]>
         /// </code>
-        /// <para>Get the git version info for the project using a dynamic repository.</para>
+        /// <para>Get the Git version info for the project using a dynamic repository.</para>
         /// <para>Cake task:</para>
         /// <code>
         /// <![CDATA[
@@ -52,9 +52,9 @@ namespace Cake.Common.Tools.GitVersion
         ///         Password = "MyPassword,
         ///         Url = "http://git.myhost.com/myproject.git"
         ///         Branch = "develop"
-        ///         Commit = EnviromentVariable("MY_COMMIT")
+        ///         Commit = EnvironmentVariable("MY_COMMIT")
         ///     });
-        ///     // Use result for building nuget packages, setting build server version, etc...
+        ///     // Use result for building NuGet packages, setting build server version, etc...
         /// });
         /// ]]>
         /// </code>
@@ -75,7 +75,7 @@ namespace Cake.Common.Tools.GitVersion
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="settings">The GitVersion settings.</param>
-        /// <returns>The git version info.</returns>
+        /// <returns>The Git version info.</returns>
         /// <example>
         /// <para>Update the assembly info files for the project.</para>
         /// <para>Cake task:</para>
@@ -90,7 +90,7 @@ namespace Cake.Common.Tools.GitVersion
         /// });
         /// ]]>
         /// </code>
-        /// <para>Get the git version info for the project using a dynamic repository.</para>
+        /// <para>Get the Git version info for the project using a dynamic repository.</para>
         /// <para>Cake task:</para>
         /// <code>
         /// <![CDATA[
@@ -102,9 +102,9 @@ namespace Cake.Common.Tools.GitVersion
         ///         Password = "MyPassword,
         ///         Url = "http://git.myhost.com/myproject.git"
         ///         Branch = "develop"
-        ///         Commit = EnviromentVariable("MY_COMMIT")
+        ///         Commit = EnvironmentVariable("MY_COMMIT")
         ///     });
-        ///     // Use result for building nuget packages, setting build server version, etc...
+        ///     // Use result for building NuGet packages, setting build server version, etc...
         /// });
         /// ]]>
         /// </code>

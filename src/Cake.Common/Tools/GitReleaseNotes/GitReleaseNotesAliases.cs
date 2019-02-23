@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.GitReleaseNotes
     /// <para>Contains functionality related to <see href="https://github.com/gittools/gitreleasenotes">GitReleaseNotes</see>.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the <see cref="GitReleaseNotesSettings" /> class:
+    /// install from nuget.org, or specify the ToolPath within the <see cref="GitReleaseNotesSettings" /> class:
     /// <code>
     /// #tool "nuget:?package=GitReleaseNotes"
     /// </code>

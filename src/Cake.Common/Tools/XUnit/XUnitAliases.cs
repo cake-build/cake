@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.XUnit
     /// <para>Contains functionality related to running <see href="https://github.com/xunit/xunit">xunit</see> tests.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the <see cref="XUnitSettings" /> class:
+    /// install from nuget.org, or specify the ToolPath within the <see cref="XUnitSettings" /> class:
     /// <code>
     /// #tool "nuget:?package=xunit.runner.console&amp;version=2.2.0"
     /// </code>

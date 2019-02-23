@@ -266,7 +266,7 @@ namespace Cake.Common.Tools.NUnit
         }
 
         /// <summary>
-        /// Customized Nunit3 exit code handling.
+        /// Customized NUnit 3 exit code handling.
         /// Throws <see cref="CakeException"/> on non-zero exit code
         /// </summary>
         /// <param name="exitCode">The process exit code</param>

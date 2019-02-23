@@ -86,7 +86,7 @@ namespace Cake.Core.Tests.Data
         [CakeMethodAlias]
         public static void Generic_ExtensionMethod<TTest>(this ICakeContext context)
         {
-            Debug.Assert(typeof(TTest) != null); // Resharper
+            Debug.Assert(typeof(TTest) != null); // ReSharper
             throw new NotImplementedException();
         }
 

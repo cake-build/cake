@@ -660,7 +660,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
-        /// Deletes a package from the NuGet.org.
+        /// Deletes a package from nuget.org.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageName">Name of package to delete.</param>
@@ -678,7 +678,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
-        /// Deletes a specific version of a package from the NuGet.org.
+        /// Deletes a specific version of a package from nuget.org.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageName">Name of package to delete.</param>

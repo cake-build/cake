@@ -105,7 +105,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("build \"./src/*\" --runtime runtime1 --framework net451 --configuration Release --version-suffix rc1 --verbosity Minimal", result.Args);
+                Assert.Equal("build \"./src/*\" --runtime runtime1 --framework net451 --configuration Release --version-suffix rc1 --verbosity minimal", result.Args);
             }
 
             [Fact]

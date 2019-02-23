@@ -263,11 +263,13 @@ namespace Cake.Common.Build.TeamCity
         /// <param name="identity">Build identity.</param>
         public void BuildProblem(string description, string identity)
         {
-            WriteServiceMessage("buildProblem", new Dictionary<string, string>
+            var tokens = new Dictionary<string, string> { { "description", description } };
+            if (!string.IsNullOrEmpty(identity))
             {
-                { "description", description },
-                { "identity", identity }
-            });
+                tokens.Add("identity", identity);
+            }
+
+            WriteServiceMessage("buildProblem", tokens);
         }
 
         /// <summary>

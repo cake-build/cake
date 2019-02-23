@@ -60,7 +60,7 @@ namespace Cake.Common.Tools.InspectCode
         public Dictionary<string, string> MsBuildProperties { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Gets or sets a list of Resharper extensions which will be used.
+        /// Gets or sets a list of ReSharper extensions which will be used.
         /// </summary>
         public string[] Extensions { get; set; }
 

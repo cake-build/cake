@@ -10,7 +10,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.DotNetCore.NuGet.Delete
 {
     /// <summary>
-    /// .NET Core nuget deleter. Deletes or unlists a package from the server.
+    /// .NET Core NuGet deleter. Deletes or unlists a package from the server.
     /// </summary>
     public sealed class DotNetCoreNuGetDeleter : DotNetCoreTool<DotNetCoreNuGetDeleteSettings>
     {

@@ -18,7 +18,7 @@ namespace Cake.NuGet.Install.Extensions
     {
         public static async Task<IEnumerable<NuGetProjectAction>> GetInstallProjectActionsAsync(
             this NuGetPackageManager packageManager,
-            NugetFolderProject nuGetProject,
+            NuGetFolderProject nuGetProject,
             PackageIdentity packageIdentity,
             ResolutionContext resolutionContext,
             INuGetProjectContext nuGetProjectContext,
@@ -187,7 +187,7 @@ namespace Cake.NuGet.Install.Extensions
 
         private static async Task<Tuple<IReadOnlyCollection<PackageIdentity>, IReadOnlyCollection<SourcePackageDependencyInfo>>> GetPackageAndDependenciesToInstall(
             NuGetPackageManager packageManager,
-            NugetFolderProject nuGetProject,
+            NuGetFolderProject nuGetProject,
             PackageIdentity packageIdentity,
             ResolutionContext resolutionContext,
             INuGetProjectContext nuGetProjectContext,
@@ -233,7 +233,7 @@ namespace Cake.NuGet.Install.Extensions
 
         private static async Task<IReadOnlyCollection<SourcePackageDependencyInfo>> GetAvailablePackageDependencies(
             NuGetPackageManager packageManager,
-            NugetFolderProject nuGetProject,
+            NuGetFolderProject nuGetProject,
             PackageIdentity packageIdentity,
             ResolutionContext resolutionContext,
             INuGetProjectContext nuGetProjectContext,
@@ -305,7 +305,7 @@ namespace Cake.NuGet.Install.Extensions
             PackageIdentity packageIdentity,
             IReadOnlyCollection<PackageIdentity> packagesToInstall,
             IReadOnlyCollection<SourcePackageDependencyInfo> availablePackageDependencies,
-            NugetFolderProject nuGetProject)
+            NuGetFolderProject nuGetProject)
         {
             var nuGetProjectActions = new List<NuGetProjectAction>();
             foreach (var packageToInstall in packagesToInstall)

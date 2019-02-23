@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.InspectCode
 {
     /// <summary>
-    /// Represents Resharper's settings layers.
+    /// Represents ReSharper's settings layers.
     /// </summary>
     public enum SettingsLayer
     {

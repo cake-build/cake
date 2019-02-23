@@ -87,7 +87,7 @@ public class BuildDirectories
 {
     public DirectoryPath Artifacts { get; }
     public DirectoryPath TestResults { get; }
-    public DirectoryPath NugetRoot { get; }
+    public DirectoryPath NuGetRoot { get; }
     public DirectoryPath ArtifactsBin { get; }
     public DirectoryPath ArtifactsBinFullFx { get; }
     public DirectoryPath ArtifactsBinNetCore { get; }
@@ -108,7 +108,7 @@ public class BuildDirectories
     {
         Artifacts = artifactsDir;
         TestResults = testResultsDir;
-        NugetRoot = nugetRoot;
+        NuGetRoot = nugetRoot;
         ArtifactsBin = artifactsBinDir;
         ArtifactsBinFullFx = artifactsBinFullFx;
         ArtifactsBinNetCore = artifactsBinNetCore;
@@ -117,7 +117,7 @@ public class BuildDirectories
         ToClean = new[] {
             Artifacts,
             TestResults,
-            NugetRoot,
+            NuGetRoot,
             ArtifactsBin,
             ArtifactsBinFullFx,
             ArtifactsBinNetCore,

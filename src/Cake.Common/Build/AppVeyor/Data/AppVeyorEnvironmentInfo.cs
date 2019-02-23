@@ -281,7 +281,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <para>Via AppVeyor</para>
         /// <example>
         /// <code>
-        /// // via appveyor
+        /// // via AppVeyor
         /// if (AppVeyor.IsRunningOnAppVeyor)
         /// {
         ///     Information(
