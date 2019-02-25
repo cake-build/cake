@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Build.TFBuild.Data
 {
@@ -19,7 +20,40 @@ namespace Cake.Common.Build.TFBuild.Data
         public TFBuildInfo(ICakeEnvironment environment)
             : base(environment)
         {
+            TriggeredBy = new TFBuildTriggeredBy(environment);
         }
+
+        /// <summary>
+        /// Gets the a special variable that carries the security token used by the running build
+        /// </summary>
+        /// <value>
+        /// The security token
+        /// </value>
+        public string AccessToken => GetEnvironmentString("SYSTEM_ACCESSTOKEN");
+
+        /// <summary>
+        /// Gets a value indicating whether more detailed logs to debug pipeline problems is enabled
+        /// </summary>
+        /// <value>
+        /// True if more detailed logs are enabled
+        /// </value>
+        public bool Debug => GetEnvironmentBoolean("SYSTEM_DEBUG");
+
+        /// <summary>
+        /// Gets the local path on the agent where any artifacts are copied to before being pushed to their destination
+        /// </summary>
+        /// <value>
+        /// The path of the staging directory
+        /// </value>
+        public FilePath ArtifactStagingDirectory => GetEnvironmentString("BUILD_ARTIFACTSTAGINGDIRECTORY");
+
+        /// <summary>
+        /// Gets the local path on the agent you can use as an output folder for compiled binaries
+        /// </summary>
+        /// <value>
+        /// The path to the binaries directory
+        /// </value>
+        public FilePath BinariesDirectory => GetEnvironmentString("BUILD_BINARIESDIRECTORY");
 
         /// <summary>
         /// Gets the ID of the record for the completed build.
@@ -56,10 +90,10 @@ namespace Cake.Common.Build.TFBuild.Data
         public string QueuedBy => GetEnvironmentString("BUILD_QUEUEDBY");
 
         /// <summary>
-        /// Gets the build reason.
+        /// Gets the event that caused the build to run
         /// </summary>
         /// <value>
-        /// The build reason.
+        /// The event name
         /// </value>
         public string Reason => GetEnvironmentString("BUILD_REASON");
 
@@ -78,5 +112,40 @@ namespace Cake.Common.Build.TFBuild.Data
         /// The email of the user the build was requested for.
         /// </value>
         public string RequestedForEmail => GetEnvironmentString("BUILD_REQUESTEDFOREMAIL");
+
+        /// <summary>
+        /// Gets the local path on the agent where your source code files are downloaded
+        /// </summary>
+        /// <value>
+        /// The source code directory
+        /// </value>
+        public FilePath SourcesDirectory => GetEnvironmentString("BUILD_SOURCESDIRECTORY");
+
+        /// <summary>
+        /// Gets the local path on the agent where any artifacts are copied to before being pushed to their destination
+        /// </summary>
+        /// <value>
+        /// The staging directory
+        /// </value>
+        public FilePath StagingDirectory => GetEnvironmentString("BUILD_STAGINGDIRECTORY");
+
+        /// <summary>
+        /// Gets local path on the agent where the test results are created
+        /// </summary>
+        /// <value>
+        /// The test result directory
+        /// </value>
+        public FilePath TestResultsDirectory => GetEnvironmentString("COMMON_TESTRESULTSDIRECTORY");
+
+        /// <summary>
+        /// Gets TF Build TriggeredBy information.
+        /// </summary>
+        /// <remarks>
+        /// This is only populated if the build was triggered by another build
+        /// </remarks>
+        /// <value>
+        /// The TF Build Trigger information.
+        /// </value>
+        public TFBuildTriggeredBy TriggeredBy { get; }
     }
 }
