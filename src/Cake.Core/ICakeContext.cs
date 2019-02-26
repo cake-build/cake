@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -65,5 +66,10 @@ namespace Cake.Core
         /// Gets the data context resolver.
         /// </summary>
         ICakeDataResolver Data { get; }
+
+        /// <summary>
+        /// Gets the cake configuration.
+        /// </summary>
+        ICakeConfiguration Configuration { get; }
     }
 }
