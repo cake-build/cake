@@ -93,6 +93,22 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             }
 
             [Fact]
+            public void Should_Add_Space_To_Query_Filter_If_Not_Null()
+            {
+                // Given
+                var fixture = new OctopusDeploymentQuerierFixture();
+                fixture.Settings.TenantName = "Tenant A";
+                fixture.Settings.Space = "spacename";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("list-deployments --tenant \"Tenant A\" --number 1 " +
+                             "--server http://octopus --apiKey API-12345 --space \"spacename\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Map_All_Query_Filter_Options()
             {
                 // Given
