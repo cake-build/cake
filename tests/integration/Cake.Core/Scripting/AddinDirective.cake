@@ -1,3 +1,5 @@
+#addin nuget:?package=Cake.Incubator&version=4.0.0
+
 Task("Cake.Core.Scripting.AddinDirective.LoadNetStandardAddin")
     .Does(() =>
 {
@@ -12,15 +14,24 @@ Task("Cake.Core.Scripting.AddinDirective.LoadNetStandardAddin")
     ";
 
     CakeExecuteExpression(script,
-    	new CakeSettings {
-    		EnvironmentVariables = new Dictionary<string, string>{
-    			{"CAKE_PATHS_ADDINS", $"{Paths.Temp}/tools/Addins"},
-    			{"CAKE_PATHS_TOOLS", $"{Paths.Temp}/tools"},
-    			{"CAKE_PATHS_MODULES", $"{Paths.Temp}/tools/Modules"}
-    		}});
+        new CakeSettings {
+            EnvironmentVariables = new Dictionary<string, string>{
+                {"CAKE_PATHS_ADDINS", $"{Paths.Temp}/tools/Addins"},
+                {"CAKE_PATHS_TOOLS", $"{Paths.Temp}/tools"},
+                {"CAKE_PATHS_MODULES", $"{Paths.Temp}/tools/Modules"},
+            },
+            Verbosity = Context.Log.Verbosity
+        });
+});
+
+Task("Cake.Core.Scripting.AddinDirective.CallDuplicatedMethod")
+    .Does(context =>
+{
+    var result = context.EnvironmentVariable("CAKE_DOES_ROCK", true);
 });
 
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.AddinDirective")
-    .IsDependentOn("Cake.Core.Scripting.AddinDirective.LoadNetStandardAddin");
+    .IsDependentOn("Cake.Core.Scripting.AddinDirective.LoadNetStandardAddin")
+    .IsDependentOn("Cake.Core.Scripting.AddinDirective.CallDuplicatedMethod");

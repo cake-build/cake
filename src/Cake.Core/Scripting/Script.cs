@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,18 +13,16 @@ namespace Cake.Core.Scripting
     /// </summary>
     public sealed class Script
     {
-        private readonly List<string> _namespaces;
-        private readonly List<string> _lines;
-        private readonly List<ScriptAlias> _aliases;
-        private readonly List<string> _usingAliasDirectives;
-        private readonly List<string> _usingStaticDirectives;
-        private readonly List<string> _defines;
-
         /// <summary>
         /// Gets the namespaces imported via the <c>using</c> statement.
         /// </summary>
         /// <value>The namespaces.</value>
-        public IReadOnlyList<string> Namespaces => _namespaces;
+        public IReadOnlyList<string> Namespaces { get; }
+
+        /// <summary>
+        /// Gets the namespaces flagged to be excluded by code generation and affected aliases.
+        /// </summary>
+        public IDictionary<string, IList<string>> ExcludedNamespaces { get;  }
 
         /// <summary>
         /// Gets the script lines.
@@ -31,31 +30,31 @@ namespace Cake.Core.Scripting
         /// <value>
         /// The lines.
         /// </value>
-        public IReadOnlyList<string> Lines => _lines;
+        public IReadOnlyList<string> Lines { get; }
 
         /// <summary>
         /// Gets the aliases.
         /// </summary>
         /// <value>The aliases.</value>
-        public IReadOnlyList<ScriptAlias> Aliases => _aliases;
+        public IReadOnlyList<ScriptAlias> Aliases { get; }
 
         /// <summary>
         /// Gets the using alias directives.
         /// </summary>
         /// <value>The using alias directives.</value>
-        public IReadOnlyList<string> UsingAliasDirectives => _usingAliasDirectives;
+        public IReadOnlyList<string> UsingAliasDirectives { get; }
 
         /// <summary>
         /// Gets the using static directives.
         /// </summary>
         /// <value>The using static directives.</value>
-        public IReadOnlyList<string> UsingStaticDirectives => _usingStaticDirectives;
+        public IReadOnlyList<string> UsingStaticDirectives { get; }
 
         /// <summary>
         /// Gets the defines.
         /// </summary>
         /// <value>The defines.</value>
-        public IReadOnlyList<string> Defines => _defines;
+        public IReadOnlyList<string> Defines { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Script" /> class.
@@ -74,12 +73,13 @@ namespace Cake.Core.Scripting
             IEnumerable<string> usingStaticDirectives,
             IEnumerable<string> defines)
         {
-            _namespaces = new List<string>(namespaces ?? Enumerable.Empty<string>());
-            _lines = new List<string>(lines ?? Enumerable.Empty<string>());
-            _aliases = new List<ScriptAlias>(aliases ?? Enumerable.Empty<ScriptAlias>());
-            _usingAliasDirectives = new List<string>(usingAliasDirectives ?? Enumerable.Empty<string>());
-            _usingStaticDirectives = new List<string>(usingStaticDirectives ?? Enumerable.Empty<string>());
-            _defines = new List<string>(defines ?? Enumerable.Empty<string>());
+            Namespaces = new List<string>(namespaces ?? Enumerable.Empty<string>());
+            Lines = new List<string>(lines ?? Enumerable.Empty<string>());
+            Aliases = new List<ScriptAlias>(aliases ?? Enumerable.Empty<ScriptAlias>());
+            UsingAliasDirectives = new List<string>(usingAliasDirectives ?? Enumerable.Empty<string>());
+            UsingStaticDirectives = new List<string>(usingStaticDirectives ?? Enumerable.Empty<string>());
+            Defines = new List<string>(defines ?? Enumerable.Empty<string>());
+            ExcludedNamespaces = new Dictionary<string, IList<string>>(StringComparer.Ordinal);
         }
     }
 }
