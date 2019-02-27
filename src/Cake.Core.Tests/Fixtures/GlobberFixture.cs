@@ -125,10 +125,15 @@ namespace Cake.Core.Tests.Fixtures
             return Match(pattern, null);
         }
 
-        public Path[] Match(string pattern, Func<IFileSystemInfo, bool> predicate)
+        public Path[] Match(string pattern, Func<IFileSystemInfo, bool> directoryPredicate)
+        {
+            return Match(pattern, directoryPredicate, null);
+        }
+
+        public Path[] Match(string pattern, Func<IFileSystemInfo, bool> directoryPredicate, Func<IFile, bool> filePredicate)
         {
             return new Globber(FileSystem, Environment)
-                .Match(pattern, new GlobberSettings { Predicate = predicate })
+                .Match(pattern, new GlobberSettings { Predicate = directoryPredicate, FilePredicate = filePredicate })
                 .ToArray();
         }
     }
