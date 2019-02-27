@@ -31,5 +31,16 @@ namespace Cake.Common.Build.BitbucketPipelines
         {
             return _environment.GetEnvironmentVariable(variable) ?? string.Empty;
         }
+
+        /// <summary>
+        /// Gets an environment variable as a <see cref="System.Int32"/>.
+        /// </summary>
+        /// <param name="variable">The environment variable name.</param>
+        /// <returns>The environment variable.</returns>
+        protected int GetEnvironmentInteger(string variable)
+        {
+            var value = GetEnvironmentString(variable);
+            return !string.IsNullOrWhiteSpace(value) && int.TryParse(value, out var result) ? result : 0;
+        }
     }
 }

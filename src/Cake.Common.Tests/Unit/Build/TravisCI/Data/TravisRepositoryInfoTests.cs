@@ -5,72 +5,71 @@
 using Cake.Common.Tests.Fixtures.Build;
 using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.TravicCI.Data
+namespace Cake.Common.Tests.Unit.Build.TravisCI.Data
 {
-    public sealed class TravisJobInfoTests
+    public sealed class TravisRepositoryInfoTests
     {
-        public sealed class TheJobIdProperty
+        public sealed class TheCommitProperty
         {
             [Fact]
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new TravisCIInfoFixture().CreateJobInfo();
+                var info = new TravisCIInfoFixture().CreateRepositoryInfo();
 
                 // When
-                var result = info.JobId;
+                var result = info.Commit;
 
                 // Then
-                Assert.Equal("934", result);
+                Assert.Equal("6cbdbe8", result);
             }
         }
 
-        public sealed class TheJobNumerProperty
+        public sealed class TheCommitRangeProperty
         {
             [Fact]
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new TravisCIInfoFixture().CreateJobInfo();
+                var info = new TravisCIInfoFixture().CreateRepositoryInfo();
 
                 // When
-                var result = info.JobNumber;
+                var result = info.CommitRange;
 
                 // Then
-                Assert.Equal("934.2", result);
+                Assert.Equal("6cb4d6...5ba6dbe8", result);
             }
         }
 
-        // ReSharper disable once InconsistentNaming
-        public sealed class TheOSNameProperty
+        public sealed class ThePullRequestProperty
         {
             [Fact]
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new TravisCIInfoFixture().CreateJobInfo();
+                var info = new TravisCIInfoFixture().CreateRepositoryInfo();
 
                 // When
-                var result = info.OSName;
+                var result = info.PullRequest;
 
                 // Then
-                Assert.Equal("osx", result);
+                Assert.Equal("1", result);
             }
         }
 
-        public sealed class TheSecureEnvironmentVariablesProperty
+        public sealed class TheSlugProperty
         {
             [Fact]
             public void Should_Return_Correct_Value()
             {
                 // Given
-                var info = new TravisCIInfoFixture().CreateJobInfo();
+                var info = new TravisCIInfoFixture().CreateRepositoryInfo();
 
                 // When
-                var result = info.SecureEnvironmentVariables;
+                var result = info.Slug;
 
                 // Then
-                Assert.False(result);
+                Assert.Equal("4d65ba6", result);
             }
         }
     }

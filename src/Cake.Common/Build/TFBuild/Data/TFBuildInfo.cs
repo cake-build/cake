@@ -56,6 +56,14 @@ namespace Cake.Common.Build.TFBuild.Data
         public string QueuedBy => GetEnvironmentString("BUILD_QUEUEDBY");
 
         /// <summary>
+        /// Gets the build reason.
+        /// </summary>
+        /// <value>
+        /// The build reason.
+        /// </value>
+        public string Reason => GetEnvironmentString("BUILD_REASON");
+
+        /// <summary>
         /// Gets the user the build was requested for.
         /// </summary>
         /// <value>

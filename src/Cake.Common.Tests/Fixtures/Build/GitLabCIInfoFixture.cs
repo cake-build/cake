@@ -44,7 +44,10 @@ namespace Cake.Common.Tests.Fixtures.Build
                 Environment.GetEnvironmentVariable("CI_BUILD_TRIGGERED").Returns("true");
                 Environment.GetEnvironmentVariable("CI_BUILD_TOKEN").Returns("abcde-1234ABCD5678ef");
             }
+            Environment.GetEnvironmentVariable("CI_MERGE_REQUEST_ID").Returns("10");
+            Environment.GetEnvironmentVariable("CI_MERGE_REQUEST_IID").Returns("1");
             Environment.GetEnvironmentVariable("CI_PIPELINE_ID").Returns("1000");
+            Environment.GetEnvironmentVariable("CI_PIPELINE_IID").Returns("100");
             Environment.GetEnvironmentVariable("CI_PROJECT_ID").Returns("34");
             Environment.GetEnvironmentVariable("CI_PROJECT_DIR").Returns("/builds/gitlab-org/gitlab-ce");
             Environment.GetEnvironmentVariable("CI_PROJECT_NAME").Returns("gitlab-ce");
@@ -67,6 +70,11 @@ namespace Cake.Common.Tests.Fixtures.Build
         public GitLabCIBuildInfo CreateBuildInfo()
         {
             return new GitLabCIBuildInfo(Environment);
+        }
+
+        public GitLabCIPullRequestInfo CreatePullRequestInfo()
+        {
+            return new GitLabCIPullRequestInfo(Environment);
         }
 
         public GitLabCIProjectInfo CreateProjectInfo()

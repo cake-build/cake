@@ -8,7 +8,7 @@ using Cake.Common.Tests.Fixtures.Build;
 using Cake.Testing.Extensions;
 using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.TravicCI
+namespace Cake.Common.Tests.Unit.Build.TravisCI
 {
     public sealed class TravisCIProviderTests
     {

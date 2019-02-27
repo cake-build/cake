@@ -130,6 +130,14 @@ namespace Cake.Common.Build
                 | (TFBuild.IsRunningOnAzurePipelinesHosted ? BuildProvider.AzurePipelinesHosted : BuildProvider.Local);
 
             IsLocalBuild = Provider == BuildProvider.Local;
+
+            IsPullRequest = ((Provider & BuildProvider.AppVeyor) != 0 && AppVeyor.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.TeamCity) != 0 && TeamCity.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.Bitrise) != 0 && Bitrise.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.TravisCI) != 0 && TravisCI.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.BitbucketPipelines) != 0 && BitbucketPipelines.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.GitLabCI) != 0 && GitLabCI.Environment.PullRequest.IsPullRequest)
+                || ((Provider & (BuildProvider.AzurePipelines | BuildProvider.AzurePipelinesHosted)) != 0 && TFBuild.Environment.PullRequest.IsPullRequest);
         }
 
         /// <summary>
@@ -589,5 +597,13 @@ namespace Cake.Common.Build
         ///   <c>true</c> if the current build is local build; otherwise, <c>false</c>.
         /// </value>
         public bool IsLocalBuild { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the current build was started by a pull request.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsPullRequest { get; }
     }
 }

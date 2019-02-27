@@ -22,6 +22,9 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("BITBUCKET_REPO_OWNER").Returns("cakebuild");
             Environment.GetEnvironmentVariable("BITBUCKET_BRANCH").Returns("develop");
             Environment.GetEnvironmentVariable("BITBUCKET_TAG").Returns("BitbucketPipelines");
+
+            // BitbucketPipelines PullRequestInfo
+            Environment.GetEnvironmentVariable("BITBUCKET_PR_ID").Returns("1");
         }
 
         public BitbucketPipelinesEnvironmentInfo CreateEnvironmentInfo()
@@ -32,6 +35,11 @@ namespace Cake.Common.Tests.Fixtures.Build
         public BitbucketPipelinesRepositoryInfo CreateRepositoryInfo()
         {
             return new BitbucketPipelinesRepositoryInfo(Environment);
+        }
+
+        public BitbucketPipelinesPullRequestInfo CreatePullRequestInfo()
+        {
+            return new BitbucketPipelinesPullRequestInfo(Environment);
         }
     }
 }
