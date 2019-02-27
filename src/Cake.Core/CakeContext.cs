@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -26,6 +27,7 @@ namespace Cake.Core
         /// <param name="registry">The registry.</param>
         /// <param name="tools">The tool locator.</param>
         /// <param name="data">The data service.</param>
+        /// <param name="configuration">The cake configuration.</param>
         public CakeContext(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -35,7 +37,8 @@ namespace Cake.Core
             IProcessRunner processRunner,
             IRegistry registry,
             IToolLocator tools,
-            ICakeDataService data)
+            ICakeDataService data,
+            ICakeConfiguration configuration)
         {
             FileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -46,6 +49,7 @@ namespace Cake.Core
             Registry = registry ?? throw new ArgumentNullException(nameof(registry));
             Tools = tools ?? throw new ArgumentNullException(nameof(tools));
             Data = data ?? throw new ArgumentNullException(nameof(data));
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         /// <summary>
@@ -116,5 +120,10 @@ namespace Cake.Core
         /// Gets the data context resolver.
         /// </summary>
         public ICakeDataResolver Data { get; }
+
+        /// <summary>
+        /// Gets the cake configuration.
+        /// </summary>
+        public ICakeConfiguration Configuration { get; }
     }
 }
