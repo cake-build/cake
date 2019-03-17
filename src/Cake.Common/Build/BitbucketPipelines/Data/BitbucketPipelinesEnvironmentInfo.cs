@@ -70,12 +70,59 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         public BitbucketPipelinesRepositoryInfo Repository { get; }
 
         /// <summary>
+        /// Gets Bitbucket Pipelines pull request information.
+        /// </summary>
+        /// <value>
+        /// The Bitbucket Pipelines pull request information.
+        /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.BitbucketPipelines.IsRunningOnBitbucketPipelines)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Id: {1}",
+        ///         BuildSystem.BitbucketPipelines.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.BitbucketPipelines.Environment.PullRequest.Id
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on BitbucketPipelines");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via BitbucketPipelines</para>
+        /// <example>
+        /// <code>
+        /// if (BitbucketPipelines.IsRunningOnBitbucketPipelines)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Id: {1}",
+        ///         BitbucketPipelines.Environment.PullRequest.IsPullRequest,
+        ///         BitbucketPipelines.Environment.PullRequest.Id
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on BitbucketPipelines");
+        /// }
+        /// </code>
+        /// </example>
+        public BitbucketPipelinesPullRequestInfo PullRequest { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BitbucketPipelinesEnvironmentInfo"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
         public BitbucketPipelinesEnvironmentInfo(ICakeEnvironment environment) : base(environment)
         {
             Repository = new BitbucketPipelinesRepositoryInfo(environment);
+            PullRequest = new BitbucketPipelinesPullRequestInfo(environment);
         }
     }
 }

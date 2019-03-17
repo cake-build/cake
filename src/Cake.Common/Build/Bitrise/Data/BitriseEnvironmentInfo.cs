@@ -120,6 +120,52 @@ namespace Cake.Common.Build.Bitrise.Data
         public BitriseBuildInfo Build { get; }
 
         /// <summary>
+        /// Gets Bitrise pull request information.
+        /// </summary>
+        /// <value>
+        /// The Bitrise pull request information.
+        /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.Bitrise.IsRunningOnBitrise)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Id: {1}",
+        ///         BuildSystem.Bitrise.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.Bitrise.Environment.PullRequest.Id
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on Bitrise");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via Bitrise</para>
+        /// <example>
+        /// <code>
+        /// if (Bitrise.IsRunningOnBitrise)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Id: {1}",
+        ///         Bitrise.Environment.PullRequest.IsPullRequest,
+        ///         Bitrise.Environment.PullRequest.Id
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on Bitrise");
+        /// }
+        /// </code>
+        /// </example>
+        public BitrisePullRequestInfo PullRequest { get; }
+
+        /// <summary>
         /// Gets Bitrise directory information.
         /// </summary>
         /// <value>
@@ -327,6 +373,7 @@ namespace Cake.Common.Build.Bitrise.Data
         {
             Application = new BitriseApplicationInfo(environment);
             Build = new BitriseBuildInfo(environment);
+            PullRequest = new BitrisePullRequestInfo(environment);
             Provisioning = new BitriseProvisioningInfo(environment);
             Repository = new BitriseRepositoryInfo(environment);
             Workflow = new BitriseWorkflowInfo(environment);

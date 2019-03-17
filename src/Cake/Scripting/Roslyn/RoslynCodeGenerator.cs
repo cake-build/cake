@@ -22,14 +22,37 @@ namespace Cake.Scripting.Roslyn
 
         private static string GetAliasCode(Script context)
         {
-            var result = new List<string>();
+            var result = new Dictionary<string, string>();
             foreach (var alias in context.Aliases)
             {
-                result.Add(alias.Type == ScriptAliasType.Method
-                    ? MethodAliasGenerator.Generate(alias.Method)
-                    : PropertyAliasGenerator.Generate(alias.Method));
+                string hash, code = alias.Type == ScriptAliasType.Method
+                    ? MethodAliasGenerator.Generate(alias.Method, out hash)
+                    : PropertyAliasGenerator.Generate(alias.Method, out hash);
+
+                string @namespace = alias.Method.DeclaringType.Namespace ?? "@null";
+                if (result.ContainsKey(hash))
+                {
+                    var message = $"{alias.Type.ToString().ToLowerInvariant()} \"{alias.Name}\" excluded from code generation and will need to be fully qualified on ICakeContext.";
+                    if (context.ExcludedNamespaces.ContainsKey(@namespace))
+                    {
+                        context.ExcludedNamespaces[@namespace].Add(message);
+                    }
+                    else
+                    {
+                        context.ExcludedNamespaces.Add(@namespace,
+                            new List<string>() { message });
+                    }
+                    continue;
+                }
+                else if (context.ExcludedNamespaces.ContainsKey(@namespace))
+                {
+                    var message = $"{alias.Type.ToString().ToLowerInvariant()} \"{alias.Name}\" was included in code generation, but will need to be fully qualified on ICakeContext.";
+                    context.ExcludedNamespaces[@namespace].Add(message);
+                }
+
+                result.Add(hash, code);
             }
-            return string.Join("\r\n", result);
+            return string.Join("\r\n", result.Values);
         }
     }
 }

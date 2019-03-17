@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -17,6 +18,8 @@ namespace Cake.Core.Scripting.CodeGen
     /// </summary>
     public static class PropertyAliasGenerator
     {
+        private static readonly System.Security.Cryptography.SHA256 SHA256 = System.Security.Cryptography.SHA256.Create();
+
         /// <summary>
         /// Generates a script property alias from the specified method.
         /// The provided method must be an extension method for <see cref="ICakeContext"/>
@@ -24,7 +27,17 @@ namespace Cake.Core.Scripting.CodeGen
         /// </summary>
         /// <param name="method">The method to generate the code for.</param>
         /// <returns>The generated code.</returns>
-        public static string Generate(MethodInfo method)
+        public static string Generate(MethodInfo method) => Generate(method, out _);
+
+        /// <summary>
+        /// Generates a script property alias from the specified method.
+        /// The provided method must be an extension method for <see cref="ICakeContext"/>
+        /// and it must be decorated with the <see cref="CakePropertyAliasAttribute"/>.
+        /// </summary>
+        /// <param name="method">The method to generate the code for.</param>
+        /// <param name="hash">The hash of property signature.</param>
+        /// <returns>The generated code.</returns>
+        public static string Generate(MethodInfo method, out string hash)
         {
             if (method == null)
             {
@@ -40,8 +53,8 @@ namespace Cake.Core.Scripting.CodeGen
 
             // Generate code.
             return attribute.Cache
-                ? GenerateCachedCode(method)
-                    : GenerateCode(method);
+                ? GenerateCachedCode(method, out hash)
+                    : GenerateCode(method, out hash);
         }
 
         private static void ValidateMethod(MethodInfo method)
@@ -98,15 +111,12 @@ namespace Cake.Core.Scripting.CodeGen
             }
         }
 
-        private static string GenerateCode(MethodInfo method)
+        private static string GenerateCode(MethodInfo method, out string hash)
         {
             var builder = new StringBuilder();
 
-            builder.Append("public ");
-            builder.Append(GetReturnType(method));
-            builder.Append(" ");
-            builder.Append(method.Name);
-            builder.AppendLine();
+            hash = GenerateCommonInitalCode(method, ref builder);
+
             builder.Append("{");
             builder.AppendLine();
             builder.Append("    get");
@@ -150,7 +160,25 @@ namespace Cake.Core.Scripting.CodeGen
             return builder.ToString();
         }
 
-        private static string GenerateCachedCode(MethodInfo method)
+        private static string GenerateCommonInitalCode(MethodInfo method, ref StringBuilder builder)
+        {
+            string hash;
+            var curPos = builder.Length;
+            builder.Append("public ");
+            builder.Append(GetReturnType(method));
+            builder.Append(" ");
+            builder.Append(method.Name);
+            builder.AppendLine();
+
+            hash = SHA256
+                .ComputeHash(Encoding.UTF8.GetBytes(builder.ToString(curPos, builder.Length - curPos)))
+                .Aggregate(new StringBuilder(),
+                (sb, b) => sb.AppendFormat("{0:x2}", b),
+                sb => sb.ToString());
+            return hash;
+        }
+
+        private static string GenerateCachedCode(MethodInfo method, out string hash)
         {
             var builder = new StringBuilder();
 
@@ -160,7 +188,7 @@ namespace Cake.Core.Scripting.CodeGen
             {
                 if (obsolete.IsError)
                 {
-                    return GenerateCode(method);
+                    return GenerateCode(method, out hash);
                 }
             }
 
@@ -177,11 +205,7 @@ namespace Cake.Core.Scripting.CodeGen
             builder.AppendLine();
 
             // Property
-            builder.Append("public ");
-            builder.Append(GetReturnType(method));
-            builder.Append(" ");
-            builder.Append(method.Name);
-            builder.AppendLine();
+            hash = GenerateCommonInitalCode(method, ref builder);
             builder.Append("{");
             builder.AppendLine();
             builder.AppendLine("    get");

@@ -8,7 +8,7 @@ using Cake.Core;
 namespace Cake.Common.Build.GitLabCI
 {
     /// <summary>
-    /// Base class used to provide information about the Bitbucket Pipelines environment.
+    /// Base class used to provide information about the GitLab CI environment.
     /// </summary>
     public abstract class GitLabCIInfo
     {

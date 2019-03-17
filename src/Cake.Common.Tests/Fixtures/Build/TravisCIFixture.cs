@@ -21,7 +21,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Log = new FakeLog();
         }
 
-        public void IsRunningOnTravicCI()
+        public void IsRunningOnTravisCI()
         {
             Environment.GetEnvironmentVariable("TRAVIS").Returns("true");
         }

@@ -5,7 +5,7 @@
 using Cake.Common.Tests.Fixtures.Build;
 using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.TravicCI
+namespace Cake.Common.Tests.Unit.Build.TravisCI
 {
     public sealed class TravisCIEnvironmentInfoTests
     {

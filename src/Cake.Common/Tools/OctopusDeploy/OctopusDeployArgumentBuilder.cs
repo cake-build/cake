@@ -104,6 +104,8 @@ namespace Cake.Common.Tools.OctopusDeploy
             {
                 Builder.Append("--enableServiceMessages");
             }
+
+            AppendArgumentIfNotNull("space", Settings.Space);
         }
     }
 }
