@@ -20,9 +20,11 @@ namespace Cake.Core.Tests.Fixtures
         public ICakeLog Log { get; set; }
         public List<ILoadDirectiveProvider> Providers { get; set; }
 
-        public ScriptAnalyzerFixture()
+        public ScriptAnalyzerFixture(bool windows = false)
         {
-            Environment = FakeEnvironment.CreateUnixEnvironment();
+            Environment = windows
+                ? FakeEnvironment.CreateWindowsEnvironment()
+                : FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
             Globber = new Globber(FileSystem, Environment);
             Log = Substitute.For<ICakeLog>();
