@@ -34,5 +34,18 @@ namespace Cake.Core
         /// <c>true</c> if skipped; otherwise, <c>false</c>.
         /// </value>
         bool Skipped { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="CakeTask"/> was successful
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if successful; otherwise <c>false</c>.
+        /// </value>
+        bool Successful { get; }
+
+        /// <summary>
+        /// Gets the exception that was thrown by the tasl.
+        /// </summary>
+        Exception ThrownException { get; }
     }
 }
