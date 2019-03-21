@@ -350,7 +350,7 @@ namespace Cake.Core
                 // Got an error handler?
                 if (task.ErrorHandler != null)
                 {
-                    HandleErrors(strategy, task.ErrorHandler, exception);
+                    HandleErrors(strategy, task.ErrorHandler, exception, context);
                 }
                 else
                 {
@@ -456,11 +456,11 @@ namespace Cake.Core
             }
         }
 
-        private void HandleErrors(IExecutionStrategy strategy, Action<Exception> errorHandler, Exception exception)
+        private void HandleErrors(IExecutionStrategy strategy, Action<Exception, ICakeContext> errorHandler, Exception exception, ICakeContext context)
         {
             try
             {
-                strategy.HandleErrors(errorHandler, exception);
+                strategy.HandleErrors(errorHandler, exception, context);
             }
             catch (Exception errorHandlerException)
             {

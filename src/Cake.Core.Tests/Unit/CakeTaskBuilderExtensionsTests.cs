@@ -482,18 +482,130 @@ namespace Cake.Core.Tests.Unit
 
         public sealed class TheOnErrorMethod
         {
-            [Fact]
-            public void Should_Set_The_Error_Handler()
+            public sealed class WithData
             {
-                // Given
-                var task = new CakeTask("task");
-                var builder = new CakeTaskBuilder(task);
+                public sealed class WithContext
+                {
+                    public sealed class WithException
+                    {
+                        [Fact]
+                        public void Should_Set_The_Error_Handler()
+                        {
+                            // Given
+                            var task = new CakeTask("task");
+                            var builder = new CakeTaskBuilder(task);
 
-                // When
-                builder.OnError(exception => { });
+                            // When
+                            builder.OnError<string>((exception, context, data) => { });
 
-                // Then
-                Assert.NotNull(builder.Target.ErrorHandler);
+                            // Then
+                            Assert.NotNull(builder.Target.ErrorHandler);
+                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                        }
+                    }
+                }
+
+                public sealed class WithoutContext
+                {
+                    public sealed class WithException
+                    {
+                        [Fact]
+                        public void Should_Set_The_Error_Handler()
+                        {
+                            // Given
+                            var task = new CakeTask("task");
+                            var builder = new CakeTaskBuilder(task);
+
+                            // When
+                            builder.OnError((Exception exception, string data) => { });
+
+                            // Then
+                            Assert.NotNull(builder.Target.ErrorHandler);
+                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                        }
+                    }
+
+                    public sealed class WithoutException
+                    {
+                        [Fact]
+                        public void Should_Set_The_Error_Handler()
+                        {
+                            // Given
+                            var task = new CakeTask("task");
+                            var builder = new CakeTaskBuilder(task);
+
+                            // When
+                            builder.OnError<string>(data => { });
+
+                            // Then
+                            Assert.NotNull(builder.Target.ErrorHandler);
+                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                        }
+                    }
+                }
+            }
+
+            public sealed class WithoutData
+            {
+                public sealed class WithContext
+                {
+                    public sealed class WithException
+                    {
+                        [Fact]
+                        public void Should_Set_The_Error_Handler()
+                        {
+                            // Given
+                            var task = new CakeTask("task");
+                            var builder = new CakeTaskBuilder(task);
+
+                            // When
+                            builder.OnError((exception, context) => { });
+
+                            // Then
+                            Assert.NotNull(builder.Target.ErrorHandler);
+                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                        }
+                    }
+                }
+
+                public sealed class WithoutContext
+                {
+                    public sealed class WithException
+                    {
+                        [Fact]
+                        public void Should_Set_The_Error_Handler()
+                        {
+                            // Given
+                            var task = new CakeTask("task");
+                            var builder = new CakeTaskBuilder(task);
+
+                            // When
+                            builder.OnError(exception => { });
+
+                            // Then
+                            Assert.NotNull(builder.Target.ErrorHandler);
+                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                        }
+                    }
+
+                    public sealed class WithoutException
+                    {
+                        [Fact]
+                        public void Should_Set_The_Error_Handler()
+                        {
+                            // Given
+                            var task = new CakeTask("task");
+                            var builder = new CakeTaskBuilder(task);
+
+                            // When
+                            builder.OnError(() => { });
+
+                            // Then
+                            Assert.NotNull(builder.Target.ErrorHandler);
+                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                        }
+                    }
+                }
             }
         }
 
