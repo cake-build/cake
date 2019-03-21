@@ -46,6 +46,12 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
             ProcessRunner.Process.SetStandardOutput(standardOutput);
             Log = Substitute.For<ICakeLog>();
+            Log.Verbosity = Verbosity.Normal;
+        }
+
+        public void SetLogVerbosity(Verbosity verbosity)
+        {
+            Log.Verbosity = verbosity;
         }
 
         protected override void RunTool()
