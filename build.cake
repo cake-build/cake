@@ -250,7 +250,8 @@ Task("Validate-Version")
          fullFxExe,
          new ProcessSettings {
              Arguments = "--version",
-             RedirectStandardOutput = true
+             RedirectStandardOutput = true,
+             WorkingDirectory = parameters.Paths.Directories.ArtifactsBinFullFx
          },
          out fullFxOutput
      );
@@ -261,7 +262,8 @@ Task("Validate-Version")
          "dotnet",
          new ProcessSettings {
              Arguments = $"\"{coreFxExe}\" --version",
-             RedirectStandardOutput = true
+             RedirectStandardOutput = true,
+             WorkingDirectory = parameters.Paths.Directories.ArtifactsBinNetCore
          },
          out coreFxOutput
      );
