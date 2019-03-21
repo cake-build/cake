@@ -36,7 +36,8 @@ var logObjectMethods = new [] {
     new { Name = "Debug", Action = new Action<object>(Debug)}
 };
 
-var loggingAliasesTask = Task("Cake.Common.Diagnostics.LoggingAliases");
+var loggingAliasesTask = Task("Cake.Common.Diagnostics.LoggingAliases")
+                            .IsDependentOn("Cake.Common.Diagnostics.LoggingAliases.GetCallerInfo");
 
 Array.ForEach(
     verbosities,
@@ -144,3 +145,23 @@ Array.ForEach(
                                     }).Task.Name
                         ))
 );
+
+Task("Cake.Common.Diagnostics.LoggingAliases.GetCallerInfo")
+    .Does( ()=> {
+    // Given
+    ScriptCallerInfo callerInfoDSL;
+    ScriptCallerInfo callerInfo;
+
+    // When
+    CallerInfoTest(out callerInfoDSL, out callerInfo);
+
+    // Then
+    Assert.Equal(callerInfo.MemberName, callerInfoDSL.MemberName);
+    Assert.Equal(callerInfo.SourceFilePath.FullPath, callerInfoDSL.SourceFilePath.FullPath);
+    Assert.Equal(callerInfo.SourceLineNumber, callerInfoDSL.SourceLineNumber);
+});
+
+public void CallerInfoTest(out ScriptCallerInfo callerInfoDSL, out ScriptCallerInfo callerInfo)
+{
+    callerInfoDSL = GetCallerInfo(); callerInfo = Context.GetCallerInfo();
+}
