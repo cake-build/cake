@@ -70,7 +70,7 @@ namespace Cake.Core
         /// Gets the task's actions that are run at execution time to additionally populate <see cref="Actions"/>.
         /// </summary>
         /// <value>The task's delayed actions actions.</value>
-        public Queue<Action> DelayedActions { get; }
+        public Queue<Action<ICakeContext>> DelayedActions { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether gets the task's state if it will defer exceptions until the end of the task.
@@ -101,7 +101,7 @@ namespace Cake.Core
             Dependees = new List<CakeTaskDependency>();
             Criterias = new List<CakeTaskCriteria>();
             Actions = new List<Func<ICakeContext, Task>>();
-            DelayedActions = new Queue<Action>();
+            DelayedActions = new Queue<Action<ICakeContext>>();
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Cake.Core
             while (DelayedActions.Count > 0)
             {
                 var delayedDelegate = DelayedActions.Dequeue();
-                delayedDelegate();
+                delayedDelegate(context);
             }
 
             var exceptions = new List<Exception>();

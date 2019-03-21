@@ -126,7 +126,7 @@ namespace Cake.Core
         /// <param name="task">The task.</param>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        public static void AddDelayedAction(this CakeTask task, Action action)
+        public static void AddDelayedAction(this CakeTask task, Action<ICakeContext> action)
         {
             if (action == null)
             {
