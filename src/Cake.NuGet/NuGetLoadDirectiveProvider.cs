@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
@@ -56,21 +57,24 @@ namespace Cake.NuGet
             var toolPath = GetToolPath(_environment.WorkingDirectory);
 
             // Install the NuGet package.
-            var files = _installer.Install(package, PackageType.Tool, toolPath);
-            if (files.Count == 0)
+            var files = _installer
+                .Install(package, PackageType.Tool, toolPath)
+                .Where(file =>
+                {
+                    var extension = file.Path.GetExtension();
+                    return extension != null && extension.Equals(".cake", StringComparison.OrdinalIgnoreCase);
+                })
+                .ToArray();
+            if (files.Length == 0)
             {
-                // No files found.
+                // No scripts found.
                 _log.Warning("No scripts found in NuGet package {0}.", package.Package);
                 return;
             }
 
             foreach (var file in files)
             {
-                var extension = file.Path.GetExtension();
-                if (extension != null && extension.Equals(".cake", StringComparison.OrdinalIgnoreCase))
-                {
-                    context.Analyze(file.Path);
-                }
+                context.Analyze(file.Path);
             }
         }
 

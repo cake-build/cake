@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Analysis;
 
@@ -12,6 +13,15 @@ namespace Cake.Core.Scripting.Processors.Loading
 {
     internal sealed class FileLoadDirectiveProvider : ILoadDirectiveProvider
     {
+        private readonly IGlobber _globber;
+        private readonly ICakeLog _log;
+
+        public FileLoadDirectiveProvider(IGlobber globber, ICakeLog log)
+        {
+            _globber = globber;
+            _log = log;
+        }
+
         public bool CanLoad(IScriptAnalyzerContext context, LoadReference reference)
         {
             return reference.Scheme != null && reference.Scheme.Equals("local", StringComparison.OrdinalIgnoreCase);
@@ -44,8 +54,25 @@ namespace Cake.Core.Scripting.Processors.Loading
             var current = context.Current.Path.GetDirectory();
             path = path.MakeAbsolute(current);
 
-            // Analyze the script.
-            context.Analyze(path);
+            var files = _globber
+                .GetFiles(path.FullPath)
+                .Where(file =>
+                {
+                    var extension = file.GetExtension();
+                    return extension != null && extension.Equals(".cake", StringComparison.OrdinalIgnoreCase);
+                })
+                .ToArray();
+            if (files.Length == 0)
+            {
+                // No scripts found.
+                _log.Warning("No scripts found at {0}.", path);
+                return;
+            }
+
+            foreach (var file in files)
+            {
+                context.Analyze(file);
+            }
         }
     }
 }
