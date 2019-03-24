@@ -9,5 +9,7 @@ Task("Cake.Core.Scripting.LoadDirective.WithSpaces")
 
 //////////////////////////////////////////////////////////////////////////////
 
-Task("Cake.Core.Scripting.LoadDirective")
+var loadDirectiveTask = Task("Cake.Core.Scripting.LoadDirective")
     .IsDependentOn("Cake.Core.Scripting.LoadDirective.WithSpaces");
+
+#load "../../resources/Cake.Core/Scripting/Globber/**/no*.cake"
