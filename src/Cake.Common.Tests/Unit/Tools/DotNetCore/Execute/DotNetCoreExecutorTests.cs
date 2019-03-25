@@ -84,14 +84,14 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Execute
             {
                 // Given
                 var fixture = new DotNetCoreExecutorFixture();
-                fixture.AssemblyPath = "./bin/Debug/app.dll";
+                fixture.AssemblyPath = "./Some Folder/Debug/app.dll";
                 fixture.Settings.FrameworkVersion = "1.0.3";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--fx-version 1.0.3 \"/Working/bin/Debug/app.dll\"", result.Args);
+                Assert.Equal("--fx-version 1.0.3 \"/Working/Some Folder/Debug/app.dll\"", result.Args);
             }
 
             [Fact]
