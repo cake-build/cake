@@ -76,7 +76,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Execute
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/bin/Debug/app.dll", result.Args);
+                Assert.Equal("\"/Working/bin/Debug/app.dll\"", result.Args);
             }
 
             [Fact]
@@ -91,7 +91,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Execute
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--fx-version 1.0.3 /Working/bin/Debug/app.dll", result.Args);
+                Assert.Equal("--fx-version 1.0.3 \"/Working/bin/Debug/app.dll\"", result.Args);
             }
 
             [Fact]
@@ -106,7 +106,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Execute
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--diagnostics /Working/bin/Debug/app.dll", result.Args);
+                Assert.Equal("--diagnostics \"/Working/bin/Debug/app.dll\"", result.Args);
             }
         }
     }
