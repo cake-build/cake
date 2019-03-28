@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Common.Text;
 using Cake.Core;
 using NSubstitute;
@@ -9,8 +10,6 @@ using Xunit;
 
 namespace Cake.Common.Tests.Unit.Text
 {
-    using System.Collections.Generic;
-
     public sealed class TextTransformationExtensionsTests
     {
         public sealed class TheWithTokenMethod
@@ -44,7 +43,10 @@ namespace Cake.Common.Tests.Unit.Text
                 // Then
                 Assert.Same(transformation, result);
             }
+        }
 
+        public sealed class TheWithTokensMethod
+        {
             [Fact]
             public void Should_Register_The_Provided_Tokens_With_The_Template()
             {

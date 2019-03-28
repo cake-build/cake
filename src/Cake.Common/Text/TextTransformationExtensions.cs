@@ -2,21 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Collections.Generic;
 using Cake.Core.Text;
 
 namespace Cake.Common.Text
 {
-    using System;
-    using System.Collections.Generic;
-
     /// <summary>
     /// Contains extension methods for <see cref="TextTransformation{TTemplate}"/>.
     /// </summary>
     public static class TextTransformationExtensions
     {
         /// <summary>
-        /// Registers a key and a value to be used with the
-        /// text transformation.
+        /// Registers a key and a value to be used with the text transformation.
         /// </summary>
         /// <typeparam name="TTemplate">The text transformation template.</typeparam>
         /// <param name="transformation">The text transformation.</param>
@@ -34,7 +32,7 @@ namespace Cake.Common.Text
         }
 
         /// <summary>
-        /// Registers all keys and values in the dictionary for text transformation.
+        /// Registers all keys and values in the enumerable for text transformation.
         /// </summary>
         /// <typeparam name="TTemplate">The text transformation template.</typeparam>
         /// <param name="transformation">The text transformation.</param>
@@ -43,7 +41,7 @@ namespace Cake.Common.Text
         /// The same <see cref="TextTransformation{TTemplate}" /> instance so that multiple calls can be chained.
         /// </returns>
         public static TextTransformation<TTemplate> WithTokens<TTemplate>(
-            this TextTransformation<TTemplate> transformation, IDictionary<string, object> tokens)
+            this TextTransformation<TTemplate> transformation, IEnumerable<KeyValuePair<string, object>> tokens)
             where TTemplate : class, ITextTransformationTemplate
         {
             if (tokens == null)
@@ -51,9 +49,9 @@ namespace Cake.Common.Text
                 throw new ArgumentNullException(nameof(tokens));
             }
 
-            foreach (var kvp in tokens)
+            foreach (var token in tokens)
             {
-                transformation?.Template.Register(kvp.Key, kvp.Value);
+                transformation?.Template.Register(token.Key, token.Value);
             }
 
             return transformation;
