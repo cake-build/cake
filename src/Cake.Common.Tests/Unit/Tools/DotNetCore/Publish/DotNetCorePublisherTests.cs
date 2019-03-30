@@ -122,7 +122,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-build --no-dependencies --no-restore --force --self-contained true --source \"https://api.nuget.org/v3/index.json\" --verbosity Minimal", result.Args);
+                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-build --no-dependencies --no-restore --force --self-contained true --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
             }
 
             [Fact]
@@ -146,7 +146,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-dependencies --no-restore --force --self-contained false --source \"https://api.nuget.org/v3/index.json\" --verbosity Minimal", result.Args);
+                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-dependencies --no-restore --force --self-contained false --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
             }
 
             [Fact]

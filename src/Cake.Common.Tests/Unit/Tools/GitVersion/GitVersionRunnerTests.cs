@@ -5,6 +5,7 @@
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.GitVersion;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Testing;
 using Xunit;
 
@@ -311,6 +312,43 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 Assert.Equal(expect.CommitsSinceVersionSource, result.CommitsSinceVersionSource);
                 Assert.Equal(expect.CommitsSinceVersionSourcePadded, result.CommitsSinceVersionSourcePadded);
                 Assert.Equal(expect.CommitDate, result.CommitDate);
+            }
+
+            [Theory]
+            [InlineData(GitVersionVerbosity.None, "None")]
+            [InlineData(GitVersionVerbosity.Debug, "Debug")]
+            [InlineData(GitVersionVerbosity.Info, "Info")]
+            [InlineData(GitVersionVerbosity.Warn, "Warn")]
+            [InlineData(GitVersionVerbosity.Error, "Error")]
+            public void Should_Add_Verbosity_To_Arguments_If_Set(GitVersionVerbosity verbosity, string arg)
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.Verbosity = verbosity;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($"-verbosity {arg}", result.Args);
+            }
+
+            [Theory]
+            [InlineData(Verbosity.Quiet, "None")]
+            [InlineData(Verbosity.Diagnostic, "Debug")]
+            [InlineData(Verbosity.Verbose, "Debug")]
+            [InlineData(Verbosity.Minimal, "Error")]
+            public void Should_Add_Default_Verbosity_To_Arguments_If_Not_Set(Verbosity verbosity, string arg)
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.SetLogVerbosity(verbosity);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($"-verbosity {arg}", result.Args);
             }
         }
     }

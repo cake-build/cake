@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.GitVersion
     public sealed class GitVersionSettings : ToolSettings
     {
         /// <summary>
-        /// Gets or sets the path for the git repository to use.
+        /// Gets or sets the path for the Git repository to use.
         /// </summary>
         public DirectoryPath RepositoryPath { get; set; }
 
@@ -48,7 +48,7 @@ namespace Cake.Common.Tools.GitVersion
         public string Password { get; set; }
 
         /// <summary>
-        /// Gets or sets the git url to use if using dynamic repositories.
+        /// Gets or sets the Git URL to use if using dynamic repositories.
         /// </summary>
         public string Url { get; set; }
 
@@ -77,5 +77,10 @@ namespace Cake.Common.Tools.GitVersion
         /// Gets or sets the path to the log file.
         /// </summary>
         public FilePath LogFilePath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the logging verbosity.
+        /// </summary>
+        public GitVersionVerbosity? Verbosity { get; set; }
     }
 }

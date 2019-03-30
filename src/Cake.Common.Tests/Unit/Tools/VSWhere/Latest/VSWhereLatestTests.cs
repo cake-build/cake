@@ -153,7 +153,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Latest
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("-latest -requires \"Test.Component\" -property installationPath -nologo", result.Args);
+                Assert.Equal("-latest -requires Test.Component -property installationPath -nologo", result.Args);
             }
 
             [Fact]

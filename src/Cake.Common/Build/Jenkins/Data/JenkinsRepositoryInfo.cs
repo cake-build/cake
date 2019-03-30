@@ -20,18 +20,18 @@ namespace Cake.Common.Build.Jenkins.Data
         public string BranchName => GetEnvironmentString("BRANCH_NAME");
 
         /// <summary>
-        /// Gets the git commit sha.
+        /// Gets the Git commit sha.
         /// </summary>
         /// <value>
-        /// The git commit sha.
+        /// The Git commit sha.
         /// </value>
         public string GitCommitSha => GetEnvironmentString("GIT_COMMIT");
 
         /// <summary>
-        /// Gets the git branch.
+        /// Gets the Git branch.
         /// </summary>
         /// <value>
-        /// The git branch.
+        /// The Git branch.
         /// </value>
         public string GitBranch => GetEnvironmentString("GIT_BRANCH");
 

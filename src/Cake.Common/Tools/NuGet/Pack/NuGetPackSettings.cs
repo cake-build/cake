@@ -212,7 +212,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// Defaults to <c>false</c>.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the output should be placed in the tool folder inside the nuget package; otherwise <c>false</c>.
+        /// <c>true</c> if the output should be placed in the tool folder inside the NuGet package; otherwise <c>false</c>.
         /// </value>
         public bool OutputToToolFolder { get; set; }
     }

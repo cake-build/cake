@@ -20,6 +20,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         {
             Server = new GitLabCIServerInfo(environment);
             Build = new Data.GitLabCIBuildInfo(environment);
+            PullRequest = new GitLabCIPullRequestInfo(environment);
             Project = new Data.GitLabCIProjectInfo(environment);
             Runner = new Data.GitLabCIRunnerInfo(environment);
         }
@@ -174,6 +175,56 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// </code>
         /// </example>
         public GitLabCIBuildInfo Build { get; }
+
+        /// <summary>
+        /// Gets GitLab CI pull request information.
+        /// </summary>
+        /// <value>
+        /// The GitLab CI pull request information.
+        /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitLabCI.IsRunningOnGitLabCI)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Id: {1}
+        ///         IId: {2}",
+        ///         BuildSystem.GitLabCI.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.GitLabCI.Environment.PullRequest.Id,
+        ///         BuildSystem.GitLabCI.Environment.PullRequest.IId
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitLabCI");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitLabCI</para>
+        /// <example>
+        /// <code>
+        /// if (GitLabCI.IsRunningOnGitLabCI)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Id: {1}
+        ///         IId: {2}",
+        ///         GitLabCI.Environment.PullRequest.IsPullRequest,
+        ///         GitLabCI.Environment.PullRequest.Id,
+        ///         GitLabCI.Environment.PullRequest.IId
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitLabCI");
+        /// }
+        /// </code>
+        /// </example>
+        public GitLabCIPullRequestInfo PullRequest { get; }
 
         /// <summary>
         /// Gets the GitLab CI project information.

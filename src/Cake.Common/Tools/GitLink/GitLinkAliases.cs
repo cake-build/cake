@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.GitLink
     /// <para>Contains functionality related to <see href="https://github.com/gittools/gitlink">GitLink</see>.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the <see cref="GitLinkSettings" /> class:
+    /// install from nuget.org, or specify the ToolPath within the <see cref="GitLinkSettings" /> class:
     /// <code>
     /// #tool "nuget:?package=gitlink&amp;version=2.4.0"
     /// </code>

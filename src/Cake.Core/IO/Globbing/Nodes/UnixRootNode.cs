@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Cake.Core.IO.Globbing.Nodes
 {
-    [DebuggerDisplay("$")]
+    [DebuggerDisplay("/")]
     internal sealed class UnixRootNode : GlobNode
     {
         [DebuggerStepThrough]

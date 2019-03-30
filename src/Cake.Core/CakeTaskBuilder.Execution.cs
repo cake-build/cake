@@ -279,8 +279,26 @@ namespace Cake.Core
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return DoesForEach(builder, itemsFunc,
-                (item, context) => action(item));
+            return DoesForEach(builder, context => itemsFunc(), (item, context) => action(item));
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TItem>(this CakeTaskBuilder builder, Func<ICakeContext, IEnumerable<TItem>> itemsFunc, Action<TItem> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, itemsFunc, (item, context) => action(item));
         }
 
         /// <summary>
@@ -301,8 +319,7 @@ namespace Cake.Core
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return DoesForEach<TData, TItem>(builder, itemsFunc,
-                (data, item, context) => action(data, item));
+            return DoesForEach<TData, TItem>(builder, itemsFunc, (data, item, context) => action(data, item));
         }
 
         /// <summary>
@@ -323,7 +340,7 @@ namespace Cake.Core
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return DoesForEach(builder, itemsFunc, (item, context) =>
+            return DoesForEach(builder, context => itemsFunc(), (item, context) =>
             {
                 var data = context.Data.Get<TData>();
                 action(data, item, context);
@@ -350,9 +367,269 @@ namespace Cake.Core
                 throw new ArgumentNullException(nameof(action));
             }
 
-            builder.Target.AddDelayedAction(() =>
+            return DoesForEach(builder, context => itemsFunc(), action);
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TData, TItem>(this CakeTaskBuilder builder, Func<ICakeContext, IEnumerable<TItem>> itemsFunc, Action<TData, TItem> action)
+            where TData : class
+        {
+            if (action == null)
             {
-                foreach (var item in itemsFunc())
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, context => itemsFunc(context), (item, context) =>
+            {
+                var data = context.Data.Get<TData>();
+                action(data, item);
+            });
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TData, TItem>(this CakeTaskBuilder builder, Func<TData, IEnumerable<TItem>> itemsFunc, Action<TData, TItem, ICakeContext> action)
+            where TData : class
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, context => itemsFunc(context.Data.Get<TData>()), (item, context) =>
+            {
+                var data = context.Data.Get<TData>();
+                action(data, item, context);
+            });
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TData, TItem>(CakeTaskBuilder builder, Func<ICakeContext, IEnumerable<TItem>> itemsFunc, Action<TData, TItem, ICakeContext> action)
+            where TData : class
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, itemsFunc, (item, context) =>
+            {
+                var data = context.Data.Get<TData>();
+                action(data, item, context);
+            });
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TData, TItem>(CakeTaskBuilder builder, Func<TData, IEnumerable<TItem>> itemsFunc, Action<TData, TItem> action)
+            where TData : class
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, context => itemsFunc(context.Data.Get<TData>()), (item, context) =>
+            {
+                var data = context.Data.Get<TData>();
+                action(data, item);
+            });
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TData, TItem>(CakeTaskBuilder builder, Func<TData, IEnumerable<TItem>> itemsFunc, Action<TItem, ICakeContext> action)
+            where TData : class
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, context => itemsFunc(context.Data.Get<TData>()), action);
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TData, TItem>(CakeTaskBuilder builder, Func<TData, IEnumerable<TItem>> itemsFunc, Action<TItem> action)
+            where TData : class
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, context => itemsFunc(context.Data.Get<TData>()), action);
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TData, TItem>(this CakeTaskBuilder builder, Func<TData, ICakeContext, IEnumerable<TItem>> itemsFunc, Action<TData, TItem, ICakeContext> action)
+            where TData : class
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, context => itemsFunc(context.Data.Get<TData>(), context), (item, context) =>
+            {
+                var data = context.Data.Get<TData>();
+                action(data, item, context);
+            });
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TData, TItem>(CakeTaskBuilder builder, Func<TData, ICakeContext, IEnumerable<TItem>> itemsFunc, Action<TData, TItem> action)
+            where TData : class
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, context => itemsFunc(context.Data.Get<TData>(), context), (item, context) =>
+            {
+                var data = context.Data.Get<TData>();
+                action(data, item);
+            });
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TData, TItem>(CakeTaskBuilder builder, Func<TData, ICakeContext, IEnumerable<TItem>> itemsFunc, Action<TItem, ICakeContext> action)
+            where TData : class
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, context => itemsFunc(context.Data.Get<TData>(), context), action);
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TData, TItem>(CakeTaskBuilder builder, Func<TData, ICakeContext, IEnumerable<TItem>> itemsFunc, Action<TItem> action)
+            where TData : class
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return DoesForEach(builder, context => itemsFunc(context.Data.Get<TData>(), context), (item, context) =>
+            {
+                action(item);
+            });
+        }
+
+        /// <summary>
+        /// Adds an action to be executed foreach item returned by the items function.
+        /// This method will be executed the first time the task is executed.
+        /// </summary>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="itemsFunc">The items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder DoesForEach<TItem>(this CakeTaskBuilder builder, Func<ICakeContext, IEnumerable<TItem>> itemsFunc, Action<TItem, ICakeContext> action)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            builder.Target.AddDelayedAction(delayedContext =>
+            {
+                foreach (var item in itemsFunc(delayedContext))
                 {
                     builder.Target.AddAction(context =>
                     {

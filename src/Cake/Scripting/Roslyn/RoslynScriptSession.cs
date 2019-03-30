@@ -82,9 +82,16 @@ namespace Cake.Scripting.Roslyn
             var generator = new RoslynCodeGenerator();
             var code = generator.Generate(script);
 
+            // Warn about any code generation excluded namespaces
+            foreach (var @namespace in script.ExcludedNamespaces)
+            {
+                _log.Warning("Namespace {0} excluded by code generation, affected methods:\r\n\t{1}",
+                    @namespace.Key, string.Join("\r\n\t", @namespace.Value));
+            }
+
             // Create the script options dynamically.
             var options = Microsoft.CodeAnalysis.Scripting.ScriptOptions.Default
-                .AddImports(Namespaces)
+                .AddImports(Namespaces.Except(script.ExcludedNamespaces.Keys))
                 .AddReferences(References)
                 .AddReferences(ReferencePaths.Select(r => r.FullPath))
                 .WithEmitDebugInformation(_options.PerformDebug)

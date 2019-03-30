@@ -5,7 +5,7 @@
 namespace Cake.Common.Build.AppVeyor
 {
     /// <summary>
-    /// Appveyor upload artifacts settings
+    /// AppVeyor upload artifacts settings
     /// </summary>
     public class AppVeyorUploadArtifactsSettings
     {

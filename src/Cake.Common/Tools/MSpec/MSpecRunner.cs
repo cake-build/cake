@@ -128,12 +128,12 @@ namespace Cake.Common.Tools.MSpec
                 builder.Append("--no-teamcity-autodetect");
             }
 
-            if (settings.Appveyor)
+            if (settings.AppVeyor)
             {
                 builder.Append("--appveyor");
             }
 
-            if (settings.NoAppveyor)
+            if (settings.NoAppVeyor)
             {
                 builder.Append("--no-appveyor-autodetect");
             }

@@ -13,17 +13,17 @@ namespace Cake.Common.Tools.GitLink
     public sealed class GitLink3Settings : ToolSettings
     {
         /// <summary>
-        /// Gets or sets the Url to remote git repository.
+        /// Gets or sets the Url to remote Git repository.
         /// </summary>
         public string RepositoryUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets the SHA-1 hash of the git commit to be used.
+        /// Gets or sets the SHA-1 hash of the Git commit to be used.
         /// </summary>
         public string ShaHash { get; set; }
 
         /// <summary>
-        /// Gets or sets the path to the root of the git repository
+        /// Gets or sets the path to the root of the Git repository
         /// </summary>
         public DirectoryPath BaseDir { get; set; }
 

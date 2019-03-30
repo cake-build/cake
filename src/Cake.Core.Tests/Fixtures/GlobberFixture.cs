@@ -83,6 +83,7 @@ namespace Cake.Core.Tests.Fixtures
             var filesystem = new FakeFileSystem(environment);
 
             // Directories
+            filesystem.CreateDirectory("/RootDir");
             filesystem.CreateDirectory("/Working");
             filesystem.CreateDirectory("/Working/Foo");
             filesystem.CreateDirectory("/Working/Foo/Bar");
@@ -94,6 +95,7 @@ namespace Cake.Core.Tests.Fixtures
             filesystem.CreateDirectory("/嵌套/目录");
 
             // Files
+            filesystem.CreateFile("/RootFile.sh");
             filesystem.CreateFile("/Working/Foo/Bar/Qux.c");
             filesystem.CreateFile("/Working/Foo/Bar/Qex.c");
             filesystem.CreateFile("/Working/Foo/Bar/Qux.h");
@@ -125,10 +127,15 @@ namespace Cake.Core.Tests.Fixtures
             return Match(pattern, null);
         }
 
-        public Path[] Match(string pattern, Func<IFileSystemInfo, bool> predicate)
+        public Path[] Match(string pattern, Func<IFileSystemInfo, bool> directoryPredicate)
+        {
+            return Match(pattern, directoryPredicate, null);
+        }
+
+        public Path[] Match(string pattern, Func<IFileSystemInfo, bool> directoryPredicate, Func<IFile, bool> filePredicate)
         {
             return new Globber(FileSystem, Environment)
-                .Match(pattern, new GlobberSettings { Predicate = predicate })
+                .Match(pattern, new GlobberSettings { Predicate = directoryPredicate, FilePredicate = filePredicate })
                 .ToArray();
         }
     }

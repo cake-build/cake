@@ -45,7 +45,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Fact]
-            public void Should_Split_Multiple_NugetSources_Into_Multple_Repositories()
+            public void Should_Split_Multiple_NuGet_Sources_Into_Multiple_Repositories()
             {
                 var nugetV3Api = "https://api.nuget.org/v3/index.json";
                 var nugetV2Api = "https://packages.nuget.org/api/v2";
@@ -64,7 +64,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Fact]
-            public void Should_Ignore_Trailing_Separator_For_NugetSource_Argument()
+            public void Should_Ignore_Trailing_Separator_For_NuGet_Source_Argument()
             {
                 var nugetV2Api = "https://packages.nuget.org/api/v2";
                 var package = new PackageReference("nuget:?package=First.Package");
@@ -81,7 +81,7 @@ namespace Cake.NuGet.Tests.Unit
             }
 
             [Fact]
-            public void Should_Not_Throw_For_Null_NugetSource_Value_In_CakeConfiguration()
+            public void Should_Not_Throw_For_Null_NuGet_Source_Value_In_CakeConfiguration()
             {
                 var package = new PackageReference("nuget:?package=First.Package");
                 var settings = Substitute.For<ISettings>();

@@ -16,7 +16,7 @@ namespace Cake.Common.Tools.Fixie
     /// <para>Contains functionality related to running <see href="https://github.com/fixie/fixie">Fixie</see> tests.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the <see cref="FixieSettings" /> class:
+    /// install from nuget.org, or specify the ToolPath within the <see cref="FixieSettings" /> class:
     /// <code>
     /// #tool "nuget:?package=Fixie"
     /// </code>

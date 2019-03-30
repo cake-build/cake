@@ -18,7 +18,8 @@ namespace Cake.Core
         /// <param name="task">The task.</param>
         /// <param name="duration">The duration of the task.</param>
         /// <param name="skipped">if set to <c>true</c>, the task was not executed.</param>
-        public TaskTeardownContext(ICakeContext context, ICakeTaskInfo task, TimeSpan duration, bool skipped)
+        /// <param name="throwException">The exception that was thrown by the task.</param>
+        public TaskTeardownContext(ICakeContext context, ICakeTaskInfo task, TimeSpan duration, bool skipped, Exception throwException)
             : base(context)
         {
             if (task == null)
@@ -29,6 +30,7 @@ namespace Cake.Core
             Task = task;
             Duration = duration;
             Skipped = skipped;
+            ThrownException = throwException;
         }
 
         /// <summary>
@@ -54,5 +56,18 @@ namespace Cake.Core
         /// <c>true</c> if skipped; otherwise, <c>false</c>.
         /// </value>
         public bool Skipped { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="CakeTask"/> was successful
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if successful; otherwise <c>false</c>.
+        /// </value>
+        public bool Successful => ThrownException == null;
+
+        /// <summary>
+        /// Gets the exception that was thrown by the tasl.
+        /// </summary>
+        public Exception ThrownException { get; }
     }
 }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -98,5 +99,10 @@ namespace Cake.Core
         /// Gets the data context resolver.
         /// </summary>
         public ICakeDataResolver Data => _context.Data;
+
+        /// <summary>
+        /// Gets the cake configuration.
+        /// </summary>
+        public ICakeConfiguration Configuration => _context.Configuration;
     }
 }

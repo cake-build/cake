@@ -53,7 +53,8 @@ namespace Cake.Core
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="exception">The exception.</param>
-        void HandleErrors(Action<Exception> action, Exception exception);
+        /// <param name="context">The context.</param>
+        void HandleErrors(Action<Exception, ICakeContext> action, Exception exception, ICakeContext context);
 
         /// <summary>
         /// Invokes the finally handler.

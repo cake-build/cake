@@ -124,9 +124,10 @@ namespace Cake.Core
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="exception">The exception.</param>
-        public void HandleErrors(Action<Exception> action, Exception exception)
+        /// <param name="context">The context.</param>
+        public void HandleErrors(Action<Exception, ICakeContext> action, Exception exception, ICakeContext context)
         {
-            action?.Invoke(exception);
+            action?.Invoke(exception, context);
         }
 
         /// <summary>

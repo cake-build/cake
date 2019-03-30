@@ -129,7 +129,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                              " --source \"https://www.example.com/source2\"" +
                              " --configfile \"/Working/NuGet.config\"" +
                              " --no-cache --disable-parallel --ignore-failed-sources --no-dependencies --force" +
-                             " --verbosity Minimal", result.Args);
+                             " --verbosity minimal", result.Args);
             }
 
             [Fact]
@@ -144,6 +144,77 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
 
                 // Then
                 Assert.Equal("--diagnostics restore", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Interactive()
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.Settings.Interactive = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($@"restore --interactive", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_UseLockFile()
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.Settings.UseLockFile = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($@"restore --use-lock-file", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_LockedMode()
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.Settings.LockedMode = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($@"restore --locked-mode", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_LockFilePath()
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                const string lockfile = @"mypackages.lock.json";
+                fixture.Settings.LockFilePath = lockfile;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($@"restore --lock-file-path ""/Working/{lockfile}""", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ForceEvaluate()
+            {
+                // Given
+                var fixture = new DotNetCoreRestorerFixture();
+                fixture.Settings.ForceEvaluate = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($@"restore --force-evaluate", result.Args);
             }
         }
     }

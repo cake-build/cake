@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Core.Scripting.Processors.Loading;
 using Cake.Core.Tests.Fixtures;
 using Cake.Testing.Xunit;
 using Xunit;
@@ -18,7 +17,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
         {
             // Given
             var fixture = new ScriptAnalyzerFixture();
-            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.AddFileLoadDirectiveProvider();
             fixture.GivenScriptExist("/Working/script.cake", source);
             fixture.GivenScriptExist("/Working/utils.cake", "Console.WriteLine();");
 
@@ -37,7 +36,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
         {
             // Given
             var fixture = new ScriptAnalyzerFixture();
-            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.AddFileLoadDirectiveProvider();
             fixture.GivenScriptExist("/Working/script.cake", source);
             fixture.GivenScriptExist("/Working/test/my utils.cake", "Console.WriteLine();");
 
@@ -56,7 +55,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
         {
             // Given
             var fixture = new ScriptAnalyzerFixture();
-            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.AddFileLoadDirectiveProvider();
             fixture.GivenScriptExist("/Working/script.cake", source);
             fixture.GivenScriptExist("/Working/utils.cake", "Console.WriteLine();");
             fixture.GivenScriptExist("/Working/other.cake", "Console.WriteLine();");
@@ -77,7 +76,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             // Given
             var fixture = new ScriptAnalyzerFixture();
             fixture.Environment.SetEnvironmentVariable("CAKE_TEST_SCRIPT_PATH", "test");
-            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.AddFileLoadDirectiveProvider();
             fixture.GivenScriptExist("/Working/script.cake", source);
             fixture.GivenScriptExist("/Working/test/utils.cake", "Console.WriteLine();");
 
@@ -97,7 +96,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var fixture = new ScriptAnalyzerFixture();
             fixture.Environment.SetEnvironmentVariable("CAKE_TEST_SCRIPT_BASE_PATH", "test");
             fixture.Environment.SetEnvironmentVariable("CAKE_TEST_SCRIPT_PATH", "scripts");
-            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.AddFileLoadDirectiveProvider();
             fixture.GivenScriptExist("/Working/script.cake", source);
             fixture.GivenScriptExist("/Working/test/scripts/utils.cake", "Console.WriteLine();");
 
@@ -109,12 +108,80 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             Assert.Equal("/Working/test/scripts/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
 
+        [Theory]
+        [InlineData("#load \"scripts/*\"")]
+        [InlineData("#load \"scripts/*.*\"")]
+        [InlineData("#load \"scripts/*.cs\"")]
+        [InlineData("#load \"scripts/*.kake\"")]
+        [InlineData("#load \"scripts/**/*\"")]
+        [InlineData("#load \"scripts/**/*.*\"")]
+        [InlineData("#load \"scripts/**/*.cs\"")]
+        [InlineData("#load \"scripts/**/*.kake\"")]
+        [InlineData("#load \"scripts/{utils,other}.{cs,kake}\"")]
+        [InlineData("#load \"/Working/scripts/*\"")]
+        [InlineData("#load \"/Working/scripts/*.*\"")]
+        [InlineData("#load \"/Working/scripts/*.cs\"")]
+        [InlineData("#load \"/Working/scripts/*.kake\"")]
+        [InlineData("#load \"/Working/scripts/**/*\"")]
+        [InlineData("#load \"/Working/scripts/**/*.*\"")]
+        [InlineData("#load \"/Working/scripts/**/*.cs\"")]
+        [InlineData("#load \"/Working/scripts/**/*.kake\"")]
+        [InlineData("#load \"/Working/scripts/{utils,other}.{cs,kake}\"")]
+        public void Should_Ignore_Globber_Matches_With_Invalid_Extensions(string source)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.AddFileLoadDirectiveProvider();
+            fixture.GivenScriptExist("/Working/bootstrap.cake", source);
+            fixture.GivenScriptExist("/Working/scripts/utils.cs", "Console.WriteLine();");
+            fixture.GivenScriptExist("/Working/scripts/other.kake", "Console.WriteLine();");
+
+            // When
+            var result = fixture.Analyze("/Working/bootstrap.cake");
+
+            // Then
+            Assert.Equal(0, result.Script.Includes.Count);
+        }
+
+        [Theory]
+        [InlineData("#load \"scripts/*\"")]
+        [InlineData("#load \"scripts/*.*\"")]
+        [InlineData("#load \"scripts/*.cake\"")]
+        [InlineData("#load \"scripts/**/*\"")]
+        [InlineData("#load \"scripts/**/*.*\"")]
+        [InlineData("#load \"scripts/**/*.cake\"")]
+        [InlineData("#load \"scripts/{utils,other}.cake\"")]
+        [InlineData("#load \"/Working/scripts/*\"")]
+        [InlineData("#load \"/Working/scripts/*.*\"")]
+        [InlineData("#load \"/Working/scripts/*.cake\"")]
+        [InlineData("#load \"/Working/scripts/**/*\"")]
+        [InlineData("#load \"/Working/scripts/**/*.*\"")]
+        [InlineData("#load \"/Working/scripts/**/*.cake\"")]
+        [InlineData("#load \"/Working/scripts/{utils,other}.cake\"")]
+        public void Should_Process_Globber_Matches_With_Valid_Extension(string source)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.AddFileLoadDirectiveProvider();
+            fixture.GivenScriptExist("/Working/bootstrap.cake", source);
+            fixture.GivenScriptExist("/Working/scripts/utils.cake", "Console.WriteLine();");
+            fixture.GivenScriptExist("/Working/scripts/other.cake", "Console.WriteLine();");
+
+            // When
+            var result = fixture.Analyze("/Working/bootstrap.cake");
+
+            // Then
+            Assert.Equal(2, result.Script.Includes.Count);
+            Assert.Equal("/Working/scripts/utils.cake", result.Script.Includes[0].Path.FullPath);
+            Assert.Equal("/Working/scripts/other.cake", result.Script.Includes[1].Path.FullPath);
+        }
+
         [Fact]
         public void Should_Insert_Line_Directives_When_Processing_Load_Directives()
         {
             // Given
             var fixture = new ScriptAnalyzerFixture();
-            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.AddFileLoadDirectiveProvider();
             fixture.GivenScriptExist("/Working/a.cake", "int x=0;\n#l b.cake\nint y=2;");
             fixture.GivenScriptExist("/Working/b.cake", "int z=1;\n#l c.cake\nint p=4;");
             fixture.GivenScriptExist("/Working/c.cake", "int o=3;\n#r d.dll");
@@ -146,7 +213,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
         {
             // Given
             var fixture = new ScriptAnalyzerFixture();
-            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.AddFileLoadDirectiveProvider();
             fixture.GivenScriptExist("/Working/script.cake", source);
             fixture.GivenScriptExist("/utils.cake", "Console.WriteLine();");
 
@@ -165,7 +232,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
         {
             // Given
             var fixture = new ScriptAnalyzerFixture();
-            fixture.Providers.Add(new FileLoadDirectiveProvider());
+            fixture.AddFileLoadDirectiveProvider();
             fixture.GivenScriptExist("/Working/script.cake", source);
             fixture.GivenScriptExist("/Working/test/utils.cake", "Console.WriteLine();");
 
@@ -178,22 +245,22 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
         }
 
         [WindowsTheory]
-        [InlineData("#load \"c:/utils.cake\"")]
-        [InlineData("#load \"local:?path=c:/utils.cake\"")]
+        [InlineData("#load \"C:/utils.cake\"")]
+        [InlineData("#load \"local:?path=C:/utils.cake\"")]
         public void Should_Process_WindowsAbsolutePath_Script_Reference_Found_In_Source(string source)
         {
             // Given
-            var fixture = new ScriptAnalyzerFixture();
-            fixture.Providers.Add(new FileLoadDirectiveProvider());
-            fixture.GivenScriptExist("/Working/script.cake", source);
-            fixture.GivenScriptExist("c:/utils.cake", "Console.WriteLine();");
+            var fixture = new ScriptAnalyzerFixture(windows: true);
+            fixture.AddFileLoadDirectiveProvider();
+            fixture.GivenScriptExist("C:/Working/script.cake", source);
+            fixture.GivenScriptExist("C:/utils.cake", "Console.WriteLine();");
 
             // When
-            var result = fixture.Analyze("/Working/script.cake");
+            var result = fixture.Analyze("C:/Working/script.cake");
 
             // Then
             Assert.Equal(1, result.Script.Includes.Count);
-            Assert.Equal("c:/utils.cake", result.Script.Includes[0].Path.FullPath);
+            Assert.Equal("C:/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
 
         [WindowsTheory]
@@ -202,17 +269,17 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
         public void Should_Process_WindowsRelativePath_Script_Reference_Found_In_Source(string source)
         {
             // Given
-            var fixture = new ScriptAnalyzerFixture();
-            fixture.Providers.Add(new FileLoadDirectiveProvider());
-            fixture.GivenScriptExist("/Working/script.cake", source);
-            fixture.GivenScriptExist("/Working/test/utils.cake", "Console.WriteLine();");
+            var fixture = new ScriptAnalyzerFixture(windows: true);
+            fixture.AddFileLoadDirectiveProvider();
+            fixture.GivenScriptExist("C:/Working/script.cake", source);
+            fixture.GivenScriptExist("C:/Working/test/utils.cake", "Console.WriteLine();");
 
             // When
-            var result = fixture.Analyze("/Working/script.cake");
+            var result = fixture.Analyze("C:/Working/script.cake");
 
             // Then
             Assert.Equal(1, result.Script.Includes.Count);
-            Assert.Equal("/Working/test/utils.cake", result.Script.Includes[0].Path.FullPath);
+            Assert.Equal("C:/Working/test/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
     }
 }

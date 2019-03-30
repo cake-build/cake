@@ -209,7 +209,7 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
             }
 
             [Fact]
-            public void Should_Set_Resharper_Plugins()
+            public void Should_Set_ReSharper_Plugins()
             {
                 // Given
                 var fixture = new InspectCodeRunFixture();

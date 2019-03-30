@@ -85,7 +85,7 @@ namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
                 var result = info.PullRequest;
 
                 // Then
-                Assert.Equal("[WIP] Bitrise cake support #000", result);
+                Assert.Equal("1", result);
             }
         }
     }

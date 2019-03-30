@@ -29,6 +29,9 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("TRAVIS_TEST_RESULT").Returns("0");
             Environment.GetEnvironmentVariable("TRAVIS_TAG").Returns("v0.10.0");
 
+            // TravisCIPullRequestInfo
+            Environment.GetEnvironmentVariable("TRAVIS_PULL_REQUEST").Returns("1");
+
             // TravisCIJobInfo
             Environment.GetEnvironmentVariable("TRAVIS_JOB_ID").Returns("934");
             Environment.GetEnvironmentVariable("TRAVIS_JOB_NUMBER").Returns("934.2");
@@ -38,13 +41,17 @@ namespace Cake.Common.Tests.Fixtures.Build
             // TravisCIRepositoryInfo
             Environment.GetEnvironmentVariable("TRAVIS_COMMIT").Returns("6cbdbe8");
             Environment.GetEnvironmentVariable("TRAVIS_COMMIT_RANGE").Returns("6cb4d6...5ba6dbe8");
-            Environment.GetEnvironmentVariable("TRAVIS_PULL_REQUEST").Returns("#786 (GH742) Added TravisCI build system support");
             Environment.GetEnvironmentVariable("TRAVIS_REPO_SLUG").Returns("4d65ba6");
         }
 
         public TravisCIBuildInfo CreateBuildInfo()
         {
             return new TravisCIBuildInfo(Environment);
+        }
+
+        public TravisCIPullRequestInfo CreatePullRequestInfo()
+        {
+            return new TravisCIPullRequestInfo(Environment);
         }
 
         public TravisCIJobInfo CreateJobInfo()

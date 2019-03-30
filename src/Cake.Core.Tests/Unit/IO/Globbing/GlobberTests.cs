@@ -41,7 +41,7 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
 
         public sealed class TheMatchMethod
         {
-            public sealed class WithPredicate
+            public sealed class WithDirectoryPredicate
             {
                 [Fact]
                 public void Should_Return_Paths_Not_Affected_By_Walker_Hints()
@@ -87,6 +87,56 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
 
                     // Then
                     Assert.Empty(result);
+                }
+            }
+
+            public sealed class WithFilePredicate
+            {
+                [Fact]
+                public void Should_Return_Only_Files_Matching_Predicate()
+                {
+                    // Given
+                    var fixture = GlobberFixture.UnixLike();
+                    var predicate = new Func<IFile, bool>(i => i.Path.FullPath.EndsWith(".c"));
+
+                    // When
+                    var result = fixture.Match("/Working/**/*.*", null, predicate);
+
+                    // Then
+                    Assert.Equal(5, result.Length);
+                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+                    AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+                    AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
+                }
+            }
+
+            public sealed class WithDirectoryAndFilePredicate
+            {
+                [Fact]
+                public void Should_Return_Only_Files_Matching_Predicate()
+                {
+                    // Given
+                    var fixture = GlobberFixture.UnixLike();
+                    var directoryPredicate = new Func<IFileSystemInfo, bool>(i => i.Path.FullPath.Contains("/Working"));
+                    var filePredicate = new Func<IFile, bool>(i => !i.Path.FullPath.EndsWith(".dll"));
+
+                    // When
+                    var result = fixture.Match("./**/*.*", directoryPredicate, filePredicate);
+
+                    // Then
+                    Assert.Equal(10, result.Length);
+                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
+                    AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+                    AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
+                    AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.h");
+                    AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+                    AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
+                    AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
                 }
             }
 
@@ -191,33 +241,37 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
                 Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result?.Message);
             }
 
-            [Fact]
-            public void Should_Return_Single_Path_For_Absolute_File_Path_Without_Glob_Pattern()
+            [Theory]
+            [InlineData("/RootFile.sh")]
+            [InlineData("/Working/Foo/Bar/Qux.c")]
+            public void Should_Return_Single_Path_For_Absolute_File_Path_Without_Glob_Pattern(string pattern)
             {
                 // Given
                 var fixture = GlobberFixture.UnixLike();
 
                 // When
-                var result = fixture.Match("/Working/Foo/Bar/Qux.c");
+                var result = fixture.Match(pattern);
 
                 // Then
                 Assert.Single(result);
                 Assert.IsType<FilePath>(result[0]);
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+                AssertEx.ContainsFilePath(result, pattern);
             }
 
-            [Fact]
-            public void Should_Return_Single_Path_For_Absolute_Directory_Path_Without_Glob_Pattern()
+            [Theory]
+            [InlineData("/RootDir")]
+            [InlineData("/Working/Foo/Bar")]
+            public void Should_Return_Single_Path_For_Absolute_Directory_Path_Without_Glob_Pattern(string pattern)
             {
                 // Given
                 var fixture = GlobberFixture.UnixLike();
 
                 // When
-                var result = fixture.Match("/Working/Foo/Bar");
+                var result = fixture.Match(pattern);
 
                 // Then
                 Assert.Single(result);
-                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
+                AssertEx.ContainsDirectoryPath(result, pattern);
             }
 
             [Fact]
@@ -378,32 +432,52 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
                 AssertEx.ContainsDirectoryPath(result, "/Working/Bar");
             }
 
-            [Fact]
-            public void Should_Include_Files_In_Root_Folder_When_Using_Recursive_Wildcard()
+            [Theory]
+            [InlineData("/*.sh", "/RootFile.sh")]
+            [InlineData("/Foo/*.baz", "/Foo/Bar.baz")]
+            public void Should_Include_Files_In_Root_Folder_When_Using_Wildcard(string pattern, string file)
             {
                 // Given
                 var fixture = GlobberFixture.UnixLike();
 
                 // When
-                var result = fixture.Match("/Foo/**/Bar.baz");
+                var result = fixture.Match(pattern);
 
                 // Then
                 Assert.Single(result);
-                AssertEx.ContainsFilePath(result, "/Foo/Bar.baz");
+                AssertEx.ContainsFilePath(result, file);
             }
 
-            [Fact]
-            public void Should_Include_Folder_In_Root_Folder_When_Using_Recursive_Wildcard()
+            [Theory]
+            [InlineData("/**/RootFile.sh", "/RootFile.sh")]
+            [InlineData("/Foo/**/Bar.baz", "/Foo/Bar.baz")]
+            public void Should_Include_Files_In_Root_Folder_When_Using_Recursive_Wildcard(string pattern, string file)
             {
                 // Given
                 var fixture = GlobberFixture.UnixLike();
 
                 // When
-                var result = fixture.Match("/Foo/**/Bar");
+                var result = fixture.Match(pattern);
 
                 // Then
                 Assert.Single(result);
-                AssertEx.ContainsDirectoryPath(result, "/Foo/Bar");
+                AssertEx.ContainsFilePath(result, file);
+            }
+
+            [Theory]
+            [InlineData("/**/RootDir", "/RootDir")]
+            [InlineData("/Foo/**/Bar", "/Foo/Bar")]
+            public void Should_Include_Folder_In_Root_Folder_When_Using_Recursive_Wildcard(string pattern, string folder)
+            {
+                // Given
+                var fixture = GlobberFixture.UnixLike();
+
+                // When
+                var result = fixture.Match(pattern);
+
+                // Then
+                Assert.Single(result);
+                AssertEx.ContainsDirectoryPath(result, folder);
             }
 
             [Fact]

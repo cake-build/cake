@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.ILMerge
     /// <para>Contains functionality related to <see href="http://research.microsoft.com/en-us/people/mbarnett/ILMerge.aspx">ILMerge</see>.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the <see cref="ILMergeSettings" /> class:
+    /// install from nuget.org, or specify the ToolPath within the <see cref="ILMergeSettings" /> class:
     /// <code>
     /// #tool "nuget:?package=ilmerge"
     /// </code>

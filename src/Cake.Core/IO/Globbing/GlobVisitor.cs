@@ -21,7 +21,7 @@ namespace Cake.Core.IO.Globbing
 
         public IEnumerable<IFileSystemInfo> Walk(GlobNode node, GlobberSettings settings)
         {
-            var context = new GlobVisitorContext(_fileSystem, _environment, settings.Predicate);
+            var context = new GlobVisitorContext(_fileSystem, _environment, settings.Predicate, settings.FilePredicate);
             node.Accept(this, context);
             return context.Results;
         }
@@ -112,7 +112,7 @@ namespace Cake.Core.IO.Globbing
                         // Then it must be a file (if it exist).
                         var filePath = context.Path.CombineWithFilePath(segment);
                         var file = context.FileSystem.GetFile(filePath);
-                        if (file.Exists)
+                        if (file.Exists && context.ShouldInclude(file))
                         {
                             // File
                             context.AddResult(file);
@@ -138,7 +138,7 @@ namespace Cake.Core.IO.Globbing
                         {
                             if (node.Next != null)
                             {
-                                context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + 1));
+                                context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
                                 node.Next.Accept(this, context);
                                 context.Pop();
                             }
@@ -154,7 +154,7 @@ namespace Cake.Core.IO.Globbing
 
         public void VisitUnixRoot(UnixRootNode node, GlobVisitorContext context)
         {
-            context.Push(string.Empty);
+            context.Push("/");
             node.Next.Accept(this, context);
             context.Pop();
         }
@@ -173,7 +173,7 @@ namespace Cake.Core.IO.Globbing
             {
                 foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
                 {
-                    context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + 1));
+                    context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
                     if (node.Next != null)
                     {
                         node.Next.Accept(this, context);
@@ -240,7 +240,7 @@ namespace Cake.Core.IO.Globbing
                 foreach (var file in current.GetFiles("*", option))
                 {
                     var lastPath = file.Path.Segments.Last();
-                    if (node.IsMatch(lastPath))
+                    if (node.IsMatch(lastPath) && context.ShouldInclude(file))
                     {
                         result.Add(file);
                     }

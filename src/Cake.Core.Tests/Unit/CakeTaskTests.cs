@@ -155,10 +155,11 @@ namespace Cake.Core.Tests.Unit
                 var task = new CakeTask("task");
 
                 // When
-                task.SetErrorHandler(e => { });
+                task.SetErrorHandler((e, c) => { });
 
                 // Then
                 Assert.NotNull(task.ErrorHandler);
+                Assert.IsType<Action<Exception, ICakeContext>>(task.ErrorHandler);
             }
 
             [Fact]
@@ -166,10 +167,10 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var task = new CakeTask("task");
-                task.SetErrorHandler(e => { });
+                task.SetErrorHandler((e, c) => { });
 
                 // When
-                var result = Record.Exception(() => task.SetErrorHandler(e => { }));
+                var result = Record.Exception(() => task.SetErrorHandler((e, c) => { }));
 
                 // Then
                 Assert.IsType<CakeException>(result);
