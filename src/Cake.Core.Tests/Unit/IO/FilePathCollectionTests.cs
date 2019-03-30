@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Core.IO;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.IO
@@ -97,6 +98,19 @@ namespace Cake.Core.Tests.Unit.IO
                     // Then
                     Assert.Equal(expectedCount, collection.Count);
                 }
+
+                [Fact]
+                public void Should_Throw_If_Paths_Is_Null()
+                {
+                    // Given
+                    var collection = new FilePathCollection();
+
+                    // When
+                    var result = Record.Exception(() => collection.Add((IEnumerable<FilePath>)null));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "paths");
+                }
             }
         }
 
@@ -136,6 +150,19 @@ namespace Cake.Core.Tests.Unit.IO
                     // Then
                     Assert.Equal(expectedCount, collection.Count);
                 }
+
+                [Fact]
+                public void Should_Throw_If_Paths_Is_Null()
+                {
+                    // Given
+                    var collection = new FilePathCollection();
+
+                    // When
+                    var result = Record.Exception(() => collection.Remove((IEnumerable<FilePath>)null));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "paths");
+                }
             }
         }
 
@@ -170,6 +197,16 @@ namespace Cake.Core.Tests.Unit.IO
                     // Then
                     Assert.False(ReferenceEquals(result, collection));
                 }
+
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() => (FilePathCollection)null + new FilePath("A.txt"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
+                }
             }
 
             public sealed class WithMultiplePaths
@@ -200,6 +237,16 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.False(ReferenceEquals(result, collection));
+                }
+
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() => (FilePathCollection)null + new FilePath[] { "A.txt" });
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
                 }
             }
         }
@@ -235,6 +282,16 @@ namespace Cake.Core.Tests.Unit.IO
                     // Then
                     Assert.False(ReferenceEquals(result, collection));
                 }
+
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() => (FilePathCollection)null - new FilePath("A.txt"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
+                }
             }
 
             public sealed class WithMultiplePaths
@@ -265,6 +322,16 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.False(ReferenceEquals(result, collection));
+                }
+
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() => (FilePathCollection)null - new FilePath[] { "A.txt" });
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
                 }
             }
         }
