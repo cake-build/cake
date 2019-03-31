@@ -61,7 +61,7 @@ namespace Cake.Core.Tests.Unit.IO
                 }
 
                 [Fact]
-                public void Should_Throw_If_Filesystem_Is_Null()
+                public void Should_Throw_If_FileSystem_Is_Null()
                 {
                     // Given, When
                     var result = Record.Exception(() => FileSystemExtensions.Exist(null, (FilePath)"file.txt"));
@@ -120,7 +120,7 @@ namespace Cake.Core.Tests.Unit.IO
                 }
 
                 [Fact]
-                public void Should_Throw_If_Filesystem_Is_Null()
+                public void Should_Throw_If_FileSystem_Is_Null()
                 {
                     // Given, When
                     var result = Record.Exception(() => FileSystemExtensions.Exist(null, (DirectoryPath)"/Target"));
