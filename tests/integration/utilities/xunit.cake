@@ -1,4 +1,4 @@
-#addin "nuget:?package=xunit.assert&version=2.3.1&prerelease"
+#addin "nuget:?package=xunit.assert&version=2.4.1"
 
 // Usings
 using Xunit;

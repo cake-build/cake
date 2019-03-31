@@ -21,7 +21,7 @@ namespace Cake.Common.Build.TFBuild.Data
         public TFCodeCoverageToolType? CodeCoverageTool { get; set; }
 
         /// <summary>
-        /// Gets or Sets the path ath of the summary file containing code coverage statistics, such as line, method, and class coverage.
+        /// Gets or Sets the path of the summary file containing code coverage statistics, such as line, method, and class coverage.
         /// </summary>
         public FilePath SummaryFileLocation { get; set; }
 

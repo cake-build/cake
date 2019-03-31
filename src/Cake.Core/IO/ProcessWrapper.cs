@@ -77,7 +77,7 @@ namespace Cake.Core.IO
                 {
                     continue;
                 }
-                _log.Debug(log => log("{0}", _filterOutput(line)));
+                _log.Debug(log => log("{0}", _filterError(line)));
                 yield return line;
             }
         }

@@ -138,7 +138,7 @@ namespace Cake.Core.IO.Globbing
                         {
                             if (node.Next != null)
                             {
-                                context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + 1));
+                                context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
                                 node.Next.Accept(this, context);
                                 context.Pop();
                             }
@@ -154,7 +154,7 @@ namespace Cake.Core.IO.Globbing
 
         public void VisitUnixRoot(UnixRootNode node, GlobVisitorContext context)
         {
-            context.Push(string.Empty);
+            context.Push("/");
             node.Next.Accept(this, context);
             context.Pop();
         }
@@ -173,7 +173,7 @@ namespace Cake.Core.IO.Globbing
             {
                 foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
                 {
-                    context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + 1));
+                    context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
                     if (node.Next != null)
                     {
                         node.Next.Accept(this, context);

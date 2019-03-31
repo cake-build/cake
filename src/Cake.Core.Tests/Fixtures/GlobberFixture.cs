@@ -83,6 +83,7 @@ namespace Cake.Core.Tests.Fixtures
             var filesystem = new FakeFileSystem(environment);
 
             // Directories
+            filesystem.CreateDirectory("/RootDir");
             filesystem.CreateDirectory("/Working");
             filesystem.CreateDirectory("/Working/Foo");
             filesystem.CreateDirectory("/Working/Foo/Bar");
@@ -94,6 +95,7 @@ namespace Cake.Core.Tests.Fixtures
             filesystem.CreateDirectory("/嵌套/目录");
 
             // Files
+            filesystem.CreateFile("/RootFile.sh");
             filesystem.CreateFile("/Working/Foo/Bar/Qux.c");
             filesystem.CreateFile("/Working/Foo/Bar/Qex.c");
             filesystem.CreateFile("/Working/Foo/Bar/Qux.h");

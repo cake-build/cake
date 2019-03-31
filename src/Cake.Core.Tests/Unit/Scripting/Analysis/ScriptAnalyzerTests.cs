@@ -332,7 +332,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
             {
                 // Given
                 var fixture = new ScriptAnalyzerFixture();
-                fixture.Providers.Add(new FileLoadDirectiveProvider());
+                fixture.AddFileLoadDirectiveProvider();
                 fixture.GivenScriptExist("/Working/script.cake", "#load \"local:?pat\"");
 
                 // When
@@ -354,7 +354,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
             {
                 // Given
                 var fixture = new ScriptAnalyzerFixture();
-                fixture.Providers.Add(new FileLoadDirectiveProvider());
+                fixture.AddFileLoadDirectiveProvider();
                 fixture.GivenScriptExist("/Working/script.cake", "#load \"local:?path=script2.cake\"");
                 fixture.GivenScriptExist("/Working/script2.cake", "\n#load \"local:?path=1&path=2\"");
 

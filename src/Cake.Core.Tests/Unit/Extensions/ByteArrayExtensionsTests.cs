@@ -11,6 +11,14 @@ namespace Cake.Core.Tests.Unit.Extensions
         public class TheStartsWithMethod
         {
             [Fact]
+            public void Should_Throw_When_Value_Is_Null()
+            {
+                var result = Record.Exception(() => ByteArrayExtensions.StartsWith(null, new byte[] { }));
+
+                AssertEx.IsArgumentNullException(result, "value");
+            }
+
+            [Fact]
             public void Should_Throw_When_Prefix_Is_Null()
             {
                 var value = new byte[] { 0x6E, 0x75, 0x6C, 0x6C };

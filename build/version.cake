@@ -17,7 +17,7 @@ public class BuildVersion
         string semVersion = null;
         string milestone = null;
 
-        if (context.IsRunningOnWindows() && !parameters.SkipGitVersion)
+        if (!parameters.SkipGitVersion)
         {
             context.Information("Calculating Semantic Version");
             if (!parameters.IsLocalBuild || parameters.IsPublishBuild || parameters.IsReleaseBuild)

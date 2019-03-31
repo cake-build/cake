@@ -48,7 +48,7 @@ namespace Cake.Common.Tools.VSWhere.Product
             if (!string.IsNullOrWhiteSpace(settings.Products))
             {
                 builder.Append("-products");
-                builder.AppendQuoted(settings.Products);
+                builder.Append(settings.Products);
             }
 
             AddCommonArguments(settings, builder);

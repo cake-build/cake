@@ -329,7 +329,7 @@ namespace Cake.Core
 
             PerformTaskSetup(context, strategy, task, false);
 
-            var exceptionWasThrown = false;
+            Exception taskException = null;
             try
             {
                 // Execute the task.
@@ -339,7 +339,7 @@ namespace Cake.Core
             {
                 _log.Error("An error occurred when executing task '{0}'.", task.Name);
 
-                exceptionWasThrown = true;
+                taskException = exception;
 
                 // Got an error reporter?
                 if (task.ErrorReporter != null)
@@ -350,7 +350,7 @@ namespace Cake.Core
                 // Got an error handler?
                 if (task.ErrorHandler != null)
                 {
-                    HandleErrors(strategy, task.ErrorHandler, exception);
+                    HandleErrors(strategy, task.ErrorHandler, exception, context);
                 }
                 else
                 {
@@ -366,7 +366,7 @@ namespace Cake.Core
                     strategy.InvokeFinally(task.FinallyHandler);
                 }
 
-                PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, exceptionWasThrown);
+                PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, taskException);
             }
 
             // Add the task results to the report
@@ -392,18 +392,19 @@ namespace Cake.Core
                 {
                     strategy.PerformTaskSetup(_actions.TaskSetup, taskSetupContext);
                 }
-                catch
+                catch (Exception exception)
                 {
-                    PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, skipped, true);
+                    PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, skipped, exception);
                     throw;
                 }
             }
         }
 
-        private void PerformTaskTeardown(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task,
-            TimeSpan duration, bool skipped, bool exceptionWasThrown)
+        private void PerformTaskTeardown(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task, TimeSpan duration, bool skipped, Exception taskException)
         {
-            var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped);
+            var exceptionWasThrown = taskException != null;
+
+            var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped, taskException);
             PublishEvent(TaskTeardown, new TaskTeardownEventArgs(taskTeardownContext));
             if (_actions.TaskTeardown != null)
             {
@@ -430,7 +431,7 @@ namespace Cake.Core
         {
             PerformTaskSetup(context, strategy, task, true);
             strategy.Skip(task, criteria);
-            PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, true, false);
+            PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, true, null);
 
             // Add the skipped task to the report.
             report.AddSkipped(task.Name);
@@ -455,11 +456,11 @@ namespace Cake.Core
             }
         }
 
-        private void HandleErrors(IExecutionStrategy strategy, Action<Exception> errorHandler, Exception exception)
+        private void HandleErrors(IExecutionStrategy strategy, Action<Exception, ICakeContext> errorHandler, Exception exception, ICakeContext context)
         {
             try
             {
-                strategy.HandleErrors(errorHandler, exception);
+                strategy.HandleErrors(errorHandler, exception, context);
             }
             catch (Exception errorHandlerException)
             {

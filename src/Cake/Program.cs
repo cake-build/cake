@@ -100,7 +100,7 @@ namespace Cake
                 var aex = ex as AggregateException;
                 if (aex != null)
                 {
-                    foreach (var exception in aex.InnerExceptions)
+                    foreach (var exception in aex.Flatten().InnerExceptions)
                     {
                         log.Error("\t{0}", exception.Message);
                     }

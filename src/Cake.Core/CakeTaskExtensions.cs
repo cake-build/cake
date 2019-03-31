@@ -64,7 +64,7 @@ namespace Cake.Core
         /// <param name="errorHandler">The error handler.</param>
         /// <exception cref="CakeException">There can only be one error handler per task.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="errorHandler"/> is null.</exception>
-        public static void SetErrorHandler(this CakeTask task, Action<Exception> errorHandler)
+        public static void SetErrorHandler(this CakeTask task, Action<Exception, ICakeContext> errorHandler)
         {
             if (task.ErrorHandler != null)
             {
@@ -126,7 +126,7 @@ namespace Cake.Core
         /// <param name="task">The task.</param>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        public static void AddDelayedAction(this CakeTask task, Action action)
+        public static void AddDelayedAction(this CakeTask task, Action<ICakeContext> action)
         {
             if (action == null)
             {

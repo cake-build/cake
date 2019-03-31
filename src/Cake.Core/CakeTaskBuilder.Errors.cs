@@ -53,6 +53,17 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Action<Exception> errorHandler)
         {
+            return OnError(builder, (exception, context) => errorHandler(exception));
+        }
+
+        /// <summary>
+        /// Adds an error handler to be executed if an exception occurs in the task.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="errorHandler">The error handler.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Action<Exception, ICakeContext> errorHandler)
+        {
             if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
@@ -60,6 +71,49 @@ namespace Cake.Core
 
             builder.Target.SetErrorHandler(errorHandler);
             return builder;
+        }
+
+        /// <summary>
+        /// Adds an error handler to be executed if an exception occurs in the task.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="errorHandler">The error handler.</param>
+        /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<TData> errorHandler)
+            where TData : class
+        {
+            return OnError<TData>(builder, (exception, data) => errorHandler(data));
+        }
+
+        /// <summary>
+        /// Adds an error handler to be executed if an exception occurs in the task.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="errorHandler">The error handler.</param>
+        /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<Exception, TData> errorHandler)
+            where TData : class
+        {
+            return OnError<TData>(builder, (exception, context, data) => errorHandler(exception, data));
+        }
+
+        /// <summary>
+        /// Adds an error handler to be executed if an exception occurs in the task.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="errorHandler">The error handler.</param>
+        /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<Exception, ICakeContext, TData> errorHandler)
+            where TData : class
+        {
+            return OnError(builder, (exception, context) =>
+            {
+                var data = context.Data.Get<TData>();
+                errorHandler(exception, context, data);
+            });
         }
 
         /// <summary>

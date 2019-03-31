@@ -16,15 +16,24 @@ namespace Cake.Core.Tests.Fixtures
     {
         public FakeFileSystem FileSystem { get; set; }
         public FakeEnvironment Environment { get; set; }
+        public IGlobber Globber { get; set; }
         public ICakeLog Log { get; set; }
         public List<ILoadDirectiveProvider> Providers { get; set; }
 
-        public ScriptAnalyzerFixture()
+        public ScriptAnalyzerFixture(bool windows = false)
         {
-            Environment = FakeEnvironment.CreateUnixEnvironment();
+            Environment = windows
+                ? FakeEnvironment.CreateWindowsEnvironment()
+                : FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
+            Globber = new Globber(FileSystem, Environment);
             Log = Substitute.For<ICakeLog>();
             Providers = new List<ILoadDirectiveProvider>();
+        }
+
+        public void AddFileLoadDirectiveProvider()
+        {
+            Providers.Add(new FileLoadDirectiveProvider(Globber, Log));
         }
 
         public ScriptAnalyzer CreateAnalyzer()
