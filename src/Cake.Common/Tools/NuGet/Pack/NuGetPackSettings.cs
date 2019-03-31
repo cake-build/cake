@@ -138,9 +138,36 @@ namespace Cake.Common.Tools.NuGet.Pack
         public ICollection<string> Tags { get; set; } = new List<string>();
 
         /// <summary>
-        /// Gets or sets the package repository data
+        /// Gets or sets a value indicating whether this package should be marked as a serviceable.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if serviceable; otherwise, <c>false</c>.
+        /// </value>
+        public bool? Serviceable { get; set; }
+
+        /// <summary>
+        /// Gets or sets the package repository data.
+        /// </summary>
+        /// <value>The package repository data.</value>
         public NuGetRepository Repository { get; set; }
+
+        /// <summary>
+        /// Gets or sets the package license.
+        /// </summary>
+        /// <value>The package license.</value>
+        public NuSpecLicense License { get; set; }
+
+        /// <summary>
+        /// Gets or sets the package types.
+        /// </summary>
+        /// <value>The package types.</value>
+        public ICollection<NuSpecPackageType> PackageTypes { get; set; } = new List<NuSpecPackageType>();
+
+        /// <summary>
+        /// Gets or sets the package framework assemblies.
+        /// </summary>
+        /// <value>The package framework assemblies.</value>
+        public ICollection<NuSpecFrameworkAssembly> FrameworkAssemblies { get; set; } = new List<NuSpecFrameworkAssembly>();
 
         /// <summary>
         /// Gets or sets a value indicating whether this package should be marked as a development dependency.
@@ -157,6 +184,24 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <c>true</c> if users has to accept the package license; otherwise, <c>false</c>.
         /// </value>
         public bool? RequireLicenseAcceptance { get; set; }
+
+        /// <summary>
+        /// Gets or sets the package references.
+        /// </summary>
+        /// <value>The package references.</value>
+        public ICollection<NuSpecReference> References { get; set; } = new List<NuSpecReference>();
+
+        /// <summary>
+        /// Gets or sets the package content files.
+        /// </summary>
+        /// <value>The package content files.</value>
+        public ICollection<NuSpecContentFile> ContentFiles { get; set; } = new List<NuSpecContentFile>();
+
+        /// <summary>
+        /// Gets or sets the package minimum client version.
+        /// </summary>
+        /// <value>The package minimum client version.</value>
+        public string MinClientVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the package files.
