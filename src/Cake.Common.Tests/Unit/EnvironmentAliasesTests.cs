@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core;
 using Cake.Testing;
 using NSubstitute;
@@ -88,11 +89,11 @@ namespace Cake.Common.Tests.Unit
                 var result = EnvironmentAliases.EnvironmentVariable(context, TestVariableName);
 
                 // Then
-                Assert.Equal(result, TestVariableValue);
+                Assert.Equal(TestVariableValue, result);
             }
 
             [Fact]
-            public void Should_Return_Null_If_Value_Do_Not_Exist()
+            public void Should_Return_Null_If_Value_Does_Not_Exist()
             {
                 // Given
                 var environment = Substitute.For<ICakeEnvironment>();
@@ -107,6 +108,61 @@ namespace Cake.Common.Tests.Unit
 
                 // Then
                 Assert.Null(result);
+            }
+
+            [Fact]
+            public void Should_Return_Typed_Value()
+            {
+                // Given
+                var environment = Substitute.For<ICakeEnvironment>();
+                environment.GetEnvironmentVariable(TestVariableName)
+                    .Returns("123");
+
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.Returns(environment);
+
+                // When
+                var result = EnvironmentAliases.EnvironmentVariable(context, TestVariableName, 456);
+
+                // Then
+                Assert.Equal(123, result);
+            }
+
+            [Fact]
+            public void Should_Return_Typed_DefaultValue_If_Value_Does_Not_Exist()
+            {
+                // Given
+                var environment = Substitute.For<ICakeEnvironment>();
+                environment.GetEnvironmentVariable(TestVariableName)
+                    .Returns((string)null);
+
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.Returns(environment);
+
+                // When
+                var result = EnvironmentAliases.EnvironmentVariable(context, TestVariableName, 456);
+
+                // Then
+                Assert.Equal(456, result);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Value_Does_Not_Convert()
+            {
+                // Given
+                var environment = Substitute.For<ICakeEnvironment>();
+                environment.GetEnvironmentVariable(TestVariableName)
+                    .Returns("abc");
+
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.Returns(environment);
+
+                // When
+                var ex = Record.Exception(() => EnvironmentAliases.EnvironmentVariable(context, TestVariableName, 456));
+
+                // Then
+                Assert.NotNull(ex);
+                Assert.Contains("not a valid value", ex.Message);
             }
         }
 
@@ -136,7 +192,7 @@ namespace Cake.Common.Tests.Unit
                 var result = EnvironmentAliases.IsRunningOnWindows(context);
 
                 // Then
-                Assert.Equal(result, expected);
+                Assert.Equal(expected, result);
             }
         }
 
@@ -166,7 +222,7 @@ namespace Cake.Common.Tests.Unit
                 var result = EnvironmentAliases.IsRunningOnUnix(context);
 
                 // Then
-                Assert.Equal(result, expected);
+                Assert.Equal(expected, result);
             }
         }
     }

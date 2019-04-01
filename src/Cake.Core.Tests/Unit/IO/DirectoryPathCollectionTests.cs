@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Core.IO;
 using Xunit;
 
@@ -71,6 +72,19 @@ namespace Cake.Core.Tests.Unit.IO
             public sealed class WithMultiplePaths
             {
                 [Fact]
+                public void Should_Throw_If_Paths_Is_Null()
+                {
+                    // Given
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A" }, new PathComparer(false));
+
+                    // When
+                    var result = Record.Exception(() => collection.Add((IEnumerable<DirectoryPath>)null));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "paths");
+                }
+
+                [Fact]
                 public void Should_Add_Paths_That_Are_Not_Present()
                 {
                     // Given
@@ -122,6 +136,19 @@ namespace Cake.Core.Tests.Unit.IO
 
             public sealed class WithMultiplePaths
             {
+                [Fact]
+                public void Should_Throw_If_Paths_Is_Null()
+                {
+                    // Given
+                    var collection = new DirectoryPathCollection(new DirectoryPath[] { "A" }, new PathComparer(false));
+
+                    // When
+                    var result = Record.Exception(() => collection.Remove((IEnumerable<DirectoryPath>)null));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "paths");
+                }
+
                 [Theory]
                 [InlineData(true, 2)]
                 [InlineData(false, 0)]
@@ -143,6 +170,16 @@ namespace Cake.Core.Tests.Unit.IO
         {
             public sealed class WithSinglePath
             {
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() => (DirectoryPathCollection)null + new DirectoryPath("a"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
+                }
+
                 [Theory]
                 [InlineData(true, 2)]
                 [InlineData(false, 1)]
@@ -174,6 +211,16 @@ namespace Cake.Core.Tests.Unit.IO
 
             public sealed class WithMultiplePaths
             {
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() => (DirectoryPathCollection)null + new DirectoryPath[] { "a" });
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
+                }
+
                 [Theory]
                 [InlineData(true, 5)]
                 [InlineData(false, 3)]
@@ -208,6 +255,16 @@ namespace Cake.Core.Tests.Unit.IO
         {
             public sealed class WithSinglePath
             {
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() => (DirectoryPathCollection)null - new DirectoryPath("a"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
+                }
+
                 [Theory]
                 [InlineData(true, 2)]
                 [InlineData(false, 1)]
@@ -239,6 +296,16 @@ namespace Cake.Core.Tests.Unit.IO
 
             public sealed class WithMultiplePaths
             {
+                [Fact]
+                public void Should_Throw_If_Collection_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() => (DirectoryPathCollection)null - new DirectoryPath[] { "a" });
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "collection");
+                }
+
                 [Theory]
                 [InlineData(true, 3)]
                 [InlineData(false, 1)]

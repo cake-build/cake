@@ -33,7 +33,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <summary>
         /// Gets the directory the agent is installed into. This contains the agent software.
         /// </summary>
-        /// <remarks>If you are using an on-premises agent, this directory is specified by you.</remarks>
+        /// <remarks>If you are using a self-hosted agent, this directory is specified by you.</remarks>
         /// <value>
         /// The directory the agent is installed into.
         /// </value>
@@ -57,9 +57,25 @@ namespace Cake.Common.Build.TFBuild.Data
         public int Id => GetEnvironmentInteger("AGENT_ID");
 
         /// <summary>
+        /// Gets the display name of the running job.
+        /// </summary>
+        /// <value>
+        /// The display name of the running job.
+        /// </value>
+        public string JobName => GetEnvironmentString("AGENT_JOBNAME");
+
+        /// <summary>
+        /// Gets the status of the build.
+        /// </summary>
+        /// <value>
+        /// The status of the build.
+        /// </value>
+        public string JobStatus => GetEnvironmentString("AGENT_JOBSTATUS");
+
+        /// <summary>
         /// Gets the name of the agent that is registered with the pool.
         /// </summary>
-        /// <remarks>If you are using an on-premises agent, this is specified by you.</remarks>
+        /// <remarks>If you are using a self-hosted agent, this is specified by you.</remarks>
         /// <value>
         /// The name of the agent that is registered with the pool.
         /// </value>
@@ -71,7 +87,18 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The name of the machine on which the agent is installed.
         /// </value>
-        public string MachineName => GetEnvironmentString("AGENT_MACHINE_NAME");
+        public string MachineName => GetEnvironmentString("AGENT_MACHINENAME");
+
+        /// <summary>
+        /// Gets the directory used by tasks such as Node Tool Installer and Use Python Version to switch between multiple versions of a tool.
+        /// </summary>
+        /// <remarks>
+        /// These tasks will add tools from this directory to PATH so that subsequent build steps can use them
+        /// </remarks>
+        /// <value>
+        /// The task directory
+        /// </value>
+        public FilePath ToolsDirectory => GetEnvironmentString("AGENT_TOOLSDIRECTORY");
 
         /// <summary>
         /// Gets a value indicating whether the current agent is a hosted agent.
@@ -79,6 +106,6 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// <c>true</c> if the current agent is a hosted agent; otherwise, <c>false</c>.
         /// </value>
-        public bool IsHosted => Name == "Hosted Agent";
+        public bool IsHosted => Name != null && Name.StartsWith("Hosted");
     }
 }

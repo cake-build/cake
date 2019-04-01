@@ -19,7 +19,7 @@ namespace Cake.Core.Tests.Unit
                 var task = Substitute.For<ICakeTaskInfo>();
 
                 // When
-                var result = Record.Exception(() => new TaskTeardownContext(null, task, TimeSpan.Zero, false));
+                var result = Record.Exception(() => new TaskTeardownContext(null, task, TimeSpan.Zero, false, null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "context");
@@ -32,7 +32,7 @@ namespace Cake.Core.Tests.Unit
                 var context = Substitute.For<ICakeContext>();
 
                 // When
-                var result = Record.Exception(() => new TaskTeardownContext(context, null, TimeSpan.Zero, false));
+                var result = Record.Exception(() => new TaskTeardownContext(context, null, TimeSpan.Zero, false, null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "task");

@@ -15,7 +15,7 @@ namespace Cake.Common.Tools.SpecFlow
     /// <para>Contains functionality related to <see href="http://www.specflow.org/">SpecFlow</see>.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the appropriate settings class:
+    /// install from nuget.org, or specify the ToolPath within the appropriate settings class:
     /// <code>
     /// #tool "nuget:?package=SpecFlow"
     /// </code>
@@ -96,7 +96,7 @@ namespace Cake.Common.Tools.SpecFlow
         /// See <see href="https://github.com/techtalk/SpecFlow/wiki/Reporting#test-execution-report">SpecFlow Documentation</see> for more information.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="action">The action to run SpecFlow for. Supported actions are: MSTest, NUNit, NUNit3, XUnit and XUnit2</param>
+        /// <param name="action">The action to run SpecFlow for. Supported actions are: MSTest, NUnit, NUnit3, XUnit and XUnit2</param>
         /// <param name="projectFile">The path of the project file containing the feature files.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]

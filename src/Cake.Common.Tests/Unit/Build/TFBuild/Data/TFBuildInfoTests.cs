@@ -106,5 +106,213 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild.Data
                 Assert.Equal("author@mail.com", result);
             }
         }
+
+        public sealed class TheAccessTokenProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.AccessToken;
+
+                // Then
+                Assert.Equal("f662dbe218144c86bdecb1e9b2eb336c", result);
+            }
+        }
+
+        public sealed class TheDebugProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.Debug;
+
+                // Then
+                Assert.Equal(true, result);
+            }
+        }
+
+        public sealed class TheArtifactStagingDirectoryProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.ArtifactStagingDirectory;
+
+                // Then
+                Assert.Equal(@"c:/agent/_work/1/a", result.FullPath);
+            }
+        }
+
+        public sealed class TheBinariesDirectoryProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.BinariesDirectory;
+
+                // Then
+                Assert.Equal(@"c:/agent/_work/1/b", result.FullPath);
+            }
+        }
+
+        public sealed class TheSourcesDirectoryProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.SourcesDirectory;
+
+                // Then
+                Assert.Equal(@"c:/agent/_work/1/s", result.FullPath);
+            }
+        }
+
+        public sealed class TheStagingDirectoryProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.StagingDirectory;
+
+                // Then
+                Assert.Equal(@"c:/agent/_work/1/a", result.FullPath);
+            }
+        }
+
+        public sealed class TheTestResultsDirectoryProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.TestResultsDirectory;
+
+                // Then
+                Assert.Equal(@"c:/agent/_work/1/TestResults", result.FullPath);
+            }
+        }
+
+        public sealed class TheReasonProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.Reason;
+
+                // Then
+                Assert.Equal(@"PullRequest", result);
+            }
+        }
+
+        public sealed class TheTriggeredByBuildIdProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.TriggeredBy.BuildId;
+
+                // Then
+                Assert.Equal(1, result);
+            }
+        }
+
+        public sealed class TheTriggeredByDefinitionIdProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.TriggeredBy.DefinitionId;
+
+                // Then
+                Assert.Equal(1, result);
+            }
+        }
+
+        public sealed class TheTriggeredByDefinitionNameProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.TriggeredBy.DefinitionName;
+
+                // Then
+                Assert.Equal(@"Build", result);
+            }
+        }
+
+        public sealed class TheTriggeredByBuildNumberProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.TriggeredBy.BuildNumber;
+
+                // Then
+                Assert.Equal(@"123", result);
+            }
+        }
+
+        public sealed class TheTriggeredByProjectIdProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.TriggeredBy.ProjectId;
+
+                // Then
+                Assert.Equal(@"456", result);
+            }
+        }
     }
 }

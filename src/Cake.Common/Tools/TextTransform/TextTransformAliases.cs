@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.TextTransform
     /// <para>Contains functionality related to <see href="https://github.com/mono/monodevelop/tree/master/main/src/addins/TextTemplating/TextTransform">TextTransform</see>.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the <see cref="TextTransformSettings" /> class:
+    /// install from nuget.org, or specify the ToolPath within the <see cref="TextTransformSettings" /> class:
     /// <code>
     /// #tool "nuget:?package=Mono.TextTransform"
     /// </code>

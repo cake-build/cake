@@ -17,6 +17,8 @@ namespace Cake.Core.Scripting.CodeGen
     /// </summary>
     public static class MethodAliasGenerator
     {
+        private static readonly System.Security.Cryptography.SHA256 SHA256 = System.Security.Cryptography.SHA256.Create();
+
         /// <summary>
         /// Generates a script method alias from the specified method.
         /// The provided method must be an extension method for <see cref="ICakeContext"/>
@@ -24,7 +26,17 @@ namespace Cake.Core.Scripting.CodeGen
         /// </summary>
         /// <param name="method">The method to generate the code for.</param>
         /// <returns>The generated code.</returns>
-        public static string Generate(MethodInfo method)
+        public static string Generate(MethodInfo method) => Generate(method, out _);
+
+        /// <summary>
+        /// Generates a script method alias from the specified method.
+        /// The provided method must be an extension method for <see cref="ICakeContext"/>
+        /// and it must be decorated with the <see cref="CakeMethodAliasAttribute"/>.
+        /// </summary>
+        /// <param name="method">The method to generate the code for.</param>
+        /// <param name="hash">The hash of method signature.</param>
+        /// <returns>The generated code.</returns>
+        public static string Generate(MethodInfo method, out string hash)
         {
             if (method == null)
             {
@@ -56,6 +68,12 @@ namespace Cake.Core.Scripting.CodeGen
             {
                 GenericParameterConstraintEmitter.BuildGenericConstraints(method, builder);
             }
+
+            hash = SHA256
+                .ComputeHash(Encoding.UTF8.GetBytes(builder.ToString()))
+                .Aggregate(new StringBuilder(),
+                (sb, b) => sb.AppendFormat("{0:x2}", b),
+                sb => sb.ToString());
 
             builder.AppendLine();
             builder.Append("{");

@@ -114,6 +114,30 @@ namespace Cake.Common.Build
             GoCD = goCDProvider;
             GitLabCI = gitlabCIProvider;
             TFBuild = tfBuildProvider;
+
+            Provider = (AppVeyor.IsRunningOnAppVeyor ? BuildProvider.AppVeyor : BuildProvider.Local)
+                | (TeamCity.IsRunningOnTeamCity ? BuildProvider.TeamCity : BuildProvider.Local)
+                | (MyGet.IsRunningOnMyGet ? BuildProvider.MyGet : BuildProvider.Local)
+                | (Bamboo.IsRunningOnBamboo ? BuildProvider.Bamboo : BuildProvider.Local)
+                | (ContinuaCI.IsRunningOnContinuaCI ? BuildProvider.ContinuaCI : BuildProvider.Local)
+                | (Jenkins.IsRunningOnJenkins ? BuildProvider.Jenkins : BuildProvider.Local)
+                | (Bitrise.IsRunningOnBitrise ? BuildProvider.Bitrise : BuildProvider.Local)
+                | (TravisCI.IsRunningOnTravisCI ? BuildProvider.TravisCI : BuildProvider.Local)
+                | (BitbucketPipelines.IsRunningOnBitbucketPipelines ? BuildProvider.BitbucketPipelines : BuildProvider.Local)
+                | (GoCD.IsRunningOnGoCD ? BuildProvider.GoCD : BuildProvider.Local)
+                | (GitLabCI.IsRunningOnGitLabCI ? BuildProvider.GitLabCI : BuildProvider.Local)
+                | (TFBuild.IsRunningOnAzurePipelines ? BuildProvider.AzurePipelines : BuildProvider.Local)
+                | (TFBuild.IsRunningOnAzurePipelinesHosted ? BuildProvider.AzurePipelinesHosted : BuildProvider.Local);
+
+            IsLocalBuild = Provider == BuildProvider.Local;
+
+            IsPullRequest = ((Provider & BuildProvider.AppVeyor) != 0 && AppVeyor.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.TeamCity) != 0 && TeamCity.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.Bitrise) != 0 && Bitrise.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.TravisCI) != 0 && TravisCI.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.BitbucketPipelines) != 0 && BitbucketPipelines.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.GitLabCI) != 0 && GitLabCI.Environment.PullRequest.IsPullRequest)
+                || ((Provider & (BuildProvider.AzurePipelines | BuildProvider.AzurePipelinesHosted)) != 0 && TFBuild.Environment.PullRequest.IsPullRequest);
         }
 
         /// <summary>
@@ -464,23 +488,6 @@ namespace Cake.Common.Build
         public bool IsRunningOnGitLabCI => GitLabCI.IsRunningOnGitLabCI;
 
         /// <summary>
-        /// Gets a value indicating whether this instance is running on VSTS.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// if(BuildSystem.IsRunningOnVSTS)
-        /// {
-        ///     // Get the build commit hash.
-        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
-        /// }
-        /// </code>
-        /// </example>
-        /// <value>
-        /// <c>true</c> if this instance is running on VSTS; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsRunningOnVSTS => TFBuild.IsRunningOnVSTS;
-
-        /// <summary>
         /// Gets a value indicating whether this instance is running on TFS.
         /// </summary>
         /// <example>
@@ -495,7 +502,60 @@ namespace Cake.Common.Build
         /// <value>
         /// <c>true</c> if this instance is running on TFS; otherwise, <c>false</c>.
         /// </value>
+        [Obsolete("Please use BuildSystem.IsRunningOnAzurePipelines instead.")]
         public bool IsRunningOnTFS => TFBuild.IsRunningOnTFS;
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is running on VSTS.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnVSTS)
+        /// {
+        ///     // Get the build commit hash.
+        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on VSTS; otherwise, <c>false</c>.
+        /// </value>
+        [Obsolete("Please use BuildSystem.IsRunningOnAzurePipelinesHosted instead.")]
+        public bool IsRunningOnVSTS => TFBuild.IsRunningOnVSTS;
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is running on Azure Pipelines.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnAzurePipelines)
+        /// {
+        ///     // Get the build commit hash.
+        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on Azure Pipelines; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnAzurePipelines => TFBuild.IsRunningOnAzurePipelines;
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is running on hosted Azure Pipelines.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if(BuildSystem.IsRunningOnAzurePipelinesHosted)
+        /// {
+        ///     // Get the build commit hash.
+        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on hosted Azure Pipelines; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnAzurePipelinesHosted => TFBuild.IsRunningOnAzurePipelinesHosted;
 
         /// <summary>
         /// Gets the TF Build Provider.
@@ -510,6 +570,12 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         public ITFBuildProvider TFBuild { get; }
+
+        /// <summary>
+        /// Gets the current build provider.
+        /// </summary>
+        /// <value>The current build provider.</value>
+        public BuildProvider Provider { get; }
 
         /// <summary>
         /// Gets a value indicating whether the current build is local build.
@@ -530,6 +596,14 @@ namespace Cake.Common.Build
         /// <value>
         ///   <c>true</c> if the current build is local build; otherwise, <c>false</c>.
         /// </value>
-        public bool IsLocalBuild => !(IsRunningOnAppVeyor || IsRunningOnTeamCity || IsRunningOnMyGet || IsRunningOnBamboo || IsRunningOnContinuaCI || IsRunningOnJenkins || IsRunningOnBitrise || IsRunningOnTravisCI || IsRunningOnBitbucketPipelines || IsRunningOnGoCD || IsRunningOnGitLabCI || IsRunningOnTFS || IsRunningOnVSTS);
+        public bool IsLocalBuild { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the current build was started by a pull request.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsPullRequest { get; }
     }
 }

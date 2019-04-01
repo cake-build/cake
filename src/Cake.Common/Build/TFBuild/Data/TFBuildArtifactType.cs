@@ -25,7 +25,7 @@ namespace Cake.Common.Build.TFBuild.Data
         VersionControl,
 
         /// <summary>
-        /// The git reference type.
+        /// The Git reference type.
         /// </summary>
         GitRef,
 

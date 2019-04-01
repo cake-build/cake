@@ -109,6 +109,14 @@ namespace Cake.Common.Build.GitLabCI.Data
         public int PipelineId => GetEnvironmentInteger("CI_PIPELINE_ID");
 
         /// <summary>
+        /// Gets the unique id of the current pipeline scoped to the project.
+        /// </summary>
+        /// <value>
+        /// The unique build ID.
+        /// </value>
+        public int PipelineIId => GetEnvironmentInteger("CI_PIPELINE_IID");
+
+        /// <summary>
         /// Gets the id of the user who started the build.
         /// </summary>
         /// <value>

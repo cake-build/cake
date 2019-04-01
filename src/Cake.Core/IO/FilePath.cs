@@ -170,7 +170,7 @@ namespace Cake.Core.IO
         /// <returns>A <see cref="FilePath"/>.</returns>
         public static implicit operator FilePath(string path)
         {
-            return FromString(path);
+            return path is null ? null : FromString(path);
         }
 
         /// <summary>

@@ -46,7 +46,7 @@ namespace Cake.Core.Tests.Fixtures
             Environment = FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
             FileSystem.CreateFile(Script.MakeAbsolute(Environment)).SetContent(Source);
-            Globber = Substitute.For<IGlobber>();
+            Globber = new Globber(FileSystem, Environment);
 
             Configuration = Substitute.For<ICakeConfiguration>();
             AliasFinder = Substitute.For<IScriptAliasFinder>();
@@ -57,7 +57,7 @@ namespace Cake.Core.Tests.Fixtures
             Engine = Substitute.For<IScriptEngine>();
             Engine.CreateSession(Arg.Any<IScriptHost>()).Returns(Session);
 
-            ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log, new[] { new FileLoadDirectiveProvider() });
+            ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log, new[] { new FileLoadDirectiveProvider(Globber, Log) });
             ScriptProcessor = Substitute.For<IScriptProcessor>();
             ScriptConventions = new ScriptConventions(FileSystem, AssemblyLoader);
 

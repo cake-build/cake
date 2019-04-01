@@ -1,3 +1,47 @@
+### New in 0.33.0 (Released 2019/04/01)
+
+* 2514 Add additional report types for ReportGenerator
+* 2130 Add exceptions thrown to TaskTeardownContext
+* 2456 Add logging aliases to override the log verbosity
+* 2453 Unify pull request status across providers
+* 2440 Add EnvironmentVariable alias
+* 2400 Add globber pattern support to the #load directive
+* 2504 Update .NET Core SDK 2.1.505
+* 2487 Warn and skip code gen for duplicate aliases
+* 2481 FilePath and DirectoryPath implicit conversions should return null when passed null
+* 2473 ParseAssemblyInfo does not support .NET Core generated assembly info
+* 2468 DotNet commands do not respect the verbosity
+* 2439 HtmlInline_AzurePipelines and MHtml shares the same numeric value
+* 2432 Azure Pipelines build system not recognized with non-Windows jobs
+* 2088 VSWhere -requires and -products argument values are quoted but VSWhere doesn't support multiple values in quotes
+* 2507 Cake.CoreCLR can't handle whitespace in path
+* 2491 Add additional Azure DevOps (TFBuild) properties
+* 2484 Octopus Deploy 2019.1 and Spaces feature
+* 2478 Lock file arguments for NuGet and dotnet restore
+* 2474 TeamCityProvider.BuildProblem method should conform to TeamCity API
+* 2472 Expose ICakeConfiguration (or specific values like tools path) on context
+* 2465 Roundhouse dotnet tool does not run
+* 2463 DoesForEach don't support data context for items functions
+* 2462 Added unit tests for Cake.Core
+* 2459 Add MSBuildPath to NuGetRestoreSettings
+* 2449 ARM64 missing from MSBuild target platform
+* 2445 Add OnError
+* 2433 NugetRestore still using msbuild 15
+* 2429 Add provider name to BuildSystem
+* 2415 Add support for MSBuild options to enable RestoreLockedMode
+* 2393 MethodAliasGenerator doesn't generate parameter attributes
+* 2345 Allow NuGetRestoreSettings to opt out of setting -NonInteractive
+* 2270 Allow to listen and modify redirected standard output of a process
+* 2141 Add Verbosity property to GitVersionSettings
+* 2124 Add Support for IEnumerable tokens on TextTransformationExtensions
+* 2087 Include more detailed exception information when Exception is AggregateException
+* 2026 Support for additional SignTool flags
+* 2019 Clean up some parser tests
+* 1384 Enhancement: Add support for filtering files in Globbing alias
+* 820 Log tools command-line at higher log level (preferably default)
+* 2512 TFBuildPublishCodeCoverageData xml comments minor typo
+* 2025 The tool path for MSpec needs to be changed in the documentation
+
 ### New in 0.32.1 (Released 2019/01/04)
 
 * 2426 Chocolatey pack regression in Cake 0.32.0
@@ -81,7 +125,7 @@
 
 * 2140 DotNetCorePublish does not respect SelfContained DotNetCorePublishSettings property.
 * 2203 Add Octopus Deploy Promote release support.
-* 2095 Add "--skipnontestassemblies" funcionality to CAKE's NUnit3Settings as it exists in original nunit3 test runner.
+* 2095 Add "--skipnontestassemblies" funcionality to Cake's NUnit3Settings as it exists in original NUnit 3 test runner.
 * 2094 Add support for executing a single task without dependencies.
 * 2196 NuGet Repository information not settable in NuGet Pack.
 * 2185 Try to find vswhere.exe on the system if the tool is not registered.
@@ -118,13 +162,13 @@
 ### New in 0.27.0 (Released 2018/04/19)
 
 * 2078 Support expand environment variables in script pre-processor directives
-* 2047 Specify version during Nuget Updating
+* 2047 Specify version during NuGet Updating
 * 2005 Add entries for Setup/Teardown in report
 * 1908 Octopus Deploy tool does not support list-deployments call for octo.exe
 * 2116 Loading Newtonsoft.Json in Cake.CoreCLR throws during assembly loading
 * 2084 Cake does not load dependencies in correct order
 * 2082 Investigate NuGet local V3 cache
-* 2081 Possibility to override default nuget sources
+* 2081 Possibility to override default NuGet sources
 * 2079 Default sources not loaded if nuget_source is empty
 * 2119 DotNetCore Publish misses Force / Self contained / Sources settings
 * 2113 Error when loading tools without internet connection
@@ -187,7 +231,7 @@
 * 1943 Chocolatey package dependencies cannot be set using the ChocolateyPackSettings
 * 1936 Move to signing service v2
 * 1931 Allow passing a nuget.config as environment variable or in cake.config
-* 1924 Set UserAgent for in process nuget
+* 1924 Set UserAgent for in-process NuGet
 * 1922 GitVersion is missing AssemblySemFileVer
 * 1912 Support for DotCover Process Filter
 * 1910 MSBuild property values should escape carriage return and line feed
@@ -208,7 +252,7 @@
 * 1853 The "using static" directive doesn't compile
 * 1843 NuGetContentResolver should not return ref assemblies.
 * 1842 Params in URI pre-processor directives are case sensitive
-* 1838 Dependencies are installed but have no references added when using LoadDependencies=true with in process nuget client
+* 1838 Dependencies are installed but have no references added when using LoadDependencies=true with in process NuGet client
 * 1831 CleanDirectories Throws NullReferenceException When Token Is Null
 * 1815 Exception Message should be shown rather than "One or more errors occurred."
 * 1404 MsBuildSettings.WithProperty does not escape values
@@ -277,7 +321,7 @@
 * 1787 Add opt-out config information to assembly version verification error message
 * 1780 Fix typo in version.cake
 * 1727 Incorrect documentation for XmlPeek Alias
-* 1700 Update nuget license url
+* 1700 Update NuGet license url
 * 1525 Updated examples for DotNetCoreTest
 
 ### New in 0.21.1 (Released 2017/07/15)
@@ -637,7 +681,7 @@
 * Add DotCover Cover support
 * Add SpecFlow support
 * Add Jenkins CI build system support
-* Use V3 Nuget in bootstrapper
+* Use V3 NuGet in bootstrapper
 * Remove logging from task setup/teardown.
 * Update ReleaseNotes.md
 * Removed year from © in readme
@@ -664,7 +708,7 @@
 * Replace #if !UNIX with [WindowsFact]
 * Don't show delegating tasks in summary
 * Task Summary should include skipped tasks
-* Support for nuget packing of project files
+* Support for NuGet packing of project files
 * Add method to get relative paths (for paths)
 * Full Build/Publish Automation for Cake
 * Add GitVersion into build.cake
@@ -724,7 +768,7 @@
 * Got support for .cake files in GitHub.
 * Created a Visual Studio Code extension for Cake.
 * Created a VSTS extension for Cake.
-* Fixed issue with external nugets used directly via #addin directive.
+* Fixed issue with external NuGet packages used directly via #addin directive.
 * DupFinder: Added ability to fail the build on detected issues.
 * InspectCode: Added ability to fail the build on detected issues.
 * TextTransform now handles Regex special characters.

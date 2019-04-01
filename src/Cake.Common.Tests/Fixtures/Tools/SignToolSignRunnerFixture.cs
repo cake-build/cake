@@ -23,7 +23,6 @@ namespace Cake.Common.Tests.Fixtures.Tools
         {
             Settings.CertPath = "./cert.pfx";
             Settings.Password = "secret";
-            Settings.TimeStampUri = new Uri("https://t.com");
 
             AssemblyPaths = new[] { new FilePath("./a.dll") };
             FileSystem.CreateFile("/Working/a.dll");

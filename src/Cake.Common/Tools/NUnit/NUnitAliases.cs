@@ -16,7 +16,7 @@ namespace Cake.Common.Tools.NUnit
     /// <para>Contains functionality related to running <see href="https://github.com/nunit/nunit">NUnit</see> tests.</para>
     /// <para>
     /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from NuGet.org, or specify the ToolPath within the <see cref="NUnitSettings" /> class:
+    /// install from nuget.org, or specify the ToolPath within the <see cref="NUnitSettings" /> class:
     /// <code>
     /// #tool "nuget:?package=NUnit.Runners&amp;version=2.6.4"
     /// </code>

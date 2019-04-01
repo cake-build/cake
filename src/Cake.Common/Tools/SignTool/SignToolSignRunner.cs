@@ -92,13 +92,6 @@ namespace Cake.Common.Tools.SignTool
                 }
             }
 
-            if (settings.TimeStampUri == null)
-            {
-                const string format = "{0}: Timestamp server URL is required but not specified.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName());
-                throw new CakeException(message);
-            }
-
             var builder = new ProcessArgumentBuilder();
 
             // SIGN Command.
@@ -110,20 +103,23 @@ namespace Cake.Common.Tools.SignTool
                 builder.Append("/fd sha256");
             }
 
-            // TimeStamp server.
-            if (settings.TimeStampDigestAlgorithm == SignToolDigestAlgorithm.Sha256)
+            // TimeStamp.
+            if (settings.TimeStampUri != null)
             {
-                // If Sha256 use RFC 3161 timestamp server.
-                builder.Append("/tr");
-                builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
+                if (settings.TimeStampDigestAlgorithm == SignToolDigestAlgorithm.Sha256)
+                {
+                    // If Sha256 use RFC 3161 timestamp server.
+                    builder.Append("/tr");
+                    builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
 
-                builder.Append("/td sha256");
-            }
-            else
-            {
-                // Otherwise use SHA-1 Authenticode timestamp server
-                builder.Append("/t");
-                builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
+                    builder.Append("/td sha256");
+                }
+                else
+                {
+                    // Otherwise use SHA-1 Authenticode timestamp server
+                    builder.Append("/t");
+                    builder.AppendQuoted(settings.TimeStampUri.AbsoluteUri);
+                }
             }
 
             if (settings.CertPath == null && string.IsNullOrEmpty(settings.CertThumbprint) && string.IsNullOrEmpty(settings.CertSubjectName))
@@ -187,6 +183,25 @@ namespace Cake.Common.Tools.SignTool
                 }
             }
 
+            if (settings.AdditionalCertPath != null)
+            {
+                // Make additional certificate path absolute.
+                settings.AdditionalCertPath = settings.AdditionalCertPath.IsRelative
+                    ? settings.AdditionalCertPath.MakeAbsolute(_environment)
+                    : settings.AdditionalCertPath;
+
+                if (!_fileSystem.Exist(settings.AdditionalCertPath))
+                {
+                    const string format = "{0}: The additional certificate '{1}' does not exist.";
+                    var message = string.Format(CultureInfo.InvariantCulture, format, GetToolName(), settings.AdditionalCertPath.FullPath);
+                    throw new CakeException(message);
+                }
+
+                // Path to additional certificate.
+                builder.Append("/ac");
+                builder.AppendQuoted(settings.AdditionalCertPath.MakeAbsolute(_environment).FullPath);
+            }
+
             // Certificate thumbprint.
             if (!string.IsNullOrEmpty(settings.CertThumbprint))
             {
@@ -224,6 +239,13 @@ namespace Cake.Common.Tools.SignTool
             if (settings.UseMachineStore)
             {
                 builder.Append("/sm");
+            }
+
+            // open a specific certificate store
+            if (!string.IsNullOrWhiteSpace(settings.StoreName))
+            {
+                builder.Append("/s");
+                builder.AppendQuoted(settings.StoreName);
             }
 
             // Target Assemblies to sign.

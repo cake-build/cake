@@ -230,6 +230,8 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
             [InlineData(NuGetMSBuildVersion.MSBuild4, "update \"/Working/packages.config\" -MSBuildVersion 4 -NonInteractive")]
             [InlineData(NuGetMSBuildVersion.MSBuild12, "update \"/Working/packages.config\" -MSBuildVersion 12 -NonInteractive")]
             [InlineData(NuGetMSBuildVersion.MSBuild14, "update \"/Working/packages.config\" -MSBuildVersion 14 -NonInteractive")]
+            [InlineData(NuGetMSBuildVersion.MSBuild15_9, "update \"/Working/packages.config\" -MSBuildVersion 15.9 -NonInteractive")]
+            [InlineData(NuGetMSBuildVersion.MSBuild16_0, "update \"/Working/packages.config\" -MSBuildVersion 16.0 -NonInteractive")]
             public void Should_Add_MSBuildVersion_To_Arguments_If_Set(NuGetMSBuildVersion msBuildVersion, string expected)
             {
                 // Given

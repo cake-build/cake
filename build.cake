@@ -7,7 +7,6 @@
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.10.0"
 
 // Install tools.
-#tool "nuget:https://api.nuget.org/v3/index.json?package=gitreleasemanager&version=0.7.1"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.4.2"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.6.519"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.0.4"
@@ -16,6 +15,7 @@
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=4.0.1-beta1-58"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=SignClient&version=1.0.82"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.8.0"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -250,7 +250,8 @@ Task("Validate-Version")
          fullFxExe,
          new ProcessSettings {
              Arguments = "--version",
-             RedirectStandardOutput = true
+             RedirectStandardOutput = true,
+             WorkingDirectory = parameters.Paths.Directories.ArtifactsBinFullFx
          },
          out fullFxOutput
      );
@@ -261,7 +262,8 @@ Task("Validate-Version")
          "dotnet",
          new ProcessSettings {
              Arguments = $"\"{coreFxExe}\" --version",
-             RedirectStandardOutput = true
+             RedirectStandardOutput = true,
+             WorkingDirectory = parameters.Paths.Directories.ArtifactsBinNetCore
          },
          out coreFxOutput
      );
@@ -314,7 +316,7 @@ Task("Create-Chocolatey-Packages")
         ChocolateyPack(package.NuspecPath, new ChocolateyPackSettings {
             Version = parameters.Version.SemVersion,
             ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-            OutputDirectory = parameters.Paths.Directories.NugetRoot,
+            OutputDirectory = parameters.Paths.Directories.NuGetRoot,
             Files = (GetFiles(netFxFullArtifactPath + "/*.*") + GetFiles("./nuspec/*.txt") + GetFiles("./LICENSE"))
                                     .Select(file=>"../" + file.FullPath.Substring(curDirLength))
                                     .Select(file=> new ChocolateyNuSpecContent { Source = file })
@@ -339,7 +341,7 @@ Task("Create-NuGet-Packages")
 
         DotNetCorePack(project.FullPath, new DotNetCorePackSettings {
             Configuration = parameters.Configuration,
-            OutputDirectory = parameters.Paths.Directories.NugetRoot,
+            OutputDirectory = parameters.Paths.Directories.NuGetRoot,
             NoBuild = true,
             NoRestore = true,
             IncludeSymbols = true,
@@ -352,7 +354,7 @@ Task("Create-NuGet-Packages")
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
         BasePath = parameters.Paths.Directories.ArtifactsBinFullFx,
-        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
         Symbols = true,
         NoPackageAnalysis = true
     });
@@ -365,7 +367,7 @@ Task("Create-NuGet-Packages")
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
         BasePath = netFxFullArtifactPath,
-        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
         Symbols = false,
         NoPackageAnalysis = true,
         Files = GetFiles(netFxFullArtifactPath + "/*")
@@ -379,7 +381,7 @@ Task("Create-NuGet-Packages")
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
         BasePath = parameters.Paths.Directories.ArtifactsBinNetCore,
-        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
         Symbols = true,
         NoPackageAnalysis = true
     });
@@ -392,7 +394,7 @@ Task("Create-NuGet-Packages")
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
         BasePath = netCoreFullArtifactPath,
-        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
         Symbols = false,
         NoPackageAnalysis = true,
         Files = GetFiles(netCoreFullArtifactPath + "/**/*")
@@ -403,7 +405,7 @@ Task("Create-NuGet-Packages")
 
     DotNetCorePack("./src/Cake/Cake.Tool.csproj", new DotNetCorePackSettings {
         Configuration = parameters.Configuration,
-        OutputDirectory = parameters.Paths.Directories.NugetRoot,
+        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
         IncludeSymbols = true,
         MSBuildSettings = msBuildSettings
     });
@@ -433,7 +435,7 @@ Task("Sign-Binaries")
     var filter = File("./signclient.filter");
 
     // Get the files to sign.
-    var files = GetFiles(string.Concat(parameters.Paths.Directories.NugetRoot, "/", "*.nupkg"))
+    var files = GetFiles(string.Concat(parameters.Paths.Directories.NuGetRoot, "/", "*.nupkg"))
         + parameters.Paths.Files.ZipArtifactPathDesktop
         + parameters.Paths.Files.ZipArtifactPathCoreClr;
 
@@ -471,7 +473,7 @@ Task("Upload-AppVeyor-Artifacts")
 {
     AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPathDesktop);
     AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPathCoreClr);
-    foreach(var package in GetFiles(parameters.Paths.Directories.NugetRoot + "/*"))
+    foreach(var package in GetFiles(parameters.Paths.Directories.NuGetRoot + "/*"))
     {
         AppVeyor.UploadArtifact(package);
     }
@@ -542,7 +544,7 @@ Task("Publish-NuGet")
         throw new InvalidOperationException("Could not resolve NuGet API url.");
     }
 
-    foreach(var package in parameters.Packages.Nuget)
+    foreach(var package in parameters.Packages.NuGet)
     {
         // Push the package.
         NuGetPush(package.PackagePath, new NuGetPushSettings {

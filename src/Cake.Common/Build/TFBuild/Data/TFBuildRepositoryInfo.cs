@@ -21,10 +21,18 @@ namespace Cake.Common.Build.TFBuild.Data
         }
 
         /// <summary>
+        /// Gets the branch the build was queued for
+        /// </summary>
+        /// <value>
+        /// The full SCM branch
+        /// </value>
+        public string SourceBranch => GetEnvironmentString("BUILD_SOURCEBRANCH");
+
+        /// <summary>
         /// Gets name of the branch the build was queued for.
         /// </summary>
         /// <value>
-        /// The SCM branch
+        /// The SCM branch name
         /// </value>
         public string Branch => GetEnvironmentString("BUILD_SOURCEBRANCHNAME");
 
@@ -36,6 +44,15 @@ namespace Cake.Common.Build.TFBuild.Data
         /// The SCM source version
         /// </value>
         public string SourceVersion => GetEnvironmentString("BUILD_SOURCEVERSION");
+
+        /// <summary>
+        /// Gets the comment of the commit or changeset.
+        /// </summary>
+        /// <remarks>Note: This variable is available in TFS 2015.4.</remarks>
+        /// <value>
+        /// The comment
+        /// </value>
+        public string SourceVersionMessage => GetEnvironmentString("BUILD_SOURCEVERSIONMESSAGE");
 
         /// <summary>
         /// Gets the name of the shelveset you are building, if you are running a gated build or a shelveset build.
@@ -61,5 +78,13 @@ namespace Cake.Common.Build.TFBuild.Data
         /// The type of the current repository.
         /// </value>
         public TFRepositoryType? Provider => GetRepositoryType("BUILD_REPOSITORY_PROVIDER");
+
+        /// <summary>
+        /// Gets the value you've selected for Checkout submodules on the repository tab
+        /// </summary>
+        /// <value>
+        /// The checkout submodule value.
+        /// </value>
+        public string GitSubmoduleCheckout => GetEnvironmentString("BUILD_REPOSITORY_GIT_SUBMODULECHECKOUT");
     }
 }

@@ -118,10 +118,21 @@ namespace Cake.Common.Tools.NuGet.Restore
             if (settings.MSBuildVersion.HasValue)
             {
                 builder.Append("-MSBuildVersion");
-                builder.Append(settings.MSBuildVersion.Value.ToString("D"));
+                builder.Append(settings.MSBuildVersion.Value.GetNuGetMSBuildVersionString());
             }
 
-            builder.Append("-NonInteractive");
+            // MSBuildPath
+            if (settings.MSBuildPath != null)
+            {
+                builder.Append("-MSBuildPath");
+                builder.AppendQuoted(settings.MSBuildPath.MakeAbsolute(_environment).FullPath);
+            }
+
+            // NonInteractive?
+            if (settings.NonInteractive)
+            {
+                builder.Append("-NonInteractive");
+            }
 
             return builder;
         }

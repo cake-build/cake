@@ -18,7 +18,7 @@ using PackageType = Cake.Core.Packaging.PackageType;
 
 namespace Cake.NuGet.Install
 {
-    internal sealed class NugetFolderProject : FolderNuGetProject
+    internal sealed class NuGetFolderProject : FolderNuGetProject
     {
         private readonly ISet<PackageIdentity> _installedPackages;
         private readonly IFileSystem _fileSystem;
@@ -34,7 +34,7 @@ namespace Cake.NuGet.Install
 
         public NuGetFramework TargetFramework { get; }
 
-        public NugetFolderProject(
+        public NuGetFolderProject(
             IFileSystem fileSystem,
             INuGetContentResolver contentResolver,
             ICakeLog log,

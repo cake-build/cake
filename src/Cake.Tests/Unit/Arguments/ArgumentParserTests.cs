@@ -80,19 +80,12 @@ namespace Cake.Tests.Unit.Arguments
                 Assert.Equal("/home/test/build.cake", result.Script.FullPath);
             }
 
-            [Theory]
-            [InlineData(".cakefile")]
-            [InlineData("build.cake")]
-            public void Can_Find_Default_Scripts(string scriptName)
+            [Fact]
+            public void Can_Find_Default_BuildCake_Script()
             {
                 // Given
                 var fixture = new ArgumentParserFixture();
                 var parser = new ArgumentParser(fixture.Log, fixture.VerbosityParser);
-                var file = Substitute.For<IFile>();
-                file.Exists.Returns(true);
-
-                fixture.FileSystem.GetFile(Arg.Is<FilePath>(fp => fp.FullPath == scriptName))
-                    .Returns(file);
 
                 // When
                 var result = parser.Parse(new string[] { });

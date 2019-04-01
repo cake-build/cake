@@ -75,13 +75,29 @@ namespace Cake.Common.Tools.ReportGenerator
         HtmlInline_AzurePipelines = 13,
 
         /// <summary>
-        /// Same as HTML but packaged into a single MHTML file.
-        /// </summary>
-        MHtml = 13,
-
-        /// <summary>
         /// A single PNG file containing a chart with historic coverage information.
         /// </summary>
-        PngChart = 14
+        PngChart = 14,
+
+        /// <summary>
+        /// Same as HTML but packaged into a single MHTML file.
+        /// </summary>
+        MHtml = 15,
+
+        /// <summary>
+        /// Creates xml report in SonarQube 'Generic Test Data' format.
+        /// </summary>
+        /// <remarks>
+        /// Requires ReportGenerator 4.0.6+
+        /// </remarks>
+        SonarQube = 16,
+
+        /// <summary>
+        /// Same as HTMLInline but with modified CSS that matches the dark look and feel of Azure Pipelines.
+        /// </summary>
+        /// <remarks>
+        /// Requires ReportGenerator 4.0.10+
+        /// </remarks>
+        HtmlInline_AzurePipelines_Dark = 17
     }
 }

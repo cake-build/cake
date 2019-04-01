@@ -456,6 +456,20 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 // Then
                 Assert.Equal(MinimalParameters + " --channel \"somechannel\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Space_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseDeployerFixture();
+                fixture.Settings.Space = @"spacename";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(MinimalParameters + " --space \"spacename\"", result.Args);
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Cake.Common.Build.TFBuild.Data
             Repository = new TFBuildRepositoryInfo(environment);
             BuildDefinition = new TFBuildDefinitionInfo(environment);
             Build = new TFBuildInfo(environment);
+            PullRequest = new TFBuildPullRequestInfo(environment);
             Agent = new TFBuildAgentInfo(environment);
             TeamProject = new TFBuildTeamProjectInfo(environment);
         }
@@ -174,6 +175,56 @@ namespace Cake.Common.Build.TFBuild.Data
         /// </code>
         /// </example>
         public TFBuildInfo Build { get; }
+
+        /// <summary>
+        /// Gets TF Build pull request information.
+        /// </summary>
+        /// <value>
+        /// The TF Build pull request information.
+        /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Id: {1}
+        ///         Number: {2}",
+        ///         BuildSystem.TFBuild.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.TFBuild.Environment.PullRequest.Id,
+        ///         BuildSystem.TFBuild.Environment.PullRequest.Number
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TFBuild</para>
+        /// <example>
+        /// <code>
+        /// if (TFBuild.IsRunningOnTFBuild)
+        /// {
+        ///     Information(
+        ///         @"PullRequest:
+        ///         IsPullRequest: {0}
+        ///         Id: {1}
+        ///         Number: {2}",
+        ///         TFBuild.Environment.PullRequest.IsPullRequest,
+        ///         TFBuild.Environment.PullRequest.Id,
+        ///         TFBuild.Environment.PullRequest.Number
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on TFBuild");
+        /// }
+        /// </code>
+        /// </example>
+        public TFBuildPullRequestInfo PullRequest { get; }
 
         /// <summary>
         /// Gets TF Team Project information.

@@ -1,7 +1,7 @@
 public class BuildPackages
 {
     public ICollection<BuildPackage> All { get; private set; }
-    public ICollection<BuildPackage> Nuget { get; private set; }
+    public ICollection<BuildPackage> NuGet { get; private set; }
     public ICollection<BuildPackage> Chocolatey { get; private set; }
 
     public static BuildPackages GetPackages(
@@ -10,14 +10,14 @@ public class BuildPackages
         string[] packageIds,
         string[] chocolateyPackageIds)
     {
-        var toNugetPackage = BuildPackage(nugetRooPath, semVersion);
+        var toNuGetPackage = BuildPackage(nugetRooPath, semVersion);
         var toChocolateyPackage = BuildPackage(nugetRooPath, semVersion, isChocolateyPackage: true);
-        var nugetPackages = packageIds.Select(toNugetPackage).ToArray();
+        var nugetPackages = packageIds.Select(toNuGetPackage).ToArray();
         var chocolateyPackages = chocolateyPackageIds.Select(toChocolateyPackage).ToArray();
         
         return new BuildPackages {
             All = nugetPackages.Union(chocolateyPackages).ToArray(),
-            Nuget = nugetPackages,
+            NuGet = nugetPackages,
             Chocolatey = chocolateyPackages
         };
     }

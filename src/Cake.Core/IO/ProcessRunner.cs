@@ -23,6 +23,7 @@ namespace Cake.Core.IO
         private readonly IToolLocator _tools;
         private readonly ICakeConfiguration _configuration;
         private readonly bool _noMonoCoersion;
+        private readonly bool _showCommandLine;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessRunner" /> class.
@@ -42,6 +43,8 @@ namespace Cake.Core.IO
 
             var noMonoCoersion = configuration.GetValue(Constants.Settings.NoMonoCoersion);
             _noMonoCoersion = noMonoCoersion != null && noMonoCoersion.Equals("true", StringComparison.OrdinalIgnoreCase);
+            var showCommandLine = configuration.GetValue(Constants.Settings.ShowProcessCommandLine);
+            _showCommandLine = showCommandLine != null && showCommandLine.Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -70,16 +73,19 @@ namespace Cake.Core.IO
                 return null;
             }
 
-            var consoleOutputQueue = settings.RedirectStandardOutput
-                ? SubscribeStandardConsoleOutputQueue(process)
-                : null;
+            var processWrapper = new ProcessWrapper(process, _log, filterUnsafe, settings.RedirectedStandardOutputHandler,
+                filterUnsafe, settings.RedirectedStandardErrorHandler);
 
-            var consoleErrorQueue = settings.RedirectStandardError
-                ? SubscribeStandardConsoleErrorQueue(process)
-                : null;
+            if (settings.RedirectStandardOutput)
+            {
+                SubscribeStandardOutput(process, processWrapper);
+            }
+            if (settings.RedirectStandardError)
+            {
+                SubscribeStandardError(process, processWrapper);
+            }
 
-            return new ProcessWrapper(process, _log, filterUnsafe,
-                consoleOutputQueue, filterUnsafe, consoleErrorQueue);
+            return processWrapper;
         }
 
         internal ProcessStartInfo GetProcessStartInfo(FilePath filePath, ProcessSettings settings, out Func<string, string> filterUnsafe)
@@ -122,7 +128,7 @@ namespace Cake.Core.IO
             {
                 // Log the filename and arguments.
                 var message = string.Concat(fileName, " ", arguments.RenderSafe().TrimEnd());
-                _log.Verbose(Verbosity.Diagnostic, "Executing: {0}", message);
+                _log.Verbose(_showCommandLine ? _log.Verbosity : Verbosity.Diagnostic, "Executing: {0}", message);
             }
 
             // Create the process start info.
@@ -155,32 +161,22 @@ namespace Cake.Core.IO
             return info;
         }
 
-        private static ConcurrentQueue<string> SubscribeStandardConsoleErrorQueue(Process process)
+        private static void SubscribeStandardError(Process process, ProcessWrapper processWrapper)
         {
-            var consoleErrorQueue = new ConcurrentQueue<string>();
             process.ErrorDataReceived += (s, e) =>
             {
-                if (e.Data != null)
-                {
-                    consoleErrorQueue.Enqueue(e.Data);
-                }
+                processWrapper.StandardErrorReceived(e.Data);
             };
             process.BeginErrorReadLine();
-            return consoleErrorQueue;
         }
 
-        private static ConcurrentQueue<string> SubscribeStandardConsoleOutputQueue(Process process)
+        private static void SubscribeStandardOutput(Process process, ProcessWrapper processWrapper)
         {
-            var consoleOutputQueue = new ConcurrentQueue<string>();
             process.OutputDataReceived += (s, e) =>
             {
-                if (e.Data != null)
-                {
-                    consoleOutputQueue.Enqueue(e.Data);
-                }
+                processWrapper.StandardOutputReceived(e.Data);
             };
             process.BeginOutputReadLine();
-            return consoleOutputQueue;
         }
     }
 }

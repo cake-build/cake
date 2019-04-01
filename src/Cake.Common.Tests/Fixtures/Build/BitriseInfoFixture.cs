@@ -28,6 +28,9 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("BITRISE_BUILD_TRIGGER_TIMESTAMP").Returns("2016-03-12 23:49:26");
             Environment.GetEnvironmentVariable("BITRISE_BUILD_STATUS").Returns("true");
 
+            // Bitrise PullRequestInfo
+            Environment.GetEnvironmentVariable("BITRISE_PULL_REQUEST").Returns("1");
+
             // Bitrise DirectoryInfo
             Environment.GetEnvironmentVariable("BITRISE_SOURCE_DIR").Returns("/Users/vagrant/git");
             Environment.GetEnvironmentVariable("BITRISE_DEPLOY_DIR").Returns("/Users/vagrant/deploy");
@@ -42,11 +45,15 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("BITRISE_GIT_BRANCH").Returns("cake-branch");
             Environment.GetEnvironmentVariable("BITRISE_GIT_TAG").Returns("v0.0.1");
             Environment.GetEnvironmentVariable("BITRISE_GIT_COMMIT").Returns("63dd7b");
-            Environment.GetEnvironmentVariable("BITRISE_PULL_REQUEST").Returns("[WIP] Bitrise cake support #000");
 
             // Bitrise WorkflowInfo
             Environment.GetEnvironmentVariable("BITRISE_TRIGGERED_WORKFLOW_ID").Returns("Build & Test Cake on BitRise");
             Environment.GetEnvironmentVariable("BITRISE_TRIGGERED_WORKFLOW_TITLE").Returns("Build & Test Cake on BitRise");
+        }
+
+        public BitriseEnvironmentInfo CreateEnvironmentInfo()
+        {
+            return new BitriseEnvironmentInfo(Environment);
         }
 
         public BitriseApplicationInfo CreateApplicationInfo()
@@ -57,6 +64,11 @@ namespace Cake.Common.Tests.Fixtures.Build
         public BitriseBuildInfo CreateBuildInfo()
         {
             return new BitriseBuildInfo(Environment);
+        }
+
+        public BitrisePullRequestInfo CreatePullRequestInfo()
+        {
+            return new BitrisePullRequestInfo(Environment);
         }
 
         public BitriseDirectoryInfo CreateDirectoryInfo()

@@ -156,7 +156,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "rh.exe" };
+            return new[] { "rh.exe", "rh" };
         }
     }
 }

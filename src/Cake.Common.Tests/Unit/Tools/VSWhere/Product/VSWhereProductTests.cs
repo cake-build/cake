@@ -125,7 +125,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Product
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("-products \"Microsoft.VisualStudio.Product.BuildTools\" -property installationPath -nologo", result.Args);
+                Assert.Equal("-products Microsoft.VisualStudio.Product.BuildTools -property installationPath -nologo", result.Args);
             }
 
             [Fact]
@@ -139,7 +139,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Product
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("-products \"Microsoft.VisualStudio.Product.BuildTools\" -version \"15\" -property installationPath -nologo", result.Args);
+                Assert.Equal("-products Microsoft.VisualStudio.Product.BuildTools -version \"15\" -property installationPath -nologo", result.Args);
             }
 
             [Fact]
@@ -153,7 +153,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Product
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("-products \"Microsoft.VisualStudio.Product.BuildTools\" -requires \"Test.Component\" -property installationPath -nologo", result.Args);
+                Assert.Equal("-products Microsoft.VisualStudio.Product.BuildTools -requires Test.Component -property installationPath -nologo", result.Args);
             }
 
             [Fact]
@@ -167,7 +167,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Product
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("-products \"Microsoft.VisualStudio.Product.BuildTools\" -nologo", result.Args);
+                Assert.Equal("-products Microsoft.VisualStudio.Product.BuildTools -nologo", result.Args);
             }
 
             [Fact]
@@ -195,7 +195,7 @@ namespace Cake.Common.Tests.Unit.Tools.VSWhere.Product
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("-products \"Microsoft.VisualStudio.Product.BuildTools\" -property installationPath -prerelease -nologo", result.Args);
+                Assert.Equal("-products Microsoft.VisualStudio.Product.BuildTools -property installationPath -prerelease -nologo", result.Args);
             }
         }
     }

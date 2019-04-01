@@ -24,7 +24,7 @@ namespace Cake.Common.Tools.NuGet.Update
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The nuget tool resolver.</param>
+        /// <param name="resolver">The NuGet tool resolver.</param>
         public NuGetUpdater(IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
@@ -96,7 +96,7 @@ namespace Cake.Common.Tools.NuGet.Update
             if (settings.MSBuildVersion.HasValue)
             {
                 builder.Append("-MSBuildVersion");
-                builder.Append(settings.MSBuildVersion.Value.ToString("D"));
+                builder.Append(settings.MSBuildVersion.Value.GetNuGetMSBuildVersionString());
             }
 
             // Version

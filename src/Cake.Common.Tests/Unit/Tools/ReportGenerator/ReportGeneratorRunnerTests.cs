@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.ReportGenerator;
 using Cake.Core;
@@ -156,18 +157,36 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
                 Assert.Equal("\"-reports:/Working/report1.xml;/Working/report2.xml\" \"-targetdir:/Working/output\"", result.Args);
             }
 
-            [Fact]
-            public void Should_Set_Report_Types()
+            [Theory]
+            [InlineData("Badges", 1)]
+            [InlineData("Html", 2)]
+            [InlineData("HtmlSummary", 3)]
+            [InlineData("Latex", 4)]
+            [InlineData("LatexSummary", 5)]
+            [InlineData("TextSummary", 6)]
+            [InlineData("Xml", 7)]
+            [InlineData("XmlSummary", 8)]
+            [InlineData("Cobertura", 9)]
+            [InlineData("CsvSummary", 10)]
+            [InlineData("HtmlChart", 11)]
+            [InlineData("HtmlInline", 12)]
+            [InlineData("HtmlInline_AzurePipelines", 13)]
+            [InlineData("PngChart", 14)]
+            [InlineData("MHtml", 15)]
+            [InlineData("SonarQube", 16)]
+            [InlineData("HtmlInline_AzurePipelines_Dark", 17)]
+            public void Should_Set_Report_Types(string expected, int enumValue)
             {
                 // Given
                 var fixture = new ReportGeneratorRunnerFixture();
-                fixture.Settings.ReportTypes = new[] { ReportGeneratorReportType.Html, ReportGeneratorReportType.Latex };
+                fixture.Settings.ReportTypes = new[] { (ReportGeneratorReportType)enumValue };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("\"-reports:/Working/report.xml\" \"-targetdir:/Working/output\" \"-reporttypes:Html;Latex\"", result.Args);
+                Assert.True(Enum.IsDefined(typeof(ReportGeneratorReportType), enumValue));
+                Assert.Equal($"\"-reports:/Working/report.xml\" \"-targetdir:/Working/output\" \"-reporttypes:{expected}\"", result.Args);
             }
 
             [Fact]

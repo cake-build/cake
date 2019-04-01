@@ -105,6 +105,54 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild.Data
             }
         }
 
+        public sealed class TheToolsDirectoryProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateAgentInfo();
+
+                // When
+                var result = info.ToolsDirectory;
+
+                // Then
+                Assert.Equal("C:/hostedtoolcache/windows", result.FullPath);
+            }
+        }
+
+        public sealed class TheJobNameProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateAgentInfo();
+
+                // When
+                var result = info.JobName;
+
+                // Then
+                Assert.Equal("Job", result);
+            }
+        }
+
+        public sealed class TheJobStatusProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateAgentInfo();
+
+                // When
+                var result = info.JobStatus;
+
+                // Then
+                Assert.Equal("SucceededWithIssues", result);
+            }
+        }
+
         public sealed class TheIsHostedProperty
         {
             [Fact]

@@ -114,9 +114,7 @@ namespace Cake.Common
             }
 
             var value = context.Arguments.GetArgument(name);
-            return value == null
-                ? defaultValue
-                : Convert<T>(value);
+            return value == null ? defaultValue : Convert<T>(value);
         }
 
         private static T Convert<T>(string value)

@@ -61,10 +61,44 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Sets a value indicating whether the output of an application is written to the <see cref="P:System.Diagnostics.Process.StandardOutput"/> stream.
+        /// Sets a function that intercepts the standard output before being redirected. Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/>
         /// </summary>
         /// <param name="settings">The process settings.</param>
-        /// <param name="redirect">true if output should be written to <see cref="P:System.Diagnostics.Process.StandardOutput"/>; otherwise, false. The default is false.</param>
+        /// <param name="handler">The standard output handler.</param>
+        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessSettings SetRedirectedStandardOutputHandler(this ProcessSettings settings, Func<string, string> handler)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.RedirectedStandardOutputHandler = handler;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets a function that intercepts the standard error before being redirected. Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/>
+        /// </summary>
+        /// <param name="settings">The process settings.</param>
+        /// <param name="handler">The standard error handler.</param>
+        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessSettings SetRedirectedStandardErrorHandler(this ProcessSettings settings, Func<string, string> handler)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.RedirectedStandardErrorHandler = handler;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets a value indicating whether the output of an application is written to the standard output stream.
+        /// </summary>
+        /// <param name="settings">The process settings.</param>
+        /// <param name="redirect">true if output should be redirected; false if output should be written to the standard output stream. The default is false.</param>
         /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
         public static ProcessSettings SetRedirectStandardOutput(this ProcessSettings settings, bool redirect)
         {
@@ -74,6 +108,23 @@ namespace Cake.Core
             }
 
             settings.RedirectStandardOutput = redirect;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets a value indicating whether the standard error of an application is written to the standard error stream.
+        /// </summary>
+        /// <param name="settings">The process settings.</param>
+        /// <param name="redirect">true if error output should be redirected; false if error output should be written to the standard error stream. The default is false.</param>
+        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessSettings SetRedirectStandardError(this ProcessSettings settings, bool redirect)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.RedirectStandardError = redirect;
             return settings;
         }
 
