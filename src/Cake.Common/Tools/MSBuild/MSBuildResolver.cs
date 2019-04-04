@@ -59,7 +59,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             var versions = new[]
             {
-                // MSBuildVersion.MSBuild16, /*Since it's still in preview, do not search unless specified. Uncomment after stable version released*/
+                MSBuildVersion.MSBuild16,
                 MSBuildVersion.MSBuild15,
                 MSBuildVersion.MSBuild14,
                 MSBuildVersion.MSBuild12,
@@ -165,8 +165,7 @@ namespace Cake.Common.Tools.MSBuild
                 "Enterprise",
                 "Professional",
                 "Community",
-                "BuildTools",
-                "Preview" // Remove after stable version released
+                "BuildTools"
             };
 
             var visualStudio2019Path = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
