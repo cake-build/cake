@@ -78,6 +78,7 @@ namespace Cake.DotNetTool.Module.Tests
 
         public sealed class TheCanInstallMethod
         {
+            [Fact]
             public void Should_Throw_If_URI_Is_Null()
             {
                 // Given
