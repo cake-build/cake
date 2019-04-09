@@ -1,3 +1,47 @@
+### New in 0.33.0 (Released 2019/04/01)
+
+* 2514 Add additional report types for ReportGenerator
+* 2130 Add exceptions thrown to TaskTeardownContext
+* 2456 Add logging aliases to override the log verbosity
+* 2453 Unify pull request status across providers
+* 2440 Add EnvironmentVariable alias
+* 2400 Add globber pattern support to the #load directive
+* 2504 Update .NET Core SDK 2.1.505
+* 2487 Warn and skip code gen for duplicate aliases
+* 2481 FilePath and DirectoryPath implicit conversions should return null when passed null
+* 2473 ParseAssemblyInfo does not support .NET Core generated assembly info
+* 2468 DotNet commands do not respect the verbosity
+* 2439 HtmlInline_AzurePipelines and MHtml shares the same numeric value
+* 2432 Azure Pipelines build system not recognized with non-Windows jobs
+* 2088 VSWhere -requires and -products argument values are quoted but VSWhere doesn't support multiple values in quotes
+* 2507 Cake.CoreCLR can't handle whitespace in path
+* 2491 Add additional Azure DevOps (TFBuild) properties
+* 2484 Octopus Deploy 2019.1 and Spaces feature
+* 2478 Lock file arguments for NuGet and dotnet restore
+* 2474 TeamCityProvider.BuildProblem method should conform to TeamCity API
+* 2472 Expose ICakeConfiguration (or specific values like tools path) on context
+* 2465 Roundhouse dotnet tool does not run
+* 2463 DoesForEach don't support data context for items functions
+* 2462 Added unit tests for Cake.Core
+* 2459 Add MSBuildPath to NuGetRestoreSettings
+* 2449 ARM64 missing from MSBuild target platform
+* 2445 Add OnError
+* 2433 NugetRestore still using msbuild 15
+* 2429 Add provider name to BuildSystem
+* 2415 Add support for MSBuild options to enable RestoreLockedMode
+* 2393 MethodAliasGenerator doesn't generate parameter attributes
+* 2345 Allow NuGetRestoreSettings to opt out of setting -NonInteractive
+* 2270 Allow to listen and modify redirected standard output of a process
+* 2141 Add Verbosity property to GitVersionSettings
+* 2124 Add Support for IEnumerable tokens on TextTransformationExtensions
+* 2087 Include more detailed exception information when Exception is AggregateException
+* 2026 Support for additional SignTool flags
+* 2019 Clean up some parser tests
+* 1384 Enhancement: Add support for filtering files in Globbing alias
+* 820 Log tools command-line at higher log level (preferably default)
+* 2512 TFBuildPublishCodeCoverageData xml comments minor typo
+* 2025 The tool path for MSpec needs to be changed in the documentation
+
 ### New in 0.32.1 (Released 2019/01/04)
 
 * 2426 Chocolatey pack regression in Cake 0.32.0
