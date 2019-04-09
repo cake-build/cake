@@ -47,7 +47,7 @@ namespace Cake.Frosting.Internal.Commands
         {
         }
 
-        public void HandleErrors(Action<Exception> action, Exception exception)
+        public void HandleErrors(Action<Exception, ICakeContext> action, Exception exception, ICakeContext context)
         {
         }
 
