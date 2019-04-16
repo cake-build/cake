@@ -9,6 +9,7 @@
 
   <PropertyGroup>
     <PackageId>Cake.Tool</PackageId>
+    <PackageDescription>The Cake .NET Core Global Tool.</PackageDescription>
   </PropertyGroup>
 
 </Project>
