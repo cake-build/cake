@@ -6,21 +6,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.Configuration;
-using Cake.Core.Packaging;
 using NuGet.Configuration;
-using NuGet.PackageManagement;
+using NuGet.Packaging;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
+using PackageReference = Cake.Core.Packaging.PackageReference;
 
 namespace Cake.NuGet.Install
 {
-    internal sealed class NuGetSourceRepositoryProvider : ISourceRepositoryProvider
+    internal sealed class NuGetSourceRepositoryProvider
     {
         private readonly List<Lazy<INuGetResourceProvider>> _resourceProviders;
         private readonly ISet<SourceRepository> _repositories;
         private readonly ISet<SourceRepository> _primaryRepositories;
+        private readonly ISet<SourceRepository> _localRepositories;
 
-        public NuGetSourceRepositoryProvider(ISettings settings, ICakeConfiguration config, PackageReference package)
+        public NuGetSourceRepositoryProvider(ISettings settings, ICakeConfiguration config, PackageReference package, string packagesRoot)
         {
             if (settings == null)
             {
@@ -37,24 +38,28 @@ namespace Cake.NuGet.Install
                 throw new ArgumentNullException(nameof(package));
             }
 
-            // Create the package source provider (needed primarily to get default sources)
-            PackageSourceProvider = new PackageSourceProvider(settings);
-
             // Create the default v3 resource provider
             _resourceProviders = new List<Lazy<INuGetResourceProvider>>();
             _resourceProviders.AddRange(Repository.Provider.GetCoreV3());
 
             // Add repositories
-            _repositories = new HashSet<SourceRepository>(new SourceRepositoryComparer());
-            _primaryRepositories = new HashSet<SourceRepository>(new SourceRepositoryComparer());
+            var sourceComparer = new NuGetSourceRepositoryComparer();
+            _repositories = new HashSet<SourceRepository>(sourceComparer);
+            _primaryRepositories = new HashSet<SourceRepository>(sourceComparer);
+            _localRepositories = new HashSet<SourceRepository>(sourceComparer);
 
-            var packageSources = PackageSourceProvider.LoadPackageSources().ToList();
+            _localRepositories.Add(CreateRepository(packagesRoot));
+            _localRepositories.Add(CreateRepository(SettingsUtility.GetGlobalPackagesFolder(settings)));
+            _localRepositories.AddRange(SettingsUtility.GetFallbackPackageFolders(settings).Select(CreateRepository));
+
+            var packageSources = new PackageSourceProvider(settings).LoadPackageSources().ToList();
 
             if (package.Address != null)
             {
                 var repository = GetOrCreateRepository(package.Address.AbsoluteUri);
 
                 // Sources specified in directive is always primary.
+                _repositories.Add(repository);
                 _primaryRepositories.Add(repository);
             }
 
@@ -66,6 +71,7 @@ namespace Cake.NuGet.Install
                     if (!string.IsNullOrWhiteSpace(nugetSource))
                     {
                         var repository = GetOrCreateRepository(nugetSource);
+                        _repositories.Add(repository);
 
                         // If source is not specified in directive, add it as primary source.
                         if (package.Address == null)
@@ -83,6 +89,7 @@ namespace Cake.NuGet.Install
                     if (source.IsEnabled)
                     {
                         var repository = CreateRepository(source);
+                        _repositories.Add(repository);
 
                         // If source is not specified in directive, add it as primary source.
                         if (package.Address == null)
@@ -105,28 +112,25 @@ namespace Cake.NuGet.Install
             }
         }
 
-        public IEnumerable<SourceRepository> GetPrimaryRepositories() => _primaryRepositories;
+        public IEnumerable<SourceRepository> PrimaryRepositories => _primaryRepositories;
 
-        public IEnumerable<SourceRepository> GetRepositories() => _repositories;
+        public IEnumerable<SourceRepository> LocalRepositories => _localRepositories;
 
-        public SourceRepository CreateRepository(string source) => CreateRepository(new PackageSource(source));
+        public IEnumerable<SourceRepository> Repositories => _repositories;
 
-        public SourceRepository CreateRepository(PackageSource source) => CreateRepository(source, FeedType.Undefined);
-
-        public SourceRepository CreateRepository(PackageSource source, FeedType type)
+        private SourceRepository CreateRepository(string source)
         {
-            var repository = new SourceRepository(source, _resourceProviders, type);
-            var comparer = new SourceRepositoryComparer();
-
-            if (_repositories.Contains(repository))
-            {
-                return _repositories.First(x => comparer.Equals(x, repository));
-            }
-
-            _repositories.Add(repository);
-            return repository;
+            return CreateRepository(new PackageSource(source));
         }
 
-        public IPackageSourceProvider PackageSourceProvider { get; }
+        private SourceRepository CreateRepository(PackageSource source)
+        {
+            return CreateRepository(source, FeedType.Undefined);
+        }
+
+        private SourceRepository CreateRepository(PackageSource source, FeedType type)
+        {
+            return new SourceRepository(source, _resourceProviders, type);
+        }
     }
 }
