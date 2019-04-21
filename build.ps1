@@ -1,3 +1,4 @@
+#!/usr/bin/env pwsh
 $DotNetInstallerUri = 'https://dot.net/v1/dotnet-install.ps1';
 $DotNetUnixInstallerUri = 'https://dot.net/v1/dotnet-install.sh'
 $DotNetChannel = 'LTS'
@@ -5,7 +6,7 @@ $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 
 [string] $CakeVersion = ''
 [string] $DotNetVersion= ''
-foreach($line in Get-Content "$PSScriptRoot\build.config")
+foreach($line in Get-Content (Join-Path $PSScriptRoot 'build.config'))
 {
   if ($line -like 'CAKE_VERSION=*') {
       $CakeVersion = $line.SubString(13)
@@ -84,16 +85,21 @@ if($FoundDotNetCliVersion -ne $DotNetVersion) {
     }
 
     if ($IsMacOS -or $IsLinux) {
-        (New-Object System.Net.WebClient).DownloadFile($DotNetUnixInstallerUri, "$InstallPath\dotnet-install.sh");
-        & bash $InstallPath\dotnet-install.sh --version "$DotNetVersion" --install-dir "$InstallPath" --channel "$DotNetChannel" --no-path
+        $ScriptPath = Join-Path $InstallPath 'dotnet-install.sh'
+        (New-Object System.Net.WebClient).DownloadFile($DotNetUnixInstallerUri, $ScriptPath);
+        & bash $ScriptPath --version "$DotNetVersion" --install-dir "$InstallPath" --channel "$DotNetChannel" --no-path
+
+        Remove-PathVariable "$InstallPath"
+        $env:PATH = "$($InstallPath):$env:PATH"
     }
     else {
-        (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, "$InstallPath\dotnet-install.ps1");
-        & $InstallPath\dotnet-install.ps1 -Channel $DotNetChannel -Version $DotNetVersion -InstallDir $InstallPath;
-    }
+        $ScriptPath = Join-Path $InstallPath 'dotnet-install.ps1'
+        (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, $ScriptPath);
+        & $ScriptPath -Channel $DotNetChannel -Version $DotNetVersion -InstallDir $InstallPath;
 
-    Remove-PathVariable "$InstallPath"
-    $env:PATH = "$InstallPath;$env:PATH"
+        Remove-PathVariable "$InstallPath"
+        $env:PATH = "$InstallPath;$env:PATH"
+    }
 }
 
 $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
@@ -113,7 +119,8 @@ if ($CakeInstalledVersion -eq $CakeVersion) {
     $CakeExePath = (Get-Command dotnet-cake).Source
 }
 else {
-    $CakePath = Join-Path $ToolPath ".store\cake.tool\$CakeVersion"
+    $CakePath = [System.IO.Path]::Combine($ToolPath,'.store', 'cake.tool', $CakeVersion) # Old PowerShell versions Join-Path only supports one child path
+
     $CakeExePath = (Get-ChildItem -Path $ToolPath -Filter "dotnet-cake*" -File| ForEach-Object FullName | Select-Object -First 1)
 
 
