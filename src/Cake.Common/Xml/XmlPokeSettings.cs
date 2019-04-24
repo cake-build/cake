@@ -33,6 +33,24 @@ namespace Cake.Common.Xml
         public XmlDtdProcessing DtdProcessing { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to write attributes on a new line.
+        /// This setting is used when <see cref="Indent"/> is set to true.
+        /// </summary>
+        public bool NewLineOnAttributes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the character string to use when indenting.
+        /// This setting is used when <see cref="Indent"/> is set to true.
+        /// The default is two spaces.
+        /// </summary>
+        public string IndentChars { get; set; } = "  ";
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to indent elements.
+        /// </summary>
+        public bool Indent { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="XmlPokeSettings"/> class.
         /// </summary>
         public XmlPokeSettings()
