@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.IO;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
@@ -161,7 +160,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 fixture.Log
                     .Received(1)
-                    .Verbose(Verbosity.Diagnostic, "Executing: {0}", $"\"/Program Files/Cake.exe\" [REDACTED] in working directory: {System.IO.Path.DirectorySeparatorChar}Working");
+                    .Verbose(Verbosity.Diagnostic, "Executing: {0}", $"\"/Program Files/Cake.exe\" [REDACTED] in working directory: /Working");
             }
 
             [RuntimeFact(TestRuntime.CoreClr)]
