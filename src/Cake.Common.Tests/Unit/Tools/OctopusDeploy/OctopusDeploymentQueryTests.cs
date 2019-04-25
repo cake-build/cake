@@ -143,8 +143,8 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             }
 
             [Theory]
-            [InlineData("/bin/tools/octopus/octo.exe", "/bin/tools/octopus/octo.exe")]
-            [InlineData("./tools/octopus/octo.exe", "/Working/tools/octopus/octo.exe")]
+            [InlineData("/bin/tools/octopus/Octo.exe", "/bin/tools/octopus/Octo.exe")]
+            [InlineData("./tools/octopus/Octo.exe", "/Working/tools/octopus/Octo.exe")]
             public void Should_Use_Octo_Executable_From_Tool_Path_If_Provided(string toolPath, string expected)
             {
                 // Given
@@ -160,7 +160,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             }
 
             [WindowsTheory]
-            [InlineData("C:/octopusDeploy/octo.exe", "C:/octopusDeploy/octo.exe")]
+            [InlineData("C:/octopusDeploy/Octo.exe", "C:/octopusDeploy/Octo.exe")]
             public void Should_Use_Octo_Executable_From_Tool_Path_If_Provided_On_Windows(string toolPath, string expected)
             {
                 // Given
@@ -185,7 +185,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/Working/tools/octo.exe", result.Path.FullPath);
+                Assert.Equal("/Working/tools/Octo.exe", result.Path.FullPath);
             }
 
             [Fact]
