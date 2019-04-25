@@ -9,6 +9,7 @@ using Cake.Core.Tooling;
 using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
+using System.IO;
 
 namespace Cake.Core.Tests.Unit.IO
 {
@@ -160,7 +161,7 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 fixture.Log
                     .Received(1)
-                    .Verbose(Verbosity.Diagnostic, "Executing: {0}", "\"/Program Files/Cake.exe\" [REDACTED]");
+                    .Verbose(Verbosity.Diagnostic, "Executing: {0}", $"\"/Program Files/Cake.exe\" [REDACTED] in working directory: {System.IO.Path.DirectorySeparatorChar}Working");
             }
 
             [RuntimeFact(TestRuntime.CoreClr)]
