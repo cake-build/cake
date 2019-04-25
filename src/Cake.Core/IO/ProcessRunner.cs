@@ -124,13 +124,6 @@ namespace Cake.Core.IO
             }
 #endif
 
-            if (!settings.Silent)
-            {
-                // Log the filename and arguments.
-                var message = string.Concat(fileName, " ", arguments.RenderSafe().TrimEnd());
-                _log.Verbose(_showCommandLine ? _log.Verbosity : Verbosity.Diagnostic, "Executing: {0}", message);
-            }
-
             // Create the process start info.
             var info = new ProcessStartInfo(fileName)
             {
@@ -141,10 +134,24 @@ namespace Cake.Core.IO
             };
 
             // Allow working directory?
+            var workingDirLog = string.Empty;
             if (!settings.NoWorkingDirectory)
             {
                 var workingDirectory = settings.WorkingDirectory ?? _environment.WorkingDirectory;
                 info.WorkingDirectory = workingDirectory.MakeAbsolute(_environment).FullPath;
+                workingDirLog = info.WorkingDirectory;
+            }
+
+            if (!settings.Silent)
+            {
+                // Log the filename and arguments.
+                var message = string.Concat(fileName, " ", arguments.RenderSafe().TrimEnd());
+                if (!string.IsNullOrEmpty(workingDirLog))
+                {
+                    message = string.Concat(message, " in working directory: ", workingDirLog);
+                }
+
+                _log.Verbose(_showCommandLine ? _log.Verbosity : Verbosity.Diagnostic, "Executing: {0}", message);
             }
 
             // Add environment variables
