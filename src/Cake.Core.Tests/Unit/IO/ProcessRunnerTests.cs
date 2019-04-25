@@ -11,7 +11,6 @@ using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
-
 namespace Cake.Core.Tests.Unit.IO
 {
     public sealed class ProcessRunnerTests
