@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Linq;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -78,7 +79,7 @@ namespace Cake.Testing.Fixtures
             FileSystem = new FakeFileSystem(Environment);
             Globber = new Globber(FileSystem, Environment);
             Configuration = new FakeConfiguration();
-            Tools = new ToolLocator(Environment, new ToolRepository(Environment), new ToolResolutionStrategy(FileSystem, Environment, Globber, Configuration));
+            Tools = new ToolLocator(Environment, new ToolRepository(Environment), new ToolResolutionStrategy(FileSystem, Environment, Globber, Configuration, new NullLog()));
 
             // ReSharper disable once VirtualMemberCallInConstructor
             DefaultToolPath = GetDefaultToolPath(toolFilename);

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.Configuration;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Core.Tooling
@@ -19,6 +20,7 @@ namespace Cake.Core.Tooling
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly ICakeConfiguration _configuration;
+        private readonly ICakeLog _log;
         private readonly object _lock;
         private List<DirectoryPath> _path;
 
@@ -29,11 +31,13 @@ namespace Cake.Core.Tooling
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="configuration">The configuration.</param>
+        /// <param name="log">The log.</param>
         public ToolResolutionStrategy(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IGlobber globber,
-            ICakeConfiguration configuration)
+            ICakeConfiguration configuration,
+            ICakeLog log)
         {
             if (fileSystem == null)
             {
@@ -52,6 +56,7 @@ namespace Cake.Core.Tooling
             _environment = environment;
             _globber = globber;
             _configuration = configuration;
+            _log = log;
             _lock = new object();
         }
 
@@ -122,6 +127,7 @@ namespace Cake.Core.Tooling
                     {
                         if (_fileSystem.Exist(file))
                         {
+                            _log.Verbose($"Resolved toolpath {file}");
                             return file.MakeAbsolute(_environment);
                         }
                     }
@@ -130,6 +136,9 @@ namespace Cake.Core.Tooling
                     }
                 }
 
+                var allPaths = string.Join(",", _path);
+                _log.Verbose($"Could not resolve path for tool \"{tool}\" using these directories:");
+                _log.Verbose(allPaths);
                 return null;
             }
         }
