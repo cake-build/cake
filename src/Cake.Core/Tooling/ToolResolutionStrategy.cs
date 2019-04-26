@@ -127,7 +127,7 @@ namespace Cake.Core.Tooling
                     {
                         if (_fileSystem.Exist(file))
                         {
-                            _log.Verbose($"Resolved toolpath {file}");
+                            _log.Verbose($"Resolved tool to path {file}");
                             return file.MakeAbsolute(_environment);
                         }
                     }
