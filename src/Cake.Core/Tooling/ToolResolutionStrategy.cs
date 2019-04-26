@@ -127,7 +127,7 @@ namespace Cake.Core.Tooling
                     {
                         if (_fileSystem.Exist(file))
                         {
-                            _log.Verbose($"Resolved tool to path {file}");
+                            _log.Debug($"Resolved tool to path {file}");
                             return file.MakeAbsolute(_environment);
                         }
                     }
@@ -137,8 +137,7 @@ namespace Cake.Core.Tooling
                 }
 
                 var allPaths = string.Join(",", _path);
-                _log.Verbose($"Could not resolve path for tool \"{tool}\" using these directories:");
-                _log.Verbose(allPaths);
+                _log.Debug($"Could not resolve path for tool \"{tool}\" using these directories: {allPaths}");
                 return null;
             }
         }
