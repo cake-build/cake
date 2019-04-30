@@ -49,7 +49,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "octo.exe", "dotnet-octo", "dotnet-octo.exe" };
+            return new[] { "Octo.exe", "dotnet-octo", "dotnet-octo.exe" };
         }
     }
 }

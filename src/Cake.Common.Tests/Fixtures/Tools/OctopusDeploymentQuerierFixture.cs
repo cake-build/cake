@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         internal string ApiKey { get; set; }
 
         public OctopusDeploymentQuerierFixture()
-            : base("octo.exe")
+            : base("Octo.exe")
         {
             Server = "http://octopus";
             ApiKey = "API-12345";
