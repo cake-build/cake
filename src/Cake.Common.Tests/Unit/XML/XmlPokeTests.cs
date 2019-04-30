@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.IO;
 using System.Text;
 using Cake.Common.Tests.Fixtures;
@@ -181,6 +182,121 @@ namespace Cake.Common.Tests.Unit.XML
 
                 // Then
                 Assert.DoesNotContain("<?xml", resultXml);
+            }
+        }
+
+        public sealed class Formatting
+        {
+            [Fact]
+            public void Should_Preserve_Whitespace()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+                fixture.Settings.PreserveWhitespace = true;
+
+                // When
+                fixture.Poke("/configuration/appSettings/add[@key = 'server']/@value", "testhost.somecompany.com");
+
+                // Then
+                var expectedXml =
+                    "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + Environment.NewLine +
+                    "<configuration>" + Environment.NewLine +
+                    "    <appSettings>" + Environment.NewLine +
+                    "        <add key=\"server\" value=\"testhost.somecompany.com\" />" + Environment.NewLine +
+                    "        <add key=\"test\" value=\"true\" />" + Environment.NewLine +
+                    "    </appSettings>" + Environment.NewLine +
+                    "</configuration>";
+                Assert.Equal(expectedXml, fixture.GetFullXml());
+            }
+
+            [Fact]
+            public void Should_Ignore_Whitespace()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+                fixture.Settings.PreserveWhitespace = false;
+
+                // When
+                fixture.Poke("/configuration/appSettings/add[@key = 'server']/@value", "testhost.somecompany.com");
+
+                // Then
+                var expectedXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><configuration><appSettings><add key=\"server\" value=\"testhost.somecompany.com\" /><add key=\"test\" value=\"true\" /></appSettings></configuration>";
+                Assert.Equal(expectedXml, fixture.GetFullXml());
+            }
+
+            [Fact]
+            public void Should_Indent()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+                fixture.Settings.PreserveWhitespace = false;
+                fixture.Settings.Indent = true;
+
+                // When
+                fixture.Poke("/configuration/appSettings/add[@key = 'server']/@value", "testhost.somecompany.com");
+
+                // Then
+                var expectedXml =
+                    "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + Environment.NewLine +
+                    "<configuration>" + Environment.NewLine +
+                    "  <appSettings>" + Environment.NewLine +
+                    "    <add key=\"server\" value=\"testhost.somecompany.com\" />" + Environment.NewLine +
+                    "    <add key=\"test\" value=\"true\" />" + Environment.NewLine +
+                    "  </appSettings>" + Environment.NewLine +
+                    "</configuration>";
+                Assert.Equal(expectedXml, fixture.GetFullXml());
+            }
+
+            [Fact]
+            public void Should_Indent_With_Tab()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+                fixture.Settings.PreserveWhitespace = false;
+                fixture.Settings.Indent = true;
+                fixture.Settings.IndentChars = "\t";
+
+                // When
+                fixture.Poke("/configuration/appSettings/add[@key = 'server']/@value", "testhost.somecompany.com");
+
+                // Then
+                var expectedXml =
+                    "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + Environment.NewLine +
+                    "<configuration>" + Environment.NewLine +
+                    "\t<appSettings>" + Environment.NewLine +
+                    "\t\t<add key=\"server\" value=\"testhost.somecompany.com\" />" + Environment.NewLine +
+                    "\t\t<add key=\"test\" value=\"true\" />" + Environment.NewLine +
+                    "\t</appSettings>" + Environment.NewLine +
+                    "</configuration>";
+                Assert.Equal(expectedXml, fixture.GetFullXml());
+            }
+
+            [Fact]
+            public void Should_Put_Attributes_On_New_Line()
+            {
+                // Given
+                var fixture = new XmlPokeFixture();
+                fixture.Settings.PreserveWhitespace = false;
+                fixture.Settings.Indent = true;
+                fixture.Settings.NewLineOnAttributes = true;
+
+                // When
+                fixture.Poke("/configuration/appSettings/add[@key = 'server']/@value", "testhost.somecompany.com");
+
+                // Then
+                var expectedXml =
+                    "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + Environment.NewLine +
+                    "<configuration>" + Environment.NewLine +
+                    "  <appSettings>" + Environment.NewLine +
+                    "    <add" + Environment.NewLine +
+                    "      key=\"server\"" + Environment.NewLine +
+                    "      value=\"testhost.somecompany.com\" />" + Environment.NewLine +
+                    "    <add" + Environment.NewLine +
+                    "      key=\"test\"" + Environment.NewLine +
+                    "      value=\"true\" />" + Environment.NewLine +
+                    "  </appSettings>" + Environment.NewLine +
+                    "</configuration>";
+                Assert.Equal(expectedXml, fixture.GetFullXml());
             }
         }
     }
