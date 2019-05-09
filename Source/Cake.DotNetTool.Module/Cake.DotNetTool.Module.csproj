@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup>
     <CodeAnalysisRuleSet>Cake.DotNetTool.Module.ruleset</CodeAnalysisRuleSet>
