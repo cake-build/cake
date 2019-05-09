@@ -7,7 +7,8 @@
     <owners>gep13, cake-contrib</owners>
     <description>Cake DotNetTool Module.</description>
     <summary>Cake Module that extends Cake with ability to install tools using dotnet cli.</summary>
-    <licenseUrl>https://github.com/cake-contrib/Cake.DotNetTool.Module/blob/master/LICENSE</licenseUrl>
+    <license type="expression">MIT</license>
+    <repository type="git" url="https://github.com/cake-contrib/Cake.DotNetTool.Module"/>
     <projectUrl>https://github.com/cake-contrib/Cake.DotNetTool.Module/</projectUrl>
     <iconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
