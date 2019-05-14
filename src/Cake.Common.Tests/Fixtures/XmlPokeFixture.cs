@@ -111,7 +111,7 @@ namespace Cake.Common.Tests.Fixtures
             return FileSystem.GetFile(XmlPath).HasUTF8BOM();
         }
 
-        private string GetFullXml()
+        public string GetFullXml()
         {
             return FileSystem.GetFile(XmlPath).GetTextContent();
         }

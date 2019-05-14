@@ -14,9 +14,9 @@ using Cake.NuGet.Install.Extensions;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Frameworks;
-using NuGet.PackageManagement;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
+using NuGet.Packaging.Signing;
 using NuGet.Protocol.Core.Types;
 using NuGet.Resolver;
 using NuGet.Versioning;
@@ -27,6 +27,8 @@ namespace Cake.NuGet.Install
 {
     internal sealed class NuGetPackageInstaller : INuGetPackageInstaller, IDisposable
     {
+        private static readonly ISet<string> _blackListedPackages;
+
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly INuGetContentResolver _contentResolver;
@@ -35,13 +37,20 @@ namespace Cake.NuGet.Install
         private readonly ISettings _nugetSettings;
         private readonly ILogger _nugetLogger;
         private readonly NuGetFramework _currentFramework;
-        private readonly GatherCache _gatherCache;
         private readonly SourceCacheContext _sourceCacheContext;
 
         static NuGetPackageInstaller()
         {
             // Set User Agent string
             UserAgent.SetUserAgentString(new UserAgentStringBuilder("Cake NuGet Client"));
+
+            _blackListedPackages = new HashSet<string>(new[]
+            {
+                "Cake",
+                "Cake.Common",
+                "Cake.Core",
+                "Cake.NuGet"
+            }, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -79,7 +88,6 @@ namespace Cake.NuGet.Install
                 nugetConfigDirectoryPath.FullPath,
                 nugetConfigFilePath?.GetFilename().ToString(),
                 new XPlatMachineWideSetting());
-            _gatherCache = new GatherCache();
             _sourceCacheContext = new SourceCacheContext();
         }
 
@@ -105,46 +113,105 @@ namespace Cake.NuGet.Install
 
             var packageRoot = path.MakeAbsolute(_environment).FullPath;
             var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;
-            var sourceRepositoryProvider = new NuGetSourceRepositoryProvider(_nugetSettings, _config, package);
-            var pathResolver = new PackagePathResolver(packageRoot);
-            var project = new NuGetFolderProject(_fileSystem, _contentResolver, _log, pathResolver, packageRoot, targetFramework);
-            var packageManager = new NuGetPackageManager(sourceRepositoryProvider, _nugetSettings, project.Root)
-            {
-                PackagesFolderNuGetProject = project
-            };
+            var sourceRepositoryProvider = new NuGetSourceRepositoryProvider(_nugetSettings, _config, package, packageRoot);
 
-            var packageIdentity = GetPackageId(package, packageManager, sourceRepositoryProvider, targetFramework, _sourceCacheContext, _nugetLogger);
+            var localAndPrimaryRepositories = new HashSet<SourceRepository>(new NuGetSourceRepositoryComparer());
+            localAndPrimaryRepositories.AddRange(sourceRepositoryProvider.LocalRepositories);
+            localAndPrimaryRepositories.AddRange(sourceRepositoryProvider.PrimaryRepositories);
+
+            var allRepositories = new HashSet<SourceRepository>(new NuGetSourceRepositoryComparer());
+            allRepositories.AddRange(localAndPrimaryRepositories);
+            allRepositories.AddRange(sourceRepositoryProvider.Repositories);
+
+            var packageIdentity = GetPackageId(package, localAndPrimaryRepositories, targetFramework, _sourceCacheContext, _nugetLogger);
             if (packageIdentity == null)
             {
                 return Array.Empty<IFile>();
             }
 
-            var includePrerelease = package.IsPrerelease();
+            if (packageIdentity.Version.IsPrerelease && !package.IsPrerelease())
+            {
+                // TODO: Is this allowed? If not, log and return
+                return Array.Empty<IFile>();
+            }
+
+            var pathResolver = new PackagePathResolver(packageRoot);
             var dependencyBehavior = GetDependencyBehavior(type, package);
-            var projectContext = new NuGetProjectContext(_nugetSettings, _log);
-            var resolutionContext = new ResolutionContext(dependencyBehavior, includePrerelease, false, VersionConstraints.None, _gatherCache, _sourceCacheContext);
             var downloadContext = new PackageDownloadContext(_sourceCacheContext);
 
-            // First get the install actions.
-            // This will give us the list of packages to install, and which feed should be used.
-            var actions = packageManager.GetInstallProjectActionsAsync(
-                project,
-                packageIdentity,
-                resolutionContext,
-                projectContext,
-                sourceRepositoryProvider.GetPrimaryRepositories(),
-                sourceRepositoryProvider.GetRepositories(),
-                CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+            var availablePackages = new HashSet<SourcePackageDependencyInfo>(PackageIdentityComparer.Default);
+            GetPackageDependencies(packageIdentity,
+                targetFramework,
+                _sourceCacheContext,
+                _nugetLogger,
+                allRepositories,
+                availablePackages,
+                dependencyBehavior,
+                localAndPrimaryRepositories);
 
-            // Then install the packages.
-            packageManager.ExecuteNuGetProjectActionsAsync(
-                project,
-                actions,
-                projectContext,
-                downloadContext,
-                CancellationToken.None).Wait();
+            var resolverContext = new PackageResolverContext(
+                dependencyBehavior,
+                new[] { packageIdentity.Id },
+                Enumerable.Empty<string>(),
+                Enumerable.Empty<global::NuGet.Packaging.PackageReference>(),
+                Enumerable.Empty<PackageIdentity>(),
+                availablePackages,
+                allRepositories.Select(s => s.PackageSource),
+                NullLogger.Instance);
 
-            return project.GetFiles(path, package, type);
+            var resolver = new PackageResolver();
+            var packagesToInstall = resolver.Resolve(resolverContext, CancellationToken.None)
+                .Select(p => availablePackages.Single(x => PackageIdentityComparer.Default.Equals(x, p)));
+
+            var packageExtractionContext = new PackageExtractionContext(
+                PackageSaveMode.Nuspec | PackageSaveMode.Files | PackageSaveMode.Nupkg,
+                XmlDocFileSaveMode.None,
+                ClientPolicyContext.GetClientPolicy(_nugetSettings, _nugetLogger),
+                _nugetLogger);
+
+            var installedFiles = new List<IFile>();
+            foreach (var packageToInstall in packagesToInstall)
+            {
+                var isTargetPackage = packageToInstall.Id.Equals(package.Package, StringComparison.OrdinalIgnoreCase);
+                var installPath = new DirectoryPath(pathResolver.GetInstallPath(packageToInstall));
+                if (!_fileSystem.Exist(installPath))
+                {
+                    var downloadResource = packageToInstall.Source.GetResourceAsync<DownloadResource>(CancellationToken.None).GetAwaiter().GetResult();
+                    var downloadResult = downloadResource.GetDownloadResourceResultAsync(
+                        packageToInstall,
+                        downloadContext,
+                        SettingsUtility.GetGlobalPackagesFolder(_nugetSettings),
+                        _nugetLogger, CancellationToken.None).GetAwaiter().GetResult();
+
+                    PackageExtractor.ExtractPackageAsync(
+                        downloadResult.PackageSource,
+                        downloadResult.PackageStream,
+                        pathResolver,
+                        packageExtractionContext,
+                        CancellationToken.None).GetAwaiter().GetResult();
+
+                    // If this is the target package, to avoid problems with casing, get the actual install path from the nuspec
+                    if (isTargetPackage)
+                    {
+                        installPath = new DirectoryPath(pathResolver.GetInstallPath(downloadResult.PackageReader.GetIdentity()));
+                    }
+                }
+
+                if (_blackListedPackages.Contains(packageToInstall.Id))
+                {
+                    const string format = "Package {0} depends on package {1}. This dependency won't be loaded.";
+                    _log.Debug(format, package.Package, packageToInstall.ToString());
+                    continue;
+                }
+
+                // If the installed package is not the target package, create a new PackageReference
+                // which is passed to the content resolver. This makes logging make more sense.
+                var installedPackageReference = isTargetPackage ? package : new PackageReference($"nuget:?package={packageToInstall.Id}");
+
+                installedFiles.AddRange(_contentResolver.GetFiles(installPath, installedPackageReference, type));
+            }
+
+            return installedFiles;
         }
 
         private DependencyBehavior GetDependencyBehavior(PackageType type, PackageReference package)
@@ -166,24 +233,18 @@ namespace Cake.NuGet.Install
                 environment.WorkingDirectory.Combine("tools").MakeAbsolute(environment).FullPath;
         }
 
-        private static PackageIdentity GetPackageId(PackageReference package, NuGetPackageManager packageManager, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, SourceCacheContext sourceCacheContext, ILogger logger)
+        private static PackageIdentity GetPackageId(PackageReference package, IEnumerable<SourceRepository> repositories, NuGetFramework targetFramework, SourceCacheContext sourceCacheContext, ILogger logger)
         {
-            var version = GetNuGetVersion(package, packageManager, sourceRepositoryProvider, targetFramework, sourceCacheContext, logger);
+            var version = GetNuGetVersion(package, repositories, targetFramework, sourceCacheContext, logger);
             return version == null ? null : new PackageIdentity(package.Package, version);
         }
 
-        private static NuGetVersion GetNuGetVersion(PackageReference package, NuGetPackageManager packageManager, NuGetSourceRepositoryProvider sourceRepositoryProvider, NuGetFramework targetFramework, SourceCacheContext sourceCacheContext, ILogger logger)
+        private static NuGetVersion GetNuGetVersion(PackageReference package, IEnumerable<SourceRepository> repositories, NuGetFramework targetFramework, SourceCacheContext sourceCacheContext, ILogger logger)
         {
             if (package.Parameters.ContainsKey("version"))
             {
                 return new NuGetVersion(package.Parameters["version"].First());
             }
-
-            // Only search for latest version in local and primary sources.
-            var repositories = new HashSet<SourceRepository>(new SourceRepositoryComparer());
-            repositories.Add(packageManager.PackagesFolderSourceRepository);
-            repositories.AddRange(packageManager.GlobalPackageFolderRepositories);
-            repositories.AddRange(sourceRepositoryProvider.GetPrimaryRepositories());
 
             var includePrerelease = package.IsPrerelease();
             NuGetVersion version = null;
@@ -216,6 +277,50 @@ namespace Cake.NuGet.Install
                 }
             }
             return version;
+        }
+
+        private static void GetPackageDependencies(PackageIdentity package,
+            NuGetFramework framework,
+            SourceCacheContext cacheContext,
+            ILogger logger,
+            IEnumerable<SourceRepository> repositories,
+            ISet<SourcePackageDependencyInfo> availablePackages,
+            DependencyBehavior dependencyBehavior,
+            IEnumerable<SourceRepository> primaryRepositories = null)
+        {
+            if (availablePackages.Contains(package))
+            {
+                return;
+            }
+
+            foreach (var sourceRepository in primaryRepositories ?? repositories)
+            {
+                var dependencyInfoResource = sourceRepository.GetResourceAsync<DependencyInfoResource>().GetAwaiter().GetResult();
+                var dependencyInfo = dependencyInfoResource.ResolvePackage(package, framework, cacheContext, logger, CancellationToken.None).GetAwaiter().GetResult();
+
+                if (dependencyInfo == null)
+                {
+                    continue;
+                }
+
+                availablePackages.Add(dependencyInfo);
+
+                // No need to resolve dependencies if the dependency behavior is ignore.
+                if (dependencyBehavior == DependencyBehavior.Ignore)
+                {
+                    return;
+                }
+
+                foreach (var dependency in dependencyInfo.Dependencies)
+                {
+                    GetPackageDependencies(
+                        new PackageIdentity(dependency.Id, dependency.VersionRange.MinVersion),
+                        framework, cacheContext, logger, repositories, availablePackages, dependencyBehavior);
+                }
+
+                // If we have already found package we can return here. No need to enumerate the other sources.
+                return;
+            }
         }
 
         private static Tuple<DirectoryPath, FilePath> GetNuGetConfigPath(ICakeEnvironment environment, ICakeConfiguration config)

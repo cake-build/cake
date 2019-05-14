@@ -20,7 +20,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         internal string ReleaseNumber { get; set; }
 
         public OctopusDeployReleaseDeployerFixture()
-            : base("octo.exe")
+            : base("Octo.exe")
         {
             Server = "http://octopus";
             ApiKey = "API-12345";
