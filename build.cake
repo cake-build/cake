@@ -696,7 +696,7 @@ Task("AppVeyor")
 });
 
 Task("Travis")
-  .IsDependentOn("Run-Unit-Tests");
+  .IsDependentOn("Run-Integration-Tests");
 
 Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");
