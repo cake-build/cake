@@ -11,6 +11,39 @@ namespace Cake.Common.Build.TeamCity.Data
     /// </summary>
     public class TeamCityPullRequestInfo : TeamCityInfo
     {
+        private static bool InferIsPullRequest(string gitReferenceName)
+        {
+            var branchSlices = gitReferenceName.Split('/');
+
+            if (branchSlices.Length >= 3)
+            {
+                switch (branchSlices[1].ToUpper())
+                {
+                    case "CHANGES":
+                    case "MERGE-REQUESTS":
+                    case "PULL":
+                    case "PULL-REQUESTS":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            return false;
+        }
+
+        private static int? GetPullRequestNumber(string gitReferenceName)
+        {
+            var branchSlices = gitReferenceName.Split('/');
+
+            if (int.TryParse(branchSlices[2], out var pullRequestNumber))
+            {
+                return pullRequestNumber;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Gets a value indicating whether the current build was started by a pull request.
         /// </summary>
@@ -20,7 +53,7 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <remarks>
         /// <c>env.Git_Branch</c> is a required parameter in TeamCity for this to work
         /// </remarks>
-        public bool IsPullRequest => GetEnvironmentString("Git_Branch").ToUpper().Contains("PULL-REQUEST");
+        public bool IsPullRequest => InferIsPullRequest(GetEnvironmentString("Git_Branch"));
 
         /// <summary>
         /// Gets the pull request number
@@ -31,7 +64,7 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <remarks>
         /// <c>env.Git_Branch</c> is a required parameter in TeamCity for this to work
         /// </remarks>
-        public int? Number => IsPullRequest ? int.Parse(GetEnvironmentString("Git_Branch").Remove(GetEnvironmentString("Git_Branch").LastIndexOf('/')).Remove(0, "refs/pull-requests/".Length)) : (int?)null;
+        public int? Number => IsPullRequest ? GetPullRequestNumber(GetEnvironmentString("Git_Branch")) : null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TeamCityPullRequestInfo"/> class.
