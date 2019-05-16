@@ -85,6 +85,7 @@ namespace Cake.Core.Scripting
             // This is just to please Roslyn when running under Mono. See issue https://github.com/dotnet/roslyn/issues/19364
             result.Add(_loader.Load(new AssemblyName("System.Runtime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"))); // System.Runtime
             result.Add(_loader.Load(new AssemblyName("System.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"))); // System.Collections
+            result.Add(_loader.Load(new AssemblyName("System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"))); // System.Net.Http
 
             try
             {
