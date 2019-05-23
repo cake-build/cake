@@ -322,6 +322,37 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheNoImplicitTargetMethod
+        {
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Set_No_Implicit_Target(bool noImplicitTarget)
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.SetNoImplicitTarget(noImplicitTarget);
+
+                // Then
+                Assert.Equal(noImplicitTarget, settings.NoImplicitTarget);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetNoImplicitTarget(true);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetRestoreLockedModeMethod
         {
             [Theory]

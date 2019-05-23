@@ -207,6 +207,22 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets whether or not any targets should be passed to MSBuild.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="noImplicitTarget"><c>true</c> if no implicit target should be passed to MSBuild; otherwise <c>false</c>.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetNoImplicitTarget(this MSBuildSettings settings, bool noImplicitTarget)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.NoImplicitTarget = noImplicitTarget;
+            return settings;
+        }
+
+        /// <summary>
         /// Sets the build log verbosity.
         /// </summary>
         /// <param name="settings">The settings.</param>
