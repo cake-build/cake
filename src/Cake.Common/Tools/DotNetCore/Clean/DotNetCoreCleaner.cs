@@ -78,6 +78,13 @@ namespace Cake.Common.Tools.DotNetCore.Clean
                 builder.Append(settings.Framework);
             }
 
+            // Runtime
+            if (!string.IsNullOrEmpty(settings.Runtime))
+            {
+                builder.Append("--runtime");
+                builder.Append(settings.Runtime);
+            }
+
             // Configuration
             if (!string.IsNullOrEmpty(settings.Configuration))
             {

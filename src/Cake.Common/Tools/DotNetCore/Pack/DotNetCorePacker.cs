@@ -117,6 +117,13 @@ namespace Cake.Common.Tools.DotNetCore.Pack
                 builder.Append("--serviceable");
             }
 
+            // Runtime
+            if (!string.IsNullOrEmpty(settings.Runtime))
+            {
+                builder.Append("--runtime");
+                builder.Append(settings.Runtime);
+            }
+
             if (settings.MSBuildSettings != null)
             {
                 builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
