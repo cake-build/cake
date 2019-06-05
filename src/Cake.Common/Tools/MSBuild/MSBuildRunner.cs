@@ -116,8 +116,12 @@ namespace Cake.Common.Tools.MSBuild
             }
             else
             {
-                // Use default target.
-                builder.Append("/target:Build");
+                // Should use implicit target?
+                if (!settings.NoImplicitTarget.GetValueOrDefault())
+                {
+                    // Use default target.
+                    builder.Append("/target:Build");
+                }
             }
 
             if (settings.Loggers.Count > 0)

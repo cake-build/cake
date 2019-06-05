@@ -95,6 +95,13 @@ namespace Cake.Common.Tools.MSBuild
         public bool? NoLogo { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether implicit target should be passed to MSBuild.
+        /// If set to true, no targets will be specified.
+        /// If set to false, and no targets specified, Build target will be passed by default.
+        /// </summary>
+        public bool? NoImplicitTarget { get; set; }
+
+        /// <summary>
         /// Gets or sets the amount of information to display in the build log.
         /// Each logger displays events based on the verbosity level that you set for that logger.
         /// </summary>
