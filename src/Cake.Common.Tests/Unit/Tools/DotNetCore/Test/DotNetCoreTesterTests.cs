@@ -119,12 +119,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 fixture.Settings.DiagnosticFile = "./artifacts/logging/diagnostics.txt";
                 fixture.Settings.ResultsDirectory = "./tests/";
                 fixture.Settings.VSTestReportPath = "./tests/TestResults.xml";
+                fixture.Settings.Runtime = "win-x64";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\"", result.Args);
+                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64", result.Args);
             }
 
             [Fact]
