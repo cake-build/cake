@@ -13,6 +13,11 @@ namespace Cake.Common.Build.TeamCity.Data
     {
         private static bool InferIsPullRequest(string gitReferenceName)
         {
+            if (string.IsNullOrEmpty(gitReferenceName))
+            {
+                return false;
+            }
+
             var branchSlices = gitReferenceName.Split('/');
 
             if (branchSlices.Length >= 3)
@@ -34,6 +39,11 @@ namespace Cake.Common.Build.TeamCity.Data
 
         private static int? GetPullRequestNumber(string gitReferenceName)
         {
+            if (string.IsNullOrEmpty(gitReferenceName))
+            {
+                return null;
+            }
+
             var branchSlices = gitReferenceName.Split('/');
 
             if (int.TryParse(branchSlices[2], out var pullRequestNumber))
