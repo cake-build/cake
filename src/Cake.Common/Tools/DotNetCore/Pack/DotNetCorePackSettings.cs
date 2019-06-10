@@ -69,6 +69,11 @@ namespace Cake.Common.Tools.DotNetCore.Pack
         public bool Serviceable { get; set; }
 
         /// <summary>
+        /// Gets or sets the target runtime.
+        /// </summary>
+        public string Runtime { get; set; }
+
+        /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
         public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }

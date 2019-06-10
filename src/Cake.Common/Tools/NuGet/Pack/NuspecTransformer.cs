@@ -110,7 +110,7 @@ namespace Cake.Common.Tools.NuGet.Pack
             if (settings.Files != null && settings.Files.Count > 0)
             {
                 var filesPath = string.Format(CultureInfo.InvariantCulture,
-                    "//*[local-name()='package']//*[local-name()='files']");
+                    "//*[local-name()='package']/*[local-name()='files']");
                 var filesElement = document.SelectSingleNode(filesPath, namespaceManager);
                 if (filesElement == null)
                 {

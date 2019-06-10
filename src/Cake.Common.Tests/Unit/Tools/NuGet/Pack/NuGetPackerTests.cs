@@ -1201,6 +1201,30 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     // Then
                     Assert.Equal(expected, result.Args);
                 }
+
+                [Fact]
+                public void Should_Not_Modify_ContentFiles_Element_If_Files_Specified()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.WithNuSpecXml(Resources.Nuspec_ContentFiles);
+
+                    fixture.Settings.Files = new[]
+                    {
+                        new NuSpecContent { Source = "Cake.Core.dll", Target = "lib/net45" },
+                        new NuSpecContent { Source = "Cake.Core.xml", Target = "lib/net45" },
+                        new NuSpecContent { Source = "Cake.Core.pdb", Target = "lib/net45" },
+                        new NuSpecContent { Source = "LICENSE" }
+                    };
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(
+                        Resources.Nuspec_ContentFiles.NormalizeLineEndings(),
+                        result.NuspecContent.NormalizeLineEndings());
+                }
             }
 
             public sealed class WithoutNuSpec

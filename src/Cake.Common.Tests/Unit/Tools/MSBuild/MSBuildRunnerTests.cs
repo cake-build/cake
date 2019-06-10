@@ -610,6 +610,37 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Not_Append_Targets_If_No_Implicit_Target_Is_True_And_No_Targets_Provided()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.NoImplicitTarget = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_Targets_If_No_Implicit_Target_Is_True_And_Targets_Provided()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.NoImplicitTarget = true;
+                fixture.Settings.WithTarget("A");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Use_Node_Reuse_If_Specified()
             {
                 // Given

@@ -84,6 +84,13 @@ namespace Cake.Common.Tools.DotNetCore.Run
                 builder.Append("--no-build");
             }
 
+            // Runtime
+            if (!string.IsNullOrEmpty(settings.Runtime))
+            {
+                builder.Append("--runtime");
+                builder.Append(settings.Runtime);
+            }
+
             // Arguments
             if (!arguments.IsNullOrEmpty())
             {
