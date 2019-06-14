@@ -76,13 +76,13 @@ namespace Cake.NuGet.Install
             _currentFramework = NuGetFramework.Parse(_environment.Runtime.BuiltFramework.FullName, DefaultFrameworkNameProvider.Instance);
             _nugetLogger = new NuGetLogger(_log);
 
-            var nugetConfig = GetNuGetConfigPath(_environment, _config);
+            var nugetConfig = GetNuGetConfigPath(_environment, _config, _fileSystem);
             var nugetConfigDirectoryPath = nugetConfig.Item1;
             var nugetConfigFilePath = nugetConfig.Item2;
 
             _log.Debug(nugetConfigFilePath != null
-                ? $"Found NuGet.config at: {nugetConfigFilePath}"
-                : "NuGet.config not found.");
+                ? $"Found NuGet Config at: {nugetConfigDirectoryPath}/{nugetConfigFilePath}"
+                : "NuGet Config not specified. Will use NuGet default mechanism for resolving it.");
 
             _nugetSettings = Settings.LoadDefaultSettings(
                 nugetConfigDirectoryPath.FullPath,
@@ -323,7 +323,7 @@ namespace Cake.NuGet.Install
             }
         }
 
-        private static Tuple<DirectoryPath, FilePath> GetNuGetConfigPath(ICakeEnvironment environment, ICakeConfiguration config)
+        private static Tuple<DirectoryPath, FilePath> GetNuGetConfigPath(ICakeEnvironment environment, ICakeConfiguration config, IFileSystem fileSystem)
         {
             DirectoryPath rootPath;
             FilePath filePath;
@@ -331,7 +331,12 @@ namespace Cake.NuGet.Install
             var nugetConfigFile = config.GetValue(Constants.NuGet.ConfigFile);
             if (!string.IsNullOrEmpty(nugetConfigFile))
             {
-                var configFilePath = new FilePath(nugetConfigFile);
+                var configFilePath = new FilePath(nugetConfigFile).MakeAbsolute(environment);
+
+                if (!fileSystem.Exist(configFilePath))
+                {
+                    throw new System.IO.FileNotFoundException("NuGet Config file not found.", configFilePath.FullPath);
+                }
 
                 rootPath = configFilePath.GetDirectory();
                 filePath = configFilePath.GetFilename();
