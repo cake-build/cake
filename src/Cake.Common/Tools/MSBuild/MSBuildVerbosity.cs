@@ -2,12 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotNetCore
+namespace Cake.Common.Tools.MSBuild
 {
     /// <summary>
     /// Contains the verbosity of logging to use..
     /// </summary>
-    public enum DotNetCoreVerbosity
+    public enum MSBuildVerbosity
     {
         /// <summary>
         /// Quiet level.

@@ -69,7 +69,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             }
 
             // configure console logger?
-            if (!settings.DisableConsoleLogger && settings.ConsoleLoggerSettings != null)
+            if (!settings.NoConsoleLogger && settings.ConsoleLoggerSettings != null)
             {
                 var arguments = GetLoggerSettings(settings.ConsoleLoggerSettings);
 
@@ -80,7 +80,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             }
 
             // disable console logger?
-            if (settings.DisableConsoleLogger)
+            if (settings.NoConsoleLogger)
             {
                 builder.AppendMSBuildSwitch("noconsolelogger");
             }
@@ -122,19 +122,69 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                 builder.AppendMSBuildSwitch("logger", GetLoggerValue(logger));
             }
 
-            var showWarningsAsError = settings.TreatAllWarningsAs == MSBuildTreatAllWarningsAs.Error || settings.WarningCodesAsError.Any();
-            var showWarningsAsMessages = settings.TreatAllWarningsAs == MSBuildTreatAllWarningsAs.Message || settings.WarningCodesAsMessage.Any();
-
-            // Treat all or some warnings as errors?
-            if (showWarningsAsError)
+            // Use binary logging?
+            if (settings.BinaryLogger != null && settings.BinaryLogger.Enabled)
             {
-                builder.AppendMSBuildSwitchWithOptionalValueIfNotEmpty("warnaserror", GetWarningCodes(settings.TreatAllWarningsAs == MSBuildTreatAllWarningsAs.Error, settings.WarningCodesAsError));
+                string binaryOptions = null;
+                if (!string.IsNullOrEmpty(settings.BinaryLogger.FileName))
+                {
+                    binaryOptions = settings.BinaryLogger.FileName;
+                }
+
+                if (settings.BinaryLogger.Imports != MSBuildBinaryLogImports.Unspecified)
+                {
+                    if (!string.IsNullOrEmpty(binaryOptions))
+                    {
+                        binaryOptions = binaryOptions + ";";
+                    }
+
+                    binaryOptions = binaryOptions + "ProjectImports=" + settings.BinaryLogger.Imports;
+                }
+
+                if (string.IsNullOrEmpty(binaryOptions))
+                {
+                    builder.AppendMSBuildSwitch("bl");
+                }
+                else
+                {
+                    builder.AppendMSBuildSwitch("bl", binaryOptions);
+                }
             }
 
-            // Treat all or some warnings as messages?
-            if (showWarningsAsMessages)
+            // Got a specific configuration in mind?
+            if (!string.IsNullOrWhiteSpace(settings.Configuration))
             {
-                builder.AppendMSBuildSwitchWithOptionalValueIfNotEmpty("warnasmessage", GetWarningCodes(settings.TreatAllWarningsAs == MSBuildTreatAllWarningsAs.Message, settings.WarningCodesAsMessage));
+                // Add the configuration as a property.
+                builder.AppendSwitchQuoted("/property:configuration", "=", settings.Configuration);
+            }
+
+            // Set restore locked mode?
+            if (settings.RestoreLockedMode.HasValue)
+            {
+                builder.AppendSwitchQuoted("/property:RestoreLockedMode", "=", settings.RestoreLockedMode.Value ? "true" : "false");
+            }
+
+            if (settings.NodeReuse != null)
+            {
+                builder.AppendMSBuildSwitch("nr", settings.NodeReuse.Value ? "true" : "false");
+            }
+
+            // Treat errors as warnings?
+            if (settings.WarningsAsErrorCodes.Any())
+            {
+                var codes = string.Join(";", settings.WarningsAsErrorCodes);
+                builder.AppendMSBuildSwitch("warnaserror", codes);
+            }
+            else if (settings.TreatWarningsAsErrors)
+            {
+                builder.AppendMSBuildSwitch("warnaserror");
+            }
+
+            // Any warnings to NOT treat as errors?
+            if (settings.WarningsAsMessageCodes.Any())
+            {
+                var codes = string.Join(";", settings.WarningsAsMessageCodes);
+                builder.AppendMSBuildSwitch("warnasmessage", codes);
             }
 
             // set project file extensions to ignore when searching for project file
@@ -159,6 +209,12 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             if (settings.ExcludeAutoResponseFiles)
             {
                 builder.AppendMSBuildSwitch("noautoresponse");
+            }
+
+            // Invoke restore target before any other target?
+            if (settings.Restore)
+            {
+                builder.AppendMSBuildSwitch("restore");
             }
 
             // don't output MSBuild logo?
@@ -338,11 +394,6 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
 
             return string.Join(";", settings);
         }
-
-        private static string GetWarningCodes(bool shouldApplyToAllWarnings, IList<string> warningCodes)
-            => shouldApplyToAllWarnings
-                ? null
-                : string.Join(";", warningCodes);
 
         private static void AppendMSBuildSwitch(this ProcessArgumentBuilder builder, string @switch)
             => builder.Append($"/{@switch}");

@@ -92,7 +92,6 @@ namespace Cake.Common.Tools
                 MSBuildAliases.MSBuild(context, solution, settings =>
                 {
                     settings.Configuration = dotNetSettings.Configuration;
-                    settings.Verbosity = dotNetSettings.Verbosity;
 
                     foreach (var target in dotNetSettings.Targets)
                     {

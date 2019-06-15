@@ -5,6 +5,7 @@
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Build;
+using Cake.Common.Tools.MSBuild;
 using Cake.Testing;
 using Xunit;
 
@@ -99,13 +100,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.VersionSuffix = "rc1";
                 fixture.Project = "./src/*";
-                fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("build \"./src/*\" --runtime runtime1 --framework net451 --configuration Release --version-suffix rc1 --verbosity minimal", result.Args);
+                Assert.Equal("build \"./src/*\" --runtime runtime1 --framework net451 --configuration Release --version-suffix rc1", result.Args);
             }
 
             [Fact]

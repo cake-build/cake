@@ -576,7 +576,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m /v:normal /target:Build " +
+                Assert.Equal("/m /v:Normal /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -591,7 +591,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/m:4 /v:normal /target:Build " +
+                Assert.Equal("/m:4 /v:Normal /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -605,7 +605,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:Build " +
+                Assert.Equal("/v:Normal /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -620,7 +620,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal " +
+                Assert.Equal("/v:Normal " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -636,7 +636,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:A " +
+                Assert.Equal("/v:Normal /target:A " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -651,7 +651,37 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /nr:true /target:Build " +
+                Assert.Equal("/v:Normal /nr:true /target:Build " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_IgnoreProjectExtensions_Argument()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.IgnoreProjectExtensions.Add(".sln");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:Normal /ignoreprojectextensions:.sln /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_IgnoreProjectExtensions_Argument_When_Multiple_Values()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.IgnoreProjectExtensions.Add(".vcproj");
+                fixture.Settings.IgnoreProjectExtensions.Add(".sln");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:Normal /ignoreprojectextensions:.vcproj,.sln /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -666,7 +696,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/ds /v:normal /target:Build " +
+                Assert.Equal("/ds /v:Normal /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -681,7 +711,22 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/noconlog /v:normal /target:Build " +
+                Assert.Equal("/noconlog /v:Normal /target:Build " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_NoAutoResponse_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ExcludeAutoResponseFiles = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:Normal /target:Build /noautoresponse " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -696,7 +741,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/nologo /v:normal /target:Build " +
+                Assert.Equal("/nologo /v:Normal /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -712,7 +757,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:A;B " +
+                Assert.Equal("/v:Normal /target:A;B " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -728,7 +773,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /p:A=B /p:C=D /target:Build " +
+                Assert.Equal("/v:Normal /p:A=B /p:C=D /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -744,13 +789,13 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /p:A=B /p:A=E /p:C=D /target:Build " +
+                Assert.Equal("/v:Normal /p:A=B /p:A=E /p:C=D /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
             [Theory]
-            [InlineData("Release", "/v:normal /p:Configuration=\"Release\" /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData("Custom Spaced", "/v:normal /p:Configuration=\"Custom Spaced\" /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData("Release", "/v:Normal /p:Configuration=\"Release\" /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData("Custom Spaced", "/v:Normal /p:Configuration=\"Custom Spaced\" /target:Build \"C:/Working/src/Solution.sln\"")]
             public void Should_Append_Configuration_As_Property_To_Process_Arguments(string configuration, string expected)
             {
                 // Given
@@ -765,11 +810,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
-            [InlineData(PlatformTarget.MSIL, "/v:normal /p:Platform=\"Any CPU\" /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.x86, "/v:normal /p:Platform=x86 /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.x64, "/v:normal /p:Platform=x64 /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.ARM, "/v:normal /p:Platform=arm /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData(PlatformTarget.Win32, "/v:normal /p:Platform=Win32 /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.MSIL, "/v:Normal /p:Platform=\"Any CPU\" /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.x86, "/v:Normal /p:Platform=x86 /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.x64, "/v:Normal /p:Platform=x64 /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.ARM, "/v:Normal /p:Platform=arm /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData(PlatformTarget.Win32, "/v:Normal /p:Platform=Win32 /target:Build \"C:/Working/src/Solution.sln\"")]
             public void Should_Append_Platform_As_Property_To_Process_Arguments(PlatformTarget platform, string expected)
             {
                 // Given
@@ -795,7 +840,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /p:Platform=AnyCPU /target:Build \"/Working/src/Project.csproj\"", result.Args);
+                Assert.Equal("/v:Normal /p:Platform=AnyCPU /target:Build \"/Working/src/Project.csproj\"", result.Args);
             }
 
             [Fact]
@@ -810,7 +855,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /p:Platform=arm /target:Build " +
+                Assert.Equal("/v:Normal /p:Platform=arm /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
                 Assert.Equal("/Program86/MSBuild/12.0/Bin/MSBuild.exe", result.Path.FullPath);
             }
@@ -825,7 +870,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:Build " +
+                Assert.Equal("/v:Normal /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -871,12 +916,12 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
-            [InlineData(Verbosity.Quiet, "/v:quiet /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData(Verbosity.Minimal, "/v:minimal /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData(Verbosity.Normal, "/v:normal /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData(Verbosity.Verbose, "/v:detailed /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData(Verbosity.Diagnostic, "/v:diagnostic /target:Build \"C:/Working/src/Solution.sln\"")]
-            public void Should_Append_Correct_Verbosity(Verbosity verbosity, string expected)
+            [InlineData(MSBuildVerbosity.Quiet, "/v:Quiet /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData(MSBuildVerbosity.Minimal, "/v:Minimal /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData(MSBuildVerbosity.Normal, "/v:Normal /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData(MSBuildVerbosity.Detailed, "/v:Detailed /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData(MSBuildVerbosity.Diagnostic, "/v:Diagnostic /target:Build \"C:/Working/src/Solution.sln\"")]
+            public void Should_Append_Correct_Verbosity(MSBuildVerbosity verbosity, string expected)
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
@@ -887,20 +932,6 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.Equal(expected, result.Args);
-            }
-
-            [Fact]
-            public void Should_Throw_If_Verbosity_Is_Unknown()
-            {
-                // Given
-                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
-                fixture.Settings.Verbosity = (Verbosity)int.MaxValue;
-
-                // When
-                var result = Record.Exception(() => fixture.Run());
-
-                // Then
-                AssertEx.IsCakeException(result, "Encountered unknown MSBuild build log verbosity.");
             }
 
             [Fact]
@@ -916,7 +947,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:Build /logger:B,\"A\";C /logger:E,\"D\" /logger:\"F\" " +
+                Assert.Equal("/v:Normal /target:Build /logger:B,A;C /logger:E,D /logger:\"F\" " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -925,18 +956,18 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
-                fixture.Settings.AddFileLogger(new MSBuildFileLogger { AppendToLogFile = false, Encoding = "E", HideVerboseItemAndPropertyList = false, LogFile = "A", MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.All, PerformanceSummaryEnabled = false, ShowCommandLine = false, ShowEventId = false, ShowTimestamp = false, SummaryDisabled = false, Verbosity = Verbosity.Diagnostic });
-                fixture.Settings.AddFileLogger(new MSBuildFileLogger { AppendToLogFile = true, HideVerboseItemAndPropertyList = true, MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.ErrorsOnly, PerformanceSummaryEnabled = true, ShowCommandLine = true, ShowEventId = true, ShowTimestamp = true, SummaryDisabled = true, Verbosity = Verbosity.Minimal });
-                fixture.Settings.AddFileLogger(new MSBuildFileLogger { MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.WarningsOnly, Verbosity = Verbosity.Normal });
-                fixture.Settings.AddFileLogger(new MSBuildFileLogger { Verbosity = Verbosity.Quiet });
-                fixture.Settings.AddFileLogger(new MSBuildFileLogger { Verbosity = Verbosity.Verbose });
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { AppendToLogFile = false, Encoding = "E", HideVerboseItemAndPropertyList = false, LogFile = "A", MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.All, PerformanceSummaryEnabled = false, ShowCommandLine = false, ShowEventId = false, ShowTimestamp = false, SummaryDisabled = false, Verbosity = MSBuildVerbosity.Diagnostic });
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { AppendToLogFile = true, HideVerboseItemAndPropertyList = true, MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.ErrorsOnly, PerformanceSummaryEnabled = true, ShowCommandLine = true, ShowEventId = true, ShowTimestamp = true, SummaryDisabled = true, Verbosity = MSBuildVerbosity.Minimal });
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { MSBuildFileLoggerOutput = MSBuildFileLoggerOutput.WarningsOnly, Verbosity = MSBuildVerbosity.Normal });
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { Verbosity = MSBuildVerbosity.Quiet });
+                fixture.Settings.AddFileLogger(new MSBuildFileLogger { Verbosity = MSBuildVerbosity.Detailed });
                 fixture.Settings.AddFileLogger(new MSBuildFileLogger { });
                 fixture.Settings.AddFileLogger();
 
                 // When
                 var result = fixture.Run();
                 // Then
-                Assert.Equal(@"/v:normal /target:Build /fl /flp:logfile=""C:/Working/A"";Encoding=E;Verbosity=diagnostic /fl1 /flp1:Append;PerformanceSummary;NoSummary;ErrorsOnly;NoItemAndPropertyList;ShowCommandLine;ShowTimestamp;ShowEventId;Verbosity=minimal /fl2 /flp2:WarningsOnly;Verbosity=normal /fl3 /flp3:Verbosity=quiet /fl4 /flp4:Verbosity=detailed /fl5 /fl6 ""C:/Working/src/Solution.sln""", result.Args);
+                Assert.Equal(@"/v:Normal /target:Build /fl /flp:logfile=""C:/Working/A"";Encoding=E;Verbosity=Diagnostic /fl1 /flp1:Append;PerformanceSummary;NoSummary;ErrorsOnly;NoItemAndPropertyList;ShowCommandLine;ShowTimestamp;ShowEventId;Verbosity=Minimal /fl2 /flp2:WarningsOnly;Verbosity=Normal /fl3 /flp3:Verbosity=Quiet /fl4 /flp4:Verbosity=Detailed /fl5 /fl6 ""C:/Working/src/Solution.sln""", result.Args);
             }
 
             [Fact]
@@ -950,7 +981,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(@"/v:normal /target:Build /fl ""C:/Working/src/Solution.sln""", result.Args);
+                Assert.Equal(@"/v:Normal /target:Build /fl ""C:/Working/src/Solution.sln""", result.Args);
             }
 
             [Fact]
@@ -993,7 +1024,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
+                Assert.Equal("/v:Normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
@@ -1007,13 +1038,13 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
+                Assert.Equal("/v:Normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
             }
 
             [Theory]
-            [InlineData("Value1,Value2", "/v:normal /p:Property=Value1%2CValue2 /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData("Value1;Value2", "/v:normal /p:Property=Value1%3BValue2 /target:Build \"C:/Working/src/Solution.sln\"")]
-            [InlineData("Value1 Value2", "/v:normal /p:Property=Value1%20Value2 /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData("Value1,Value2", "/v:Normal /p:Property=Value1%2CValue2 /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData("Value1;Value2", "/v:Normal /p:Property=Value1%3BValue2 /target:Build \"C:/Working/src/Solution.sln\"")]
+            [InlineData("Value1 Value2", "/v:Normal /p:Property=Value1%20Value2 /target:Build \"C:/Working/src/Solution.sln\"")]
             public void Should_Escape_Special_Characters_In_Property_Value(string propertyValue, string expected)
             {
                 // Given
@@ -1031,7 +1062,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Use_WarnAsError_If_Specified()
             {
                 // Given
-                var expected = "/v:normal /target:Build /warnaserror \"C:/Working/src/Solution.sln\"";
+                var expected = "/v:Normal /target:Build /warnaserror \"C:/Working/src/Solution.sln\"";
                 var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
                 fixture.Settings.WithWarningsAsError();
 
@@ -1042,13 +1073,21 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(expected, result.Args);
             }
 
-            [Fact]
-            public void Should_Use_WarnAsError_Codes_If_Specified()
+            [Theory]
+            [InlineData(new[] { "Err1" }, ":Err1")]
+            [InlineData(new[] { "Err1", "Err2" }, ":Err1;Err2")]
+            [InlineData(new string[] { }, "")]
+            public void Should_Use_WarnAsError_Codes_If_Specified(string[] errorCodes, string expectedValue)
             {
                 // Given
-                const string expected = "/v:normal /target:Build /warnaserror:\"12345\" \"C:/Working/src/Solution.sln\"";
+                string expected = $"/v:Normal /target:Build /warnaserror{expectedValue} \"C:/Working/src/Solution.sln\"";
                 var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
-                fixture.Settings.WithWarningsAsError("12345");
+                fixture.Settings.TreatWarningsAsErrors = true;
+
+                foreach (var errorCode in errorCodes)
+                {
+                    fixture.Settings.WarningsAsErrorCodes.Add(errorCode);
+                }
 
                 // When
                 var result = fixture.Run();
@@ -1057,13 +1096,19 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(expected, result.Args);
             }
 
-            [Fact]
-            public void Should_Use_WarnAsMessage_Codes_If_Specified()
+            [Theory]
+            [InlineData(new[] { "Err1" }, ":Err1")]
+            [InlineData(new[] { "Err1", "Err2" }, ":Err1;Err2")]
+            public void Should_Use_WarnAsMessage_Codes_If_Specified(string[] errorCodes, string expectedValue)
             {
                 // Given
-                const string expected = "/v:normal /target:Build /warnasmessage:\"12345\" \"C:/Working/src/Solution.sln\"";
+                string expected = $"/v:Normal /target:Build /warnasmessage{expectedValue} \"C:/Working/src/Solution.sln\"";
                 var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
-                fixture.Settings.WithWarningsAsMessage("12345");
+
+                foreach (var errorCode in errorCodes)
+                {
+                    fixture.Settings.WarningsAsMessageCodes.Add(errorCode);
+                }
 
                 // When
                 var result = fixture.Run();
@@ -1076,7 +1121,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Use_WarnAsError_And_WarnAsMessage_Codes_If_Specified()
             {
                 // Given
-                var expected = "/v:normal /target:Build /warnaserror /warnasmessage:\"12345\" \"C:/Working/src/Solution.sln\"";
+                var expected = "/v:Normal /target:Build /warnaserror /warnasmessage:12345 \"C:/Working/src/Solution.sln\"";
                 var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
                 fixture.Settings.WithWarningsAsError().WithWarningsAsMessage("12345");
 
@@ -1101,7 +1146,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal($"/v:normal /p:Foo={expected} /target:Build " +
+                Assert.Equal($"/v:Normal /p:Foo={expected} /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 
@@ -1109,7 +1154,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Use_Restore_If_Specified()
             {
                 // Given
-                var expected = "/v:normal /target:Build /restore \"C:/Working/src/Solution.sln\"";
+                var expected = "/v:Normal /target:Build /restore \"C:/Working/src/Solution.sln\"";
                 var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
                 fixture.Settings.WithRestore();
 
@@ -1120,24 +1165,343 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(expected, result.Args);
             }
 
-            [Theory]
-            [InlineData(new string[] { }, @"/v:normal /target:Build ""C:/Working/src/Solution.sln""")]
-            [InlineData(new string[] { "ForceConsoleColor" }, @"/v:normal /target:Build /clp:ForceConsoleColor ""C:/Working/src/Solution.sln""")]
-            [InlineData(new string[] { "ForceConsoleColor", "ShowCommandLine" }, @"/v:normal /target:Build /clp:ForceConsoleColor;ShowCommandLine ""C:/Working/src/Solution.sln""")]
-            public void Should_Append_ConsoleLoggerParameters(string[] parameters, string expected)
+            [Fact]
+            public void Should_Add_DistributedFileLogger_If_Specified()
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
-                foreach (var parameter in parameters)
-                {
-                    fixture.Settings.ConsoleLoggerParameters.Add(parameter);
-                }
+                fixture.Settings.DistributedFileLogger = true;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(expected, result.Args);
+                Assert.Equal("/v:Normal /distributedFileLogger /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ResponseFile_Argument()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ResponseFiles.Add("/src/inputs.rsp");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:Normal @\"/src/inputs.rsp\" /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_DistributedLogger_Argument()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.DistributedLoggers.Add(new MSBuildDistributedLogger
+                {
+                    CentralLogger = new MSBuildLogger { Assembly = "A" },
+                    ForwardingLogger = new MSBuildLogger { Assembly = "B" }
+                });
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:Normal /distributedlogger:\"A\"*\"B\" /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Multiple_DistributedLogger_Arguments_When_Multiple_Values()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.DistributedLoggers.Add(new MSBuildDistributedLogger
+                {
+                    CentralLogger = new MSBuildLogger { Assembly = "A" },
+                    ForwardingLogger = new MSBuildLogger { Assembly = "B" }
+                });
+
+                fixture.Settings.DistributedLoggers.Add(new MSBuildDistributedLogger
+                {
+                    CentralLogger = new MSBuildLogger { Class = "C", Assembly = "D" },
+                    ForwardingLogger = new MSBuildLogger { Class = "E", Assembly = "F", Parameters = "g" }
+                });
+
+                // When
+                var result = fixture.Run();
+
+                Assert.Equal("/v:Normal /distributedlogger:\"A\"*\"B\" /distributedlogger:C,D*E,F;g /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Theory]
+            [InlineData(null, null)]
+            [InlineData(null, "A")]
+            [InlineData("A", null)]
+            [InlineData("", "")]
+            [InlineData("", "A")]
+            [InlineData("A", "")]
+            [InlineData("          ", "          ")]
+            [InlineData("          ", "A")]
+            [InlineData("A", "          ")]
+            public void Should_Throw_If_DistributedLogger_Has_No_Assembly_Value(string centralLoggerAssembly, string forwardingLoggerAssembly)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.DistributedLoggers.Add(new MSBuildDistributedLogger
+                {
+                    CentralLogger = new MSBuildLogger { Assembly = centralLoggerAssembly },
+                    ForwardingLogger = new MSBuildLogger { Assembly = forwardingLoggerAssembly }
+                });
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "Assembly");
+            }
+
+            [Fact]
+            public void Should_Append_ResponseFile_Argument_When_Multiple_Values()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ResponseFiles.Add("/src/inputs1.rsp");
+                fixture.Settings.ResponseFiles.Add("/src/inputs_2.rsp");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:Normal @\"/src/inputs1.rsp\" @\"/src/inputs_2.rsp\" /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_PerformanceSummary_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    PerformanceSummary = true
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/consoleloggerparameters:PerformanceSummary /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_NoSummary_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    NoSummary = true
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/consoleloggerparameters:NoSummary /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Theory]
+            [InlineData(MSBuildLoggerOutputLevel.ErrorsOnly)]
+            [InlineData(MSBuildLoggerOutputLevel.WarningsOnly)]
+            public void Should_Append_SummaryOutputLevel_If_Specified(MSBuildLoggerOutputLevel outputLevel)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    SummaryOutputLevel = outputLevel
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($"/consoleloggerparameters:{outputLevel} /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Append_SummaryOutputLevel_If_Default()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    SummaryOutputLevel = MSBuildLoggerOutputLevel.Default
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_HideItemAndPropertyList_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    HideItemAndPropertyList = true
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/consoleloggerparameters:NoItemAndPropertyList /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_ShowCommandLine_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    ShowCommandLine = true
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/consoleloggerparameters:ShowCommandLine /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_ShowTimestamp_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    ShowTimestamp = true
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/consoleloggerparameters:ShowTimestamp /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_ForceNoAlign_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    ForceNoAlign = true
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/consoleloggerparameters:ForceNoAlign /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_ShowEventId_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    ShowEventId = true
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/consoleloggerparameters:ShowEventId /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_DisableConsoleColor_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    ConsoleColorType = MSBuildConsoleColorType.Disabled
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/consoleloggerparameters:DisableConsoleColor /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_ForceConsoleColor_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    ConsoleColorType = MSBuildConsoleColorType.ForceAnsi
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/consoleloggerparameters:ForceConsoleColor /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_DisableMultiprocessorLogging_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    DisableMultiprocessorLogging = true
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/consoleloggerparameters:DisableMPLogging /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Theory]
+            [InlineData(MSBuildVerbosity.Quiet)]
+            [InlineData(MSBuildVerbosity.Minimal)]
+            [InlineData(MSBuildVerbosity.Normal)]
+            [InlineData(MSBuildVerbosity.Detailed)]
+            [InlineData(MSBuildVerbosity.Diagnostic)]
+            public void Should_Append_Verbosity_If_Specified(MSBuildVerbosity verbosity)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings
+                {
+                    Verbosity = verbosity
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal($"/consoleloggerparameters:Verbosity={verbosity} /v:Normal /target:Build \"C:/Working/src/Solution.sln\"", result.Args);
             }
         }
     }

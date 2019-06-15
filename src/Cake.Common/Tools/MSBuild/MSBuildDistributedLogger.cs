@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.MSBuild;
-
-namespace Cake.Common.Tools.DotNetCore.MSBuild
+namespace Cake.Common.Tools.MSBuild
 {
     /// <summary>
     /// Represents the Distributed Logging Model with a central logger and forwarding logger.

@@ -387,12 +387,12 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
         public sealed class TheSetVerbosityMethod
         {
             [Theory]
-            [InlineData(Verbosity.Quiet)]
-            [InlineData(Verbosity.Minimal)]
-            [InlineData(Verbosity.Normal)]
-            [InlineData(Verbosity.Verbose)]
-            [InlineData(Verbosity.Diagnostic)]
-            public void Should_Set_Verbosity(Verbosity verbosity)
+            [InlineData(MSBuildVerbosity.Quiet)]
+            [InlineData(MSBuildVerbosity.Minimal)]
+            [InlineData(MSBuildVerbosity.Normal)]
+            [InlineData(MSBuildVerbosity.Detailed)]
+            [InlineData(MSBuildVerbosity.Diagnostic)]
+            public void Should_Set_Verbosity(MSBuildVerbosity verbosity)
             {
                 // Given
                 var settings = new MSBuildSettings();
@@ -411,7 +411,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var settings = new MSBuildSettings();
 
                 // When
-                var result = settings.SetVerbosity(Verbosity.Normal);
+                var result = settings.SetVerbosity(MSBuildVerbosity.Normal);
 
                 // Then
                 Assert.Equal(settings, result);
@@ -505,7 +505,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 settings.WithWarningsAsError();
 
                 // Then
-                Assert.True(settings.WarningsAsError);
+                Assert.True(settings.TreatWarningsAsErrors);
                 Assert.Equal(0, settings.WarningsAsErrorCodes.Count);
             }
 
@@ -519,7 +519,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 settings.WithWarningsAsError("12345");
 
                 // Then
-                Assert.True(settings.WarningsAsError);
+                Assert.True(settings.TreatWarningsAsErrors);
                 Assert.Equal(1, settings.WarningsAsErrorCodes.Count);
                 Assert.Equal("12345", settings.WarningsAsErrorCodes.First());
             }
@@ -604,14 +604,14 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var settings = new MSBuildSettings();
+                var loggerSettings = new MSBuildLoggerSettings { ForceNoAlign = true, ShowCommandLine = true };
 
                // When
-                settings.WithConsoleLoggerParameter("ForceConsoleColor");
-                settings.WithConsoleLoggerParameter("ShowCommandLine");
+                settings.ConsoleLoggerSettings = loggerSettings;
 
                // Then
-                Assert.Contains("ForceConsoleColor", settings.ConsoleLoggerParameters);
-                Assert.Contains("ShowCommandLine", settings.ConsoleLoggerParameters);
+                Assert.True(settings.ConsoleLoggerSettings.ForceNoAlign);
+                Assert.True(settings.ConsoleLoggerSettings.ShowCommandLine);
             }
 
             [Fact]
@@ -619,14 +619,13 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             {
                 // Given
                 var settings = new MSBuildSettings();
+                var loggerSettings = new MSBuildLoggerSettings { ConsoleColorType = MSBuildConsoleColorType.ForceAnsi, ShowCommandLine = true };
 
                // When
-                var result = settings.WithConsoleLoggerParameter("ForceConsoleColor");
-                var result1 = settings.WithConsoleLoggerParameter("ShowCommandLine");
+                var result = settings.WithConsoleLoggerSettings(loggerSettings);
 
                // Then
                 Assert.Equal(settings, result);
-                Assert.Equal(settings, result1);
             }
         }
     }

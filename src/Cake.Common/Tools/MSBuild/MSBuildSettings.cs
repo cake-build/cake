@@ -4,7 +4,8 @@
 
 using System;
 using System.Collections.Generic;
-using Cake.Core.Diagnostics;
+using Cake.Common.Tools.DotNetCore.MSBuild;
+using Cake.Core.IO;
 using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.MSBuild
@@ -20,7 +21,9 @@ namespace Cake.Common.Tools.MSBuild
         private readonly List<MSBuildFileLogger> _fileLoggers;
         private readonly HashSet<string> _warningsAsErrorCodes;
         private readonly HashSet<string> _warningsAsMessageCodes;
-        private readonly HashSet<string> _consoleLoggerParameters;
+        private readonly List<string> _ignoreProjectExtensions;
+        private readonly List<FilePath> _responseFiles;
+        private readonly List<MSBuildDistributedLogger> _distributedLoggers;
 
         /// <summary>
         /// Gets the targets.
@@ -75,6 +78,11 @@ namespace Cake.Common.Tools.MSBuild
         public bool? NodeReuse { get; set; }
 
         /// <summary>
+        /// Gets extensions to ignore when determining which project file to build.
+        /// </summary>
+        public ICollection<string> IgnoreProjectExtensions => _ignoreProjectExtensions;
+
+        /// <summary>
         /// Gets or sets whether or not detailed summary is created.
         /// Shows detailed information at the end of the build
         /// about the configurations built and how they were
@@ -88,6 +96,29 @@ namespace Cake.Common.Tools.MSBuild
         /// to the console.
         /// </summary>
         public bool? NoConsoleLogger { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to log the build output of each MSBuild node to its own file.
+        /// </summary>
+        /// <remarks>
+        /// The initial location for these files is the current directory. By default, the files are named "MSBuildNodeId.log". You can use the /fileLoggerParameters switch to specify the location of the files and other parameters for the fileLogger.
+        /// If you name a log file by using the /fileLoggerParameters switch, the distributed logger will use that name as a template and append the node ID to that name when creating a log file for each node.
+        /// </remarks>
+        public bool DistributedFileLogger { get; set; }
+
+        /// <summary>
+        /// Gets the distributed loggers to use.
+        /// </summary>
+        /// <remarks>
+        /// A distributed logger consists of a central and forwarding logger. MSBuild will attach an instance of the forwarding logger to each secondary node.
+        /// For more information see https://msdn.microsoft.com/en-us/library/bb383987.aspx
+        /// </remarks>
+        public ICollection<MSBuildDistributedLogger> DistributedLoggers => _distributedLoggers;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to exclude any MSBuild.rsp files automatically.
+        /// </summary>
+        public bool ExcludeAutoResponseFiles { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show copyright information at the start of the program.
@@ -106,7 +137,7 @@ namespace Cake.Common.Tools.MSBuild
         /// Each logger displays events based on the verbosity level that you set for that logger.
         /// </summary>
         /// <value>The build log verbosity.</value>
-        public Verbosity Verbosity { get; set; }
+        public MSBuildVerbosity Verbosity { get; set; }
 
         /// <summary>
         /// Gets the loggers.
@@ -127,11 +158,11 @@ namespace Cake.Common.Tools.MSBuild
         /// Gets or sets a value indicating whether warnings should be treated as errors.
         /// Treats all warnings as errors unless <see cref="WarningsAsErrorCodes"/> has specific codes specified.
         /// </summary>
-        public bool WarningsAsError { get; set; }
+        public bool TreatWarningsAsErrors { get; set; }
 
         /// <summary>
         /// Gets the warning codes to treat as errors.
-        /// If any specified <seealso cref="WarningsAsError"/> will implicitly be treated as true.
+        /// If any specified <seealso cref="TreatWarningsAsErrors"/> will implicitly be treated as true.
         /// </summary>
         public ISet<string> WarningsAsErrorCodes => _warningsAsErrorCodes;
 
@@ -156,9 +187,17 @@ namespace Cake.Common.Tools.MSBuild
         public bool? RestoreLockedMode { get; set; }
 
         /// <summary>
-        /// Gets the console logger parameters.
+        /// Gets or sets the parameters for the console logger.
         /// </summary>
-        public ISet<string> ConsoleLoggerParameters => _consoleLoggerParameters;
+        public MSBuildLoggerSettings ConsoleLoggerSettings { get; set; }
+
+        /// <summary>
+        /// Gets the response files to use.
+        /// </summary>
+        /// <remarks>
+        /// A response file is a text file that is used to insert command-line switches. For more information see https://docs.microsoft.com/en-gb/visualstudio/msbuild/msbuild-response-files
+        /// </remarks>
+        public ICollection<FilePath> ResponseFiles => _responseFiles;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
@@ -171,11 +210,13 @@ namespace Cake.Common.Tools.MSBuild
             _fileLoggers = new List<MSBuildFileLogger>();
             _warningsAsErrorCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _warningsAsMessageCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            _consoleLoggerParameters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _distributedLoggers = new List<MSBuildDistributedLogger>();
+            _responseFiles = new List<FilePath>();
+            _ignoreProjectExtensions = new List<string>();
 
             ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;
-            Verbosity = Verbosity.Normal;
+            Verbosity = MSBuildVerbosity.Normal;
             MSBuildPlatform = MSBuildPlatform.Automatic;
         }
     }

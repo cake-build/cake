@@ -279,7 +279,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.DisableConsoleLogger = true;
+                fixture.Settings.NoConsoleLogger = true;
 
                 // When
                 var result = fixture.Run();
@@ -293,7 +293,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.DisableConsoleLogger = true;
+                fixture.Settings.NoConsoleLogger = true;
                 fixture.Settings.ConsoleLoggerSettings = new MSBuildLoggerSettings();
 
                 // When
@@ -312,7 +312,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 {
                     PerformanceSummary = true,
                     SummaryOutputLevel = MSBuildLoggerOutputLevel.ErrorsOnly,
-                    Verbosity = DotNetCoreVerbosity.Diagnostic
+                    Verbosity = MSBuildVerbosity.Diagnostic
                 };
 
                 // When
@@ -327,7 +327,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { AppendToLogFile = false, PerformanceSummary = true, Verbosity = DotNetCoreVerbosity.Diagnostic });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { AppendToLogFile = false, PerformanceSummary = true, Verbosity = MSBuildVerbosity.Diagnostic });
 
                 // When
                 var result = fixture.Run();
@@ -490,20 +490,131 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 AssertEx.IsArgumentNullException(result, "Assembly");
             }
 
-            [Theory]
-            [InlineData(MSBuildTreatAllWarningsAs.Default, new[] { "Err1" }, ":Err1")]
-            [InlineData(MSBuildTreatAllWarningsAs.Default, new[] { "Err1", "Err2" }, ":Err1;Err2")]
-            [InlineData(MSBuildTreatAllWarningsAs.Error, new[] { "Err1", "Err2" }, "")]
-            [InlineData(MSBuildTreatAllWarningsAs.Error, new string[] { }, "")]
-            public void Should_Add_WarnAsError_Argument(MSBuildTreatAllWarningsAs treatAllWarningsAs, string[] errorCodes, string expectedValue)
+            [Fact]
+            public void Should_Use_Binary_Logging_If_Specified()
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.TreatAllWarningsAs = treatAllWarningsAs;
+                fixture.Settings.BinaryLogger = new MSBuildBinaryLogSettings()
+                {
+                    Enabled = true,
+                    FileName = "mylog.binlog",
+                    Imports = MSBuildBinaryLogImports.ZipFile
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /bl:mylog.binlog;ProjectImports=ZipFile", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_Binary_Logging_If_Enabled()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.BinaryLogger = new MSBuildBinaryLogSettings
+                {
+                    Enabled = true,
+                    FileName = "mylog.binlog",
+                    Imports = MSBuildBinaryLogImports.ZipFile
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /bl:mylog.binlog;ProjectImports=ZipFile", result.Args);
+            }
+
+            [Theory]
+            [InlineData("Release", "msbuild /property:configuration=\"Release\"")]
+            [InlineData("Custom Spaced", "msbuild /property:configuration=\"Custom Spaced\"")]
+            public void Should_Append_Configuration_As_Property_To_Process_Arguments(string configuration, string expected)
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.Configuration = configuration; // .SetConfiguration(configuration);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "msbuild /property:RestoreLockedMode=\"true\"")]
+            [InlineData(false, "msbuild /property:RestoreLockedMode=\"false\"")]
+            public void Should_Append_RestoreLockedMode_As_Property_To_Process_Arguments(bool restoreLockedMode, string expected)
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.RestoreLockedMode = restoreLockedMode;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_Restore_If_Specified()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.Restore = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /restore", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_No_Console_Logger_If_Specified()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.NoConsoleLogger = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /noconsolelogger", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_Node_Reuse_If_Specified()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.NodeReuse = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /nr:true", result.Args);
+            }
+
+            [Theory]
+            [InlineData(new[] { "Err1" }, ":Err1")]
+            [InlineData(new[] { "Err1", "Err2" }, ":Err1;Err2")]
+            [InlineData(new string[] { }, "")]
+            public void Should_Add_WarnAsError_Argument(string[] errorCodes, string expectedValue)
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.TreatWarningsAsErrors = true;
 
                 foreach (var errorCode in errorCodes)
                 {
-                    fixture.Settings.WarningCodesAsError.Add(errorCode);
+                    fixture.Settings.WarningsAsErrorCodes.Add(errorCode);
                 }
 
                 // When
@@ -514,19 +625,16 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Theory]
-            [InlineData(MSBuildTreatAllWarningsAs.Default, new[] { "Err1" }, ":Err1")]
-            [InlineData(MSBuildTreatAllWarningsAs.Default, new[] { "Err1", "Err2" }, ":Err1;Err2")]
-            [InlineData(MSBuildTreatAllWarningsAs.Message, new[] { "Err1", "Err2" }, "")]
-            [InlineData(MSBuildTreatAllWarningsAs.Message, new string[] { }, "")]
-            public void Should_Add_WarnAsMessage_Argument(MSBuildTreatAllWarningsAs treatAllWarningsAs, string[] errorCodes, string expectedValue)
+            [InlineData(new[] { "Err1" }, ":Err1")]
+            [InlineData(new[] { "Err1", "Err2" }, ":Err1;Err2")]
+            public void Should_Add_WarnAsMessage_Argument(string[] errorCodes, string expectedValue)
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.TreatAllWarningsAs = treatAllWarningsAs;
 
                 foreach (var errorCode in errorCodes)
                 {
-                    fixture.Settings.WarningCodesAsMessage.Add(errorCode);
+                    fixture.Settings.WarningsAsMessageCodes.Add(errorCode);
                 }
 
                 // When
@@ -534,6 +642,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
 
                 // Then
                 Assert.Equal($"msbuild /warnasmessage{expectedValue}", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_WarnAsError_And_WarnAsMessage_Codes_If_Specified()
+            {
+                // Given
+                var expected = "msbuild /warnaserror /warnasmessage:12345";
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.TreatWarningsAsErrors = true;
+                fixture.Settings.WarningsAsMessageCodes.Add("12345");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -860,12 +984,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Theory]
-            [InlineData(DotNetCoreVerbosity.Quiet)]
-            [InlineData(DotNetCoreVerbosity.Minimal)]
-            [InlineData(DotNetCoreVerbosity.Normal)]
-            [InlineData(DotNetCoreVerbosity.Detailed)]
-            [InlineData(DotNetCoreVerbosity.Diagnostic)]
-            public void Should_Append_Verbosity_If_Specified(DotNetCoreVerbosity verbosity)
+            [InlineData(MSBuildVerbosity.Quiet)]
+            [InlineData(MSBuildVerbosity.Minimal)]
+            [InlineData(MSBuildVerbosity.Normal)]
+            [InlineData(MSBuildVerbosity.Detailed)]
+            [InlineData(MSBuildVerbosity.Diagnostic)]
+            public void Should_Append_Verbosity_If_Specified(MSBuildVerbosity verbosity)
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
@@ -1117,12 +1241,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Theory]
-            [InlineData(DotNetCoreVerbosity.Quiet)]
-            [InlineData(DotNetCoreVerbosity.Minimal)]
-            [InlineData(DotNetCoreVerbosity.Normal)]
-            [InlineData(DotNetCoreVerbosity.Detailed)]
-            [InlineData(DotNetCoreVerbosity.Diagnostic)]
-            public void Should_Append_Verbosity_If_Specified(DotNetCoreVerbosity verbosity)
+            [InlineData(MSBuildVerbosity.Quiet)]
+            [InlineData(MSBuildVerbosity.Minimal)]
+            [InlineData(MSBuildVerbosity.Normal)]
+            [InlineData(MSBuildVerbosity.Detailed)]
+            [InlineData(MSBuildVerbosity.Diagnostic)]
+            public void Should_Append_Verbosity_If_Specified(MSBuildVerbosity verbosity)
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();

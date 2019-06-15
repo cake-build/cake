@@ -296,7 +296,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         {
             EnsureSettings(settings);
 
-            settings.DisableConsoleLogger = true;
+            settings.NoConsoleLogger = true;
 
             return settings;
         }
@@ -319,7 +319,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                 throw new ArgumentException("Warning code cannot be null or empty", nameof(warningCode));
             }
 
-            settings.WarningCodesAsError.Add(warningCode);
+            settings.WarningsAsErrorCodes.Add(warningCode);
 
             return settings;
         }
@@ -339,7 +339,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                 throw new ArgumentException("Warning code cannot be null or empty", nameof(warningCode));
             }
 
-            settings.WarningCodesAsMessage.Add(warningCode);
+            settings.WarningsAsMessageCodes.Add(warningCode);
 
             return settings;
         }
@@ -348,13 +348,13 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// Sets how all warnings should be treated.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="behaviour">How all warning should be treated.</param>
+        /// <param name="behaviour">If warnings should be treated as errors.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        public static DotNetCoreMSBuildSettings TreatAllWarningsAs(this DotNetCoreMSBuildSettings settings, MSBuildTreatAllWarningsAs behaviour)
+        public static DotNetCoreMSBuildSettings TreatWarningsAsError(this DotNetCoreMSBuildSettings settings, bool behaviour)
         {
             EnsureSettings(settings);
 
-            settings.TreatAllWarningsAs = behaviour;
+            settings.TreatWarningsAsErrors = behaviour;
 
             return settings;
         }

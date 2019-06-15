@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotNetCore.MSBuild
+using Cake.Common.Tools.DotNetCore;
+
+namespace Cake.Common.Tools.MSBuild
 {
     /// <summary>
     /// Represents the common settings for a logger.
@@ -63,6 +65,6 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <summary>
         /// Gets or sets a value that overrides the /verbosity setting for this logger.
         /// </summary>
-        public DotNetCoreVerbosity? Verbosity { get; set; }
+        public MSBuildVerbosity? Verbosity { get; set; }
     }
 }

@@ -510,7 +510,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 settings.DisableConsoleLogger();
 
                 // Then
-                Assert.True(settings.DisableConsoleLogger);
+                Assert.True(settings.NoConsoleLogger);
             }
 
             [Fact]
@@ -539,7 +539,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 settings.SetWarningCodeAsError("ERR1");
 
                 // Then
-                Assert.True(settings.WarningCodesAsError.Contains("ERR1"));
+                Assert.True(settings.WarningsAsErrorCodes.Contains("ERR1"));
             }
 
             [Fact]
@@ -584,7 +584,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 settings.SetWarningCodeAsMessage("ERR1");
 
                 // Then
-                Assert.True(settings.WarningCodesAsMessage.Contains("ERR1"));
+                Assert.True(settings.WarningsAsMessageCodes.Contains("ERR1"));
             }
 
             [Fact]
@@ -614,37 +614,6 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
 
                 // Then
                 AssertEx.IsArgumentException(result, "warningCode", "Warning code cannot be null or empty");
-            }
-        }
-
-        public sealed class TheTreatAllWarningsAsMethod
-        {
-            [Theory]
-            [InlineData(MSBuildTreatAllWarningsAs.Message)]
-            [InlineData(MSBuildTreatAllWarningsAs.Error)]
-            public void Should_Set_Warning_Code_Behaviour(MSBuildTreatAllWarningsAs treatAllAs)
-            {
-                // Given
-                var settings = new DotNetCoreMSBuildSettings();
-
-                // When
-                settings.TreatAllWarningsAs(treatAllAs);
-
-                // Then
-                Assert.Equal(treatAllAs, settings.TreatAllWarningsAs);
-            }
-
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetCoreMSBuildSettings();
-
-                // When
-                var result = settings.TreatAllWarningsAs(MSBuildTreatAllWarningsAs.Error);
-
-                // Then
-                Assert.Equal(settings, result);
             }
         }
 

@@ -57,9 +57,6 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="arguments">The arguments.</param>
         protected void RunCommand(TSettings settings, ProcessArgumentBuilder arguments)
         {
-            // add arguments common to all commands last
-            AppendCommonArguments(arguments, settings);
-
             Run(settings, arguments, null, null);
         }
 
@@ -71,9 +68,6 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="processSettings">The processSettings.</param>
         protected void RunCommand(TSettings settings, ProcessArgumentBuilder arguments, ProcessSettings processSettings)
         {
-            // add arguments common to all commands last
-            AppendCommonArguments(arguments, settings);
-
             Run(settings, arguments, processSettings, null);
         }
 
@@ -89,24 +83,6 @@ namespace Cake.Common.Tools.DotNetCore
             if (settings.DiagnosticOutput)
             {
                 builder.Append("--diagnostics");
-            }
-
-            return builder;
-        }
-
-        /// <summary>
-        /// Adds common commandline arguments.
-        /// </summary>
-        /// <param name="builder">Process argument builder to update.</param>
-        /// <param name="settings">The settings.</param>
-        /// <returns>Returns <see cref="ProcessArgumentBuilder"/> updated with common commandline arguments.</returns>
-        private ProcessArgumentBuilder AppendCommonArguments(ProcessArgumentBuilder builder, TSettings settings)
-        {
-            // Verbosity
-            if (settings.Verbosity.HasValue)
-            {
-                builder.Append("--verbosity");
-                builder.Append(settings.Verbosity.ToString().ToLower());
             }
 
             return builder;

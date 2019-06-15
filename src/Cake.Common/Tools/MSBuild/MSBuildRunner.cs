@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -76,12 +77,30 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append("/nologo");
             }
 
+            // configure console logger?
+            if (!settings.NoConsoleLogger.GetValueOrDefault() && settings.ConsoleLoggerSettings != null)
+            {
+                var arguments = GetLoggerSettings(settings.ConsoleLoggerSettings);
+
+                if (arguments.Any())
+                {
+                    builder.Append($"/consoleloggerparameters:{arguments}");
+                }
+            }
+
             // Set the verbosity.
-            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", settings.Verbosity.GetMSBuildVerbosityName()));
+            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", settings.Verbosity));
 
             if (settings.NodeReuse != null)
             {
                 builder.Append(string.Concat("/nr:", settings.NodeReuse.Value ? "true" : "false"));
+            }
+
+            // set project file extensions to ignore when searching for project file
+            if (settings.IgnoreProjectExtensions.Any())
+            {
+                var arguments = string.Concat("/ignoreprojectextensions:", string.Join(",", settings.IgnoreProjectExtensions));
+                builder.Append(arguments);
             }
 
             // Got a specific configuration in mind?
@@ -106,6 +125,26 @@ namespace Cake.Common.Tools.MSBuild
                 {
                     builder.Append(property);
                 }
+            }
+
+            // Include response files?
+            foreach (var responseFile in settings.ResponseFiles)
+            {
+                builder.AppendSwitchQuoted("@", string.Empty, responseFile.MakeAbsolute(_environment).FullPath);
+            }
+
+            // Got any distributed loggers?
+            foreach (var distributedLogger in settings.DistributedLoggers)
+            {
+                var arguments = string.Concat("/distributedlogger:",
+                    $"{GetLoggerValue(distributedLogger.CentralLogger)}*{GetLoggerValue(distributedLogger.ForwardingLogger)}");
+                builder.Append(arguments);
+            }
+
+            // use a file logger for each node?
+            if (settings.DistributedFileLogger)
+            {
+                builder.Append("/distributedFileLogger");
             }
 
             // Got any targets?
@@ -173,13 +212,19 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
+            // exclude auto response files?
+            if (settings.ExcludeAutoResponseFiles)
+            {
+                builder.Append("/noautoresponse");
+            }
+
             // Treat errors as warnings?
             if (settings.WarningsAsErrorCodes.Any())
             {
                 var codes = string.Join(";", settings.WarningsAsErrorCodes);
-                builder.Append($"/warnaserror:{codes.Quote()}");
+                builder.Append($"/warnaserror:{codes}");
             }
-            else if (settings.WarningsAsError)
+            else if (settings.TreatWarningsAsErrors)
             {
                 builder.Append("/warnaserror");
             }
@@ -188,7 +233,7 @@ namespace Cake.Common.Tools.MSBuild
             if (settings.WarningsAsMessageCodes.Any())
             {
                 var codes = string.Join(";", settings.WarningsAsMessageCodes);
-                builder.Append($"/warnasmessage:{codes.Quote()}");
+                builder.Append($"/warnasmessage:{codes}");
             }
 
             // Invoke restore target before any other target?
@@ -201,13 +246,6 @@ namespace Cake.Common.Tools.MSBuild
             if (settings.RestoreLockedMode.HasValue)
             {
                 builder.Append(string.Concat("/p:RestoreLockedMode=", settings.RestoreLockedMode.Value ? "true" : "false"));
-            }
-
-            // Got any console logger parameters?
-            if (settings.ConsoleLoggerParameters.Count > 0)
-            {
-                var argument = "/clp:" + string.Join(";", settings.ConsoleLoggerParameters);
-                builder.Append(argument);
             }
 
             // Add the solution as the last parameter.
@@ -236,21 +274,36 @@ namespace Cake.Common.Tools.MSBuild
 
         private static string GetLoggerArgument(MSBuildLogger logger)
         {
-            var argumentBuilder = new StringBuilder("/logger:");
-            if (!string.IsNullOrWhiteSpace(logger.Class))
+            var argument = string.Concat("/logger:", GetLoggerValue(logger));
+            return argument;
+        }
+
+        private static string GetLoggerValue(MSBuildLogger logger)
+        {
+            if (string.IsNullOrWhiteSpace(logger.Assembly))
             {
-                argumentBuilder.Append(logger.Class);
-                argumentBuilder.Append(",");
+                throw new ArgumentNullException(nameof(logger.Assembly), "Assembly must be a strong name or file");
             }
 
-            argumentBuilder.Append(logger.Assembly.Quote());
+            var builder = new StringBuilder();
+            if (!string.IsNullOrWhiteSpace(logger.Class))
+            {
+                builder.Append(logger.Class);
+                builder.Append(",");
+                builder.Append(logger.Assembly);
+            }
+            else
+            {
+                builder.Append(logger.Assembly?.Quote());
+            }
 
             if (!string.IsNullOrWhiteSpace(logger.Parameters))
             {
-                argumentBuilder.Append(";");
-                argumentBuilder.Append(logger.Parameters);
+                builder.Append(";");
+                builder.Append(logger.Parameters);
             }
-            return argumentBuilder.ToString();
+
+            return builder.ToString();
         }
 
         private static string GetPlatformName(PlatformTarget platform, bool isSolution)
@@ -339,6 +392,81 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             return Enumerable.Empty<FilePath>();
+        }
+
+        private static string GetLoggerSettings(MSBuildLoggerSettings loggerSettings)
+        {
+            var settings = new List<string>();
+
+            if (loggerSettings.PerformanceSummary)
+            {
+                settings.Add("PerformanceSummary");
+            }
+
+            if (loggerSettings.NoSummary)
+            {
+                settings.Add("NoSummary");
+            }
+
+            if (loggerSettings.SummaryOutputLevel != MSBuildLoggerOutputLevel.Default)
+            {
+                switch (loggerSettings.SummaryOutputLevel)
+                {
+                    case MSBuildLoggerOutputLevel.WarningsOnly:
+                        settings.Add("WarningsOnly");
+                        break;
+                    case MSBuildLoggerOutputLevel.ErrorsOnly:
+                        settings.Add("ErrorsOnly");
+                        break;
+                }
+            }
+
+            if (loggerSettings.HideItemAndPropertyList)
+            {
+                settings.Add("NoItemAndPropertyList");
+            }
+
+            if (loggerSettings.ShowCommandLine)
+            {
+                settings.Add("ShowCommandLine");
+            }
+
+            if (loggerSettings.ShowTimestamp)
+            {
+                settings.Add("ShowTimestamp");
+            }
+
+            if (loggerSettings.ShowEventId)
+            {
+                settings.Add("ShowEventId");
+            }
+
+            if (loggerSettings.ForceNoAlign)
+            {
+                settings.Add("ForceNoAlign");
+            }
+
+            if (loggerSettings.ConsoleColorType == MSBuildConsoleColorType.Disabled)
+            {
+                settings.Add("DisableConsoleColor");
+            }
+
+            if (loggerSettings.ConsoleColorType == MSBuildConsoleColorType.ForceAnsi)
+            {
+                settings.Add("ForceConsoleColor");
+            }
+
+            if (loggerSettings.DisableMultiprocessorLogging)
+            {
+                settings.Add("DisableMPLogging");
+            }
+
+            if (loggerSettings.Verbosity.HasValue)
+            {
+                settings.Add($"Verbosity={loggerSettings.Verbosity}");
+            }
+
+            return string.Join(";", settings);
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Cake.Common.Tools.MSBuild
         /// Gets or sets Verbosity. Override the /verbosity setting for this logger.
         /// Specify the following verbosity levels: q[uiet], m[inimal], n[ormal], v[erbose] (detailed), and diag[nostic].
         /// </summary>
-        public Verbosity? Verbosity { get; set; }
+        public MSBuildVerbosity? Verbosity { get; set; }
 
         /// <summary>
         /// Gets or sets LogFile. The path to the log file into which the build log is written.
@@ -98,7 +98,7 @@ namespace Cake.Common.Tools.MSBuild
             parameters.Add(ShowCommandLine ? "ShowCommandLine" : null);
             parameters.Add(ShowTimestamp ? "ShowTimestamp" : null);
             parameters.Add(ShowEventId ? "ShowEventId" : null);
-            parameters.Add(Verbosity != null ? $"Verbosity={Verbosity.Value.GetMSBuildVerbosityName()}" : null);
+            parameters.Add(Verbosity != null ? $"Verbosity={Verbosity.Value}" : null);
 
             return string.Join(";", parameters.Where(p => p != null));
         }

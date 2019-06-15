@@ -228,7 +228,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <param name="settings">The settings.</param>
         /// <param name="verbosity">The build log verbosity.</param>
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        public static MSBuildSettings SetVerbosity(this MSBuildSettings settings, Verbosity verbosity)
+        public static MSBuildSettings SetVerbosity(this MSBuildSettings settings, MSBuildVerbosity verbosity)
         {
             if (settings == null)
             {
@@ -411,7 +411,7 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            settings.WarningsAsError = true;
+            settings.TreatWarningsAsErrors = true;
 
             foreach (var code in codes)
             {
@@ -481,16 +481,16 @@ namespace Cake.Common.Tools.MSBuild
         /// Adds a console logger parameter.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="parameter">The console logger parameter.</param>
+        /// <param name="loggerSettings">The msbuild logger settings.</param>
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        public static MSBuildSettings WithConsoleLoggerParameter(this MSBuildSettings settings, string parameter)
+        public static MSBuildSettings WithConsoleLoggerSettings(this MSBuildSettings settings, MSBuildLoggerSettings loggerSettings)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            settings.ConsoleLoggerParameters.Add(parameter);
+            settings.ConsoleLoggerSettings = loggerSettings;
             return settings;
         }
     }

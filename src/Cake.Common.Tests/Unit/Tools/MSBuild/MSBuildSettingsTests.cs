@@ -39,7 +39,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var settings = new MSBuildSettings();
 
                 // Then
-                Assert.Equal(Verbosity.Normal, settings.Verbosity);
+                Assert.Equal(MSBuildVerbosity.Normal, settings.Verbosity);
             }
         }
 
@@ -221,13 +221,13 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
         public sealed class TheConsoleLoggerParametersProperty
         {
             [Fact]
-            public void Should_Be_Empty_By_Default()
+            public void Should_Be_Null_By_Default()
             {
                 // Given
                 var settings = new MSBuildSettings();
 
                 // Then
-                Assert.Empty(settings.ConsoleLoggerParameters);
+                Assert.Null(settings.ConsoleLoggerSettings);
             }
         }
 

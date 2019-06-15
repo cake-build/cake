@@ -33,6 +33,33 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         public int? MaxCpuCount { get; set; }
 
         /// <summary>
+        /// Gets or sets the configuration.
+        /// </summary>
+        /// <value>The configuration.</value>
+        public string Configuration { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether or not node reuse is used.
+        /// When you’re doing multiple builds in a row, this helps reduce your total build time,
+        /// by avoiding the start up costs of each MSBuild child node.
+        /// </summary>
+        public bool? NodeReuse { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the Restore target should be run before any other targets.
+        /// This setting will pass the /restore option down to MSBuild.
+        /// Use this setting when working with the new csproj format.
+        /// </summary>
+        public bool Restore { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not to lock the package dependency graph while
+        /// restoring, using the packages.lock.json file.
+        /// This setting is available with atleast Visual Studio 2017 version 15.9 and above or NET SDK version 2.1.500 and above.
+        /// </summary>
+        public bool? RestoreLockedMode { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to exclude any MSBuild.rsp files automatically.
         /// </summary>
         public bool ExcludeAutoResponseFiles { get; set; }
@@ -74,6 +101,11 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         public ICollection<FilePath> ResponseFiles { get; }
 
         /// <summary>
+        /// Gets or sets the binary logging options
+        /// </summary>
+        public MSBuildBinaryLogSettings BinaryLogger { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to log the build output of each MSBuild node to its own file.
         /// </summary>
         /// <remarks>
@@ -109,7 +141,13 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <summary>
         /// Gets or sets a value indicating whether to disable the default console logger, and not log events to the console.
         /// </summary>
-        public bool DisableConsoleLogger { get; set; }
+        public bool NoConsoleLogger { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether warnings should be treated as errors.
+        /// Treats all warnings as errors unless <see cref="WarningsAsErrorCodes"/> has specific codes specified.
+        /// </summary>
+        public bool TreatWarningsAsErrors { get; set; }
 
         /// <summary>
         /// Gets the warning codes to treats as errors.
@@ -117,17 +155,12 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <remarks>
         /// When a warning is treated as an error the target will continue to execute as if it was a warning but the overall build will fail.
         /// </remarks>
-        public IList<string> WarningCodesAsError { get; }
-
-        /// <summary>
-        /// Gets or sets a value indicating how all warnings should be treated.
-        /// </summary>
-        public MSBuildTreatAllWarningsAs TreatAllWarningsAs { get; set; }
+        public IList<string> WarningsAsErrorCodes { get; }
 
         /// <summary>
         /// Gets the warning codes to treats as low importance messages.
         /// </summary>
-        public IList<string> WarningCodesAsMessage { get; }
+        public IList<string> WarningsAsMessageCodes { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetCoreMSBuildSettings"/> class.
@@ -140,8 +173,8 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             DistributedLoggers = new List<MSBuildDistributedLogger>();
             FileLoggers = new List<MSBuildFileLoggerSettings>();
             Loggers = new List<MSBuildLogger>();
-            WarningCodesAsError = new List<string>();
-            WarningCodesAsMessage = new List<string>();
+            WarningsAsErrorCodes = new List<string>();
+            WarningsAsMessageCodes = new List<string>();
             IgnoreProjectExtensions = new List<string>();
         }
     }

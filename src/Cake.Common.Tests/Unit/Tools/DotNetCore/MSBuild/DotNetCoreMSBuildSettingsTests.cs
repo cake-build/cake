@@ -48,20 +48,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
         }
 
-        public sealed class TheTreatAllWarningsAsProperty
+        public sealed class TheTreatWarningsAsErrorProperty
         {
             [Fact]
-            public void Should_Be_Default_By_Default()
+            public void Should_Be_False_By_Default()
             {
                 // Given
                 var settings = new DotNetCoreMSBuildSettings();
 
                 // Then
-                Assert.Equal(MSBuildTreatAllWarningsAs.Default, settings.TreatAllWarningsAs);
+                Assert.Equal(false, settings.TreatWarningsAsErrors);
             }
         }
 
-        public sealed class TheWarningCodesAsErrorProperty
+        public sealed class TheWarningsAsErrorCodesProperty
         {
             [Fact]
             public void Should_Be_Empty_By_Default()
@@ -70,11 +70,11 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var settings = new DotNetCoreMSBuildSettings();
 
                 // Then
-                Assert.Empty(settings.WarningCodesAsError);
+                Assert.Empty(settings.WarningsAsErrorCodes);
             }
         }
 
-        public sealed class TheWarningCodesAsMessageProperty
+        public sealed class TheWarningsAsMessageCodesProperty
         {
             [Fact]
             public void Should_Be_Empty_By_Default()
@@ -83,7 +83,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var settings = new DotNetCoreMSBuildSettings();
 
                 // Then
-                Assert.Empty(settings.WarningCodesAsMessage);
+                Assert.Empty(settings.WarningsAsMessageCodes);
             }
         }
 
@@ -97,19 +97,6 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
 
                 // Then
                 Assert.Null(settings.ConsoleLoggerSettings);
-            }
-        }
-
-        public sealed class TheVerbosityProperty
-        {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new DotNetCoreMSBuildSettings();
-
-                // Then
-                Assert.Null(settings.Verbosity);
             }
         }
 
@@ -200,7 +187,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var settings = new DotNetCoreMSBuildSettings();
 
                 // Then
-                Assert.False(settings.DisableConsoleLogger);
+                Assert.False(settings.NoConsoleLogger);
             }
         }
 

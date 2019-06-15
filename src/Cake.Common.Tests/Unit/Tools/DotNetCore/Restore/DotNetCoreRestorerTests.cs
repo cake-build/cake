@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Restore;
-using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Testing;
 using Xunit;
 
@@ -116,7 +114,6 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                 fixture.Settings.Runtime = "runtime1";
                 fixture.Settings.NoDependencies = true;
                 fixture.Settings.Force = true;
-                fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
                 var result = fixture.Run();
@@ -128,8 +125,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Restore
                              " --source \"https://www.example.com/source1\"" +
                              " --source \"https://www.example.com/source2\"" +
                              " --configfile \"/Working/NuGet.config\"" +
-                             " --no-cache --disable-parallel --ignore-failed-sources --no-dependencies --force" +
-                             " --verbosity minimal", result.Args);
+                             " --no-cache --disable-parallel --ignore-failed-sources --no-dependencies --force", result.Args);
             }
 
             [Fact]

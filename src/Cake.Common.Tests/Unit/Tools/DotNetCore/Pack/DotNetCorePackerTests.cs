@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Pack;
-using Cake.Common.Tools.DotNetCore;
 using Cake.Testing;
 using Xunit;
 
@@ -115,13 +114,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 fixture.Settings.IncludeSymbols = true;
                 fixture.Settings.Serviceable = true;
                 fixture.Settings.Runtime = "win7-x86";
-                fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack --output \"/Working/artifacts\" --no-build --no-dependencies --no-restore --include-symbols --include-source --configuration Release --version-suffix rc1 --serviceable --runtime win7-x86 --verbosity minimal", result.Args);
+                Assert.Equal("pack --output \"/Working/artifacts\" --no-build --no-dependencies --no-restore --include-symbols --include-source --configuration Release --version-suffix rc1 --serviceable --runtime win7-x86", result.Args);
             }
 
             [Fact]
