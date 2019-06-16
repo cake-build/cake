@@ -24,7 +24,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRestore")
     var root = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
 
     // When
-    DotNetCoreRestore(root.FullPath, new DotNetCoreRestoreSettings { Verbosity = DotNetCoreVerbosity.Minimal });
+    DotNetCoreRestore(root.FullPath, new DotNetCoreRestoreSettings());
 });
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
