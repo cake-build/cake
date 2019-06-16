@@ -143,7 +143,6 @@ Task("Restore-NuGet-Packages")
 {
     DotNetCoreRestore("./src/Cake.sln", new DotNetCoreRestoreSettings
     {
-        Verbosity = DotNetCoreVerbosity.Minimal,
         Sources = new [] { "https://api.nuget.org/v3/index.json" },
         MSBuildSettings = msBuildSettings
     });
