@@ -195,13 +195,56 @@ namespace Cake.Common.Tools.OctopusDeploy
         [CakeMethodAlias]
         public static void OctoDeployRelease(this ICakeContext context, string server, string apiKey, string projectName, string deployTo, string releaseNumber, OctopusDeployReleaseDeploymentSettings settings)
         {
+            OctoDeployRelease(context, server, apiKey, projectName, new string[] { deployTo }, releaseNumber, settings);
+        }
+
+        /// <summary>
+        /// Deploys the specified already existing release into a specified environment
+        /// See <see href="http://docs.octopusdeploy.com/display/OD/Deploying+releases">Octopus Documentation</see> for more details.
+        /// </summary>
+        /// <param name="context">The cake context.</param>
+        /// <param name="server">The Octopus server URL.</param>
+        /// <param name="apiKey">The user's API key.</param>
+        /// <param name="projectName">Name of the target project.</param>
+        /// <param name="deployToMultiple">Multiple target environment names.</param>
+        /// <param name="releaseNumber">Version number of the release to deploy. Specify "latest" for the latest release.</param>
+        /// <param name="settings">Deployment settings.</param>
+        /// <example>
+        /// <code>
+        ///     // bare minimum
+        ///     OctoDeployRelease("http://octopus-deploy.example", "API-XXXXXXXXXXXXXXXXXXXX", "MyGreatProject", "Testing", "2.1.15-RC" new OctopusDeployReleaseDeploymentSettings());
+        ///
+        ///     // All of deployment arguments
+        ///     OctoDeployRelease("http://octopus-deploy.example", "API-XXXXXXXXXXXXXXXXXXXX", "MyGreatProject", new string[] {"Testing", "Testing2"}, "2.1.15-RC" new OctopusDeployReleaseDeploymentSettings {
+        ///         ShowProgress = true,
+        ///         ForcePackageDownload = true,
+        ///         WaitForDeployment = true,
+        ///         DeploymentTimeout = TimeSpan.FromMinutes(1),
+        ///         CancelOnTimeout = true,
+        ///         DeploymentChecksLeapCycle = TimeSpan.FromMinutes(77),
+        ///         GuidedFailure = true,
+        ///         SpecificMachines = new string[] { "Machine1", "Machine2" },
+        ///         Force = true,
+        ///         SkipSteps = new[] { "Step1", "Step2" },
+        ///         NoRawLog = true,
+        ///         RawLogFile = "someFile.txt",
+        ///         DeployAt = new DateTime(2010, 6, 15).AddMinutes(1),
+        ///         Tenant = new[] { "Tenant1", "Tenant2" },
+        ///         TenantTags = new[] { "Tag1", "Tag2" },
+        ///
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static void OctoDeployRelease(this ICakeContext context, string server, string apiKey, string projectName, string[] deployToMultiple, string releaseNumber, OctopusDeployReleaseDeploymentSettings settings)
+        {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
             var releaseDeployer = new OctopusDeployReleaseDeployer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            releaseDeployer.DeployRelease(server, apiKey, projectName, deployTo, releaseNumber, settings);
+            releaseDeployer.DeployRelease(server, apiKey, projectName, deployToMultiple, releaseNumber, settings);
         }
 
         /// <summary>
