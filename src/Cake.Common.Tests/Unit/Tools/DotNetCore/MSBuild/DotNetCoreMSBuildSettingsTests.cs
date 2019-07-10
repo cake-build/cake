@@ -174,7 +174,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var settings = new DotNetCoreMSBuildSettings();
 
                 // Then
-                Assert.False(settings.DetailedSummary);
+                Assert.Null(settings.DetailedSummary);
             }
         }
 
@@ -187,7 +187,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var settings = new DotNetCoreMSBuildSettings();
 
                 // Then
-                Assert.False(settings.NoConsoleLogger);
+                Assert.Null(settings.NoConsoleLogger);
             }
         }
 

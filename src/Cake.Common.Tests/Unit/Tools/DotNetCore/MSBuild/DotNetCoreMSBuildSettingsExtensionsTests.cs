@@ -237,10 +237,10 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var settings = new DotNetCoreMSBuildSettings();
 
                 // When
-                settings.UseToolVersion(MSBuildVersion.MSBuild35);
+                settings.UseToolVersion(MSBuildToolVersion.NET35);
 
                 // Then
-                Assert.Equal(MSBuildVersion.MSBuild35, settings.ToolVersion);
+                Assert.Equal(MSBuildToolVersion.NET35, settings.ToolVersion);
             }
 
             [Fact]
@@ -250,7 +250,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var settings = new DotNetCoreMSBuildSettings();
 
                 // When
-                var result = settings.UseToolVersion(MSBuildVersion.MSBuild35);
+                var result = settings.UseToolVersion(MSBuildToolVersion.NET35);
 
                 // Then
                 Assert.Equal(settings, result);
@@ -430,8 +430,8 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var settings = new DotNetCoreMSBuildSettings();
-                var fileLogger = new MSBuildFileLoggerSettings();
-                var fileLogger2 = new MSBuildFileLoggerSettings() { LogFile = "A" };
+                var fileLogger = new MSBuildFileLogger();
+                var fileLogger2 = new MSBuildFileLogger() { LogFile = "A" };
 
                 // When
                 settings.AddFileLogger(fileLogger);
@@ -442,7 +442,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 Assert.Equal(2, loggers.Length);
                 Assert.Equal(fileLogger, loggers[0]);
                 Assert.Equal(fileLogger2, loggers[1]);
-                Assert.Equal("A", loggers[1].LogFile);
+                Assert.Equal("A", loggers[1].LogFile.FullPath);
             }
 
             [Fact]
@@ -452,7 +452,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var settings = new DotNetCoreMSBuildSettings();
 
                 // When
-                var result = settings.AddFileLogger(new MSBuildFileLoggerSettings());
+                var result = settings.AddFileLogger(new MSBuildFileLogger());
                 var result1 = settings.AddFileLogger();
 
                 // Then

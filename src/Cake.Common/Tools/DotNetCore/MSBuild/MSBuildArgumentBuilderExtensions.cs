@@ -9,6 +9,7 @@ using System.Text;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.DotNetCore.MSBuild
 {
@@ -24,7 +25,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="settings">MSBuild settings to add.</param>
         /// <param name="environment">The environment.</param>
         /// <exception cref="InvalidOperationException">Throws if 10 or more file loggers specified.</exception>
-        public static void AppendMSBuildSettings(this ProcessArgumentBuilder builder, DotNetCoreMSBuildSettings settings, ICakeEnvironment environment)
+        public static void AppendMSBuildSettings(this ProcessArgumentBuilder builder, MSBuildSettings settings, ICakeEnvironment environment)
         {
             // Got any targets?
             if (settings.Targets.Any())
@@ -69,7 +70,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             }
 
             // configure console logger?
-            if (!settings.NoConsoleLogger && settings.ConsoleLoggerSettings != null)
+            if (!settings.NoConsoleLogger.HasValue && settings.ConsoleLoggerSettings != null)
             {
                 var arguments = GetLoggerSettings(settings.ConsoleLoggerSettings);
 
@@ -80,7 +81,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             }
 
             // disable console logger?
-            if (settings.NoConsoleLogger)
+            if (settings.NoConsoleLogger.HasValue)
             {
                 builder.AppendMSBuildSwitch("noconsolelogger");
             }
@@ -88,15 +89,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             // Got any file loggers?
             if (settings.FileLoggers.Any())
             {
-                if (settings.FileLoggers.Count >= 10)
-                {
-                    throw new InvalidOperationException("Too Many FileLoggers");
-                }
-
-                var arguments = settings
-                                    .FileLoggers
-                                    .Select((logger, index) => GetLoggerArgument(index, logger, environment))
-                                    .Where(arg => !string.IsNullOrEmpty(arg));
+                var arguments = settings.FileLoggers.Select((logger, index) => GetLoggerArgument(index, logger, environment));
 
                 foreach (var argument in arguments)
                 {
@@ -194,7 +187,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             }
 
             // detailed summary?
-            if (settings.DetailedSummary)
+            if (settings.DetailedSummary.HasValue)
             {
                 builder.AppendMSBuildSwitch("detailedsummary");
             }
@@ -218,7 +211,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             }
 
             // don't output MSBuild logo?
-            if (settings.NoLogo)
+            if (settings.NoLogo.HasValue)
             {
                 builder.AppendMSBuildSwitch("nologo");
             }
@@ -252,21 +245,28 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             return argumentBuilder.ToString();
         }
 
-        private static string GetLoggerArgument(int index, MSBuildFileLoggerSettings logger, ICakeEnvironment environment)
+        private static string GetLoggerArgument(int index, MSBuildFileLogger logger, ICakeEnvironment environment)
         {
-            var parameters = GetLoggerSettings(logger, environment);
-            if (string.IsNullOrWhiteSpace(parameters))
+            if (index >= 10)
             {
-                return string.Empty;
+                throw new InvalidOperationException("Too Many FileLoggers");
             }
 
             var counter = index == 0 ? string.Empty : index.ToString();
-            return $"/fileLogger{counter} /fileloggerparameters{counter}:{parameters}";
+            var argument = $"/fl{counter}";
+
+            var parameters = logger.GetParameters(environment);
+            if (!string.IsNullOrWhiteSpace(parameters))
+            {
+                argument = $"{argument} /flp{counter}:{parameters}";
+            }
+            return argument;
         }
 
-        private static string GetToolVersionValue(MSBuildVersion toolVersion)
+        private static string GetToolVersionValue(MSBuildToolVersion toolVersion)
         {
-            switch (toolVersion)
+            var msBuildVersion = (MSBuildVersion)toolVersion;
+            switch (msBuildVersion)
             {
                 case MSBuildVersion.MSBuild20:
                     return "2.0";
@@ -281,43 +281,11 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                 case MSBuildVersion.MSBuild15:
                     return "15.0";
                 case MSBuildVersion.MSBuild16:
+                case MSBuildVersion.Default:
                     return "16.0";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(toolVersion), toolVersion, "Invalid value");
             }
-        }
-
-        private static string GetLoggerSettings(MSBuildFileLoggerSettings loggerSettings, ICakeEnvironment environment)
-        {
-            var settings = new List<string>();
-
-            var commonArguments = GetLoggerSettings(loggerSettings);
-
-            if (commonArguments.Any())
-            {
-                settings.Add(commonArguments);
-            }
-
-            if (loggerSettings.LogFile != null)
-            {
-                var filePath = string.IsNullOrWhiteSpace(loggerSettings.LogFile)
-                    ? string.Empty
-                    : FilePath.FromString(loggerSettings.LogFile).MakeAbsolute(environment).ToString();
-
-                settings.Add($"LogFile=\"{filePath}\"");
-            }
-
-            if (loggerSettings.AppendToLogFile)
-            {
-                settings.Add("Append");
-            }
-
-            if (!string.IsNullOrWhiteSpace(loggerSettings.FileEncoding))
-            {
-                settings.Add($"Encoding={loggerSettings.FileEncoding}");
-            }
-
-            return string.Join(";", settings);
         }
 
         private static string GetLoggerSettings(MSBuildLoggerSettings loggerSettings)

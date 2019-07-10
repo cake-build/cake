@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Tools.MSBuild;
 using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.DotNetCore
@@ -9,7 +10,7 @@ namespace Cake.Common.Tools.DotNetCore
     /// <summary>
     /// Contains common settings used by <see cref="DotNetCoreTool{TSettings}" />.
     /// </summary>
-    public abstract class DotNetCoreSettings : ToolSettings
+    public abstract class DotNetCoreSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets a value indicating whether to not enable diagnostic output.

@@ -45,7 +45,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         {
             EnsureSettings(settings);
 
-            ICollection<string> currentValue;
+            IList<string> currentValue;
 
             // try to get existing values of properties and add new property values
             currentValue = settings.Properties.TryGetValue(name, out currentValue) && currentValue != null
@@ -132,7 +132,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="settings">The settings.</param>
         /// <param name="version">The version.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        public static DotNetCoreMSBuildSettings UseToolVersion(this DotNetCoreMSBuildSettings settings, MSBuildVersion version)
+        public static DotNetCoreMSBuildSettings UseToolVersion(this DotNetCoreMSBuildSettings settings, MSBuildToolVersion version)
         {
             EnsureSettings(settings);
 
@@ -227,7 +227,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// The first file logger will match up to the /fl parameter.
         /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
         /// </remarks>
-        public static DotNetCoreMSBuildSettings AddFileLogger(this DotNetCoreMSBuildSettings settings, MSBuildFileLoggerSettings fileLoggerParameters)
+        public static DotNetCoreMSBuildSettings AddFileLogger(this DotNetCoreMSBuildSettings settings, MSBuildFileLogger fileLoggerParameters)
         {
             EnsureSettings(settings);
 
@@ -255,7 +255,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         {
             EnsureSettings(settings);
 
-            settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
+            settings.FileLoggers.Add(new MSBuildFileLogger());
 
             return settings;
         }

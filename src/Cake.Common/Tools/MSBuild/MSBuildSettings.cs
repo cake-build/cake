@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.MSBuild
     /// <summary>
     /// Contains settings used by <see cref="MSBuildRunner"/>.
     /// </summary>
-    public sealed class MSBuildSettings : ToolSettings
+    public class MSBuildSettings : DotNetSettings
     {
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;
@@ -53,7 +53,7 @@ namespace Cake.Common.Tools.MSBuild
         /// Gets or sets the tool version.
         /// </summary>
         /// <value>The tool version.</value>
-        public MSBuildToolVersion ToolVersion { get; set; }
+        public MSBuildToolVersion? ToolVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the configuration.
@@ -214,7 +214,6 @@ namespace Cake.Common.Tools.MSBuild
             _responseFiles = new List<FilePath>();
             _ignoreProjectExtensions = new List<string>();
 
-            ToolVersion = MSBuildToolVersion.Default;
             Configuration = string.Empty;
             Verbosity = MSBuildVerbosity.Normal;
             MSBuildPlatform = MSBuildPlatform.Automatic;

@@ -59,7 +59,6 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
             // Prepare the tool parameters.
             Solution = new FilePath("./src/Solution.sln");
-            Settings.ToolVersion = MSBuildToolVersion.VS2013;
         }
 
         public void GivenMSBuildIsNotInstalled()

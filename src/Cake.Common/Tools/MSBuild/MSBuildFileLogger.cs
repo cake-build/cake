@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.MSBuild
@@ -13,56 +12,8 @@ namespace Cake.Common.Tools.MSBuild
     /// <summary>
     /// Contains settings for specifying a MSBuild file logger.
     /// </summary>
-    public class MSBuildFileLogger
+    public class MSBuildFileLogger : MSBuildLoggerSettings
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MSBuildFileLogger"/> class.
-        /// </summary>
-        public MSBuildFileLogger()
-        {
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether PerformanceSummary will Show the time that’s spent in tasks, targets, and projects.
-        /// </summary>
-        public bool PerformanceSummaryEnabled { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Summary will Show the error and warning summary at the end.
-        /// </summary>
-        public bool SummaryDisabled { get; set; }
-
-        /// <summary>
-        /// Gets or sets show ErrorsOnly, WarningsOnly, or All.
-        /// </summary>
-        public MSBuildFileLoggerOutput MSBuildFileLoggerOutput { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether NoItemAndPropertyList will be set to Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.
-        /// </summary>
-        public bool HideVerboseItemAndPropertyList { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowCommandLine. Show TaskCommandLineEvent messages.
-        /// </summary>
-        public bool ShowCommandLine { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowTimestamp. Show the timestamp as a prefix to any message.
-        /// </summary>
-        public bool ShowTimestamp { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowEventId. Show the event ID for each started event, finished event, and message.
-        /// </summary>
-        public bool ShowEventId { get; set; }
-
-        /// <summary>
-        /// Gets or sets Verbosity. Override the /verbosity setting for this logger.
-        /// Specify the following verbosity levels: q[uiet], m[inimal], n[ormal], v[erbose] (detailed), and diag[nostic].
-        /// </summary>
-        public MSBuildVerbosity? Verbosity { get; set; }
-
         /// <summary>
         /// Gets or sets LogFile. The path to the log file into which the build log is written.
         /// An empty string will use msbuild.log.
@@ -87,18 +38,22 @@ namespace Cake.Common.Tools.MSBuild
         public string GetParameters(ICakeEnvironment environment)
         {
             var parameters = new List<string>();
-            parameters.Add(LogFile != null ? $"logfile={LogFile.MakeAbsolute(environment).FullPath.Quote()}" : null);
+            parameters.Add(LogFile != null ? $"LogFile={LogFile.MakeAbsolute(environment).FullPath.Quote()}" : null);
             parameters.Add(!string.IsNullOrWhiteSpace(Encoding) ? $"Encoding={Encoding}" : null);
             parameters.Add(AppendToLogFile ? "Append" : null);
-            parameters.Add(PerformanceSummaryEnabled ? "PerformanceSummary" : null);
-            parameters.Add(SummaryDisabled ? "NoSummary" : null);
-            parameters.Add(MSBuildFileLoggerOutput == MSBuildFileLoggerOutput.ErrorsOnly ? "ErrorsOnly" : null);
-            parameters.Add(MSBuildFileLoggerOutput == MSBuildFileLoggerOutput.WarningsOnly ? "WarningsOnly" : null);
-            parameters.Add(HideVerboseItemAndPropertyList ? "NoItemAndPropertyList" : null);
+            parameters.Add(PerformanceSummary ? "PerformanceSummary" : null);
+            parameters.Add(NoSummary ? "NoSummary" : null);
+            parameters.Add(SummaryOutputLevel == MSBuildLoggerOutputLevel.ErrorsOnly ? "ErrorsOnly" : null);
+            parameters.Add(SummaryOutputLevel == MSBuildLoggerOutputLevel.WarningsOnly ? "WarningsOnly" : null);
+            parameters.Add(HideItemAndPropertyList ? "NoItemAndPropertyList" : null);
             parameters.Add(ShowCommandLine ? "ShowCommandLine" : null);
             parameters.Add(ShowTimestamp ? "ShowTimestamp" : null);
             parameters.Add(ShowEventId ? "ShowEventId" : null);
             parameters.Add(Verbosity != null ? $"Verbosity={Verbosity.Value}" : null);
+            parameters.Add(ForceNoAlign ? "ForceNoAlign" : null);
+            parameters.Add(ConsoleColorType == MSBuildConsoleColorType.Disabled ? "DisableConsoleColor" : null);
+            parameters.Add(ConsoleColorType == MSBuildConsoleColorType.ForceAnsi ? "ForceConsoleColor" : null);
+            parameters.Add(DisableMultiprocessorLogging ? "DisableMPLogging" : null);
 
             return string.Join(";", parameters.Where(p => p != null));
         }

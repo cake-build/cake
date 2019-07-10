@@ -9,6 +9,9 @@ namespace Cake.Common.Tools.MSBuild
     /// </summary>
     public enum MSBuildVersion
     {
+        /// <summary>The highest available MSBuild version.</summary>
+        Default = 0,
+
         /// <summary>Version 2.0</summary>
         MSBuild20 = 1,
 

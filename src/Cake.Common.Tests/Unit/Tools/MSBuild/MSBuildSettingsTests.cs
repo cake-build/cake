@@ -13,13 +13,13 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
         public sealed class TheConstructor
         {
             [Fact]
-            public void Should_Set_Default_Tools_Version_To_Default()
+            public void Should_Set_Default_Tools_Version_To_null()
             {
                 // Given, When
                 var settings = new MSBuildSettings();
 
                 // Then
-                Assert.Equal(MSBuildToolVersion.Default, settings.ToolVersion);
+                Assert.Null(settings.ToolVersion);
             }
 
             [Fact]

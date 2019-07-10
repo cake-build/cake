@@ -10,7 +10,7 @@ namespace Cake.Common.Tools.MSBuild
 {
     internal static class MSBuildResolver
     {
-        public static FilePath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildToolVersion version, MSBuildPlatform buildPlatform)
+        public static FilePath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildToolVersion? version, MSBuildPlatform buildPlatform)
         {
             if (environment.Platform.Family == PlatformFamily.OSX)
             {
@@ -40,6 +40,10 @@ namespace Cake.Common.Tools.MSBuild
                 }
 
                 throw new CakeException("Could not resolve MSBuild.");
+            }
+            if (!version.HasValue)
+            {
+                version = MSBuildToolVersion.Default;
             }
 
             var binPath = version == MSBuildToolVersion.Default

@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -12,7 +14,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
     /// <summary>
     /// .NET Core project builder.
     /// </summary>
-    public sealed class DotNetCoreMSBuildBuilder : DotNetCoreTool<DotNetCoreMSBuildSettings>
+    public sealed class DotNetCoreMSBuildBuilder : DotNetBuildTool<DotNetCoreMSBuildSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -30,6 +32,24 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
             _environment = environment;
+        }
+
+        /// <summary>
+        /// Gets the name of the tool.
+        /// </summary>
+        /// <returns>The name of the tool.</returns>
+        protected override string GetToolName()
+        {
+            return ".NET Core CLI";
+        }
+
+        /// <summary>
+        /// Gets the possible names of the tool executable.
+        /// </summary>
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames()
+        {
+            return new[] { "dotnet", "dotnet.exe" };
         }
 
         /// <summary>
@@ -60,6 +80,11 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             if (projectOrDirectory != null)
             {
                 builder.AppendQuoted(projectOrDirectory);
+            }
+
+            if (settings.DiagnosticOutput)
+            {
+                builder.Append("--diagnostics");
             }
 
             return builder;

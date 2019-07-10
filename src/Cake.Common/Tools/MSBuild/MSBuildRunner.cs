@@ -17,7 +17,7 @@ namespace Cake.Common.Tools.MSBuild
     /// <summary>
     /// The MSBuild runner.
     /// </summary>
-    public sealed class MSBuildRunner : Tool<MSBuildSettings>
+    public sealed class MSBuildRunner : DotNetBuildTool<MSBuildSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
@@ -52,108 +52,20 @@ namespace Cake.Common.Tools.MSBuild
         private ProcessArgumentBuilder GetArguments(FilePath solution, MSBuildSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
-
-            // Set the maximum number of processors?
-            if (settings.MaxCpuCount != null)
-            {
-                builder.Append(settings.MaxCpuCount > 0 ? string.Concat("/m:", settings.MaxCpuCount) : "/m");
-            }
-
-            // Set the detailed summary flag.
-            if (settings.DetailedSummary.GetValueOrDefault())
-            {
-                builder.Append("/ds");
-            }
-
-            // Set the no console logger flag.
-            if (settings.NoConsoleLogger.GetValueOrDefault())
-            {
-                builder.Append("/noconlog");
-            }
-
-            // Set the no logo flag.
-            if (settings.NoLogo.GetValueOrDefault())
-            {
-                builder.Append("/nologo");
-            }
-
-            // configure console logger?
-            if (!settings.NoConsoleLogger.GetValueOrDefault() && settings.ConsoleLoggerSettings != null)
-            {
-                var arguments = GetLoggerSettings(settings.ConsoleLoggerSettings);
-
-                if (arguments.Any())
-                {
-                    builder.Append($"/consoleloggerparameters:{arguments}");
-                }
-            }
-
-            // Set the verbosity.
-            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", settings.Verbosity));
-
-            if (settings.NodeReuse != null)
-            {
-                builder.Append(string.Concat("/nr:", settings.NodeReuse.Value ? "true" : "false"));
-            }
-
-            // set project file extensions to ignore when searching for project file
-            if (settings.IgnoreProjectExtensions.Any())
-            {
-                var arguments = string.Concat("/ignoreprojectextensions:", string.Join(",", settings.IgnoreProjectExtensions));
-                builder.Append(arguments);
-            }
-
-            // Got a specific configuration in mind?
-            if (!string.IsNullOrWhiteSpace(settings.Configuration))
-            {
-                // Add the configuration as a property.
-                builder.AppendSwitchQuoted("/p:Configuration", "=", settings.Configuration);
-            }
+            builder.Append(string.Format(CultureInfo.InvariantCulture, $"/v:{settings.Verbosity}"));
 
             // Build for a specific platform?
             if (settings.PlatformTarget.HasValue)
             {
                 var platform = settings.PlatformTarget.Value;
                 bool isSolution = string.Equals(solution.GetExtension(), ".sln", StringComparison.OrdinalIgnoreCase);
-                builder.Append(string.Concat("/p:Platform=", GetPlatformName(platform, isSolution)));
+                builder.Append(string.Concat("/property:Platform=", GetPlatformName(platform, isSolution)));
             }
 
-            // Got any properties?
-            if (settings.Properties.Count > 0)
-            {
-                foreach (var property in GetPropertyArguments(settings.Properties))
-                {
-                    builder.Append(property);
-                }
-            }
-
-            // Include response files?
-            foreach (var responseFile in settings.ResponseFiles)
-            {
-                builder.AppendSwitchQuoted("@", string.Empty, responseFile.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Got any distributed loggers?
-            foreach (var distributedLogger in settings.DistributedLoggers)
-            {
-                var arguments = string.Concat("/distributedlogger:",
-                    $"{GetLoggerValue(distributedLogger.CentralLogger)}*{GetLoggerValue(distributedLogger.ForwardingLogger)}");
-                builder.Append(arguments);
-            }
-
-            // use a file logger for each node?
-            if (settings.DistributedFileLogger)
-            {
-                builder.Append("/distributedFileLogger");
-            }
+            builder.AppendMSBuildSettings(settings, _environment);
 
             // Got any targets?
-            if (settings.Targets.Count > 0)
-            {
-                var targets = string.Join(";", settings.Targets);
-                builder.Append(string.Concat("/target:", targets));
-            }
-            else
+            if (settings.Targets.Count <= 0)
             {
                 // Should use implicit target?
                 if (!settings.NoImplicitTarget.GetValueOrDefault())
@@ -163,180 +75,9 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
-            if (settings.Loggers.Count > 0)
-            {
-                foreach (var logger in settings.Loggers)
-                {
-                    var argument = GetLoggerArgument(logger);
-                    builder.Append(argument);
-                }
-            }
-
-            // Got any file loggers?
-            if (settings.FileLoggers.Count > 0)
-            {
-                var arguments = settings.FileLoggers.Select((logger, index) => GetLoggerArgument(index, logger));
-
-                foreach (var argument in arguments)
-                {
-                    builder.Append(argument);
-                }
-            }
-
-            // Use binary logging?
-            if (settings.BinaryLogger != null && settings.BinaryLogger.Enabled)
-            {
-                string binaryOptions = null;
-                if (!string.IsNullOrEmpty(settings.BinaryLogger.FileName))
-                {
-                    binaryOptions = settings.BinaryLogger.FileName;
-                }
-
-                if (settings.BinaryLogger.Imports != MSBuildBinaryLogImports.Unspecified)
-                {
-                    if (!string.IsNullOrEmpty(binaryOptions))
-                    {
-                        binaryOptions = binaryOptions + ";";
-                    }
-
-                    binaryOptions = binaryOptions + "ProjectImports=" + settings.BinaryLogger.Imports;
-                }
-
-                if (string.IsNullOrEmpty(binaryOptions))
-                {
-                    builder.Append("/bl");
-                }
-                else
-                {
-                    builder.Append("/bl:" + binaryOptions);
-                }
-            }
-
-            // exclude auto response files?
-            if (settings.ExcludeAutoResponseFiles)
-            {
-                builder.Append("/noautoresponse");
-            }
-
-            // Treat errors as warnings?
-            if (settings.WarningsAsErrorCodes.Any())
-            {
-                var codes = string.Join(";", settings.WarningsAsErrorCodes);
-                builder.Append($"/warnaserror:{codes}");
-            }
-            else if (settings.TreatWarningsAsErrors)
-            {
-                builder.Append("/warnaserror");
-            }
-
-            // Any warnings to NOT treat as errors?
-            if (settings.WarningsAsMessageCodes.Any())
-            {
-                var codes = string.Join(";", settings.WarningsAsMessageCodes);
-                builder.Append($"/warnasmessage:{codes}");
-            }
-
-            // Invoke restore target before any other target?
-            if (settings.Restore)
-            {
-                builder.Append("/restore");
-            }
-
-            // Set restore locked mode?
-            if (settings.RestoreLockedMode.HasValue)
-            {
-                builder.Append(string.Concat("/p:RestoreLockedMode=", settings.RestoreLockedMode.Value ? "true" : "false"));
-            }
-
-            // Add the solution as the last parameter.
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
             return builder;
-        }
-
-        private string GetLoggerArgument(int index, MSBuildFileLogger logger)
-        {
-            if (index >= 10)
-            {
-                throw new InvalidOperationException("Too Many FileLoggers");
-            }
-
-            var counter = index == 0 ? string.Empty : index.ToString();
-            var argument = $"/fl{counter}";
-
-            var parameters = logger.GetParameters(_environment);
-            if (!string.IsNullOrWhiteSpace(parameters))
-            {
-                argument = $"{argument} /flp{counter}:{parameters}";
-            }
-            return argument;
-        }
-
-        private static string GetLoggerArgument(MSBuildLogger logger)
-        {
-            var argument = string.Concat("/logger:", GetLoggerValue(logger));
-            return argument;
-        }
-
-        private static string GetLoggerValue(MSBuildLogger logger)
-        {
-            if (string.IsNullOrWhiteSpace(logger.Assembly))
-            {
-                throw new ArgumentNullException(nameof(logger.Assembly), "Assembly must be a strong name or file");
-            }
-
-            var builder = new StringBuilder();
-            if (!string.IsNullOrWhiteSpace(logger.Class))
-            {
-                builder.Append(logger.Class);
-                builder.Append(",");
-                builder.Append(logger.Assembly);
-            }
-            else
-            {
-                builder.Append(logger.Assembly?.Quote());
-            }
-
-            if (!string.IsNullOrWhiteSpace(logger.Parameters))
-            {
-                builder.Append(";");
-                builder.Append(logger.Parameters);
-            }
-
-            return builder.ToString();
-        }
-
-        private static string GetPlatformName(PlatformTarget platform, bool isSolution)
-        {
-            switch (platform)
-            {
-                case PlatformTarget.MSIL:
-                    // Solutions expect "Any CPU", but projects expect "AnyCPU"
-                    return isSolution ? "\"Any CPU\"" : "AnyCPU";
-                case PlatformTarget.x86:
-                    return "x86";
-                case PlatformTarget.x64:
-                    return "x64";
-                case PlatformTarget.ARM:
-                    return "arm";
-                case PlatformTarget.ARM64:
-                    return "arm64";
-                case PlatformTarget.Win32:
-                    return "Win32";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(platform), platform, "Invalid platform");
-            }
-        }
-
-        private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
-        {
-            foreach (var propertyKey in properties.Keys)
-            {
-                foreach (var propertyValue in properties[propertyKey])
-                {
-                    yield return string.Concat("/p:", propertyKey, "=", propertyValue.EscapeMSBuildPropertySpecialCharacters());
-                }
-            }
         }
 
         /// <summary>
@@ -394,79 +135,26 @@ namespace Cake.Common.Tools.MSBuild
             return Enumerable.Empty<FilePath>();
         }
 
-        private static string GetLoggerSettings(MSBuildLoggerSettings loggerSettings)
+        private static string GetPlatformName(PlatformTarget platform, bool isSolution)
         {
-            var settings = new List<string>();
-
-            if (loggerSettings.PerformanceSummary)
+            switch (platform)
             {
-                settings.Add("PerformanceSummary");
+                case PlatformTarget.MSIL:
+                    // Solutions expect "Any CPU", but projects expect "AnyCPU"
+                    return isSolution ? "\"Any CPU\"" : "AnyCPU";
+                case PlatformTarget.x86:
+                    return "x86";
+                case PlatformTarget.x64:
+                    return "x64";
+                case PlatformTarget.ARM:
+                    return "arm";
+                case PlatformTarget.ARM64:
+                    return "arm64";
+                case PlatformTarget.Win32:
+                    return "Win32";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(platform), platform, "Invalid platform");
             }
-
-            if (loggerSettings.NoSummary)
-            {
-                settings.Add("NoSummary");
-            }
-
-            if (loggerSettings.SummaryOutputLevel != MSBuildLoggerOutputLevel.Default)
-            {
-                switch (loggerSettings.SummaryOutputLevel)
-                {
-                    case MSBuildLoggerOutputLevel.WarningsOnly:
-                        settings.Add("WarningsOnly");
-                        break;
-                    case MSBuildLoggerOutputLevel.ErrorsOnly:
-                        settings.Add("ErrorsOnly");
-                        break;
-                }
-            }
-
-            if (loggerSettings.HideItemAndPropertyList)
-            {
-                settings.Add("NoItemAndPropertyList");
-            }
-
-            if (loggerSettings.ShowCommandLine)
-            {
-                settings.Add("ShowCommandLine");
-            }
-
-            if (loggerSettings.ShowTimestamp)
-            {
-                settings.Add("ShowTimestamp");
-            }
-
-            if (loggerSettings.ShowEventId)
-            {
-                settings.Add("ShowEventId");
-            }
-
-            if (loggerSettings.ForceNoAlign)
-            {
-                settings.Add("ForceNoAlign");
-            }
-
-            if (loggerSettings.ConsoleColorType == MSBuildConsoleColorType.Disabled)
-            {
-                settings.Add("DisableConsoleColor");
-            }
-
-            if (loggerSettings.ConsoleColorType == MSBuildConsoleColorType.ForceAnsi)
-            {
-                settings.Add("ForceConsoleColor");
-            }
-
-            if (loggerSettings.DisableMultiprocessorLogging)
-            {
-                settings.Add("DisableMPLogging");
-            }
-
-            if (loggerSettings.Verbosity.HasValue)
-            {
-                settings.Add($"Verbosity={loggerSettings.Verbosity}");
-            }
-
-            return string.Join(";", settings);
         }
     }
 }

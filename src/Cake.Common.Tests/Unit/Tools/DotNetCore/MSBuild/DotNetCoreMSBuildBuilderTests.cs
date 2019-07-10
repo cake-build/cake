@@ -236,13 +236,14 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Theory]
-            [InlineData(MSBuildVersion.MSBuild20, "2.0")]
-            [InlineData(MSBuildVersion.MSBuild35, "3.5")]
-            [InlineData(MSBuildVersion.MSBuild4, "4.0")]
-            [InlineData(MSBuildVersion.MSBuild12, "12.0")]
-            [InlineData(MSBuildVersion.MSBuild14, "14.0")]
-            [InlineData(MSBuildVersion.MSBuild15, "15.0")]
-            public void Should_Add_ToolVersion_Argument_If_Specified(MSBuildVersion toolVersion, string expectedToolVersion)
+            [InlineData(MSBuildToolVersion.NET20, "2.0")]
+            [InlineData(MSBuildToolVersion.NET35, "3.5")]
+            [InlineData(MSBuildToolVersion.NET40, "4.0")]
+            [InlineData(MSBuildToolVersion.NET451, "12.0")]
+            [InlineData(MSBuildToolVersion.NET46, "14.0")]
+            [InlineData(MSBuildToolVersion.VS2017, "15.0")]
+            [InlineData(MSBuildToolVersion.VS2019, "16.0")]
+            public void Should_Add_ToolVersion_Argument_If_Specified(MSBuildToolVersion toolVersion, string expectedToolVersion)
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
@@ -258,12 +259,11 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             [Theory]
             [InlineData(100)]
             [InlineData(-8)]
-            [InlineData(0)]
             public void Should_Throw_If_ToolVersion_Is_Invalid(int toolVersion)
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.ToolVersion = (MSBuildVersion)toolVersion;
+                fixture.Settings.ToolVersion = (MSBuildToolVersion)toolVersion;
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -327,13 +327,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { AppendToLogFile = false, PerformanceSummary = true, Verbosity = MSBuildVerbosity.Diagnostic });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { AppendToLogFile = false, PerformanceSummary = true, Verbosity = MSBuildVerbosity.Diagnostic });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(@"msbuild /fileLogger /fileloggerparameters:PerformanceSummary;Verbosity=Diagnostic", result.Args);
+                Assert.Equal(@"msbuild /fl /flp:PerformanceSummary;Verbosity=Diagnostic", result.Args);
             }
 
             [Fact]
@@ -341,17 +341,17 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger());
 
                 // When
                 var ex = Assert.Throws<InvalidOperationException>(() => fixture.Run());
@@ -771,7 +771,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--diagnostics msbuild", result.Args);
+                Assert.Equal("msbuild --diagnostics", result.Args);
             }
         }
 
@@ -1015,7 +1015,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger
                 {
                     LogFile = "msbuild.log"
                 });
@@ -1024,7 +1024,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:LogFile=\"/Working/msbuild.log\"", result.Args);
+                Assert.Equal("msbuild /fl /flp:LogFile=\"/Working/msbuild.log\"", result.Args);
             }
 
             [Fact]
@@ -1032,13 +1032,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { LogFile = string.Empty });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { LogFile = string.Empty });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:LogFile=\"\"", result.Args);
+                Assert.Equal("msbuild /fl /flp:LogFile=\"/Working\"", result.Args);
             }
 
             [Fact]
@@ -1046,13 +1046,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { AppendToLogFile = true });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { AppendToLogFile = true });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:Append", result.Args);
+                Assert.Equal("msbuild /fl /flp:Append", result.Args);
             }
 
             [Fact]
@@ -1061,13 +1061,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 // Given
                 const string fileEncoding = "UTF8";
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { FileEncoding = fileEncoding });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { Encoding = fileEncoding });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal($"msbuild /fileLogger /fileloggerparameters:Encoding={fileEncoding}", result.Args);
+                Assert.Equal($"msbuild /fl /flp:Encoding={fileEncoding}", result.Args);
             }
 
             [Fact]
@@ -1075,13 +1075,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { PerformanceSummary = true });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { PerformanceSummary = true });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:PerformanceSummary", result.Args);
+                Assert.Equal("msbuild /fl /flp:PerformanceSummary", result.Args);
             }
 
             [Fact]
@@ -1089,13 +1089,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { NoSummary = true });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { NoSummary = true });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:NoSummary", result.Args);
+                Assert.Equal("msbuild /fl /flp:NoSummary", result.Args);
             }
 
             [Theory]
@@ -1105,13 +1105,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { SummaryOutputLevel = outputLevel });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { SummaryOutputLevel = outputLevel });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal($"msbuild /fileLogger /fileloggerparameters:{outputLevel}", result.Args);
+                Assert.Equal($"msbuild /fl /flp:{outputLevel}", result.Args);
             }
 
             [Fact]
@@ -1119,13 +1119,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { SummaryOutputLevel = MSBuildLoggerOutputLevel.Default });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { SummaryOutputLevel = MSBuildLoggerOutputLevel.Default });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild", result.Args);
+                Assert.Equal("msbuild /fl", result.Args);
             }
 
             [Fact]
@@ -1133,13 +1133,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { HideItemAndPropertyList = true });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { HideItemAndPropertyList = true });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:NoItemAndPropertyList", result.Args);
+                Assert.Equal("msbuild /fl /flp:NoItemAndPropertyList", result.Args);
             }
 
             [Fact]
@@ -1147,13 +1147,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { ShowCommandLine = true });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { ShowCommandLine = true });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:ShowCommandLine", result.Args);
+                Assert.Equal("msbuild /fl /flp:ShowCommandLine", result.Args);
             }
 
             [Fact]
@@ -1161,13 +1161,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { ShowTimestamp = true });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { ShowTimestamp = true });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:ShowTimestamp", result.Args);
+                Assert.Equal("msbuild /fl /flp:ShowTimestamp", result.Args);
             }
 
             [Fact]
@@ -1175,13 +1175,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { ForceNoAlign = true });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { ForceNoAlign = true });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:ForceNoAlign", result.Args);
+                Assert.Equal("msbuild /fl /flp:ForceNoAlign", result.Args);
             }
 
             [Fact]
@@ -1189,13 +1189,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { ShowEventId = true });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { ShowEventId = true });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:ShowEventId", result.Args);
+                Assert.Equal("msbuild /fl /flp:ShowEventId", result.Args);
             }
 
             [Fact]
@@ -1203,13 +1203,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { ConsoleColorType = MSBuildConsoleColorType.Disabled });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { ConsoleColorType = MSBuildConsoleColorType.Disabled });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:DisableConsoleColor", result.Args);
+                Assert.Equal("msbuild /fl /flp:DisableConsoleColor", result.Args);
             }
 
             [Fact]
@@ -1217,13 +1217,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { ConsoleColorType = MSBuildConsoleColorType.ForceAnsi });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { ConsoleColorType = MSBuildConsoleColorType.ForceAnsi });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:ForceConsoleColor", result.Args);
+                Assert.Equal("msbuild /fl /flp:ForceConsoleColor", result.Args);
             }
 
             [Fact]
@@ -1231,13 +1231,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { DisableMultiprocessorLogging = true });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { DisableMultiprocessorLogging = true });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /fileLogger /fileloggerparameters:DisableMPLogging", result.Args);
+                Assert.Equal("msbuild /fl /flp:DisableMPLogging", result.Args);
             }
 
             [Theory]
@@ -1250,13 +1250,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
-                fixture.Settings.FileLoggers.Add(new MSBuildFileLoggerSettings { Verbosity = verbosity });
+                fixture.Settings.FileLoggers.Add(new MSBuildFileLogger { Verbosity = verbosity });
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal($"msbuild /fileLogger /fileloggerparameters:Verbosity={verbosity}", result.Args);
+                Assert.Equal($"msbuild /fl /flp:Verbosity={verbosity}", result.Args);
             }
         }
     }
