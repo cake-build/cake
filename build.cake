@@ -1,10 +1,10 @@
 // Install modules
-#module nuget:?package=Cake.DotNetTool.Module&version=0.1.0
+#module nuget:?package=Cake.DotNetTool.Module&version=0.3.0
 
 // Install addins.
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=0.9.0"
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=0.9.0"
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.10.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=0.10.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=0.10.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.11.0"
 
 // Install tools.
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.4.2"
