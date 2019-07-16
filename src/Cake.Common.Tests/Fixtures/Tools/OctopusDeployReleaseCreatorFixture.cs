@@ -12,7 +12,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public string ProjectName { get; set; }
 
         public OctopusDeployReleaseCreatorFixture()
-            : base("octo.exe")
+            : base("Octo.exe")
         {
             ProjectName = "testProject";
 

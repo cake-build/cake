@@ -10,7 +10,6 @@
 
 namespace Cake.Common.Tests.Properties {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace Cake.Common.Tests.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cake.Common.Tests.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cake.Common.Tests.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -303,19 +302,18 @@ namespace Cake.Common.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///  &lt;metadata minClientVersion=&quot;3.3&quot; xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
         ///    &lt;id&gt;The ID&lt;/id&gt;
         ///    &lt;version&gt;The version&lt;/version&gt;
         ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-        ///    &lt;description&gt;The description&lt;/description&gt;
-        ///    &lt;summary&gt;The summary&lt;/summary&gt;
-        ///    &lt;licenseUrl&gt;https://lic [rest of string was truncated]&quot;;.
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/p [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string Nuspec_Metadata {
+        public static string Nuspec_ContentFiles {
             get {
-                return ResourceManager.GetString("Nuspec_Metadata", resourceCulture);
+                return ResourceManager.GetString("Nuspec_ContentFiles", resourceCulture);
             }
         }
         
@@ -328,9 +326,86 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Nuspec_FrameworkAssemblies {
+            get {
+                return ResourceManager.GetString("Nuspec_FrameworkAssemblies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Nuspec_License {
+            get {
+                return ResourceManager.GetString("Nuspec_License", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Nuspec_Metadata {
+            get {
+                return ResourceManager.GetString("Nuspec_Metadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;nonexisting&lt;/id&gt;
+        ///    &lt;version&gt;1.0.0&lt;/version&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
         ///    &lt;description&gt;The description&lt;/description&gt;
-        ///    &lt;summary&gt;The summary&lt;/summary&gt;
-        ///    &lt;licenseUrl&gt;https://lic [rest of string was truncated]&quot;;.
+        ///    &lt;dependencies&gt;
+        ///      &lt;group targetFramework=&quot;net452&quot;&gt;
+        ///        &lt;dependency id=&quot;Test1&quot; version=&quot;1.0.0&quot; /&gt;
+        ///      &lt;/group&gt;
+        ///      &lt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Nuspec_Metadata_PackWithTargetFrameworkDependencies {
+            get {
+                return ResourceManager.GetString("Nuspec_Metadata_PackWithTargetFrameworkDependencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUr [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Metadata_WithDependencies {
             get {
@@ -347,12 +422,12 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-        ///    &lt;description&gt;The description&lt;/description&gt;
-        ///    &lt;summary&gt;The summary&lt;/summary&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
         ///    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-        ///    &lt;developmentDependency&gt;true&lt;/developmentDepende [rest of string was truncated]&quot;;.
+        ///    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+        ///    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+        ///    &lt;descriptio [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Metadata_WithoutNamespaces {
             get {
@@ -369,12 +444,12 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-        ///    &lt;description&gt;The description&lt;/description&gt;
-        ///    &lt;summary&gt;The summary&lt;/summary&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
         ///    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-        ///    &lt;developmentDependency&gt;true&lt;/developmentDepende [rest of string was truncated]&quot;;.
+        ///    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+        ///    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+        ///    &lt;descriptio [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Metadata_WithoutNamespaces_WithDependencies {
             get {
@@ -391,34 +466,16 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-        ///    &lt;description&gt;The description&lt;/description&gt;
-        ///    &lt;summary&gt;The summary&lt;/summary&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
         ///    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-        ///    &lt;developmentDependency&gt;true&lt;/developmentDepende [rest of string was truncated]&quot;;.
+        ///    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+        ///    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+        ///    &lt;descriptio [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Metadata_WithoutNamespaces_WithTargetFramworkDependencies {
             get {
                 return ResourceManager.GetString("Nuspec_Metadata_WithoutNamespaces_WithTargetFramworkDependencies", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
-        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
-        ///    &lt;id&gt;nonexisting&lt;/id&gt;
-        ///    &lt;version&gt;1.0.0&lt;/version&gt;
-        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
-        ///    &lt;description&gt;The description&lt;/description&gt;
-        ///    &lt;developmentDependency&gt;false&lt;/developmentDependency&gt;
-        ///    &lt;requireLicenseAcceptance&gt;false&lt;/requireLicenseAcceptance&gt;
-        ///    &lt;depende [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string Nuspec_Metadata_WithTargetFrameworkDependencies {
-            get {
-                return ResourceManager.GetString("Nuspec_Metadata_WithTargetFrameworkDependencies", resourceCulture);
             }
         }
         
@@ -431,13 +488,13 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-        ///    &lt;description&gt;The description&lt;/description&gt;
-        ///    &lt;summary&gt;The summary&lt;/summary&gt;
-        ///    &lt;licenseUrl&gt;https://lic [rest of string was truncated]&quot;;.
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUr [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string Nuspec_Metadata_WithTragetFramworkDependencies {
+        public static string Nuspec_Metadata_WithTargetFrameworkDependencies {
             get {
-                return ResourceManager.GetString("Nuspec_Metadata_WithTragetFramworkDependencies", resourceCulture);
+                return ResourceManager.GetString("Nuspec_Metadata_WithTargetFrameworkDependencies", resourceCulture);
             }
         }
         
@@ -496,6 +553,25 @@ namespace Cake.Common.Tests.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Nuspec_PackageTypes {
+            get {
+                return ResourceManager.GetString("Nuspec_PackageTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;Project ToolsVersion=&quot;4.0&quot; DefaultTargets=&quot;Build&quot; xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&gt;
         ///  &lt;PropertyGroup&gt;
         ///    &lt;Configuration Condition=&quot; &apos;$(Configuration)&apos; == &apos;&apos; &quot;&gt;Debug&lt;/Configuration&gt;
@@ -520,9 +596,47 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;title&gt;The title&lt;/title&gt;
         ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-        ///    &lt;description&gt;The description&lt;/description&gt;
-        ///    &lt;summary&gt;The summary&lt;/summary&gt;
-        ///    &lt;licenseUrl&gt;https://lic [rest of string was truncated]&quot;;.
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Nuspec_References {
+            get {
+                return ResourceManager.GetString("Nuspec_References", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Nuspec_References_WithTargetFramework {
+            get {
+                return ResourceManager.GetString("Nuspec_References_WithTargetFramework", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;iconUr [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Repository {
             get {

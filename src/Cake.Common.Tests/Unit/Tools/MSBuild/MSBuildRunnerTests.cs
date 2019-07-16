@@ -137,8 +137,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
-            [InlineData(MSBuildToolVersion.VS2019, PlatformTarget.x64, PlatformFamily.Windows, false, "/Program86/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/amd64/MSBuild.exe")]
-            [InlineData(MSBuildToolVersion.VS2019, PlatformTarget.x86, PlatformFamily.Windows, false, "/Program86/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2019, PlatformTarget.x64, PlatformFamily.Windows, false, "/Program86/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2019, PlatformTarget.x86, PlatformFamily.Windows, false, "/Program86/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2019, PlatformTarget.x64, PlatformFamily.Linux, false, "/usr/bin/msbuild")]
             [InlineData(MSBuildToolVersion.VS2019, PlatformTarget.x64, PlatformFamily.OSX, false, "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild")]
             public void Should_Get_Correct_Path_To_MSBuild_Version_16(MSBuildToolVersion version, PlatformTarget target, PlatformFamily family, bool is64BitOperativeSystem, string expected)
@@ -606,6 +606,37 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.Equal("/v:normal /target:Build " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Append_Targets_If_No_Implicit_Target_Is_True_And_No_Targets_Provided()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.NoImplicitTarget = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_Targets_If_No_Implicit_Target_Is_True_And_Targets_Provided()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.NoImplicitTarget = true;
+                fixture.Settings.WithTarget("A");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 

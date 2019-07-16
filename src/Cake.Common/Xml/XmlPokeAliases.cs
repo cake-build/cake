@@ -581,7 +581,10 @@ namespace Cake.Common.Xml
         {
             var writerSettings = new XmlWriterSettings
             {
-                Encoding = settings.Encoding
+                Encoding = settings.Encoding,
+                NewLineOnAttributes = settings.NewLineOnAttributes,
+                IndentChars = settings.IndentChars,
+                Indent = settings.Indent
             };
             // Currently only returns the default settings
             return writerSettings;
