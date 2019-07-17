@@ -241,9 +241,18 @@ namespace Cake.NuGet.Install
 
         private static NuGetVersion GetNuGetVersion(PackageReference package, IEnumerable<SourceRepository> repositories, NuGetFramework targetFramework, SourceCacheContext sourceCacheContext, ILogger logger)
         {
+            VersionRange versionRange = null;
             if (package.Parameters.ContainsKey("version"))
             {
-                return new NuGetVersion(package.Parameters["version"].First());
+                var requestedVersion = package.Parameters["version"].First();
+                if (NuGetVersion.TryParse(requestedVersion, out NuGetVersion parsedVersion))
+                {
+                    return parsedVersion;
+                }
+                else if (VersionRange.TryParse(requestedVersion, out VersionRange parsedVersionRange))
+                {
+                    versionRange = parsedVersionRange;
+                }
             }
 
             var includePrerelease = package.IsPrerelease();
@@ -254,11 +263,21 @@ namespace Cake.NuGet.Install
                 {
                     var dependencyInfoResource = sourceRepository.GetResourceAsync<DependencyInfoResource>().Result;
                     var dependencyInfo = dependencyInfoResource.ResolvePackages(package.Package, targetFramework, sourceCacheContext, logger, CancellationToken.None).Result;
-                    var foundVersion = dependencyInfo
+
+                    var foundVersions = dependencyInfo
                         .Where(p => p.Listed && (includePrerelease || !p.Version.IsPrerelease))
                         .OrderByDescending(p => p.Version, VersionComparer.Default)
-                        .Select(p => p.Version)
-                        .FirstOrDefault();
+                        .Select(p => p.Version);
+
+                    NuGetVersion foundVersion;
+                    if (versionRange != null)
+                    {
+                        foundVersion = versionRange.FindBestMatch(foundVersions);
+                    }
+                    else
+                    {
+                        foundVersion = foundVersions.FirstOrDefault();
+                    }
 
                     // Find the highest possible version
                     version = version ?? foundVersion;
