@@ -1,3 +1,7 @@
+### New in 0.34.1 (Released 2019/07/16)
+
+* 2575 v0.34.0 fails on scripts using the dynamic keyword
+
 ### New in 0.34.0 (Released 2019/07/16)
 
 * 2519 Not able to build project with ToolsVersion="15.0"
