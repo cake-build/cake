@@ -62,6 +62,7 @@ namespace Cake.Core.Scripting
             var result = new HashSet<Assembly>(new SimpleAssemblyComparer());
             result.Add(typeof(Action).GetTypeInfo().Assembly); // mscorlib or System.Private.Core
             result.Add(typeof(IQueryable).GetTypeInfo().Assembly); // System.Core or System.Linq.Expressions
+            result.Add(typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Assembly); // Dynamic support
 
             // Load other Cake-related assemblies that we need.
             var cakeAssemblies = LoadCakeAssemblies(root);

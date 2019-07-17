@@ -37,6 +37,7 @@ public class BuildPaths
         var integrationTestsBin = context.MakeAbsolute(context.Directory("./tests/integration/tools"));
         var integrationTestsBinFullFx = integrationTestsBin.Combine("Cake");
         var integrationTestsBinNetCore = integrationTestsBin.Combine("Cake.CoreCLR");
+        var integrationTestsBinTool = integrationTestsBin.Combine("Cake.Tool");
 
         // Directories
         var buildDirectories = new BuildDirectories(
@@ -47,7 +48,8 @@ public class BuildPaths
             artifactsBinFullFx,
             artifactsBinNetCore,
             integrationTestsBinFullFx,
-            integrationTestsBinNetCore);
+            integrationTestsBinNetCore,
+            integrationTestsBinTool);
 
         // Files
         var buildFiles = new BuildFiles(
@@ -93,6 +95,7 @@ public class BuildDirectories
     public DirectoryPath ArtifactsBinNetCore { get; }
     public DirectoryPath IntegrationTestsBinFullFx { get; }
     public DirectoryPath IntegrationTestsBinNetCore { get; }
+    public DirectoryPath IntegrationTestsBinTool { get; }
     public ICollection<DirectoryPath> ToClean { get; }
 
     public BuildDirectories(
@@ -103,7 +106,8 @@ public class BuildDirectories
         DirectoryPath artifactsBinFullFx,
         DirectoryPath artifactsBinNetCore,
         DirectoryPath integrationTestsBinFullFx,
-        DirectoryPath integrationTestsBinNetCore
+        DirectoryPath integrationTestsBinNetCore,
+        DirectoryPath integrationTestsBinTool
         )
     {
         Artifacts = artifactsDir;
@@ -114,6 +118,7 @@ public class BuildDirectories
         ArtifactsBinNetCore = artifactsBinNetCore;
         IntegrationTestsBinFullFx = integrationTestsBinFullFx;
         IntegrationTestsBinNetCore = integrationTestsBinNetCore;
+        IntegrationTestsBinTool = integrationTestsBinTool;
         ToClean = new[] {
             Artifacts,
             TestResults,
@@ -122,7 +127,8 @@ public class BuildDirectories
             ArtifactsBinFullFx,
             ArtifactsBinNetCore,
             IntegrationTestsBinFullFx,
-            IntegrationTestsBinNetCore
+            IntegrationTestsBinNetCore,
+            IntegrationTestsBinTool
         };
     }
 }
