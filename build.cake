@@ -633,9 +633,12 @@ Task("Create-Release-Notes")
 });
 
 Task("Prepare-Integration-Tests")
-    .IsDependentOn("Validate-Version")
+    .IsDependentOn("Create-NuGet-Packages")
     .Does(() =>
 {
+   Unzip(parameters.Paths.Directories.NuGetRoot.CombineWithFilePath($"Cake.Tool.{parameters.Version.SemVersion}.nupkg"),
+        parameters.Paths.Directories.IntegrationTestsBinTool);
+
    CopyDirectory(parameters.Paths.Directories.ArtifactsBinFullFx, parameters.Paths.Directories.IntegrationTestsBinFullFx);
    CopyDirectory(parameters.Paths.Directories.ArtifactsBinNetCore, parameters.Paths.Directories.IntegrationTestsBinNetCore);
 });
@@ -645,6 +648,7 @@ Task("Run-Integration-Tests")
     .DeferOnError()
     .DoesForEach(
         ()=> new[] {
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/Cake.dll").Single(),
             parameters.Paths.Directories.IntegrationTestsBinFullFx.CombineWithFilePath("Cake.exe"),
             parameters.Paths.Directories.IntegrationTestsBinNetCore.CombineWithFilePath("Cake.dll")
         },
