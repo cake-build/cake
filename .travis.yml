@@ -3,9 +3,9 @@ os:
   - osx
   - linux
 
-# Ubuntu 14.04
+# Ubuntu 16.04
 sudo: required
-dist: trusty
+dist: xenial
 
 # OS X 10.12
 osx_image: xcode9.2
