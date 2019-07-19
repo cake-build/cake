@@ -109,6 +109,11 @@ namespace Cake
         public bool Exclusive { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the generated cacke script assembly should be recompiled.
+        /// </summary>
+        public bool ForceRecompile { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeOptions"/> class.
         /// </summary>
         public CakeOptions()
@@ -119,6 +124,7 @@ namespace Cake
             ShowDescription = false;
             ShowTree = false;
             ShowHelp = false;
+            ForceRecompile = false;
         }
     }
 }

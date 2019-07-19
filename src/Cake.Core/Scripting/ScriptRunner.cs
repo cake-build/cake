@@ -127,6 +127,16 @@ namespace Cake.Core.Scripting
             // Prepare the environment.
             _environment.WorkingDirectory = scriptPath.GetDirectory();
 
+            // Create and prepare the session.
+            var session = _engine.CreateSession(host);
+            if (session.SupportsCachedExecution && session.IsCacheValid)
+            {
+                // we can execute this run immediately
+                _log.Verbose("Cached assembly detected. Running pre-built assembly...");
+                session.Execute(null);
+                return;
+            }
+
             // Analyze the script file.
             _log.Verbose("Analyzing build script...");
             var result = _analyzer.Analyze(scriptPath.GetFilename());
@@ -154,9 +164,6 @@ namespace Cake.Core.Scripting
             {
                 result.References.Add(addinReference.FullPath);
             }
-
-            // Create and prepare the session.
-            var session = _engine.CreateSession(host);
 
             // Load all references.
             var applicationRoot = _environment.ApplicationRoot;
