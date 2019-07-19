@@ -4,7 +4,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Cake.Core.Packaging;
+using Cake.Core.Utilities;
 
 namespace Cake.Core.Scripting.Analysis
 {
@@ -84,6 +86,12 @@ namespace Cake.Core.Scripting.Analysis
         public bool Succeeded { get; }
 
         /// <summary>
+        /// Gets a value indicating the unique hash of the script lines included in the analysis.
+        /// </summary>
+        /// <value>The hash.</value>
+        public string Hash { get; private set; }
+
+        /// <summary>
         /// Gets the list of analyzer errors.
         /// </summary>
         public IReadOnlyList<ScriptAnalyzerError> Errors { get; }
@@ -108,6 +116,7 @@ namespace Cake.Core.Scripting.Analysis
             Modules = new HashSet<PackageReference>(Collect(script, i => i.Modules));
             Errors = errors ?? new List<ScriptAnalyzerError>(0);
             Succeeded = Errors.Count == 0;
+            Hash = FastHash.GenerateHash(Encoding.UTF8.GetBytes(String.Concat(lines)));
         }
 
         private static IEnumerable<T> Collect<T>(IScriptInformation script, Func<IScriptInformation, IEnumerable<T>> collector)

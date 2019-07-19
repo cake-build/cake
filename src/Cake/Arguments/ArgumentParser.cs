@@ -187,11 +187,6 @@ namespace Cake.Arguments
                 options.Exclusive = ParseBooleanValue(value);
             }
 
-            if (name.Equals("recompile", StringComparison.OrdinalIgnoreCase))
-            {
-                options.ForceRecompile = ParseBooleanValue(value);
-            }
-
             if (options.Arguments.ContainsKey(name))
             {
                 _log.Error("Multiple arguments with the same name ({0}).", name);

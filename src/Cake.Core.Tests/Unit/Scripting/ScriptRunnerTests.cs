@@ -162,7 +162,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 runner.Run(fixture.Host, fixture.Script, fixture.ArgumentDictionary);
 
                 // Then
-                fixture.Engine.Received(1).CreateSession(fixture.Host);
+                fixture.Engine.Received(1).CreateSession(fixture.Host, Arg.Any<string>());
             }
 
             [Fact]

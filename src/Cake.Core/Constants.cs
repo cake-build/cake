@@ -19,6 +19,12 @@ namespace Cake.Core
             public const string ShowProcessCommandLine = "Settings_ShowProcessCommandLine";
         }
 
+        public static class Cache
+        {
+            public const string Enabled = "Cache_Enabled";
+            public const string ForceRecompile = "Cache_Force_Recompile";
+        }
+
         public static class Paths
         {
             public const string Tools = "Paths_Tools";

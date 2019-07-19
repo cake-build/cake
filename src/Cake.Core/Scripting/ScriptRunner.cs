@@ -127,19 +127,15 @@ namespace Cake.Core.Scripting
             // Prepare the environment.
             _environment.WorkingDirectory = scriptPath.GetDirectory();
 
-            // Create and prepare the session.
-            var session = _engine.CreateSession(host);
-            if (session.SupportsCachedExecution && session.IsCacheValid)
-            {
-                // we can execute this run immediately
-                _log.Verbose("Cached assembly detected. Running pre-built assembly...");
-                session.Execute(null);
-                return;
-            }
-
             // Analyze the script file.
-            _log.Verbose("Analyzing build script...");
+            _log.Debug("Analyzing build script...");
+            var stopWatch = new System.Diagnostics.Stopwatch();
+            stopWatch.Start();
             var result = _analyzer.Analyze(scriptPath.GetFilename());
+            stopWatch.Stop();
+
+            _log.Debug($"Analyzer perf: {stopWatch.ElapsedMilliseconds}ms");
+            _log.Debug($"Analysis Hash: {result.Hash}");
 
             // Log all errors and throw
             if (!result.Succeeded)
@@ -150,6 +146,16 @@ namespace Cake.Core.Scripting
                     _log.Error(format, error.Message);
                 }
                 throw new CakeException("Errors occurred while analyzing script.");
+            }
+
+            // Create and prepare the session.
+            var session = _engine.CreateSession(host, result.Hash);
+            if (session.SupportsCachedExecution && session.IsCacheValid)
+            {
+                // we can execute this run immediately
+                _log.Verbose("Cached assembly detected. Running pre-built assembly...");
+                session.Execute(null);
+                return;
             }
 
             // Install tools.

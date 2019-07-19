@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Reflection;
@@ -23,6 +24,9 @@ namespace Cake.Scripting.Roslyn
         private readonly IAssemblyLoader _loader;
         private readonly ICakeLog _log;
         private readonly CakeOptions _options;
+        private readonly bool _cacheEnabled;
+        private readonly bool _forceRecompile;
+        private readonly string _cacheToken = String.Empty;
 
         public HashSet<FilePath> ReferencePaths { get; }
 
@@ -32,18 +36,29 @@ namespace Cake.Scripting.Roslyn
 
         public bool SupportsCachedExecution => true;
 
-        public bool IsCacheValid => System.IO.File.Exists(GetCachedAssemblyPath()) && !_options.ForceRecompile;
+        public bool IsCacheValid => System.IO.File.Exists(GetCachedAssemblyPath()) && _cacheEnabled && !_forceRecompile;
 
-        public RoslynScriptSession(IScriptHost host, IAssemblyLoader loader, ICakeLog log, CakeOptions options)
+        public RoslynScriptSession(IScriptHost host, IAssemblyLoader loader, ICakeLog log, CakeOptions options, string cacheToken)
         {
             _host = host;
             _loader = loader;
             _log = log;
             _options = options;
+            _cacheToken = cacheToken;
 
             ReferencePaths = new HashSet<FilePath>(PathComparer.Default);
             References = new HashSet<Assembly>();
             Namespaces = new HashSet<string>(StringComparer.Ordinal);
+
+            var configuration = new CakeConfiguration(options?.Arguments ?? new Dictionary<string, string>());
+
+            var cacheEnabled = configuration.GetValue(Constants.Cache.Enabled) ?? "false";
+            _cacheEnabled = cacheEnabled.Equals("true", StringComparison.OrdinalIgnoreCase);
+
+            var forceRecompile = configuration.GetValue(Constants.Cache.ForceRecompile) ?? "false";
+            _forceRecompile = forceRecompile.Equals("true", StringComparison.OrdinalIgnoreCase);
+
+            _log.Debug($"Cache Enabled: {_cacheEnabled}    Force Recompile: {_forceRecompile}");
         }
 
         public void AddReference(Assembly assembly)
@@ -84,7 +99,7 @@ namespace Cake.Scripting.Roslyn
         {
             var cakeAsm = System.Reflection.Assembly.GetExecutingAssembly();
             var cakeAsmDir = System.IO.Path.GetDirectoryName(cakeAsm.Location);
-            var directory = System.IO.Path.Combine(cakeAsmDir, $".cache");
+            var directory = System.IO.Path.Combine(cakeAsmDir, $".cache/{_cacheToken}/");
             return System.IO.Path.Combine(directory, "./script.dll");
         }
 
@@ -93,21 +108,22 @@ namespace Cake.Scripting.Roslyn
             var assemblyPath = GetCachedAssemblyPath();
             var directory = System.IO.Path.GetDirectoryName(assemblyPath);
 
-            if (_options.ForceRecompile)
+            if (_cacheEnabled)
             {
-                _log.Verbose("--recompile option detected. Recompilation will forced.");
-            }
-            else
-            {
-                _log.Verbose("Checking for cached cake assembly in " + assemblyPath);
-                if (System.IO.File.Exists(assemblyPath))
+                if (IsCacheValid)
                 {
-                    RunScriptAssembly(assemblyPath);
-                    return;
+                    _log.Verbose("Checking for cached cake assembly in " + assemblyPath);
+                    if (System.IO.File.Exists(assemblyPath))
+                    {
+                        RunScriptAssembly(assemblyPath);
+                        return;
+                    }
+                }
+                if (_forceRecompile)
+                {
+                    _log.Verbose($"--{Constants.Cache.ForceRecompile.ToLower()} option detected. Recompilation will be forced.");
                 }
             }
-
-            System.IO.Directory.CreateDirectory(directory);
 
             // Generate the script code.
             var generator = new RoslynCodeGenerator();
@@ -126,22 +142,6 @@ namespace Cake.Scripting.Roslyn
             _log.Verbose("Compiling build script...");
             var compilation = roslynScript.GetCompilation();
             var diagnostics = compilation.GetDiagnostics();
-            var emitResult = compilation.Emit(assemblyPath);
-
-            if (emitResult.Success)
-            {
-                foreach (var r in References)
-                {
-                    var referenceFileName = System.IO.Path.GetFileName(r.Location);
-                    var target = System.IO.Path.Combine(directory, referenceFileName);
-                    _log.Verbose($"Copying reference ${referenceFileName} to cache directory.");
-                    _log.Verbose($" * {r.Location} => {target}");
-                    System.IO.File.Copy(r.Location, target);
-                }
-                _log.Verbose("Cake assembly cached in " + assemblyPath);
-                RunScriptAssembly(assemblyPath);
-                return;
-            }
 
             var errors = new List<Diagnostic>();
 
@@ -169,6 +169,35 @@ namespace Cake.Scripting.Roslyn
                 var errorMessages = string.Join(Environment.NewLine, errors.Select(x => x.ToString()));
                 var message = string.Format(CultureInfo.InvariantCulture, "Error(s) occurred when compiling build script:{0}{1}", Environment.NewLine, errorMessages);
                 throw new CakeException(message);
+            }
+
+            if (_cacheEnabled)
+            {
+                // if we've gotten this far we should emit the compiled script
+                // as a dll into the cache directory and run it from there.
+                System.IO.Directory.CreateDirectory(directory);
+                var emitResult = compilation.Emit(assemblyPath);
+
+                if (emitResult.Success)
+                {
+                    foreach (var r in References)
+                    {
+                        var referenceFileName = System.IO.Path.GetFileName(r.Location);
+                        var target = System.IO.Path.Combine(directory, referenceFileName);
+                        _log.Debug($"Copying reference ${referenceFileName} to cache directory.");
+                        _log.Debug($" * {r.Location} => {target}");
+                        System.IO.File.Copy(r.Location, target);
+                    }
+                    _log.Verbose("Cake assembly cached in " + assemblyPath);
+                    RunScriptAssembly(assemblyPath);
+                }
+            }
+            else
+            {
+                using (new ScriptAssemblyResolver(_log))
+                {
+                    roslynScript.RunAsync(_host).Wait();
+                }
             }
         }
 
