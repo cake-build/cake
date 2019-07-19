@@ -84,9 +84,7 @@ namespace Cake.Scripting.Roslyn
         {
             var cakeAsm = System.Reflection.Assembly.GetExecutingAssembly();
             var cakeAsmDir = System.IO.Path.GetDirectoryName(cakeAsm.Location);
-            var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(cakeAsm.Location);
-            var version = fvi.FileVersion;
-            var directory = System.IO.Path.Combine(cakeAsmDir, $".cache/{version}");
+            var directory = System.IO.Path.Combine(cakeAsmDir, $".cache");
             return System.IO.Path.Combine(directory, "./script.dll");
         }
 
