@@ -32,7 +32,7 @@ namespace Cake.Scripting.Roslyn
 
         public bool SupportsCachedExecution => true;
 
-        public bool IsCacheValid => System.IO.File.Exists(GetCachedAssemblyPath());
+        public bool IsCacheValid => System.IO.File.Exists(GetCachedAssemblyPath()) && !_options.ForceRecompile;
 
         public RoslynScriptSession(IScriptHost host, IAssemblyLoader loader, ICakeLog log, CakeOptions options)
         {
