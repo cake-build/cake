@@ -35,6 +35,7 @@
 #load "./Cake.Core/Scripting/UsingDirective.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
 #load "./Cake.Core/CakeAliases.cake"
+#load "./Cake.Nuget/NugetPackageInstaller.cake"
 
 //////////////////////////////////////////////////
 // ARGUMENTS
@@ -79,10 +80,14 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases")
     .IsDependentOn("Cake.Common.Tools.TextTransform.TextTransformAliases");
 
+Task("Cake.Nuget")
+    .IsDependentOn("Cake.Nuget.NugetPackageInstaller");
+
 Task("Run-All-Tests")
     .IsDependentOn("Setup-Tests")
     .IsDependentOn("Cake.Core")
-    .IsDependentOn("Cake.Common");
+    .IsDependentOn("Cake.Common")
+    .IsDependentOn("Cake.Nuget");
 
 //////////////////////////////////////////////////
 

@@ -278,10 +278,14 @@ namespace Cake.NuGet.Install
                     {
                         foundVersion = foundVersions.FirstOrDefault();
                     }
+                    if (foundVersion == null)
+                    {
+                        continue;
+                    }
 
                     // Find the highest possible version
                     version = version ?? foundVersion;
-                    if (foundVersion != null && foundVersion > version)
+                    if (foundVersion > version)
                     {
                         version = foundVersion;
                     }
