@@ -100,7 +100,7 @@ namespace Cake.Scripting.Roslyn
             var cakeAsm = System.Reflection.Assembly.GetExecutingAssembly();
             var cakeAsmDir = System.IO.Path.GetDirectoryName(cakeAsm.Location);
             var directory = System.IO.Path.Combine(cakeAsmDir, $".cache/{_cacheToken}/");
-            return System.IO.Path.Combine(directory, "./script.dll");
+            return System.IO.Path.Combine(directory, "script.dll");
         }
 
         public void Execute(Script script)
@@ -213,10 +213,14 @@ namespace Cake.Scripting.Roslyn
                     {
                         Assembly.LoadFile(asm);
                     }
-                    catch (Exception e)
+                    catch (System.BadImageFormatException)
                     {
                         // usually this is because the assembly is not a proper dotnet assembly,
                         // but was required as a reference to build the script
+                        _log.Verbose($"{asm} is not a valid netcore assembly. Continuing with load.");
+                    }
+                    catch (Exception e)
+                    {
                         _log.Verbose($"Error when loading {asm} into app domain: {e.ToString()}");
                     }
                 }
