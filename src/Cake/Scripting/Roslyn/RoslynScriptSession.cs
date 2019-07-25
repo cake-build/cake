@@ -205,31 +205,31 @@ namespace Cake.Scripting.Roslyn
         {
             _log.Verbose("Running cached assembly from " + assemblyPath);
             var directory = System.IO.Path.GetDirectoryName(assemblyPath);
-            foreach (var asm in System.IO.Directory.GetFiles(directory))
-            {
-                if (asm.EndsWith(".dll"))
-                {
-                    try
-                    {
-                        Assembly.LoadFile(asm);
-                    }
-                    catch (System.BadImageFormatException)
-                    {
-                        // usually this is because the assembly is not a proper dotnet assembly,
-                        // but was required as a reference to build the script
-                        _log.Verbose($"{asm} is not a valid netcore assembly. Continuing with load.");
-                    }
-                    catch (Exception e)
-                    {
-                        _log.Verbose($"Error when loading {asm} into app domain: {e.ToString()}");
-                    }
-                }
-            }
-            var assembly = Assembly.LoadFile(assemblyPath);
-            var type = assembly.GetType("Submission#0");
-            var factoryMethod = type.GetMethod("<Factory>", new[] { typeof(object[]) });
             using (new ScriptAssemblyResolver(_log))
             {
+                foreach (var asm in System.IO.Directory.GetFiles(directory))
+                {
+                    if (asm.EndsWith(".dll"))
+                    {
+                        try
+                        {
+                            Assembly.LoadFile(asm);
+                        }
+                        catch (System.BadImageFormatException)
+                        {
+                            // usually this is because the assembly is not a proper dotnet assembly,
+                            // but was required as a reference to build the script
+                            _log.Verbose($"{asm} is not a valid netcore assembly. Continuing with load.");
+                        }
+                        catch (Exception e)
+                        {
+                            _log.Verbose($"Error when loading {asm} into app domain: {e.ToString()}");
+                        }
+                    }
+                }
+                var assembly = Assembly.LoadFile(assemblyPath);
+                var type = assembly.GetType("Submission#0");
+                var factoryMethod = type.GetMethod("<Factory>", new[] { typeof(object[]) });
                 try
                 {
                     var task = (System.Threading.Tasks.Task<object>)factoryMethod.Invoke(null, new object[] { new object[] { _host, null } });
