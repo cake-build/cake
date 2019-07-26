@@ -213,7 +213,7 @@ namespace Cake.Scripting.Roslyn
                     {
                         try
                         {
-                            Assembly.LoadFile(asm);
+                            Assembly.LoadFrom(asm);
                         }
                         catch (System.BadImageFormatException)
                         {

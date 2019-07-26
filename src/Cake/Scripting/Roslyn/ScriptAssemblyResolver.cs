@@ -41,7 +41,7 @@ namespace Cake.Scripting.Roslyn
                         ?? Assembly.Load(name.Name);
                     if (assembly != null)
                     {
-                        _log.Verbose($"Resolved {name.Name} by assembly {assembly.FullName}");
+                        _log.Verbose($"Resolved {name.Name} by assembly {assembly.FullName} from {assembly.Location}");
                     }
                     else
                     {
