@@ -23,8 +23,8 @@
     <DebugType>portable</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.33.0" />
-    <PackageReference Include="Cake.Common" Version="0.33.0" />
+    <PackageReference Include="Cake.Core" Version="0.34.1" />
+    <PackageReference Include="Cake.Common" Version="0.34.1" />
     <None Include="../../LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)"/>
   </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
