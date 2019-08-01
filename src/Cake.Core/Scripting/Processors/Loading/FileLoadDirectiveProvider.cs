@@ -64,7 +64,7 @@ namespace Cake.Core.Scripting.Processors.Loading
                 })
                 .ToArray();
 
-            if (!files.Any())
+            if (files.Length == 0)
             {
                 // No scripts found.
                 _log.Warning("No scripts found at {0}.", path);
