@@ -15,22 +15,22 @@ namespace Cake.Common.Tools.GitVersion
         None,
 
         /// <summary>
-        /// Only log error messages.
+        /// Log error messages.
         /// </summary>
         Error,
 
         /// <summary>
-        /// Only log wanring messages.
+        /// Log error and warning messages.
         /// </summary>
         Warn,
 
         /// <summary>
-        /// Only log info messages.
+        /// Log error, warning and info messages.
         /// </summary>
         Info,
 
         /// <summary>
-        /// Only log debug messages.
+        /// Log error, warning, info and debug messages (log all).
         /// </summary>
         Debug
     }
