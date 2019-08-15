@@ -25,6 +25,6 @@
     <PackageReference Include="NuGet.Packaging" Version="5.0.0" />
     <PackageReference Include="NuGet.Resolver" Version="5.0.0" />
     <PackageReference Include="NuGet.Common" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="*" />
   </ItemGroup>
 </Project>
