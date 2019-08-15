@@ -179,7 +179,7 @@ Task("Run-Unit-Tests")
         // .NET Core
         DotNetCoreTest(project.FullPath, new DotNetCoreTestSettings
         {
-            Framework = "netcoreapp2.0",
+            Framework = "netcoreapp2.1",
             NoBuild = true,
             NoRestore = true,
             Configuration = parameters.Configuration,
@@ -222,7 +222,7 @@ Task("Copy-Files")
     // .NET Core
     DotNetCorePublish("./src/Cake/Cake.csproj", new DotNetCorePublishSettings
     {
-        Framework = "netcoreapp2.0",
+        Framework = "netcoreapp2.1",
         NoRestore = true,
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinNetCore,
@@ -235,7 +235,7 @@ Task("Copy-Files")
 
     // Copy Cake.XML (since publish does not do this anymore)
     CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp2.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
+    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp2.1/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
 Task("Validate-Version")
