@@ -30,5 +30,10 @@ namespace Cake.Common.Tools.DotNetCore.Run
         /// This makes run faster, but requires build to be done before run is executed.
         /// </summary>
         public bool NoBuild { get; set; }
+
+        /// <summary>
+        /// Gets or sets the target runtime.
+        /// </summary>
+        public string Runtime { get; set; }
     }
 }

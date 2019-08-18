@@ -100,6 +100,7 @@ if($FoundDotNetCliVersion -ne $DotNetVersion) {
         Remove-PathVariable "$InstallPath"
         $env:PATH = "$InstallPath;$env:PATH"
     }
+    $env:DOTNET_ROOT=$InstallPath
 }
 
 $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1

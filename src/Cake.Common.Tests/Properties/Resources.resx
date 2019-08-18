@@ -297,19 +297,20 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;title&gt;The title&lt;/title&gt;
     &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-    &lt;description&gt;The description&lt;/description&gt;
-    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;serviceable&gt;true&lt;/serviceable&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
 Line #3]]&gt;&lt;/releaseNotes&gt;
-    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
-    &lt;language&gt;en-us&lt;/language&gt;
   &lt;/metadata&gt;
   &lt;files&gt;
     &lt;file src="Cake.Core.dll" target="lib/net45" /&gt;
@@ -328,19 +329,20 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;title&gt;The title&lt;/title&gt;
     &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-    &lt;description&gt;The description&lt;/description&gt;
-    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;serviceable&gt;true&lt;/serviceable&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
 Line #3]]&gt;&lt;/releaseNotes&gt;
-    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
-    &lt;language&gt;en-us&lt;/language&gt;
     &lt;dependencies&gt;
       &lt;dependency id="Test1" version="1.0.0" /&gt;
       &lt;dependency id="Test2" version="[1.0.0]" /&gt;
@@ -363,19 +365,20 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;title&gt;The title&lt;/title&gt;
     &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-    &lt;description&gt;The description&lt;/description&gt;
-    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;serviceable&gt;true&lt;/serviceable&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
 Line #3]]&gt;&lt;/releaseNotes&gt;
-    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
-    &lt;language&gt;en-us&lt;/language&gt;
   &lt;/metadata&gt;
   &lt;files&gt;
     &lt;file src="Cake.Core.dll" target="lib/net45" /&gt;
@@ -394,19 +397,19 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;title&gt;The title&lt;/title&gt;
     &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-    &lt;description&gt;The description&lt;/description&gt;
-    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
 Line #3]]&gt;&lt;/releaseNotes&gt;
-    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
-    &lt;language&gt;en-us&lt;/language&gt;
     &lt;dependencies&gt;
       &lt;dependency id="Test1" version="1.0.0" /&gt;
       &lt;dependency id="Test2" version="[1.0.0]" /&gt;
@@ -891,7 +894,7 @@ Global
 	EndGlobalSection
 EndGlobal</value>
   </data>
-  <data name="Nuspec_Metadata_WithTargetFrameworkDependencies" xml:space="preserve">
+  <data name="Nuspec_Metadata_PackWithTargetFrameworkDependencies" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"&gt;
@@ -912,7 +915,7 @@ EndGlobal</value>
   &lt;/files&gt;
 &lt;/package&gt;</value>
   </data>
-  <data name="Nuspec_Metadata_WithTragetFramworkDependencies" xml:space="preserve">
+  <data name="Nuspec_Metadata_WithTargetFrameworkDependencies" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"&gt;
@@ -921,19 +924,19 @@ EndGlobal</value>
     &lt;title&gt;The title&lt;/title&gt;
     &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-    &lt;description&gt;The description&lt;/description&gt;
-    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
 Line #3]]&gt;&lt;/releaseNotes&gt;
-    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
-    &lt;language&gt;en-us&lt;/language&gt;
     &lt;dependencies&gt;
       &lt;group targetFramework="net452"&gt;
         &lt;dependency id="Test1" version="1.0.0" /&gt;
@@ -960,19 +963,19 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;title&gt;The title&lt;/title&gt;
     &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-    &lt;description&gt;The description&lt;/description&gt;
-    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
 Line #3]]&gt;&lt;/releaseNotes&gt;
-    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
-    &lt;language&gt;en-us&lt;/language&gt;
     &lt;dependencies&gt;
       &lt;group targetFramework="net452"&gt;
         &lt;dependency id="Test1" version="1.0.0" /&gt;
@@ -1051,19 +1054,19 @@ Imports System.Runtime.CompilerServices;
     &lt;title&gt;The title&lt;/title&gt;
     &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
-    &lt;description&gt;The description&lt;/description&gt;
-    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
-    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
     &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
     &lt;releaseNotes&gt;&lt;![CDATA[Line #1
 Line #2
 Line #3]]&gt;&lt;/releaseNotes&gt;
-    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
-    &lt;language&gt;en-us&lt;/language&gt;
     &lt;repository type="git" url="https://test" commit="0000000000000000000000000000000000000000" branch="master" /&gt;
   &lt;/metadata&gt;
   &lt;files&gt;
@@ -1097,5 +1100,216 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyVersionAttribute("1.3.0.0")]
 
 // Generated by the MSBuild WriteCodeFragment class.</value>
+  </data>
+  <data name="Nuspec_FrameworkAssemblies" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
+    &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
+Line #2
+Line #3]]&gt;&lt;/releaseNotes&gt;
+    &lt;frameworkAssemblies&gt;
+      &lt;frameworkAssembly assemblyName="System.Net" targetFramework="net40" /&gt;
+      &lt;frameworkAssembly assemblyName="System.Net.Cookie" targetFramework="net47" /&gt;
+    &lt;/frameworkAssemblies&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src="Cake.Core.dll" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.xml" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.pdb" target="lib/net45" /&gt;
+    &lt;file src="LICENSE" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_License" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
+    &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
+Line #2
+Line #3]]&gt;&lt;/releaseNotes&gt;
+    &lt;license type="expression" version="V1"&gt;MIT&lt;/license&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src="Cake.Core.dll" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.xml" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.pdb" target="lib/net45" /&gt;
+    &lt;file src="LICENSE" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_PackageTypes" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
+    &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
+Line #2
+Line #3]]&gt;&lt;/releaseNotes&gt;
+    &lt;packageTypes&gt;
+      &lt;packageType name="package1" version="V1" /&gt;
+      &lt;packageType name="package2" version="V2" /&gt;
+    &lt;/packageTypes&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src="Cake.Core.dll" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.xml" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.pdb" target="lib/net45" /&gt;
+    &lt;file src="LICENSE" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_References" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
+    &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
+Line #2
+Line #3]]&gt;&lt;/releaseNotes&gt;
+    &lt;references&gt;
+      &lt;reference file="Cake.Core.dll" /&gt;
+      &lt;reference file="Cake.Core.xml" /&gt;
+    &lt;/references&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src="Cake.Core.dll" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.xml" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.pdb" target="lib/net45" /&gt;
+    &lt;file src="LICENSE" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_ContentFiles" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;metadata minClientVersion="3.3" xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
+    &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
+Line #2
+Line #3]]&gt;&lt;/releaseNotes&gt;
+    &lt;contentFiles&gt;
+      &lt;files include="**/images/*.*" buildAction="EmbeddedResource" copyToOutput="false" flatten="false" /&gt;
+      &lt;files include="cs/**/*.*" buildAction="Compile" copyToOutput="true" flatten="false" /&gt;
+    &lt;/contentFiles&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src="Cake.Core.dll" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.xml" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.pdb" target="lib/net45" /&gt;
+    &lt;file src="LICENSE" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
+  </data>
+  <data name="Nuspec_References_WithTargetFramework" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"&gt;
+    &lt;id&gt;The ID&lt;/id&gt;
+    &lt;version&gt;The version&lt;/version&gt;
+    &lt;title&gt;The title&lt;/title&gt;
+    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
+    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
+    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
+    &lt;description&gt;The description&lt;/description&gt;
+    &lt;summary&gt;The summary&lt;/summary&gt;
+    &lt;copyright&gt;The copyright&lt;/copyright&gt;
+    &lt;language&gt;en-us&lt;/language&gt;
+    &lt;tags&gt;Tag1 Tag2 Tag3&lt;/tags&gt;
+    &lt;releaseNotes&gt;&lt;![CDATA[Line #1
+Line #2
+Line #3]]&gt;&lt;/releaseNotes&gt;
+    &lt;references&gt;
+      &lt;group targetFramework="net452"&gt;
+        &lt;reference file="Cake.Core.dll" /&gt;
+      &lt;/group&gt;
+      &lt;group targetFramework="net46"&gt;
+        &lt;reference file="Cake.Core.xml" /&gt;
+      &lt;/group&gt;
+    &lt;/references&gt;
+  &lt;/metadata&gt;
+  &lt;files&gt;
+    &lt;file src="Cake.Core.dll" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.xml" target="lib/net45" /&gt;
+    &lt;file src="Cake.Core.pdb" target="lib/net45" /&gt;
+    &lt;file src="LICENSE" /&gt;
+  &lt;/files&gt;
+&lt;/package&gt;</value>
   </data>
 </root>

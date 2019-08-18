@@ -28,6 +28,8 @@
 #load "./Cake.Common/Tools/TextTransform/TextTransformAliases.cake"
 #load "./Cake.Core/Scripting/AddinDirective.cake"
 #load "./Cake.Core/Scripting/DefineDirective.cake"
+#load "./Cake.Core/Scripting/Dynamic.cake"
+#load "./Cake.Core/Scripting/HttpClient.cake"
 #load "./Cake.Core/Scripting/LoadDirective.cake"
 #load "./Cake.Core/Scripting/SystemCollections.cake"
 #load "./Cake.Core/Scripting/UsingDirective.cake"
@@ -47,6 +49,8 @@ var target = Argument<string>("target", "Run-All-Tests");
 Task("Cake.Core")
     .IsDependentOn("Cake.Core.Scripting.AddinDirective")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective")
+    .IsDependentOn("Cake.Core.Scripting.Dynamic")
+    .IsDependentOn("Cake.Core.Scripting.HttpClient")
     .IsDependentOn("Cake.Core.Scripting.LoadDirective")
     .IsDependentOn("Cake.Core.Scripting.SystemCollections")
     .IsDependentOn("Cake.Core.Scripting.UsingDirective")

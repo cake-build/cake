@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// Parses the Console Output of the octo.exe call when called with list-deployments
+    /// Parses the Console Output of the Octo.exe call when called with list-deployments
     /// </summary>
     public class DeploymentQueryResultParser
     {

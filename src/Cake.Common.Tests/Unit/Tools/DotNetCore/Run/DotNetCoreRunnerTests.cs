@@ -92,11 +92,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 var fixture = new DotNetCoreRunnerFixture();
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
+                fixture.Settings.Runtime = "win7-x86";
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("run --framework dnxcore50 --configuration Release", result.Args);
+                Assert.Equal("run --framework dnxcore50 --configuration Release --runtime win7-x86", result.Args);
             }
 
             [Fact]

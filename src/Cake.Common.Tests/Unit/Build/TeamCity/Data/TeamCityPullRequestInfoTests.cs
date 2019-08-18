@@ -14,6 +14,10 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
         {
             [Theory]
             [InlineData("refs/pull-requests/1/merge", true)]
+            [InlineData("refs/merge-requests/1/head", true)]
+            [InlineData("refs/pull/1/head", true)]
+            [InlineData("refs/pull/1/merge", true)]
+            [InlineData("refs/changes/1/head", true)]
             [InlineData("refs/heads/master", false)]
             public void Should_Return_Correct_Value(string value, bool expected)
             {
@@ -34,6 +38,9 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
         {
             [Theory]
             [InlineData("refs/pull-requests/1/merge", 1)]
+            [InlineData("refs/pull/2/merge", 2)]
+            [InlineData("refs/changes/3/merge", 3)]
+            [InlineData("refs/merge-requests/4/merge", 4)]
             [InlineData("refs/heads/master", null)]
             public void Should_Return_Correct_Value(string value, int? expected)
             {

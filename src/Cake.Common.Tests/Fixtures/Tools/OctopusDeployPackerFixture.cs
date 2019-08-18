@@ -12,7 +12,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         public string Id { get; set; }
 
         public OctopusDeployPackerFixture()
-            : base("octo.exe")
+            : base("Octo.exe")
         {
         }
 

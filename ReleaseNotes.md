@@ -1,3 +1,25 @@
+### New in 0.34.1 (Released 2019/07/16)
+
+* 2575 v0.34.0 fails on scripts using the dynamic keyword
+
+### New in 0.34.0 (Released 2019/07/16)
+
+* 2519 Not able to build project with ToolsVersion="15.0"
+* 2553 cake 0.33.0 compilation is failing for System.Net.Http.HttpClient on Mono 5.20.1.19
+* 2535 OctoPack doesn't work on Linux
+* 2161 If [Nuget] ConfigFile directive in cake configuration file has no folder — error rises
+* 2157 NuGetPack with nuspec that contains contentFiles becomes invalid
+* 2560 Runtime property is missing for 'dotnet pack', 'dotnet run' and 'dotnet clean'
+* 2556 DotNetCoreTestSettings: Missing RunTime Property which is needed for RID builds
+* 2551 Call MSBuild without specifying a target does not use DefaultTarget
+* 2536 Additional formatting options on XmlPoke
+* 2531 Update to NuGet client libraries to v5
+* 2530 Remove dependency on NuGet.PackageManagement
+* 2521 Update to Roslyn 3.0.0
+* 2499 NuGet Pack with assembly references support
+* 2156 Add newer nuspec properties to NuGetPackSettings
+* 1618 Support different Git servers in TeamCityPullRequestInfo
+
 ### New in 0.33.0 (Released 2019/04/01)
 
 * 2514 Add additional report types for ReportGenerator
