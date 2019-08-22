@@ -251,7 +251,8 @@ namespace Cake.Core.Scripting.CodeGen
 
         private static string GetReturnType(MethodInfo method)
         {
-            return method.ReturnType.GetFullName();
+            var isDynamic = method.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(DynamicAttribute), true).Any();
+            return isDynamic ? "dynamic" : method.ReturnType.GetFullName();
         }
 
         private static string GetObsoleteMessage(MethodInfo method, ObsoleteAttribute attribute)
