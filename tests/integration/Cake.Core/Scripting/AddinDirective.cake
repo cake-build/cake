@@ -11,6 +11,8 @@ Task("Cake.Core.Scripting.AddinDirective.LoadNetStandardAddin")
     var script = $@"#addin nuget:{Paths.Resources}/Cake.Core/Scripting/netstandard2.addin/bin/Release?package=netstandard2.addin&version=1.0.0
         Information(""Magic number: {0}"", GetMagicNumber(false));
         Information(""The answer to life: {0}"", TheAnswerToLife);
+        Information(""Get Dynamic Magic Number: {0}"", GetDynamicMagicNumber(false).MagicNumber);
+        Information(""Dynamic Magic Number: {0}"", TheDynamicAnswerToLife.TheAnswerToLife);
     ";
 
     CakeExecuteExpression(script,
