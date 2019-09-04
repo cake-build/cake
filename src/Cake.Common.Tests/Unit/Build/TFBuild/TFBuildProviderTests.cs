@@ -170,6 +170,23 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
                 // Then
                 Assert.False(result);
             }
+
+            [Theory]
+            [InlineData("Hosted Agent 2")]
+            [InlineData("Azure Pipelines 3")]
+            public void Should_Return_True_If_Running_On_AzurePipelinesExtraAgent(string agentName)
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                fixture.IsRunningOnAzurePipelinesHosted(agentName);
+                var tfBuild = fixture.CreateTFBuildService();
+
+                // When
+                var result = tfBuild.IsRunningOnAzurePipelinesHosted;
+
+                // Then
+                Assert.True(result);
+            }
         }
 
         public sealed class TheEnvironmentProperty
