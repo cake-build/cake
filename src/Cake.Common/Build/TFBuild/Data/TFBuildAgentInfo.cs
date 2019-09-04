@@ -106,6 +106,6 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// <c>true</c> if the current agent is a hosted agent; otherwise, <c>false</c>.
         /// </value>
-        public bool IsHosted => Name != null && Name.StartsWith("Hosted");
+        public bool IsHosted => Name != null && (Name.StartsWith("Hosted") || Name.StartsWith("Azure Pipelines"));
     }
 }
