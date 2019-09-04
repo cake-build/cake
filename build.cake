@@ -13,7 +13,7 @@
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=4.9.2"
 
 // Install .NET Core Global tools.
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=4.0.1-beta1-58"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.0.1"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=SignClient&version=1.0.82"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.8.0"
 
