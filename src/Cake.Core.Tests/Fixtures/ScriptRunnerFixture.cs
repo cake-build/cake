@@ -55,6 +55,7 @@ namespace Cake.Core.Tests.Fixtures
             Session = Substitute.For<IScriptSession>();
             ArgumentDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             Engine = Substitute.For<IScriptEngine>();
+            Engine.CreateSession(Arg.Any<IScriptHost>(), Arg.Any<string>()).Returns(Session);
             Engine.CreateSession(Arg.Any<IScriptHost>()).Returns(Session);
 
             ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log, new[] { new FileLoadDirectiveProvider(Globber, Log) });

@@ -13,6 +13,16 @@ namespace Cake.Core.Scripting
     public interface IScriptSession
     {
         /// <summary>
+        /// Gets a value indicating whether or not the ScriptSession supports cached execution.
+        /// </summary>
+        bool SupportsCachedExecution { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the current cache is valid. If true, the cached version can be executed immediately.
+        /// </summary>
+        bool IsCacheValid { get; }
+
+        /// <summary>
         /// Adds a reference path to the session.
         /// </summary>
         /// <param name="path">The reference path.</param>

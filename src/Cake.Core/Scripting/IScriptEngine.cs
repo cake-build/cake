@@ -13,7 +13,8 @@ namespace Cake.Core.Scripting
         /// Creates a new script session.
         /// </summary>
         /// <param name="host">The host.</param>
+        /// <param name="sessionCacheToken">A token to use when validating the cache.</param>
         /// <returns>A new script session.</returns>
-        IScriptSession CreateSession(IScriptHost host);
+        IScriptSession CreateSession(IScriptHost host, string sessionCacheToken = "");
     }
 }
