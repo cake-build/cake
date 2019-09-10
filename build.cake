@@ -705,6 +705,9 @@ Task("Travis")
 Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");
 
+Task("AzureDevOps")
+  .IsDependentOn(parameters.IsRunningOnWindows ? "Create-Chocolatey-Packages" : "Package");
+
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
