@@ -664,7 +664,7 @@ Task("Run-Integration-Tests")
             },
             Arguments = {
                 ["target"] = Argument("integration-tests-target", "Run-All-Tests"),
-                ["verbosity"] = "quiet",
+                ["verbosity"] = "diagnostic",
                 ["platform"] = parameters.IsRunningOnWindows ? "windows" : "posix",
                 ["customarg"] = "hello"
             }

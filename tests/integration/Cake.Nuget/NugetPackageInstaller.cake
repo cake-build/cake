@@ -12,7 +12,10 @@ Task("Cake.Nuget.Install.NugetPackageInstaller.VersionPinFull")
             throw new Exception(""VersionPinFull failed"");
     ";
 
-    CakeExecuteExpression(script);
+    CakeExecuteExpression(script,
+        new CakeSettings {
+            Verbosity = Context.Log.Verbosity
+        });
 });
 
 Task("Cake.Nuget.Install.NugetPackageInstaller.VersionPinRange.InclusiveExclusive")
@@ -31,7 +34,10 @@ Task("Cake.Nuget.Install.NugetPackageInstaller.VersionPinRange.InclusiveExclusiv
             throw new Exception(""VersionPinRange.InclusiveExclusive failed"");
     ";
 
-    CakeExecuteExpression(script);
+    CakeExecuteExpression(script,
+        new CakeSettings {
+            Verbosity = Context.Log.Verbosity
+        });
 });
 
 Task("Cake.Nuget.Install.NugetPackageInstaller.VersionPinRange.InclusiveInclusive")
@@ -50,7 +56,10 @@ Task("Cake.Nuget.Install.NugetPackageInstaller.VersionPinRange.InclusiveInclusiv
             throw new Exception(""VersionPinRange.InclusiveInclusive failed"");
     ";
 
-    CakeExecuteExpression(script);
+    CakeExecuteExpression(script,
+        new CakeSettings {
+            Verbosity = Context.Log.Verbosity
+        });
 });
 
 Task("Cake.Nuget.Install.NugetPackageInstaller.VersionPinRange.Wildcard")
@@ -69,7 +78,10 @@ Task("Cake.Nuget.Install.NugetPackageInstaller.VersionPinRange.Wildcard")
             throw new Exception(""VersionPinRange.Wildcard failed"");
     ";
 
-    CakeExecuteExpression(script);
+    CakeExecuteExpression(script,
+        new CakeSettings {
+            Verbosity = Context.Log.Verbosity
+        });
 });
 
 //////////////////////////////////////////////////////////////////////////////
