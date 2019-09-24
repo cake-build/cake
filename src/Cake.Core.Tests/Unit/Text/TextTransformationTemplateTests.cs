@@ -52,7 +52,7 @@ namespace Cake.Core.Tests.Unit.Text
                 // Then
                 Assert.IsType<ArgumentException>(result);
                 Assert.Equal("key", ((ArgumentException)result)?.ParamName);
-                Assert.Equal($"Key cannot be empty.", result.Message?.SplitLines()[0]);
+                Assert.StartsWith("Key cannot be empty", result.Message?.SplitLines()[0]);
             }
 
             [Theory]

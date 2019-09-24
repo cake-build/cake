@@ -6,38 +6,32 @@
     <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger and contributors</Authors>
     <Company>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger and contributors</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</PackageIconUrl>
+    <PackageIcon>cake-medium.png</PackageIcon>
     <RepositoryUrl>https://github.com/cake-build/cake</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Cake;Script;Build</PackageTags>
     <PackageProjectUrl>https://cakebuild.net</PackageProjectUrl>
   </PropertyGroup>
-  <!-- Misc -->
-  <PropertyGroup>
-    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">2.0.0</NetStandardImplicitPackageVersion>
+
+  <!-- Define .NET Core constants -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netcoreapp2.0' OR '$(TargetFramework)' == 'netcoreapp2.1' OR '$(TargetFramework)' == 'netcoreapp3.0' ">
+    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
+
   <!-- Global solution information -->
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)SolutionInfo.cs" />
     <None Include="../../LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+    <None Include="../../nuspec/cake-medium.png" Pack="true" PackagePath=""/>
   </ItemGroup>
+
   <!-- Warnings as errors -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  <!-- Define .NET Core constants -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
-    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
-    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
+
   <!-- Attribute generation -->
   <PropertyGroup>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>

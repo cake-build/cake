@@ -14,7 +14,7 @@ namespace Cake.Core.Tests.Unit
 {
     public sealed class CakeRuntimeTests
     {
-        public sealed class TheBuiltFrameworkroperty
+        public sealed class TheBuiltFrameworkProperty
         {
             [RuntimeFact(TestRuntime.CoreClr)]
             public void Should_Return_Correct_Result_For_CoreClr()
@@ -26,7 +26,35 @@ namespace Cake.Core.Tests.Unit
                 var framework = runtime.BuiltFramework;
 
                 // Then
+#if NETFRAMEWORK
+                Assert.Equal(".NETFramework,Version=v4.6.1", framework.FullName);
+#elif !NETCOREAPP
                 Assert.Equal(".NETStandard,Version=v2.0", framework.FullName);
+#else
+                try
+                {
+                    Assert.Equal(".NETCoreApp,Version=v" +
+
+#if NETCOREAPP2_0
+                    "2.0",
+#elif NETCOREAPP2_1
+                    "2.1",
+#elif NETCOREAPP2_2
+                    "2.2",
+#elif NETCOREAPP3_0
+                    "3.0",
+#endif
+                        framework.FullName);
+                }
+                catch
+                {
+                    // Temp fix for if only netcore3 installed
+                    if (!StringComparer.Ordinal.Equals(framework.FullName, ".NETCoreApp,Version=v3.0"))
+                    {
+                        throw;
+                    }
+                }
+#endif
             }
         }
 

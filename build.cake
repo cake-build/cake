@@ -10,7 +10,7 @@
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.4.2"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.6.519"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.0.4"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=4.9.2"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.2.0"
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.0.1"
@@ -165,33 +165,14 @@ Task("Build")
 
 Task("Run-Unit-Tests")
     .IsDependentOn("Build")
-    .Does(() =>
+    .DoesForEach(
+        () => GetFiles("./src/**/*.Tests.csproj"),
+        project =>
 {
-    var projects = GetFiles("./src/**/*.Tests.csproj");
-    foreach(var project in projects)
+    foreach(var framework in new[] { "netcoreapp2.0", "netcoreapp3.0", "net461" })
     {
-        var projectName = project.GetFilenameWithoutExtension().FullPath;
-
-        FilePath
-            testResultsCore = MakeAbsolute(parameters.Paths.Directories.TestResults.CombineWithFilePath($"{projectName}_core_TestResults.xml")),
-            testResultsFull = MakeAbsolute(parameters.Paths.Directories.TestResults.CombineWithFilePath($"{projectName}_full_TestResults.xml"));
-
-        // .NET Core
-        DotNetCoreTest(project.FullPath, new DotNetCoreTestSettings
-        {
-            Framework = "netcoreapp2.0",
-            NoBuild = true,
-            NoRestore = true,
-            Configuration = parameters.Configuration,
-            ArgumentCustomization = args=>args.Append($"--logger trx;LogFileName=\"{testResultsCore}\"")
-        });
-
-        // .NET Framework/Mono
-        // Total hack, but gets the work done.
-        var framework = "net46";
-        if(project.ToString().EndsWith("Cake.Tests.csproj")) {
-            framework = "net461";
-        }
+        FilePath testResultsPath = MakeAbsolute(parameters.Paths.Directories.TestResults
+                                    .CombineWithFilePath($"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.xml"));
 
         DotNetCoreTest(project.FullPath, new DotNetCoreTestSettings
         {
@@ -199,7 +180,7 @@ Task("Run-Unit-Tests")
             NoBuild = true,
             NoRestore = true,
             Configuration = parameters.Configuration,
-            ArgumentCustomization = args=>args.Append($"--logger trx;LogFileName=\"{testResultsFull}\"")
+            ArgumentCustomization = args=>args.Append($"--logger trx;LogFileName=\"{testResultsPath}\"")
         });
     }
 });
@@ -403,11 +384,12 @@ Task("Create-NuGet-Packages")
                                 .ToArray()
     });
 
-    DotNetCorePack("./src/Cake/Cake.Tool.csproj", new DotNetCorePackSettings {
+    DotNetCorePack("./src/Cake/Cake.csproj", new DotNetCorePackSettings {
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.NuGetRoot,
         IncludeSymbols = true,
-        MSBuildSettings = msBuildSettings
+        MSBuildSettings = msBuildSettings,
+        ArgumentCustomization = arg => arg.Append("/p:PackAsTool=true")
     });
 });
 
@@ -647,12 +629,13 @@ Task("Run-Integration-Tests")
     .IsDependentOn("Prepare-Integration-Tests")
     .DeferOnError()
     .DoesForEach(
-        ()=> new[] {
-            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/Cake.dll").Single(),
+        () => new[] {
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp2.1/**/Cake.dll").Single(),
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp3.0/**/Cake.dll").Single(),
             parameters.Paths.Directories.IntegrationTestsBinFullFx.CombineWithFilePath("Cake.exe"),
             parameters.Paths.Directories.IntegrationTestsBinNetCore.CombineWithFilePath("Cake.dll")
         },
-        cakeAssembly=>
+        cakeAssembly =>
 {
     Information("Testing: {0}", cakeAssembly);
     CakeExecuteScript("./tests/integration/build.cake",
@@ -700,7 +683,7 @@ Task("AppVeyor")
 });
 
 Task("Travis")
-  .IsDependentOn("Run-Integration-Tests");
+  .IsDependentOn("Run-Unit-Tests");
 
 Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");
