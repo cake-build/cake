@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNetCore.Test
@@ -30,9 +31,9 @@ namespace Cake.Common.Tools.DotNetCore.Test
         public DirectoryPath TestAdapterPath { get; set; }
 
         /// <summary>
-        /// Gets or sets a logger for test results
+        /// Gets or sets a loggers for test results
         /// </summary>
-        public string Logger { get; set; }
+        public IEnumerable<string> Logger { get; set; }
 
         /// <summary>
         /// Gets or sets the output directory.

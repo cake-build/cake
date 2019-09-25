@@ -81,10 +81,16 @@ namespace Cake.Common.Tools.DotNetCore.Test
             }
 
             // Filter
-            if (!string.IsNullOrWhiteSpace(settings.Logger))
+            if (settings.Logger != null)
             {
-                builder.Append("--logger");
-                builder.AppendQuoted(settings.Logger);
+                foreach (var logger in settings.Logger)
+                {
+                    if (!string.IsNullOrWhiteSpace(logger))
+                    {
+                        builder.Append("--logger");
+                        builder.AppendQuoted(logger);
+                    }
+                }
             }
 
             // Output directory
