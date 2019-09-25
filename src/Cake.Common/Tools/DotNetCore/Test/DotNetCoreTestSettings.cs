@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// <summary>
         /// Gets or sets a loggers for test results
         /// </summary>
-        public IEnumerable<string> Logger { get; set; }
+        public ICollection<string> Logger { get; set; }
 
         /// <summary>
         /// Gets or sets the output directory.
@@ -83,5 +83,13 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Gets or sets the target runtime to test for. This setting is only available from .NET Core 3.x upward.
         /// </summary>
         public string Runtime { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DotNetCoreTestSettings"/> class.
+        /// </summary>
+        public DotNetCoreTestSettings()
+        {
+            this.Logger = new List<string>();
+        }
     }
 }

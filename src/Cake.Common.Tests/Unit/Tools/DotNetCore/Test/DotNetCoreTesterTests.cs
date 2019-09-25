@@ -115,7 +115,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 fixture.Settings.Settings = "./demo.runsettings";
                 fixture.Settings.Filter = "Priority = 1";
                 fixture.Settings.TestAdapterPath = @"/Working/custom-test-adapter";
-                fixture.Settings.Logger = new string[] { @"trx;LogFileName=/Working/logfile.trx" };
+                fixture.Settings.Logger = new string[] { @"html;LogFileName=/Working/logfile.html", @"trx;LogFileName=/Working/logfile.trx" };
                 fixture.Settings.DiagnosticFile = "./artifacts/logging/diagnostics.txt";
                 fixture.Settings.ResultsDirectory = "./tests/";
                 fixture.Settings.VSTestReportPath = "./tests/TestResults.xml";
@@ -125,7 +125,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64", result.Args);
+                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"html;LogFileName=/Working/logfile.html\" --logger \"trx;LogFileName=/Working/logfile.trx\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64", result.Args);
             }
 
             [Fact]
