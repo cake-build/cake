@@ -115,7 +115,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 fixture.Settings.Settings = "./demo.runsettings";
                 fixture.Settings.Filter = "Priority = 1";
                 fixture.Settings.TestAdapterPath = @"/Working/custom-test-adapter";
-                fixture.Settings.Logger = @"trx;LogFileName=/Working/logfile.trx";
+                fixture.Settings.Logger = new string[] { @"trx;LogFileName=/Working/logfile.trx" };
                 fixture.Settings.DiagnosticFile = "./artifacts/logging/diagnostics.txt";
                 fixture.Settings.ResultsDirectory = "./tests/";
                 fixture.Settings.VSTestReportPath = "./tests/TestResults.xml";
