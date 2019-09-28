@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cake.Testing.Xunit;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Cake.Core.Tests.Unit
 {
@@ -16,6 +17,13 @@ namespace Cake.Core.Tests.Unit
     {
         public sealed class TheBuiltFrameworkProperty
         {
+            private ITestOutputHelper TestOutputHelper { get; }
+
+            public TheBuiltFrameworkProperty(ITestOutputHelper testOutputHelper)
+            {
+                TestOutputHelper = testOutputHelper;
+            }
+
             [RuntimeFact(TestRuntime.CoreClr)]
             public void Should_Return_Correct_Result_For_CoreClr()
             {
@@ -31,29 +39,48 @@ namespace Cake.Core.Tests.Unit
 #elif !NETCOREAPP
                 Assert.Equal(".NETStandard,Version=v2.0", framework.FullName);
 #else
-                try
-                {
-                    Assert.Equal(".NETCoreApp,Version=v" +
-
+                var expect = string.Concat(".NETCoreApp,Version=v",
 #if NETCOREAPP2_0
-                    "2.0",
+                                "2.0");
 #elif NETCOREAPP2_1
-                    "2.1",
+                                "2.1");
 #elif NETCOREAPP2_2
-                    "2.2",
+                                "2.2");
 #elif NETCOREAPP3_0
-                    "3.0",
+                                "3.0");
 #endif
-                        framework.FullName);
-                }
-                catch
+                // ToDo: Enable mocking runtime resolution, temp work around for missing runtimes.
+                switch (expect)
                 {
-                    // Temp fix for if only netcore3 installed
-                    if (!StringComparer.Ordinal.Equals(framework.FullName, ".NETCoreApp,Version=v3.0"))
+                    case ".NETCoreApp,Version=v2.0":
                     {
-                        throw;
+                        switch (framework.FullName)
+                        {
+                            case ".NETCoreApp,Version=v2.1":
+                            case ".NETCoreApp,Version=v3.0":
+                                {
+                                    TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
+                                    expect = framework.FullName;
+                                    break;
+                                }
+                        }
+                        break;
+                    }
+                    case ".NETCoreApp,Version=v2.1":
+                    {
+                        switch (framework.FullName)
+                        {
+                            case ".NETCoreApp,Version=v3.0":
+                            {
+                                TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
+                                expect = framework.FullName;
+                                break;
+                            }
+                        }
+                        break;
                     }
                 }
+                Assert.Equal(expect, framework.FullName);
 #endif
             }
         }
