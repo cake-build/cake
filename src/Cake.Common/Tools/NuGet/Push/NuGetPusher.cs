@@ -90,6 +90,11 @@ namespace Cake.Common.Tools.NuGet.Push
                 _log.Verbose("No Source property has been set.  Depending on your configuration, this may cause problems.");
             }
 
+            if (settings.SkipDuplicate)
+            {
+                builder.Append("-SkipDuplicate");
+            }
+
             if (settings.Timeout != null)
             {
                 builder.Append("-Timeout");

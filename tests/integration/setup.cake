@@ -17,11 +17,12 @@ Setup<ScriptContext>(setupContext =>
     // Output information from setup task
     setupContext.Log.Information(
         Verbosity.Quiet,
-        "Performing setup initated by {0} ({1} tasks to be executed beginning with {2}, performing {3} build)",
+        "Performing setup initated by {0} ({1} tasks to be executed beginning with {2}, performing {3} build on {4})",
         setupContext.TargetTask?.Name,
         setupContext.TasksToExecute?.Count,
         setupContext.TasksToExecute?.Select(task => task.Name).FirstOrDefault(),
-        BuildSystem.Provider
+        BuildSystem.Provider,
+        setupContext.Environment.Runtime.BuiltFramework
         );
 
     // Perform artifact cleanup

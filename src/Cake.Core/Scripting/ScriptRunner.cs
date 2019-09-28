@@ -206,8 +206,11 @@ namespace Cake.Core.Scripting
                 session.ImportNamespace(@namespace);
             }
 
+            var defines = new HashSet<string>(result.Defines, StringComparer.Ordinal);
+            defines.AddRange(_conventions.GetDefaultDefines());
+
             // Execute the script.
-            var script = new Script(result.Namespaces, result.Lines, aliases, result.UsingAliases, result.UsingStaticDirectives, result.Defines);
+            var script = new Script(result.Namespaces, result.Lines, aliases, result.UsingAliases, result.UsingStaticDirectives, defines);
             session.Execute(script);
         }
 

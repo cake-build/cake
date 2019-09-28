@@ -112,6 +112,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
             [Theory]
             [InlineData("NonCached_Value_Type")]
+            [InlineData("NonCached_Dynamic_Type")]
             public void Should_Return_Correct_Generated_Code_For_Non_Cached_Properties(string name)
             {
                 // Given
@@ -127,6 +128,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [Theory]
             [InlineData("Cached_Reference_Type")]
             [InlineData("Cached_Value_Type")]
+            [InlineData("Cached_Dynamic_Type")]
             public void Should_Return_Correct_Generated_Code_For_Cached_Properties(string name)
             {
                 // Given

@@ -240,5 +240,11 @@ namespace Cake.Core.Tests.Data
         {
             throw new NotImplementedException();
         }
+
+        [CakeMethodAlias]
+        public static dynamic NonGeneric_ExtensionMethodWithDynamicReturnValue(this ICakeContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

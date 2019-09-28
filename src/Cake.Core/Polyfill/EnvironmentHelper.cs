@@ -4,6 +4,8 @@
 
 using System;
 #if NETCORE
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 #endif
 using System.Runtime.Versioning;
@@ -15,7 +17,9 @@ namespace Cake.Core.Polyfill
 #if !NETCORE
         private static bool? _isRunningOnMac;
 #else
+        private static readonly FrameworkName NetStandardFramework = new FrameworkName(".NETStandard,Version=v2.0");
         private static bool? _isCoreClr;
+        private static FrameworkName netCoreAppFramwork;
 #endif
 
         public static bool Is64BitOperativeSystem()
@@ -119,7 +123,28 @@ namespace Cake.Core.Polyfill
         public static FrameworkName GetBuiltFramework()
         {
 #if NETCORE
-            return new FrameworkName(".NETStandard,Version=v2.0");
+            if (netCoreAppFramwork != null)
+            {
+                return netCoreAppFramwork;
+            }
+
+            var assemblyPath = typeof(System.Runtime.GCSettings)?.GetTypeInfo()?.Assembly?.CodeBase;
+            if (string.IsNullOrEmpty(assemblyPath))
+            {
+                return NetStandardFramework;
+            }
+
+            const string microsoftNetCoreApp = "Microsoft.NETCore.App";
+            var runtimeBasePathLength = assemblyPath.IndexOf(microsoftNetCoreApp) + microsoftNetCoreApp.Length + 1;
+            var netCoreAppVersion = string.Concat(assemblyPath.Skip(runtimeBasePathLength).Take(3));
+            if (string.IsNullOrEmpty(netCoreAppVersion))
+            {
+                return NetStandardFramework;
+            }
+
+            return netCoreAppFramwork = Version.TryParse(netCoreAppVersion, out var version)
+                                            ? new FrameworkName(".NETCoreApp", version)
+                                            : NetStandardFramework;
 #else
             return new FrameworkName(".NETFramework,Version=v4.6.1");
 #endif

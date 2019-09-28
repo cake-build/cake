@@ -35,10 +35,10 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("AGENT_NAME").Returns("On Premises");
         }
 
-        public void IsRunningOnAzurePipelinesHosted()
+        public void IsRunningOnAzurePipelinesHosted(string agentHostName = "Hosted Agent")
         {
             Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
-            Environment.GetEnvironmentVariable("AGENT_NAME").Returns("Hosted Agent");
+            Environment.GetEnvironmentVariable("AGENT_NAME").Returns(agentHostName);
         }
 
         public TFBuildProvider CreateTFBuildService() => new TFBuildProvider(Environment, Log);

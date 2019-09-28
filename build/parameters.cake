@@ -43,8 +43,8 @@ public class BuildParameters
     {
         get
         {
-            return !IsLocalBuild && !IsPullRequest && IsMainCakeRepo
-                && (IsTagged || IsDevelopCakeBranch);
+            return false; /* !IsLocalBuild && !IsPullRequest && IsMainCakeRepo
+                && (IsTagged || IsDevelopCakeBranch);*/
         }
     }
 
