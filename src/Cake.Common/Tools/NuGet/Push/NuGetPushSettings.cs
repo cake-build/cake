@@ -55,5 +55,15 @@ namespace Cake.Common.Tools.NuGet.Push
         /// </summary>
         /// <value>The NuGet configuration file.</value>
         public FilePath ConfigFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to skip a package and continue with
+        /// the next package in the push, if any when a package with the same version
+        /// already exists.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if skipping duplicates; otherwise, <c>false</c>.
+        /// </value>
+        public bool SkipDuplicate { get; set; }
     }
 }
