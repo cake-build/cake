@@ -3,8 +3,8 @@
   <PropertyGroup>
     <PackageId>$(AssemblyName)</PackageId>
     <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
-    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger and contributors</Authors>
-    <Company>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger and contributors</Company>
+    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels and contributors</Authors>
+    <Company>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels and contributors</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>cake-medium.png</PackageIcon>
     <RepositoryUrl>https://github.com/cake-build/cake</RepositoryUrl>
