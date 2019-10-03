@@ -25,5 +25,11 @@ namespace Cake.Core.Scripting
         /// <param name="root">The root to where to find Cake related assemblies.</param>
         /// <returns>A list containing all default assemblies.</returns>
         IReadOnlyList<Assembly> GetDefaultAssemblies(DirectoryPath root);
+
+        /// <summary>
+        /// Gets the default defines.
+        /// </summary>
+        /// <returns>A list containing all default defines.</returns>
+        IReadOnlyList<string> GetDefaultDefines();
     }
 }
