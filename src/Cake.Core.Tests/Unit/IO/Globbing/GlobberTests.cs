@@ -238,7 +238,7 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<NotSupportedException>(result);
-                Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result?.Message);
+                Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result.Message);
             }
 
             [Theory]

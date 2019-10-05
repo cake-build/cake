@@ -809,7 +809,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Fail", result?.Message);
+                Assert.Equal("Fail", result.Message);
                 Assert.Contains(fixture.Log.Entries, x => x.Message == "Executing custom teardown action...");
             }
 
@@ -832,7 +832,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Fail", result?.Message);
+                Assert.Equal("Fail", result.Message);
                 Assert.Contains(fixture.Log.Entries, x => x.Message == "Executing custom teardown action...");
             }
 
@@ -855,7 +855,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Setup", result?.Message);
+                Assert.Equal("Setup", result.Message);
             }
 
             [Fact]
@@ -993,7 +993,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Task", result?.Message);
+                Assert.Equal("Task", result.Message);
             }
 
             [Fact]
@@ -1267,7 +1267,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(exception);
                 Assert.IsType<InvalidOperationException>(exception);
-                Assert.Equal("Fail", exception?.Message);
+                Assert.Equal("Fail", exception.Message);
                 Assert.Equal(
                     new List<string>
                     {
@@ -1302,7 +1302,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(exception);
                 Assert.IsType<InvalidOperationException>(exception);
-                Assert.Equal("Fail", exception?.Message);
+                Assert.Equal("Fail", exception.Message);
                 Assert.Equal(
                     new List<string>
                     {
@@ -1331,7 +1331,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Task Setup: A", result?.Message);
+                Assert.Equal("Task Setup: A", result.Message);
             }
 
             [Fact]
@@ -1353,7 +1353,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Task Teardown: A", result?.Message);
+                Assert.Equal("Task Teardown: A", result.Message);
             }
 
             [Fact]
@@ -1377,7 +1377,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Task Setup: A", result?.Message);
+                Assert.Equal("Task Setup: A", result.Message);
                 Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Task Teardown error (A):"));
             }
 
@@ -1400,7 +1400,7 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<InvalidOperationException>(result);
-                Assert.Equal("Task: A", result?.Message);
+                Assert.Equal("Task: A", result.Message);
             }
 
             [Fact]

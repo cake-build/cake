@@ -73,7 +73,7 @@ namespace Cake.Core.IO
         /// <returns>The file extension.</returns>
         public string GetExtension()
         {
-            var filename = PathHelper.GetFileName(this);
+            var filename = PathHelper.GetFileName(this) ?? string.Empty;
             var index = filename.LastIndexOf('.');
             if (index != -1)
             {

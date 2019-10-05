@@ -184,7 +184,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             }
             else
             {
-                argumentBuilder.Append(logger.Assembly?.Quote());
+                argumentBuilder.Append(logger.Assembly.Quote());
             }
 
             if (!string.IsNullOrWhiteSpace(logger.Parameters))
