@@ -315,7 +315,7 @@ Task("Create-NuGet-Packages")
     foreach(var project in projects)
     {
         var name = project.GetDirectory().FullPath;
-        if(name.EndsWith("Cake") || name.EndsWith("Tests") || name.EndsWith("Xunit"))
+        if(name.EndsWith("Cake") || name.EndsWith("Tests"))
         {
             continue;
         }

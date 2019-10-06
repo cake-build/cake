@@ -76,7 +76,7 @@ public class BuildParameters
         Packages = BuildPackages.GetPackages(
             Paths.Directories.NuGetRoot,
             Version.SemVersion,
-            new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.CoreCLR", "Cake.NuGet", "Cake.Tool" },
+            new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.Testing.Xunit", "Cake.CoreCLR", "Cake.NuGet", "Cake.Tool" },
             new [] { "cake.portable" });
     }
 
