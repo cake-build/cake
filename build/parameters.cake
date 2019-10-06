@@ -5,30 +5,32 @@
 
 public class BuildParameters
 {
-    public string Target { get; private set; }
-    public string Configuration { get; private set; }
-    public bool IsLocalBuild { get; private set; }
-    public bool IsRunningOnUnix { get; private set; }
-    public bool IsRunningOnWindows { get; private set; }
-    public bool IsRunningOnAppVeyor { get; private set; }
-    public bool IsPullRequest { get; private set; }
-    public bool IsMainCakeRepo { get; private set; }
-    public bool IsMainCakeBranch { get; private set; }
-    public bool IsDevelopCakeBranch { get; private set; }
-    public bool IsTagged { get; private set; }
-    public bool IsPublishBuild { get; private set; }
-    public bool IsReleaseBuild { get; private set; }
-    public bool SkipGitVersion { get; private set; }
-    public bool SkipOpenCover { get; private set; }
-    public bool SkipSigning { get; private set; }
-    public BuildCredentials GitHub { get; private set; }
-    public CoverallsCredentials Coveralls { get; private set; }
-    public TwitterCredentials Twitter { get; private set; }
-    public GitterCredentials Gitter { get; private set; }
-    public ReleaseNotes ReleaseNotes { get; private set; }
-    public BuildVersion Version { get; private set; }
-    public BuildPaths Paths { get; private set; }
-    public BuildPackages Packages { get; private set; }
+    public string Target { get; }
+    public string Configuration { get; }
+    public bool IsLocalBuild { get; }
+    public bool IsRunningOnUnix { get; }
+    public bool IsRunningOnWindows { get; }
+    public bool IsRunningOnAppVeyor { get; }
+    public bool IsPullRequest { get; }
+    public bool IsMainCakeRepo { get; }
+    public bool IsMainCakeBranch { get; }
+    public bool IsDevelopCakeBranch { get; }
+    public bool IsTagged { get; }
+    public bool IsPublishBuild { get; }
+    public bool IsReleaseBuild { get; }
+    public bool SkipGitVersion { get; }
+    public bool SkipOpenCover { get; }
+    public bool SkipSigning { get; }
+    public BuildCredentials GitHub { get; }
+    public CoverallsCredentials Coveralls { get; }
+    public TwitterCredentials Twitter { get; }
+    public GitterCredentials Gitter { get; }
+    public ReleaseNotes ReleaseNotes { get; }
+    public BuildVersion Version { get; set; }
+    public BuildPaths Paths { get; }
+    public BuildPackages Packages { get; }
+    public bool PublishingError { get; set; }
+    public DotNetCoreMSBuildSettings MSBuildSettings { get; }
 
     public bool ShouldPublish
     {
@@ -67,52 +69,50 @@ public class BuildParameters
         }
     }
 
-    public void Initialize(ICakeContext context)
-    {
-        Version = BuildVersion.Calculate(context, this);
-
-        Paths = BuildPaths.GetPaths(context, Configuration, Version.SemVersion);
-
-        Packages = BuildPackages.GetPackages(
-            Paths.Directories.NuGetRoot,
-            Version.SemVersion,
-            new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.Testing.Xunit", "Cake.CoreCLR", "Cake.NuGet", "Cake.Tool" },
-            new [] { "cake.portable" });
-    }
-
-    public static BuildParameters GetParameters(ICakeContext context)
+    public BuildParameters (ISetupContext context)
     {
         if (context == null)
         {
             throw new ArgumentNullException("context");
         }
 
-        var target = context.Argument("target", "Default");
         var buildSystem = context.BuildSystem();
 
-        return new BuildParameters {
-            Target = target,
-            Configuration = context.Argument("configuration", "Release"),
-            IsLocalBuild = buildSystem.IsLocalBuild,
-            IsRunningOnUnix = context.IsRunningOnUnix(),
-            IsRunningOnWindows = context.IsRunningOnWindows(),
-            IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor,
-            IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest,
-            IsMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", buildSystem.AppVeyor.Environment.Repository.Name),
-            IsMainCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("main", buildSystem.AppVeyor.Environment.Repository.Branch),
-            IsDevelopCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch),
-            IsTagged = IsBuildTagged(buildSystem),
-            GitHub = BuildCredentials.GetGitHubCredentials(context),
-            Coveralls = CoverallsCredentials.GetCoverallsCredentials(context),
-            Twitter = TwitterCredentials.GetTwitterCredentials(context),
-            Gitter = GitterCredentials.GetGitterCredentials(context),
-            ReleaseNotes = context.ParseReleaseNotes("./ReleaseNotes.md"),
-            IsPublishBuild = IsPublishing(target),
-            IsReleaseBuild = IsReleasing(target),
-            SkipSigning = StringComparer.OrdinalIgnoreCase.Equals("True", context.Argument("skipsigning", "False")),
-            SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION")),
-            SkipOpenCover = true//StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_OPENCOVER"))
-        };
+        Target = context.TargetTask.Name;
+        Configuration = context.Argument("configuration", "Release");
+        IsLocalBuild = buildSystem.IsLocalBuild;
+        IsRunningOnUnix = context.IsRunningOnUnix();
+        IsRunningOnWindows = context.IsRunningOnWindows();
+        IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor;
+        IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest;
+        IsMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", buildSystem.AppVeyor.Environment.Repository.Name);
+        IsMainCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("main", buildSystem.AppVeyor.Environment.Repository.Branch);
+        IsDevelopCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch);
+        IsTagged = IsBuildTagged(buildSystem);
+        GitHub = BuildCredentials.GetGitHubCredentials(context);
+        Coveralls = CoverallsCredentials.GetCoverallsCredentials(context);
+        Twitter = TwitterCredentials.GetTwitterCredentials(context);
+        Gitter = GitterCredentials.GetGitterCredentials(context);
+        ReleaseNotes = context.ParseReleaseNotes("./ReleaseNotes.md");
+        IsPublishBuild = IsPublishing(context.TargetTask.Name);
+        IsReleaseBuild = IsReleasing(context.TargetTask.Name);
+        SkipSigning = StringComparer.OrdinalIgnoreCase.Equals("True", context.Argument("skipsigning", "False"));
+        SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION"));
+        SkipOpenCover = true; //StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_OPENCOVER"));
+        Version = BuildVersion.Calculate(context, this);
+        Paths = BuildPaths.GetPaths(context, Configuration, Version.SemVersion);
+        Packages = BuildPackages.GetPackages(
+            Paths.Directories.NuGetRoot,
+            Version.SemVersion,
+            new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.Testing.Xunit", "Cake.CoreCLR", "Cake.NuGet", "Cake.Tool" },
+            new [] { "cake.portable" });
+
+        var releaseNotes = string.Join("\n", ReleaseNotes.Notes.ToArray()).Replace("\"", "\"\"");
+        MSBuildSettings = new DotNetCoreMSBuildSettings()
+                            .WithProperty("Version", Version.SemVersion)
+                            .WithProperty("AssemblyVersion", Version.Version)
+                            .WithProperty("FileVersion", Version.Version)
+                            .WithProperty("PackageReleaseNotes", string.Concat("\"", releaseNotes, "\""));
     }
 
     private static bool IsBuildTagged(BuildSystem buildSystem)

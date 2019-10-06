@@ -2,6 +2,7 @@ public class BuildPaths
 {
     public BuildFiles Files { get; private set; }
     public BuildDirectories Directories { get; private set; }
+    public FilePath SignClientPath { get; private set; }
 
     public static BuildPaths GetPaths(
         ICakeContext context,
@@ -58,10 +59,13 @@ public class BuildPaths
             zipArtifactPathDesktop,
             testCoverageOutputFilePath);
 
+        var signClientPath = context.Tools.Resolve("SignClient.exe") ?? context.Tools.Resolve("SignClient") ?? throw new Exception("Failed to locate sign tool");
+
         return new BuildPaths
         {
             Files = buildFiles,
-            Directories = buildDirectories
+            Directories = buildDirectories,
+            SignClientPath = signClientPath
         };
     }
 }
