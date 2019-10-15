@@ -301,6 +301,51 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 Assert.Contains("Imports Test.NameSpace", result);
                 Assert.Contains("<Assembly: TestAttribute(\"TestValue\")>", result);
             }
+
+            [Fact]
+            public void Should_Add_CustomAttributes_If_Set_With_Boolean_Value()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture_VB();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = true } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("Imports Test.NameSpace", result);
+                Assert.Contains("<Assembly: TestAttribute(True)>", result);
+            }
+
+            [Fact]
+            public void Should_Add_CustomAttributes_If_Set_With_Null_Value()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture_VB();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = null } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("Imports Test.NameSpace", result);
+                Assert.Contains("<Assembly: TestAttribute()>", result);
+            }
+
+            [Fact]
+            public void Should_Add_CustomAttributes_If_Set_With_Empty_Value()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture_VB();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = string.Empty } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("Imports Test.NameSpace", result);
+                Assert.Contains("<Assembly: TestAttribute()>", result);
+            }
         }
     }
 }

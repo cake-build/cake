@@ -348,6 +348,51 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Fact]
+            public void Should_Add_CustomAttributes_If_Set_With_Boolean_Value()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = true } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("using Test.NameSpace;", result);
+                Assert.Contains("[assembly: TestAttribute(true)]", result);
+            }
+
+            [Fact]
+            public void Should_Add_CustomAttributes_If_Set_With_Null_Value()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = null } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("using Test.NameSpace;", result);
+                Assert.Contains("[assembly: TestAttribute()]", result);
+            }
+
+            [Fact]
+            public void Should_Add_CustomAttributes_If_Set_With_Empty_Value()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = string.Empty } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("using Test.NameSpace;", result);
+                Assert.Contains("[assembly: TestAttribute()]", result);
+            }
+
+            [Fact]
             public void Should_Add_MetadataAttributes_If_Set()
             {
                 // Given

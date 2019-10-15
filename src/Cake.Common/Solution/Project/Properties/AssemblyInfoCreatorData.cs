@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Cake.Core;
 
@@ -99,11 +100,35 @@ namespace Cake.Common.Solution.Project.Properties
             }
         }
 
-        private void AddCustomAttribute(string name, string @namespace, string value)
+        private void AddCustomAttribute(string name, string @namespace, object value)
         {
-            if (value != null)
+            var attributeValue = AttributeValueToString(value);
+
+            AddAttributeCore(CustomAttributes, name, @namespace, attributeValue);
+        }
+
+        private string AttributeValueToString(object value)
+        {
+            switch (value)
             {
-                AddAttributeCore(CustomAttributes, name, @namespace, string.Concat("\"", value, "\""));
+                case null:
+                {
+                    return string.Empty;
+                }
+                case bool boolValue:
+                {
+                    return boolValue ? _trueStringValue : _falseStringValue;
+                }
+                case string stringValue:
+                {
+                    return stringValue == string.Empty
+                        ? string.Empty
+                        : string.Concat("\"", value, "\"");
+                }
+                default:
+                {
+                    return Convert.ToString(value, CultureInfo.InvariantCulture);
+                }
             }
         }
 
