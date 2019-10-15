@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -222,7 +222,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
 
                 // Then
                 Assert.Contains("Imports System.Runtime.InteropServices", result);
-                Assert.Contains("<Assembly: ComVisible(true)>", result);
+                Assert.Contains("<Assembly: ComVisible(True)>", result);
             }
 
             [Fact]
@@ -237,7 +237,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
 
                 // Then
                 Assert.Contains("Imports System", result);
-                Assert.Contains("<Assembly: CLSCompliant(true)>", result);
+                Assert.Contains("<Assembly: CLSCompliant(True)>", result);
             }
 
             [Fact]

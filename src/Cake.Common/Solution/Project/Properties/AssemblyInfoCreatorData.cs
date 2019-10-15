@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -16,6 +16,8 @@ namespace Cake.Common.Solution.Project.Properties
         private readonly Dictionary<string, string> _metadatattributes;
         private readonly HashSet<string> _namespaces;
         private readonly HashSet<string> _internalVisibleTo;
+        private readonly string _trueStringValue;
+        private readonly string _falseStringValue;
 
         public IDictionary<string, string> Attributes => _dictionary;
 
@@ -27,13 +29,16 @@ namespace Cake.Common.Solution.Project.Properties
 
         public ISet<string> InternalVisibleTo => _internalVisibleTo;
 
-        public AssemblyInfoCreatorData(AssemblyInfoSettings settings)
+        public AssemblyInfoCreatorData(AssemblyInfoSettings settings, bool isVisualBasicAssemblyInfoFile)
         {
             _dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _customAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _metadatattributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _namespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _internalVisibleTo = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            _falseStringValue = isVisualBasicAssemblyInfoFile ? "False" : "false";
+            _trueStringValue = isVisualBasicAssemblyInfoFile ? "True" : "true";
 
             // Add attributes.
             AddAttribute("AssemblyTitle", "System.Reflection", settings.Title);
@@ -82,7 +87,7 @@ namespace Cake.Common.Solution.Project.Properties
         {
             if (value != null)
             {
-                AddAttributeCore(Attributes, name, @namespace, value.Value ? "true" : "false");
+                AddAttributeCore(Attributes, name, @namespace, value.Value ? _trueStringValue : _falseStringValue);
             }
         }
 
