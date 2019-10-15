@@ -1,9 +1,10 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Cake.Core;
 
@@ -16,6 +17,8 @@ namespace Cake.Common.Solution.Project.Properties
         private readonly Dictionary<string, string> _metadatattributes;
         private readonly HashSet<string> _namespaces;
         private readonly HashSet<string> _internalVisibleTo;
+        private readonly string _trueStringValue;
+        private readonly string _falseStringValue;
 
         public IDictionary<string, string> Attributes => _dictionary;
 
@@ -27,13 +30,16 @@ namespace Cake.Common.Solution.Project.Properties
 
         public ISet<string> InternalVisibleTo => _internalVisibleTo;
 
-        public AssemblyInfoCreatorData(AssemblyInfoSettings settings)
+        public AssemblyInfoCreatorData(AssemblyInfoSettings settings, bool isVisualBasicAssemblyInfoFile)
         {
             _dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _customAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _metadatattributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _namespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _internalVisibleTo = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            _falseStringValue = isVisualBasicAssemblyInfoFile ? "False" : "false";
+            _trueStringValue = isVisualBasicAssemblyInfoFile ? "True" : "true";
 
             // Add attributes.
             AddAttribute("AssemblyTitle", "System.Reflection", settings.Title);
@@ -82,7 +88,7 @@ namespace Cake.Common.Solution.Project.Properties
         {
             if (value != null)
             {
-                AddAttributeCore(Attributes, name, @namespace, value.Value ? "true" : "false");
+                AddAttributeCore(Attributes, name, @namespace, value.Value ? _trueStringValue : _falseStringValue);
             }
         }
 
@@ -94,11 +100,35 @@ namespace Cake.Common.Solution.Project.Properties
             }
         }
 
-        private void AddCustomAttribute(string name, string @namespace, string value)
+        private void AddCustomAttribute(string name, string @namespace, object value)
         {
-            if (value != null)
+            var attributeValue = AttributeValueToString(value);
+
+            AddAttributeCore(CustomAttributes, name, @namespace, attributeValue);
+        }
+
+        private string AttributeValueToString(object value)
+        {
+            switch (value)
             {
-                AddAttributeCore(CustomAttributes, name, @namespace, string.Concat("\"", value, "\""));
+                case null:
+                {
+                    return string.Empty;
+                }
+                case bool boolValue:
+                {
+                    return boolValue ? _trueStringValue : _falseStringValue;
+                }
+                case string stringValue:
+                {
+                    return stringValue == string.Empty
+                        ? string.Empty
+                        : string.Concat("\"", value, "\"");
+                }
+                default:
+                {
+                    return Convert.ToString(value, CultureInfo.InvariantCulture);
+                }
             }
         }
 
