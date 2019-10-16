@@ -196,6 +196,10 @@ Task("Copy-Files")
     CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinFullFx);
     CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore);
 
+    // Copy icon
+    CopyFileToDirectory("./nuspec/cake-medium.png", parameters.Paths.Directories.ArtifactsBinFullFx);
+    CopyFileToDirectory("./nuspec/cake-medium.png", parameters.Paths.Directories.ArtifactsBinNetCore);
+
     // Copy Cake.XML (since publish does not do this anymore)
     CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
     CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp2.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
@@ -312,7 +316,7 @@ Task("Create-NuGet-Packages")
         });
     }
 
-    // Cake - Symbols - .NET 4.6
+    // Cake - Symbols - .NET 4.6.1
     NuGetPack("./nuspec/Cake.symbols.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
@@ -325,7 +329,7 @@ Task("Create-NuGet-Packages")
     var netFxFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx).FullPath;
     var netFxFullArtifactPathLength = netFxFullArtifactPath.Length+1;
 
-    // Cake - .NET 4.6
+    // Cake - .NET 4.6.1
     NuGetPack("./nuspec/Cake.nuspec", new NuGetPackSettings {
         Version = parameters.Version.SemVersion,
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
