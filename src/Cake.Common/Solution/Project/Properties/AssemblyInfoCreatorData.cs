@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -79,7 +79,7 @@ namespace Cake.Common.Solution.Project.Properties
             {
                 foreach (var item in settings.MetaDataAttributes.Where(item => item != null))
                 {
-                    AddMetadataAttribute(item.Name, item.NameSpace, item.Key, item.Value);
+                    AddMetadataAttribute(item.NameSpace, item.Key, item.Value);
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace Cake.Common.Solution.Project.Properties
             }
         }
 
-        private void AddMetadataAttribute(string name, string @namespace, string key, string value)
+        private void AddMetadataAttribute(string @namespace, string key, string value)
         {
             if (key != null && value != null)
             {
