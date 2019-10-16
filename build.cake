@@ -10,7 +10,7 @@
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.4.2"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.6.519"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.0.4"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.2.0"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.0"
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.0.1"
