@@ -56,11 +56,6 @@ namespace Cake.Core.Scripting.Processors.Loading
 
             var files = _globber
                 .GetFiles(path.FullPath)
-                .Where(file =>
-                {
-                    var extension = file.GetExtension();
-                    return extension != null && extension.Equals(".cake", StringComparison.OrdinalIgnoreCase);
-                })
                 .ToArray();
             if (files.Length == 0)
             {
