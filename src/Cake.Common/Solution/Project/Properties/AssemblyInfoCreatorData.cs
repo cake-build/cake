@@ -72,7 +72,7 @@ namespace Cake.Common.Solution.Project.Properties
             {
                 foreach (var item in settings.CustomAttributes.Where(item => item != null))
                 {
-                    AddCustomAttribute(item.Name, item.NameSpace, item.Value);
+                    AddCustomAttribute(item.Name, item.NameSpace, item.Value, item.UseRawValue);
                 }
             }
             if (settings.MetaDataAttributes != null)
@@ -100,14 +100,14 @@ namespace Cake.Common.Solution.Project.Properties
             }
         }
 
-        private void AddCustomAttribute(string name, string @namespace, object value)
+        private void AddCustomAttribute(string name, string @namespace, object value, bool isRawValue)
         {
-            var attributeValue = AttributeValueToString(value);
+            var attributeValue = AttributeValueToString(value, isRawValue);
 
             AddAttributeCore(CustomAttributes, name, @namespace, attributeValue);
         }
 
-        private string AttributeValueToString(object value)
+        private string AttributeValueToString(object value, bool isRawValue)
         {
             switch (value)
             {
@@ -123,7 +123,9 @@ namespace Cake.Common.Solution.Project.Properties
                 {
                     return stringValue == string.Empty
                         ? string.Empty
-                        : string.Concat("\"", value, "\"");
+                        : isRawValue
+                            ? stringValue
+                            : string.Concat("\"", stringValue.Replace("\"", "\\\""), "\"");
                 }
                 default:
                 {
