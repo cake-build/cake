@@ -241,6 +241,12 @@ namespace Cake.DotNetTool.Module
                 arguments.AppendQuoted(definition.Parameters["configfile"].First());
             }
 
+            // Whether to ignore failed sources
+            if(definition.Parameters.ContainsKey("ignore-failed-sources"))
+            {
+                arguments.Append("--ignore-failed-sources");
+            }
+
             // Framework
             if (definition.Parameters.ContainsKey("framework"))
             {
