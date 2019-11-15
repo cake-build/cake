@@ -237,7 +237,7 @@ namespace Cake.DotNetTool.Module
             // Config File
             if(definition.Parameters.ContainsKey("configfile"))
             {
-                arguments.Append("--config-file");
+                arguments.Append("--configfile");
                 arguments.AppendQuoted(definition.Parameters["configfile"].First());
             }
 
