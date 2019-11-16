@@ -1,0 +1,25 @@
+name: Build
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    steps:
+      - name: Get the sources
+        uses: actions/checkout@v1
+
+      - name: Run Cake script
+        uses: ecampidoglio/cake-action@v1.1.0
+        env:
+          DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX: 2
+        with:
+          target: Run-Unit-Tests
+          cake-bootstrap: true
