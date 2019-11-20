@@ -19,7 +19,25 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild.Data
                 var info = new TFBuildInfoFixture().CreateRepositoryInfo();
 
                 // When
+#pragma warning disable 618
                 var result = info.Branch;
+#pragma warning restore 618
+
+                // Then
+                Assert.Equal("develop", result);
+            }
+        }
+
+        public sealed class TheSourceBranchNameProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TFBuildInfoFixture().CreateRepositoryInfo();
+
+                // When
+                var result = info.SourceBranchName;
 
                 // Then
                 Assert.Equal("develop", result);
