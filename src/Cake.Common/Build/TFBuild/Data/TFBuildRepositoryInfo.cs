@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core;
 
 namespace Cake.Common.Build.TFBuild.Data
@@ -34,7 +35,16 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The SCM branch name
         /// </value>
-        public string Branch => GetEnvironmentString("BUILD_SOURCEBRANCHNAME");
+        public string SourceBranchName => GetEnvironmentString("BUILD_SOURCEBRANCHNAME");
+
+        /// <summary>
+        /// Gets name of the branch the build was queued for.
+        /// </summary>
+        /// <value>
+        /// The SCM branch name
+        /// </value>
+        [Obsolete("Please use TFBuildRepositoryInfo.SourceBranchName instead")]
+        public string Branch => SourceBranchName;
 
         /// <summary>
         /// Gets the latest version control change that is included in this build.
