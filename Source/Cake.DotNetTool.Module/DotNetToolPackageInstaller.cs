@@ -108,16 +108,42 @@ namespace Cake.DotNetTool.Module
             }
 
             // First we need to check if the Tool is already installed
-            var installedToolNames = GetInstalledTools(toolLocation);
+            var installedTools = GetInstalledTools(toolLocation);
 
             _log.Debug("Checking for tool: {0}", package.Package.ToLowerInvariant());
-            if(installedToolNames.Contains(package.Package.ToLowerInvariant()))
+            
+            var installedTool = installedTools.FirstOrDefault(t => t.Id.ToLowerInvariant() == package.Package.ToLowerInvariant());
+
+            if (installedTool != null)
             {
-                _log.Information("Tool {0} is already installed, so nothing to do here.", package.Package);
+                // The tool is already installed, so need to check if requested version is the same as
+                // what is already installed
+                string requestedVersion = null;
+
+                if (package.Parameters.ContainsKey("version"))
+                {
+                    requestedVersion = package.Parameters["version"].First();
+                }
+
+                if (requestedVersion == null)
+                {
+                    _log.Warning("Tool {0} is already installed, and no specific version has been requested via pre-processor directive, so leaving current version installed.", package.Package);
+                }
+                else if (requestedVersion.ToLowerInvariant() != installedTool.Version.ToLowerInvariant())
+                {
+                    _log.Warning("Tool {0} is already installed, but a different version has been requested.  Uninstall/install will now be performed...", package.Package);
+                    RunDotNetTool(package, toolsFolderDirectoryPath, DotNetToolOperation.Uninstall);
+                    RunDotNetTool(package, toolsFolderDirectoryPath, DotNetToolOperation.Install);
+                }
+                else
+                {
+                    _log.Information("Tool {0} is already installed, with required version.", package.Package);
+                }                
             }
             else
             {
-                InstallTool(package, toolsFolderDirectoryPath);
+                // The tool isn't already installed, go ahead and install it
+                RunDotNetTool(package, toolsFolderDirectoryPath, DotNetToolOperation.Install);
             }
 
             var result = _contentResolver.GetFiles(package, type);
@@ -130,7 +156,7 @@ namespace Cake.DotNetTool.Module
             return result;
         }
 
-        private List<string> GetInstalledTools(string toolLocation)
+        private List<DotNetToolPackage> GetInstalledTools(string toolLocation)
         {
             var toolLocationArgument = string.Empty;
             if(toolLocation != "global")
@@ -144,7 +170,7 @@ namespace Cake.DotNetTool.Module
                 if(!toolLocationDirectory.Exists)
                 {
                     _log.Debug("Specified installation location doesn't currently exist.");
-                    return new List<string>();
+                    return new List<DotNetToolPackage>();
                 }
             }
             else
@@ -162,7 +188,7 @@ namespace Cake.DotNetTool.Module
             isInstalledProcess.WaitForExit();
 
             var installedTools = isInstalledProcess.GetStandardOutput().ToList();
-            var installedToolNames = new List<string>();
+            var installedToolNames = new List<DotNetToolPackage>();
 
             string pattern = @"(?<packageName>[^\s]+)\s+(?<packageVersion>[^\s]+)\s+(?<packageShortCode>[^`s])";
 
@@ -171,7 +197,12 @@ namespace Cake.DotNetTool.Module
                 foreach (Match match in Regex.Matches(installedTool, pattern, RegexOptions.IgnoreCase))
                 {
                     _log.Debug("Adding tool {0}", match.Groups["packageName"].Value);
-                    installedToolNames.Add(match.Groups["packageName"].Value);
+                    installedToolNames.Add(new DotNetToolPackage 
+                    { 
+                        Id = match.Groups["packageName"].Value,
+                        Version = match.Groups["packageVersion"].Value,
+                        ShortCode = match.Groups["packageShortCode"].Value
+                    });
                 }
             }
 
@@ -179,14 +210,14 @@ namespace Cake.DotNetTool.Module
             return installedToolNames;
         }
 
-        private void InstallTool(PackageReference package, DirectoryPath toolsFolderDirectoryPath)
+        private void RunDotNetTool(PackageReference package, DirectoryPath toolsFolderDirectoryPath, DotNetToolOperation operation)
         {
             // Install the tool....
-            _log.Debug("Installing dotnet tool: {0}...", package.Package);
+            _log.Debug("Running dotnet tool with operation {0}: {1}...", operation, package.Package);
             var process = _processRunner.Start(
                 "dotnet",
                 new ProcessSettings {
-                    Arguments = GetArguments(package, _log, toolsFolderDirectoryPath),
+                    Arguments = GetArguments(package, operation, _log, toolsFolderDirectoryPath),
                     RedirectStandardOutput = true,
                     Silent = _log.Verbosity < Verbosity.Diagnostic,
                     NoWorkingDirectory = true });
@@ -201,14 +232,17 @@ namespace Cake.DotNetTool.Module
                 _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
             }
         }
+
         private static ProcessArgumentBuilder GetArguments(
             PackageReference definition,
+            DotNetToolOperation operation,
             ICakeLog log,
             DirectoryPath toolDirectoryPath)
         {
             var arguments = new ProcessArgumentBuilder();
 
-            arguments.Append("tool install");
+            arguments.Append("tool");
+            arguments.Append(Enum.GetName(typeof(DotNetToolOperation), operation).ToLowerInvariant());
             arguments.AppendQuoted(definition.Package);
 
             if(definition.Parameters.ContainsKey("global"))
@@ -221,67 +255,70 @@ namespace Cake.DotNetTool.Module
                 arguments.AppendQuoted(toolDirectoryPath.FullPath);
             }
 
-            if (definition.Address != null)
+            if (operation != DotNetToolOperation.Uninstall)
             {
-                arguments.Append("--add-source");
-                arguments.AppendQuoted(definition.Address.AbsoluteUri);
-            }
+                if (definition.Address != null)
+                {
+                    arguments.Append("--add-source");
+                    arguments.AppendQuoted(definition.Address.AbsoluteUri);
+                }
 
-            // Version
-            if (definition.Parameters.ContainsKey("version"))
-            {
-                arguments.Append("--version");
-                arguments.Append(definition.Parameters["version"].First());
-            }
+                // Version
+                if (definition.Parameters.ContainsKey("version"))
+                {
+                    arguments.Append("--version");
+                    arguments.Append(definition.Parameters["version"].First());
+                }
 
-            // Config File
-            if(definition.Parameters.ContainsKey("configfile"))
-            {
-                arguments.Append("--configfile");
-                arguments.AppendQuoted(definition.Parameters["configfile"].First());
-            }
+                // Config File
+                if(definition.Parameters.ContainsKey("configfile"))
+                {
+                    arguments.Append("--configfile");
+                    arguments.AppendQuoted(definition.Parameters["configfile"].First());
+                }
 
-            // Whether to ignore failed sources
-            if(definition.Parameters.ContainsKey("ignore-failed-sources"))
-            {
-                arguments.Append("--ignore-failed-sources");
-            }
+                // Whether to ignore failed sources
+                if(definition.Parameters.ContainsKey("ignore-failed-sources"))
+                {
+                    arguments.Append("--ignore-failed-sources");
+                }
 
-            // Framework
-            if (definition.Parameters.ContainsKey("framework"))
-            {
-                arguments.Append("--framework");
-                arguments.Append(definition.Parameters["framework"].First());
-            }
+                // Framework
+                if (definition.Parameters.ContainsKey("framework"))
+                {
+                    arguments.Append("--framework");
+                    arguments.Append(definition.Parameters["framework"].First());
+                }
 
-            switch(log.Verbosity)
-            {
-                case Verbosity.Quiet:
+                switch(log.Verbosity)
+                {
+                    case Verbosity.Quiet:
+                        arguments.Append("--verbosity");
+                        arguments.Append("quiet");
+                        break;
+                    case Verbosity.Minimal:
+                        arguments.Append("--verbosity");
+                        arguments.Append("minimal");
+                        break;
+                    case Verbosity.Normal:
                     arguments.Append("--verbosity");
-                    arguments.Append("quiet");
-                    break;
-                case Verbosity.Minimal:
-                    arguments.Append("--verbosity");
-                    arguments.Append("minimal");
-                    break;
-                case Verbosity.Normal:
-                   arguments.Append("--verbosity");
-                    arguments.Append("normal");
-                    break;
-                case Verbosity.Verbose:
-                    arguments.Append("--verbosity");
-                    arguments.Append("detailed");
-                    break;
-                case Verbosity.Diagnostic:
-                    arguments.Append("--verbosity");
-                    arguments.Append("diagnostic");
-                    break;
-                default:
-                    arguments.Append("--verbosity");
-                    arguments.Append("normal");
-                    break;
+                        arguments.Append("normal");
+                        break;
+                    case Verbosity.Verbose:
+                        arguments.Append("--verbosity");
+                        arguments.Append("detailed");
+                        break;
+                    case Verbosity.Diagnostic:
+                        arguments.Append("--verbosity");
+                        arguments.Append("diagnostic");
+                        break;
+                    default:
+                        arguments.Append("--verbosity");
+                        arguments.Append("normal");
+                        break;
+                }
             }
-
+            
             return arguments;
         }
     }
