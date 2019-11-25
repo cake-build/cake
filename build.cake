@@ -15,7 +15,7 @@
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.0.1"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=SignClient&version=1.0.82"
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.8.0"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.9.0"
 
 // Load other scripts.
 #load "./build/parameters.cake"
