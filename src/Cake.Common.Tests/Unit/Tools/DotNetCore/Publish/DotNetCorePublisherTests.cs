@@ -162,6 +162,76 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 // Then
                 Assert.Equal("--diagnostics publish", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_PublishSingleFile()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.PublishSingleFile = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:PublishSingleFile=true", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PublishTrimmed()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.PublishTrimmed = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:PublishTrimmed=true", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_TieredCompilationQuickJit()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.TieredCompilationQuickJit = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:TieredCompilationQuickJit=false", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_TieredCompilation()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.TieredCompilation = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:TieredCompilation=false", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PublishReadyToRun()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.PublishReadyToRun = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:PublishReadyToRun=true", result.Args);
+            }
         }
     }
 }
