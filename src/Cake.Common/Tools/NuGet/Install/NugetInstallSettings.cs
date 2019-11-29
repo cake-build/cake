@@ -101,5 +101,16 @@ namespace Cake.Common.Tools.NuGet.Install
         /// </summary>
         /// <value>The list of packages sources to use as fallbacks for this command.</value>
         public ICollection<string> FallbackSource { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not NuGet suppresses prompts for user input or confirmations.
+        /// </summary>
+        /// <remarks>
+        /// This setting is passed by NuGet.exe to any extensions such as authorization providers
+        /// </remarks>
+        /// <value>
+        /// <c>false</c> to allow NuGet to show prompts for user input or confirmations; otherwise, <c>true</c>.
+        /// </value>
+        public bool NonInteractive { get; set; } = true;
     }
 }
