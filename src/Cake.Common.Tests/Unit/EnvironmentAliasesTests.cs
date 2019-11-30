@@ -162,7 +162,8 @@ namespace Cake.Common.Tests.Unit
 
                 // Then
                 Assert.NotNull(ex);
-                Assert.Contains("not a valid value", ex.Message);
+                Assert.NotNull(ex.InnerException);
+                Assert.IsType<FormatException>(ex.InnerException);
             }
         }
 
