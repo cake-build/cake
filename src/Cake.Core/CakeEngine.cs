@@ -344,13 +344,13 @@ namespace Cake.Core
                 // Got an error reporter?
                 if (task.ErrorReporter != null)
                 {
-                    ReportErrors(strategy, task.ErrorReporter, exception);
+                    await ReportErrorsAsync(strategy, task.ErrorReporter, exception);
                 }
 
                 // Got an error handler?
                 if (task.ErrorHandler != null)
                 {
-                    HandleErrors(strategy, task.ErrorHandler, exception, context);
+                    await HandleErrorsAsync(strategy, task.ErrorHandler, exception, context);
                 }
                 else
                 {
@@ -363,7 +363,7 @@ namespace Cake.Core
             {
                 if (task.FinallyHandler != null)
                 {
-                    strategy.InvokeFinally(task.FinallyHandler);
+                    await strategy.InvokeFinallyAsync(task.FinallyHandler);
                 }
 
                 PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, taskException);
@@ -442,12 +442,12 @@ namespace Cake.Core
             return task != null && !task.Actions.Any();
         }
 
-        private static void ReportErrors(IExecutionStrategy strategy, Action<Exception> errorReporter,
+        private static async Task ReportErrorsAsync(IExecutionStrategy strategy, Func<Exception, Task> errorReporter,
             Exception taskException)
         {
             try
             {
-                strategy.ReportErrors(errorReporter, taskException);
+                await strategy.ReportErrorsAsync(errorReporter, taskException);
             }
             // ReSharper disable once EmptyGeneralCatchClause
             catch
@@ -456,11 +456,11 @@ namespace Cake.Core
             }
         }
 
-        private void HandleErrors(IExecutionStrategy strategy, Action<Exception, ICakeContext> errorHandler, Exception exception, ICakeContext context)
+        private async Task HandleErrorsAsync(IExecutionStrategy strategy, Func<Exception, ICakeContext, Task> errorHandler, Exception exception, ICakeContext context)
         {
             try
             {
-                strategy.HandleErrors(errorHandler, exception, context);
+                await strategy.HandleErrorsAsync(errorHandler, exception, context);
             }
             catch (Exception errorHandlerException)
             {

@@ -71,8 +71,42 @@ Task("Cake.Core.CakeAliases.DoesForEach.Func.NotOk")
     Assert.Equal(cakeCoreCakeAliasesDoesForEachFuncNotOkCount, 1);
 });
 
+var cakeCoreCakeAliasesOnErrorAsync = 0;
+Task("Cake.Core.CakeAliases.OnError.Async")
+.Does(() => {
+    // Given
+    throw new CakeException("Async Error");
+})
+.OnError(async exception => {
+    // When
+    await System.Threading.Tasks.Task.CompletedTask;
+    cakeCoreCakeAliasesOnErrorAsync++;
+    })
+.Finally(() => {
+    // Then
+    Assert.Equal(cakeCoreCakeAliasesOnErrorAsync, 1);
+});
+
+var cakeCoreCakeAliasesOnErrorSync = 0;
+Task("Cake.Core.CakeAliases.OnError.Sync")
+.Does(() => {
+    // Given
+    throw new CakeException("Sync Error");
+})
+.OnError(exception => {
+    // When
+    cakeCoreCakeAliasesOnErrorSync++;
+    })
+.Finally(() => {
+    // Then
+    Assert.Equal(cakeCoreCakeAliasesOnErrorSync, 1);
+});
+
+
 Task("Cake.Core.CakeAliases")
     .IsDependentOn("Cake.Core.CakeAliases.DoesForEach.Ok")
     .IsDependentOn("Cake.Core.CakeAliases.DoesForEach.NotOk")
     .IsDependentOn("Cake.Core.CakeAliases.DoesForEach.Func.Ok")
-    .IsDependentOn("Cake.Core.CakeAliases.DoesForEach.Func.NotOk");
+    .IsDependentOn("Cake.Core.CakeAliases.DoesForEach.Func.NotOk")
+    .IsDependentOn("Cake.Core.CakeAliases.OnError.Async")
+    .IsDependentOn("Cake.Core.CakeAliases.OnError.Sync");
