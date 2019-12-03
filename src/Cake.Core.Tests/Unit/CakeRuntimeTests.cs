@@ -48,6 +48,8 @@ namespace Cake.Core.Tests.Unit
                                 "2.2");
 #elif NETCOREAPP3_0
                                 "3.0");
+#elif NETCOREAPP3_1
+                                "3.1");
 #endif
                 // ToDo: Enable mocking runtime resolution, temp work around for missing runtimes.
                 switch (expect)
@@ -58,6 +60,7 @@ namespace Cake.Core.Tests.Unit
                         {
                             case ".NETCoreApp,Version=v2.1":
                             case ".NETCoreApp,Version=v3.0":
+                            case ".NETCoreApp,Version=v3.1":
                                 {
                                     TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
                                     expect = framework.FullName;
@@ -71,6 +74,20 @@ namespace Cake.Core.Tests.Unit
                         switch (framework.FullName)
                         {
                             case ".NETCoreApp,Version=v3.0":
+                            case ".NETCoreApp,Version=v3.1":
+                            {
+                                TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
+                                expect = framework.FullName;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    case ".NETCoreApp,Version=v3.0":
+                    {
+                        switch (framework.FullName)
+                        {
+                            case ".NETCoreApp,Version=v3.1":
                             {
                                 TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
                                 expect = framework.FullName;

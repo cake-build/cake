@@ -44,6 +44,8 @@ Task("Cake.Core.Scripting.DefineDirective.Runtime")
                     "2.2",
 #elif NETCOREAPP3_0
                     "3.0",
+#elif NETCOREAPP3_1
+                    "3.1",
 #endif
                     context.Environment.Runtime.BuiltFramework.FullName);
 });
