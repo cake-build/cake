@@ -21,5 +21,5 @@ jobs:
         env:
           DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX: 2
         with:
-          target: Run-Unit-Tests
+          target: Run-Integration-Tests
           cake-bootstrap: true
