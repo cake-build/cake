@@ -231,6 +231,13 @@ namespace Cake.Core.Tooling
         /// <summary>
         /// Gets the possible names of the tool executable.
         /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The name of the tool.</returns>
+        protected virtual IEnumerable<string> GetToolExecutableNames(TSettings settings) => GetToolExecutableNames();
+
+        /// <summary>
+        /// Gets the possible names of the tool executable.
+        /// </summary>
         /// <returns>The tool executable name.</returns>
         protected abstract IEnumerable<string> GetToolExecutableNames();
 
@@ -294,7 +301,7 @@ namespace Cake.Core.Tooling
             }
 
             // Look for each possible executable name in various places.
-            var toolExeNames = GetToolExecutableNames();
+            var toolExeNames = GetToolExecutableNames(settings);
             foreach (var toolExeName in toolExeNames)
             {
                 var result = _tools.Resolve(toolExeName);
@@ -326,7 +333,7 @@ namespace Cake.Core.Tooling
                 return toolPath.MakeAbsolute(_environment);
             }
 
-            var toolExeNames = GetToolExecutableNames();
+            var toolExeNames = GetToolExecutableNames(settings);
             string[] pathDirs = null;
 
             // Look for each possible executable name in various places.
