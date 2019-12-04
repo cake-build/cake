@@ -49,6 +49,25 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
         }
 
         [Theory]
+        [InlineData("utils.cs")]
+        [InlineData("utils.foo")]
+        public void Should_Process_Single_Script_Reference_With_Any_Extension_Found_In_Source(string filename)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.AddFileLoadDirectiveProvider();
+            fixture.GivenScriptExist("/Working/script.cake", $"#l \"{filename}\"");
+            fixture.GivenScriptExist($"/Working/{filename}", "Console.WriteLine();");
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Equal($"/Working/{filename}", result.Script.Includes[0].Path.FullPath);
+        }
+
+        [Theory]
         [InlineData("#l \"utils.cake\"\n#l \"other.cake\"")]
         [InlineData("#load \"utils.cake\"\n#load \"other.cake\"")]
         public void Should_Process_Multiple_Script_References_Found_In_Source(string source)
@@ -111,21 +130,13 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
         [Theory]
         [InlineData("#load \"scripts/*\"")]
         [InlineData("#load \"scripts/*.*\"")]
-        [InlineData("#load \"scripts/*.cs\"")]
-        [InlineData("#load \"scripts/*.kake\"")]
         [InlineData("#load \"scripts/**/*\"")]
         [InlineData("#load \"scripts/**/*.*\"")]
-        [InlineData("#load \"scripts/**/*.cs\"")]
-        [InlineData("#load \"scripts/**/*.kake\"")]
         [InlineData("#load \"scripts/{utils,other}.{cs,kake}\"")]
         [InlineData("#load \"/Working/scripts/*\"")]
         [InlineData("#load \"/Working/scripts/*.*\"")]
-        [InlineData("#load \"/Working/scripts/*.cs\"")]
-        [InlineData("#load \"/Working/scripts/*.kake\"")]
         [InlineData("#load \"/Working/scripts/**/*\"")]
         [InlineData("#load \"/Working/scripts/**/*.*\"")]
-        [InlineData("#load \"/Working/scripts/**/*.cs\"")]
-        [InlineData("#load \"/Working/scripts/**/*.kake\"")]
         [InlineData("#load \"/Working/scripts/{utils,other}.{cs,kake}\"")]
         public void Should_Ignore_Globber_Matches_With_Invalid_Extensions(string source)
         {
