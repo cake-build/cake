@@ -45,6 +45,19 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
             }
 
             [Fact]
+            public void Should_Find_Inspect_Code_Runner_X86()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture(true);
+                fixture.Settings.UseX86Tool = true;
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/Working/tools/inspectcode.x86.exe", result.Path.FullPath);
+            }
+
+            [Fact]
             public void Should_Use_Provided_Solution_In_Process_Arguments()
             {
                 // Given

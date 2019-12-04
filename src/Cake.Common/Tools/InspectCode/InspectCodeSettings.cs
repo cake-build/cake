@@ -99,5 +99,10 @@ namespace Cake.Common.Tools.InspectCode
         /// Gets or sets a value indicating whether to throw an exception on finding violations
         /// </summary>
         public bool ThrowExceptionOnFindingViolations { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use x86 tool.
+        /// </summary>
+        public bool UseX86Tool { get; set; }
     }
 }
