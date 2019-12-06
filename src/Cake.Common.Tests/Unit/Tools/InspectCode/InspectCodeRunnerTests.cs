@@ -317,6 +317,20 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 // Then
                 Assert.Equal("\"/verbosity=ERROR\" \"/Working/Test.sln\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Set_Severity()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Severity = InspectCodeSeverity.Hint;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/severity=HINT\" \"/Working/Test.sln\"", result.Args);
+            }
         }
 
         public sealed class TheRunFromConfigMethod

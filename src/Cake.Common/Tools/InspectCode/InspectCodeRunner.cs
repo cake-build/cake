@@ -200,6 +200,11 @@ namespace Cake.Common.Tools.InspectCode
                 builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/verbosity={0}", settings.Verbosity.ToString().ToUpper(CultureInfo.InvariantCulture)));
             }
 
+            if (settings.Severity != null)
+            {
+                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/severity={0}", settings.Severity.ToString().ToUpper(CultureInfo.InvariantCulture)));
+            }
+
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
             return builder;

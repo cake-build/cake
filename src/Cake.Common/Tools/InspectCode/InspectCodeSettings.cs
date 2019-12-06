@@ -109,5 +109,10 @@ namespace Cake.Common.Tools.InspectCode
         /// Gets or sets the verbosity level of the log messages.
         /// </summary>
         public InspectCodeVerbosity? Verbosity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the minimal severity of issues to report.
+        /// </summary>
+        public InspectCodeSeverity? Severity { get; set; }
     }
 }
