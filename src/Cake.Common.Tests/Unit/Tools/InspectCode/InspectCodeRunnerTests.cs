@@ -303,6 +303,20 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 Assert.Equal("\"/profile=/Working/profile.DotSettings\" " +
                              "\"/Working/Test.sln\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Set_Verbosity()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Verbosity = InspectCodeVerbosity.Error;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/verbosity=ERROR\" \"/Working/Test.sln\"", result.Args);
+            }
         }
 
         public sealed class TheRunFromConfigMethod

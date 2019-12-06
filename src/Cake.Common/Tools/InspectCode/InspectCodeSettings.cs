@@ -104,5 +104,10 @@ namespace Cake.Common.Tools.InspectCode
         /// Gets or sets a value indicating whether to use x86 tool.
         /// </summary>
         public bool UseX86Tool { get; set; }
+
+        /// <summary>
+        /// Gets or sets the verbosity level of the log messages.
+        /// </summary>
+        public InspectCodeVerbosity? Verbosity { get; set; }
     }
 }
