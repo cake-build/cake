@@ -71,10 +71,6 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTool")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
     .Does(() =>
 {
-    // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
-    var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
-
     // When
     DotNetCoreTool("--info");
 });
@@ -133,7 +129,6 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetPush")
     // Then
     Assert.True(System.IO.File.Exists(nugetDestination.FullPath), "Path:" + nugetDestination.FullPath);
 });
-
 
 Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetDelete")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetPush")
