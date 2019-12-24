@@ -35,18 +35,20 @@ namespace Cake.Common.Build.TFBuild.Data
         public bool IsPullRequest => Id > 0;
 
         /// <summary>
-        /// Gets the pull request id.
+        /// Gets the ID of the pull request that caused this build.
+        /// This value is set only if the build ran because of a Git PR affected by a branch policy.
         /// </summary>
         /// <value>
-        ///   The pull request id.
+        ///   The ID of the pull request that caused this build.
         /// </value>
         public int Id => GetEnvironmentInteger("SYSTEM_PULLREQUEST_PULLREQUESTID");
 
         /// <summary>
-        /// Gets the GitHub pull request number.
+        /// Gets the number of the pull request that caused this build.
+        /// This value is set for pull requests from GitHub which have a different pull request ID and pull request number.
         /// </summary>
         /// <value>
-        ///   The GitHub pull request number.
+        ///   The number of the pull request that caused this build.
         /// </value>
         public int Number => GetEnvironmentInteger("SYSTEM_PULLREQUEST_PULLREQUESTNUMBER");
 

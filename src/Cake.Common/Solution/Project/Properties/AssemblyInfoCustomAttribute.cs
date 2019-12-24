@@ -26,5 +26,13 @@ namespace Cake.Common.Solution.Project.Properties
         /// </summary>
         /// <value>The value for the attribute.</value>
         public object Value { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the value is raw or should be quoted in the created attribute.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if should be treated as raw; otherwise, <c>false</c>.
+        /// </value>
+        public bool UseRawValue { get; set; }
     }
 }

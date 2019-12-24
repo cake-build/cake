@@ -70,7 +70,37 @@ namespace Cake.Core
             {
                 throw new CakeException("There can only be one error handler per task.");
             }
-            task.ErrorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
+
+            if (errorHandler is null)
+            {
+                throw new ArgumentNullException(nameof(errorHandler));
+            }
+
+#pragma warning disable CS1998
+            task.ErrorHandler = async (ex, context) => errorHandler(ex, context);
+#pragma warning restore CS1998
+        }
+
+        /// <summary>
+        /// Sets the task's error handler.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        /// <param name="errorHandler">The error handler.</param>
+        /// <exception cref="CakeException">There can only be one error handler per task.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="errorHandler"/> is null.</exception>
+        public static void SetErrorHandler(this CakeTask task, Func<Exception, ICakeContext, Task> errorHandler)
+        {
+            if (task.ErrorHandler != null)
+            {
+                throw new CakeException("There can only be one error handler per task.");
+            }
+
+            if (errorHandler is null)
+            {
+                throw new ArgumentNullException(nameof(errorHandler));
+            }
+
+            task.ErrorHandler = errorHandler;
         }
 
         /// <summary>
@@ -86,7 +116,37 @@ namespace Cake.Core
             {
                 throw new CakeException("There can only be one error reporter per task.");
             }
-            task.ErrorReporter = errorReporter ?? throw new ArgumentNullException(nameof(errorReporter));
+
+            if (errorReporter is null)
+            {
+                throw new ArgumentNullException(nameof(errorReporter));
+            }
+
+#pragma warning disable CS1998
+            task.ErrorReporter = async (ex) => errorReporter(ex);
+#pragma warning restore CS1998
+        }
+
+        /// <summary>
+        /// Sets the task's error reporter.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        /// <param name="errorReporter">The error reporter.</param>
+        /// <exception cref="CakeException">There can only be one error reporter per task.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="errorReporter"/> is null.</exception>
+        public static void SetErrorReporter(this CakeTask task, Func<Exception, Task> errorReporter)
+        {
+            if (task.ErrorReporter != null)
+            {
+                throw new CakeException("There can only be one error reporter per task.");
+            }
+
+            if (errorReporter is null)
+            {
+                throw new ArgumentNullException(nameof(errorReporter));
+            }
+
+            task.ErrorReporter = errorReporter;
         }
 
         /// <summary>
@@ -102,7 +162,37 @@ namespace Cake.Core
             {
                 throw new CakeException("There can only be one finally handler per task.");
             }
-            task.FinallyHandler = finallyHandler ?? throw new ArgumentNullException(nameof(finallyHandler));
+
+            if (finallyHandler is null)
+            {
+                throw new ArgumentNullException(nameof(finallyHandler));
+            }
+
+#pragma warning disable CS1998
+            task.FinallyHandler = async () => finallyHandler();
+#pragma warning restore CS1998
+        }
+
+        /// <summary>
+        /// Sets the task's finally handler.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        /// <param name="finallyHandler">The finally handler.</param>
+        /// <exception cref="CakeException">There can only be one finally handler per task.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="finallyHandler"/> is null.</exception>
+        public static void SetFinallyHandler(this CakeTask task, Func<Task> finallyHandler)
+        {
+            if (task.FinallyHandler != null)
+            {
+                throw new CakeException("There can only be one finally handler per task.");
+            }
+
+            if (finallyHandler is null)
+            {
+                throw new ArgumentNullException(nameof(finallyHandler));
+            }
+
+            task.FinallyHandler = finallyHandler;
         }
 
         /// <summary>
@@ -117,6 +207,7 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException(nameof(action));
             }
+
             task.Actions.Add(action);
         }
 
@@ -132,6 +223,7 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException(nameof(action));
             }
+
             task.DelayedActions.Enqueue(action);
         }
 

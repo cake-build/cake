@@ -500,7 +500,7 @@ namespace Cake.Core.Tests.Unit
 
                             // Then
                             Assert.NotNull(builder.Target.ErrorHandler);
-                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                            Assert.IsType<Func<Exception, ICakeContext, Task>>(builder.Target.ErrorHandler);
                         }
                     }
                 }
@@ -521,7 +521,7 @@ namespace Cake.Core.Tests.Unit
 
                             // Then
                             Assert.NotNull(builder.Target.ErrorHandler);
-                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                            Assert.IsType<Func<Exception, ICakeContext, Task>>(builder.Target.ErrorHandler);
                         }
                     }
 
@@ -539,7 +539,7 @@ namespace Cake.Core.Tests.Unit
 
                             // Then
                             Assert.NotNull(builder.Target.ErrorHandler);
-                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                            Assert.IsType<Func<Exception, ICakeContext, Task>>(builder.Target.ErrorHandler);
                         }
                     }
                 }
@@ -563,7 +563,7 @@ namespace Cake.Core.Tests.Unit
 
                             // Then
                             Assert.NotNull(builder.Target.ErrorHandler);
-                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                            Assert.IsType<Func<Exception, ICakeContext, Task>>(builder.Target.ErrorHandler);
                         }
                     }
                 }
@@ -584,7 +584,7 @@ namespace Cake.Core.Tests.Unit
 
                             // Then
                             Assert.NotNull(builder.Target.ErrorHandler);
-                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                            Assert.IsType<Func<Exception, ICakeContext, Task>>(builder.Target.ErrorHandler);
                         }
                     }
 
@@ -602,7 +602,7 @@ namespace Cake.Core.Tests.Unit
 
                             // Then
                             Assert.NotNull(builder.Target.ErrorHandler);
-                            Assert.IsType<Action<Exception, ICakeContext>>(builder.Target.ErrorHandler);
+                            Assert.IsType<Func<Exception, ICakeContext, Task>>(builder.Target.ErrorHandler);
                         }
                     }
                 }

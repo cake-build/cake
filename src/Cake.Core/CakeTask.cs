@@ -48,17 +48,17 @@ namespace Cake.Core
         /// Gets or sets the error handler.
         /// </summary>
         /// <value>The error handler.</value>
-        public Action<Exception, ICakeContext> ErrorHandler { get; set; }
+        public Func<Exception, ICakeContext, Task> ErrorHandler { get; set; }
 
         /// <summary>
         /// Gets or sets the error reporter.
         /// </summary>
-        public Action<Exception> ErrorReporter { get; set; }
+        public Func<Exception, Task> ErrorReporter { get; set; }
 
         /// <summary>
         /// Gets or sets the finally handler.
         /// </summary>
-        public Action FinallyHandler { get; set; }
+        public Func<Task> FinallyHandler { get; set; }
 
         /// <summary>
         /// Gets the task's actions.

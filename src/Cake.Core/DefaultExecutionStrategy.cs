@@ -114,9 +114,15 @@ namespace Cake.Core
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="exception">The exception.</param>
-        public void ReportErrors(Action<Exception> action, Exception exception)
+        /// <returns>The awaitable task.</returns>
+        public async Task ReportErrorsAsync(Func<Exception, Task> action, Exception exception)
         {
-            action?.Invoke(exception);
+            if (action is null)
+            {
+                return;
+            }
+
+            await action(exception);
         }
 
         /// <summary>
@@ -125,18 +131,30 @@ namespace Cake.Core
         /// <param name="action">The action.</param>
         /// <param name="exception">The exception.</param>
         /// <param name="context">The context.</param>
-        public void HandleErrors(Action<Exception, ICakeContext> action, Exception exception, ICakeContext context)
+        /// <returns>The awaitable task.</returns>
+        public async Task HandleErrorsAsync(Func<Exception, ICakeContext, Task> action, Exception exception, ICakeContext context)
         {
-            action?.Invoke(exception, context);
+            if (action is null)
+            {
+                return;
+            }
+
+            await action(exception, context);
         }
 
         /// <summary>
         /// Invokes the finally handler.
         /// </summary>
         /// <param name="action">The action.</param>
-        public void InvokeFinally(Action action)
+        /// <returns>The awaitable task.</returns>
+        public async Task InvokeFinallyAsync(Func<Task> action)
         {
-            action?.Invoke();
+            if (action is null)
+            {
+                return;
+            }
+
+            await action();
         }
 
         /// <summary>

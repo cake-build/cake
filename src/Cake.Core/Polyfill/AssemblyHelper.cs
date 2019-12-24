@@ -4,6 +4,7 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Cake.Core.IO;
 #if NETCORE
 using Cake.Core.Reflection;
@@ -15,11 +16,7 @@ namespace Cake.Core.Polyfill
     {
         public static Assembly GetExecutingAssembly()
         {
-#if NETCORE
-            return typeof(CakeEnvironment).GetTypeInfo().Assembly;
-#else
             return Assembly.GetExecutingAssembly();
-#endif
         }
 
         public static Assembly LoadAssembly(AssemblyName assemblyName)
@@ -46,7 +43,40 @@ namespace Cake.Core.Polyfill
 
             // Make the path absolute.
             path = path.MakeAbsolute(environment);
-            return Assembly.LoadFrom(path.FullPath);
+
+            try
+            {
+                if (fileSystem.GetFile(path).IsClrAssembly())
+                {
+                    return Assembly.LoadFrom(path.FullPath);
+                }
+
+                if (environment.Platform.IsUnix())
+                {
+                    LoadUnixLibrary(path.FullPath, RTLD_NOW);
+                }
+                else
+                {
+                    LoadWindowsLibrary(path.FullPath);
+                }
+
+                return null;
+            }
+            catch (System.IO.FileLoadException)
+            {
+                // TODO: LOG
+                return null;
+            }
         }
+
+#pragma warning disable SA1310 // Field names should not contain underscore
+        private const int RTLD_NOW = 0x002;
+#pragma warning restore SA1310 // Field names should not contain underscore
+
+        [DllImport("libdl", EntryPoint = "dlopen")]
+        private static extern IntPtr LoadUnixLibrary(string path, int flags);
+
+        [DllImport("kernel32", EntryPoint = "LoadLibrary")]
+        private static extern IntPtr LoadWindowsLibrary(string path);
     }
 }

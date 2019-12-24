@@ -4,13 +4,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
+using NuGet.Client;
+using NuGet.ContentModel;
 using NuGet.Frameworks;
+using NuGet.RuntimeModel;
 
 namespace Cake.NuGet
 {
@@ -20,6 +22,19 @@ namespace Cake.NuGet
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly ICakeLog _log;
+
+        private static readonly Lazy<RuntimeGraph> RuntimeGraph = new Lazy<RuntimeGraph>(() =>
+        {
+#if NETCORE
+            var assembly = typeof(NuGetContentResolver).Assembly;
+            using (var stream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.runtime.json"))
+            {
+                return JsonRuntimeFormat.ReadRuntimeGraph(stream);
+            }
+#else
+            return global::NuGet.RuntimeModel.RuntimeGraph.Empty;
+#endif
+        });
 
         public NuGetContentResolver(
             IFileSystem fileSystem,
@@ -56,82 +71,39 @@ namespace Cake.NuGet
         {
             if (!_fileSystem.Exist(path))
             {
-                return new List<IFile>();
+                return Array.Empty<IFile>();
             }
 
             // Get current framework.
-            var provider = DefaultFrameworkNameProvider.Instance;
-            var current = NuGetFramework.Parse(_environment.Runtime.BuiltFramework.FullName, provider);
+            var tfm = NuGetFramework.Parse(_environment.Runtime.BuiltFramework.FullName, DefaultFrameworkNameProvider.Instance);
 
-            // Get all ref assemblies.
-            var refAssemblies = _globber.GetFiles(path.FullPath + "/ref/**/*.dll");
+            // Get current runtime identifier.
+            string rid = _environment.Runtime.IsCoreClr ? Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.GetRuntimeIdentifier() : null;
 
             // Get all candidate files.
             var pathComparer = PathComparer.Default;
-            var assemblies = GetFiles(path, package, new[] { path.FullPath + "/**/*.dll" })
-                .Where(file => !"Cake.Core.dll".Equals(file.Path.GetFilename().FullPath, StringComparison.OrdinalIgnoreCase)
-                               && file.IsClrAssembly()
-                               && !refAssemblies.Contains(file.Path, pathComparer))
-                .ToList();
+            var assemblies = GetFiles(path, package, new[] { path.FullPath + "/**/*.{dll,so,dylib}" })
+                .Where(file => !"Cake.Core.dll".Equals(file.Path.GetFilename().FullPath, StringComparison.OrdinalIgnoreCase))
+                .ToDictionary(x => path.GetRelativePath(x.Path).FullPath);
 
-            // Iterate all found files.
-            var comparer = new NuGetFrameworkFullComparer();
-            var mapping = new Dictionary<NuGetFramework, List<FilePath>>(comparer);
-            foreach (var assembly in assemblies)
+            var conventions = new ManagedCodeConventions(RuntimeGraph.Value);
+
+            var collection = new ContentItemCollection();
+            collection.Load(assemblies.Keys);
+
+            var criteria = conventions.Criteria.ForFrameworkAndRuntime(tfm, rid);
+            var managedAssemblies = collection.FindBestItemGroup(criteria, conventions.Patterns.RuntimeAssemblies);
+
+            var files = managedAssemblies?.Items.Select(x => assemblies[x.Path]).Where(x => x.IsClrAssembly()) ?? Enumerable.Empty<IFile>();
+
+            if (_environment.Runtime.IsCoreClr)
             {
-                // Get relative path.
-                var relative = path.GetRelativePath(assembly.Path);
-                var framework = ParseFromDirectoryPath(current, relative.GetDirectory());
-                if (!mapping.ContainsKey(framework))
-                {
-                    mapping.Add(framework, new List<FilePath>());
-                }
-                mapping[framework].Add(assembly.Path);
+                var nativeAssemblies = collection.FindBestItemGroup(criteria, conventions.Patterns.NativeLibraries);
+
+                files = (nativeAssemblies?.Items.Select(x => assemblies[x.Path]) ?? Enumerable.Empty<IFile>()).Concat(files);
             }
 
-            // Reduce found frameworks to the closest one.
-            var reducer = new FrameworkReducer();
-            var nearest = reducer.GetNearest(current, mapping.Keys);
-            if (nearest == null || !mapping.ContainsKey(nearest))
-            {
-                return new List<IFile>();
-            }
-
-            if (nearest == NuGetFramework.AnyFramework)
-            {
-                var framework = _environment.Runtime.BuiltFramework;
-                _log.Warning("Could not find any assemblies compatible with {0} in NuGet package {1}. " +
-                             "Falling back to using root folder of NuGet package.", framework.FullName, package.Package);
-            }
-
-            // Return the result.
-            return mapping[nearest].Select(p => _fileSystem.GetFile(p)).ToList();
-        }
-
-        private NuGetFramework ParseFromDirectoryPath(NuGetFramework current, DirectoryPath path)
-        {
-            var segments = path.Segments;
-
-            if (segments.Length == 1 &&
-                segments[0].Equals("lib", StringComparison.OrdinalIgnoreCase))
-            {
-                // Treat as AnyFramework if lib folder
-                return NuGetFramework.AnyFramework;
-            }
-
-            var queue = new Queue<string>(segments);
-            while (queue.Count > 0)
-            {
-                var other = NuGetFramework.Parse(queue.Dequeue(), DefaultFrameworkNameProvider.Instance);
-                var compatible = DefaultCompatibilityProvider.Instance.IsCompatible(other, current);
-                if (compatible || queue.Count == 0)
-                {
-                    return other;
-                }
-            }
-
-            // Treat as AnyFramework if root folder
-            return NuGetFramework.AnyFramework;
+            return files.ToArray();
         }
 
         private IReadOnlyCollection<IFile> GetToolFiles(DirectoryPath path, PackageReference package)

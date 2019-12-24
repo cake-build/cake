@@ -40,7 +40,7 @@ namespace HWApp.Tests
                 // Then
                 Assert.NotNull(result);
                 Assert.IsType<ArgumentNullException>(result);
-                Assert.Equal($"Value cannot be null.{Environment.NewLine}Parameter name: name", result.Message);
+                Assert.Equal($"Value cannot be null. (Parameter 'name')", result.Message);
             }
         }
     }

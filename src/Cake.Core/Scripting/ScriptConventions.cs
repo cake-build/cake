@@ -142,6 +142,9 @@ namespace Cake.Core.Scripting
                 case ".NETCoreApp,Version=v3.0":
                     return "NETCOREAPP3_0";
 
+                case ".NETCoreApp,Version=v3.1":
+                    return "NETCOREAPP3_1";
+
                 default:
                     return "NETSTANDARD2_0";
             }
