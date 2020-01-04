@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Cake.Core.Annotations;
 
@@ -148,9 +149,13 @@ namespace Cake.Core.Scripting.CodeGen
 
         private static string GetReturnType(MethodInfo method)
         {
-            return method.ReturnType == typeof(void)
-                ? "void"
-                    : method.ReturnType.GetFullName();
+            if (method.ReturnType == typeof(void))
+            {
+                return "void";
+            }
+
+            var isDynamic = method.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(DynamicAttribute), true).Any();
+            return isDynamic ? "dynamic" : method.ReturnType.GetFullName();
         }
 
         private static IEnumerable<string> GetProxyParameters(IEnumerable<ParameterInfo> parameters, bool includeType)

@@ -13,6 +13,14 @@ namespace Cake.Common.Build.TeamCity
     public interface ITeamCityProvider
     {
         /// <summary>
+        /// Gets a value indicating whether the current build is running on TeamCity.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the current build is running on TeamCity; otherwise, <c>false</c>.
+        /// </value>
+        bool IsRunningOnTeamCity { get; }
+
+        /// <summary>
         /// Gets the TeamCity environment.
         /// </summary>
         /// <value>
@@ -82,14 +90,6 @@ namespace Cake.Common.Build.TeamCity
         /// <param name="snapshotFile">Snapshot file path.</param>
         /// <param name="dotCoverHome">The full path to the dotCover home folder to override the bundled dotCover.</param>
         void ImportDotCoverCoverage(FilePath snapshotFile, DirectoryPath dotCoverHome = null);
-
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on TeamCity.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on TeamCity; otherwise, <c>false</c>.
-        /// </value>
-        bool IsRunningOnTeamCity { get; }
 
         /// <summary>
         /// Tells TeamCity to publish artifacts in the given directory.

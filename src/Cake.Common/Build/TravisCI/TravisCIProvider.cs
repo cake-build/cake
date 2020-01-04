@@ -54,20 +54,20 @@ namespace Cake.Common.Build.TravisCI
         }
 
         /// <summary>
-        /// Gets the Travis CI environment.
-        /// </summary>
-        /// <value>
-        /// The environment.
-        /// </value>
-        public TravisCIEnvironmentInfo Environment { get; }
-
-        /// <summary>
         /// Gets a value indicating whether this instance is running on Travis CI.
         /// </summary>
         /// <value>
         /// <c>true</c> if this instance is running on Travis CI; otherwise, <c>false</c>.
         /// </value>
         public bool IsRunningOnTravisCI => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TRAVIS"));
+
+        /// <summary>
+        /// Gets the Travis CI environment.
+        /// </summary>
+        /// <value>
+        /// The environment.
+        /// </value>
+        public TravisCIEnvironmentInfo Environment { get; }
 
         /// <summary>
         /// Write the start of a message fold to the Travis CI build log.

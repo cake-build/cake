@@ -29,7 +29,7 @@ namespace Cake.Core.Reflection
         public Assembly Load(FilePath path, bool verify)
         {
             var assembly = AssemblyHelper.LoadAssembly(_environment, _fileSystem, path);
-            if (verify)
+            if (verify && assembly != null)
             {
                 _verifier.Verify(assembly);
             }

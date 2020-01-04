@@ -44,6 +44,12 @@ namespace Cake.Core.Tests.Data
             return 42;
         }
 
+        [CakePropertyAlias]
+        public static dynamic NonCached_Dynamic_Type(this ICakeContext context)
+        {
+            return new { };
+        }
+
         [CakePropertyAlias(Cache = true)]
         public static string Cached_Reference_Type(this ICakeContext context)
         {
@@ -54,6 +60,12 @@ namespace Cake.Core.Tests.Data
         public static bool Cached_Value_Type(this ICakeContext context)
         {
             return true;
+        }
+
+        [CakePropertyAlias(Cache = true)]
+        public static dynamic Cached_Dynamic_Type(this ICakeContext context)
+        {
+            return new { };
         }
 
         [CakePropertyAlias]

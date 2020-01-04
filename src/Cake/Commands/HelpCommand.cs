@@ -32,7 +32,7 @@ namespace Cake.Commands
             else
             {
                 _console.WriteLine();
-                _console.WriteLine("Usage: Cake.exe [script] [--verbosity=value]");
+                _console.WriteLine("Usage: Cake.exe [script] [--target=value] [--verbosity=value]");
                 _console.WriteLine("                [--showdescription] [--dryrun] [..]");
                 _console.WriteLine();
                 _console.WriteLine("Example: Cake.exe");
@@ -40,6 +40,7 @@ namespace Cake.Commands
                 _console.WriteLine("Example: Cake.exe build.cake --showdescription");
                 _console.WriteLine();
                 _console.WriteLine("Options:");
+                _console.WriteLine("    --target <TARGET>    Target task to invoke. Script must support this explicitly.");
                 _console.WriteLine("    --verbosity=value    Specifies the amount of information to be displayed.");
                 _console.WriteLine("                         ({0})",
                     string.Join(", ", Enum.GetNames(typeof(Verbosity))));

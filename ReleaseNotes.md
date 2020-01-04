@@ -1,3 +1,16 @@
+### New in 0.35.0 (Released 2019/09/28)
+
+* 2603 Add .NET Core 3 to Cake.Tool update to .NET Core 3 SDK.
+* 2625 Add NuGet Push -SkipDuplicate Flag.
+* 2618 The MSTest tool doesn't pick up the mstest.exe from Visual Studio 2019.
+* 2606 Unable to reference Newtonsoft.Json > 11.0.2.
+* 2601 Update Microsoft.CodeAnalysis.CSharp.Scripting to 3.2.1.
+* 2599 Update to Autofac 4.9.4.
+* 2585 Cake.Tool - How in the world do I run a specific task?.
+* 2590 Update confusing GitVersionVerbosity docs.
+* 2610 Aliases of type 'dynamic' cannot be accessed directly.
+* 2608 TFBuildProvider.IsHostedAgent returns wrong value when running on 2nd build agent.
+
 ### New in 0.34.1 (Released 2019/07/16)
 
 * 2575 v0.34.0 fails on scripts using the dynamic keyword

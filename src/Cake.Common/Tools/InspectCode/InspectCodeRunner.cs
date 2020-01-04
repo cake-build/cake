@@ -195,6 +195,16 @@ namespace Cake.Common.Tools.InspectCode
                 builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/profile={0}", settings.Profile.MakeAbsolute(_environment).FullPath));
             }
 
+            if (settings.Verbosity != null)
+            {
+                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/verbosity={0}", settings.Verbosity.ToString().ToUpper(CultureInfo.InvariantCulture)));
+            }
+
+            if (settings.Severity != null)
+            {
+                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/severity={0}", settings.Severity.ToString().ToUpper(CultureInfo.InvariantCulture)));
+            }
+
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
             return builder;
@@ -212,10 +222,17 @@ namespace Cake.Common.Tools.InspectCode
         /// <summary>
         /// Gets the possible names of the tool executable.
         /// </summary>
+        /// <param name="settings">The settings.</param>
         /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
+        protected override IEnumerable<string> GetToolExecutableNames(InspectCodeSettings settings)
         {
-            return new[] { "inspectcode.exe" };
+            return new[] { settings != null && settings.UseX86Tool ? "inspectcode.x86.exe" : "inspectcode.exe" };
         }
+
+        /// <summary>
+        /// Gets the possible names of the tool executable.
+        /// </summary>
+        /// <returns>The tool executable name.</returns>
+        protected override IEnumerable<string> GetToolExecutableNames() => GetToolExecutableNames(null);
     }
 }

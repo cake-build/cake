@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.InspectCode
         public ICakeLog Log { get; set; }
         public FilePath Config { get; set; }
 
-        public InspectCodeRunFromConfigFixture()
+        public InspectCodeRunFromConfigFixture(bool useX86 = false) : base(useX86)
         {
             Log = Substitute.For<ICakeLog>();
         }

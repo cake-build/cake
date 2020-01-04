@@ -50,6 +50,11 @@ if ($PSVersionTable.PSEdition -ne 'Core') {
 # INSTALL .NET CORE CLI
 ###########################################################################
 
+$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+$env:DOTNET_CLI_TELEMETRY_OPTOUT=1
+$env:DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX=2
+
+
 Function Remove-PathVariable([string]$VariableToRemove)
 {
     $SplitChar = ';'
@@ -102,10 +107,6 @@ if($FoundDotNetCliVersion -ne $DotNetVersion) {
     }
     $env:DOTNET_ROOT=$InstallPath
 }
-
-$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-$env:DOTNET_CLI_TELEMETRY_OPTOUT=1
-
 
 ###########################################################################
 # INSTALL CAKE

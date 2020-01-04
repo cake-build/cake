@@ -133,6 +133,71 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 }
             }
 
+            // publish single file
+            if (settings.PublishSingleFile.HasValue)
+            {
+                if (settings.PublishSingleFile.Value)
+                {
+                    builder.Append("-p:PublishSingleFile=true");
+                }
+                else
+                {
+                    builder.Append("-p:PublishSingleFile=false");
+                }
+            }
+
+            // publish trimmed
+            if (settings.PublishTrimmed.HasValue)
+            {
+                if (settings.PublishTrimmed.Value)
+                {
+                    builder.Append("-p:PublishTrimmed=true");
+                }
+                else
+                {
+                    builder.Append("-p:PublishTrimmed=false");
+                }
+            }
+
+            // Tiered Compilation Quick Jit
+            if (settings.TieredCompilationQuickJit.HasValue)
+            {
+                if (settings.TieredCompilationQuickJit.Value)
+                {
+                    builder.Append("-p:TieredCompilationQuickJit=true");
+                }
+                else
+                {
+                    builder.Append("-p:TieredCompilationQuickJit=false");
+                }
+            }
+
+            // Tiered Compilation
+            if (settings.TieredCompilation.HasValue)
+            {
+                if (settings.TieredCompilation.Value)
+                {
+                    builder.Append("-p:TieredCompilation=true");
+                }
+                else
+                {
+                    builder.Append("-p:TieredCompilation=false");
+                }
+            }
+
+            // Publish ReadyToRun
+            if (settings.PublishReadyToRun.HasValue)
+            {
+                if (settings.PublishReadyToRun.Value)
+                {
+                    builder.Append("-p:PublishReadyToRun=true");
+                }
+                else
+                {
+                    builder.Append("-p:PublishReadyToRun=false");
+                }
+            }
+
             // Sources
             if (settings.Sources != null)
             {

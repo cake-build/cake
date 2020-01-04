@@ -54,14 +54,16 @@ namespace Cake.Core.Scripting.Processors.Loading
             var current = context.Current.Path.GetDirectory();
             path = path.MakeAbsolute(current);
 
+            var expectedExtension = path.HasExtension ? path.GetExtension() : ".cake";
             var files = _globber
                 .GetFiles(path.FullPath)
                 .Where(file =>
                 {
-                    var extension = file.GetExtension();
-                    return extension != null && extension.Equals(".cake", StringComparison.OrdinalIgnoreCase);
+                  var extension = file.GetExtension();
+                  return extension != null && (extension.Equals(".cake", StringComparison.OrdinalIgnoreCase) || extension.Equals(expectedExtension, StringComparison.OrdinalIgnoreCase));
                 })
                 .ToArray();
+
             if (files.Length == 0)
             {
                 // No scripts found.
