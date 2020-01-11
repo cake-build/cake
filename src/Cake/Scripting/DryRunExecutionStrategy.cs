@@ -45,16 +45,19 @@ namespace Cake.Scripting
         {
         }
 
-        public void ReportErrors(Action<Exception> action, Exception exception)
+        public Task ReportErrorsAsync(Func<Exception, Task> action, Exception exception)
         {
+            return Task.CompletedTask;
         }
 
-        public void HandleErrors(Action<Exception, ICakeContext> action, Exception exception, ICakeContext context)
+        public Task HandleErrorsAsync(Func<Exception, ICakeContext, Task> action, Exception exception, ICakeContext context)
         {
+            return Task.CompletedTask;
         }
 
-        public void InvokeFinally(Action action)
+        public Task InvokeFinallyAsync(Func<Task> action)
         {
+            return Task.CompletedTask;
         }
 
         public void PerformTaskSetup(Action<ITaskSetupContext> action, ITaskSetupContext taskSetupContext)

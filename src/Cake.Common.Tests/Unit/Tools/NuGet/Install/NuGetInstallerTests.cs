@@ -215,6 +215,20 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
                              "-NonInteractive", result.Args);
             }
 
+            [Fact]
+            public void Should_Remove_NonInteractive_From_Arguments_If_False()
+            {
+                // Given
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.NonInteractive = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("install \"Cake\"", result.Args);
+            }
+
             [Theory]
             [InlineData(NuGetVerbosity.Detailed, "install \"Cake\" -Verbosity detailed -NonInteractive")]
             [InlineData(NuGetVerbosity.Normal, "install \"Cake\" -Verbosity normal -NonInteractive")]

@@ -26,6 +26,14 @@ namespace Cake.Common.Build.TeamCity
         private readonly ICakeLog _log;
 
         /// <summary>
+        /// Gets a value indicating whether the current build is running on TeamCity.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the current build is running on TeamCity; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnTeamCity => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
+
+        /// <summary>
         /// Gets the TeamCity environment.
         /// </summary>
         /// <value>
@@ -110,14 +118,6 @@ namespace Cake.Common.Build.TeamCity
 
             Environment = new TeamCityEnvironmentInfo(environment);
         }
-
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on TeamCity.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on TeamCity; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsRunningOnTeamCity => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
 
         /// <summary>
         /// Write a progress message to the TeamCity build log.

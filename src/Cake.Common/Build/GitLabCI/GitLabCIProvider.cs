@@ -30,19 +30,19 @@ namespace Cake.Common.Build.GitLabCI
         }
 
         /// <summary>
-        /// Gets the GitLab CI environment.
-        /// </summary>
-        /// <value>
-        /// The GitLab CI environment.
-        /// </value>
-        public GitLabCIEnvironmentInfo Environment { get; }
-
-        /// <summary>
         /// Gets a value indicating whether the current build is running on GitLab CI.
         /// </summary>
         /// <value>
         /// <c>true</c> if the current build is running on GitLab CI; otherwise, <c>false</c>.
         /// </value>
         public bool IsRunningOnGitLabCI => _environment.GetEnvironmentVariable("CI_SERVER")?.Equals("yes", StringComparison.OrdinalIgnoreCase) ?? false;
+
+        /// <summary>
+        /// Gets the GitLab CI environment.
+        /// </summary>
+        /// <value>
+        /// The GitLab CI environment.
+        /// </value>
+        public GitLabCIEnvironmentInfo Environment { get; }
     }
 }

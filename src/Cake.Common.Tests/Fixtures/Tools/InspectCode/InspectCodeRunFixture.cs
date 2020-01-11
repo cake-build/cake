@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.InspectCode
         public ICakeLog Log { get; set; }
         public FilePath Solution { get; set; }
 
-        public InspectCodeRunFixture()
+        public InspectCodeRunFixture(bool useX86 = false) : base(useX86)
         {
             Solution = new FilePath("./Test.sln");
 

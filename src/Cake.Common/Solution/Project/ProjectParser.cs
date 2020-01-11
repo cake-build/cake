@@ -162,8 +162,8 @@ namespace Cake.Common.Solution.Project
                  select new ProjectAssemblyReference
                  {
                      Include = includeValue,
-                     HintPath = string.IsNullOrEmpty(hintPathElement?.Value)
-                        ? null : rootPath.CombineWithFilePath(hintPathElement.Value),
+                     HintPath = string.IsNullOrEmpty(hintPathElement?.Value) ? null : PathHelper.IsPathRooted(hintPathElement?.Value)
+                            ? hintPathElement?.Value : rootPath.CombineWithFilePath(hintPathElement.Value),
                      Name = nameElement?.Value,
                      FusionName = fusionNameElement?.Value,
                      SpecificVersion = specificVersionElement == null ? (bool?)null : bool.Parse(specificVersionElement.Value),

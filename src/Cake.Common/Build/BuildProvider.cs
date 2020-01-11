@@ -80,6 +80,11 @@ namespace Cake.Common.Build
         /// <summary>
         /// AzurePipelinesHosted build provider.
         /// </summary>
-        AzurePipelinesHosted = 4096
+        AzurePipelinesHosted = 4096,
+
+        /// <summary>
+        /// GitHubActions build provider.
+        /// </summary>
+        GitHubActions = 8192
     }
 }

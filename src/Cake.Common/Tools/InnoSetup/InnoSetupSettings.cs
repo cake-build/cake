@@ -42,6 +42,11 @@ namespace Cake.Common.Tools.InnoSetup
         public InnoSetupQuietMode QuietMode { get; set; }
 
         /// <summary>
+        /// Gets or sets the version of Inno Setup to be used with this command. By default the highest installed version of Inno Setup is used.
+        /// </summary>
+        public InnoSetupVersion? Version { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="InnoSetupSettings"/> class with the default settings.
         /// </summary>
         public InnoSetupSettings()

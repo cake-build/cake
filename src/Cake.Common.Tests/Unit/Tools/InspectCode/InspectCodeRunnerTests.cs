@@ -45,6 +45,19 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
             }
 
             [Fact]
+            public void Should_Find_Inspect_Code_Runner_X86()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture(true);
+                fixture.Settings.UseX86Tool = true;
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/Working/tools/inspectcode.x86.exe", result.Path.FullPath);
+            }
+
+            [Fact]
             public void Should_Use_Provided_Solution_In_Process_Arguments()
             {
                 // Given
@@ -289,6 +302,34 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 // Then
                 Assert.Equal("\"/profile=/Working/profile.DotSettings\" " +
                              "\"/Working/Test.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Set_Verbosity()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Verbosity = InspectCodeVerbosity.Error;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/verbosity=ERROR\" \"/Working/Test.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Set_Severity()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Severity = InspectCodeSeverity.Hint;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/severity=HINT\" \"/Working/Test.sln\"", result.Args);
             }
         }
 

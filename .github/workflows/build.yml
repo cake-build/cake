@@ -1,0 +1,30 @@
+name: Build
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    steps:
+      - name: Get the sources
+        uses: actions/checkout@v1
+
+      - name: Install .NET Core SDK 3.1.100
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.100'
+
+      - name: Run Cake script
+        uses: ecampidoglio/cake-action@v1.1.0
+        env:
+          DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX: 2
+        with:
+          target: Run-Integration-Tests
+          cake-bootstrap: true

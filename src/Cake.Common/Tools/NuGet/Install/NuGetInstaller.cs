@@ -161,7 +161,11 @@ namespace Cake.Common.Tools.NuGet.Install
                 builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
             }
 
-            builder.Append("-NonInteractive");
+            // NonInteractive?
+            if (settings.NonInteractive)
+            {
+                builder.Append("-NonInteractive");
+            }
 
             return builder;
         }

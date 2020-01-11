@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -222,7 +222,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
 
                 // Then
                 Assert.Contains("Imports System.Runtime.InteropServices", result);
-                Assert.Contains("<Assembly: ComVisible(true)>", result);
+                Assert.Contains("<Assembly: ComVisible(True)>", result);
             }
 
             [Fact]
@@ -237,7 +237,7 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
 
                 // Then
                 Assert.Contains("Imports System", result);
-                Assert.Contains("<Assembly: CLSCompliant(true)>", result);
+                Assert.Contains("<Assembly: CLSCompliant(True)>", result);
             }
 
             [Fact]
@@ -300,6 +300,51 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 // Then
                 Assert.Contains("Imports Test.NameSpace", result);
                 Assert.Contains("<Assembly: TestAttribute(\"TestValue\")>", result);
+            }
+
+            [Fact]
+            public void Should_Add_CustomAttributes_If_Set_With_Boolean_Value()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture_VB();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = true } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("Imports Test.NameSpace", result);
+                Assert.Contains("<Assembly: TestAttribute(True)>", result);
+            }
+
+            [Fact]
+            public void Should_Add_CustomAttributes_If_Set_With_Null_Value()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture_VB();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = null } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("Imports Test.NameSpace", result);
+                Assert.Contains("<Assembly: TestAttribute()>", result);
+            }
+
+            [Fact]
+            public void Should_Add_CustomAttributes_If_Set_With_Empty_Value()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture_VB();
+                fixture.Settings.CustomAttributes = new Collection<AssemblyInfoCustomAttribute> { new AssemblyInfoCustomAttribute { Name = "TestAttribute", NameSpace = "Test.NameSpace", Value = string.Empty } };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("Imports Test.NameSpace", result);
+                Assert.Contains("<Assembly: TestAttribute()>", result);
             }
         }
     }

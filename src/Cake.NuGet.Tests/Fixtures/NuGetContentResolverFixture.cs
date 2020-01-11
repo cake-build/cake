@@ -28,6 +28,7 @@ namespace Cake.NuGet.Tests.Fixtures
             Environment = FakeEnvironment.CreateUnixEnvironment();
             Environment.Runtime.BuiltFramework = new FrameworkName(framework);
             Environment.Runtime.Runtime = runtime;
+            Environment.Runtime.IsCoreClr = runtime == Runtime.CoreClr;
 
             FileSystem = new FakeFileSystem(Environment);
             Globber = new Globber(FileSystem, Environment);
