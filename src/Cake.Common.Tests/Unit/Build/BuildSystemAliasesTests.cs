@@ -135,5 +135,18 @@ namespace Cake.Common.Tests.Unit.Build
                 AssertEx.IsArgumentNullException(result, "context");
             }
         }
+
+        public sealed class TheGitHubActionsMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => BuildSystemAliases.GitHubActions(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+        }
     }
 }
