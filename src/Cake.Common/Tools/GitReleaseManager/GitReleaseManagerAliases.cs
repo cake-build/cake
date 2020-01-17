@@ -6,8 +6,10 @@ using System;
 using Cake.Common.Tools.GitReleaseManager.AddAssets;
 using Cake.Common.Tools.GitReleaseManager.Close;
 using Cake.Common.Tools.GitReleaseManager.Create;
+using Cake.Common.Tools.GitReleaseManager.Discard;
 using Cake.Common.Tools.GitReleaseManager.Export;
 using Cake.Common.Tools.GitReleaseManager.Label;
+using Cake.Common.Tools.GitReleaseManager.Open;
 using Cake.Common.Tools.GitReleaseManager.Publish;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -50,7 +52,7 @@ namespace Cake.Common.Tools.GitReleaseManager
             GitReleaseManagerCreate(context, userName, password, owner, repository, new GitReleaseManagerCreateSettings());
         }
 
-                /// <summary>
+        /// <summary>
         /// Creates a Package Release.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -708,6 +710,118 @@ namespace Cake.Common.Tools.GitReleaseManager
 
             var labeller = new GitReleaseManagerLabeller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             labeller.Label(token, owner, repository, settings);
+        }
+
+        /// <summary>
+        /// Opens the milestone associated with a release.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="token">The token.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="milestone">The milestone.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerOpen("token", "owner", "repo", "0.1.0");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Open")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Open")]
+        public static void GitReleaseManagerOpen(this ICakeContext context, string token, string owner, string repository, string milestone)
+        {
+            GitReleaseManagerOpen(context, token, owner, repository, milestone, new GitReleaseManagerOpenMilestoneSettings());
+        }
+
+        /// <summary>
+        /// Opens the milestone associated with a release using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="token">The token.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="milestone">The milestone.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerOpen("token", "owner", "repo", "0.1.0", new GitReleaseManagerOpenMilestoneSettings {
+        ///     TargetDirectory   = "c:/repo",
+        ///     LogFilePath       = "c:/temp/grm.log"
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Open")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Open")]
+        public static void GitReleaseManagerOpen(this ICakeContext context, string token, string owner, string repository, string milestone, GitReleaseManagerOpenMilestoneSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var milestoneOpener = new GitReleaseManagerMilestoneOpener(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            milestoneOpener.Open(token, owner, repository, milestone, settings);
+        }
+
+        /// <summary>
+        /// Discards a Release.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="token">The token.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="milestone">The milestone.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerDiscard("token", "owner", "repo", "0.1.0");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Discard")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Discard")]
+        public static void GitReleaseManagerDiscard(this ICakeContext context, string token, string owner, string repository, string milestone)
+        {
+            GitReleaseManagerDiscard(context, token, owner, repository, milestone, new GitReleaseManagerDiscardSettings());
+        }
+
+        /// <summary>
+        /// Discards a Release using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="token">The token.</param>
+        /// <param name="owner">The owner.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="milestone">The milestone.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerDiscard("token", "owner", "repo", "0.1.0", new GitReleaseManagerDiscardSettings {
+        ///     TargetDirectory   = "c:/repo",
+        ///     LogFilePath       = "c:/temp/grm.log"
+        /// });
+        /// </code>
+        /// </example>
+        /// <example>
+        /// <code>
+        /// GitReleaseManagerDiscard("token", "owner", "repo", "0.1.0", new GitReleaseManagerDiscardSettings {
+        ///     TargetDirectory   = "c:/repo",
+        ///     LogFilePath       = "c:/temp/grm.log"
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Discard")]
+        [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Discard")]
+        public static void GitReleaseManagerDiscard(this ICakeContext context, string token, string owner, string repository, string milestone, GitReleaseManagerDiscardSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var discarder = new GitReleaseManagerDiscarder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            discarder.Discard(token, owner, repository, milestone, settings);
         }
     }
 }
