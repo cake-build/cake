@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
         }
 
         /// <summary>
-        /// Creates a Release using the specified and settings.
+        /// Creates a Release using the specified settings.
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <param name="password">The password.</param>
@@ -70,8 +70,8 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
             Run(settings, GetArguments(userName, password, owner, repository, settings));
         }
 
-                /// <summary>
-        /// Creates a Release using the specified and settings.
+        /// <summary>
+        /// Creates a Release using the specified settings.
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="owner">The owner.</param>

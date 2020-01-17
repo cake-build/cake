@@ -30,7 +30,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
         }
 
         /// <summary>
-        /// Creates a Release using the specified settings.
+        /// Closes a milestone using the specified settings.
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <param name="password">The password.</param>
@@ -74,7 +74,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
         }
 
         /// <summary>
-        /// Creates a Release using the specified settings.
+        /// Closes a milestone using the specified settings.
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="owner">The owner.</param>
