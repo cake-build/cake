@@ -70,7 +70,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Label
             Run(settings, GetArguments(userName, password, owner, repository, settings));
         }
 
-/// <summary>
+        /// <summary>
         /// Deletes and creates labels using the specified and settings.
         /// </summary>
         /// <param name="token">The token.</param>
