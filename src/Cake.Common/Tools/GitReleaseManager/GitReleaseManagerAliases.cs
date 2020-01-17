@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -44,6 +44,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("Create")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Create")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerCreate(this ICakeContext context, string userName, string password, string owner, string repository)
         {
             GitReleaseManagerCreate(context, userName, password, owner, repository, new GitReleaseManagerCreateSettings());
@@ -106,6 +107,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("Create")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Create")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerCreate(this ICakeContext context, string userName, string password, string owner, string repository, GitReleaseManagerCreateSettings settings)
         {
             if (context == null)
@@ -182,6 +184,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("AddAssets")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.AddAssets")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerAddAssets(this ICakeContext context, string userName, string password, string owner, string repository, string tagName, string assets)
         {
             GitReleaseManagerAddAssets(context, userName, password, owner, repository, tagName, assets, new GitReleaseManagerAddAssetsSettings());
@@ -231,6 +234,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("AddAssets")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.AddAssets")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerAddAssets(this ICakeContext context, string userName, string password, string owner, string repository, string tagName, string assets, GitReleaseManagerAddAssetsSettings settings)
         {
             if (context == null)
@@ -291,6 +295,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("Close")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Close")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerClose(this ICakeContext context, string userName, string password, string owner, string repository, string milestone)
         {
             GitReleaseManagerClose(context, userName, password, owner, repository, milestone, new GitReleaseManagerCloseMilestoneSettings());
@@ -338,6 +343,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("Close")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Close")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerClose(this ICakeContext context, string userName, string password, string owner, string repository, string milestone, GitReleaseManagerCloseMilestoneSettings settings)
         {
             if (context == null)
@@ -397,6 +403,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("Publish")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Publish")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerPublish(this ICakeContext context, string userName, string password, string owner, string repository, string tagName)
         {
             GitReleaseManagerPublish(context, userName, password, owner, repository, tagName, new GitReleaseManagerPublishSettings());
@@ -444,6 +451,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("Publish")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Publish")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerPublish(this ICakeContext context, string userName, string password, string owner, string repository, string tagName, GitReleaseManagerPublishSettings settings)
         {
             if (context == null)
@@ -504,6 +512,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("Export")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Export")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerExport(this ICakeContext context, string userName, string password, string owner, string repository, FilePath fileOutputPath)
         {
             GitReleaseManagerExport(context, userName, password, owner, repository, fileOutputPath, new GitReleaseManagerExportSettings());
@@ -553,6 +562,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("Export")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Export")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerExport(this ICakeContext context, string userName, string password, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
         {
             if (context == null)
@@ -613,6 +623,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("Label")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Label")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerLabel(this ICakeContext context, string userName, string password, string owner, string repository)
         {
             GitReleaseManagerLabel(context, userName, password, owner, repository, new GitReleaseManagerLabelSettings());
@@ -658,6 +669,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeMethodAlias]
         [CakeAliasCategory("Label")]
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Label")]
+        [Obsolete("Use the overload that accepts a token instead.")]
         public static void GitReleaseManagerLabel(this ICakeContext context, string userName, string password, string owner, string repository, GitReleaseManagerLabelSettings settings)
         {
             if (context == null)
