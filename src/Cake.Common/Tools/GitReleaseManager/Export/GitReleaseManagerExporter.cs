@@ -128,6 +128,8 @@ namespace Cake.Common.Tools.GitReleaseManager.Export
 
             ParseCommonArguments(builder, owner, repository, fileOutputPath, settings);
 
+            AddBaseArguments(settings, builder);
+
             return builder;
         }
 
@@ -141,6 +143,8 @@ namespace Cake.Common.Tools.GitReleaseManager.Export
             builder.AppendQuoted(token);
 
             ParseCommonArguments(builder, owner, repository, fileOutputPath, settings);
+
+            AddBaseArguments(settings, builder);
 
             return builder;
         }
@@ -160,20 +164,6 @@ namespace Cake.Common.Tools.GitReleaseManager.Export
             {
                 builder.Append("-t");
                 builder.AppendQuoted(settings.TagName);
-            }
-
-            // Target Directory
-            if (settings.TargetDirectory != null)
-            {
-                builder.Append("-d");
-                builder.AppendQuoted(settings.TargetDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Log File Path
-            if (settings.LogFilePath != null)
-            {
-                builder.Append("-l");
-                builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
             }
         }
     }

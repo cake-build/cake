@@ -116,6 +116,8 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
 
             ParseCommonArguments(builder, owner, repository, settings);
 
+            AddBaseArguments(settings, builder);
+
             return builder;
         }
 
@@ -129,6 +131,8 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
             builder.AppendQuoted(token);
 
             ParseCommonArguments(builder, owner, repository, settings);
+
+            AddBaseArguments(settings, builder);
 
             return builder;
         }
@@ -180,20 +184,6 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
             {
                 builder.Append("-c");
                 builder.AppendQuoted(settings.TargetCommitish);
-            }
-
-            // Target Directory
-            if (settings.TargetDirectory != null)
-            {
-                builder.Append("-d");
-                builder.AppendQuoted(settings.TargetDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Log File Path
-            if (settings.LogFilePath != null)
-            {
-                builder.Append("-l");
-                builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
             }
         }
     }
