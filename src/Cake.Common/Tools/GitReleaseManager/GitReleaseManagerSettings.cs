@@ -21,5 +21,20 @@ namespace Cake.Common.Tools.GitReleaseManager
         /// Gets or sets the path to the GitReleaseManager log file.
         /// </summary>
         public FilePath LogFilePath { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not to use debug level logging.
+        /// </summary>
+        public bool Debug { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not to use verbose level logging.
+        /// </summary>
+        public bool Verbose { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not to show the GitReleaseManager logo during execution.
+        /// </summary>
+        public bool NoLogo { get; set; }
     }
 }
