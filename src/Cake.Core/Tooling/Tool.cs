@@ -302,6 +302,20 @@ namespace Cake.Core.Tooling
 
             // Look for each possible executable name in various places.
             var toolExeNames = GetToolExecutableNames(settings);
+
+            if (_environment.Runtime.IsCoreClr)
+            {
+                // Prioritize .dll over .exe on .net core, if any.
+                foreach (var toolExeName in toolExeNames.Where(t => t.EndsWith(".dll", StringComparison.OrdinalIgnoreCase)))
+                {
+                    var result = _tools.Resolve(toolExeName);
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+
             foreach (var toolExeName in toolExeNames)
             {
                 var result = _tools.Resolve(toolExeName);

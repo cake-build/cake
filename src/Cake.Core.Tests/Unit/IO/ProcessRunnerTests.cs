@@ -227,6 +227,36 @@ namespace Cake.Core.Tests.Unit.IO
                     .Received(1)
                     .Write(Verbosity.Diagnostic, LogLevel.Verbose, "{0} is a .NET Framework executable, you might need to install Mono for it to execute successfully.", "/Program Files/Cake.exe");
             }
+
+            [RuntimeFact(TestRuntime.CoreClr)]
+            public void Should_Use_DotnetCli_On_Windows_And_CoreClr_When_Tool_Is_Dll()
+            {
+                // Given
+                var fixture = new ProcessRunnerFixture(windows: true, dllTool: true);
+                fixture.GivenIsCoreClr();
+
+                // When
+                var result = fixture.GetProcessStartInfo();
+
+                // Then
+                Assert.Equal("/Program Files/dotnet.exe", result.FileName);
+                Assert.Equal("\"/Program Files/Cake.dll\"", result.Arguments);
+            }
+
+            [RuntimeFact(TestRuntime.CoreClr)]
+            public void Should_Use_DotnetCli_On_Unix_And_CoreClr_When_Tool_Is_Dll()
+            {
+                // Given
+                var fixture = new ProcessRunnerFixture(windows: false, dllTool: true);
+                fixture.GivenIsCoreClr();
+
+                // When
+                var result = fixture.GetProcessStartInfo();
+
+                // Then
+                Assert.Equal("/Program Files/dotnet", result.FileName);
+                Assert.Equal("\"/Program Files/Cake.dll\"", result.Arguments);
+            }
         }
     }
 }

@@ -124,6 +124,23 @@ namespace Cake.Core.IO
             }
 #endif
 
+            if (_environment.Runtime.IsCoreClr && (
+                    fileName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase) ||
+                    fileName.EndsWith(".dll\"", StringComparison.OrdinalIgnoreCase)))
+            {
+                if (_environment.Platform.IsUnix())
+                {
+                    arguments.PrependQuoted(fileName);
+                }
+                else
+                {
+                    // Should already be quoted on windows
+                    arguments.Prepend(fileName);
+                }
+                // Since we're running under CoreCLR then .net cli should always resolve successfully.
+                fileName = _tools.Resolve(_environment.Platform.IsUnix() ? "dotnet" : "dotnet.exe").FullPath;
+            }
+
             if (!settings.Silent)
             {
                 // Log the filename and arguments.

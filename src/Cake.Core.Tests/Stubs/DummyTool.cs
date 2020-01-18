@@ -12,15 +12,18 @@ namespace Cake.Core.Tests.Stubs
     public sealed class DummyTool : Tool<DummySettings>
     {
         private readonly Action<int> _exitCodeValidation;
+        private readonly bool _hasDllExe;
 
         public DummyTool(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
             IToolLocator tools,
-            Action<int> exitCodeValidation) : base(fileSystem, environment, processRunner, tools)
+            Action<int> exitCodeValidation,
+            bool hasDllExe = false) : base(fileSystem, environment, processRunner, tools)
         {
             _exitCodeValidation = exitCodeValidation;
+            _hasDllExe = hasDllExe;
         }
 
         public void Run(DummySettings settings)
@@ -45,7 +48,9 @@ namespace Cake.Core.Tests.Stubs
 
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "dummy.exe" };
+            return _hasDllExe
+                ? new[] { "dummy.exe", "dummy.dll" }
+                : new[] { "dummy.exe" };
         }
     }
 }

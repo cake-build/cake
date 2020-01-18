@@ -17,9 +17,9 @@ namespace Cake.Testing.Fixtures
         /// <summary>
         /// Initializes a new instance of the <see cref="ToolFixture{TToolSettings}"/> class.
         /// </summary>
-        /// <param name="toolFilename">The tool filename.</param>
-        protected ToolFixture(string toolFilename)
-            : base(toolFilename)
+        /// <param name="toolFilenames">The list of tool filenames.</param>
+        protected ToolFixture(params string[] toolFilenames)
+            : base(toolFilenames)
         {
         }
 

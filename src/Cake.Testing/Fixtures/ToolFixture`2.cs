@@ -68,9 +68,9 @@ namespace Cake.Testing.Fixtures
         /// <summary>
         /// Initializes a new instance of the <see cref="ToolFixture{TToolSettings, TFixtureResult}"/> class.
         /// </summary>
-        /// <param name="toolFilename">The tool filename.</param>
+        /// <param name="toolFilenames">The list of tool filenames.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        protected ToolFixture(string toolFilename)
+        protected ToolFixture(params string[] toolFilenames)
         {
             Settings = new TToolSettings();
             ProcessRunner = new ToolFixtureProcessRunner<TFixtureResult>(CreateResult);
@@ -81,8 +81,11 @@ namespace Cake.Testing.Fixtures
             Tools = new ToolLocator(Environment, new ToolRepository(Environment), new ToolResolutionStrategy(FileSystem, Environment, Globber, Configuration));
 
             // ReSharper disable once VirtualMemberCallInConstructor
-            DefaultToolPath = GetDefaultToolPath(toolFilename);
-            FileSystem.CreateFile(DefaultToolPath);
+            DefaultToolPath = GetDefaultToolPath(toolFilenames[0]);
+            foreach (var toolFilename in toolFilenames)
+            {
+                FileSystem.CreateFile(GetDefaultToolPath(toolFilename));
+            }
         }
 
         /// <summary>
