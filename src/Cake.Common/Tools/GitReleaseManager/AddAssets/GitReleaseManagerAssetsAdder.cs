@@ -149,7 +149,7 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
             builder.Append("addasset");
 
             builder.Append("--token");
-            builder.AppendQuoted(token);
+            builder.AppendQuotedSecret(token);
 
             ParseCommonArguments(builder, owner, repository, tagName, assets);
 

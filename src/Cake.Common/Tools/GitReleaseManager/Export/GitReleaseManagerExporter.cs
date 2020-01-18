@@ -140,7 +140,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Export
             builder.Append("export");
 
             builder.Append("--token");
-            builder.AppendQuoted(token);
+            builder.AppendQuotedSecret(token);
 
             ParseCommonArguments(builder, owner, repository, fileOutputPath, settings);
 

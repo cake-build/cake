@@ -128,7 +128,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
             builder.Append("create");
 
             builder.Append("--token");
-            builder.AppendQuoted(token);
+            builder.AppendQuotedSecret(token);
 
             ParseCommonArguments(builder, owner, repository, settings);
 

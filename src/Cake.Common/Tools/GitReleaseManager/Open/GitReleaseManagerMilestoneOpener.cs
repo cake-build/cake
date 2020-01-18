@@ -74,7 +74,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Open
             builder.Append("open");
 
             builder.Append("--token");
-            builder.AppendQuoted(token);
+            builder.AppendQuotedSecret(token);
 
             builder.Append("-o");
             builder.AppendQuoted(owner);

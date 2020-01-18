@@ -125,7 +125,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Label
             builder.Append("label");
 
             builder.Append("--token");
-            builder.AppendQuoted(token);
+            builder.AppendQuotedSecret(token);
 
             ParseCommonArguments(builder, owner, repository);
 
