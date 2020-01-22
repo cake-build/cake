@@ -14,8 +14,6 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
     /// </summary>
     public sealed class GitReleaseManagerMilestoneCloser : GitReleaseManagerTool<GitReleaseManagerCloseMilestoneSettings>
     {
-        private readonly ICakeEnvironment _environment;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GitReleaseManagerMilestoneCloser"/> class.
         /// </summary>
@@ -29,11 +27,10 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
             IProcessRunner processRunner,
             IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
-            _environment = environment;
         }
 
         /// <summary>
-        /// Creates a Release using the specified settings.
+        /// Closes a milestone using the specified settings.
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <param name="password">The password.</param>
@@ -77,7 +74,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
         }
 
         /// <summary>
-        /// Creates a Release using the specified settings.
+        /// Closes a milestone using the specified settings.
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="owner">The owner.</param>
@@ -126,7 +123,9 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
             builder.Append("-p");
             builder.AppendQuotedSecret(password);
 
-            ParseCommonArguments(builder, owner, repository, milestone, settings);
+            ParseCommonArguments(builder, owner, repository, milestone);
+
+            AddBaseArguments(settings, builder);
 
             return builder;
         }
@@ -138,14 +137,16 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
             builder.Append("close");
 
             builder.Append("--token");
-            builder.AppendQuoted(token);
+            builder.AppendQuotedSecret(token);
 
-            ParseCommonArguments(builder, owner, repository, milestone, settings);
+            ParseCommonArguments(builder, owner, repository, milestone);
+
+            AddBaseArguments(settings, builder);
 
             return builder;
         }
 
-        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, string milestone, GitReleaseManagerCloseMilestoneSettings settings)
+        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, string milestone)
         {
             builder.Append("-o");
             builder.AppendQuoted(owner);
@@ -155,20 +156,6 @@ namespace Cake.Common.Tools.GitReleaseManager.Close
 
             builder.Append("-m");
             builder.AppendQuoted(milestone);
-
-            // Target Directory
-            if (settings.TargetDirectory != null)
-            {
-                builder.Append("-d");
-                builder.AppendQuoted(settings.TargetDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Log File Path
-            if (settings.LogFilePath != null)
-            {
-                builder.Append("-l");
-                builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
-            }
         }
     }
 }

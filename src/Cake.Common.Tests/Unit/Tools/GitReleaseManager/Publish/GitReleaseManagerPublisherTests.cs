@@ -454,6 +454,105 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Publish
                              "\"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
                              "-l \"/temp/log.txt\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Debug_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new GitReleaseManagerPublisherFixture();
+                fixture.Settings.Debug = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -u \"bob\" -p \"password\" -o " +
+                             "\"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "--debug", result.Args);
+            }
+
+            [Fact]
+            public void Should_All_Debug_To_Arguments_If_Set_When_Using_Token()
+            {
+                // Given
+                var fixture = new GitReleaseManagerPublisherFixture();
+                fixture.UseToken();
+                fixture.Settings.Debug = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish --token \"token\" -o " +
+                             "\"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "--debug", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Verbose_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new GitReleaseManagerPublisherFixture();
+                fixture.Settings.Verbose = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -u \"bob\" -p \"password\" -o " +
+                             "\"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "--verbose", result.Args);
+            }
+
+            [Fact]
+            public void Should_All_Verbose_To_Arguments_If_Set_When_Using_Token()
+            {
+                // Given
+                var fixture = new GitReleaseManagerPublisherFixture();
+                fixture.UseToken();
+                fixture.Settings.Verbose = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish --token \"token\" -o " +
+                             "\"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "--verbose", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_NoLogo_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new GitReleaseManagerPublisherFixture();
+                fixture.Settings.NoLogo = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -u \"bob\" -p \"password\" -o " +
+                             "\"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "--no-logo", result.Args);
+            }
+
+            [Fact]
+            public void Should_All_NoLogo_To_Arguments_If_Set_When_Using_Token()
+            {
+                // Given
+                var fixture = new GitReleaseManagerPublisherFixture();
+                fixture.UseToken();
+                fixture.Settings.NoLogo = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish --token \"token\" -o " +
+                             "\"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "--no-logo", result.Args);
+            }
         }
     }
 }

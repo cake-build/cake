@@ -605,6 +605,105 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.Create
                              "-o \"repoOwner\" -r \"repo\" " +
                              "-l \"/temp/log.txt\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Debug_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new GitReleaseManagerCreatorFixture();
+                fixture.Settings.Debug = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" " +
+                             "--debug", result.Args);
+            }
+
+            [Fact]
+            public void Should_All_Debug_To_Arguments_If_Set_When_Using_Token()
+            {
+                // Given
+                var fixture = new GitReleaseManagerCreatorFixture();
+                fixture.UseToken();
+                fixture.Settings.Debug = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create --token \"token\" " +
+                             "-o \"repoOwner\" -r \"repo\" " +
+                             "--debug", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Verbose_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new GitReleaseManagerCreatorFixture();
+                fixture.Settings.Verbose = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" " +
+                             "--verbose", result.Args);
+            }
+
+            [Fact]
+            public void Should_All_Verbose_To_Arguments_If_Set_When_Using_Token()
+            {
+                // Given
+                var fixture = new GitReleaseManagerCreatorFixture();
+                fixture.UseToken();
+                fixture.Settings.Verbose = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create --token \"token\" " +
+                             "-o \"repoOwner\" -r \"repo\" " +
+                             "--verbose", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_NoLogo_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new GitReleaseManagerCreatorFixture();
+                fixture.Settings.NoLogo = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" " +
+                             "--no-logo", result.Args);
+            }
+
+            [Fact]
+            public void Should_All_NoLogo_To_Arguments_If_Set_When_Using_Token()
+            {
+                // Given
+                var fixture = new GitReleaseManagerCreatorFixture();
+                fixture.UseToken();
+                fixture.Settings.NoLogo = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create --token \"token\" " +
+                             "-o \"repoOwner\" -r \"repo\" " +
+                             "--no-logo", result.Args);
+            }
         }
     }
 }
