@@ -79,7 +79,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Delete
             if (!string.IsNullOrEmpty(settings.ApiKey))
             {
                 builder.Append("--api-key");
-                builder.AppendQuoted(settings.ApiKey);
+                builder.AppendQuotedSecret(settings.ApiKey);
             }
 
             // Force English Output

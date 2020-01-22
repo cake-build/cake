@@ -155,7 +155,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("push \"/Working/existing.nupkg\" 1234 -NonInteractive", result.Args);
+                Assert.Equal("push \"/Working/existing.nupkg\" \"1234\" -NonInteractive", result.Args);
             }
 
             [Fact]

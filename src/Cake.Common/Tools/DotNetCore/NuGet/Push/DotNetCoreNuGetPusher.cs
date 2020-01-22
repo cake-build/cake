@@ -69,7 +69,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
             if (!string.IsNullOrWhiteSpace(settings.ApiKey))
             {
                 builder.Append("--api-key");
-                builder.Append(settings.ApiKey);
+                builder.AppendQuotedSecret(settings.ApiKey);
             }
 
             // Where to push symbol package to
@@ -83,7 +83,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
             if (!string.IsNullOrWhiteSpace(settings.SymbolApiKey))
             {
                 builder.Append("--symbol-api-key");
-                builder.Append(settings.SymbolApiKey);
+                builder.AppendQuotedSecret(settings.SymbolApiKey);
             }
 
             // Timeout

@@ -68,7 +68,7 @@ namespace Cake.Common.Tools.Chocolatey.ApiKey
             builder.AppendQuoted(source);
 
             builder.Append("-k");
-            builder.AppendQuoted(apiKey);
+            builder.AppendQuotedSecret(apiKey);
 
             // Debug
             if (settings.Debug)
