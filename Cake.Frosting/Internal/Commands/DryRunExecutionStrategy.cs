@@ -62,5 +62,20 @@ namespace Cake.Frosting.Internal.Commands
         public void PerformTaskTeardown(Action<ITaskTeardownContext> action, ITaskTeardownContext taskTeardownContext)
         {
         }
+
+        public Task ReportErrorsAsync(Func<Exception, Task> action, Exception exception)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task HandleErrorsAsync(Func<Exception, ICakeContext, Task> action, Exception exception, ICakeContext context)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task InvokeFinallyAsync(Func<Task> action)
+        {
+            return Task.CompletedTask;
+        }
     }
 }
