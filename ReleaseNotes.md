@@ -1,3 +1,13 @@
+### New in 0.37.0 (Released 2020/02/01)
+
+* 2708 Emitting debug information should be done regardless of --debug switch.
+* 2701 Api keys should be secret.
+* 2697 Update to latest release of GitReleaseManager.
+* 2696 Upgrade Cake Alias support for GitReleaseManager.
+* 2691 Missing GitHubActions Alias.
+* 2695 Cake fails to build on travis-ci with latest mono (6.8).
+* 2693 Update .NET Core SDK to 3.1.101.
+
 ### New in 0.36.0 (Released 2020/01/11)
 
 * 2677 Add GitHub Actions build provider.
