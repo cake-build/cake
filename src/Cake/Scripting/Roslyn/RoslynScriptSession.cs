@@ -94,7 +94,7 @@ namespace Cake.Scripting.Roslyn
                 .AddImports(Namespaces.Except(script.ExcludedNamespaces.Keys))
                 .AddReferences(References)
                 .AddReferences(ReferencePaths.Select(r => r.FullPath))
-                .WithEmitDebugInformation(_options.PerformDebug)
+                .WithEmitDebugInformation(true)
                 .WithMetadataResolver(Microsoft.CodeAnalysis.Scripting.ScriptMetadataResolver.Default);
 
             var roslynScript = CSharpScript.Create(code, options, _host.GetType());
