@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Core.IO;
-using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.GitReleaseManager.Create
 {
     /// <summary>
     /// Contains settings used by <see cref="GitReleaseManagerCreator"/>.
     /// </summary>
-    public sealed class GitReleaseManagerCreateSettings : ToolSettings
+    public sealed class GitReleaseManagerCreateSettings : GitReleaseManagerSettings
     {
         /// <summary>
         /// Gets or sets the milestone to be used when creating the release.
@@ -41,15 +40,5 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
         /// Gets or sets the commit to tag. Can be a branch or SHA. Defaults to repository's default branch..
         /// </summary>
         public string TargetCommitish { get; set; }
-
-        /// <summary>
-        /// Gets or sets the path on which GitReleaseManager should be executed.
-        /// </summary>
-        public DirectoryPath TargetDirectory { get; set; }
-
-        /// <summary>
-        /// Gets or sets the path to the GitReleaseManager log file.
-        /// </summary>
-        public FilePath LogFilePath { get; set; }
     }
 }

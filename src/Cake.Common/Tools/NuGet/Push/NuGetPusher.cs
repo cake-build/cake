@@ -69,7 +69,7 @@ namespace Cake.Common.Tools.NuGet.Push
 
             if (settings.ApiKey != null)
             {
-                builder.AppendSecret(settings.ApiKey);
+                builder.AppendQuotedSecret(settings.ApiKey);
             }
 
             builder.Append("-NonInteractive");
