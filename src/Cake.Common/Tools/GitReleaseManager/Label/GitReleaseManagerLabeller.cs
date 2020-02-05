@@ -14,8 +14,6 @@ namespace Cake.Common.Tools.GitReleaseManager.Label
     /// </summary>
     public sealed class GitReleaseManagerLabeller : GitReleaseManagerTool<GitReleaseManagerLabelSettings>
     {
-        private readonly ICakeEnvironment _environment;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GitReleaseManagerLabeller"/> class.
         /// </summary>
@@ -29,7 +27,6 @@ namespace Cake.Common.Tools.GitReleaseManager.Label
             IProcessRunner processRunner,
             IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
-            _environment = environment;
         }
 
         /// <summary>
@@ -70,7 +67,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Label
             Run(settings, GetArguments(userName, password, owner, repository, settings));
         }
 
-/// <summary>
+        /// <summary>
         /// Deletes and creates labels using the specified and settings.
         /// </summary>
         /// <param name="token">The token.</param>
@@ -114,7 +111,9 @@ namespace Cake.Common.Tools.GitReleaseManager.Label
             builder.Append("-p");
             builder.AppendQuotedSecret(password);
 
-            ParseCommonArguments(builder, owner, repository, settings);
+            ParseCommonArguments(builder, owner, repository);
+
+            AddBaseArguments(settings, builder);
 
             return builder;
         }
@@ -126,33 +125,22 @@ namespace Cake.Common.Tools.GitReleaseManager.Label
             builder.Append("label");
 
             builder.Append("--token");
-            builder.AppendQuoted(token);
+            builder.AppendQuotedSecret(token);
 
-            ParseCommonArguments(builder, owner, repository, settings);
+            ParseCommonArguments(builder, owner, repository);
+
+            AddBaseArguments(settings, builder);
+
             return builder;
         }
 
-        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, GitReleaseManagerLabelSettings settings)
+        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository)
         {
             builder.Append("-o");
             builder.AppendQuoted(owner);
 
             builder.Append("-r");
             builder.AppendQuoted(repository);
-
-            // Target Directory
-            if (settings.TargetDirectory != null)
-            {
-                builder.Append("-d");
-                builder.AppendQuoted(settings.TargetDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Log File Path
-            if (settings.LogFilePath != null)
-            {
-                builder.Append("-l");
-                builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
-            }
         }
     }
 }

@@ -14,8 +14,6 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
     /// </summary>
     public sealed class GitReleaseManagerAssetsAdder : GitReleaseManagerTool<GitReleaseManagerAddAssetsSettings>
     {
-        private readonly ICakeEnvironment _environment;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GitReleaseManagerAssetsAdder"/> class.
         /// </summary>
@@ -29,7 +27,6 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
             IProcessRunner processRunner,
             IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
-            _environment = environment;
         }
 
         /// <summary>
@@ -138,7 +135,9 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
             builder.Append("-p");
             builder.AppendQuotedSecret(password);
 
-            ParseCommonArguments(builder, owner, repository, tagName, assets, settings);
+            ParseCommonArguments(builder, owner, repository, tagName, assets);
+
+            AddBaseArguments(settings, builder);
 
             return builder;
         }
@@ -150,14 +149,16 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
             builder.Append("addasset");
 
             builder.Append("--token");
-            builder.AppendQuoted(token);
+            builder.AppendQuotedSecret(token);
 
-            ParseCommonArguments(builder, owner, repository, tagName, assets, settings);
+            ParseCommonArguments(builder, owner, repository, tagName, assets);
+
+            AddBaseArguments(settings, builder);
 
             return builder;
         }
 
-        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, string tagName, string assets, GitReleaseManagerAddAssetsSettings settings)
+        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, string tagName, string assets)
         {
             builder.Append("-o");
             builder.AppendQuoted(owner);
@@ -170,20 +171,6 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
 
             builder.Append("-a");
             builder.AppendQuoted(assets);
-
-            // Target Directory
-            if (settings.TargetDirectory != null)
-            {
-                builder.Append("-d");
-                builder.AppendQuoted(settings.TargetDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Log File Path
-            if (settings.LogFilePath != null)
-            {
-                builder.Append("-l");
-                builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
-            }
         }
     }
 }
