@@ -85,6 +85,22 @@ namespace Cake.Common.Build.GitHubActions.Data
         public string Repository => GetEnvironmentString("GITHUB_REPOSITORY");
 
         /// <summary>
+        /// Gets the unique number for each run within the repository.
+        /// </summary>
+        /// <value>
+        /// The unique number for each run within the repository.
+        /// </value>
+        public string RunId => GetEnvironmentString("GITHUB_RUN_ID");
+
+        /// <summary>
+        /// Gets the unique number for each run of a particular workflow in the repository.
+        /// </summary>
+        /// <value>
+        /// The unique number for each run of a particular workflow in the repository.
+        /// </value>
+        public int RunNumber => GetEnvironmentInteger("GITHUB_RUN_NUMBER");
+
+        /// <summary>
         /// Gets the commit SHA that triggered the workflow.
         /// </summary>
         /// <value>

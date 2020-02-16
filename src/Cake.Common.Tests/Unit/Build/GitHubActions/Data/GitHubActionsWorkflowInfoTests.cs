@@ -137,6 +137,38 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
             }
         }
 
+        public sealed class TheRunIdProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.RunId;
+
+                // Then
+                Assert.Equal("34058136", result);
+            }
+        }
+
+        public sealed class TheRunNumberProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.RunNumber;
+
+                // Then
+                Assert.Equal(60, result);
+            }
+        }
+
         public sealed class TheShaProperty
         {
             [Fact]
