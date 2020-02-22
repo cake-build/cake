@@ -69,6 +69,12 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Delete
                 builder.AppendQuoted(settings.Source);
             }
 
+            // No service endpoint
+            if (settings.NoServiceEndpoint)
+            {
+                builder.Append("--no-service-endpoint");
+            }
+
             // Is it CI?
             if (settings.NonInteractive)
             {
