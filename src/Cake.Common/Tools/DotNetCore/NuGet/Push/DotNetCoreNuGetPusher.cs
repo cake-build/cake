@@ -105,6 +105,12 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
                 builder.Append("--no-symbols");
             }
 
+            // skip duplicate
+            if (settings.SkipDuplicate)
+            {
+                builder.Append("--skip-duplicate");
+            }
+
             // Force English Output
             if (settings.ForceEnglishOutput)
             {

@@ -54,6 +54,15 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
         public bool IgnoreSymbols { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether, when pushing multiple packages to an HTTP(S) server,
+        /// to treat any 409 Conflict response as a warning so that the push can continue.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 3.1 SDK.
+        /// </remarks>
+        public bool SkipDuplicate { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to force command-line output in English.
         /// </summary>
         public bool ForceEnglishOutput { get; set; }
