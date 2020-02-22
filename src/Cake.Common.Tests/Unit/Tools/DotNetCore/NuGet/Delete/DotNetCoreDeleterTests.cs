@@ -105,6 +105,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Delete
                 var fixture = new DotNetCoreDeleterFixture();
                 fixture.Settings.Source = source;
                 fixture.Settings.NoServiceEndpoint = true;
+                fixture.Settings.Interactive = true;
                 fixture.Settings.NonInteractive = true;
                 fixture.Settings.ApiKey = apiKey;
                 fixture.Settings.ForceEnglishOutput = true;
@@ -115,7 +116,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Delete
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(string.Format("nuget delete {0} {1} --source \"{2}\" --no-service-endpoint --non-interactive --api-key \"{3}\" --force-english-output", packageName, packageVersion, source, apiKey), result.Args);
+                Assert.Equal(string.Format("nuget delete {0} {1} --source \"{2}\" --no-service-endpoint --interactive --non-interactive --api-key \"{3}\" --force-english-output", packageName, packageVersion, source, apiKey), result.Args);
             }
 
             [Fact]
