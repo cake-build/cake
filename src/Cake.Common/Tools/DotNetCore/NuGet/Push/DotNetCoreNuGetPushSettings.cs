@@ -31,6 +31,14 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
         public bool NoServiceEndpoint { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to block and require manual action for operations like authentication.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 2.2 SDK.
+        /// </remarks>
+        public bool Interactive { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating timeout for pushing to a server in seconds.
         /// <remarks>
         /// Defaults to 300 seconds (5 minutes). Specifying 0 (zero seconds) applies the default value.

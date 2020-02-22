@@ -110,6 +110,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Push
                 fixture.Settings.SymbolSource = symbolSource;
                 fixture.Settings.SymbolApiKey = symbolApiKey;
                 fixture.Settings.NoServiceEndpoint = true;
+                fixture.Settings.Interactive = true;
                 fixture.Settings.Timeout = timeout;
                 fixture.Settings.DisableBuffering = true;
                 fixture.Settings.IgnoreSymbols = true;
@@ -121,7 +122,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Push
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(string.Format("nuget push {0} --source {1} --api-key \"{2}\" --symbol-source {3} --symbol-api-key \"{4}\" --no-service-endpoint --timeout {5} --disable-buffering --no-symbols --skip-duplicate --force-english-output", packageName, source, apiKey, symbolSource, symbolApiKey, timeout), result.Args);
+                Assert.Equal(string.Format("nuget push {0} --source {1} --api-key \"{2}\" --symbol-source {3} --symbol-api-key \"{4}\" --no-service-endpoint --interactive --timeout {5} --disable-buffering --no-symbols --skip-duplicate --force-english-output", packageName, source, apiKey, symbolSource, symbolApiKey, timeout), result.Args);
             }
 
             [Fact]

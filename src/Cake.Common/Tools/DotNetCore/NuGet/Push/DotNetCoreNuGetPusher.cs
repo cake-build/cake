@@ -92,6 +92,12 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
                 builder.Append("--no-service-endpoint");
             }
 
+            // Interactive
+            if (settings.Interactive)
+            {
+                builder.Append("--interactive");
+            }
+
             // Timeout
             if (settings.Timeout.HasValue)
             {
