@@ -86,6 +86,12 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
                 builder.AppendQuotedSecret(settings.SymbolApiKey);
             }
 
+            // No service endpoint
+            if (settings.NoServiceEndpoint)
+            {
+                builder.Append("--no-service-endpoint");
+            }
+
             // Timeout
             if (settings.Timeout.HasValue)
             {

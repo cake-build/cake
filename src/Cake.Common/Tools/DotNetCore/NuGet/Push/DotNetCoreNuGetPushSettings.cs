@@ -23,6 +23,14 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
         public string SymbolSource { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to append "api/v2/package" to the source URL.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 2.1 SDK.
+        /// </remarks>
+        public bool NoServiceEndpoint { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating timeout for pushing to a server in seconds.
         /// <remarks>
         /// Defaults to 300 seconds (5 minutes). Specifying 0 (zero seconds) applies the default value.
