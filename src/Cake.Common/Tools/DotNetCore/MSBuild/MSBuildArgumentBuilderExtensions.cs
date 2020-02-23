@@ -135,7 +135,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             // use a file logger for each node?
             if (settings.DistributedFileLogger)
             {
-                builder.AppendMSBuildSwitch("distributedFileLogger");
+                builder.AppendMSBuildSwitch("distributedfilelogger");
             }
 
             // Got any loggers?

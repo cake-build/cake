@@ -440,7 +440,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /distributedFileLogger", result.Args);
+                Assert.Equal("msbuild /distributedfilelogger", result.Args);
             }
 
             [Fact]
