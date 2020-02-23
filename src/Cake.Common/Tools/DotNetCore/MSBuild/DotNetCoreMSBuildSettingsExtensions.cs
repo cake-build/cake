@@ -217,6 +217,21 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         }
 
         /// <summary>
+        /// Adds a file logger with all the default settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <remarks>
+        /// Each file logger will be declared in the order added.
+        /// The first file logger will match up to the /fl parameter.
+        /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
+        /// </remarks>
+        public static DotNetCoreMSBuildSettings AddFileLogger(this DotNetCoreMSBuildSettings settings)
+        {
+            return AddFileLogger(settings, new MSBuildFileLoggerSettings());
+        }
+
+        /// <summary>
         /// Adds a file logger.
         /// </summary>
         /// <param name="settings">The settings.</param>
@@ -237,25 +252,6 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             }
 
             settings.FileLoggers.Add(fileLoggerParameters);
-
-            return settings;
-        }
-
-        /// <summary>
-        /// Adds a file logger with all the default settings.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        /// <remarks>
-        /// Each file logger will be declared in the order added.
-        /// The first file logger will match up to the /fl parameter.
-        /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
-        /// </remarks>
-        public static DotNetCoreMSBuildSettings AddFileLogger(this DotNetCoreMSBuildSettings settings)
-        {
-            EnsureSettings(settings);
-
-            settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
 
             return settings;
         }
