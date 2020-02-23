@@ -257,6 +257,73 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         }
 
         /// <summary>
+        /// Enables the binary logger with all the default settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings)
+        {
+            return EnableBinaryLogger(settings, MSBuildBinaryLoggerImports.Unspecified);
+        }
+
+        /// <summary>
+        /// Enables the binary logger with the specified imports and default file name.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="imports">The imports.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings, MSBuildBinaryLoggerImports imports)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.BinaryLogger = new MSBuildBinaryLoggerSettings
+            {
+                Enabled = true,
+                Imports = imports,
+            };
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Enables the binary logger with the specified log file name and no imports.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileName">The log file name.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings, string fileName)
+        {
+            return EnableBinaryLogger(settings, fileName, MSBuildBinaryLoggerImports.Unspecified);
+        }
+
+        /// <summary>
+        /// Enables the binary logger with the specified log file name and imports.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileName">The log file name.</param>
+        /// <param name="imports">The imports.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings, string fileName, MSBuildBinaryLoggerImports imports)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.BinaryLogger = new MSBuildBinaryLoggerSettings
+            {
+                Enabled = true,
+                FileName = fileName,
+                Imports = imports,
+            };
+
+            return settings;
+        }
+
+        /// <summary>
         /// Adds a custom logger.
         /// </summary>
         /// <param name="settings">The settings.</param>
