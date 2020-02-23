@@ -360,7 +360,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="configuration">The configuration.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetConfiguration(this DotNetCoreMSBuildSettings settings, string configuration)
             => settings.WithProperty("configuration", configuration);
 
@@ -369,7 +369,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="version">The version.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         /// <remarks>
         /// Version will override VersionPrefix and VersionSuffix if set.
         /// This may also override version settings during packaging.
@@ -382,7 +382,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="fileVersion">The file version.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetFileVersion(this DotNetCoreMSBuildSettings settings, string fileVersion)
             => settings.WithProperty("FileVersion", fileVersion);
 
@@ -391,7 +391,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="informationalVersion">The informational version.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetInformationalVersion(this DotNetCoreMSBuildSettings settings, string informationalVersion)
             => settings.WithProperty("InformationalVersion", informationalVersion);
 
@@ -403,7 +403,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// each is an integer between 0 and 65534 (inclusive).
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SuppressVersionRecommendedFormatWarning(this DotNetCoreMSBuildSettings settings)
             => settings.WithProperty("nowarn", "7035");
 
@@ -412,7 +412,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="versionPrefix">The version prefix.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetVersionPrefix(this DotNetCoreMSBuildSettings settings, string versionPrefix)
             => settings.WithProperty("VersionPrefix", versionPrefix);
 
@@ -421,7 +421,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="versionSuffix">The version prefix.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetVersionSuffix(this DotNetCoreMSBuildSettings settings, string versionSuffix)
             => settings.WithProperty("VersionSuffix", versionSuffix);
 
@@ -430,7 +430,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="targetFramework">The framework to target.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         /// <remarks>
         /// For list of target frameworks see https://docs.microsoft.com/en-us/dotnet/standard/frameworks.
         /// </remarks>
@@ -442,7 +442,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="runtimeId">The runtime id of the operating system.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         /// <remarks>
         /// For list of runtime ids see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog.
         /// </remarks>
