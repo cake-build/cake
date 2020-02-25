@@ -56,7 +56,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
             builder.Append("nuget push");
 
             // Specific package
-            builder.Append(packageName);
+            builder.AppendQuoted(packageName);
 
             // Where to push package to
             if (!string.IsNullOrWhiteSpace(settings.Source))
