@@ -10,3 +10,20 @@ issue-labels-alias:
     - name:    Documentation
       header:  Documentation
       plural:  Documentation
+create:
+  include-sha-section: true
+  sha-section-heading: "SHA256 Hashes of the release artifacts"
+  sha-section-line-format: "- `{1}\t{0}`"
+close:
+  use-issue-comments: true
+  issue-comment: |-
+    :tada: This issue has been resolved in version {milestone} :tada:
+
+    The release is available on:
+
+    - [GitHub Release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
+    - [NuGet Package](https://www.nuget.org/packages/Cake/{milestone})
+    - [Chocolatey Package](https://chocolatey.org/packages/cake.portable/{milestone})
+    - [.Net Global Tool](https://www.nuget.org/packages/Cake.Tool/{milestone})
+    
+    Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:

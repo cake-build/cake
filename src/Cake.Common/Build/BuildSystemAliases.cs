@@ -358,5 +358,30 @@ namespace Cake.Common.Build
             var buildSystem = context.BuildSystem();
             return buildSystem.TFBuild;
         }
+
+        /// <summary>
+        /// Gets a <see cref="GitHubActionsProvider"/> instance that can be used to
+        /// obtain information from the GitHub Actions environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isGitHubActionsBuild = GitHubActions.IsRunningOnGitHubActions;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Cake.Common.Build.GitHubActions"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.GitHubActions")]
+        [CakeNamespaceImport("Cake.Common.Build.GitHubActions.Data")]
+        public static IGitHubActionsProvider GitHubActions(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var buildSystem = context.BuildSystem();
+            return buildSystem.GitHubActions;
+        }
     }
 }
