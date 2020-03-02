@@ -1,3 +1,36 @@
+### New in 0.37.0 (Released 2020/02/01)
+
+* 2708 Emitting debug information should be done regardless of --debug switch.
+* 2701 Api keys should be secret.
+* 2697 Update to latest release of GitReleaseManager.
+* 2696 Upgrade Cake Alias support for GitReleaseManager.
+* 2691 Missing GitHubActions Alias.
+* 2695 Cake fails to build on travis-ci with latest mono (6.8).
+* 2693 Update .NET Core SDK to 3.1.101.
+
+### New in 0.36.0 (Released 2020/01/11)
+
+* 2677 Add GitHub Actions build provider.
+* 2638 CreateAssemblyInfo alias should allow creation of custom boolean attributes and also empty attributes.
+* 2682 Add .NET Core 3.1 Runtime support.
+* 2679 Add optional GetToolExecutableNames that takes tool settings.
+* 2675 InspectCode: Add support for InspectCode.x86.exe tool.
+* 2673 DotNetCorePublishSettings should support new .NET Core 3 features.
+* 2671 NuGet Install doesn't allow to set NonInteractive to false.
+* 2663 Support Inno Setup 6.
+* 2657 Rename TFBuild.Environment.Repository.Branch to TFBuild.Environment.Repository.BranchName.
+* 2533 Setting SecurityRules with CreateAssemblyInfo.
+* 2532 Publish Cake.Testing.Xunit package.
+* 2328 InspectCode: Add support for new /verbosity argument.
+* 2652 Improve documentation for TFBuildPullRequestInfo.Id and TFBuildPullRequestInfo.Number.
+* 2661 Build not stopped when rethrowing exception in OnError.
+* 2640 Remove unnecessary parameter from AddMetadataAttribute method.
+* 2637 CreateAssemblyInfo alias creates invalid file when using .vb.
+* 2534 Windows 10: System.PlatformNotSupportedException: System.Data.SqlClient is not supported on this platform.
+* 2527 Don't limit the #load to only .cake files.
+* 2498 ParseProject fails on an absolute HintPath.
+* 2275 System.Data.SqlClient in Cake.CoreCLR Assembly Load Error.
+
 ### New in 0.35.0 (Released 2019/09/28)
 
 * 2603 Add .NET Core 3 to Cake.Tool update to .NET Core 3 SDK.

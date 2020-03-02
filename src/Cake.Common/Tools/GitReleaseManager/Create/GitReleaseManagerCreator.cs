@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
         }
 
         /// <summary>
-        /// Creates a Release using the specified and settings.
+        /// Creates a Release using the specified settings.
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <param name="password">The password.</param>
@@ -70,8 +70,8 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
             Run(settings, GetArguments(userName, password, owner, repository, settings));
         }
 
-                /// <summary>
-        /// Creates a Release using the specified and settings.
+        /// <summary>
+        /// Creates a Release using the specified settings.
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="owner">The owner.</param>
@@ -116,6 +116,8 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
 
             ParseCommonArguments(builder, owner, repository, settings);
 
+            AddBaseArguments(settings, builder);
+
             return builder;
         }
 
@@ -126,9 +128,11 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
             builder.Append("create");
 
             builder.Append("--token");
-            builder.AppendQuoted(token);
+            builder.AppendQuotedSecret(token);
 
             ParseCommonArguments(builder, owner, repository, settings);
+
+            AddBaseArguments(settings, builder);
 
             return builder;
         }
@@ -180,20 +184,6 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
             {
                 builder.Append("-c");
                 builder.AppendQuoted(settings.TargetCommitish);
-            }
-
-            // Target Directory
-            if (settings.TargetDirectory != null)
-            {
-                builder.Append("-d");
-                builder.AppendQuoted(settings.TargetDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Log File Path
-            if (settings.LogFilePath != null)
-            {
-                builder.Append("-l");
-                builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
             }
         }
     }
