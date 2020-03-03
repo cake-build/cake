@@ -148,5 +148,18 @@ namespace Cake.Common.Tests.Unit.Build
                 AssertEx.IsArgumentNullException(result, "context");
             }
         }
+
+        public sealed class TheAzurePipelinesMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => BuildSystemAliases.AzurePipelines(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Common.Build.AppVeyor;
+using Cake.Common.Build.AzurePipelines;
 using Cake.Common.Build.Bamboo;
 using Cake.Common.Build.BitbucketPipelines;
 using Cake.Common.Build.Bitrise;
@@ -58,7 +59,8 @@ namespace Cake.Common.Build
             var gitLabCIProvider = new GitLabCIProvider(context.Environment);
             var tfBuildProvider = new TFBuildProvider(context.Environment, context.Log);
             var gitHubActionsProvider = new GitHubActionsProvider(context.Environment);
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider);
+            var azurePipelinesProvider = new AzurePipelinesProvider(context.Environment, context.Log);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider, azurePipelinesProvider);
         }
 
         /// <summary>
@@ -348,6 +350,7 @@ namespace Cake.Common.Build
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.TFBuild")]
         [CakeNamespaceImport("Cake.Common.Build.TFBuild.Data")]
+        [Obsolete("Use AzurePipelines instead.")]
         public static ITFBuildProvider TFBuild(this ICakeContext context)
         {
             if (context == null)
@@ -382,6 +385,31 @@ namespace Cake.Common.Build
 
             var buildSystem = context.BuildSystem();
             return buildSystem.GitHubActions;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="AzurePipelinesProvider"/> instance that can be used to
+        /// obtain information from the Azure Pipelines environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isAzurePipelines = AzurePipelines.IsRunningOnAzurePipelines;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Build.AzurePipelines"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.AzurePipelines")]
+        [CakeNamespaceImport("Cake.Common.Build.AzurePipelines.Data")]
+        public static IAzurePipelinesProvider AzurePipelines(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var buildSystem = context.BuildSystem();
+            return buildSystem.AzurePipelines;
         }
     }
 }
