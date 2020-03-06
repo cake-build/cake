@@ -6,7 +6,7 @@ using Cake.Common.Tools.DotNetCore.NuGet.Push;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.NuGet.Push
 {
-    internal sealed class DotNetCorePusherFixture : DotNetCoreFixture<DotNetCoreNuGetPushSettings>
+    internal sealed class DotNetCoreNuGetPusherFixture : DotNetCoreFixture<DotNetCoreNuGetPushSettings>
     {
         public string PackageName { get; set; }
 

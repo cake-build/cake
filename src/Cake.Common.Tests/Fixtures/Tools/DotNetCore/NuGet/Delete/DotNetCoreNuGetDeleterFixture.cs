@@ -6,7 +6,7 @@ using Cake.Common.Tools.DotNetCore.NuGet.Delete;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.NuGet.Delete
 {
-    internal sealed class DotNetCoreDeleterFixture : DotNetCoreFixture<DotNetCoreNuGetDeleteSettings>
+    internal sealed class DotNetCoreNuGetDeleterFixture : DotNetCoreFixture<DotNetCoreNuGetDeleteSettings>
     {
         public string PackageName { get; set; }
         public string PackageVersion { get; set; }
