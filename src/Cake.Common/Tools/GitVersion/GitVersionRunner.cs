@@ -51,6 +51,8 @@ namespace Cake.Common.Tools.GitVersion
                 throw new ArgumentNullException(nameof(settings));
             }
 
+            Run(settings, GetArguments(settings));
+
             if (settings.OutputType != GitVersionOutput.BuildServer)
             {
                 var jsonString = string.Empty;
@@ -65,8 +67,6 @@ namespace Cake.Common.Tools.GitVersion
                     return (jsonSerializer.ReadObject(jsonStream) as GitVersionInternal)?.GitVersion;
                 }
             }
-
-            Run(settings, GetArguments(settings));
 
             return new GitVersion();
         }
