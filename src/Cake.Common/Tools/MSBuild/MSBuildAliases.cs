@@ -20,10 +20,10 @@ namespace Cake.Common.Tools.MSBuild
     public static class MSBuildAliases
     {
         /// <summary>
-        /// Builds the specified solution using MSBuild.
+        /// Builds the specified solution or MsBuild project file using MSBuild.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="solution">The solution.</param>
+        /// <param name="solution">The solution or MsBuild project file to build.</param>
         /// <example>
         /// <code>
         /// MSBuild("./src/Cake.sln");
@@ -36,10 +36,10 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
-        /// Builds the specified solution using MSBuild.
+        /// Builds the specified solution or MsBuild project file using MSBuild.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="solution">The solution to build.</param>
+        /// <param name="solution">The solution or MsBuild project file to build.</param>
         /// <param name="configurator">The settings configurator.</param>
         /// <example>
         /// <code>
@@ -71,10 +71,10 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
-        /// Builds the specified solution using MSBuild.
+        /// Builds the specified solution or MsBuild project file using MSBuild.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="solution">The solution to build.</param>
+        /// <param name="solution">The solution or MsBuild project file to build.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
