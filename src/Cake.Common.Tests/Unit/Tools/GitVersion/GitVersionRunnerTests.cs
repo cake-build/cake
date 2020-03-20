@@ -2,11 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.GitVersion;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Testing;
+using Cake.Testing.Extensions;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.GitVersion
@@ -215,6 +217,45 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
 
                 // Then
                 Assert.Equal(args, result.Args);
+            }
+
+            [Theory]
+            [InlineData(Verbosity.Quiet)]
+            [InlineData(Verbosity.Minimal)]
+            [InlineData(Verbosity.Normal)]
+            [InlineData(Verbosity.Verbose)]
+            [InlineData(Verbosity.Diagnostic)]
+            public void Should_Log_GitVersion_Errors_When_Verbosity_Less_Than_Diagnostic(Verbosity verbosity)
+            {
+                // Given
+                var log = new FakeLog { Verbosity = verbosity };
+                var fixture = new GitVersionRunnerFixture(new[]
+                {
+                    "  INFO [02/29/20 20:29:12:17] No local branch pointing at the commit '57a682f6012d1f27255de86240fa98e87fe1f765'. Fake branch needs to be created.  INFO [02/29/20 20:29:12:17] Fetching remote refs to see if there is a pull request ref  INFO [02/29/20 20:29:12:20] End: Normalizing git directory for branch '' (Took: 89.28ms)  ERROR [02/29/20 20:29:12:21] An unexpected error occurred:",
+                    "LibGit2Sharp.LibGit2SharpException: this remote has never connected",
+                    "   at LibGit2Sharp.Core.Ensure.HandleError(Int32 result)",
+                    "...",
+                    "  INFO [02/29/20 20:43:18:60] No local branch pointing at the commit 'c9d51bc9836a310145b3d8976a69b1859be36a35'. Fake branch needs to be created.",
+                    "  INFO [02/29/20 20:43:18:60] Fetching remote refs to see if there is a pull request ref",
+                    "  INFO [02/29/20 20:43:18:66] End: Normalizing git directory for branch '' (Took: 124.33ms)",
+                    "  ERROR [02/29/20 20:43:18:68] An unexpected error occurred:",
+                    "LibGit2Sharp.LibGit2SharpException: this remote has never connected",
+                    "   at LibGit2Sharp.Core.Ensure.HandleError(Int32 result)",
+                    "..."
+                });
+                fixture.Log = log;
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.Equal(verbosity < Verbosity.Diagnostic
+                    ? "  ERROR [02/29/20 20:29:12:21] An unexpected error occurred:" + Environment.NewLine +
+                    "LibGit2Sharp.LibGit2SharpException: this remote has never connected" + Environment.NewLine +
+                    "  ERROR [02/29/20 20:43:18:68] An unexpected error occurred:" + Environment.NewLine +
+                    "LibGit2Sharp.LibGit2SharpException: this remote has never connected" + Environment.NewLine
+                    : string.Empty,
+                    log.AggregateLogMessages());
             }
 
             [Fact]

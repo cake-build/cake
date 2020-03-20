@@ -5,8 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -53,14 +55,23 @@ namespace Cake.Common.Tools.GitVersion
 
             if (settings.OutputType != GitVersionOutput.BuildServer)
             {
-                var jsonString = string.Empty;
-
-                Run(settings, GetArguments(settings), new ProcessSettings { RedirectStandardOutput = true },
-                process => jsonString = string.Join("\n", process.GetStandardOutput()));
+                var output = string.Empty;
+                Run(settings, GetArguments(settings), new ProcessSettings { RedirectStandardOutput = true }, process =>
+                {
+                    output = string.Join("\n", process.GetStandardOutput());
+                    if (_log.Verbosity < Verbosity.Diagnostic)
+                    {
+                        var errors = Regex.Matches(output, @"( *ERROR:? [^\n]*)\n([^\n]*)").Cast<Match>()
+                            .SelectMany(match => new[] { match.Groups[1].Value, match.Groups[2].Value });
+                        foreach (var error in errors)
+                        {
+                            _log.Error(error);
+                        }
+                    }
+                });
 
                 var jsonSerializer = new DataContractJsonSerializer(typeof(GitVersionInternal));
-
-                using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString)))
+                using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(output)))
                 {
                     return (jsonSerializer.ReadObject(jsonStream) as GitVersionInternal)?.GitVersion;
                 }
