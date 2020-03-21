@@ -98,19 +98,14 @@ namespace Cake.Core.Utilities
             // Wait for the process to exit.
             process.WaitForExit();
 
-            try
+            // Post action specified?
+            postAction?.Invoke(process);
+
+            // Did an error occur?
+            if (process.GetExitCode() != 0)
             {
-                // Did an error occur?
-                if (process.GetExitCode() != 0)
-                {
-                    const string message = "{0}: Process returned an error (exit code {1}).";
-                    throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), process.GetExitCode()));
-                }
-            }
-            finally
-            {
-                // Post action specified?
-                postAction?.Invoke(process);
+                const string message = "{0}: Process returned an error (exit code {1}).";
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), process.GetExitCode()));
             }
         }
 
