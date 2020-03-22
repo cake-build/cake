@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+using System.Linq;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 using Cake.Testing;
@@ -105,7 +107,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var locator = new ToolLocator(environment, repository, strategy);
 
                 // When
-                var result = Record.Exception(() => locator.Resolve(null));
+                var result = Record.Exception(() => locator.Resolve((string)null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "tool");
@@ -131,6 +133,22 @@ namespace Cake.Core.Tests.Unit.Tooling
             }
 
             [Fact]
+            public void Should_Throw_If_ToolExeNames_Is_Null()
+            {
+                // Given
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var repository = Substitute.For<IToolRepository>();
+                var strategy = Substitute.For<IToolResolutionStrategy>();
+                var locator = new ToolLocator(environment, repository, strategy);
+
+                // When
+                var result = Record.Exception(() => locator.Resolve((IEnumerable<string>)null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "toolExeNames");
+            }
+
+            [Fact]
             public void Should_Resolve_Tool_Using_The_Tool_Resolution_Strategy()
             {
                 // Given
@@ -143,9 +161,25 @@ namespace Cake.Core.Tests.Unit.Tooling
                 locator.Resolve("test.exe");
 
                 // Then
-                strategy.Received(1).Resolve(
-                    Arg.Is(repository),
-                    Arg.Is("test.exe"));
+                strategy.Received(1)
+                    .Resolve(Arg.Is(repository), Arg.Is("test.exe"));
+            }
+
+            [Fact]
+            public void Should_Resolve_ToolExeNames_Using_The_Tool_Resolution_Strategy()
+            {
+                // Given
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var repository = Substitute.For<IToolRepository>();
+                var strategy = Substitute.For<IToolResolutionStrategy>();
+                var locator = new ToolLocator(environment, repository, strategy);
+
+                // When
+                locator.Resolve(new[] { "test.exe", "dotnet-test", "dotnet-test.exe" });
+
+                // Then
+                strategy.Received(1)
+                    .Resolve(Arg.Is(repository), Arg.Is<IEnumerable<string>>(arg => arg.SequenceEqual(new[] { "test.exe", "dotnet-test", "dotnet-test.exe" })));
             }
         }
     }

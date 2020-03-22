@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Core.IO;
 
 namespace Cake.Core.Tooling
@@ -23,5 +24,12 @@ namespace Cake.Core.Tooling
         /// <param name="tool">The tool.</param>
         /// <returns>A path if the tool was found; otherwise <c>null</c>.</returns>
         FilePath Resolve(string tool);
+
+        /// <summary>
+        /// Resolves the path to the specified tool.
+        /// </summary>
+        /// <param name="toolExeNames">The possible names of the tool executable.</param>
+        /// <returns>A path if the tool was found; otherwise <c>null</c>.</returns>
+        FilePath Resolve(IEnumerable<string> toolExeNames);
     }
 }
