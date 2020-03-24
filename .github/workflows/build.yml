@@ -16,10 +16,10 @@ jobs:
       - name: Get the sources
         uses: actions/checkout@v1
 
-      - name: Install .NET Core SDK 3.1.101
+      - name: Install .NET Core SDK 3.1.200
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.101'
+          dotnet-version: '3.1.200'
 
       - name: Run Cake script
         uses: ecampidoglio/cake-action@v1.1.0
