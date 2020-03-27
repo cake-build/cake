@@ -16,19 +16,36 @@ namespace Cake.Common.Security
     public sealed class FileHashCalculator
     {
         private readonly IFileSystem _fileSystem;
+        private readonly IHashAlgorithmBuilder _hashAlgorithmBuilder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileHashCalculator"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         public FileHashCalculator(IFileSystem fileSystem)
+            : this(fileSystem, new HashAlgorithmBuilder())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileHashCalculator"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="hashAlgorithmBuilder">The hash algorithm builder.</param>
+        public FileHashCalculator(IFileSystem fileSystem, IHashAlgorithmBuilder hashAlgorithmBuilder)
         {
             if (fileSystem == null)
             {
                 throw new ArgumentNullException(nameof(fileSystem));
             }
 
+            if (hashAlgorithmBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(hashAlgorithmBuilder));
+            }
+
             _fileSystem = fileSystem;
+            _hashAlgorithmBuilder = hashAlgorithmBuilder;
         }
 
         /// <summary>
@@ -53,29 +70,12 @@ namespace Cake.Common.Security
                 throw new CakeException(message);
             }
 
-            using (var hashAlgo = GetHashAlgorithm(hashAlgorithm))
+            using (var hashAlgo = _hashAlgorithmBuilder.CreateHashAlgorithm(hashAlgorithm))
             using (var readStream = file.OpenRead())
             {
                 var hash = hashAlgo.ComputeHash(readStream);
                 return new FileHash(filePath, hash, hashAlgorithm);
             }
-        }
-
-        private System.Security.Cryptography.HashAlgorithm GetHashAlgorithm(HashAlgorithm hashAlgorithm)
-        {
-            switch (hashAlgorithm)
-            {
-                case HashAlgorithm.MD5:
-                    return MD5.Create();
-
-                case HashAlgorithm.SHA256:
-                    return SHA256.Create();
-
-                case HashAlgorithm.SHA512:
-                    return SHA512.Create();
-            }
-
-            throw new NotSupportedException(hashAlgorithm.ToString());
         }
     }
 }
