@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Core.Configuration;
+using Cake.Core.Diagnostics;
 
 namespace Cake.Core
 {
@@ -11,6 +13,8 @@ namespace Cake.Core
     /// </summary>
     public sealed class CakeConsole : IConsole
     {
+        private readonly Lazy<bool> _supportAnsiEscapeCodes;
+
         /// <summary>
         /// Gets or sets the foreground color.
         /// </summary>
@@ -29,6 +33,25 @@ namespace Cake.Core
         {
             get { return Console.BackgroundColor; }
             set { Console.BackgroundColor = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the console supports ANSI escape codes.
+        /// </summary>
+        public bool SupportAnsiEscapeCodes => _supportAnsiEscapeCodes.Value;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeConsole"/> class.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        public CakeConsole(ICakeEnvironment environment)
+        {
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+
+            _supportAnsiEscapeCodes = new Lazy<bool>(() => AnsiDetector.SupportsAnsi(environment));
         }
 
         /// <summary>
