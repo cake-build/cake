@@ -114,6 +114,24 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             Assert.Equal(existingToolPath, result.Path.FullPath);
         }
 
+        [Theory]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2019/Enterprise/Common7/IDE/mstest.exe", "/ProgramFilesX86/Microsoft Visual Studio/2017/Enterprise/Common7/IDE/mstest.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2019/Professional/Common7/IDE/mstest.exe", "/ProgramFilesX86/Microsoft Visual Studio/2017/Enterprise/Common7/IDE/mstest.exe")]
+        public void Should_Use_Highest_Available_Version_Tool_Path(string prioritizedPath, string lesserPath)
+        {
+            // Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.FileSystem.CreateFile(lesserPath);
+            fixture.FileSystem.CreateFile(prioritizedPath);
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal(prioritizedPath, result.Path.FullPath);
+        }
+
         [Fact]
         public void Should_Set_Working_Directory()
         {
