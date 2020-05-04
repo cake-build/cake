@@ -311,20 +311,9 @@ Task("Create-NuGet-Packages")
             OutputDirectory = parameters.Paths.Directories.NuGetRoot,
             NoBuild = true,
             NoRestore = true,
-            IncludeSymbols = true,
             MSBuildSettings = parameters.MSBuildSettings
         });
     }
-
-    // Cake - Symbols - .NET 4.6.1
-    NuGetPack("./nuspec/Cake.symbols.nuspec", new NuGetPackSettings {
-        Version = parameters.Version.SemVersion,
-        ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = parameters.Paths.Directories.ArtifactsBinFullFx,
-        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        Symbols = true,
-        NoPackageAnalysis = true
-    });
 
     var netFxFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx).FullPath;
     var netFxFullArtifactPathLength = netFxFullArtifactPath.Length+1;
@@ -335,22 +324,11 @@ Task("Create-NuGet-Packages")
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
         BasePath = netFxFullArtifactPath,
         OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        Symbols = false,
         NoPackageAnalysis = true,
         Files = GetFiles(netFxFullArtifactPath + "/*")
                                 .Select(file=>file.FullPath.Substring(netFxFullArtifactPathLength))
                                 .Select(file=> new NuSpecContent { Source = file, Target = file })
                                 .ToArray()
-    });
-
-    // Cake Symbols - .NET Core
-    NuGetPack("./nuspec/Cake.CoreCLR.symbols.nuspec", new NuGetPackSettings {
-        Version = parameters.Version.SemVersion,
-        ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = parameters.Paths.Directories.ArtifactsBinNetCore,
-        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        Symbols = true,
-        NoPackageAnalysis = true
     });
 
     var netCoreFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCore).FullPath;
@@ -362,7 +340,6 @@ Task("Create-NuGet-Packages")
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
         BasePath = netCoreFullArtifactPath,
         OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        Symbols = false,
         NoPackageAnalysis = true,
         Files = GetFiles(netCoreFullArtifactPath + "/**/*")
                                 .Select(file=>file.FullPath.Substring(netCoreFullArtifactPathLength))
@@ -373,7 +350,6 @@ Task("Create-NuGet-Packages")
     DotNetCorePack("./src/Cake/Cake.csproj", new DotNetCorePackSettings {
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        IncludeSymbols = true,
         MSBuildSettings = parameters.MSBuildSettings,
         ArgumentCustomization = arg => arg.Append("/p:PackAsTool=true")
     });
