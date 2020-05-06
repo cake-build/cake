@@ -14,15 +14,18 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
     steps:
       - name: Get the sources
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
-      - name: Install .NET Core SDK 3.1.200
+      - name: Fetch all history for all tags and branches
+        run: git fetch --prune --unshallow
+
+      - name: Install .NET Core SDK 3.1.201
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.200'
+          dotnet-version: '3.1.201'
 
       - name: Run Cake script
-        uses: ecampidoglio/cake-action@v1.1.0
+        uses: ecampidoglio/cake-action@v1.1.1
         env:
           DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX: 2
         with:
