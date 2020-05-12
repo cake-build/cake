@@ -15,9 +15,17 @@ namespace Cake.Common.Build.Jenkins.Data
         /// Gets the change id.
         /// </summary>
         /// <value>
-        /// The change id.
+        /// The changed id such as a pull request number.
         /// </value>
         public string Id => GetEnvironmentString("CHANGE_ID");
+
+        /// <summary>
+        /// Gets a value indicating whether the current build was started by a pull request.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsPullRequest => !string.IsNullOrWhiteSpace(Id);
 
         /// <summary>
         /// Gets the change URL.
@@ -28,7 +36,7 @@ namespace Cake.Common.Build.Jenkins.Data
         public string Url => GetEnvironmentString("CHANGE_URL");
 
         /// <summary>
-        /// Gets change title.
+        /// Gets the change title.
         /// </summary>
         /// <value>
         /// The change title.
@@ -60,12 +68,28 @@ namespace Cake.Common.Build.Jenkins.Data
         public string AuthorEmail => GetEnvironmentString("CHANGE_AUTHOR_EMAIL");
 
         /// <summary>
-        /// Gets the target of the change.
+        /// Gets the target/base branch of the change.
         /// </summary>
         /// <value>
         /// The target of the change.
         /// </value>
         public string Target => GetEnvironmentString("CHANGE_TARGET");
+
+        /// <summary>
+        /// Gets the origin branch of the change.
+        /// </summary>
+        /// <value>
+        /// The origin branch of the change.
+        /// </value>
+        public string Branch => GetEnvironmentString("CHANGE_BRANCH");
+
+        /// <summary>
+        /// Gets the fork name of the change.
+        /// </summary>
+        /// <value>
+        /// The fork name of the change.
+        /// </value>
+        public string Fork => GetEnvironmentString("CHANGE_FORK");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JenkinsChangeInfo"/> class.
