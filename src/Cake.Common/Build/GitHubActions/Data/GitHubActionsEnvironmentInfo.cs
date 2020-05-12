@@ -18,6 +18,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         public GitHubActionsEnvironmentInfo(ICakeEnvironment environment)
             : base(environment)
         {
+            Runner = new GitHubActionsRunnerInfo(environment);
             Workflow = new GitHubActionsWorkflowInfo(environment);
             PullRequest = new GitHubActionsPullRequestInfo(environment);
         }
@@ -61,6 +62,60 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// </code>
         /// </example>
         public string Home => GetEnvironmentString("HOME");
+
+        /// <summary>
+        /// Gets GitHub Actions runner information.
+        /// </summary>
+        /// <value>
+        /// The GitHub Actions runner information.
+        /// </value>
+        /// <para>Via BuildSystem</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(
+        ///         @"Runner:
+        ///         OS: {0}
+        ///         Temp: {1}
+        ///         ToolCache: {2}
+        ///         Workspace: {3}",
+        ///         BuildSystem.GitHubActions.Environment.Runner.OS,
+        ///         BuildSystem.GitHubActions.Environment.Runner.Temp,
+        ///         BuildSystem.GitHubActions.Environment.Runner.ToolCache,
+        ///         BuildSystem.GitHubActions.Environment.Runner.Workspace
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitHubActions");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(
+        ///         @"Runner:
+        ///         OS: {0}
+        ///         Temp: {1}
+        ///         ToolCache: {2}
+        ///         Workspace: {3}",
+        ///         GitHubActions.Environment.Runner.OS,
+        ///         GitHubActions.Environment.Runner.Temp,
+        ///         GitHubActions.Environment.Runner.ToolCache,
+        ///         GitHubActions.Environment.Runner.Workspace
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitHubActions");
+        /// }
+        /// </code>
+        /// </example>
+        public GitHubActionsRunnerInfo Runner { get; }
 
         /// <summary>
         /// Gets the GitHub Actions workflow information.

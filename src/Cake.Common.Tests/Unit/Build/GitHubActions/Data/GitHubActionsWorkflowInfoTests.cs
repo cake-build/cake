@@ -105,6 +105,22 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
             }
         }
 
+        public sealed class TheJobProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.Job;
+
+                // Then
+                Assert.Equal("job", result);
+            }
+        }
+
         public sealed class TheRefProperty
         {
             [Fact]
@@ -134,6 +150,54 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
 
                 // Then
                 Assert.Equal("cake-build/cake", result);
+            }
+        }
+
+        public sealed class TheRepositoryOwnerProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.RepositoryOwner;
+
+                // Then
+                Assert.Equal("cake-build", result);
+            }
+        }
+
+        public sealed class TheRunIdProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.RunId;
+
+                // Then
+                Assert.Equal("34058136", result);
+            }
+        }
+
+        public sealed class TheRunNumberProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.RunNumber;
+
+                // Then
+                Assert.Equal(60, result);
             }
         }
 
