@@ -86,6 +86,18 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
                 builder.AppendQuotedSecret(settings.SymbolApiKey);
             }
 
+            // No service endpoint
+            if (settings.NoServiceEndpoint)
+            {
+                builder.Append("--no-service-endpoint");
+            }
+
+            // Interactive
+            if (settings.Interactive)
+            {
+                builder.Append("--interactive");
+            }
+
             // Timeout
             if (settings.Timeout.HasValue)
             {
@@ -103,6 +115,12 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
             if (settings.IgnoreSymbols)
             {
                 builder.Append("--no-symbols");
+            }
+
+            // skip duplicate
+            if (settings.SkipDuplicate)
+            {
+                builder.Append("--skip-duplicate");
             }
 
             // Force English Output
