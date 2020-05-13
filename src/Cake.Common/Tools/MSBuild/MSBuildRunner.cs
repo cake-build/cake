@@ -157,7 +157,7 @@ namespace Cake.Common.Tools.MSBuild
                 {
                     if (!string.IsNullOrEmpty(binaryOptions))
                     {
-                        binaryOptions = binaryOptions + ";";
+                        binaryOptions += ";";
                     }
 
                     binaryOptions = binaryOptions + "ProjectImports=" + settings.BinaryLogger.Imports;

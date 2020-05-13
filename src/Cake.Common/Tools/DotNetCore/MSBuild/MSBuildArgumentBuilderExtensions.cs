@@ -104,6 +104,28 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                 }
             }
 
+            // Use binary logging?
+            if (settings.BinaryLogger != null && settings.BinaryLogger.Enabled)
+            {
+                string binaryOptions = null;
+                if (!string.IsNullOrEmpty(settings.BinaryLogger.FileName))
+                {
+                    binaryOptions = settings.BinaryLogger.FileName;
+                }
+
+                if (settings.BinaryLogger.Imports != MSBuildBinaryLoggerImports.Unspecified)
+                {
+                    if (!string.IsNullOrEmpty(binaryOptions))
+                    {
+                        binaryOptions += ";";
+                    }
+
+                    binaryOptions = binaryOptions + "ProjectImports=" + settings.BinaryLogger.Imports;
+                }
+
+                builder.AppendMSBuildSwitchWithOptionalValueIfNotEmpty("binarylogger", binaryOptions);
+            }
+
             // Got any distributed loggers?
             foreach (var distributedLogger in settings.DistributedLoggers)
             {
@@ -113,7 +135,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             // use a file logger for each node?
             if (settings.DistributedFileLogger)
             {
-                builder.AppendMSBuildSwitch("distributedFileLogger");
+                builder.AppendMSBuildSwitch("distributedfilelogger");
             }
 
             // Got any loggers?
