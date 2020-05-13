@@ -505,6 +505,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var bambooProvider = Substitute.For<IBambooProvider>();
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
+                var jenkinsEnvironment = new JenkinsInfoFixture().CreateEnvironmentInfo();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
                 var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
@@ -514,6 +515,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
 
                 jenkinsProvider.IsRunningOnJenkins.Returns(true);
+                jenkinsProvider.Environment.Returns(jenkinsEnvironment);
 
                 // When
                 var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider);
@@ -876,6 +878,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var bambooProvider = Substitute.For<IBambooProvider>();
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
+                var jenkinsEnvironment = new JenkinsInfoFixture().CreateEnvironmentInfo();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var bitriseEnvironment = new BitriseInfoFixture().CreateEnvironmentInfo();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
@@ -898,6 +901,7 @@ namespace Cake.Common.Tests.Unit.Build
                 bambooProvider.IsRunningOnBamboo.Returns(bamboo);
                 continuaCIProvider.IsRunningOnContinuaCI.Returns(continuaCI);
                 jenkinsProvider.IsRunningOnJenkins.Returns(jenkins);
+                jenkinsProvider.Environment.Returns(jenkinsEnvironment);
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
                 bitriseProvider.Environment.Returns(bitriseEnvironment);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
@@ -956,6 +960,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var bambooProvider = Substitute.For<IBambooProvider>();
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
+                var jenkinsEnvironment = new JenkinsInfoFixture().CreateEnvironmentInfo();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var bitriseEnvironment = new BitriseInfoFixture().CreateEnvironmentInfo();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
@@ -978,6 +983,7 @@ namespace Cake.Common.Tests.Unit.Build
                 bambooProvider.IsRunningOnBamboo.Returns(bamboo);
                 continuaCIProvider.IsRunningOnContinuaCI.Returns(continuaCI);
                 jenkinsProvider.IsRunningOnJenkins.Returns(jenkins);
+                jenkinsProvider.Environment.Returns(jenkinsEnvironment);
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
                 bitriseProvider.Environment.Returns(bitriseEnvironment);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);
@@ -998,6 +1004,7 @@ namespace Cake.Common.Tests.Unit.Build
                 gitHubActionsProvider.Environment.Returns(gitHubActionsEnvironment);
 
                 // When
+                System.Console.WriteLine(jenkinsProvider);
                 var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider);
 
                 // Then
@@ -1008,23 +1015,23 @@ namespace Cake.Common.Tests.Unit.Build
         public sealed class TheIsPullRequestProperty
         {
             [Theory]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)]
-            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)]
-            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, true)]
-            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true)]
-            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true)]
-            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, true)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)] // none
+            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)] // appveyor
+            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)] // teamcity
+            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false)] // myget
+            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false)] // bamboo
+            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)] // continua
+            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, true)] // jenkins
+            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, true)] // bitrise
+            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true)] // travis
+            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true)] // bitbucket
+            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false)] // gocd
+            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, true)] // gitlab
             [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, true)] // tfs
             [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, true)] // vsts
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, true)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, true, false, true)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, true)] // az pipelines
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, true, false, true)] // az pipelines hosted
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true)] // gh actions
             public void Should_Return_True_If_Running_On_Supported_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool tfs, bool vsts, bool azurePipelines, bool azurePipelinesHosted, bool gitHubActions, bool isPullRequest)
             {
                 // Given
@@ -1036,6 +1043,7 @@ namespace Cake.Common.Tests.Unit.Build
                 var bambooProvider = Substitute.For<IBambooProvider>();
                 var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
                 var jenkinsProvider = Substitute.For<IJenkinsProvider>();
+                var jenkinsEnvironment = new JenkinsInfoFixture().CreateEnvironmentInfo();
                 var bitriseProvider = Substitute.For<IBitriseProvider>();
                 var bitriseEnvironment = new BitriseInfoFixture().CreateEnvironmentInfo();
                 var travisCIProvider = Substitute.For<ITravisCIProvider>();
@@ -1058,6 +1066,7 @@ namespace Cake.Common.Tests.Unit.Build
                 bambooProvider.IsRunningOnBamboo.Returns(bamboo);
                 continuaCIProvider.IsRunningOnContinuaCI.Returns(continuaCI);
                 jenkinsProvider.IsRunningOnJenkins.Returns(jenkins);
+                jenkinsProvider.Environment.Returns(jenkinsEnvironment);
                 bitriseProvider.IsRunningOnBitrise.Returns(bitrise);
                 bitriseProvider.Environment.Returns(bitriseEnvironment);
                 travisCIProvider.IsRunningOnTravisCI.Returns(travisCI);

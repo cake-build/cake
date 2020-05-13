@@ -120,5 +120,53 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
                 Assert.Equal("develop", result);
             }
         }
+
+        public sealed class TheChangeBranchProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.Change.Branch;
+
+                // Then
+                Assert.Equal("feature/feature1", result);
+            }
+        }
+
+        public sealed class TheChangeForkProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.Change.Fork;
+
+                // Then
+                Assert.Equal("fork1", result);
+            }
+        }
+
+        public sealed class TheIsPullRequestProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+
+                // When
+                var result = info.Change.IsPullRequest;
+
+                // Then
+                Assert.Equal(true, result);
+            }
+        }
     }
 }

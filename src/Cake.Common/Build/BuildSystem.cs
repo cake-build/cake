@@ -147,7 +147,8 @@ namespace Cake.Common.Build
                 || ((Provider & BuildProvider.BitbucketPipelines) != 0 && BitbucketPipelines.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.GitLabCI) != 0 && GitLabCI.Environment.PullRequest.IsPullRequest)
                 || ((Provider & (BuildProvider.AzurePipelines | BuildProvider.AzurePipelinesHosted)) != 0 && TFBuild.Environment.PullRequest.IsPullRequest)
-                || ((Provider & BuildProvider.GitHubActions) != 0 && GitHubActions.Environment.PullRequest.IsPullRequest);
+                || ((Provider & BuildProvider.GitHubActions) != 0 && GitHubActions.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.Jenkins) != 0 && Jenkins.Environment.Change.IsPullRequest);
         }
 
         /// <summary>
