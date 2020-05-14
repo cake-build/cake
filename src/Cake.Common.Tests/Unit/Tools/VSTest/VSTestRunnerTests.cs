@@ -95,6 +95,12 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio 14.0/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio 12.0/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio 11.0/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2017/Enterprise/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2017/Professional/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2017/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2019/Enterprise/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2019/Professional/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
         public void Should_Use_Available_Tool_Path(string existingToolPath)
         {
             // Given
