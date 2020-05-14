@@ -114,15 +114,10 @@ namespace Cake.Core.Tooling
                 process.WaitForExit();
             }
 
-            try
-            {
-                ProcessExitCode(process.GetExitCode());
-            }
-            finally
-            {
-                // Post action specified?
-                postAction?.Invoke(process);
-            }
+            // Post action specified?
+            postAction?.Invoke(process);
+
+            ProcessExitCode(process.GetExitCode());
         }
 
         /// <summary>
