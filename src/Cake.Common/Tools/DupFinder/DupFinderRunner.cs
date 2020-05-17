@@ -62,10 +62,13 @@ namespace Cake.Common.Tools.DupFinder
 
             Run(settings, GetArgument(settings, filePaths));
 
-            if (settings.OutputFile != null)
+            if (settings.DoNotAnalyseOutput ||
+                settings.OutputFile == null)
             {
-                AnalyzeResultsFile(settings.OutputFile, settings.ThrowExceptionOnFindingDuplicates);
+                return;
             }
+
+            AnalyzeResultsFile(settings.OutputFile, settings.ThrowExceptionOnFindingDuplicates);
         }
 
         /// <summary>

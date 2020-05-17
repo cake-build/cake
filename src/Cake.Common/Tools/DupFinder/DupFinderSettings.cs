@@ -101,5 +101,11 @@ namespace Cake.Common.Tools.DupFinder
         /// Gets or sets a value indicating whether to throw an exception on finding duplicates
         /// </summary>
         public bool ThrowExceptionOnFindingDuplicates { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to skip analysis of the file
+        /// that was output by the command line tool or not.
+        /// </summary>
+        public bool DoNotAnalyseOutput { get; set; }
     }
 }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Common.Tests.Fixtures.Tools.DupFinder;
 using Cake.Core;
 using Cake.Core.IO;
@@ -54,7 +55,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("DupFinder: Process was not started.", result?.Message);
+                Assert.Equal("DupFinder: Process was not started.", result.Message);
             }
 
             [Fact]
@@ -69,7 +70,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("DupFinder: Process returned an error (exit code 1).", result?.Message);
+                Assert.Equal("DupFinder: Process returned an error (exit code 1).", result.Message);
             }
 
             [Fact]
@@ -331,6 +332,51 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
 
                 // Then
                 Assert.Equal("/show-text \"/Working/Test.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Analyze_Output()
+            {
+                var log = new FakeLog();
+
+                // Given
+                var fixture = new DupFinderRunnerFixture
+                {
+                    Log = log
+                };
+                fixture.Settings.OutputFile = new FilePath("build/duplicates.xml");
+
+                // When
+                fixture.Run();
+
+                // Then
+                var logContainsInspectionResults =
+                    log.Entries.Any(p => p.Message.StartsWith("Duplicate Located with a cost of"));
+
+                Assert.True(logContainsInspectionResults);
+            }
+
+            [Fact]
+            public void Should_Not_Analyze_Output()
+            {
+                var log = new FakeLog();
+
+                // Given
+                var fixture = new DupFinderRunnerFixture
+                {
+                    Log = log
+                };
+                fixture.Settings.OutputFile = new FilePath("build/duplicates.xml");
+                fixture.Settings.DoNotAnalyseOutput = true;
+
+                // When
+                fixture.Run();
+
+                // Then
+                var logContainsInspectionResults =
+                    log.Entries.Any(p => p.Message.StartsWith("Duplicate Located with a cost of"));
+
+                Assert.False(logContainsInspectionResults);
             }
         }
 
