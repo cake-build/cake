@@ -367,7 +367,7 @@ namespace Cake.Common.Tests.Unit.Tools.DupFinder
                     Log = log
                 };
                 fixture.Settings.OutputFile = new FilePath("build/duplicates.xml");
-                fixture.Settings.DoNotAnalyseOutput = true;
+                fixture.Settings.SkipOutputAnalysis = true;
 
                 // When
                 fixture.Run();

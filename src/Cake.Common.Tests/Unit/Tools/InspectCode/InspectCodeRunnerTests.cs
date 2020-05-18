@@ -366,7 +366,7 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                     Log = log
                 };
                 fixture.Settings.OutputFile = new FilePath("build/violations.xml");
-                fixture.Settings.DoNotAnalyseOutput = true;
+                fixture.Settings.SkipOutputAnalysis = true;
 
                 // When
                 fixture.Run();

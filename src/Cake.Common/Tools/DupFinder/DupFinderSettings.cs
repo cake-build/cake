@@ -106,6 +106,6 @@ namespace Cake.Common.Tools.DupFinder
         /// Gets or sets a value indicating whether to skip analysis of the file
         /// that was output by the command line tool or not.
         /// </summary>
-        public bool DoNotAnalyseOutput { get; set; }
+        public bool SkipOutputAnalysis { get; set; }
     }
 }

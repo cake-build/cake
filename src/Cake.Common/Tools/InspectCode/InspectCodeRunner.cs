@@ -61,7 +61,7 @@ namespace Cake.Common.Tools.InspectCode
 
             Run(settings, GetArguments(settings, solution));
 
-            if (settings.DoNotAnalyseOutput ||
+            if (settings.SkipOutputAnalysis ||
                 settings.OutputFile == null)
             {
                 return;
