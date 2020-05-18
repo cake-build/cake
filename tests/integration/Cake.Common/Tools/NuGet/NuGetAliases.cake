@@ -72,9 +72,37 @@ Task("Cake.Common.Tools.NuGet.NuGetAliases.NuGetHasSource.ArgumentCustomization"
     Assert.True(result);
 });
 
-Task("Cake.Common.Tools.NuGet.NuGetAliases.NuGetRemoveSource")
+Task("Cake.Common.Tools.NuGet.NuGetAliases.NuGetSetApiKey")
     .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases.NuGetHasSource")
     .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases.NuGetHasSource.ArgumentCustomization")
+    .Does(() =>
+{
+    // Given
+    var apiKey = Guid.NewGuid().ToString();
+    var source = "https://contoso.com/packages/";
+    var settings = new NuGetSetApiKeySettings {
+            ConfigFile = NuGetAliasesConfigFile
+        };
+
+    // When
+    NuGetSetApiKey(
+        apiKey,
+        source,
+        settings
+        );
+
+    var value = XmlPeek(
+        NuGetAliasesConfigFile,
+        $"/configuration/apikeys/add[@key='{source}']/@value"
+        );
+
+    // Then
+    Assert.NotNull(value);
+
+});
+
+Task("Cake.Common.Tools.NuGet.NuGetAliases.NuGetRemoveSource")
+    .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases.NuGetSetApiKey")
     .Does(() =>
 {
     // Given
@@ -107,5 +135,6 @@ if (!Context.Environment.Runtime.IsCoreClr || !Context.IsRunningOnUnix())
     nugetAliasesTask
         .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases.NuGetAddSource")
         .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases.NuGetHasSource")
+        .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases.NuGetSetApiKey")
         .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases.NuGetRemoveSource");
 }

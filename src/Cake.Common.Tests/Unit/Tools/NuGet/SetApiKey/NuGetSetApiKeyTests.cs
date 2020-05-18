@@ -57,20 +57,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.SetApiKey
             }
 
             [Fact]
-            public void Should_Throw_If_Encounter_Unexpected_Output()
-            {
-                // Given
-                var fixture = new NuGetSetApiKeyFixture();
-                fixture.GivenUnexpectedOutput();
-
-                // When
-                var result = Record.Exception(() => fixture.Run());
-
-                // Then
-                AssertEx.IsCakeException(result, "SetApiKey returned unexpected response.");
-            }
-
-            [Fact]
             public void Should_Throw_If_NuGet_Executable_Was_Not_Found()
             {
                 // Given
