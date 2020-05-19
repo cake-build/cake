@@ -16,6 +16,18 @@ namespace Cake.Tests.Unit.Composition
 {
     public sealed class ContainerBuilderAdapterTests
     {
+        public interface IFoo
+        {
+        }
+
+        public sealed class Foo : IFoo
+        {
+        }
+
+        public sealed class Bar : IFoo
+        {
+        }
+
         public sealed class TheRegisterInstanceMethod
         {
             [Fact]
@@ -23,14 +35,14 @@ namespace Cake.Tests.Unit.Composition
             {
                 // Given
                 var builder = new ContainerRegistrar();
-                var instance1 = Substitute.For<IConsole>();
-                var instance2 = Substitute.For<IConsole>();
+                var instance1 = Substitute.For<IFoo>();
+                var instance2 = Substitute.For<IFoo>();
                 builder.RegisterInstance(instance1).Singleton();
                 builder.RegisterInstance(instance2).Singleton();
                 var container = builder.Build();
 
                 // When
-                var result = container.Resolve<IConsole>();
+                var result = container.Resolve<IFoo>();
 
                 // Then
                 Assert.Same(instance2, result);
@@ -41,14 +53,14 @@ namespace Cake.Tests.Unit.Composition
             {
                 // Given
                 var builder = new ContainerRegistrar();
-                var instance1 = Substitute.For<IConsole>();
-                var instance2 = Substitute.For<IConsole>();
+                var instance1 = Substitute.For<IFoo>();
+                var instance2 = Substitute.For<IFoo>();
                 builder.RegisterInstance(instance1).Singleton();
                 builder.RegisterInstance(instance2).Singleton();
                 var container = builder.Build();
 
                 // When
-                var result = container.Resolve<IEnumerable<IConsole>>().ToList();
+                var result = container.Resolve<IEnumerable<IFoo>>().ToList();
 
                 // Then
                 Assert.Equal(2, result.Count);
@@ -61,13 +73,13 @@ namespace Cake.Tests.Unit.Composition
             {
                 // Given
                 var builder = new ContainerRegistrar();
-                var instance = Substitute.For<IConsole>();
+                var instance = Substitute.For<IFoo>();
                 builder.RegisterInstance(instance).Singleton();
                 var container = builder.Build();
 
                 // When
-                var first = container.Resolve<IConsole>();
-                var second = container.Resolve<IConsole>();
+                var first = container.Resolve<IFoo>();
+                var second = container.Resolve<IFoo>();
 
                 // Then
                 Assert.Same(instance, first);
@@ -82,15 +94,15 @@ namespace Cake.Tests.Unit.Composition
             {
                 // Given
                 var builder = new ContainerRegistrar();
-                builder.RegisterType<CakeConsole>().As<IConsole>();
-                builder.RegisterType<FakeConsole>().As<IConsole>();
+                builder.RegisterType<Foo>().As<IFoo>();
+                builder.RegisterType<Bar>().As<IFoo>();
                 var container = builder.Build();
 
                 // When
-                var result = container.Resolve<IConsole>();
+                var result = container.Resolve<IFoo>();
 
                 // Then
-                Assert.IsType<FakeConsole>(result);
+                Assert.IsType<Bar>(result);
             }
 
             [Fact]
@@ -98,17 +110,17 @@ namespace Cake.Tests.Unit.Composition
             {
                 // Given
                 var builder = new ContainerRegistrar();
-                builder.RegisterType<CakeConsole>().As<IConsole>();
-                builder.RegisterType<FakeConsole>().As<IConsole>();
+                builder.RegisterType<Foo>().As<IFoo>();
+                builder.RegisterType<Bar>().As<IFoo>();
                 var container = builder.Build();
 
                 // When
-                var result = container.Resolve<IEnumerable<IConsole>>().ToList();
+                var result = container.Resolve<IEnumerable<IFoo>>().ToList();
 
                 // Then
                 Assert.Equal(2, result.Count);
-                Assert.Contains(result, instance => instance is CakeConsole);
-                Assert.Contains(result, instance => instance is FakeConsole);
+                Assert.Contains(result, instance => instance is Foo);
+                Assert.Contains(result, instance => instance is Bar);
             }
 
             [Fact]
@@ -116,12 +128,12 @@ namespace Cake.Tests.Unit.Composition
             {
                 // Given
                 var builder = new ContainerRegistrar();
-                builder.RegisterType<CakeConsole>().Singleton();
+                builder.RegisterType<Foo>().Singleton();
                 var container = builder.Build();
 
                 // When
-                var first = container.Resolve<CakeConsole>();
-                var second = container.Resolve<CakeConsole>();
+                var first = container.Resolve<Foo>();
+                var second = container.Resolve<Foo>();
 
                 // Then
                 Assert.Same(first, second);
@@ -132,12 +144,12 @@ namespace Cake.Tests.Unit.Composition
             {
                 // Given
                 var builder = new ContainerRegistrar();
-                builder.RegisterType<CakeConsole>().Transient();
+                builder.RegisterType<Foo>().Transient();
                 var container = builder.Build();
 
                 // When
-                var first = container.Resolve<CakeConsole>();
-                var second = container.Resolve<CakeConsole>();
+                var first = container.Resolve<Foo>();
+                var second = container.Resolve<Foo>();
 
                 // Then
                 Assert.NotSame(first, second);

@@ -24,6 +24,11 @@ namespace Cake.Core
         ConsoleColor BackgroundColor { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether or not the console supports ANSI escape codes.
+        /// </summary>
+        bool SupportAnsiEscapeCodes { get; }
+
+        /// <summary>
         /// Writes the text representation of the specified array of objects to the
         /// console output using the specified format information.
         /// </summary>

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 using Cake.Core;
 
 namespace Cake.Testing
@@ -14,6 +15,9 @@ namespace Cake.Testing
     /// </summary>
     public sealed class FakeConsole : IConsole
     {
+        private readonly StringBuilder _builder;
+        private readonly StringBuilder _errorBuilder;
+
         /// <summary>
         /// Gets or sets the messages.
         /// </summary>
@@ -39,14 +43,40 @@ namespace Cake.Testing
         public ConsoleColor BackgroundColor { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether or not the console supports ANSI escape codes.
+        /// </summary>
+        public bool SupportAnsiEscapeCodes { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether console color should be added to the text
+        /// string if <see cref="SupportAnsiEscapeCodes"/> is set to <c>false</c>.
+        /// </summary>
+        public bool OutputConsoleColor { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FakeConsole"/> class.
         /// </summary>
         public FakeConsole()
         {
+            _builder = new StringBuilder();
+            _errorBuilder = new StringBuilder();
+
             Messages = new List<string>();
             ErrorMessages = new List<string>();
             ForegroundColor = ConsoleColor.Gray;
             BackgroundColor = ConsoleColor.Black;
+        }
+
+        /// <summary>
+        /// Creates a new fake console that supports ANSI escape codes.
+        /// </summary>
+        /// <returns>The created <see cref="FakeConsole"/>.</returns>
+        public static FakeConsole CreateAnsiConsole()
+        {
+            return new FakeConsole
+            {
+                SupportAnsiEscapeCodes = true
+            };
         }
 
         /// <summary>
@@ -57,7 +87,20 @@ namespace Cake.Testing
         /// <param name="arg">An array of objects to write using format.</param>
         public void Write(string format, params object[] arg)
         {
-            Messages.Add(string.Format(CultureInfo.InvariantCulture, format, arg));
+            if (!string.IsNullOrWhiteSpace(format))
+            {
+                var message = string.Format(CultureInfo.InvariantCulture, format, arg);
+
+                if (OutputConsoleColor && !SupportAnsiEscapeCodes)
+                {
+                    var formatted = string.Format("#[{0}|{1}]{2}[/]", BackgroundColor, ForegroundColor, message);
+                    _builder.Append(formatted);
+                }
+                else
+                {
+                    _builder.Append(message);
+                }
+            }
         }
 
         /// <summary>
@@ -71,8 +114,11 @@ namespace Cake.Testing
         {
             if (!string.IsNullOrWhiteSpace(format))
             {
-                Messages.Add(string.Format(CultureInfo.InvariantCulture, format, arg));
+                Write(format, arg);
             }
+
+            Messages.Add(_builder.ToString());
+            _builder.Clear();
         }
 
         /// <summary>
@@ -85,7 +131,17 @@ namespace Cake.Testing
         {
             if (!string.IsNullOrWhiteSpace(format))
             {
-                ErrorMessages.Add(string.Format(CultureInfo.InvariantCulture, format, arg));
+                var message = string.Format(CultureInfo.InvariantCulture, format, arg);
+
+                if (OutputConsoleColor && !SupportAnsiEscapeCodes)
+                {
+                    var formatted = string.Format("#[{0}|{1}]{2}[/]", BackgroundColor, ForegroundColor, message);
+                    _errorBuilder.Append(formatted);
+                }
+                else
+                {
+                    _errorBuilder.Append(message);
+                }
             }
         }
 
@@ -100,8 +156,11 @@ namespace Cake.Testing
         {
             if (!string.IsNullOrWhiteSpace(format))
             {
-                ErrorMessages.Add(string.Format(CultureInfo.InvariantCulture, format, arg));
+                WriteError(format, arg);
             }
+
+            ErrorMessages.Add(_errorBuilder.ToString());
+            _errorBuilder.Clear();
         }
 
         /// <summary>
