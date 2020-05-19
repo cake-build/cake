@@ -26,6 +26,11 @@ namespace Cake.Core.Diagnostics
         public static IDictionary<LogLevel, ConsolePalette> CreateLookup(IConsole console)
         {
             var background = console.BackgroundColor;
+            if ((int)background < 0)
+            {
+                background = ConsoleColor.Black;
+            }
+
             return new Dictionary<LogLevel, ConsolePalette>
             {
                 { LogLevel.Fatal, new ConsolePalette(ConsoleColor.Magenta, ConsoleColor.White, ConsoleColor.DarkMagenta, ConsoleColor.White) },
