@@ -821,12 +821,15 @@ namespace Cake.Common.Tests.Unit.Build
                 var goCDProvider = Substitute.For<IGoCDProvider>();
                 var gitLabCIProvider = Substitute.For<IGitLabCIProvider>();
                 var tfBuildProvider = Substitute.For<ITFBuildProvider>();
+                var tfBuildEnvironment = new TFBuildInfoFixture().CreateEnvironmentInfo();
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var azurePipelinesEnvironment = new AzurePipelinesInfoFixture().CreateEnvironmentInfo();
 
                 azurePipelinesProvider.IsRunningOnAzurePipelines.Returns(true);
                 azurePipelinesProvider.Environment.Returns(azurePipelinesEnvironment);
+                tfBuildProvider.IsRunningOnAzurePipelines.Returns(true);
+                tfBuildProvider.Environment.Returns(tfBuildEnvironment);
 
                 // When
                 var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider, azurePipelinesProvider);
@@ -854,12 +857,15 @@ namespace Cake.Common.Tests.Unit.Build
                 var goCDProvider = Substitute.For<IGoCDProvider>();
                 var gitLabCIProvider = Substitute.For<IGitLabCIProvider>();
                 var tfBuildProvider = Substitute.For<ITFBuildProvider>();
+                var tfBuildEnvironment = new TFBuildInfoFixture().CreateEnvironmentInfo();
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var azurePipelinesEnvironment = new AzurePipelinesInfoFixture().CreateEnvironmentInfo();
 
                 azurePipelinesProvider.IsRunningOnAzurePipelinesHosted.Returns(true);
                 azurePipelinesProvider.Environment.Returns(azurePipelinesEnvironment);
+                tfBuildProvider.IsRunningOnAzurePipelinesHosted.Returns(true);
+                tfBuildProvider.Environment.Returns(tfBuildEnvironment);
 
                 // When
                 var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider, azurePipelinesProvider);

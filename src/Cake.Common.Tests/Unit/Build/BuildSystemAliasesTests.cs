@@ -129,7 +129,7 @@ namespace Cake.Common.Tests.Unit.Build
             public void Should_Throw_If_Context_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.TFBuild(null));
+                var result = Record.Exception(() => BuildSystemAliases.AzurePipelines(null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "context");
