@@ -34,7 +34,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
 
     // When
     DotNetCoreBuild(project.FullPath);
@@ -61,7 +61,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreVSTest")
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
-    var assembly = path.CombineWithFilePath("hwapp.tests/bin/Debug/netcoreapp3.0/hwapp.tests.dll");
+    var assembly = path.CombineWithFilePath("hwapp.tests/bin/Debug/netcoreapp3.1/hwapp.tests.dll");
 
     // When
     DotNetCoreVSTest(assembly.FullPath);
@@ -118,7 +118,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetPush")
     var nugetServerPath = path.Combine("DotNetCorePush");
     var nugetSource = outputPath.CombineWithFilePath("hwapp.1.0.0.nupkg");
     var nugetDestination = nugetServerPath.CombineWithFilePath("hwapp.1.0.0.nupkg");
-    
+
     EnsureDirectoryExist(outputPath);
     EnsureDirectoryExist(nugetServerPath);
     Assert.True(System.IO.File.Exists(nugetSource.FullPath), "Path:" + nugetSource.FullPath);
@@ -138,7 +138,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetDelete")
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
     var nugetServerPath = path.Combine("DotNetCorePush");
     var nugetDestination = nugetServerPath.CombineWithFilePath("hwapp.1.0.0.nupkg");
-    
+
     EnsureDirectoryExist(nugetServerPath);
     Assert.True(System.IO.File.Exists(nugetDestination.FullPath), "Path:" + nugetDestination.FullPath);
 
@@ -184,7 +184,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreExecute")
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
 
     // When
     DotNetCoreExecute(assembly);
@@ -197,7 +197,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreClean")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
     Assert.True(System.IO.File.Exists(assembly.FullPath));
 
     // When
@@ -214,7 +214,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreMSBuild")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
 
     // When
     DotNetCoreMSBuild(project.FullPath);
