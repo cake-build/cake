@@ -14,7 +14,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Build.AzurePipelines
 {
     /// <summary>
-    /// Responsible for issuing TF Build agent commands (see <see href="https://github.com/Microsoft/vsts-tasks/blob/master/docs/authoring/commands.md"/>).
+    /// Responsible for issuing Azure Pipelines agent commands (see <see href="https://github.com/microsoft/azure-pipelines-tasks/blob/master/docs/authoring/commands.md"/>).
     /// </summary>
     public sealed class AzurePipelinesCommands : IAzurePipelinesCommands
     {

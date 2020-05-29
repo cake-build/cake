@@ -11,27 +11,27 @@ using Cake.Core.IO;
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    /// Providers TF Build agent for publishing code coverage results
+    /// Description of code coverage information to publish to Azure Pipelines
     /// </summary>
     public class AzurePipelinesPublishCodeCoverageData
     {
         /// <summary>
-        /// Gets or Sets the tool from which code coverage results are generated.
+        /// Gets or sets the tool from which code coverage results are generated.
         /// </summary>
         public AzurePipelinesCodeCoverageToolType? CodeCoverageTool { get; set; }
 
         /// <summary>
-        /// Gets or Sets the path of the summary file containing code coverage statistics, such as line, method, and class coverage.
+        /// Gets or sets the path of the summary file containing code coverage statistics, such as line, method, and class coverage.
         /// </summary>
         public FilePath SummaryFileLocation { get; set; }
 
         /// <summary>
-        /// Gets or Sets the Path of the code coverage HTML report directory. The report directory is published for later viewing as an artifact of the build.
+        /// Gets or sets the path of the code coverage HTML report directory. The report directory is published for later viewing as an artifact of the build.
         /// </summary>
         public DirectoryPath ReportDirectory { get; set; }
 
         /// <summary>
-        /// Gets or Sets the file paths for any additional code coverage files to be published as artifacts of the build.
+        /// Gets or sets the file paths for any additional code coverage files to be published as artifacts of the build.
         /// </summary>
         public FilePath[] AdditionalCodeCoverageFiles { get; set; }
 

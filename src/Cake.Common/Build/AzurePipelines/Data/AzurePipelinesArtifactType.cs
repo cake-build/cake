@@ -5,7 +5,7 @@
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    /// Provides the type of a TF Build artifact.
+    /// Provides the type of an Azure Pipelines artifact.
     /// </summary>
     public enum AzurePipelinesArtifactType
     {

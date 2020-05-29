@@ -593,14 +593,14 @@ namespace Cake.Common.Build
         public ITFBuildProvider TFBuild { get; }
 
         /// <summary>
-        /// Gets the TF Build Provider.
+        /// Gets the Azure Pipelines Provider.
         /// </summary>
         /// <example>
         /// <code>
-        /// if (BuildSystem.IsRunningOnVSTS)
+        /// if (BuildSystem.IsRunningOnAzurePipelines)
         /// {
         ///     // Get the build definition name.
-        ///     var definitionName = BuildSystem.TFBuild.Environment.BuildDefinition.Name;
+        ///     var definitionName = BuildSystem.AzurePipelines.Environment.BuildDefinition.Name;
         /// }
         /// </code>
         /// </example>

@@ -10,7 +10,7 @@ using Cake.Core.Diagnostics;
 namespace Cake.Common.Build.AzurePipelines
 {
     /// <summary>
-    /// Responsible for communicating with Team Foundation Build (VSTS or TFS).
+    /// Responsible for communicating with Azure Pipelines.
     /// </summary>
     public sealed class AzurePipelinesProvider : IAzurePipelinesProvider
     {
@@ -55,18 +55,18 @@ namespace Cake.Common.Build.AzurePipelines
             => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TF_BUILD")) && IsHostedAgent;
 
         /// <summary>
-        /// Gets the TF Build environment.
+        /// Gets the Azure Pipelines environment.
         /// </summary>
         /// <value>
-        /// The TF Build environment.
+        /// The Azure Pipelines environment.
         /// </value>
         public AzurePipelinesEnvironmentInfo Environment { get; }
 
         /// <summary>
-        /// Gets the TF Build Commands provider.
+        /// Gets the Azure Pipelines commands provider.
         /// </summary>
         /// <value>
-        /// The TF Build commands provider.
+        /// The Azure Pipelines commands provider.
         /// </value>
         public IAzurePipelinesCommands Commands { get; }
 

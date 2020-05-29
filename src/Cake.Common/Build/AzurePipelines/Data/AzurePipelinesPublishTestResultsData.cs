@@ -11,42 +11,42 @@ using Cake.Core.IO;
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    ///  Provides TF Build agent info for publishing test results
+    ///  Description of test result information to publish to Azure Pipelines
     /// </summary>
     public class AzurePipelinesPublishTestResultsData
     {
         /// <summary>
-        /// Gets or Sets the type test runner the results are formatted in
+        /// Gets or sets the type test runner the results are formatted in
         /// </summary>
         public AzurePipelinesTestRunnerType? TestRunner { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of Test Result files to publish.
+        /// Gets or sets the list of test result files to publish.
         /// </summary>
         public ICollection<FilePath> TestResultsFiles { get; set; } = new List<FilePath>();
 
         /// <summary>
-        /// Gets or Sets whether to merge all Test Result Files into one run
+        /// Gets or sets whether to merge all test result files into one run.
         /// </summary>
         public bool? MergeTestResults { get; set; }
 
         /// <summary>
-        /// Gets or Sets the Platform for which the tests were run on
+        /// Gets or sets the platform for which the tests were run on
         /// </summary>
         public string Platform { get; set; }
 
         /// <summary>
-        /// Gets or Sets the configuration for which the tests were run on
+        /// Gets or sets the configuration for which the tests were run on
         /// </summary>
         public string Configuration { get; set; }
 
         /// <summary>
-        /// Gets or Sets a name for the Test Run.
+        /// Gets or sets a name for the test run.
         /// </summary>
         public string TestRunTitle { get; set; }
 
         /// <summary>
-        /// Gets or Sets whether to opt in/out of publishing test run level attachments
+        /// Gets or sets whether to opt in/out of publishing test run level attachments
         /// </summary>
         public bool? PublishRunAttachments { get; set; }
 

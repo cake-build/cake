@@ -5,7 +5,7 @@
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    /// Provides the result of a TF Build task record.
+    /// Provides the result of an Azure Pipelines task record.
     /// </summary>
     public enum AzurePipelinesTaskResult
     {

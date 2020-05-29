@@ -5,7 +5,7 @@
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    /// Providers known values for the TF Test Runner types
+    /// Test runner file formats supported on Azure Pipelines.
     /// </summary>
     public enum AzurePipelinesTestRunnerType
     {

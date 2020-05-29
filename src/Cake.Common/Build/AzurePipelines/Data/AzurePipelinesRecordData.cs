@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    /// Provides optional data associated with a TF Build timeline record.
+    /// Provides optional data associated with an Azure Pipelines timeline record.
     /// </summary>
     public sealed class AzurePipelinesRecordData
     {

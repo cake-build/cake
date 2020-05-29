@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    /// Provides optional data associated with a TF Build logging message.
+    /// Provides optional data associated with a Azure Pipelines logging message.
     /// </summary>
     public sealed class AzurePipelinesMessageData
     {

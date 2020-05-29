@@ -7,7 +7,7 @@ using Cake.Core;
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    /// Provides Azure Pipelines Environment information for the current build.
+    /// Provides Azure Pipelines environment information for the current build.
     /// </summary>
     public sealed class AzurePipelinesEnvironmentInfo : AzurePipelinesInfo
     {
@@ -35,284 +35,284 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <para>Via BuildSystem</para>
         /// <example>
         /// <code>
-        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"Repository:
         ///         Branch: {0}
         ///         SourceVersion: {1}
         ///         Shelveset: {2}",
-        ///         BuildSystem.TFBuild.Environment.Repository.Branch,
-        ///         BuildSystem.TFBuild.Environment.Repository.SourceVersion,
-        ///         BuildSystem.TFBuild.Environment.Repository.Shelveset
+        ///         BuildSystem.AzurePipelines.Environment.Repository.Branch,
+        ///         BuildSystem.AzurePipelines.Environment.Repository.SourceVersion,
+        ///         BuildSystem.AzurePipelines.Environment.Repository.Shelveset
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on Azure Pipelines");
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via AzurePipelines</para>
         /// <example>
         /// <code>
-        /// if (TFBuild.IsRunningOnTFBuild)
+        /// if (AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"Repository:
         ///         Branch: {0}
         ///         SourceVersion: {1}
         ///         Shelveset: {2}",
-        ///         TFBuild.Environment.Repository.Branch,
-        ///         TFBuild.Environment.Repository.SourceVersion,
-        ///         TFBuild.Environment.Repository.Shelveset
+        ///         AzurePipelines.Environment.Repository.Branch,
+        ///         AzurePipelines.Environment.Repository.SourceVersion,
+        ///         AzurePipelines.Environment.Repository.Shelveset
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on Azure Pipelines");
         /// }
         /// </code>
         /// </example>
         public AzurePipelinesRepositoryInfo Repository { get; }
 
         /// <summary>
-        /// Gets TF Build Definition information.
+        /// Gets Azure Pipelines Build Definition information.
         /// </summary>
         /// <value>
-        /// The TF Build Definition.
+        /// The Azure Pipelines Build Definition.
         /// </value>
         /// <para>Via BuildSystem</para>
         /// <example>
         /// <code>
-        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"BuildDefinition:
         ///         Id: {0}
         ///         Name: {1}
         ///         Version: {2}",
-        ///         BuildSystem.TFBuild.Environment.BuildDefinition.Id,
-        ///         BuildSystem.TFBuild.Environment.BuildDefinition.Name,
-        ///         BuildSystem.TFBuild.Environment.BuildDefinition.Version
+        ///         BuildSystem.AzurePipelines.Environment.BuildDefinition.Id,
+        ///         BuildSystem.AzurePipelines.Environment.BuildDefinition.Name,
+        ///         BuildSystem.AzurePipelines.Environment.BuildDefinition.Version
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on AzurePipelines");
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via AzurePipelines</para>
         /// <example>
         /// <code>
-        /// if (TFBuild.IsRunningOnTFBuild)
+        /// if (AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"BuildDefinition:
         ///         Id: {0}
         ///         Name: {1}
         ///         Version: {2}",
-        ///         TFBuild.Environment.BuildDefinition.Id,
-        ///         TFBuild.Environment.BuildDefinition.Name,
-        ///         TFBuild.Environment.BuildDefinition.Version
+        ///         AzurePipelines.Environment.BuildDefinition.Id,
+        ///         AzurePipelines.Environment.BuildDefinition.Name,
+        ///         AzurePipelines.Environment.BuildDefinition.Version
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on AzurePipelines");
         /// }
         /// </code>
         /// </example>
         public AzurePipelinesDefinitionInfo BuildDefinition { get; }
 
         /// <summary>
-        /// Gets TF Build information.
+        /// Gets Azure Pipelines Build information.
         /// </summary>
         /// <value>
-        /// The TF Build.
+        /// The Azure Pipelines Build.
         /// </value>
         /// <para>Via BuildSystem</para>
         /// <example>
         /// <code>
-        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"Build:
         ///         Id: {0}
         ///         Number: {1}
         ///         QueuedBy: {2}",
-        ///         BuildSystem.TFBuild.Environment.Build.Id,
-        ///         BuildSystem.TFBuild.Environment.Build.Number,
-        ///         BuildSystem.TFBuild.Environment.Build.QueuedBy
+        ///         BuildSystem.AzurePipelines.Environment.Build.Id,
+        ///         BuildSystem.AzurePipelines.Environment.Build.Number,
+        ///         BuildSystem.AzurePipelines.Environment.Build.QueuedBy
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on Azure Pipelines");
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via AzurePipelines</para>
         /// <example>
         /// <code>
-        /// if (TFBuild.IsRunningOnTFBuild)
+        /// if (AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"Build:
         ///         Id: {0}
         ///         Number: {1}
         ///         QueuedBy: {2}",
-        ///         TFBuild.Environment.Build.Id,
-        ///         TFBuild.Environment.Build.Number,
-        ///         TFBuild.Environment.Build.QueuedBy
+        ///         AzurePipelines.Environment.Build.Id,
+        ///         AzurePipelines.Environment.Build.Number,
+        ///         AzurePipelines.Environment.Build.QueuedBy
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on Azure Pipelines");
         /// }
         /// </code>
         /// </example>
         public AzurePipelinesBuildInfo Build { get; }
 
         /// <summary>
-        /// Gets TF Build pull request information.
+        /// Gets Azure Pipelines pull request information.
         /// </summary>
         /// <value>
-        /// The TF Build pull request information.
+        /// The Azure Pipelines pull request information.
         /// </value>
         /// <para>Via BuildSystem</para>
         /// <example>
         /// <code>
-        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"PullRequest:
         ///         IsPullRequest: {0}
         ///         Id: {1}
         ///         Number: {2}",
-        ///         BuildSystem.TFBuild.Environment.PullRequest.IsPullRequest,
-        ///         BuildSystem.TFBuild.Environment.PullRequest.Id,
-        ///         BuildSystem.TFBuild.Environment.PullRequest.Number
+        ///         BuildSystem.AzurePipelines.Environment.PullRequest.IsPullRequest,
+        ///         BuildSystem.AzurePipelines.Environment.PullRequest.Id,
+        ///         BuildSystem.AzurePipelines.Environment.PullRequest.Number
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on Azure Pipelines");
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via AzurePipelines</para>
         /// <example>
         /// <code>
-        /// if (TFBuild.IsRunningOnTFBuild)
+        /// if (AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"PullRequest:
         ///         IsPullRequest: {0}
         ///         Id: {1}
         ///         Number: {2}",
-        ///         TFBuild.Environment.PullRequest.IsPullRequest,
-        ///         TFBuild.Environment.PullRequest.Id,
-        ///         TFBuild.Environment.PullRequest.Number
+        ///         AzurePipelines.Environment.PullRequest.IsPullRequest,
+        ///         AzurePipelines.Environment.PullRequest.Id,
+        ///         AzurePipelines.Environment.PullRequest.Number
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on Azure Pipelines");
         /// }
         /// </code>
         /// </example>
         public AzurePipelinesPullRequestInfo PullRequest { get; }
 
         /// <summary>
-        /// Gets TF Team Project information.
+        /// Gets Azure Pipeline Team Project information.
         /// </summary>
         /// <value>
-        /// The TF Team Project.
+        /// The Azure Pipelines Team Project.
         /// </value>
         /// <para>Via BuildSystem</para>
         /// <example>
         /// <code>
-        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"TeamProject:
         ///         Id: {0}
         ///         Name: {1}",
-        ///         BuildSystem.TFBuild.Environment.TeamProject.Id,
-        ///         BuildSystem.TFBuild.Environment.TeamProject.Name
+        ///         BuildSystem.AzurePipelines.Environment.TeamProject.Id,
+        ///         BuildSystem.AzurePipelines.Environment.TeamProject.Name
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on Azure Pipelines");
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via AzurePipelines</para>
         /// <example>
         /// <code>
-        /// if (TFBuild.IsRunningOnTFBuild)
+        /// if (AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"TeamProject:
         ///         Id: {0}
         ///         Name: {1}",
-        ///         TFBuild.Environment.TeamProject.Id,
-        ///         TFBuild.Environment.TeamProject.Name
+        ///         AzurePipelines.Environment.TeamProject.Id,
+        ///         AzurePipelines.Environment.TeamProject.Name
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on Azure Pipelines");
         /// }
         /// </code>
         /// </example>
         public AzurePipelinesTeamProjectInfo TeamProject { get; }
 
         /// <summary>
-        /// Gets TF Build agent information.
+        /// Gets Azure Pipelines agent information.
         /// </summary>
         /// <value>
-        /// The TF Build agent.
+        /// The Azure Pipelines agent.
         /// </value>
         /// <para>Via BuildSystem</para>
         /// <example>
         /// <code>
-        /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
+        /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"Agent:
         ///         Id: {0}
         ///         Name: {1}",
-        ///         BuildSystem.TFBuild.Environment.Agent.Id,
-        ///         BuildSystem.TFBuild.Environment.Agent.Name
+        ///         BuildSystem.AzurePipelines.Environment.Agent.Id,
+        ///         BuildSystem.AzurePipelines.Environment.Agent.Name
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on Azure Pipelines");
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via AzurePipelines</para>
         /// <example>
         /// <code>
-        /// if (TFBuild.IsRunningOnTFBuild)
+        /// if (AzurePipelines.IsRunningOnAzurePipelines)
         /// {
         ///     Information(
         ///         @"Agent:
         ///         Id: {0}
         ///         Name: {1}",
-        ///         TFBuild.Environment.Agent.Id,
-        ///         TFBuild.Environment.Agent.Name
+        ///         AzurePipelines.Environment.Agent.Id,
+        ///         AzurePipelines.Environment.Agent.Name
         ///         );
         /// }
         /// else
         /// {
-        ///     Information("Not running on TFBuild");
+        ///     Information("Not running on Azure Pipelines");
         /// }
         /// </code>
         /// </example>

@@ -9,7 +9,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Build.AzurePipelines
 {
     /// <summary>
-    /// Represents a TF Build command provider.
+    /// Represents an Azure Pipelines command provider.
     /// </summary>
     public interface IAzurePipelinesCommands
     {
