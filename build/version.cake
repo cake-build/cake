@@ -20,11 +20,11 @@ public class BuildVersion
         if (!parameters.SkipGitVersion)
         {
             // Temp Workaround GitVersion Azure Pipelines
-            var tfBuild = context.TFBuild();
+            var azurePipelines = context.AzurePipelines();
             string sourceBranch = string.Empty;
-            if ((tfBuild.IsRunningOnAzurePipelinesHosted || tfBuild.IsRunningOnAzurePipelines) && tfBuild.Environment.PullRequest.Number > 0)
+            if ((azurePipelines.IsRunningOnAzurePipelinesHosted || azurePipelines.IsRunningOnAzurePipelines) && azurePipelines.Environment.PullRequest.Number > 0)
             {
-                 sourceBranch = $"PullRequest{tfBuild.Environment.PullRequest.Number}";
+                 sourceBranch = $"PullRequest{azurePipelines.Environment.PullRequest.Number}";
                  context.Information("Overriding Azure Pipelines branch name with: {0}", sourceBranch);
             }
 
