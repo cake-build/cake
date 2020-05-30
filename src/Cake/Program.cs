@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Cake.Arguments;
@@ -89,7 +90,9 @@ namespace Cake
 
         private static int LogException<T>(ICakeLog log, T ex) where T : Exception
         {
-            log = log ?? new CakeBuildLog(new CakeConsole());
+            log = log ?? new CakeBuildLog(
+                new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime())));
+
             if (log.Verbosity == Verbosity.Diagnostic)
             {
                 log.Error("Error: {0}", ex);

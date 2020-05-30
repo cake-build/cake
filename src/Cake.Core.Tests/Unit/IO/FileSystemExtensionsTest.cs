@@ -59,6 +59,16 @@ namespace Cake.Core.Tests.Unit.IO
                     // Then
                     Assert.True(result);
                 }
+
+                [Fact]
+                public void Should_Throw_If_FileSystem_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() => FileSystemExtensions.Exist(null, (FilePath)"file.txt"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "fileSystem");
+                }
             }
 
             public sealed class WithDirectoryPath
@@ -107,6 +117,16 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.True(result);
+                }
+
+                [Fact]
+                public void Should_Throw_If_FileSystem_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() => FileSystemExtensions.Exist(null, (DirectoryPath)"/Target"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "fileSystem");
                 }
             }
         }

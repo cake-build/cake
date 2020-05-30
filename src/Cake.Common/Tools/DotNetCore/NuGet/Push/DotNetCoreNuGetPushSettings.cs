@@ -23,6 +23,22 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
         public string SymbolSource { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to append "api/v2/package" to the source URL.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 2.1 SDK.
+        /// </remarks>
+        public bool NoServiceEndpoint { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to block and require manual action for operations like authentication.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 2.2 SDK.
+        /// </remarks>
+        public bool Interactive { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating timeout for pushing to a server in seconds.
         /// <remarks>
         /// Defaults to 300 seconds (5 minutes). Specifying 0 (zero seconds) applies the default value.
@@ -52,6 +68,15 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
         /// Gets or sets a value indicating whether symbols should be not be pushed if present.
         /// </summary>
         public bool IgnoreSymbols { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether, when pushing multiple packages to an HTTP(S) server,
+        /// to treat any 409 Conflict response as a warning so that the push can continue.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 3.1 SDK.
+        /// </remarks>
+        public bool SkipDuplicate { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to force command-line output in English.

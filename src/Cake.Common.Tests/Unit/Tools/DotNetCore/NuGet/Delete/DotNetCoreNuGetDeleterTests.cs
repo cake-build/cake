@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Delete
 {
-    public sealed class DotNetCoreDeleterTests
+    public sealed class DotNetCoreNuGetDeleterTests
     {
         public sealed class TheDeleteMethod
         {
@@ -17,7 +17,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Delete
             public void Should_Throw_If_Settings_Are_Null()
             {
                 // Given
-                var fixture = new DotNetCoreDeleterFixture();
+                var fixture = new DotNetCoreNuGetDeleterFixture();
                 fixture.Settings = null;
                 fixture.GivenDefaultToolDoNotExist();
 
@@ -35,7 +35,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Delete
             public void Should_Not_Throw_If_PackageName_Is_Empty(string packageName)
             {
                 // Given
-                var fixture = new DotNetCoreDeleterFixture();
+                var fixture = new DotNetCoreNuGetDeleterFixture();
                 fixture.PackageName = packageName;
                 fixture.Settings = new DotNetCoreNuGetDeleteSettings();
 
@@ -53,7 +53,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Delete
             public void Should_Not_Throw_If_PackageVersion_Is_Empty(string packageVersion)
             {
                 // Given
-                var fixture = new DotNetCoreDeleterFixture();
+                var fixture = new DotNetCoreNuGetDeleterFixture();
                 fixture.PackageName = "name";
                 fixture.PackageVersion = packageVersion;
                 fixture.Settings = new DotNetCoreNuGetDeleteSettings();
@@ -69,7 +69,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Delete
             public void Should_Throw_If_Process_Was_Not_Started()
             {
                 // Given
-                var fixture = new DotNetCoreDeleterFixture();
+                var fixture = new DotNetCoreNuGetDeleterFixture();
                 fixture.GivenProcessCannotStart();
 
                 // When
@@ -83,7 +83,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Delete
             public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
             {
                 // Given
-                var fixture = new DotNetCoreDeleterFixture();
+                var fixture = new DotNetCoreNuGetDeleterFixture();
                 fixture.GivenProcessExitsWithCode(1);
 
                 // When
@@ -102,8 +102,10 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Delete
                 const string source = "http://www.nuget.org/api/v2/package";
                 const string apiKey = "key1234";
 
-                var fixture = new DotNetCoreDeleterFixture();
+                var fixture = new DotNetCoreNuGetDeleterFixture();
                 fixture.Settings.Source = source;
+                fixture.Settings.NoServiceEndpoint = true;
+                fixture.Settings.Interactive = true;
                 fixture.Settings.NonInteractive = true;
                 fixture.Settings.ApiKey = apiKey;
                 fixture.Settings.ForceEnglishOutput = true;
@@ -114,14 +116,14 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.NuGet.Delete
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(string.Format("nuget delete {0} {1} --source \"{2}\" --non-interactive --api-key \"{3}\" --force-english-output", packageName, packageVersion, source, apiKey), result.Args);
+                Assert.Equal(string.Format("nuget delete {0} {1} --source \"{2}\" --no-service-endpoint --interactive --non-interactive --api-key \"{3}\" --force-english-output", packageName, packageVersion, source, apiKey), result.Args);
             }
 
             [Fact]
             public void Should_Add_Host_Arguments()
             {
                 // Given
-                var fixture = new DotNetCoreDeleterFixture();
+                var fixture = new DotNetCoreNuGetDeleterFixture();
                 fixture.Settings.DiagnosticOutput = true;
 
                 // When

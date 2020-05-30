@@ -54,6 +54,8 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("CHANGE_AUTHOR_DISPLAY_NAME").Returns("Cake User");
             Environment.GetEnvironmentVariable("CHANGE_AUTHOR_EMAIL").Returns("cake@cakebuild.net");
             Environment.GetEnvironmentVariable("CHANGE_TARGET").Returns("develop");
+            Environment.GetEnvironmentVariable("CHANGE_BRANCH").Returns("feature/feature1");
+            Environment.GetEnvironmentVariable("CHANGE_FORK").Returns("fork1");
         }
 
         public JenkinsBuildInfo CreateBuildInfo()

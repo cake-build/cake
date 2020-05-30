@@ -114,5 +114,11 @@ namespace Cake.Common.Tools.InspectCode
         /// Gets or sets the minimal severity of issues to report.
         /// </summary>
         public InspectCodeSeverity? Severity { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to skip analysis of the file
+        /// that was output by the command line tool or not.
+        /// </summary>
+        public bool SkipOutputAnalysis { get; set; }
     }
 }

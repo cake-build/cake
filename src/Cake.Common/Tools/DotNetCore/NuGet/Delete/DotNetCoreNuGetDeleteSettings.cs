@@ -20,6 +20,22 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Delete
         public string Source { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to append "api/v2/package" to the source URL.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 2.1 SDK.
+        /// </remarks>
+        public bool NoServiceEndpoint { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to block and require manual action for operations like authentication.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 2.2 SDK.
+        /// </remarks>
+        public bool Interactive { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to prompt for user input or confirmations.
         /// </summary>
         public bool NonInteractive { get; set; }

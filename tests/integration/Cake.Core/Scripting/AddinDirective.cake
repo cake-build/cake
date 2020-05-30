@@ -1,4 +1,4 @@
-#addin nuget:?package=Cake.Incubator&version=4.0.0
+#addin nuget:?package=Cake.Incubator&version=5.1.0
 
 Task("Cake.Core.Scripting.AddinDirective.LoadNetStandardAddin")
     .Does(() =>

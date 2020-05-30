@@ -440,7 +440,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /distributedFileLogger", result.Args);
+                Assert.Equal("msbuild /distributedfilelogger", result.Args);
             }
 
             [Fact]
@@ -1133,6 +1133,51 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
 
                 // Then
                 Assert.Equal($"msbuild /fileLogger /fileloggerparameters:Verbosity={verbosity}", result.Args);
+            }
+        }
+
+        public class TheBinaryLoggerProperty
+        {
+            [Theory]
+            [InlineData(false, null, MSBuildBinaryLoggerImports.Unspecified, "msbuild")]
+            [InlineData(true, null, MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger")]
+            [InlineData(true, null, MSBuildBinaryLoggerImports.None, "msbuild /binarylogger:ProjectImports=None")]
+            [InlineData(true, "mylog.binlog", MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger:mylog.binlog")]
+            [InlineData(true, "mylog.binlog", MSBuildBinaryLoggerImports.Embed, "msbuild /binarylogger:mylog.binlog;ProjectImports=Embed")]
+            public void Should_Append_Binary_Logging_If_Specified(bool enabled, string fileName, MSBuildBinaryLoggerImports imports, string args)
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.BinaryLogger = new MSBuildBinaryLoggerSettings
+                {
+                    Enabled = enabled,
+                    FileName = fileName,
+                    Imports = imports
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(args, result.Args);
+            }
+
+            [Theory]
+            [InlineData(null, MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger")]
+            [InlineData(null, MSBuildBinaryLoggerImports.None, "msbuild /binarylogger:ProjectImports=None")]
+            [InlineData("mylog.binlog", MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger:mylog.binlog")]
+            [InlineData("mylog.binlog", MSBuildBinaryLoggerImports.Embed, "msbuild /binarylogger:mylog.binlog;ProjectImports=Embed")]
+            public void Should_Append_Binary_Logging_If_Enabled(string fileName, MSBuildBinaryLoggerImports imports, string args)
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.EnableBinaryLogger(fileName, imports);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(args, result.Args);
             }
         }
     }

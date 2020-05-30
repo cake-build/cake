@@ -17,8 +17,6 @@ namespace Cake.Core
     /// </summary>
     public sealed class CakeEnvironment : ICakeEnvironment
     {
-        private readonly ICakeLog _log;
-
         /// <summary>
         /// Gets or sets the working directory.
         /// </summary>
@@ -52,12 +50,10 @@ namespace Cake.Core
         /// </summary>
         /// <param name="platform">The platform.</param>
         /// <param name="runtime">The runtime.</param>
-        /// <param name="log">The log.</param>
-        public CakeEnvironment(ICakePlatform platform, ICakeRuntime runtime, ICakeLog log)
+        public CakeEnvironment(ICakePlatform platform, ICakeRuntime runtime)
         {
             Platform = platform;
             Runtime = runtime;
-            _log = log;
 
             // Get the application root.
             var assembly = AssemblyHelper.GetExecutingAssembly();
@@ -105,22 +101,10 @@ namespace Cake.Core
                     (dictionary, entry) =>
                     {
                         var key = (string)entry.Key;
-                        var value = entry.Value as string;
-                        if (dictionary.TryGetValue(key, out var existingValue))
+                        if (!dictionary.TryGetValue(key, out _))
                         {
-                            if (!StringComparer.OrdinalIgnoreCase.Equals(value, existingValue))
-                            {
-                                _log.Warning("GetEnvironmentVariables() encountered duplicate for key: {0}, value: {1} (existing value: {2})",
-                                    key,
-                                    value,
-                                    existingValue);
-                            }
+                            dictionary.Add(key, entry.Value as string);
                         }
-                        else
-                        {
-                            dictionary.Add(key, value);
-                        }
-
                         return dictionary;
                     },
                     dictionary => dictionary);

@@ -41,14 +41,14 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Runs MSBuild with the specified settings.
         /// </summary>
-        /// <param name="solution">The solution to build.</param>
+        /// <param name="solution">The solution or MsBuild project file to build.</param>
         /// <param name="settings">The settings.</param>
         public void Run(FilePath solution, MSBuildSettings settings)
         {
             Run(settings, GetArguments(solution, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(FilePath solution, MSBuildSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath projectFile, MSBuildSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
@@ -95,7 +95,7 @@ namespace Cake.Common.Tools.MSBuild
             if (settings.PlatformTarget.HasValue)
             {
                 var platform = settings.PlatformTarget.Value;
-                bool isSolution = string.Equals(solution.GetExtension(), ".sln", StringComparison.OrdinalIgnoreCase);
+                bool isSolution = string.Equals(projectFile.GetExtension(), ".sln", StringComparison.OrdinalIgnoreCase);
                 builder.Append(string.Concat("/p:Platform=", GetPlatformName(platform, isSolution)));
             }
 
@@ -157,7 +157,7 @@ namespace Cake.Common.Tools.MSBuild
                 {
                     if (!string.IsNullOrEmpty(binaryOptions))
                     {
-                        binaryOptions = binaryOptions + ";";
+                        binaryOptions += ";";
                     }
 
                     binaryOptions = binaryOptions + "ProjectImports=" + settings.BinaryLogger.Imports;
@@ -211,7 +211,7 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             // Add the solution as the last parameter.
-            builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(projectFile.MakeAbsolute(_environment).FullPath);
 
             return builder;
         }

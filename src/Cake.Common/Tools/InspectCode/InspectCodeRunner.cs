@@ -61,10 +61,13 @@ namespace Cake.Common.Tools.InspectCode
 
             Run(settings, GetArguments(settings, solution));
 
-            if (settings.OutputFile != null)
+            if (settings.SkipOutputAnalysis ||
+                settings.OutputFile == null)
             {
-                AnalyseResultsFile(settings.OutputFile, settings.ThrowExceptionOnFindingViolations);
+                return;
             }
+
+            AnalyseResultsFile(settings.OutputFile, settings.ThrowExceptionOnFindingViolations);
         }
 
         /// <summary>

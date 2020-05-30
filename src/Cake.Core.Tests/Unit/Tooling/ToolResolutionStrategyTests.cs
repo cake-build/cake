@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
 using Cake.Core.Tooling;
@@ -201,7 +202,7 @@ namespace Cake.Core.Tests.Unit.Tooling
                     return fixture.FileSystem.GetFile(path);
                 });
 
-                var strategy = new ToolResolutionStrategy(fileSystem, fixture.Environment, fixture.Globber, fixture.Configuration);
+                var strategy = new ToolResolutionStrategy(fileSystem, fixture.Environment, fixture.Globber, fixture.Configuration, new NullLog());
 
                 // When
                 var result = strategy.Resolve(fixture.Repository, "tool.exe");

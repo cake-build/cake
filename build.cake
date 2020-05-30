@@ -2,20 +2,20 @@
 #module nuget:?package=Cake.DotNetTool.Module&version=0.4.0
 
 // Install addins.
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=0.10.0"
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=0.10.0"
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.11.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=0.10.1"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=0.10.1"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.11.1"
 
 // Install tools.
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.4.2"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.6.519"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.0.4"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.7.922"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.5.8"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.5.1"
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.1.2"
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=SignClient&version=1.0.82"
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.10.2"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=SignClient&version=1.2.109"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.11.0"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -311,20 +311,9 @@ Task("Create-NuGet-Packages")
             OutputDirectory = parameters.Paths.Directories.NuGetRoot,
             NoBuild = true,
             NoRestore = true,
-            IncludeSymbols = true,
             MSBuildSettings = parameters.MSBuildSettings
         });
     }
-
-    // Cake - Symbols - .NET 4.6.1
-    NuGetPack("./nuspec/Cake.symbols.nuspec", new NuGetPackSettings {
-        Version = parameters.Version.SemVersion,
-        ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = parameters.Paths.Directories.ArtifactsBinFullFx,
-        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        Symbols = true,
-        NoPackageAnalysis = true
-    });
 
     var netFxFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx).FullPath;
     var netFxFullArtifactPathLength = netFxFullArtifactPath.Length+1;
@@ -335,22 +324,11 @@ Task("Create-NuGet-Packages")
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
         BasePath = netFxFullArtifactPath,
         OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        Symbols = false,
         NoPackageAnalysis = true,
         Files = GetFiles(netFxFullArtifactPath + "/*")
                                 .Select(file=>file.FullPath.Substring(netFxFullArtifactPathLength))
                                 .Select(file=> new NuSpecContent { Source = file, Target = file })
                                 .ToArray()
-    });
-
-    // Cake Symbols - .NET Core
-    NuGetPack("./nuspec/Cake.CoreCLR.symbols.nuspec", new NuGetPackSettings {
-        Version = parameters.Version.SemVersion,
-        ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = parameters.Paths.Directories.ArtifactsBinNetCore,
-        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        Symbols = true,
-        NoPackageAnalysis = true
     });
 
     var netCoreFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCore).FullPath;
@@ -362,7 +340,6 @@ Task("Create-NuGet-Packages")
         ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
         BasePath = netCoreFullArtifactPath,
         OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        Symbols = false,
         NoPackageAnalysis = true,
         Files = GetFiles(netCoreFullArtifactPath + "/**/*")
                                 .Select(file=>file.FullPath.Substring(netCoreFullArtifactPathLength))
@@ -373,7 +350,6 @@ Task("Create-NuGet-Packages")
     DotNetCorePack("./src/Cake/Cake.csproj", new DotNetCorePackSettings {
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        IncludeSymbols = true,
         MSBuildSettings = parameters.MSBuildSettings,
         ArgumentCustomization = arg => arg.Append("/p:PackAsTool=true")
     });

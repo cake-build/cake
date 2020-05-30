@@ -493,6 +493,38 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheEnableBinaryLoggerMethod
+        {
+            [Fact]
+            public void Should_Enable_BinaryLogger()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.EnableBinaryLogger();
+
+                // Then
+                Assert.NotNull(settings.BinaryLogger);
+                Assert.True(settings.BinaryLogger.Enabled);
+                Assert.Null(settings.BinaryLogger.FileName);
+                Assert.Equal(MSBuildBinaryLogImports.Unspecified, settings.BinaryLogger.Imports);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.EnableBinaryLogger();
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheWithWarningsAsErrorMethod
         {
             [Fact]

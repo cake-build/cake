@@ -102,6 +102,11 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         public ICollection<MSBuildFileLoggerSettings> FileLoggers { get; }
 
         /// <summary>
+        /// Gets or sets the binary logging options
+        /// </summary>
+        public MSBuildBinaryLoggerSettings BinaryLogger { get; set; }
+
+        /// <summary>
         /// Gets the loggers to use to log events from MSBuild.
         /// </summary>
         public ICollection<MSBuildLogger> Loggers { get; }

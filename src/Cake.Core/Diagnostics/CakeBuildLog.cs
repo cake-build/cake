@@ -2,20 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using Cake.Core.Diagnostics.Formatting;
-
 namespace Cake.Core.Diagnostics
 {
     /// <summary>
-    /// The default Cake build log.
+    /// A log that writes to the console.
     /// </summary>
     public sealed class CakeBuildLog : ICakeLog
     {
         private readonly IConsole _console;
         private readonly object _lock;
-        private readonly IDictionary<LogLevel, ConsolePalette> _palettes;
+        private readonly IConsoleRenderer _renderer;
 
         /// <summary>
         /// Gets or sets the verbosity.
@@ -32,7 +28,18 @@ namespace Cake.Core.Diagnostics
         {
             _console = console;
             _lock = new object();
-            _palettes = CreatePalette();
+
+            if (_console.SupportAnsiEscapeCodes)
+            {
+                // Use ANSI console renderer.
+                _renderer = new AnsiConsoleRenderer(_console);
+            }
+            else
+            {
+                // Use the default renderer.
+                _renderer = new ConsoleRenderer(_console);
+            }
+
             Verbosity = verbosity;
         }
 
@@ -50,72 +57,11 @@ namespace Cake.Core.Diagnostics
             {
                 return;
             }
+
             lock (_lock)
             {
-                try
-                {
-                    var palette = _palettes[level];
-                    var tokens = FormatParser.Parse(format);
-
-                    // if the entirety of the formatting string is a single token, as is coming from
-                    // the LogExtensions implementation of (string) and (object), don't attempt to colorize the output.
-                    var colorize = !"{0}".Equals(format, StringComparison.OrdinalIgnoreCase);
-
-                    foreach (var token in tokens)
-                    {
-                        SetPalette(token, palette, colorize);
-                        if (level > LogLevel.Error)
-                        {
-                            _console.Write("{0}", token.Render(args));
-                        }
-                        else
-                        {
-                            _console.WriteError("{0}", token.Render(args));
-                        }
-                    }
-                }
-                finally
-                {
-                    _console.ResetColor();
-                    if (level > LogLevel.Error)
-                    {
-                        _console.WriteLine();
-                    }
-                    else
-                    {
-                        _console.WriteErrorLine();
-                    }
-                }
+                _renderer.Render(level, format, args);
             }
-        }
-
-        private void SetPalette(FormatToken token, ConsolePalette palette, bool colorize)
-        {
-            if (colorize && token is PropertyToken)
-            {
-                _console.BackgroundColor = palette.ArgumentBackground;
-                _console.ForegroundColor = palette.ArgumentForeground;
-            }
-            else
-            {
-                _console.BackgroundColor = palette.Background;
-                _console.ForegroundColor = palette.Foreground;
-            }
-        }
-
-        private IDictionary<LogLevel, ConsolePalette> CreatePalette()
-        {
-            var background = _console.BackgroundColor;
-            var palette = new Dictionary<LogLevel, ConsolePalette>
-            {
-                { LogLevel.Fatal, new ConsolePalette(ConsoleColor.Magenta, ConsoleColor.White, ConsoleColor.DarkMagenta, ConsoleColor.White) },
-                { LogLevel.Error, new ConsolePalette(ConsoleColor.DarkRed, ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White) },
-                { LogLevel.Warning, new ConsolePalette(background, ConsoleColor.Yellow, background, ConsoleColor.Yellow) },
-                { LogLevel.Information, new ConsolePalette(background, ConsoleColor.White, ConsoleColor.DarkBlue, ConsoleColor.White) },
-                { LogLevel.Verbose, new ConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
-                { LogLevel.Debug, new ConsolePalette(background, ConsoleColor.DarkGray, background, ConsoleColor.Gray) }
-            };
-            return palette;
         }
     }
 }
