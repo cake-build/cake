@@ -1,3 +1,7 @@
+### New in 0.38.1 (Released 2020/05/30)
+
+* 2786 0.38.0 introduces TFBuild obsolete warning for everyone not just users of property
+
 ### New in 0.38.0 (Released 2020/05/30)
 
 * 2784 Add NuGet Delete functionality
