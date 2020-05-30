@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Common.Build.AppVeyor;
+using Cake.Common.Build.AzurePipelines;
 using Cake.Common.Build.Bamboo;
 using Cake.Common.Build.BitbucketPipelines;
 using Cake.Common.Build.Bitrise;
@@ -41,6 +42,7 @@ namespace Cake.Common.Build
         /// <param name="gitLabCIProvider">The GitLab CI provider.</param>
         /// <param name="tfBuildProvider">The TF Build provider.</param>
         /// <param name="gitHubActionsProvider">The GitHub Actions provider.</param>
+        /// <param name="azurePipelinesProvider">The Azure Pipelines provider.</param>
         public BuildSystem(
             IAppVeyorProvider appVeyorProvider,
             ITeamCityProvider teamCityProvider,
@@ -54,7 +56,8 @@ namespace Cake.Common.Build
             IGoCDProvider goCDProvider,
             IGitLabCIProvider gitLabCIProvider,
             ITFBuildProvider tfBuildProvider,
-            IGitHubActionsProvider gitHubActionsProvider)
+            IGitHubActionsProvider gitHubActionsProvider,
+            IAzurePipelinesProvider azurePipelinesProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -108,6 +111,10 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException(nameof(gitHubActionsProvider));
             }
+            if (azurePipelinesProvider == null)
+            {
+                throw new ArgumentNullException(nameof(azurePipelinesProvider));
+            }
 
             AppVeyor = appVeyorProvider;
             TeamCity = teamCityProvider;
@@ -120,8 +127,11 @@ namespace Cake.Common.Build
             BitbucketPipelines = bitbucketPipelinesProvider;
             GoCD = goCDProvider;
             GitLabCI = gitLabCIProvider;
+#pragma warning disable CS0618 // Type or member is obsolete
             TFBuild = tfBuildProvider;
+#pragma warning restore CS0618 // Type or member is obsolete
             GitHubActions = gitHubActionsProvider;
+            AzurePipelines = azurePipelinesProvider;
 
             Provider = (AppVeyor.IsRunningOnAppVeyor ? BuildProvider.AppVeyor : BuildProvider.Local)
                 | (TeamCity.IsRunningOnTeamCity ? BuildProvider.TeamCity : BuildProvider.Local)
@@ -134,9 +144,9 @@ namespace Cake.Common.Build
                 | (BitbucketPipelines.IsRunningOnBitbucketPipelines ? BuildProvider.BitbucketPipelines : BuildProvider.Local)
                 | (GoCD.IsRunningOnGoCD ? BuildProvider.GoCD : BuildProvider.Local)
                 | (GitLabCI.IsRunningOnGitLabCI ? BuildProvider.GitLabCI : BuildProvider.Local)
-                | (TFBuild.IsRunningOnAzurePipelines ? BuildProvider.AzurePipelines : BuildProvider.Local)
-                | (TFBuild.IsRunningOnAzurePipelinesHosted ? BuildProvider.AzurePipelinesHosted : BuildProvider.Local)
-                | (GitHubActions.IsRunningOnGitHubActions ? BuildProvider.GitHubActions : BuildProvider.Local);
+                | (GitHubActions.IsRunningOnGitHubActions ? BuildProvider.GitHubActions : BuildProvider.Local)
+                | (AzurePipelines.IsRunningOnAzurePipelines ? BuildProvider.AzurePipelines : BuildProvider.Local)
+                | (AzurePipelines.IsRunningOnAzurePipelinesHosted ? BuildProvider.AzurePipelinesHosted : BuildProvider.Local);
 
             IsLocalBuild = Provider == BuildProvider.Local;
 
@@ -146,7 +156,7 @@ namespace Cake.Common.Build
                 || ((Provider & BuildProvider.TravisCI) != 0 && TravisCI.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.BitbucketPipelines) != 0 && BitbucketPipelines.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.GitLabCI) != 0 && GitLabCI.Environment.PullRequest.IsPullRequest)
-                || ((Provider & (BuildProvider.AzurePipelines | BuildProvider.AzurePipelinesHosted)) != 0 && TFBuild.Environment.PullRequest.IsPullRequest)
+                || ((Provider & (BuildProvider.AzurePipelines | BuildProvider.AzurePipelinesHosted)) != 0 && AzurePipelines.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.GitHubActions) != 0 && GitHubActions.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.Jenkins) != 0 && Jenkins.Environment.Change.IsPullRequest);
         }
@@ -542,14 +552,14 @@ namespace Cake.Common.Build
         /// if (BuildSystem.IsRunningOnAzurePipelines)
         /// {
         ///     // Get the build commit hash.
-        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
+        ///     var commitHash = BuildSystem.AzurePipelines.Environment.Repository.SourceVersion;
         /// }
         /// </code>
         /// </example>
         /// <value>
         /// <c>true</c> if this instance is running on Azure Pipelines; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnAzurePipelines => TFBuild.IsRunningOnAzurePipelines;
+        public bool IsRunningOnAzurePipelines => AzurePipelines.IsRunningOnAzurePipelines;
 
         /// <summary>
         /// Gets a value indicating whether this instance is running on hosted Azure Pipelines.
@@ -559,14 +569,14 @@ namespace Cake.Common.Build
         /// if (BuildSystem.IsRunningOnAzurePipelinesHosted)
         /// {
         ///     // Get the build commit hash.
-        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
+        ///     var commitHash = BuildSystem.AzurePipelines.Environment.Repository.SourceVersion;
         /// }
         /// </code>
         /// </example>
         /// <value>
         /// <c>true</c> if this instance is running on hosted Azure Pipelines; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnAzurePipelinesHosted => TFBuild.IsRunningOnAzurePipelinesHosted;
+        public bool IsRunningOnAzurePipelinesHosted => AzurePipelines.IsRunningOnAzurePipelinesHosted;
 
         /// <summary>
         /// Gets the TF Build Provider.
@@ -580,7 +590,22 @@ namespace Cake.Common.Build
         /// }
         /// </code>
         /// </example>
+        [Obsolete("Please use BuildSystem.AzurePipelines instead.")]
         public ITFBuildProvider TFBuild { get; }
+
+        /// <summary>
+        /// Gets the Azure Pipelines Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.IsRunningOnAzurePipelines)
+        /// {
+        ///     // Get the build definition name.
+        ///     var definitionName = BuildSystem.AzurePipelines.Environment.BuildDefinition.Name;
+        /// }
+        /// </code>
+        /// </example>
+        public IAzurePipelinesProvider AzurePipelines { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is running on GitHub Actions.
