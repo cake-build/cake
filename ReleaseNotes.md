@@ -1,3 +1,25 @@
+### New in 0.38.0 (Released 2020/05/30)
+
+* 2784 Add NuGet Delete functionality
+* 2749 Add support for ANSI escape codes
+* 2728 Add dotnet NuGet source commands
+* 2718 Add binary logger to dotnet MSBuild settings
+* 2721 NuGet package name/path should be added in quotes
+* 2785 Provide additional logging for tool resolver
+* 2778 Update Roslyn to 3.6.0
+* 2768 Add an option to skip the default warning/error output when running JetBrains command line tools
+* 2764 Additional Jenkins information
+* 2752 MSTestRunner prioritizes VS2017 over VS2019
+* 2745 Extend XmlPeekSettings with FileShare.* option
+* 2733 NuGetSetApiKey with Verbosity set to Quiet causes an exception.
+* 2730 Better handling for GitVersion failure cases
+* 2715 Add missing dotnet NuGet command options
+* 2714 Squash warning when skip package version check
+* 2710 Add GitHub Actions GITHUB_RUN_ID & GITHUB_RUN_NUMBER
+* 2658 Rename TFBuild alias to AzurePipelines
+* 2077 Locating the correct vstest.console.exe (VS2017)
+* 2735 Improve documentation for MSBuild alias to make clear that also MSBuild projects can be passed
+
 ### New in 0.37.0 (Released 2020/02/01)
 
 * 2708 Emitting debug information should be done regardless of --debug switch.
