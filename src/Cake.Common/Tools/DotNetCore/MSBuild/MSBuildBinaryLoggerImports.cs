@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.DotNetCore.MSBuild
 {
     /// <summary>
-    /// What files to include in the binary log
+    /// What files to include in the binary log.
     /// </summary>
     public enum MSBuildBinaryLoggerImports
     {

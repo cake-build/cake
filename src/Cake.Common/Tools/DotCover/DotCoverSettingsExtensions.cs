@@ -17,7 +17,7 @@ namespace Cake.Common.Tools.DotCover
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="configFile">The DotCover configuration file.</param>
-        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverSettings"/></typeparam>
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverSettings"/>.</typeparam>
         /// <returns>The same <see cref="DotCoverSettings"/> instance so that multiple calls can be chained.</returns>
         public static T WithConfigFile<T>(this T settings, FilePath configFile)
             where T : DotCoverSettings

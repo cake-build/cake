@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Cake.Common.Tools.MSBuild
 {
     /// <summary>
-    /// What files to include in the binary log
+    /// What files to include in the binary log.
     /// </summary>
     public enum MSBuildBinaryLogImports
     {

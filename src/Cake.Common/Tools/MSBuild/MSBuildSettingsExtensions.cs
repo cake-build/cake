@@ -242,7 +242,7 @@ namespace Cake.Common.Tools.MSBuild
         /// Adds a custom logger.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="loggerAssembly">The assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}</param>
+        /// <param name="loggerAssembly">The assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}.</param>
         /// <param name="loggerClass">The class implementing the logger. Should match the format [PartialOrFullNamespace.]LoggerClassName. If the assembly contains only one logger, class does not need to be specified.</param>
         /// <param name="loggerParameters">Parameters to be passed to the logger.</param>
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
@@ -416,7 +416,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Invoke the Restore target before any other target.
         /// </summary>
-        /// <param name="settings">The setting</param>
+        /// <param name="settings">The setting.</param>
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithRestore(this MSBuildSettings settings)
         {

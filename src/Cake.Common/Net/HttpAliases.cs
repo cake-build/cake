@@ -15,7 +15,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Net
 {
     /// <summary>
-    /// Contains functionality related to HTTP operations
+    /// Contains functionality related to HTTP operations.
     /// </summary>
     [CakeAliasCategory("HTTP Operations")]
     public static class HttpAliases
@@ -297,7 +297,7 @@ namespace Cake.Common.Net
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the upload resource.</param>
         /// <param name="data">The data to upload.</param>
-        /// <param name="fileName">The filename to give the uploaded data</param>
+        /// <param name="fileName">The filename to give the uploaded data.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Upload")]
         public static void UploadFile(this ICakeContext context, Uri address, byte[] data, string fileName)
@@ -335,7 +335,7 @@ namespace Cake.Common.Net
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the upload resource.</param>
         /// <param name="data">The data to upload.</param>
-        /// <param name="fileName">The filename to give the uploaded data</param>
+        /// <param name="fileName">The filename to give the uploaded data.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Upload")]
         public static void UploadFile(this ICakeContext context, string address, byte[] data, string fileName)

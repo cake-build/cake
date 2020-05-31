@@ -96,7 +96,7 @@ namespace Cake.Common.Solution.Project
         /// <param name="platform">The target platform.</param>
         /// <param name="projectGuid">The unique project identifier.</param>
         /// <param name="outputType">The compiler output type.</param>
-        /// <param name="outputPath">The compiler output path</param>
+        /// <param name="outputPath">The compiler output path.</param>
         /// <param name="rootNameSpace">The default root namespace.</param>
         /// <param name="assemblyName">Gets the build target assembly name.</param>
         /// <param name="targetFrameworkVersion">The compiler framework version.</param>

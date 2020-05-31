@@ -28,7 +28,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// <param name="processRunner">The process runner.</param>
         /// <param name="log">The log.</param>
         /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The Chocolatey tool resolver</param>
+        /// <param name="resolver">The Chocolatey tool resolver.</param>
         public ChocolateyPacker(
             IFileSystem fileSystem,
             ICakeEnvironment environment,

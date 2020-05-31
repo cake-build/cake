@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.MSBuild
 {
     /// <summary>
-    /// Represents a MSBuild version
+    /// Represents a MSBuild version.
     /// </summary>
     public enum MSBuildVersion
     {

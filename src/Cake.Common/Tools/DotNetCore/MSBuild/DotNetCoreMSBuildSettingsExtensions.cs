@@ -160,7 +160,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="responseFile">The response file to add.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         /// <remarks>
-        /// A response file is a text file that is used to insert command-line switches. For more information see https://docs.microsoft.com/en-gb/visualstudio/msbuild/msbuild-response-files
+        /// A response file is a text file that is used to insert command-line switches. For more information see https://docs.microsoft.com/en-gb/visualstudio/msbuild/msbuild-response-files.
         /// </remarks>
         public static DotNetCoreMSBuildSettings WithResponseFile(this DotNetCoreMSBuildSettings settings, FilePath responseFile)
         {
@@ -191,7 +191,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         /// <remarks>
         /// A distributed logger consists of a central and forwarding logger. MSBuild will attach an instance of the forwarding logger to each secondary node.
-        /// For more information see https://msdn.microsoft.com/en-us/library/bb383987.aspx
+        /// For more information see https://msdn.microsoft.com/en-us/library/bb383987.aspx.
         /// </remarks>
         public static DotNetCoreMSBuildSettings WithDistributedLogger(this DotNetCoreMSBuildSettings settings, MSBuildDistributedLogger logger)
         {
@@ -327,7 +327,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// Adds a custom logger.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="loggerAssembly">The assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}</param>
+        /// <param name="loggerAssembly">The assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}.</param>
         /// <param name="loggerClass">The class implementing the logger. Should match the format [PartialOrFullNamespace.]LoggerClassName. If the assembly contains only one logger, class does not need to be specified.</param>
         /// <param name="loggerParameters">Parameters to be passed to the logger.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>

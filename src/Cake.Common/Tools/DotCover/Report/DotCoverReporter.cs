@@ -37,7 +37,7 @@ namespace Cake.Common.Tools.DotCover.Report
         /// </summary>
         /// <param name="sourceFile">The DotCover coverage snapshot file name.</param>
         /// <param name="outputFile">The DotCover output file.</param>
-        /// <param name="settings">The settings</param>
+        /// <param name="settings">The settings.</param>
         public void Report(
             FilePath sourceFile,
             FilePath outputFile,

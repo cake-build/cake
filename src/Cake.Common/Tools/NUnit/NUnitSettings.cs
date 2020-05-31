@@ -120,13 +120,13 @@ namespace Cake.Common.Tools.NUnit
 
         /// <summary>
         ///     Gets or sets a value indicating how NUnit should load tests in processes.
-        ///     The Default value is <see cref="NUnitProcessOption.Single"/>
+        ///     The Default value is <see cref="NUnitProcessOption.Single"/>.
         /// </summary>
         public NUnitProcessOption Process { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether Single Threaded Apartment state (STA) will be used.
-        ///     Corresponds to the /apartment command line option
+        ///     Corresponds to the /apartment command line option.
         /// </summary>
         public bool UseSingleThreadedApartment { get; set; }
 

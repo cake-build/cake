@@ -28,7 +28,7 @@ namespace Cake.Common.Build.Bamboo.Data
         public int Number => GetEnvironmentInteger("bamboo_buildNumber");
 
         /// <summary>
-        /// Gets the job key for the current job, in the form PROJECT-PLAN-JOB, e.g. BAM-MAIN-JOBX
+        /// Gets the job key for the current job, in the form PROJECT-PLAN-JOB, e.g. BAM-MAIN-JOBX.
         /// </summary>
         /// <value>
         ///   The Bamboo Build Key.

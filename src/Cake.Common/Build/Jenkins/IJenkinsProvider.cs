@@ -7,7 +7,7 @@ using Cake.Common.Build.Jenkins.Data;
 namespace Cake.Common.Build.Jenkins
 {
     /// <summary>
-    /// Represents a Jenkins Provider
+    /// Represents a Jenkins Provider.
     /// </summary>
     public interface IJenkinsProvider
     {

@@ -5,7 +5,7 @@
 namespace Cake.Common.Build.TFBuild.Data
 {
     /// <summary>
-    /// Providers known values for the TF Test Runner types
+    /// Providers known values for the TF Test Runner types.
     /// </summary>
     public enum TFTestRunnerType
     {

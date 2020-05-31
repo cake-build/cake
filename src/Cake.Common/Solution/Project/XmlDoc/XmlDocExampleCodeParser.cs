@@ -15,7 +15,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Solution.Project.XmlDoc
 {
     /// <summary>
-    /// The MSBuild Xml documentation example code parser
+    /// The MSBuild Xml documentation example code parser.
     /// </summary>
     public sealed class XmlDocExampleCodeParser
     {
@@ -47,10 +47,10 @@ namespace Cake.Common.Solution.Project.XmlDoc
         }
 
         /// <summary>
-        /// Parses Xml documentation example code from given path
+        /// Parses Xml documentation example code from given path.
         /// </summary>
         /// <param name="xmlFilePath">Path to the file to parse.</param>
-        /// <returns>Parsed Example Code</returns>
+        /// <returns>Parsed Example Code.</returns>
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public IEnumerable<XmlDocExampleCode> Parse(FilePath xmlFilePath)
         {
@@ -86,10 +86,10 @@ namespace Cake.Common.Solution.Project.XmlDoc
         }
 
         /// <summary>
-        /// Parses Xml documentation example code from file(s) using given pattern
+        /// Parses Xml documentation example code from file(s) using given pattern.
         /// </summary>
         /// <param name="pattern">The globber file pattern.</param>
-        /// <returns>Parsed Example Code</returns>
+        /// <returns>Parsed Example Code.</returns>
         public IEnumerable<XmlDocExampleCode> ParseFiles(string pattern)
         {
             if (string.IsNullOrWhiteSpace(pattern))

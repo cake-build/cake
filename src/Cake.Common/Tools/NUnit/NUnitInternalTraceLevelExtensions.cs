@@ -13,10 +13,10 @@ namespace Cake.Common.Tools.NUnit
     public static class NUnitInternalTraceLevelExtensions
     {
         /// <summary>
-        /// Gets the LEVEL value for the --trace command line argument for the given <see cref="NUnitInternalTraceLevel"/>
+        /// Gets the LEVEL value for the --trace command line argument for the given <see cref="NUnitInternalTraceLevel"/>.
         /// </summary>
-        /// <param name="level">The <see cref="NUnitInternalTraceLevel"/> value for which to get the <see cref="string"/> representation</param>
-        /// <returns>Returns the appropriate <see cref="string"/> representation for the given <see cref="NUnitInternalTraceLevel"/> value</returns>
+        /// <param name="level">The <see cref="NUnitInternalTraceLevel"/> value for which to get the <see cref="string"/> representation.</param>
+        /// <returns>Returns the appropriate <see cref="string"/> representation for the given <see cref="NUnitInternalTraceLevel"/> value.</returns>
         public static string GetArgumentValue(this NUnitInternalTraceLevel level)
         {
             string result;

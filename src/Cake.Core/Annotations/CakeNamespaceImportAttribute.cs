@@ -9,7 +9,7 @@ namespace Cake.Core.Annotations
     /// <summary>
     /// An attribute used to hint Cake about additional namespaces that need
     /// to be imported for an alias to work. This attribute can mark an
-    /// extension method, the extension method class, or the assembly to provide a global set of imports
+    /// extension method, the extension method class, or the assembly to provide a global set of imports.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Assembly, AllowMultiple = true, Inherited = false)]
     public sealed class CakeNamespaceImportAttribute : Attribute

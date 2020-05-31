@@ -7,18 +7,18 @@ using System;
 namespace Cake.Diagnostics
 {
     /// <summary>
-    /// Represents a debugger
+    /// Represents a debugger.
     /// </summary>
     public interface IDebugger
     {
         /// <summary>
-        /// Gets the current process id
+        /// Gets the current process id.
         /// </summary>
-        /// <returns>The current process id</returns>
+        /// <returns>The current process id.</returns>
         int GetProcessId();
 
         /// <summary>
-        /// Wait for the debugger to attach
+        /// Wait for the debugger to attach.
         /// </summary>
         /// <param name="timeout">A TimeSpan that represents the number of milliseconds to wait,
         /// or a TimeSpan that represents -1 milliseconds to wait indefinitely.</param>

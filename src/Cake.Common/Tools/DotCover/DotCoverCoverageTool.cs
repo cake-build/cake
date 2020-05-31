@@ -12,7 +12,7 @@ namespace Cake.Common.Tools.DotCover
     /// <summary>
     /// DotCover Coverage tool.
     /// </summary>
-    /// <typeparam name="TSettings">The settings type</typeparam>
+    /// <typeparam name="TSettings">The settings type.</typeparam>
     public abstract class DotCoverCoverageTool<TSettings> : DotCoverTool<TSettings> where TSettings : DotCoverCoverageSettings
     {
         private readonly ICakeEnvironment _environment;
@@ -34,11 +34,11 @@ namespace Cake.Common.Tools.DotCover
         }
 
         /// <summary>
-        /// Get arguments from the target executable
+        /// Get arguments from the target executable.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="action">The action to run DotCover for.</param>
-        /// <returns>The process arguments</returns>
+        /// <returns>The process arguments.</returns>
         protected ProcessArgumentBuilder GetTargetArguments(ICakeContext context, Action<ICakeContext> action)
         {
             // Run the tool using the interceptor.
@@ -64,10 +64,10 @@ namespace Cake.Common.Tools.DotCover
         }
 
         /// <summary>
-        /// Get arguments from coverage settings
+        /// Get arguments from coverage settings.
         /// </summary>
-        /// <param name="settings">The settings</param>
-        /// <returns>The process arguments</returns>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The process arguments.</returns>
         protected ProcessArgumentBuilder GetCoverageArguments(DotCoverCoverageSettings settings)
         {
             var builder = new ProcessArgumentBuilder();

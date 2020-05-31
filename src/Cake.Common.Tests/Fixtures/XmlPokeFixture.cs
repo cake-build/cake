@@ -117,7 +117,7 @@ namespace Cake.Common.Tests.Fixtures
         }
 
         /// <summary>
-        /// Gets a XmlReaderSettings from a XmlPokeSettings
+        /// Gets a XmlReaderSettings from a XmlPokeSettings.
         /// </summary>
         /// <returns>The xml reader settings.</returns>
         /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>

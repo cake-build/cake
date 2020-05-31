@@ -29,7 +29,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <param name="processRunner">The process runner.</param>
         /// <param name="log">The log.</param>
         /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The NuGet tool resolver</param>
+        /// <param name="resolver">The NuGet tool resolver.</param>
         public NuGetPacker(
             IFileSystem fileSystem,
             ICakeEnvironment environment,

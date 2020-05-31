@@ -9,7 +9,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// Possible arguments to pass to Octo.exe for deploying a release. See <see href="http://docs.octopusdeploy.com/display/OD/Deploying+releases">Octopus Deploy documentation</see>
+    /// Possible arguments to pass to Octo.exe for deploying a release. See <see href="http://docs.octopusdeploy.com/display/OD/Deploying+releases">Octopus Deploy documentation</see>.
     /// </summary>
     public sealed class OctopusDeployReleaseDeploymentSettings : OctopusDeployCommonToolSettings
     {

@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Cake.Common.Tools.ILMerge
 {
     /// <summary>
-    /// Represents the .NET Framework for the target assembly
+    /// Represents the .NET Framework for the target assembly.
     /// </summary>
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public enum TargetPlatformVersion

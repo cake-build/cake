@@ -10,15 +10,15 @@ using System.Linq;
 namespace Cake.Core
 {
     /// <summary>
-    /// Extensions for <see cref="System.Uri"/>
+    /// Extensions for <see cref="System.Uri"/>.
     /// </summary>
     public static class UriExtensions
     {
         /// <summary>
-        /// Extracts query string of <see cref="System.Uri"/>
+        /// Extracts query string of <see cref="System.Uri"/>.
         /// </summary>
-        /// <param name="uri">The URI</param>
-        /// <returns>Collection of parameters and their values</returns>
+        /// <param name="uri">The URI.</param>
+        /// <returns>Collection of parameters and their values.</returns>
         public static IReadOnlyDictionary<string, IReadOnlyList<string>> GetQueryString(this Uri uri)
         {
             var result = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);

@@ -45,7 +45,7 @@ namespace Cake.Common.Tools.VSTest
         /// Log to a custom logger.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="loggerName">The name of the logger</param>
+        /// <param name="loggerName">The name of the logger.</param>
         /// <returns>The same <see cref="VSTestSettings"/> instance so that multiple calls can be chained.</returns>
         public static VSTestSettings WithLogger(this VSTestSettings settings, string loggerName)
         {

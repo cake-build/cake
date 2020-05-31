@@ -361,7 +361,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Adds NuGet package source using the specified name &amp;source to global user config
+        /// Adds NuGet package source using the specified name &amp;source to global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -389,7 +389,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Adds NuGet package source using the specified name, source &amp; settings to global user config
+        /// Adds NuGet package source using the specified name, source &amp; settings to global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -434,7 +434,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Removes NuGet package source using the specified name &amp; source from global user config
+        /// Removes NuGet package source using the specified name &amp; source from global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -462,7 +462,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Removes NuGet package source using the specified name, source &amp; settings from global user config
+        /// Removes NuGet package source using the specified name, source &amp; settings from global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -1104,12 +1104,12 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// List packages on available from source using specified settings
+        /// List packages on available from source using specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="packageId">The package Id</param>
+        /// <param name="packageId">The package Id.</param>
         /// <param name="settings">The settings.</param>
-        /// <returns>List of packages with their version</returns>
+        /// <returns>List of packages with their version.</returns>
         /// <example>
         /// <code>
         /// var packageList = NuGetList("Cake", new NuGetListSettings {
@@ -1137,11 +1137,11 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// List packages on available from source using specified settings
+        /// List packages on available from source using specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="packageId">The package Id</param>
-        /// <returns>List of packages with their version</returns>
+        /// <param name="packageId">The package Id.</param>
+        /// <returns>List of packages with their version.</returns>
         /// <example>
         /// <code>
         /// var packageList = NuGetList("Cake");
@@ -1166,11 +1166,11 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// List packages on available from source using specified settings
+        /// List packages on available from source using specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
-        /// <returns>List of packages with their version</returns>
+        /// <returns>List of packages with their version.</returns>
         /// <example>
         /// <code>
         /// var packageList = NuGetList(new NuGetListSettings {

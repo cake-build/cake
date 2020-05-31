@@ -8,7 +8,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.GitReleaseManager
 {
     /// <summary>
-    /// Contains settings used by <see cref="GitReleaseManagerSettings"/>
+    /// Contains settings used by <see cref="GitReleaseManagerSettings"/>.
     /// </summary>
     public class GitReleaseManagerSettings : ToolSettings
     {

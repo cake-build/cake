@@ -7,10 +7,10 @@ using Cake.Core;
 namespace Cake.Common.Build.TFBuild.Data
 {
     /// <summary>
-    /// Provides TF Build Trigger information for the current build
+    /// Provides TF Build Trigger information for the current build.
     /// </summary>
     /// <remarks>
-    /// Only populated if the build was triggered by another build
+    /// Only populated if the build was triggered by another build.
     /// </remarks>
     public class TFBuildTriggeredBy : TFInfo
     {
@@ -23,27 +23,27 @@ namespace Cake.Common.Build.TFBuild.Data
         }
 
         /// <summary>
-        /// Gets the BuildID of the triggering build
+        /// Gets the BuildID of the triggering build.
         /// </summary>
         public int BuildId => GetEnvironmentInteger("BUILD_TRIGGEREDBY_BUILDID");
 
         /// <summary>
-        /// Gets the DefinitionID of the triggering build
+        /// Gets the DefinitionID of the triggering build.
         /// </summary>
         public int DefinitionId => GetEnvironmentInteger("BUILD_TRIGGEREDBY_DEFINITIONID");
 
         /// <summary>
-        /// Gets the name of the triggering build pipeline
+        /// Gets the name of the triggering build pipeline.
         /// </summary>
         public string DefinitionName => GetEnvironmentString("BUILD_TRIGGEREDBY_DEFINITIONNAME");
 
         /// <summary>
-        /// Gets the number of the triggering build
+        /// Gets the number of the triggering build.
         /// </summary>
         public string BuildNumber => GetEnvironmentString("BUILD_TRIGGEREDBY_BUILDNUMBER");
 
         /// <summary>
-        /// Gets the ID of the project that contains the triggering build
+        /// Gets the ID of the project that contains the triggering build.
         /// </summary>
         public string ProjectId => GetEnvironmentString("BUILD_TRIGGEREDBY_PROJECTID");
     }

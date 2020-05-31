@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Cake.Common.Xml
 {
     /// <summary>
-    /// Contains settings for <see cref="XmlPeekAliases"/>
+    /// Contains settings for <see cref="XmlPeekAliases"/>.
     /// </summary>
     public sealed class XmlPeekSettings
     {

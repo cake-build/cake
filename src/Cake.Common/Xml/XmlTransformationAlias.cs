@@ -16,7 +16,7 @@ namespace Cake.Common.Xml
     public static class XmlTransformationAlias
     {
         /// <summary>
-        /// Performs XML XSL transformation
+        /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="xsl">XML style sheet.</param>
@@ -60,12 +60,12 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Performs XML XSL transformation
+        /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="xsl">XML style sheet.</param>
         /// <param name="xml">XML data.</param>
-        /// <param name="settings">Optional settings for result file xml writer</param>
+        /// <param name="settings">Optional settings for result file xml writer.</param>
         /// <returns>Transformed XML string.</returns>
         /// <example>
         /// <code>
@@ -98,7 +98,7 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Performs XML XSL transformation
+        /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="xslPath">Path to xml style sheet.</param>
@@ -164,13 +164,13 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Performs XML XSL transformation
+        /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="xslPath">Path to xml style sheet.</param>
         /// <param name="xmlPath">Path xml data.</param>
         /// <param name="resultPath">Transformation result path.</param>
-        /// <param name="settings">Optional settings for result file xml writer</param>
+        /// <param name="settings">Optional settings for result file xml writer.</param>
         /// <example>
         /// <code>
         /// <para>This example code will convert the Cake nuspec into html using the XmlTransform alias,

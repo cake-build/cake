@@ -11,9 +11,9 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.SpecFlow
 {
     /// <summary>
-    /// Base class for all SpecFlow related tools
+    /// Base class for all SpecFlow related tools.
     /// </summary>
-    /// <typeparam name="TSettings">The settings type</typeparam>
+    /// <typeparam name="TSettings">The settings type.</typeparam>
     public abstract class SpecFlowTool<TSettings> : Tool<TSettings>
         where TSettings : SpecFlowSettings
     {

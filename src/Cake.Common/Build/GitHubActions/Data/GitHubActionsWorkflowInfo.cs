@@ -7,7 +7,7 @@ using Cake.Core;
 namespace Cake.Common.Build.GitHubActions.Data
 {
     /// <summary>
-    /// Provide GitHub Actions workflow information for a current build
+    /// Provide GitHub Actions workflow information for a current build.
     /// </summary>
     public sealed class GitHubActionsWorkflowInfo : GitHubActionsInfo
     {

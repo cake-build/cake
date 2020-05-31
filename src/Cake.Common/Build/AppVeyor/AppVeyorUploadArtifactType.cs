@@ -5,7 +5,7 @@
 namespace Cake.Common.Build.AppVeyor
 {
     /// <summary>
-    /// Provides the known artifact upload types for the AppVeyor
+    /// Provides the known artifact upload types for the AppVeyor.
     /// </summary>
     public enum AppVeyorUploadArtifactType
     {

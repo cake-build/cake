@@ -65,7 +65,7 @@ namespace Cake.Common.Tools.GitVersion
         /// <summary>
         /// Gets or sets a value indicating whether to fetch repository information from remote when calculating version.
         /// </summary>
-        /// <remarks>If your CI server clones the entire repository you can set this to 'true' to prevent GitVersion attempting any remote repository fetching</remarks>
+        /// <remarks>If your CI server clones the entire repository you can set this to 'true' to prevent GitVersion attempting any remote repository fetching.</remarks>
         public bool NoFetch { get; set; }
 
         /// <summary>

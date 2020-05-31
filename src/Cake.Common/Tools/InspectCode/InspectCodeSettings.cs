@@ -25,7 +25,7 @@ namespace Cake.Common.Tools.InspectCode
         /// <summary>
         /// Gets or sets the location InspectCode should write its output.
         /// </summary>
-        /// <value>The location that InspectCode should write its output</value>
+        /// <value>The location that InspectCode should write its output.</value>
         public FilePath OutputFile { get; set; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.InspectCode
 
         /// <summary>
         /// Gets or sets a value indicating whether disable solution-wide analysis should be forced.
-        /// Default value is <c>false</c>
+        /// Default value is <c>false</c>.
         /// </summary>
         /// <value>
         ///     <c>true</c> if solution-wide analysis should be disabled by force; otherwise, <c>fault</c>.
@@ -56,7 +56,7 @@ namespace Cake.Common.Tools.InspectCode
         /// <summary>
         /// Gets or sets MSBuild properties.
         /// </summary>
-        /// <value>The MSBuild properties to override</value>
+        /// <value>The MSBuild properties to override.</value>
         public Dictionary<string, string> MsBuildProperties { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Cake.Common.Tools.InspectCode
         public FilePath Profile { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to throw an exception on finding violations
+        /// Gets or sets a value indicating whether to throw an exception on finding violations.
         /// </summary>
         public bool ThrowExceptionOnFindingViolations { get; set; }
 

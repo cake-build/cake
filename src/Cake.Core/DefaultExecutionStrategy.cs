@@ -71,7 +71,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="task">The task to execute.</param>
         /// <param name="context">The context.</param>
-        /// <returns>Returned Task</returns>
+        /// <returns>Returned Task.</returns>
         public async Task ExecuteAsync(CakeTask task, ICakeContext context)
         {
             if (task != null)

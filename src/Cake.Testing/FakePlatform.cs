@@ -7,7 +7,7 @@ using Cake.Core;
 namespace Cake.Testing
 {
     /// <summary>
-    /// An implementation of a fake <see cref="ICakePlatform"/>
+    /// An implementation of a fake <see cref="ICakePlatform"/>.
     /// </summary>
     public sealed class FakePlatform : ICakePlatform
     {

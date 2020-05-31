@@ -7,7 +7,7 @@ using Cake.Core;
 namespace Cake.Common.Build.TeamCity.Data
 {
     /// <summary>
-    /// Provides TeamCity pull request information for current build
+    /// Provides TeamCity pull request information for current build.
     /// </summary>
     public class TeamCityPullRequestInfo : TeamCityInfo
     {
@@ -61,18 +61,18 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
         /// </value>
         /// <remarks>
-        /// <c>env.Git_Branch</c> is a required parameter in TeamCity for this to work
+        /// <c>env.Git_Branch</c> is a required parameter in TeamCity for this to work.
         /// </remarks>
         public bool IsPullRequest => InferIsPullRequest(GetEnvironmentString("Git_Branch"));
 
         /// <summary>
-        /// Gets the pull request number
+        /// Gets the pull request number.
         /// </summary>
         /// <value>
-        /// The pull request number
+        /// The pull request number.
         /// </value>
         /// <remarks>
-        /// <c>env.Git_Branch</c> is a required parameter in TeamCity for this to work
+        /// <c>env.Git_Branch</c> is a required parameter in TeamCity for this to work.
         /// </remarks>
         public int? Number => IsPullRequest ? GetPullRequestNumber(GetEnvironmentString("Git_Branch")) : null;
 

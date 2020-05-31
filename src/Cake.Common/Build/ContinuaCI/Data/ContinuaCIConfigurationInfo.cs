@@ -26,7 +26,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets the Continua CI Configuration Name
+        /// Gets the Continua CI Configuration Name.
         /// </summary>
         /// <value>
         ///   The Continua CI Configuration Name.

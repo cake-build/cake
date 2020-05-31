@@ -14,7 +14,7 @@ namespace Cake.Core
     public static class ProcessSettingsExtensions
     {
         /// <summary>
-        /// Sets the arguments for the process
+        /// Sets the arguments for the process.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="arguments">The action used to set arguments.</param>
@@ -61,7 +61,7 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Sets a function that intercepts the standard output before being redirected. Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/>
+        /// Sets a function that intercepts the standard output before being redirected. Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/>.
         /// </summary>
         /// <param name="settings">The process settings.</param>
         /// <param name="handler">The standard output handler.</param>
@@ -78,7 +78,7 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Sets a function that intercepts the standard error before being redirected. Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/>
+        /// Sets a function that intercepts the standard error before being redirected. Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/>.
         /// </summary>
         /// <param name="settings">The process settings.</param>
         /// <param name="handler">The standard error handler.</param>
@@ -129,10 +129,10 @@ namespace Cake.Core
         }
 
         /// <summary>
-        /// Sets the optional timeout for process execution
+        /// Sets the optional timeout for process execution.
         /// </summary>
         /// <param name="settings">The process settings.</param>
-        /// <param name="timeout">The timeout duration</param>
+        /// <param name="timeout">The timeout duration.</param>
         /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
         public static ProcessSettings SetTimeout(this ProcessSettings settings, int timeout)
         {

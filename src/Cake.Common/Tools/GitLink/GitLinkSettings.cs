@@ -25,13 +25,13 @@ namespace Cake.Common.Tools.GitLink
         /// <summary>
         /// Gets or sets the name of the configuration.
         /// </summary>
-        /// <remarks>Default is Release</remarks>
+        /// <remarks>Default is Release.</remarks>
         public string Configuration { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the platform.
         /// </summary>
-        /// <remarks>Default is AnyCPU</remarks>
+        /// <remarks>Default is AnyCPU.</remarks>
         public string Platform { get; set; }
 
         /// <summary>

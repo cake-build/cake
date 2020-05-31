@@ -492,7 +492,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="separator">The separator between the switch and argument</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
         /// <param name="text">The secret text to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
@@ -506,7 +506,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="separator">The separator between the switch and argument</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
         /// <param name="text">The secret text to be prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder PrependSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string separator, string text)
@@ -544,7 +544,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="separator">The separator between the switch and argument</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
         /// <param name="argument">The secret argument to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
@@ -558,7 +558,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="separator">The separator between the switch and argument</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
         /// <param name="argument">The secret argument to be prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder PrependSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
@@ -648,7 +648,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="separator">The separator between the switch and argument</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
         /// <param name="argument">The secret argument to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
@@ -662,7 +662,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <param name="switch">The switch preceding the text.</param>
-        /// <param name="separator">The separator between the switch and argument</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
         /// <param name="argument">The secret argument to be prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder PrependQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
@@ -676,7 +676,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns><c>true</c> if <paramref name="builder"/> refers to a null or empty <see cref="ProcessArgumentBuilder"/>;
-        /// <c>false</c> if the <paramref name="builder"/>refers to non null or empty <see cref="ProcessArgumentBuilder"/></returns>
+        /// <c>false</c> if the <paramref name="builder"/>refers to non null or empty <see cref="ProcessArgumentBuilder"/>.</returns>
         public static bool IsNullOrEmpty(this ProcessArgumentBuilder builder)
         {
             return builder == null || builder.Count == 0 || string.IsNullOrEmpty(builder.Render());

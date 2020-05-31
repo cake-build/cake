@@ -181,7 +181,7 @@ namespace Cake.Common.Build.AzurePipelines
         /// Add a tag for current build.
         /// </summary>
         /// <remarks>
-        /// Requires agent version 1.95
+        /// Requires agent version 1.95.
         /// </remarks>
         /// <param name="tag">The tag.</param>
         void AddBuildTag(string tag);
@@ -189,20 +189,20 @@ namespace Cake.Common.Build.AzurePipelines
         /// <summary>
         /// Publishes and uploads tests results.
         /// </summary>
-        /// <param name="data">The publish test results data</param>
+        /// <param name="data">The publish test results data.</param>
         void PublishTestResults(AzurePipelinesPublishTestResultsData data);
 
         /// <summary>
-        /// Publishes and uploads code coverage results
+        /// Publishes and uploads code coverage results.
         /// </summary>
-        /// <param name="data">The code coverage data</param>
+        /// <param name="data">The code coverage data.</param>
         void PublishCodeCoverage(AzurePipelinesPublishCodeCoverageData data);
 
         /// <summary>
         /// Publishes and uploads code coverage results.
         /// </summary>
         /// <param name="summaryFilePath">The code coverage summary file path.</param>
-        /// <param name="data">The code coverage data</param>
+        /// <param name="data">The code coverage data.</param>
         void PublishCodeCoverage(FilePath summaryFilePath, AzurePipelinesPublishCodeCoverageData data);
 
         /// <summary>

@@ -145,7 +145,7 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Gets a XmlReaderSettings from a XmlPeekSettings
+        /// Gets a XmlReaderSettings from a XmlPeekSettings.
         /// </summary>
         /// <returns>The xml reader settings.</returns>
         /// <param name="settings">Additional settings to tweak Xml Peek behavior.</param>

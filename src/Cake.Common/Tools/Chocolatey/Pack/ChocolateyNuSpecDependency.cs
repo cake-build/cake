@@ -1,7 +1,7 @@
 ﻿namespace Cake.Common.Tools.Chocolatey.Pack
 {
     /// <summary>
-    /// Represents a Chocolatey NuGet nuspec dependency
+    /// Represents a Chocolatey NuGet nuspec dependency.
     /// </summary>
     public class ChocolateyNuSpecDependency
     {

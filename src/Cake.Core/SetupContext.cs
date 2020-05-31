@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Cake.Core
 {
     /// <summary>
-    /// Acts as a context providing info about the overall build following its completion
+    /// Acts as a context providing info about the overall build following its completion.
     /// </summary>
     public sealed class SetupContext : CakeContextAdapter, ISetupContext
     {

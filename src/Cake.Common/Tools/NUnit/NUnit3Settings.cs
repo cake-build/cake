@@ -265,7 +265,7 @@ namespace Cake.Common.Tools.NUnit
         /// <summary>
         /// Gets or sets the level of detail at which the runner should write to its internal trace log.
         /// Corresponds to the -trace=LEVEL command line argument.
-        /// If <c>null</c>, no argument will be specified
+        /// If <c>null</c>, no argument will be specified.
         /// </summary>
         /// <value>
         /// The trace level.

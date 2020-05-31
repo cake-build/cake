@@ -46,7 +46,7 @@ namespace Cake.Common.Build.Bitrise
         }
 
         /// <summary>
-        /// Sets and environment variable that can be used in next steps on Bitrise
+        /// Sets and environment variable that can be used in next steps on Bitrise.
         /// </summary>
         /// <param name="variable">The variable.</param>
         /// <param name="value">The value.</param>

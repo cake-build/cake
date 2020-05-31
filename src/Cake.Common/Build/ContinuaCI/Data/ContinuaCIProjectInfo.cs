@@ -26,7 +26,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets the Continua CI Project Name
+        /// Gets the Continua CI Project Name.
         /// </summary>
         /// <value>
         ///   The Continua CI Project Name.

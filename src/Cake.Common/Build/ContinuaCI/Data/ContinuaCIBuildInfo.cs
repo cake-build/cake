@@ -125,7 +125,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets build the number of changesets associated with this build
+        /// Gets build the number of changesets associated with this build.
         /// </summary>
         public int ChangesetCount
         {
@@ -137,7 +137,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets build the number of issues associated with this build
+        /// Gets build the number of issues associated with this build.
         /// </summary>
         public int IssueCount
         {
@@ -173,7 +173,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets list of repository names
+        /// Gets list of repository names.
         /// </summary>
         public IEnumerable<string> Repositories
         {
@@ -185,7 +185,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets list of repository branch names
+        /// Gets list of repository branch names.
         /// </summary>
         public IEnumerable<string> RepositoryBranches
         {
@@ -197,7 +197,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets triggering branch name
+        /// Gets triggering branch name.
         /// </summary>
         public string TriggeringBranch
         {
@@ -209,7 +209,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets list of changeset revisions
+        /// Gets list of changeset revisions.
         /// </summary>
         public IEnumerable<string> ChangesetRevisions
         {
@@ -221,7 +221,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets list of changeset user names
+        /// Gets list of changeset user names.
         /// </summary>
         public IEnumerable<string> ChangesetUserNames
         {
@@ -233,7 +233,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets list of changeset tag names
+        /// Gets list of changeset tag names.
         /// </summary>
         public IEnumerable<string> ChangesetTagNames
         {
@@ -245,7 +245,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets the latest build changeset
+        /// Gets the latest build changeset.
         /// </summary>
         public ContinuaCIChangesetInfo LatestChangeset { get; }
     }

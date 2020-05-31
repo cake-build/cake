@@ -36,7 +36,7 @@ namespace Cake.Core
         bool Skipped { get; }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="CakeTask"/> was successful
+        /// Gets a value indicating whether this <see cref="CakeTask"/> was successful.
         /// </summary>
         /// <value>
         /// <c>true</c> if successful; otherwise <c>false</c>.

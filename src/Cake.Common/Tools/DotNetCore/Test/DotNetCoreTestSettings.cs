@@ -20,7 +20,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Gets or sets the filter expression to filter out tests in the current project.
         /// </summary>
         /// <remarks>
-        /// For more information on filtering support, see https://aka.ms/vstest-filtering
+        /// For more information on filtering support, see https://aka.ms/vstest-filtering.
         /// </remarks>
         public string Filter { get; set; }
 
@@ -30,7 +30,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
         public DirectoryPath TestAdapterPath { get; set; }
 
         /// <summary>
-        /// Gets or sets a logger for test results
+        /// Gets or sets a logger for test results.
         /// </summary>
         public string Logger { get; set; }
 

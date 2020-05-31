@@ -10,7 +10,7 @@ namespace Cake.Common.Tools.NuGet.List
     public sealed class NuGetListSettings : ToolSettings
     {
         /// <summary>
-        /// Gets or sets a value indicating whether list all versions of a package.By default, only the latest package version is displayed
+        /// Gets or sets a value indicating whether list all versions of a package.By default, only the latest package version is displayed.
         /// </summary>
         public bool AllVersions { get; set; }
 

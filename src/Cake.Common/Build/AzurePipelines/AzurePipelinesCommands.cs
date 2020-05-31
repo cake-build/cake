@@ -329,7 +329,7 @@ namespace Cake.Common.Build.AzurePipelines
         /// Add a tag for current build.
         /// </summary>
         /// <remarks>
-        /// Requires agent version 1.95
+        /// Requires agent version 1.95.
         /// </remarks>
         /// <param name="tag">The tag.</param>
         public void AddBuildTag(string tag)
@@ -338,9 +338,9 @@ namespace Cake.Common.Build.AzurePipelines
         }
 
         /// <summary>
-        /// Publishes and uploads tests results
+        /// Publishes and uploads tests results.
         /// </summary>
-        /// <param name="data">The publish test results data</param>
+        /// <param name="data">The publish test results data.</param>
         public void PublishTestResults(AzurePipelinesPublishTestResultsData data)
         {
             var properties = data.GetProperties(_environment);
@@ -348,9 +348,9 @@ namespace Cake.Common.Build.AzurePipelines
         }
 
         /// <summary>
-        /// Publishes and uploads code coverage results
+        /// Publishes and uploads code coverage results.
         /// </summary>
-        /// <param name="data">The code coverage data</param>
+        /// <param name="data">The code coverage data.</param>
         public void PublishCodeCoverage(AzurePipelinesPublishCodeCoverageData data)
         {
             var properties = data.GetProperties(_environment);
@@ -358,10 +358,10 @@ namespace Cake.Common.Build.AzurePipelines
         }
 
         /// <summary>
-        /// Publishes and uploads code coverage results
+        /// Publishes and uploads code coverage results.
         /// </summary>
         /// <param name="summaryFilePath">The code coverage summary file path.</param>
-        /// <param name="data">The code coverage data</param>
+        /// <param name="data">The code coverage data.</param>
         public void PublishCodeCoverage(FilePath summaryFilePath, AzurePipelinesPublishCodeCoverageData data)
         {
             if (summaryFilePath == null)
@@ -374,7 +374,7 @@ namespace Cake.Common.Build.AzurePipelines
         }
 
         /// <summary>
-        /// Publishes and uploads code coverage results
+        /// Publishes and uploads code coverage results.
         /// </summary>
         /// <param name="summaryFilePath">The code coverage summary file path.</param>
         /// <param name="action">The configuration action for the code coverage data.</param>

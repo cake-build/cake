@@ -84,7 +84,7 @@ namespace Cake.Common.Tools.DupFinder
         /// <summary>
         /// Gets or sets the location DupFinder should write its output.
         /// </summary>
-        /// <value>The location DupFinder should write its output</value>
+        /// <value>The location DupFinder should write its output.</value>
         public FilePath OutputFile { get; set; }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Cake.Common.Tools.DupFinder
         public bool ShowText { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to throw an exception on finding duplicates
+        /// Gets or sets a value indicating whether to throw an exception on finding duplicates.
         /// </summary>
         public bool ThrowExceptionOnFindingDuplicates { get; set; }
 

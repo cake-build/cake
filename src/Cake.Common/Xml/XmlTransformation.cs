@@ -17,12 +17,12 @@ using Cake.Core.IO;
 namespace Cake.Common.Xml
 {
     /// <summary>
-    /// Provides functionality to perform XML transformation
+    /// Provides functionality to perform XML transformation.
     /// </summary>
     public static class XmlTransformation
     {
         /// <summary>
-        /// Performs XML XSL transformation
+        /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="xsl">XML style sheet.</param>
         /// <param name="xml">XML data.</param>
@@ -39,7 +39,7 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Performs XML XSL transformation
+        /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="xsl">XML style sheet.</param>
         /// <param name="xml">XML data.</param>
@@ -76,7 +76,7 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Performs XML XSL transformation
+        /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="xslPath">Path to xml style sheet.</param>
@@ -89,7 +89,7 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Performs XML XSL transformation
+        /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="xslPath">Path to xml style sheet.</param>
@@ -159,12 +159,12 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Performs XML XSL transformation
+        /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="xsl">XML style sheet.</param>
         /// <param name="xml">XML data.</param>
         /// <param name="result">Transformation result.</param>
-        /// <param name="settings">Optional settings for result file xml writer</param>
+        /// <param name="settings">Optional settings for result file xml writer.</param>
         private static void Transform(TextReader xsl, TextReader xml, Stream result, XmlWriterSettings settings = null)
         {
             if (xsl == null)
@@ -194,7 +194,7 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Performs XML XSL transformation
+        /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="xsl">XML style sheet.</param>
         /// <param name="xml">XML data.</param>
