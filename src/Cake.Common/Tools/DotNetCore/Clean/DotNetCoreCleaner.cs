@@ -92,6 +92,12 @@ namespace Cake.Common.Tools.DotNetCore.Clean
                 builder.Append(settings.Configuration);
             }
 
+            // No Logo
+            if (settings.NoLogo)
+            {
+                builder.Append("--nologo");
+            }
+
             if (settings.MSBuildSettings != null)
             {
                 builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);

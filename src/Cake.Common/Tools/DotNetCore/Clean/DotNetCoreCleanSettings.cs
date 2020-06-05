@@ -33,6 +33,14 @@ namespace Cake.Common.Tools.DotNetCore.Clean
         public string Runtime { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to display the startup banner or the copyright message.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 3.0 SDK.
+        /// </remarks>
+        public bool NoLogo { get; set; }
+
+        /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
         public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }
