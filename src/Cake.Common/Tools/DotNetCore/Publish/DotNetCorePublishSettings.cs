@@ -65,6 +65,14 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         public bool NoRestore { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to display the startup banner or the copyright message.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 3.0 SDK.
+        /// </remarks>
+        public bool NoLogo { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to force all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting project.assets.json.
         /// </summary>
         /// <remarks>

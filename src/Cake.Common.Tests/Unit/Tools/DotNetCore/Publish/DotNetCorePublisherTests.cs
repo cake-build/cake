@@ -108,6 +108,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 fixture.Settings.NoBuild = true;
                 fixture.Settings.NoDependencies = true;
                 fixture.Settings.NoRestore = true;
+                fixture.Settings.NoLogo = true;
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.Runtime = "runtime1";
@@ -122,7 +123,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-build --no-dependencies --no-restore --force --self-contained true --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
+                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-build --no-dependencies --no-restore --nologo --force --self-contained true --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
             }
 
             [Fact]

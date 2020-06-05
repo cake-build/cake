@@ -113,6 +113,12 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 builder.Append("--no-restore");
             }
 
+            // No Logo
+            if (settings.NoLogo)
+            {
+                builder.Append("--nologo");
+            }
+
             // Force
             if (settings.Force)
             {
