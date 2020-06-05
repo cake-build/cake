@@ -50,7 +50,7 @@ namespace Cake.Common.Tests.Unit.Build.AppVeyor
                 var result = Record.Exception(() => new AppVeyorProvider(environment, processRunner, null));
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "cakeLog");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 
