@@ -127,6 +127,12 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.Append("--no-restore");
             }
 
+            // No Logo
+            if (settings.NoLogo)
+            {
+                builder.Append("--nologo");
+            }
+
             if (settings.ResultsDirectory != null)
             {
                 builder.Append("--results-directory");
