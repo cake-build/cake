@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Build.AzurePipelines;
+using Cake.Common.Tests.Fakes;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
@@ -14,7 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Build
     {
         public ICakeEnvironment Environment { get; set; }
 
-        public FakeLog Log { get; set; }
+        public FakeBuildSystemServiceMessageWriter Writer { get; set; }
 
         public AzurePipelinesFixture()
         {
@@ -22,7 +23,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.WorkingDirectory.Returns("C:\\build\\CAKE-CAKE-JOB1");
             Environment.GetEnvironmentVariable("TF_BUILD").Returns((string)null);
             Environment.Platform.Family.Returns(PlatformFamily.Windows);
-            Log = new FakeLog();
+            Writer = new FakeBuildSystemServiceMessageWriter();
         }
 
         public void IsRunningOnTFS() => IsRunningOnAzurePipelines();
@@ -41,7 +42,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("AGENT_NAME").Returns(agentHostName);
         }
 
-        public AzurePipelinesProvider CreateAzurePipelinesService() => new AzurePipelinesProvider(Environment, Log);
+        public AzurePipelinesProvider CreateAzurePipelinesService() => new AzurePipelinesProvider(Environment, Writer);
 
         public AzurePipelinesProvider CreateAzurePipelinesService(PlatformFamily platformFamily, DirectoryPath workingDirectory)
         {

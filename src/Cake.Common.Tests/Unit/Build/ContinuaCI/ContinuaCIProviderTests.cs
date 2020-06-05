@@ -3,7 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Build.ContinuaCI;
+using Cake.Common.Tests.Fakes;
 using Cake.Common.Tests.Fixtures.Build;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.ContinuaCI
@@ -16,10 +18,22 @@ namespace Cake.Common.Tests.Unit.Build.ContinuaCI
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new ContinuaCIProvider(null));
+                var writer = new FakeBuildSystemServiceMessageWriter();
+                var result = Record.Exception(() => new ContinuaCIProvider(null, writer));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Writer_Is_Null()
+            {
+                // Given, When
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var result = Record.Exception(() => new ContinuaCIProvider(environment, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "writer");
             }
         }
 

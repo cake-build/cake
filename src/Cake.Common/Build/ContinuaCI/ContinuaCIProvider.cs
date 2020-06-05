@@ -18,8 +18,11 @@ namespace Cake.Common.Build.ContinuaCI
     {
         private const string MessagePrefix = "@@continua[";
         private const string MessagePostfix = "]";
+
         private static readonly Dictionary<string, string> _sanitizationTokens;
+
         private readonly ICakeEnvironment _environment;
+        private readonly IBuildSystemServiceMessageWriter _writer;
 
         static ContinuaCIProvider()
         {
@@ -38,14 +41,11 @@ namespace Cake.Common.Build.ContinuaCI
         /// Initializes a new instance of the <see cref="ContinuaCIProvider"/> class.
         /// </summary>
         /// <param name="environment">The cake environment.</param>
-        public ContinuaCIProvider(ICakeEnvironment environment)
+        /// <param name="writer">The build system service message writer.</param>
+        public ContinuaCIProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-
-            _environment = environment;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
             Environment = new ContinuaCIEnvironmentInfo(environment);
         }
 
@@ -144,12 +144,12 @@ namespace Cake.Common.Build.ContinuaCI
             WriteServiceMessage("setBuildStatus", "value", text);
         }
 
-        private static void WriteServiceMessage(string messageName, string attributeName, string attributeValue)
+        private void WriteServiceMessage(string messageName, string attributeName, string attributeValue)
         {
             WriteServiceMessage(messageName, new Dictionary<string, string> { { attributeName, attributeValue } });
         }
 
-        private static void WriteServiceMessage(string messageName, Dictionary<string, string> parameters)
+        private void WriteServiceMessage(string messageName, Dictionary<string, string> parameters)
         {
             var arrayOfParameters = parameters.Select(keypair =>
                                                 {
@@ -162,7 +162,7 @@ namespace Cake.Common.Build.ContinuaCI
 
             var allParameters = string.Join(" ", arrayOfParameters);
 
-            Console.WriteLine("{0}{1} {2}{3}", MessagePrefix, messageName, allParameters, MessagePostfix);
+            _writer.Write("{0}{1} {2}{3}", MessagePrefix, messageName, allParameters, MessagePostfix);
         }
 
         private static string Sanitize(string source)

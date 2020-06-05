@@ -20,26 +20,19 @@ namespace Cake.Common.Build.AzurePipelines
     {
         private const string MessagePrefix = "##vso[";
         private const string MessagePostfix = "]";
-        private readonly ICakeLog _log;
+
         private readonly ICakeEnvironment _environment;
+        private readonly IBuildSystemServiceMessageWriter _writer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzurePipelinesCommands"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        /// <param name="log">The log.</param>
-        public AzurePipelinesCommands(ICakeEnvironment environment, ICakeLog log)
+        /// <param name="writer">The build system service message writer.</param>
+        public AzurePipelinesCommands(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            _environment = environment;
-            _log = log;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
         }
 
         /// <summary>
@@ -409,7 +402,8 @@ namespace Cake.Common.Build.AzurePipelines
             {
                 return string.Format(CultureInfo.InvariantCulture, "{0}={1};", pair.Key, pair.Value);
             }));
-            _log.Write(Verbosity.Quiet, LogLevel.Information, "{0}{1} {2}{3}{4}", MessagePrefix, actionName, props, MessagePostfix, value);
+
+            _writer.Write("{0}{1} {2}{3}{4}", MessagePrefix, actionName, props, MessagePostfix, value);
         }
     }
 }

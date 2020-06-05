@@ -1,7 +1,7 @@
 ﻿using Cake.Common.Build.AzurePipelines;
+using Cake.Common.Tests.Fakes;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Testing;
 using Xunit;
 
@@ -15,20 +15,21 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new AzurePipelinesProvider(null, new NullLog()));
+                var writer = new FakeBuildSystemServiceMessageWriter();
+                var result = Record.Exception(() => new AzurePipelinesProvider(null, writer));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
-            public void Should_Throw_If_Log_Is_Null()
+            public void Should_Throw_If_Writer_Is_Null()
             {
                 // Given, When
                 var result = Record.Exception(() => new AzurePipelinesProvider(new FakeEnvironment(PlatformFamily.Unknown), null));
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "writer");
             }
         }
 

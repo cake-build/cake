@@ -34,7 +34,7 @@ namespace Cake.Common.Tests.Unit.Build.GoCD
                 var result = Record.Exception(() => new GoCDProvider(environment, null));
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "cakeLog");
+                AssertEx.IsArgumentNullException(result, "log");
             }
         }
 

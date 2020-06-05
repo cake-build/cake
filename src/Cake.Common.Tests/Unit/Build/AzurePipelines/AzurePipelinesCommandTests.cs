@@ -2,6 +2,7 @@
 using System.Linq;
 using Cake.Common.Build.AzurePipelines;
 using Cake.Common.Build.AzurePipelines.Data;
+using Cake.Common.Tests.Fakes;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -21,20 +22,21 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new AzurePipelinesCommands(null, new NullLog()));
+                var writer = new FakeBuildSystemServiceMessageWriter();
+                var result = Record.Exception(() => new AzurePipelinesCommands(null, writer));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
-            public void Should_Throw_If_Log_Is_Null()
+            public void Should_Throw_If_Writer_Is_Null()
             {
                 // Given, When
                 var result = Record.Exception(() => new AzurePipelinesCommands(new FakeEnvironment(PlatformFamily.Unknown), null));
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "writer");
             }
         }
 
@@ -66,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.WriteWarning(msg);
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.logissue type=warning;]{msg}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.logissue type=warning;]{msg}");
             }
 
             [Fact]
@@ -86,7 +88,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 });
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.logissue sourcepath=./code file.cs;linenumber=5;columnnumber=12;code=9;type=warning;]build warning");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.logissue sourcepath=./code file.cs;linenumber=5;columnnumber=12;code=9;type=warning;]build warning");
             }
 
             [Theory]
@@ -102,7 +104,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.WriteError(msg);
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.logissue type=error;]{msg}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.logissue type=error;]{msg}");
             }
 
             [Fact]
@@ -122,7 +124,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 });
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.logissue sourcepath=./code.cs;linenumber=1;columnnumber=2;code=3;type=error;]build error");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.logissue sourcepath=./code.cs;linenumber=1;columnnumber=2;code=3;type=error;]build error");
             }
 
             [Fact]
@@ -136,7 +138,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.SetProgress(75, "Testing Provider");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.setprogress value=75;]Testing Provider");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.setprogress value=75;]Testing Provider");
             }
 
             [Fact]
@@ -150,7 +152,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.CompleteCurrentTask();
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.complete ]DONE");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.complete ]DONE");
             }
 
             [Fact]
@@ -164,7 +166,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.CompleteCurrentTask(AzurePipelinesTaskResult.Failed);
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.complete result=Failed;]DONE");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.complete result=Failed;]DONE");
             }
 
             [Fact]
@@ -179,7 +181,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
 
                 // Then
                 Assert.NotNull(guid);
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.logdetail id={guid.ToString()};name=New record;type=build;order=1;]create new timeline record");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.logdetail id={guid.ToString()};name=New record;type=build;order=1;]create new timeline record");
             }
 
             [Fact]
@@ -200,7 +202,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
 
                 // Then
                 Assert.NotNull(guid);
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.logdetail starttime={date.ToString()};progress=75;state=Initialized;id={guid.ToString()};name=New record;type=build;order=2;]create new timeline record");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.logdetail starttime={date.ToString()};progress=75;state=Initialized;id={guid.ToString()};name=New record;type=build;order=2;]create new timeline record");
             }
 
             [Fact]
@@ -221,7 +223,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 });
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.logdetail parentid={parent.ToString()};progress=95;state=InProgress;id={guid.ToString()};]update");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.logdetail parentid={parent.ToString()};progress=95;state=InProgress;id={guid.ToString()};]update");
             }
 
             [Fact]
@@ -235,8 +237,8 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.SetVariable("varname", "VarValue");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries,
-                    m => m.Message == $"##vso[task.setvariable variable=varname;]VarValue");
+                Assert.Contains(fixture.Writer.Entries,
+                    m => m == $"##vso[task.setvariable variable=varname;]VarValue");
             }
 
             [Fact]
@@ -250,7 +252,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.SetSecretVariable("Secret Variable", "Secret Value");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == "##vso[task.setvariable variable=Secret Variable;issecret=true;]Secret Value");
+                Assert.Contains(fixture.Writer.Entries, m => m == "##vso[task.setvariable variable=Secret Variable;issecret=true;]Secret Value");
             }
 
             [Fact]
@@ -265,7 +267,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UploadTaskSummary("./summary.md");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.uploadsummary ]{path}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.uploadsummary ]{path}");
             }
 
             [Fact]
@@ -280,7 +282,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UploadTaskLogFile("./logs/task.log");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[task.uploadfile ]{path}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.uploadfile ]{path}");
             }
 
             [Theory]
@@ -297,8 +299,8 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.LinkArtifact(name, type, location);
 
                 // Then
-                Assert.Contains(fixture.Log.Entries,
-                    m => m.Message == $"##vso[artifact.associate artifactname={name};type={type};]{location}");
+                Assert.Contains(fixture.Writer.Entries,
+                    m => m == $"##vso[artifact.associate artifactname={name};type={type};]{location}");
             }
 
             [Fact]
@@ -313,8 +315,8 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UploadArtifact("packages", "./dist/package.nupkg");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries,
-                    m => m.Message == $"##vso[artifact.upload containerfolder=packages;]{path}");
+                Assert.Contains(fixture.Writer.Entries,
+                    m => m == $"##vso[artifact.upload containerfolder=packages;]{path}");
             }
 
             [Fact]
@@ -329,7 +331,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UploadArtifact("tests", "./artifacts/results.trx", "Test Results");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[artifact.upload containerfolder=tests;artifactname=Test Results;]{path}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[artifact.upload containerfolder=tests;artifactname=Test Results;]{path}");
             }
 
             [Fact]
@@ -358,7 +360,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UploadArtifactDirectory("./artifacts/Packages");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[artifact.upload containerfolder=Packages;artifactname=Packages;]{path}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[artifact.upload containerfolder=Packages;artifactname=Packages;]{path}");
             }
 
             [Fact]
@@ -401,7 +403,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UploadArtifactDirectory("./artifacts/Packages", "NuGet");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[artifact.upload containerfolder=NuGet;artifactname=NuGet;]{path}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[artifact.upload containerfolder=NuGet;artifactname=NuGet;]{path}");
             }
 
             [Fact]
@@ -416,7 +418,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UploadBuildLogFile("./dist/buildlog.txt");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == $"##vso[build.uploadlog ]{path}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[build.uploadlog ]{path}");
             }
 
             [Fact]
@@ -430,7 +432,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UpdateBuildNumber("CIBuild_1");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == "##vso[build.updatebuildnumber ]CIBuild_1");
+                Assert.Contains(fixture.Writer.Entries, m => m == "##vso[build.updatebuildnumber ]CIBuild_1");
             }
 
             [Fact]
@@ -444,12 +446,14 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.AddBuildTag("Stable");
 
                 // Then
-                Assert.Contains(fixture.Log.Entries, m => m.Message == "##vso[build.addbuildtag ]Stable");
+                Assert.Contains(fixture.Writer.Entries, m => m == "##vso[build.addbuildtag ]Stable");
             }
 
             [Fact]
             public void Should_Publish_Test_Results()
             {
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+
                 // Given
                 var fixture = new AzurePipelinesFixture();
                 var service = fixture.CreateAzurePipelinesService();
@@ -472,14 +476,14 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.PublishTestResults(data);
 
                 // Then
-                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
-                var actual = fixture.Log.Entries.FirstOrDefault();
-                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
             }
 
             [Fact]
             public void Should_Publish_Test_Results_If_File_Path_Is_Relative()
             {
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+
                 // Given
                 var fixture = new AzurePipelinesFixture();
                 var service = fixture.CreateAzurePipelinesService();
@@ -502,14 +506,14 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.PublishTestResults(data);
 
                 // Then
-                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
-                var actual = fixture.Log.Entries.FirstOrDefault();
-                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
             }
 
             [Fact]
             public void Should_Publish_Test_Results_If_File_Path_Is_Absolute()
             {
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=/build/CAKE-CAKE-JOB1/artifacts/resultsXUnit.trx,/build/CAKE-CAKE-JOB1/artifacts/resultsJs.trx;]";
+
                 // Given
                 var fixture = new AzurePipelinesFixture();
                 fixture.Environment.WorkingDirectory.Returns("/build/CAKE-CAKE-JOB1");
@@ -534,14 +538,14 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.PublishTestResults(data);
 
                 // Then
-                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=/build/CAKE-CAKE-JOB1/artifacts/resultsXUnit.trx,/build/CAKE-CAKE-JOB1/artifacts/resultsJs.trx;]";
-                var actual = fixture.Log.Entries.FirstOrDefault();
-                Assert.Equal(expected.Replace('/', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+                Assert.Equal(expected.Replace('/', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
             }
 
             [WindowsFact]
             public void Should_Publish_Test_Results_If_File_Path_Is_Absolute_Windows()
             {
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+
                 // Given
                 var fixture = new AzurePipelinesFixture();
                 var service = fixture.CreateAzurePipelinesService();
@@ -564,9 +568,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.PublishTestResults(data);
 
                 // Then
-                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
-                var actual = fixture.Log.Entries.FirstOrDefault();
-                Assert.Equal(expected, actual?.Message);
+                Assert.Equal(expected.Replace('/', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
             }
 
             // TODO: Windows Fact, OSX Fact
@@ -574,6 +576,8 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
             [Fact]
             public void Should_Publish_Code_Coverage()
             {
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=/build/CAKE-CAKE-JOB1/coverage/cobertura-coverage.xml;reportdirectory=/build/CAKE-CAKE-JOB1/coverage/report;]";
+
                 // Given
                 var fixture = new AzurePipelinesFixture();
                 var service = fixture.CreateAzurePipelinesService(PlatformFamily.OSX, "/build/CAKE-CAKE-JOB1");
@@ -588,14 +592,14 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.PublishCodeCoverage(data);
 
                 // Then
-                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=/build/CAKE-CAKE-JOB1/coverage/cobertura-coverage.xml;reportdirectory=/build/CAKE-CAKE-JOB1/coverage/report;]";
-                var actual = fixture.Log.Entries.FirstOrDefault();
-                Assert.Equal(expected.Replace('/', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+                Assert.Equal(expected.Replace('/', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
             }
 
             [WindowsFact]
             public void Should_Publish_Code_Coverage_Windows()
             {
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
+
                 // Given
                 var fixture = new AzurePipelinesFixture();
                 var service = fixture.CreateAzurePipelinesService();
@@ -610,14 +614,14 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.PublishCodeCoverage(data);
 
                 // Then
-                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
-                var actual = fixture.Log.Entries.FirstOrDefault();
-                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
             }
 
             [Fact]
             public void Should_Publish_Code_Coverage_If_File_Path_Provided()
             {
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
+
                 // Given
                 var fixture = new AzurePipelinesFixture();
                 var service = fixture.CreateAzurePipelinesService();
@@ -631,14 +635,14 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.PublishCodeCoverage("./coverage/cobertura-coverage.xml", data);
 
                 // Then
-                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
-                var actual = fixture.Log.Entries.FirstOrDefault();
-                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
             }
 
             [Fact]
             public void Should_Publish_Code_Coverage_If_File_Path_And_Action_Provided()
             {
+                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
+
                 // Given
                 var fixture = new AzurePipelinesFixture();
                 var service = fixture.CreateAzurePipelinesService();
@@ -652,9 +656,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                     });
 
                 // Then
-                const string expected = @"##vso[codecoverage.publish codecoveragetool=Cobertura;summaryfile=C:\build\CAKE-CAKE-JOB1\coverage\cobertura-coverage.xml;reportdirectory=C:\build\CAKE-CAKE-JOB1\coverage\report;]";
-                var actual = fixture.Log.Entries.FirstOrDefault();
-                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), actual?.Message);
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
             }
         }
     }

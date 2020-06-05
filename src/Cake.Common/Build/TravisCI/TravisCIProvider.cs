@@ -9,7 +9,6 @@ using System.Globalization;
 using System.Linq;
 using Cake.Common.Build.TravisCI.Data;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 
 namespace Cake.Common.Build.TravisCI
 {
@@ -20,8 +19,10 @@ namespace Cake.Common.Build.TravisCI
     {
         private const string MessagePrefix = "travis_";
         private const string MessagePostfix = "\r";
+
         private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
+        private readonly IBuildSystemServiceMessageWriter _writer;
+
         private static readonly Dictionary<string, string> _sanitizationTokens;
 
         static TravisCIProvider()
@@ -41,15 +42,11 @@ namespace Cake.Common.Build.TravisCI
         /// Initializes a new instance of the <see cref="TravisCIProvider"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        /// <param name="log">The log.</param>
-        public TravisCIProvider(ICakeEnvironment environment, ICakeLog log)
+        /// <param name="writer">The log.</param>
+        public TravisCIProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            _environment = environment;
-            _log = log;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
             Environment = new TravisCIEnvironmentInfo(environment);
         }
 
@@ -107,7 +104,7 @@ namespace Cake.Common.Build.TravisCI
                             return string.Format(CultureInfo.InvariantCulture, ":{0}:{1}", keypair.Key, Sanitize(keypair.Value));
                         })
                         .ToArray());
-            _log.Write(Verbosity.Quiet, LogLevel.Information, "{0}{1}{2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);
+            _writer.Write("{0}{1}{2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);
         }
 
         private static string Sanitize(string source)
