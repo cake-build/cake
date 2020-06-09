@@ -20,20 +20,12 @@ namespace Cake.Common.Build.AzurePipelines
         /// Initializes a new instance of the <see cref="AzurePipelinesProvider"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        /// <param name="log">The log.</param>
-        public AzurePipelinesProvider(ICakeEnvironment environment, ICakeLog log)
+        /// <param name="writer">The build system service message writer.</param>
+        public AzurePipelinesProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            _environment = environment;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment = new AzurePipelinesEnvironmentInfo(environment);
-            Commands = new AzurePipelinesCommands(environment, log);
+            Commands = new AzurePipelinesCommands(environment, writer);
         }
 
         /// <summary>

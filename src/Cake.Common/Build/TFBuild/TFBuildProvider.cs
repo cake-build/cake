@@ -5,7 +5,6 @@
 using System;
 using Cake.Common.Build.TFBuild.Data;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 
 namespace Cake.Common.Build.TFBuild
 {
@@ -20,20 +19,12 @@ namespace Cake.Common.Build.TFBuild
         /// Initializes a new instance of the <see cref="TFBuildProvider"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        /// <param name="log">The log.</param>
-        public TFBuildProvider(ICakeEnvironment environment, ICakeLog log)
+        /// <param name="writer">The build system service message writer.</param>
+        public TFBuildProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            _environment = environment;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment = new TFBuildEnvironmentInfo(environment);
-            Commands = new TFBuildCommands(environment, log);
+            Commands = new TFBuildCommands(environment, writer);
         }
 
         /// <summary>

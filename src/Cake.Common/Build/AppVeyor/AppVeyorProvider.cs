@@ -21,7 +21,7 @@ namespace Cake.Common.Build.AppVeyor
     {
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _processRunner;
-        private readonly ICakeLog _cakeLog;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on AppVeyor.
@@ -124,24 +124,12 @@ namespace Cake.Common.Build.AppVeyor
         /// </summary>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="cakeLog">The cake log.</param>
-        public AppVeyorProvider(ICakeEnvironment environment, IProcessRunner processRunner, ICakeLog cakeLog)
+        /// <param name="log">The cake log.</param>
+        public AppVeyorProvider(ICakeEnvironment environment, IProcessRunner processRunner, ICakeLog log)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException(nameof(processRunner));
-            }
-            if (cakeLog == null)
-            {
-                throw new ArgumentNullException(nameof(cakeLog));
-            }
-            _environment = environment;
-            _processRunner = processRunner;
-            _cakeLog = cakeLog;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _processRunner = processRunner ?? throw new ArgumentNullException(nameof(processRunner));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
             Environment = new AppVeyorEnvironmentInfo(environment);
         }
 
@@ -240,14 +228,14 @@ namespace Cake.Common.Build.AppVeyor
 
             var url = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}/api/testresults/{1}/{2}", baseUri, resultsType, Environment.JobId).ToLowerInvariant());
 
-            _cakeLog.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Uploading [{0}] to [{1}]", path.FullPath, url);
+            _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Uploading [{0}] to [{1}]", path.FullPath, url);
             Task.Run(async () =>
             {
                 using (var client = new HttpClient())
                 {
                     var response = await client.UploadFileAsync(url, path.FullPath, "text/xml");
                     var content = await response.Content.ReadAsStringAsync();
-                    _cakeLog.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Server response [{0}:{1}]:\n\r{2}", response.StatusCode, response.ReasonPhrase, content);
+                    _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Server response [{0}:{1}]:\n\r{2}", response.StatusCode, response.ReasonPhrase, content);
                 }
             }).Wait();
         }

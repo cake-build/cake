@@ -21,11 +21,7 @@ namespace Cake.Common.Build.GitHubActions
         /// <param name="environment">The environment.</param>
         public GitHubActionsProvider(ICakeEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            _environment = environment;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment = new GitHubActionsEnvironmentInfo(environment);
         }
 
