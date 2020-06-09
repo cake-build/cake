@@ -21,12 +21,7 @@ namespace Cake.Common.Build.Jenkins
         /// <param name="environment">The environment.</param>
         public JenkinsProvider(ICakeEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-
-            _environment = environment;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment = new JenkinsEnvironmentInfo(_environment);
         }
 

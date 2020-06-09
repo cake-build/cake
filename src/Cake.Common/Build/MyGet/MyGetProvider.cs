@@ -18,8 +18,11 @@ namespace Cake.Common.Build.MyGet
     {
         private const string MessagePrefix = "##myget[";
         private const string MessagePostfix = "]";
+
         private static readonly Dictionary<string, string> _sanitizationTokens;
+
         private readonly ICakeEnvironment _environment;
+        private readonly IBuildSystemServiceMessageWriter _writer;
 
         static MyGetProvider()
         {
@@ -38,14 +41,11 @@ namespace Cake.Common.Build.MyGet
         /// Initializes a new instance of the <see cref="MyGetProvider"/> class.
         /// </summary>
         /// <param name="environment">The cake environment.</param>
-        public MyGetProvider(ICakeEnvironment environment)
+        /// <param name="writer">The build system service message writer.</param>
+        public MyGetProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-
-            _environment = environment;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
         }
 
         /// <summary>
@@ -135,18 +135,18 @@ namespace Cake.Common.Build.MyGet
             WriteServiceMessage("buildNumber", buildNumber);
         }
 
-        private static void WriteServiceMessage(string messageName, string attributeValue)
+        private void WriteServiceMessage(string messageName, string attributeValue)
         {
             WriteServiceMessage(messageName, new Dictionary<string, string> { { " ", attributeValue } });
         }
 
-        private static void WriteServiceMessage(string messageName, string attributeName, string attributeValue)
+        private void WriteServiceMessage(string messageName, string attributeName, string attributeValue)
         {
             WriteServiceMessage(messageName, new Dictionary<string, string> { { attributeName, attributeValue } });
         }
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Reviewed.")]
-        private static void WriteServiceMessage(string messageName, Dictionary<string, string> values)
+        private void WriteServiceMessage(string messageName, Dictionary<string, string> values)
         {
             var valueString =
                 string.Join(" ",
@@ -161,7 +161,7 @@ namespace Cake.Common.Build.MyGet
                         })
                         .ToArray());
 
-            Console.WriteLine("{0}{1} {2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);
+            _writer.Write("{0}{1} {2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);
         }
 
         private static string Sanitize(string source)

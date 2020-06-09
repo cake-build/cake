@@ -1,3 +1,7 @@
+### New in 0.38.2 (Release 2020/06/09)
+
+* 2790 Cake 0.38.1 is failing to write messages to TeamCity
+
 ### New in 0.38.1 (Released 2020/05/30)
 
 * 2786 0.38.0 introduces TFBuild obsolete warning for everyone not just users of property

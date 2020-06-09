@@ -9,7 +9,6 @@ using System.Globalization;
 using System.Linq;
 using Cake.Common.Build.TeamCity.Data;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Build.TeamCity
@@ -21,9 +20,11 @@ namespace Cake.Common.Build.TeamCity
     {
         private const string MessagePrefix = "##teamcity[";
         private const string MessagePostfix = "]";
+
         private static readonly Dictionary<string, string> _sanitizationTokens;
+
         private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
+        private readonly IBuildSystemServiceMessageWriter _writer;
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on TeamCity.
@@ -100,21 +101,11 @@ namespace Cake.Common.Build.TeamCity
         /// Initializes a new instance of the <see cref="TeamCityProvider"/> class.
         /// </summary>
         /// <param name="environment">The cake environment.</param>
-        /// <param name="log">The cake log.</param>
-        public TeamCityProvider(ICakeEnvironment environment, ICakeLog log)
+        /// <param name="writer">The build system service message writer.</param>
+        public TeamCityProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-
-            _environment = environment;
-            _log = log;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
 
             Environment = new TeamCityEnvironmentInfo(environment);
         }
@@ -329,7 +320,7 @@ namespace Cake.Common.Build.TeamCity
                             return string.Format(CultureInfo.InvariantCulture, "{0}='{1}'", keypair.Key, Sanitize(keypair.Value));
                         })
                         .ToArray());
-            _log.Write(Verbosity.Quiet, LogLevel.Information, "{0}{1} {2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);
+            _writer.Write("{0}{1} {2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);
         }
 
         private static string Sanitize(string source)

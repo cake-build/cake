@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Build.TFBuild;
+using Cake.Common.Tests.Fakes;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -19,20 +20,20 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new TFBuildProvider(null, new NullLog()));
+                var result = Record.Exception(() => new TFBuildProvider(null, new FakeBuildSystemServiceMessageWriter()));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
-            public void Should_Throw_If_Log_Is_Null()
+            public void Should_Throw_If_Writer_Is_Null()
             {
                 // Given, When
                 var result = Record.Exception(() => new TFBuildProvider(new FakeEnvironment(PlatformFamily.Unknown), null));
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "log");
+                AssertEx.IsArgumentNullException(result, "writer");
             }
         }
 
