@@ -26,6 +26,7 @@
 #load "./Cake.Common/Tools/DotNetCore/DotNetCoreAliases.cake"
 #load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
 #load "./Cake.Common/Tools/TextTransform/TextTransformAliases.cake"
+#load "./Cake.Core/Diagnostics/ICakeLog.cake"
 #load "./Cake.Core/Scripting/AddinDirective.cake"
 #load "./Cake.Core/Scripting/DefineDirective.cake"
 #load "./Cake.Core/Scripting/Dynamic.cake"
@@ -47,6 +48,7 @@ var target = Argument<string>("target", "Run-All-Tests");
 //////////////////////////////////////////////////
 
 Task("Cake.Core")
+    .IsDependentOn("Cake.Core.Diagnostics")
     .IsDependentOn("Cake.Core.Scripting.AddinDirective")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective")
     .IsDependentOn("Cake.Core.Scripting.Dynamic")
