@@ -15,16 +15,15 @@ namespace Cake.Core.Diagnostics.Formatting
     {
         public static IEnumerable<FormatToken> Parse(string format)
         {
-            var reader = new StringReader(format);
+            var reader = new CharReader(format);
             while (true)
             {
-                var current = reader.Peek();
-                if (current == -1)
+                if (!PeakTwo(reader, out var character, out var next))
                 {
                     break;
                 }
-                var character = (char)current;
-                if (character == '{')
+
+                if (character == '{' && next != '{')
                 {
                     yield return ParseProperty(reader);
                 }
@@ -35,7 +34,22 @@ namespace Cake.Core.Diagnostics.Formatting
             }
         }
 
-        private static FormatToken ParseProperty(TextReader reader)
+        private static bool PeakTwo(CharReader reader, out char character, out char next)
+        {
+            var peek = reader.Peek(2).ToArray();
+            if (peek.Length == 0)
+            {
+                character = default;
+                next = default;
+                return false;
+            }
+
+            character = peek[0];
+            next = (peek.Length == 2) ? peek[1] : default;
+            return true;
+        }
+
+        private static FormatToken ParseProperty(CharReader reader)
         {
             reader.Read(); // Consume
             if (reader.Peek() == -1)
@@ -91,22 +105,28 @@ namespace Cake.Core.Diagnostics.Formatting
             return new LiteralToken(builder.ToString());
         }
 
-        private static FormatToken ParseText(TextReader reader)
+        private static FormatToken ParseText(CharReader reader)
         {
             var builder = new StringBuilder();
             while (true)
             {
-                var current = reader.Peek();
-                if (current == -1)
+                if (!PeakTwo(reader, out var character, out var next))
                 {
                     break;
                 }
-                var character = (char)current;
+
                 if (character == '{')
                 {
-                    break;
+                    if (next != '{')
+                    {
+                        break;
+                    }
+
+                    // escaped curly sequence, consume the first character,
+                    // let the iteration/append continue below.
+                    reader.Read();
                 }
-                if (character == '}' && reader.Peek() == '}')
+                else if (character == '}' && next == '}')
                 {
                     // escaped curly sequence, consume the first character,
                     // let the iteration/append continue below.

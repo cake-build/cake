@@ -263,6 +263,29 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                     Assert.Single(console.ErrorMessages);
                     Assert.Equal(expected, console.ErrorMessages[0]);
                 }
+
+                [Theory]
+                [InlineData(false, "#[Black|DarkGray]Executing: if ($LASTEXITCODE -gt 0) { throw \"script failed with exit code $LASTEXITCODE\" }[/]")]
+                [InlineData(true, "\u001b[40m\u001b[30;1mExecuting: if ($LASTEXITCODE -gt 0) { throw \"script failed with exit code $LASTEXITCODE\" }\u001b[0m")]
+                public void Should_Output_Escaped_Tokens_Correctly(bool ansi, string expected)
+                {
+                    // Given
+                    var message = "Executing: if ($LASTEXITCODE -gt 0) {{ throw \"script failed with exit code $LASTEXITCODE\" }}";
+                    var console = ansi
+                        ? FakeConsole.CreateAnsiConsole()
+                        : new FakeConsole()
+                        {
+                            OutputConsoleColor = true
+                        };
+                    var log = new CakeBuildLog(console, Verbosity.Diagnostic);
+
+                    // When
+                    log.Debug(Verbosity.Normal, message);
+
+                    // Then
+                    Assert.Single(console.Messages);
+                    Assert.Equal(expected, console.Messages[0]);
+                }
             }
         }
     }

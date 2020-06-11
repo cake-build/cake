@@ -54,10 +54,9 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("{{}}").ToArray();
 
                 // Then
-                Assert.Equal(2, result.Length);
+                Assert.Single(result);
                 Assert.IsType<LiteralToken>(result[0]);
-                Assert.Equal("{", ((LiteralToken)result[0]).Text);
-                Assert.Equal("}", ((LiteralToken)result[1]).Text);
+                Assert.Equal("{}", ((LiteralToken)result[0]).Text);
             }
 
             [Fact]
@@ -67,14 +66,13 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("{{}} {0}").ToArray();
 
                 // Then
-                Assert.Equal(3, result.Length);
+                Assert.Equal(2, result.Length);
                 Assert.IsType<LiteralToken>(result[0]);
-                Assert.Equal("{", ((LiteralToken)result[0]).Text);
-                Assert.Equal("} ", ((LiteralToken)result[1]).Text);
+                Assert.Equal("{} ", ((LiteralToken)result[0]).Text);
 
-                Assert.IsType<PropertyToken>(result[2]);
-                Assert.Equal(0, ((PropertyToken)result[2]).Position);
-                Assert.Equal(null, ((PropertyToken)result[2]).Format);
+                Assert.IsType<PropertyToken>(result[1]);
+                Assert.Equal(0, ((PropertyToken)result[1]).Position);
+                Assert.Equal(null, ((PropertyToken)result[1]).Format);
             }
 
             [Fact]
@@ -84,14 +82,13 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("{{ test {0}").ToArray();
 
                 // Then
-                Assert.Equal(3, result.Length);
+                Assert.Equal(2, result.Length);
                 Assert.IsType<LiteralToken>(result[0]);
-                Assert.Equal("{", ((LiteralToken)result[0]).Text);
-                Assert.Equal(" test ", ((LiteralToken)result[1]).Text);
+                Assert.Equal("{ test ", ((LiteralToken)result[0]).Text);
 
-                Assert.IsType<PropertyToken>(result[2]);
-                Assert.Equal(0, ((PropertyToken)result[2]).Position);
-                Assert.Equal(null, ((PropertyToken)result[2]).Format);
+                Assert.IsType<PropertyToken>(result[1]);
+                Assert.Equal(0, ((PropertyToken)result[1]).Position);
+                Assert.Equal(null, ((PropertyToken)result[1]).Format);
             }
 
             [Fact]
@@ -101,15 +98,13 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("{{{{ test {0}").ToArray();
 
                 // Then
-                Assert.Equal(4, result.Length);
+                Assert.Equal(2, result.Length);
                 Assert.IsType<LiteralToken>(result[0]);
-                Assert.Equal("{", ((LiteralToken)result[0]).Text);
-                Assert.Equal("{", ((LiteralToken)result[1]).Text);
-                Assert.Equal(" test ", ((LiteralToken)result[2]).Text);
+                Assert.Equal("{{ test ", ((LiteralToken)result[0]).Text);
 
-                Assert.IsType<PropertyToken>(result[3]);
-                Assert.Equal(0, ((PropertyToken)result[3]).Position);
-                Assert.Equal(null, ((PropertyToken)result[3]).Format);
+                Assert.IsType<PropertyToken>(result[1]);
+                Assert.Equal(0, ((PropertyToken)result[1]).Position);
+                Assert.Equal(null, ((PropertyToken)result[1]).Format);
             }
 
             [Fact]
@@ -138,10 +133,9 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 var result = FormatParser.Parse("{{0}}").ToArray();
 
                 // Then
-                Assert.Equal(2, result.Length);
+                Assert.Single(result);
                 Assert.IsType<LiteralToken>(result[0]);
-                Assert.Equal("{", ((LiteralToken)result[0]).Text);
-                Assert.Equal("0}", ((LiteralToken)result[1]).Text);
+                Assert.Equal("{0}", ((LiteralToken)result[0]).Text);
             }
 
             [Fact]
