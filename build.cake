@@ -571,7 +571,7 @@ Task("Create-Release-Notes")
     GitReleaseManagerCreate(parameters.GitHub.Token, "cake-build", "cake", new GitReleaseManagerCreateSettings {
         Milestone         = parameters.Version.Milestone,
         Name              = parameters.Version.Milestone,
-        Prerelease        = true,
+        Prerelease        = false,
         TargetCommitish   = "main"
     });
 });
