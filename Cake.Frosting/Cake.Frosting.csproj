@@ -23,8 +23,8 @@
     <DebugType>portable</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.37.0" />
-    <PackageReference Include="Cake.Common" Version="0.37.0" />
+    <PackageReference Include="Cake.Core" Version="0.38.2" />
+    <PackageReference Include="Cake.Common" Version="0.38.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="images\" />

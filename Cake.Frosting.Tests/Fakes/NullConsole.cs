@@ -31,5 +31,6 @@ namespace Cake.Frosting.Tests.Fakes
 
         public ConsoleColor ForegroundColor { get; set; }
         public ConsoleColor BackgroundColor { get; set; }
+        public bool SupportAnsiEscapeCodes => false;
     }
 }

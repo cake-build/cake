@@ -30,6 +30,11 @@ namespace Cake.Frosting.Internal
         }
 
         /// <summary>
+        /// Gets if console supports ANSI escape codes.
+        /// </summary>
+        public bool SupportAnsiEscapeCodes => false;
+
+        /// <summary>
         /// Writes the text representation of the specified array of objects to the
         /// console output using the specified format information.
         /// </summary>
