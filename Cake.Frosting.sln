@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Frosting", "Cake.Frosting\Cake.Frosting.csproj", "{A608FD39-2B71-4B6E-B238-AE80BB2794F8}"
 EndProject
@@ -9,6 +9,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{8BFACDC8-8BBF-4751-BB54-85B0D28A61A2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Frosting.Tests", "Cake.Frosting.Tests\Cake.Frosting.Tests.csproj", "{F6A8095C-E2B6-4D8B-88A1-213376387FD5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Build", "..\build\Build.csproj", "{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,11 +58,26 @@ Global
 		{F6A8095C-E2B6-4D8B-88A1-213376387FD5}.Release|x64.Build.0 = Release|Any CPU
 		{F6A8095C-E2B6-4D8B-88A1-213376387FD5}.Release|x86.ActiveCfg = Release|Any CPU
 		{F6A8095C-E2B6-4D8B-88A1-213376387FD5}.Release|x86.Build.0 = Release|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Debug|x64.Build.0 = Debug|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Debug|x86.Build.0 = Debug|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Release|x64.ActiveCfg = Release|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Release|x64.Build.0 = Release|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Release|x86.ActiveCfg = Release|Any CPU
+		{A117400E-6E1A-4FB0-9BD8-E298ED331FAC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ED379398-DA69-4D1E-B712-27DC0D67ABC3} = {8BFACDC8-8BBF-4751-BB54-85B0D28A61A2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {34EDB4FC-F467-4967-9101-D7027C4EC6CE}
 	EndGlobalSection
 EndGlobal
