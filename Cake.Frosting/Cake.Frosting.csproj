@@ -5,6 +5,7 @@
     <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
     <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</Authors>
     <PackageTags>Cake;Build;Build automation</PackageTags>
+    <PackageIcon>cake-medium.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</PackageIconUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
@@ -25,7 +26,11 @@
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="0.37.0" />
     <PackageReference Include="Cake.Common" Version="0.37.0" />
-    <None Include="../../LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="images\" />
+    <None Include="../../cake-medium.png" Link="images\cake-medium.png" Pack="true" PackagePath="/" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="/" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
