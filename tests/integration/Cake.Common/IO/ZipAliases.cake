@@ -1,5 +1,6 @@
 #load "./../../utilities/xunit.cake"
 #load "./../../utilities/paths.cake"
+#load "./../../utilities/io.cake"
 
 Task("Cake.Common.IO.ZipAliases.Unzip")
     .Does(() =>
@@ -91,10 +92,87 @@ Task("Cake.Common.IO.ZipAliases.Zip.Pattern")
     Assert.True(PathExists(targetFile), "Exists: " + targetFile.FullPath);
 });
 
+Task("Cake.Common.IO.ZipAliases.ZipUnzip.ValidLastWriteTime")
+    .Does(() =>
+{
+    // Given
+    var expectedDate = new DateTime(2001, 2, 3, 4, 5, 6, DateTimeKind.Utc);
+    var targetPath = Paths.Temp.Combine("./Cake.Common.IO.ZipAliases/ValidLastWriteTime");
+    var targetFile = targetPath.CombineWithFilePath("testfile.zip");
+    var sourceFile = targetPath.CombineWithFilePath("text.txt");
+    var outPath = targetPath.Combine("Out");
+    var outFile = outPath.CombineWithFilePath("text.txt");
+    EnsureDirectoryExist(outPath);
+    EnsureFileExist(sourceFile);
+    System.IO.File.SetLastWriteTimeUtc(sourceFile.FullPath, expectedDate);
+
+    // When
+    Zip(targetPath, targetFile, new []{ sourceFile });
+    Unzip(targetFile, outPath);
+
+    // Then
+    var result = System.IO.File.GetLastWriteTimeUtc(outFile.FullPath);
+    var duration  = expectedDate - result;
+    Assert.True(duration.TotalMinutes==0, $"Expected: {expectedDate}, Actual: {result}, Delta: {duration}");
+});
+
+Task("Cake.Common.IO.ZipAliases.ZipUnzip.InValidMinLastWriteTime")
+    .Does(() =>
+{
+    // Given
+    var givenDate = new DateTime(1979, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    var expectedDate = new DateTime(1980, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    var targetPath = Paths.Temp.Combine("./Cake.Common.IO.ZipAliases/InValidMinLastWriteTime");
+    var targetFile = targetPath.CombineWithFilePath("testfile.zip");
+    var sourceFile = targetPath.CombineWithFilePath("text.txt");
+    var outPath = targetPath.Combine("Out");
+    var outFile = outPath.CombineWithFilePath("text.txt");
+    EnsureDirectoryExist(outPath);
+    EnsureFileExist(sourceFile);
+    System.IO.File.SetLastWriteTimeUtc(sourceFile.FullPath, givenDate);
+
+    // When
+    Zip(targetPath, targetFile, new []{ sourceFile });
+    Unzip(targetFile, outPath);
+
+    // Then
+    var result = System.IO.File.GetLastWriteTime(outFile.FullPath);
+    var duration  = expectedDate - result;
+    Assert.True(duration.TotalMinutes==0, $"Expected: {expectedDate}, Actual: {result}, Delta: {duration}");
+});
+
+Task("Cake.Common.IO.ZipAliases.ZipUnzip.InValidMaxLastWriteTime")
+    .Does(() =>
+{
+    // Given
+    var givenDate = new DateTime(2108, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    var expectedDate = new DateTime(1980, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    var targetPath = Paths.Temp.Combine("./Cake.Common.IO.ZipAliases/InValidMaxLastWriteTime");
+    var targetFile = targetPath.CombineWithFilePath("testfile.zip");
+    var sourceFile = targetPath.CombineWithFilePath("text.txt");
+    var outPath = targetPath.Combine("Out");
+    var outFile = outPath.CombineWithFilePath("text.txt");
+    EnsureDirectoryExist(outPath);
+    EnsureFileExist(sourceFile);
+    System.IO.File.SetLastWriteTimeUtc(sourceFile.FullPath, givenDate);
+
+    // When
+    Zip(targetPath, targetFile, new []{ sourceFile });
+    Unzip(targetFile, outPath);
+
+    // Then
+    var result = System.IO.File.GetLastWriteTime(outFile.FullPath);
+    var duration  = expectedDate - result;
+    Assert.True(duration.TotalMinutes==0, $"Expected: {expectedDate}, Actual: {result}, Delta: {duration}");
+});
+
 
 Task("Cake.Common.IO.ZipAliases")
     .IsDependentOn("Cake.Common.IO.ZipAliases.Unzip")
     .IsDependentOn("Cake.Common.IO.ZipAliases.Zip.Directory")
     .IsDependentOn("Cake.Common.IO.ZipAliases.Zip.FilePaths")
     .IsDependentOn("Cake.Common.IO.ZipAliases.Zip.Strings")
-    .IsDependentOn("Cake.Common.IO.ZipAliases.Zip.Pattern");
+    .IsDependentOn("Cake.Common.IO.ZipAliases.Zip.Pattern")
+    .IsDependentOn("Cake.Common.IO.ZipAliases.ZipUnzip.ValidLastWriteTime")
+    .IsDependentOn("Cake.Common.IO.ZipAliases.ZipUnzip.InValidMinLastWriteTime")
+    .IsDependentOn("Cake.Common.IO.ZipAliases.ZipUnzip.InValidMaxLastWriteTime");

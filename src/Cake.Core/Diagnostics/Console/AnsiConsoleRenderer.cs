@@ -79,11 +79,11 @@ namespace Cake.Core.Diagnostics
 
                     if (level > LogLevel.Error)
                     {
-                        _console.Write($"{colorEscapeCode}{content}{ResetEscapeCode}");
+                        _console.Write("{0}", $"{colorEscapeCode}{content}{ResetEscapeCode}");
                     }
                     else
                     {
-                        _console.WriteError($"{colorEscapeCode}{content}{ResetEscapeCode}");
+                        _console.WriteError("{0}", $"{colorEscapeCode}{content}{ResetEscapeCode}");
                     }
                 }
                 else
