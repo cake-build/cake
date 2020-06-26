@@ -1,3 +1,7 @@
+### New in 0.38.4 (Released 2020/06/26)
+
+* 2813 Actually ship  0.38.3
+
 ### New in 0.38.3 (Released 2020/06/26)
 
 * 2803 ArgumentOutOfRangeException: The DateTimeOffset specified cannot be converted into a Zip file timestamp .
