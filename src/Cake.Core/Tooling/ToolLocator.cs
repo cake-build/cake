@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Core.IO;
 
 namespace Cake.Core.Tooling
@@ -73,6 +74,21 @@ namespace Cake.Core.Tooling
             }
 
             return _strategy.Resolve(_repository, tool);
+        }
+
+        /// <summary>
+        /// Resolves the path to the specified tool.
+        /// </summary>
+        /// <param name="toolExeNames">The possible names of the tool executable.</param>
+        /// <returns>A path if the tool was found; otherwise <c>null</c>.</returns>
+        public FilePath Resolve(IEnumerable<string> toolExeNames)
+        {
+            if (toolExeNames == null)
+            {
+                throw new ArgumentNullException(nameof(toolExeNames));
+            }
+
+            return _strategy.Resolve(_repository, toolExeNames);
         }
     }
 }

@@ -83,7 +83,7 @@ namespace Cake.Core.Tooling
                 throw new ArgumentException("Tool name cannot be empty.", nameof(tool));
             }
 
-            // Does this file already have registrations?
+            // Does this tool already have registrations?
             var resolve = LookInRegistrations(repository, tool);
             if (resolve == null)
             {
@@ -93,6 +93,45 @@ namespace Cake.Core.Tooling
                 {
                     // Look in the path environment variable.
                     resolve = LookInPath(tool);
+                }
+            }
+
+            return resolve;
+        }
+
+        /// <summary>
+        /// Resolves the specified tool using the specified tool repository.
+        /// </summary>
+        /// <param name="repository">The tool repository.</param>
+        /// <param name="toolExeNames">The possible names of the tool executable.</param>
+        /// <returns>The path to the tool; otherwise <c>null</c>.</returns>
+        public FilePath Resolve(IToolRepository repository, IEnumerable<string> toolExeNames)
+        {
+            if (repository == null)
+            {
+                throw new ArgumentNullException(nameof(repository));
+            }
+            if (toolExeNames == null)
+            {
+                throw new ArgumentNullException(nameof(toolExeNames));
+            }
+
+            var toolNames = toolExeNames.ToArray();
+            if (toolNames.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new ArgumentException("Tool names cannot be empty.", nameof(toolExeNames));
+            }
+
+            // Does this tool already have registrations?
+            var resolve = toolNames.Select(tool => LookInRegistrations(repository, tool)).FirstOrDefault(tool => tool != null);
+            if (resolve == null)
+            {
+                // Look in ./tools/
+                resolve = toolNames.Select(LookInToolsDirectory).FirstOrDefault(tool => tool != null);
+                if (resolve == null)
+                {
+                    // Look in the path environment variable.
+                    resolve = toolNames.Select(LookInPath).FirstOrDefault(tool => tool != null);
                 }
             }
 
