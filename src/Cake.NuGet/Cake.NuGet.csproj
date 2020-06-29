@@ -19,18 +19,18 @@
   </ItemGroup>
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="NuGet.Frameworks" Version="5.4.0" />
-    <PackageReference Include="NuGet.Versioning" Version="5.4.0" />
-    <PackageReference Include="NuGet.Protocol" Version="5.4.0" />
-    <PackageReference Include="NuGet.Packaging" Version="5.4.0" />
-    <PackageReference Include="NuGet.Resolver" Version="5.4.0" />
-    <PackageReference Include="NuGet.Common" Version="5.4.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.0" />
+    <PackageReference Include="NuGet.Frameworks" Version="5.5.1" />
+    <PackageReference Include="NuGet.Versioning" Version="5.5.1" />
+    <PackageReference Include="NuGet.Protocol" Version="5.5.1" />
+    <PackageReference Include="NuGet.Packaging" Version="5.5.1" />
+    <PackageReference Include="NuGet.Resolver" Version="5.5.1" />
+    <PackageReference Include="NuGet.Common" Version="5.5.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.4" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.1.0" GeneratePathProperty="true">
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.1.1" GeneratePathProperty="true">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <EmbeddedResource Include="$(PkgMicrosoft_NETCore_Platforms)\runtime.json">
