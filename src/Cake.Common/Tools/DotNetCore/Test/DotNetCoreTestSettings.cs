@@ -64,6 +64,14 @@ namespace Cake.Common.Tools.DotNetCore.Test
         public bool NoRestore { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to run tests without displaying the Microsoft TestPlatform banner.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 3.0 SDK.
+        /// </remarks>
+        public bool NoLogo { get; set; }
+
+        /// <summary>
         /// Gets or sets a file to write diagnostic messages to.
         /// </summary>
         public FilePath DiagnosticFile { get; set; }
