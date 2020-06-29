@@ -19,8 +19,9 @@ namespace Cake.Core.Tests.Fixtures
         public FilePath ProcessFilePath { get; set; }
         public ProcessSettings ProcessSettings { get; set; }
         public IFile MonoFile { get; }
+        public IFile DotNetCliFile { get; }
 
-        public ProcessRunnerFixture(bool windows = false)
+        public ProcessRunnerFixture(bool windows = false, bool dllTool = false)
         {
             var environment = windows
                 ? FakeEnvironment.CreateWindowsEnvironment()
@@ -33,15 +34,20 @@ namespace Cake.Core.Tests.Fixtures
             Log = Substitute.For<ICakeLog>();
             Tools = Substitute.For<IToolLocator>();
             Configuration = Substitute.For<ICakeConfiguration>();
-            ProcessFilePath = "/Program Files/Cake.exe";
+            ProcessFilePath = dllTool ? "/Program Files/Cake.dll" : "/Program Files/Cake.exe";
             ProcessSettings = new ProcessSettings();
 
             FileSystem.CreateDirectory("/Working");
             FileSystem.CreateDirectory("/Program Files");
             FileSystem.CreateFile("/Program Files/Cake.exe", ClrAssemblyData);
             MonoFile = FileSystem.CreateFile("/Program Files/mono.exe", NonClrAssemblyData);
+            DotNetCliFile = windows
+                ? FileSystem.CreateFile("/Program Files/dotnet.exe", NonClrAssemblyData)
+                : FileSystem.CreateFile("/Program Files/dotnet", NonClrAssemblyData);
 
             Tools.Resolve("mono").Returns(file => MonoFile.Exists ? MonoFile.Path : null);
+            Tools.Resolve("dotnet.exe").Returns(file => windows ? DotNetCliFile.Path : null);
+            Tools.Resolve("dotnet").Returns(file => !windows ? DotNetCliFile.Path : null);
         }
 
         public void GivenIsCoreClr()

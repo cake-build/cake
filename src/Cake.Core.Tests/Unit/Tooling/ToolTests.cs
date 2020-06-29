@@ -6,6 +6,7 @@ using System;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
 using Cake.Testing;
+using Cake.Testing.Xunit;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Tooling
@@ -143,6 +144,34 @@ namespace Cake.Core.Tests.Unit.Tooling
 
                 // Then
                 AssertEx.IsCakeException(result, "UnitTest");
+            }
+
+            [RuntimeFact(TestRuntime.CoreClr)]
+            public void Should_Prioritize_Dll_On_CoreClr()
+            {
+                // Given
+                var fixture = new DummyToolFixture(hasDllExe: true);
+                fixture.GivenIsCoreClr();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/Working/tools/dummy.dll", result.Path.FullPath);
+            }
+
+            [RuntimeFact(TestRuntime.CoreClr)]
+            public void Should_Fallback_To_First_Resolved_Tool_On_CoreClr_And_No_Dll_Provided()
+            {
+                // Given
+                var fixture = new DummyToolFixture(hasDllExe: false);
+                fixture.GivenIsCoreClr();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/Working/tools/dummy.exe", result.Path.FullPath);
             }
         }
     }

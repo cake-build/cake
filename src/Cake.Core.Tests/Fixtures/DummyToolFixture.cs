@@ -10,17 +10,24 @@ namespace Cake.Core.Tests.Fixtures
 {
     public sealed class DummyToolFixture : ToolFixture<DummySettings>
     {
+        private readonly bool _hasDll;
         public Action<int> ExitCodeValidation { get; set; }
 
-        public DummyToolFixture()
-            : base("dummy.exe")
+        public DummyToolFixture(bool hasDllExe = false)
+            : base("dummy.exe", "dummy.dll")
         {
+            _hasDll = hasDllExe;
             ExitCodeValidation = null;
+        }
+
+        public void GivenIsCoreClr()
+        {
+            Environment.SetIsCoreClr(true);
         }
 
         protected override void RunTool()
         {
-            var tool = new DummyTool(FileSystem, Environment, ProcessRunner, Tools, ExitCodeValidation);
+            var tool = new DummyTool(FileSystem, Environment, ProcessRunner, Tools, ExitCodeValidation, _hasDll);
             tool.Run(Settings);
         }
     }
