@@ -18,7 +18,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.Cake
 {
     /// <summary>
-    /// Cake out process runner
+    /// Cake out process runner.
     /// </summary>
     public sealed class CakeRunner : Tool<CakeSettings>
     {
@@ -63,10 +63,10 @@ namespace Cake.Common.Tools.Cake
         }
 
         /// <summary>
-        /// Executes supplied cake script in own process and supplied settings
+        /// Executes supplied cake script in own process and supplied settings.
         /// </summary>
-        /// <param name="scriptPath">Path to script to execute</param>
-        /// <param name="settings">optional cake settings</param>
+        /// <param name="scriptPath">Path to script to execute.</param>
+        /// <param name="settings">optional cake settings.</param>
         public void ExecuteScript(FilePath scriptPath, CakeSettings settings = null)
         {
             if (scriptPath == null)
@@ -102,10 +102,10 @@ namespace Cake.Common.Tools.Cake
         }
 
         /// <summary>
-        /// Executes supplied cake code expression in own process and supplied settings
+        /// Executes supplied cake code expression in own process and supplied settings.
         /// </summary>
-        /// <param name="cakeExpression">Code expression to execute</param>
-        /// <param name="settings">optional cake settings</param>
+        /// <param name="cakeExpression">Code expression to execute.</param>
+        /// <param name="settings">optional cake settings.</param>
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public void ExecuteExpression(string cakeExpression, CakeSettings settings = null)
         {
@@ -193,7 +193,7 @@ namespace Cake.Common.Tools.Cake
         }
 
         /// <summary>
-        /// Gets alternative file paths which the tool may exist in
+        /// Gets alternative file paths which the tool may exist in.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>

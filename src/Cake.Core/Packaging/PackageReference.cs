@@ -57,7 +57,7 @@ namespace Cake.Core.Packaging
         /// Initializes a new instance of the <see cref="PackageReference"/> class.
         /// </summary>
         /// <param name="uri">The URI.</param>
-        /// <exception cref="System.ArgumentException">Package query string parameter is missing.;uri</exception>
+        /// <exception cref="System.ArgumentException">Package query string parameter is missing.;uri.</exception>
         public PackageReference(Uri uri)
         {
             OriginalString = uri.OriginalString;

@@ -20,7 +20,7 @@ namespace Cake.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeContextAdapter"/> class.
         /// </summary>
-        /// <param name="context">The Cake Context</param>
+        /// <param name="context">The Cake Context.</param>
         protected CakeContextAdapter(ICakeContext context)
         {
             if (context == null)

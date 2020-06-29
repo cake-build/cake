@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.XUnit
 {
     /// <summary>
-    /// Represents XUnit2's options for parallel test execution
+    /// Represents XUnit2's options for parallel test execution.
     /// </summary>
     public enum ParallelismOption
     {

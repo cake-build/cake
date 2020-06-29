@@ -24,34 +24,34 @@ namespace Cake.Common.Build.AzurePipelines.Data
         }
 
         /// <summary>
-        /// Gets the a special variable that carries the security token used by the running build
+        /// Gets the a special variable that carries the security token used by the running build.
         /// </summary>
         /// <value>
-        /// The security token
+        /// The security token.
         /// </value>
         public string AccessToken => GetEnvironmentString("SYSTEM_ACCESSTOKEN");
 
         /// <summary>
-        /// Gets a value indicating whether more detailed logs to debug pipeline problems is enabled
+        /// Gets a value indicating whether more detailed logs to debug pipeline problems is enabled.
         /// </summary>
         /// <value>
-        /// True if more detailed logs are enabled
+        /// True if more detailed logs are enabled.
         /// </value>
         public bool Debug => GetEnvironmentBoolean("SYSTEM_DEBUG");
 
         /// <summary>
-        /// Gets the local path on the agent where any artifacts are copied to before being pushed to their destination
+        /// Gets the local path on the agent where any artifacts are copied to before being pushed to their destination.
         /// </summary>
         /// <value>
-        /// The path of the staging directory
+        /// The path of the staging directory.
         /// </value>
         public FilePath ArtifactStagingDirectory => GetEnvironmentString("BUILD_ARTIFACTSTAGINGDIRECTORY");
 
         /// <summary>
-        /// Gets the local path on the agent you can use as an output folder for compiled binaries
+        /// Gets the local path on the agent you can use as an output folder for compiled binaries.
         /// </summary>
         /// <value>
-        /// The path to the binaries directory
+        /// The path to the binaries directory.
         /// </value>
         public FilePath BinariesDirectory => GetEnvironmentString("BUILD_BINARIESDIRECTORY");
 
@@ -75,7 +75,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <summary>
         /// Gets the URI for the build.
         /// </summary>
-        /// <example><c>vstfs:///Build/Build/1430</c></example>
+        /// <example><c>vstfs:///Build/Build/1430</c>.</example>
         /// <value>
         /// The URI for the build.
         /// </value>
@@ -90,10 +90,10 @@ namespace Cake.Common.Build.AzurePipelines.Data
         public string QueuedBy => GetEnvironmentString("BUILD_QUEUEDBY");
 
         /// <summary>
-        /// Gets the event that caused the build to run
+        /// Gets the event that caused the build to run.
         /// </summary>
         /// <value>
-        /// The event name
+        /// The event name.
         /// </value>
         public string Reason => GetEnvironmentString("BUILD_REASON");
 
@@ -114,26 +114,26 @@ namespace Cake.Common.Build.AzurePipelines.Data
         public string RequestedForEmail => GetEnvironmentString("BUILD_REQUESTEDFOREMAIL");
 
         /// <summary>
-        /// Gets the local path on the agent where your source code files are downloaded
+        /// Gets the local path on the agent where your source code files are downloaded.
         /// </summary>
         /// <value>
-        /// The source code directory
+        /// The source code directory.
         /// </value>
         public FilePath SourcesDirectory => GetEnvironmentString("BUILD_SOURCESDIRECTORY");
 
         /// <summary>
-        /// Gets the local path on the agent where any artifacts are copied to before being pushed to their destination
+        /// Gets the local path on the agent where any artifacts are copied to before being pushed to their destination.
         /// </summary>
         /// <value>
-        /// The staging directory
+        /// The staging directory.
         /// </value>
         public FilePath StagingDirectory => GetEnvironmentString("BUILD_STAGINGDIRECTORY");
 
         /// <summary>
-        /// Gets local path on the agent where the test results are created
+        /// Gets local path on the agent where the test results are created.
         /// </summary>
         /// <value>
-        /// The test result directory
+        /// The test result directory.
         /// </value>
         public FilePath TestResultsDirectory => GetEnvironmentString("COMMON_TESTRESULTSDIRECTORY");
 
@@ -141,7 +141,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// Gets Azure Pipelines Build TriggeredBy information.
         /// </summary>
         /// <remarks>
-        /// This is only populated if the build was triggered by another build
+        /// This is only populated if the build was triggered by another build.
         /// </remarks>
         /// <value>
         /// The Azure Pipelines Build Trigger information.

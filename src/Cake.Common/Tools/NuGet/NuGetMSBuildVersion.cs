@@ -7,7 +7,7 @@ using System;
 namespace Cake.Common.Tools.NuGet
 {
     /// <summary>
-    /// NuGet MSBuild version
+    /// NuGet MSBuild version.
     /// </summary>
     public enum NuGetMSBuildVersion
     {

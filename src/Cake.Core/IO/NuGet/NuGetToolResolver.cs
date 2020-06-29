@@ -8,7 +8,7 @@ using Cake.Core.Tooling;
 namespace Cake.Core.IO.NuGet
 {
     /// <summary>
-    /// Contains NuGet path resolver functionality
+    /// Contains NuGet path resolver functionality.
     /// </summary>
     public sealed class NuGetToolResolver : INuGetToolResolver
     {

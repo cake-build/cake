@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.NuGet.Sources
         public bool IsSensitiveSource { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to not encrypt the password and store it in clear text. (Default: <c>false</c>)
+        /// Gets or sets a value indicating whether to not encrypt the password and store it in clear text. (Default: <c>false</c>).
         /// </summary>
         /// <value>
         /// <c>true</c> if password is stored as unencrypted; otherwise, <c>false</c>.

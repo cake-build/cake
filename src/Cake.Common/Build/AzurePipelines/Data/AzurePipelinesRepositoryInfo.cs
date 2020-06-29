@@ -7,7 +7,7 @@ using Cake.Core;
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    /// Provides Azure Pipelines Repository information for the current build
+    /// Provides Azure Pipelines Repository information for the current build.
     /// </summary>
     public sealed class AzurePipelinesRepositoryInfo : AzurePipelinesInfo
     {
@@ -21,10 +21,10 @@ namespace Cake.Common.Build.AzurePipelines.Data
         }
 
         /// <summary>
-        /// Gets the branch the build was queued for
+        /// Gets the branch the build was queued for.
         /// </summary>
         /// <value>
-        /// The full SCM branch
+        /// The full SCM branch.
         /// </value>
         public string SourceBranch => GetEnvironmentString("BUILD_SOURCEBRANCH");
 
@@ -32,7 +32,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// Gets name of the branch the build was queued for.
         /// </summary>
         /// <value>
-        /// The SCM branch name
+        /// The SCM branch name.
         /// </value>
         public string SourceBranchName => GetEnvironmentString("BUILD_SOURCEBRANCHNAME");
 
@@ -41,7 +41,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// </summary>
         /// <remarks>Note: for Git this is the commit ID. For TFVC this is the changeset.</remarks>
         /// <value>
-        /// The SCM source version
+        /// The SCM source version.
         /// </value>
         public string SourceVersion => GetEnvironmentString("BUILD_SOURCEVERSION");
 
@@ -50,7 +50,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// </summary>
         /// <remarks>Note: This variable is available in TFS 2015.4.</remarks>
         /// <value>
-        /// The comment
+        /// The comment.
         /// </value>
         public string SourceVersionMessage => GetEnvironmentString("BUILD_SOURCEVERSIONMESSAGE");
 
@@ -59,15 +59,15 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// </summary>
         /// <remarks>Defined only if your repository is Team Foundation Version Control.</remarks>
         /// <value>
-        /// The shelveset name
+        /// The shelveset name.
         /// </value>
         public string Shelveset => GetEnvironmentString("BUILD_SOURCETFVCSHELVESET");
 
         /// <summary>
-        /// Gets the name of the repository
+        /// Gets the name of the repository.
         /// </summary>
         /// <value>
-        /// The name of the repository
+        /// The name of the repository.
         /// </value>
         public string RepoName => GetEnvironmentString("BUILD_REPOSITORY_NAME");
 
@@ -80,7 +80,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         public AzurePipelinesRepositoryType? Provider => GetRepositoryType("BUILD_REPOSITORY_PROVIDER");
 
         /// <summary>
-        /// Gets the value you've selected for Checkout submodules on the repository tab
+        /// Gets the value you've selected for Checkout submodules on the repository tab.
         /// </summary>
         /// <value>
         /// The checkout submodule value.

@@ -40,7 +40,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets the changeset branch name
+        /// Gets the changeset branch name.
         /// </summary>
         public string Branch
         {
@@ -76,7 +76,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets the changeset author user/committer name
+        /// Gets the changeset author user/committer name.
         /// </summary>
         public string UserName
         {
@@ -112,7 +112,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets list of changeset tag names
+        /// Gets list of changeset tag names.
         /// </summary>
         public IEnumerable<string> TagNames
         {
@@ -124,7 +124,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets list of changeset issue names
+        /// Gets list of changeset issue names.
         /// </summary>
         public IEnumerable<string> IssueNames
         {

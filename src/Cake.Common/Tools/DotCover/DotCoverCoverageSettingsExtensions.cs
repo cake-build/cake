@@ -18,7 +18,7 @@ namespace Cake.Common.Tools.DotCover
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="scope">The scope.</param>
-        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/></typeparam>
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/>.</typeparam>
         /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
         public static T WithScope<T>(this T settings, string scope) where T : DotCoverCoverageSettings
         {
@@ -31,11 +31,11 @@ namespace Cake.Common.Tools.DotCover
         }
 
         /// <summary>
-        /// Adds the filter
+        /// Adds the filter.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="filter">The filter.</param>
-        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/></typeparam>
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/>.</typeparam>
         /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
         public static T WithFilter<T>(this T settings, string filter) where T : DotCoverCoverageSettings
         {
@@ -48,11 +48,11 @@ namespace Cake.Common.Tools.DotCover
         }
 
         /// <summary>
-        /// Adds the attribute filter
+        /// Adds the attribute filter.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="attributeFilter">The filter.</param>
-        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/></typeparam>
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/>.</typeparam>
         /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
         public static T WithAttributeFilter<T>(this T settings, string attributeFilter) where T : DotCoverCoverageSettings
         {
@@ -65,11 +65,11 @@ namespace Cake.Common.Tools.DotCover
         }
 
         /// <summary>
-        /// Adds the filter
+        /// Adds the filter.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="filter">The process filter.</param>
-        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/></typeparam>
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/>.</typeparam>
         /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
         public static T WithProcessFilter<T>(this T settings, string filter) where T : DotCoverCoverageSettings
         {

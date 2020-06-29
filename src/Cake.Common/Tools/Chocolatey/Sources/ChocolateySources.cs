@@ -11,7 +11,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.Chocolatey.Sources
 {
     /// <summary>
-    /// The Chocolatey sources is used to work with user config feeds &amp; credentials
+    /// The Chocolatey sources is used to work with user config feeds &amp; credentials.
     /// </summary>
     public sealed class ChocolateySources : ChocolateyTool<ChocolateySourcesSettings>
     {
@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
         }
 
         /// <summary>
-        /// Adds Chocolatey package source using the specified settings to global user config
+        /// Adds Chocolatey package source using the specified settings to global user config.
         /// </summary>
         /// <param name="name">Name of the source.</param>
         /// <param name="source">Path to the package(s) source.</param>
@@ -65,7 +65,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
         }
 
         /// <summary>
-        /// Remove specified Chocolatey package source
+        /// Remove specified Chocolatey package source.
         /// </summary>
         /// <param name="name">Name of the source.</param>
         /// <param name="settings">The settings.</param>
@@ -88,7 +88,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
         }
 
         /// <summary>
-        /// Enable specified Chocolatey package source
+        /// Enable specified Chocolatey package source.
         /// </summary>
         /// <param name="name">Name of the source.</param>
         /// <param name="settings">The settings.</param>
@@ -111,7 +111,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
         }
 
         /// <summary>
-        /// Disable specified Chocolatey package source
+        /// Disable specified Chocolatey package source.
         /// </summary>
         /// <param name="name">Name of the source.</param>
         /// <param name="settings">The settings.</param>

@@ -64,7 +64,7 @@ namespace Cake.Common.Tools.VSTest
         ///     semantics and is applicable for string properties like DisplayName).
         ///     Parenthesis () can be used to group sub-expressions.
         /// Examples: Priority=1
-        ///           (FullyQualifiedName~Nightly|Name=MyTestMethod)
+        ///           (FullyQualifiedName~Nightly|Name=MyTestMethod).
         /// </summary>
         public string TestCaseFilter { get; set; }
 
@@ -78,7 +78,7 @@ namespace Cake.Common.Tools.VSTest
         /// - A blank string (or null): no logger
         /// - "trx": Visual Studio's built-in logger
         /// - "AppVeyor": AppVeyor's custom logger which is available only when building your solution on the AppVeyor platform
-        /// - any custom value: the name of your custom logger
+        /// - any custom value: the name of your custom logger.
         /// </summary>
         public string Logger { get; set; }
     }

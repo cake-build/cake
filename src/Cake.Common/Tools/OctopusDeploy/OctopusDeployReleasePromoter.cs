@@ -33,12 +33,12 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <summary>
         /// Requests a promotion of a specified release to an environment.
         /// </summary>
-        /// <param name="server">Octopus Server URL</param>
-        /// <param name="apiKey">The user's API key</param>
-        /// <param name="projectName">Name of the target project</param>
-        /// <param name="deployFrom">Environment to promote from, e.g., Staging</param>
-        /// <param name="deployTo">Environment to promote to, e.g., Production</param>
-        /// <param name="settings">Settings for the deployment</param>
+        /// <param name="server">Octopus Server URL.</param>
+        /// <param name="apiKey">The user's API key.</param>
+        /// <param name="projectName">Name of the target project.</param>
+        /// <param name="deployFrom">Environment to promote from, e.g., Staging.</param>
+        /// <param name="deployTo">Environment to promote to, e.g., Production.</param>
+        /// <param name="settings">Settings for the deployment.</param>
         public void PromoteRelease(string server, string apiKey, string projectName, string deployFrom, string deployTo, OctopusDeployPromoteReleaseSettings settings)
         {
             if (String.IsNullOrEmpty(server))

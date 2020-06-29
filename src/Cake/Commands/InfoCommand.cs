@@ -9,7 +9,7 @@ using Cake.Core;
 namespace Cake.Commands
 {
     /// <summary>
-    /// A command that shows additional information about Cake execution
+    /// A command that shows additional information about Cake execution.
     /// </summary>
     internal sealed class InfoCommand : ICommand
     {

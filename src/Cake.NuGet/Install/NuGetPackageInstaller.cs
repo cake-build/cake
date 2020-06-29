@@ -60,7 +60,7 @@ namespace Cake.NuGet.Install
         /// <param name="environment">The environment.</param>
         /// <param name="contentResolver">The content resolver.</param>
         /// <param name="log">The log.</param>
-        /// <param name="config">the configuration</param>
+        /// <param name="config">the configuration.</param>
         public NuGetPackageInstaller(
             IFileSystem fileSystem,
             ICakeEnvironment environment,

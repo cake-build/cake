@@ -40,7 +40,7 @@ namespace Cake.Common.Build.TeamCity
         /// <value>
         /// The TeamCity environment.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
@@ -61,7 +61,7 @@ namespace Cake.Common.Build.TeamCity
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TeamCity</para>
+        /// <para>Via TeamCity.</para>
         /// <example>
         /// <code>
         /// if (TeamCity.IsRunningOnTeamCity)
@@ -282,7 +282,7 @@ namespace Cake.Common.Build.TeamCity
         }
 
         /// <summary>
-        /// Tells TeamCity to set a named parameter with a given value
+        /// Tells TeamCity to set a named parameter with a given value.
         /// </summary>
         /// <param name="parameterName">The name of the parameter to set.</param>
         /// <param name="parameterValue">The value to set for the named parameter.</param>

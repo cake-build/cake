@@ -9,7 +9,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// Possible arguments to pass to Octo.exe for promoting a release. See <see href="https://octopus.com/docs/api-and-integration/octo.exe-command-line/promoting-releases">Octopus Deploy documentation</see>
+    /// Possible arguments to pass to Octo.exe for promoting a release. See <see href="https://octopus.com/docs/api-and-integration/octo.exe-command-line/promoting-releases">Octopus Deploy documentation</see>.
     /// </summary>
     public sealed class OctopusDeployPromoteReleaseSettings : OctopusDeployCommonToolSettings
     {
@@ -22,7 +22,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether overwrite the variable snapshot for the release by re-importing the variables from the project
+        /// Gets or sets a value indicating whether overwrite the variable snapshot for the release by re-importing the variables from the project.
         /// </summary>
         public bool UpdateVariables { get; set; }
 

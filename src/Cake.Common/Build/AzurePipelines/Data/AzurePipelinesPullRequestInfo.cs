@@ -22,7 +22,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         }
 
         /// <summary>
-        /// Gets a value indicating whether the pull request is from a fork of the repository
+        /// Gets a value indicating whether the pull request is from a fork of the repository.
         /// </summary>
         public bool IsFork => GetEnvironmentBoolean("SYSTEM_PULLREQUEST_ISFORK");
 
@@ -56,20 +56,20 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// Gets the branch that is being reviewed in a pull request.
         /// </summary>
         /// <remarks>
-        /// This property is populated only if the build ran because of a Git PR affected by a branch policy
+        /// This property is populated only if the build ran because of a Git PR affected by a branch policy.
         /// </remarks>
         public string SourceBranch => GetEnvironmentString("SYSTEM_PULLREQUEST_SOURCEBRANCH");
 
         /// <summary>
-        /// Gets the URL to the repo that contains the pull requests
+        /// Gets the URL to the repo that contains the pull requests.
         /// </summary>
         /// <remarks>
-        /// This property is populated only if the build ran because of a Git PR affected by a branch policy. It is not initialized for GitHub PRs
+        /// This property is populated only if the build ran because of a Git PR affected by a branch policy. It is not initialized for GitHub PRs.
         /// </remarks>
         public Uri SourceRepositoryUri => GetEnvironmentUri("SYSTEM_PULLREQUEST_SOURCEREPOSITORYURI");
 
         /// <summary>
-        /// Gets the branch that is the target of a pull request
+        /// Gets the branch that is the target of a pull request.
         /// </summary>
         /// <remarks>
         /// This property is populated only if the build ran because of a Git PR affected by a branch policy.

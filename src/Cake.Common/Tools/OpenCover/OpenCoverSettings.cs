@@ -47,22 +47,22 @@ namespace Cake.Common.Tools.OpenCover
         public bool SkipAutoProps { get; set; }
 
         /// <summary>
-        /// Gets or sets the register option
+        /// Gets or sets the register option.
         /// </summary>
         public string Register { get; set; }
 
         /// <summary>
-        /// Gets or sets the Return target code offset to be used
+        /// Gets or sets the Return target code offset to be used.
         /// </summary>
         public int? ReturnTargetCodeOffset { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the OldStyle option for OpenCover should be used
+        /// Gets or sets a value indicating whether the OldStyle option for OpenCover should be used.
         /// </summary>
         public bool OldStyle { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to merge the results with an existing file
+        /// Gets or sets a value indicating whether to merge the results with an existing file.
         /// </summary>
         public bool MergeOutput { get; set; }
 

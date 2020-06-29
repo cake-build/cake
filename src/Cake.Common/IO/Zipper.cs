@@ -199,7 +199,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Unzips the specified file to the specified output path
+        /// Unzips the specified file to the specified output path.
         /// </summary>
         /// <param name="zipPath">Zip file path.</param>
         /// <param name="outputPath">Output directory path.</param>

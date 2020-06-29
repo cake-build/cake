@@ -78,7 +78,7 @@ namespace Cake.Common.Tools.InnoSetup
         }
 
         /// <summary>
-        /// Gets alternative file paths which the tool may exist in
+        /// Gets alternative file paths which the tool may exist in.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>

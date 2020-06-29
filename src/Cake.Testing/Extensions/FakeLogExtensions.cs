@@ -14,10 +14,10 @@ namespace Cake.Testing.Extensions
     public static class FakeLogExtensions
     {
         /// <summary>
-        /// Aggregates all current log entries message
+        /// Aggregates all current log entries message.
         /// </summary>
         /// <param name="fakeLog">The fake log.</param>
-        /// <returns>Log messages as <see cref="System.String"/></returns>
+        /// <returns>Log messages as <see cref="System.String"/>.</returns>
         public static string AggregateLogMessages(this FakeLog fakeLog)
         {
             if (fakeLog == null)

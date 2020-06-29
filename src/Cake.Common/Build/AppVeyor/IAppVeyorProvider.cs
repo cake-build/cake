@@ -19,7 +19,7 @@ namespace Cake.Common.Build.AppVeyor
         /// <value>
         /// <c>true</c> if the current build is running on AppVeyor.; otherwise, <c>false</c>.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -32,7 +32,7 @@ namespace Cake.Common.Build.AppVeyor
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -53,7 +53,7 @@ namespace Cake.Common.Build.AppVeyor
         /// <value>
         /// The AppVeyor environment.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -80,7 +80,7 @@ namespace Cake.Common.Build.AppVeyor
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -119,14 +119,14 @@ namespace Cake.Common.Build.AppVeyor
         /// Uploads an AppVeyor artifact.
         /// </summary>
         /// <param name="path">The file path of the artifact to upload.</param>
-        /// <param name="settings">The settings to apply when uploading an artifact</param>
+        /// <param name="settings">The settings to apply when uploading an artifact.</param>
         void UploadArtifact(FilePath path, AppVeyorUploadArtifactsSettings settings);
 
         /// <summary>
         /// Uploads an AppVeyor artifact.
         /// </summary>
         /// <param name="path">The file path of the artifact to upload.</param>
-        /// <param name="settingsAction">The settings to apply when uploading an artifact</param>
+        /// <param name="settingsAction">The settings to apply when uploading an artifact.</param>
         void UploadArtifact(FilePath path, Action<AppVeyorUploadArtifactsSettings> settingsAction);
 
         /// <summary>
@@ -143,12 +143,12 @@ namespace Cake.Common.Build.AppVeyor
         void UpdateBuildVersion(string version);
 
         /// <summary>
-        /// Adds a message to the AppVeyor build log.  Messages can be categorised as: Information, Warning or Error
+        /// Adds a message to the AppVeyor build log.  Messages can be categorised as: Information, Warning or Error.
         /// </summary>
-        /// <param name="message">A short message to display</param>
-        /// <param name="category">The category of the message</param>
-        /// <param name="details">Additional message details</param>
-        /// <para>Via BuildSystem</para>
+        /// <param name="message">A short message to display.</param>
+        /// <param name="category">The category of the message.</param>
+        /// <param name="details">Additional message details.</param>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -177,7 +177,7 @@ namespace Cake.Common.Build.AppVeyor
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)

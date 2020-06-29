@@ -43,12 +43,12 @@ namespace Cake.Core.IO
         public bool RedirectStandardOutput { get; set; }
 
         /// <summary>
-        /// Gets or sets a function that intercepts the error output before being redirected. Use in conjunction with <see cref="RedirectStandardError"/>
+        /// Gets or sets a function that intercepts the error output before being redirected. Use in conjunction with <see cref="RedirectStandardError"/>.
         /// </summary>
         public Func<string, string> RedirectedStandardErrorHandler { get; set; }
 
         /// <summary>
-        /// Gets or sets a function that intercepts the standard output before being redirected. Use in conjunction with <see cref="RedirectStandardOutput"/>
+        /// Gets or sets a function that intercepts the standard output before being redirected. Use in conjunction with <see cref="RedirectStandardOutput"/>.
         /// </summary>
         public Func<string, string> RedirectedStandardOutputHandler { get; set; }
 

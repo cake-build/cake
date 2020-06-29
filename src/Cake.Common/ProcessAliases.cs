@@ -37,7 +37,7 @@ namespace Cake.Common
         }
 
         /// <summary>
-        /// Starts the process resource that is specified by the filename and arguments
+        /// Starts the process resource that is specified by the filename and arguments.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="fileName">Name of the file.</param>

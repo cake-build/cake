@@ -6,12 +6,12 @@ using System;
 namespace Cake.Core
 {
     /// <summary>
-    /// Acts as a context providing info about the overall build following its completion
+    /// Acts as a context providing info about the overall build following its completion.
     /// </summary>
     public sealed class TeardownContext : CakeContextAdapter, ITeardownContext
     {
         /// <summary>
-        /// Gets a value indicating whether this build was successful
+        /// Gets a value indicating whether this build was successful.
         /// </summary>
         /// <value>
         /// <c>true</c> if successful; otherwise <c>false</c>.

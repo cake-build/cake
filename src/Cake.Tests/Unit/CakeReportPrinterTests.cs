@@ -47,7 +47,7 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                string expected = $"{taskName, -30}{duration, -20}";
+                string expected = $"{taskName,-30}{duration,-20}";
                 Assert.Contains(console.Messages, s => s == expected);
             }
 
@@ -70,7 +70,7 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                string expected = $"{taskName, -45}{duration, -20}";
+                string expected = $"{taskName,-45}{duration,-20}";
                 Assert.Contains(console.Messages, s => s == expected);
             }
 
@@ -94,7 +94,7 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                string expected = $"{taskNameThatWasSkipped, -30}{"Skipped", -20}";
+                string expected = $"{taskNameThatWasSkipped,-30}{"Skipped",-20}";
                 Assert.Contains(console.Messages, s => s == expected);
             }
 
@@ -124,7 +124,7 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                var expected = $"{tasknameThatWasDelegated, -30}{durationDelegatedTask, -20}";
+                var expected = $"{tasknameThatWasDelegated,-30}{durationDelegatedTask,-20}";
                 Assert.Contains(console.Messages, s => s == expected);
             }
 
@@ -155,7 +155,7 @@ namespace Cake.Tests.Unit
                 printer.Write(report);
 
                 // Then
-                var expected = $"{tasknameThatWasDelegated, -30}{durationDelegatedTask, -20}";
+                var expected = $"{tasknameThatWasDelegated,-30}{durationDelegatedTask,-20}";
                 Assert.DoesNotContain(console.Messages, s => s == expected);
             }
         }

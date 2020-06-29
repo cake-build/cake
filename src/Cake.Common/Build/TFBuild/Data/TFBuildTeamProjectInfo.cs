@@ -8,7 +8,7 @@ using Cake.Core;
 namespace Cake.Common.Build.TFBuild.Data
 {
     /// <summary>
-    /// Provides Team Foundation Team Project information for the current build
+    /// Provides Team Foundation Team Project information for the current build.
     /// </summary>
     public sealed class TFBuildTeamProjectInfo : TFInfo
     {

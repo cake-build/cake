@@ -496,7 +496,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <param name="project">The project path.</param>
         /// <example>
-        /// <para>Specify the path to the .csproj file in the test project</para>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
         /// <code>
         /// DotNetCoreTest("./test/Project.Tests/Project.Tests.csproj");
         /// </code>
@@ -698,7 +698,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
-        /// Deletes a package from a server
+        /// Deletes a package from a server.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageName">Name of package to delete.</param>
@@ -1212,7 +1212,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <param name="testFile">A path to the test file or glob for one or more test files.</param>
         /// <example>
-        /// <para>Specify the path to the .csproj file in the test project</para>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
         /// <code>
         /// DotNetCoreVSTest("./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll");
         /// </code>
@@ -1233,7 +1233,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="testFile">A path to the test file or glob for one or more test files.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
-        /// <para>Specify the path to the .csproj file in the test project</para>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
         /// <code>
         /// var settings = new DotNetCoreVSTestSettings
         /// {

@@ -69,7 +69,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// Gets the response files to use.
         /// </summary>
         /// <remarks>
-        /// A response file is a text file that is used to insert command-line switches. For more information see https://docs.microsoft.com/en-gb/visualstudio/msbuild/msbuild-response-files
+        /// A response file is a text file that is used to insert command-line switches. For more information see https://docs.microsoft.com/en-gb/visualstudio/msbuild/msbuild-response-files.
         /// </remarks>
         public ICollection<FilePath> ResponseFiles { get; }
 
@@ -87,7 +87,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <remarks>
         /// A distributed logger consists of a central and forwarding logger. MSBuild will attach an instance of the forwarding logger to each secondary node.
-        /// For more information see https://msdn.microsoft.com/en-us/library/bb383987.aspx
+        /// For more information see https://msdn.microsoft.com/en-us/library/bb383987.aspx.
         /// </remarks>
         public ICollection<MSBuildDistributedLogger> DistributedLoggers { get; }
 
@@ -102,7 +102,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         public ICollection<MSBuildFileLoggerSettings> FileLoggers { get; }
 
         /// <summary>
-        /// Gets or sets the binary logging options
+        /// Gets or sets the binary logging options.
         /// </summary>
         public MSBuildBinaryLoggerSettings BinaryLogger { get; set; }
 

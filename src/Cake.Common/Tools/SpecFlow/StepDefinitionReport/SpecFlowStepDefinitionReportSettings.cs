@@ -13,7 +13,7 @@ namespace Cake.Common.Tools.SpecFlow.StepDefinitionReport
     {
         /// <summary>
         /// Gets or sets the path for the compiled SpecFlow project. Optional.
-        /// Default: bin\Debug
+        /// Default: bin\Debug.
         /// </summary>
         public DirectoryPath BinFolder { get; set; }
     }

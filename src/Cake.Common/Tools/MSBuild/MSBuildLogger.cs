@@ -10,7 +10,7 @@ namespace Cake.Common.Tools.MSBuild
     public sealed class MSBuildLogger
     {
         /// <summary>
-        /// Gets or sets the assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}
+        /// Gets or sets the assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}.
         /// </summary>
         public string Assembly { get; set; }
 

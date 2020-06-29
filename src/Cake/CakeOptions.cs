@@ -43,7 +43,7 @@ namespace Cake
         public bool ShowDescription { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to show the task dependency tree
+        /// Gets or sets a value indicating whether to show the task dependency tree.
         /// </summary>
         /// <value>
         ///   <c>true</c> to show task tree; otherwise, <c>false</c>.

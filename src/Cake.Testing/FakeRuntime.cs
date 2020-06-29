@@ -10,7 +10,7 @@ using Cake.Core.Polyfill;
 namespace Cake.Testing
 {
     /// <summary>
-    /// An implementation of a fake <see cref="ICakeRuntime"/>
+    /// An implementation of a fake <see cref="ICakeRuntime"/>.
     /// </summary>
     public sealed class FakeRuntime : ICakeRuntime
     {

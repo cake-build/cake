@@ -62,29 +62,29 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         public bool Force { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to stop and wait for user input or action (for example to complete authentication)
+        /// Gets or sets a value indicating whether to stop and wait for user input or action (for example to complete authentication).
         /// </summary>
         /// <remarks>
-        /// Supported by .NET SDK version 2.1.400 and above
+        /// Supported by .NET SDK version 2.1.400 and above.
         /// </remarks>
         public bool Interactive { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to enable project lock file to be generated and used with restore
+        /// Gets or sets a value indicating whether to enable project lock file to be generated and used with restore.
         /// </summary>
         /// <remarks>
-        /// Supported by .NET SDK version 2.1.500 and above
+        /// Supported by .NET SDK version 2.1.500 and above.
         /// </remarks>
         public bool UseLockFile { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to not allow updating project lock file
+        /// Gets or sets a value indicating whether to not allow updating project lock file.
         /// </summary>
         /// <remarks>
         /// When set to true, restore will fail if the lock file is out of sync.
         /// Useful for CI builds when you do not want the build to continue if the package closure has changed than what is present in the lock file.
         /// <para>
-        /// Supported by .NET SDK version 2.1.500 and above
+        /// Supported by .NET SDK version 2.1.500 and above.
         /// </para>
         /// </remarks>
         public bool LockedMode { get; set; }
@@ -93,18 +93,18 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         /// Gets or sets a value indicating output location where project lock file is written.
         /// </summary>
         /// <remarks>
-        /// If not set, 'dotnet restore' defaults to 'PROJECT_ROOT\packages.lock.json'
+        /// If not set, 'dotnet restore' defaults to 'PROJECT_ROOT\packages.lock.json'.
         /// <para>
-        /// Supported by .NET SDK version 2.1.500 and above
+        /// Supported by .NET SDK version 2.1.500 and above.
         /// </para>
         /// </remarks>
         public FilePath LockFilePath { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to force restore to reevaluate all dependencies even if a lock file already exists
+        /// Gets or sets a value indicating whether to force restore to reevaluate all dependencies even if a lock file already exists.
         /// </summary>
         /// <remarks>
-        /// Supported by .NET SDK version 2.1.500 and above
+        /// Supported by .NET SDK version 2.1.500 and above.
         /// </remarks>
         public bool ForceEvaluate { get; set; }
 

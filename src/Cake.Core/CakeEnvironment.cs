@@ -91,7 +91,7 @@ namespace Cake.Core
         /// <summary>
         /// Gets all environment variables.
         /// </summary>
-        /// <returns>The environment variables as IDictionary&lt;string, string&gt; </returns>
+        /// <returns>The environment variables as IDictionary&lt;string, string&gt;. </returns>
         public IDictionary<string, string> GetEnvironmentVariables()
         {
             return Environment.GetEnvironmentVariables()

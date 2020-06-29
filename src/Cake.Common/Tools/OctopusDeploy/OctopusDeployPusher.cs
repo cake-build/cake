@@ -11,7 +11,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// The Octopus Deploy package push runner
+    /// The Octopus Deploy package push runner.
     /// </summary>
     public class OctopusDeployPusher : OctopusDeployTool<OctopusPushSettings>
     {
@@ -32,12 +32,12 @@ namespace Cake.Common.Tools.OctopusDeploy
         }
 
         /// <summary>
-        /// Pushes the specified packages to Octopus Deploy internal repository
+        /// Pushes the specified packages to Octopus Deploy internal repository.
         /// </summary>
-        /// <param name="server">The Octopus server URL</param>
-        /// <param name="apiKey">The user's API key</param>
-        /// <param name="packagePaths">Paths to the packages to be pushed</param>
-        /// <param name="settings">The settings</param>
+        /// <param name="server">The Octopus server URL.</param>
+        /// <param name="apiKey">The user's API key.</param>
+        /// <param name="packagePaths">Paths to the packages to be pushed.</param>
+        /// <param name="settings">The settings.</param>
         public void PushPackage(string server, string apiKey, FilePath[] packagePaths, OctopusPushSettings settings)
         {
             if (packagePaths == null || !packagePaths.Any())

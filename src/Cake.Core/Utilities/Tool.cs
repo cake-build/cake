@@ -83,8 +83,8 @@ namespace Cake.Core.Utilities
         /// <param name="settings">The settings.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="toolPath">The tool path to use.</param>
-        /// <param name="processSettings">The process settings</param>
-        /// <param name="postAction">If specified called after process exit</param>
+        /// <param name="processSettings">The process settings.</param>
+        /// <param name="postAction">If specified called after process exit.</param>
         protected void Run(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath,
             ProcessSettings processSettings, Action<IProcess> postAction)
         {
@@ -138,7 +138,7 @@ namespace Cake.Core.Utilities
         /// <param name="settings">The settings.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="toolPath">The tool path to use.</param>
-        /// <param name="processSettings">The process settings</param>
+        /// <param name="processSettings">The process settings.</param>
         /// <returns>The process that the tool is running under.</returns>
         protected IProcess RunProcess(TSettings settings, ProcessArgumentBuilder arguments, FilePath toolPath,
             ProcessSettings processSettings)
@@ -277,7 +277,7 @@ namespace Cake.Core.Utilities
         }
 
         /// <summary>
-        /// Gets alternative file paths which the tool may exist in
+        /// Gets alternative file paths which the tool may exist in.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>

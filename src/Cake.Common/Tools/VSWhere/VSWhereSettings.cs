@@ -27,7 +27,7 @@ namespace Cake.Common.Tools.VSWhere
         public string ReturnProperty { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether VSWhere should include prerelease installations
+        /// Gets or sets a value indicating whether VSWhere should include prerelease installations.
         /// </summary>
         public bool IncludePrerelease { get; set; }
 

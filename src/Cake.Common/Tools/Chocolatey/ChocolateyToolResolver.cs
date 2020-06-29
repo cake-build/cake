@@ -10,7 +10,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Tools.Chocolatey
 {
     /// <summary>
-    /// Contains Chocolatey path resolver functionality
+    /// Contains Chocolatey path resolver functionality.
     /// </summary>
     public sealed class ChocolateyToolResolver : IChocolateyToolResolver
     {

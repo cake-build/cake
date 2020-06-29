@@ -16,7 +16,7 @@ namespace Cake.Common.Solution.Project
     public static class ProjectAliases
     {
         /// <summary>
-        /// Parses project information from project file
+        /// Parses project information from project file.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="projectPath">The project file path.</param>

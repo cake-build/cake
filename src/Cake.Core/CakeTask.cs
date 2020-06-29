@@ -108,7 +108,7 @@ namespace Cake.Core
         /// Executes the task using the specified context.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns>Returned Task</returns>
+        /// <returns>Returned Task.</returns>
         public async Task Execute(ICakeContext context)
         {
             while (DelayedActions.Count > 0)

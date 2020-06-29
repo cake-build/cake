@@ -24,7 +24,7 @@ namespace Cake.Testing
         }
 
         /// <summary>
-        /// Waits for the process to exit
+        /// Waits for the process to exit.
         /// </summary>
         public void WaitForExit()
         {
@@ -50,18 +50,18 @@ namespace Cake.Testing
         }
 
         /// <summary>
-        /// Get the standard error of process
+        /// Get the standard error of process.
         /// </summary>
-        /// <returns>Returns process error output <see cref="ProcessSettings.RedirectStandardError">RedirectStandardError</see> is true</returns>
+        /// <returns>Returns process error output <see cref="ProcessSettings.RedirectStandardError">RedirectStandardError</see> is true.</returns>
         public IEnumerable<string> GetStandardError()
         {
             return _standardError;
         }
 
         /// <summary>
-        /// Get the standard output of process
+        /// Get the standard output of process.
         /// </summary>
-        /// <returns>Returns process output <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true</returns>
+        /// <returns>Returns process output <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true.</returns>
         public IEnumerable<string> GetStandardOutput()
         {
             return _standardOutput;

@@ -17,7 +17,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The build.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
@@ -38,7 +38,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TravisCI</para>
+        /// <para>Via TravisCI.</para>
         /// <example>
         /// <code>
         /// if (TravisCI.IsRunningOnTravisCI)
@@ -67,7 +67,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The Travis CI pull request information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
@@ -86,7 +86,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TravisCI</para>
+        /// <para>Via TravisCI.</para>
         /// <example>
         /// <code>
         /// if (TravisCI.IsRunningOnTravisCI)
@@ -113,7 +113,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The job.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
@@ -134,7 +134,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TravisCI</para>
+        /// <para>Via TravisCI.</para>
         /// <example>
         /// <code>
         /// if (TravisCI.IsRunningOnTravisCI)
@@ -163,7 +163,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The repository.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
@@ -184,7 +184,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TravisCI</para>
+        /// <para>Via TravisCI.</para>
         /// <example>
         /// <code>
         /// if (TravisCI.IsRunningOnTravisCI)
@@ -213,7 +213,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// <c>true</c> if ci; otherwise, <c>false</c>.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
@@ -229,7 +229,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TravisCI</para>
+        /// <para>Via TravisCI.</para>
         /// <example>
         /// <code>
         /// if (TravisCI.IsRunningOnTravisCI)
@@ -253,7 +253,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         /// The home.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
@@ -269,7 +269,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TravisCI</para>
+        /// <para>Via TravisCI.</para>
         /// <example>
         /// <code>
         /// if (TravisCI.IsRunningOnTravisCI)
@@ -293,7 +293,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// <value>
         ///   <c>true</c> if Travis; otherwise, <c>false</c>.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
@@ -309,7 +309,7 @@ namespace Cake.Common.Build.TravisCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TravisCI</para>
+        /// <para>Via TravisCI.</para>
         /// <example>
         /// <code>
         /// if (TravisCI.IsRunningOnTravisCI)

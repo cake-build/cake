@@ -130,7 +130,7 @@ namespace Cake.Testing
         /// <summary>
         /// Gets all environment variables.
         /// </summary>
-        /// <returns>The environment variables as IDictionary&lt;string, string&gt; </returns>
+        /// <returns>The environment variables as IDictionary&lt;string, string&gt;. </returns>
         public IDictionary<string, string> GetEnvironmentVariables()
         {
             return new Dictionary<string, string>(_environmentVariables, StringComparer.OrdinalIgnoreCase);

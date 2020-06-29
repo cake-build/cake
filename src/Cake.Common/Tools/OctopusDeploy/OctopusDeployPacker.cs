@@ -10,7 +10,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// The Octopus deploy package packer
+    /// The Octopus deploy package packer.
     /// </summary>
     public sealed class OctopusDeployPacker : OctopusDeployTool<OctopusPackSettings>
     {

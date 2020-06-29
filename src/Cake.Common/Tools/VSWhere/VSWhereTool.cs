@@ -56,7 +56,7 @@ namespace Cake.Common.Tools.VSWhere
         }
 
         /// <summary>
-        /// Gets alternative file paths which the tool may exist in
+        /// Gets alternative file paths which the tool may exist in.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
@@ -76,7 +76,7 @@ namespace Cake.Common.Tools.VSWhere
         }
 
         /// <summary>
-        /// Runs VSWhere with supplied arguments and parses installation paths
+        /// Runs VSWhere with supplied arguments and parses installation paths.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="builder">The process argument builder.</param>

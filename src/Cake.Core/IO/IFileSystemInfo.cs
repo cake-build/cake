@@ -5,7 +5,7 @@
 namespace Cake.Core.IO
 {
     /// <summary>
-    /// Represents an entry in the file system
+    /// Represents an entry in the file system.
     /// </summary>
     public interface IFileSystemInfo
     {

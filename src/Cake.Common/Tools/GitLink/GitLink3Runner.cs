@@ -11,7 +11,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.GitLink
 {
     /// <summary>
-    /// GitLink runner
+    /// GitLink runner.
     /// </summary>
     public sealed class GitLink3Runner : Tool<GitLink3Settings>
     {
@@ -34,7 +34,7 @@ namespace Cake.Common.Tools.GitLink
         }
 
         /// <summary>
-        /// Update pdb file to link all sources
+        /// Update pdb file to link all sources.
         /// </summary>
         /// <param name="pdbFile">The path to the pdb file to link.</param>
         /// <param name="settings">The settings.</param>
@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.GitLink
         }
 
         /// <summary>
-        /// Update pdb files to link all sources
+        /// Update pdb files to link all sources.
         /// </summary>
         /// <param name="pdbFiles">The file path collection for the pdb files to link.</param>
         /// <param name="settings">The settings.</param>

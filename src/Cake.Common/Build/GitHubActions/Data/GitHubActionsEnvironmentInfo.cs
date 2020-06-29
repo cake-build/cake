@@ -29,7 +29,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The home.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
@@ -45,7 +45,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GitHubActions</para>
+        /// <para>Via GitHubActions.</para>
         /// <example>
         /// <code>
         /// if (GitHubActions.IsRunningOnGitHubActions)
@@ -69,7 +69,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The GitHub Actions runner information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
@@ -92,7 +92,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GitHubActions</para>
+        /// <para>Via GitHubActions.</para>
         /// <example>
         /// <code>
         /// if (GitHubActions.IsRunningOnGitHubActions)
@@ -123,7 +123,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The GitHub Actions workflow information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
@@ -144,7 +144,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GitHubActions</para>
+        /// <para>Via GitHubActions.</para>
         /// <example>
         /// <code>
         ///     Information(
@@ -166,7 +166,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The GitHub Actions pull request information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
@@ -183,7 +183,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GitHubActions</para>
+        /// <para>Via GitHubActions.</para>
         /// <example>
         /// <code>
         /// if (GitHubActions.IsRunningOnGitHubActions)

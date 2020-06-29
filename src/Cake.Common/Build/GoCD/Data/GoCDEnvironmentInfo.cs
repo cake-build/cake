@@ -17,7 +17,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         /// The GoCD pipeline information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GoCD.IsRunningOnGoCD)
@@ -38,7 +38,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GoCD</para>
+        /// <para>Via GoCD.</para>
         /// <example>
         /// <code>
         /// if (GoCD.IsRunningOnGoCD)
@@ -67,7 +67,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         ///   The GoCD stage information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GoCD.IsRunningOnGoCD)
@@ -86,7 +86,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GoCD</para>
+        /// <para>Via GoCD.</para>
         /// <example>
         /// <code>
         /// if (GoCD.IsRunningOnGoCD)
@@ -113,7 +113,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         ///   The GoCD repository information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GoCD.IsRunningOnGoCD)
@@ -134,7 +134,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GoCD</para>
+        /// <para>Via GoCD.</para>
         /// <example>
         /// <code>
         /// if (GoCD.IsRunningOnGoCD)
@@ -163,7 +163,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         /// The Go.CD URL.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GoCD.IsRunningOnGoCD)
@@ -179,7 +179,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GoCD</para>
+        /// <para>Via GoCD.</para>
         /// <example>
         /// <code>
         /// if (GoCD.IsRunningOnGoCD)
@@ -203,7 +203,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         /// The environment name.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GoCD.IsRunningOnGoCD)
@@ -219,7 +219,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GoCD</para>
+        /// <para>Via GoCD.</para>
         /// <example>
         /// <code>
         /// if (GoCD.IsRunningOnGoCD)
@@ -243,7 +243,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         /// The job name.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GoCD.IsRunningOnGoCD)
@@ -259,7 +259,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GoCD</para>
+        /// <para>Via GoCD.</para>
         /// <example>
         /// <code>
         /// if (GoCD.IsRunningOnGoCD)
@@ -287,7 +287,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// <value>
         /// The username of the user that triggered the build.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GoCD.IsRunningOnGoCD)
@@ -303,7 +303,7 @@ namespace Cake.Common.Build.GoCD.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GoCD</para>
+        /// <para>Via GoCD.</para>
         /// <example>
         /// <code>
         /// if (GoCD.IsRunningOnGoCD)

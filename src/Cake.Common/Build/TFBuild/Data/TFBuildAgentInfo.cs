@@ -8,7 +8,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Build.TFBuild.Data
 {
     /// <summary>
-    /// Provides TF Build agent info for the current build and build agent
+    /// Provides TF Build agent info for the current build and build agent.
     /// </summary>
     public sealed class TFBuildAgentInfo : TFInfo
     {
@@ -27,7 +27,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The local path on the agent where all folders for a given build definition are created.
         /// </value>
-        /// <example><c>c:\agent\_work\1</c></example>
+        /// <example><c>c:\agent\_work\1</c>.</example>
         public FilePath BuildDirectory => GetEnvironmentString("AGENT_BUILDDIRECTORY");
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The directory the agent is installed into.
         /// </value>
-        /// <example><c>c:\agent\</c></example>
+        /// <example><c>c:\agent\</c>.</example>
         public FilePath HomeDirectory => GetEnvironmentString("AGENT_HOMEDIRECTORY");
 
         /// <summary>
@@ -93,10 +93,10 @@ namespace Cake.Common.Build.TFBuild.Data
         /// Gets the directory used by tasks such as Node Tool Installer and Use Python Version to switch between multiple versions of a tool.
         /// </summary>
         /// <remarks>
-        /// These tasks will add tools from this directory to PATH so that subsequent build steps can use them
+        /// These tasks will add tools from this directory to PATH so that subsequent build steps can use them.
         /// </remarks>
         /// <value>
-        /// The task directory
+        /// The task directory.
         /// </value>
         public FilePath ToolsDirectory => GetEnvironmentString("AGENT_TOOLSDIRECTORY");
 

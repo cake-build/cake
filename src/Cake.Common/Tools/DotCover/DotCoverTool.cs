@@ -10,9 +10,9 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.DotCover
 {
     /// <summary>
-    /// Base class for all DotCover related tools
+    /// Base class for all DotCover related tools.
     /// </summary>
-    /// <typeparam name="TSettings">The settings type</typeparam>
+    /// <typeparam name="TSettings">The settings type.</typeparam>
     public abstract class DotCoverTool<TSettings> : Tool<TSettings>
         where TSettings : DotCoverSettings
     {
@@ -53,10 +53,10 @@ namespace Cake.Common.Tools.DotCover
         }
 
         /// <summary>
-        /// Get arguments from global settings
+        /// Get arguments from global settings.
         /// </summary>
-        /// <param name="settings">The settings</param>
-        /// <returns>The process arguments</returns>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The process arguments.</returns>
         protected ProcessArgumentBuilder GetArguments(DotCoverSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
@@ -72,10 +72,10 @@ namespace Cake.Common.Tools.DotCover
         }
 
         /// <summary>
-        /// Get configuration full path from coverage settings
+        /// Get configuration full path from coverage settings.
         /// </summary>
-        /// <param name="settings">The settings</param>
-        /// <returns>The process arguments</returns>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The process arguments.</returns>
         protected ProcessArgumentBuilder GetConfigurationFileArgument(DotCoverSettings settings)
         {
             var builder = new ProcessArgumentBuilder();

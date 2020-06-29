@@ -19,7 +19,7 @@ namespace Cake.Core
         /// Determines whether the specified <see cref="Type"/> is static.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns>Whether or not the specified type is static</returns>
+        /// <returns>Whether or not the specified type is static.</returns>
         public static bool IsStatic(this Type type)
         {
             if (type == null)
@@ -37,7 +37,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="includeNamespace">if set to <c>true</c> then namespace is included.</param>
-        /// <returns>The full name of a type</returns>
+        /// <returns>The full name of a type.</returns>
         public static string GetFullName(this Type type, bool includeNamespace = true)
         {
             if (type == null)
@@ -64,10 +64,10 @@ namespace Cake.Core
         /// <summary>
         /// Gets whether or not a given <see cref="System.Type"/> is a subclass of an raw/open generic.
         /// </summary>
-        /// <param name="toCheck">The type to check</param>
-        /// <param name="generic">The open generic to test</param>
-        /// <code>typeof(Nullable&lt;int&gt;).IsSubclassOfRawGeneric(typeof(Nullable&lt;&gt;));</code>
-        /// <returns>Returns <c>true</c> if the type is a subtype of a raw generic, else <c>false</c></returns>
+        /// <param name="toCheck">The type to check.</param>
+        /// <param name="generic">The open generic to test.</param>
+        /// <code>typeof(Nullable&lt;int&gt;).IsSubclassOfRawGeneric(typeof(Nullable&lt;&gt;));.</code>
+        /// <returns>Returns <c>true</c> if the type is a subtype of a raw generic, else <c>false</c>.</returns>
         public static bool IsSubclassOfRawGeneric(this Type toCheck, Type generic)
         {
             while (toCheck != null && toCheck != typeof(object))

@@ -11,12 +11,12 @@ using Cake.Core.IO;
 namespace Cake.Common.Build.TFBuild.Data
 {
     /// <summary>
-    ///  Provides TF Build agent info for publishing test results
+    ///  Provides TF Build agent info for publishing test results.
     /// </summary>
     public class TFBuildPublishTestResultsData
     {
         /// <summary>
-        /// Gets or Sets the type test runner the results are formatted in
+        /// Gets or Sets the type test runner the results are formatted in.
         /// </summary>
         public TFTestRunnerType? TestRunner { get; set; }
 
@@ -26,17 +26,17 @@ namespace Cake.Common.Build.TFBuild.Data
         public ICollection<FilePath> TestResultsFiles { get; set; } = new List<FilePath>();
 
         /// <summary>
-        /// Gets or Sets whether to merge all Test Result Files into one run
+        /// Gets or Sets whether to merge all Test Result Files into one run.
         /// </summary>
         public bool? MergeTestResults { get; set; }
 
         /// <summary>
-        /// Gets or Sets the Platform for which the tests were run on
+        /// Gets or Sets the Platform for which the tests were run on.
         /// </summary>
         public string Platform { get; set; }
 
         /// <summary>
-        /// Gets or Sets the configuration for which the tests were run on
+        /// Gets or Sets the configuration for which the tests were run on.
         /// </summary>
         public string Configuration { get; set; }
 
@@ -46,7 +46,7 @@ namespace Cake.Common.Build.TFBuild.Data
         public string TestRunTitle { get; set; }
 
         /// <summary>
-        /// Gets or Sets whether to opt in/out of publishing test run level attachments
+        /// Gets or Sets whether to opt in/out of publishing test run level attachments.
         /// </summary>
         public bool? PublishRunAttachments { get; set; }
 

@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.Roundhouse
 {
     /// <summary>
-    /// Defines the recovery model for SQL Server
+    /// Defines the recovery model for SQL Server.
     /// </summary>
     public enum RecoveryMode
     {

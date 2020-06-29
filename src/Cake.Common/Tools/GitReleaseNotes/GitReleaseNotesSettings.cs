@@ -40,25 +40,25 @@ namespace Cake.Common.Tools.GitReleaseNotes
         /// <summary>
         /// Gets or sets the token to use when accessing repository.
         /// </summary>
-        /// <remarks>To be used instead of username/password</remarks>
+        /// <remarks>To be used instead of username/password.</remarks>
         public string RepoToken { get; set; }
 
         /// <summary>
         /// Gets or sets the Url to use when accessing repository.
         /// </summary>
-        /// <remarks>To be used instead of username/password</remarks>
+        /// <remarks>To be used instead of username/password.</remarks>
         public string RepoUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the branch name to checkout any existing release notes file.
         /// </summary>
-        /// <remarks>To be used instead of username/password</remarks>
+        /// <remarks>To be used instead of username/password.</remarks>
         public string RepoBranch { get; set; }
 
         /// <summary>
         /// Gets or sets the Url to the Issue Tracker.
         /// </summary>
-        /// <remarks>To be used instead of username/password</remarks>
+        /// <remarks>To be used instead of username/password.</remarks>
         public string IssueTrackerUrl { get; set; }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Cake.Common.Tools.GitReleaseNotes
         /// <summary>
         /// Gets or sets the token to use when accessing issue tracker.
         /// </summary>
-        /// <remarks>To be used instead of username/password</remarks>
+        /// <remarks>To be used instead of username/password.</remarks>
         public string IssueTrackerToken { get; set; }
 
         /// <summary>

@@ -72,7 +72,7 @@ namespace Cake.Common.Tools.DotNetCore.Pack
         /// Gets or sets a value indicating whether to set the serviceable flag in the package.
         /// </summary>
         /// <remarks>
-        /// For more information, see https://aka.ms/nupkgservicing
+        /// For more information, see https://aka.ms/nupkgservicing.
         /// </remarks>
         public bool Serviceable { get; set; }
 

@@ -77,7 +77,7 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
-        /// Tries to filer any unsafe arguments from string
+        /// Tries to filer any unsafe arguments from string.
         /// </summary>
         /// <param name="source">unsafe source string.</param>
         /// <returns>Filtered string.</returns>

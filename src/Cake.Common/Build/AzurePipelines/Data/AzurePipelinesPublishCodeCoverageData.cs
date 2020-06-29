@@ -11,7 +11,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    /// Description of code coverage information to publish to Azure Pipelines
+    /// Description of code coverage information to publish to Azure Pipelines.
     /// </summary>
     public class AzurePipelinesPublishCodeCoverageData
     {

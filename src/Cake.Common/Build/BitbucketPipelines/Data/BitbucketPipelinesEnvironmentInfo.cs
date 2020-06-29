@@ -17,7 +17,7 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         /// <value>
         /// The repository.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.BitbucketPipelines.IsRunningOnBitbucketPipelines)
@@ -42,7 +42,7 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via BitbucketPipelines</para>
+        /// <para>Via BitbucketPipelines.</para>
         /// <example>
         /// <code>
         /// if (BitbucketPipelines.IsRunningOnBitbucketPipelines)
@@ -75,7 +75,7 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         /// <value>
         /// The Bitbucket Pipelines pull request information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.BitbucketPipelines.IsRunningOnBitbucketPipelines)
@@ -94,7 +94,7 @@ namespace Cake.Common.Build.BitbucketPipelines.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via BitbucketPipelines</para>
+        /// <para>Via BitbucketPipelines.</para>
         /// <example>
         /// <code>
         /// if (BitbucketPipelines.IsRunningOnBitbucketPipelines)
