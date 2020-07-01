@@ -2,6 +2,7 @@
 [Obsolete]
 public System.Int32 Cached_Obsolete_ImplicitWarning_NoMessage
 {
+    [System.Diagnostics.DebuggerStepThrough]
     get
     {
         Context.Log.Warning("Warning: The alias Cached_Obsolete_ImplicitWarning_NoMessage has been made obsolete.");

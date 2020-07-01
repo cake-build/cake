@@ -49,6 +49,7 @@ namespace Cake.Core.Scripting.CodeGen
             var parameters = method.GetParameters().Skip(1).ToArray();
 
             // Generate method signature.
+            builder.AppendLine("[System.Diagnostics.DebuggerStepThrough]");
             builder.Append("public ");
             builder.Append(GetReturnType(method));
             builder.Append(" ");
