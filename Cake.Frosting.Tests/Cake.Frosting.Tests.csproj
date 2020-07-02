@@ -10,6 +10,9 @@
     <RepositoryUrl>https://github.com/cake-build/frosting</RepositoryUrl>
     <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
     <LangVersion>7</LangVersion>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' or '$(TargetFramework)' == 'netcoreapp2.1' ">
@@ -33,6 +36,7 @@
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
     <PackageReference Include="Cake.Testing" Version="0.38.4" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <!-- .NET Framework packages -->
