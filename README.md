@@ -4,8 +4,6 @@
 [![homebrew](https://img.shields.io/homebrew/v/cake.svg)](http://braumeister.org/formula/cake)
 [![Help Contribute to Open Source](https://www.codetriage.com/cake-build/cake/badges/users.svg)](https://www.codetriage.com/cake-build/cake)
 
-[![Source Browser](https://img.shields.io/badge/Browse-Source-green.svg)](http://sourcebrowser.io/Browse/cake-build/cake)
-
 Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
 ## Continuous integration
