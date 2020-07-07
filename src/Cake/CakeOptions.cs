@@ -109,6 +109,11 @@ namespace Cake
         public bool Exclusive { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether or not to regenerate the cache if a cached output exists.
+        /// </summary>
+        public bool RegenerateCache { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CakeOptions"/> class.
         /// </summary>
         public CakeOptions()
