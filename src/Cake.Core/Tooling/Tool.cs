@@ -97,7 +97,11 @@ namespace Cake.Core.Tooling
             // Post action specified?
             postAction?.Invoke(process);
 
-            ProcessExitCode(process.GetExitCode());
+            var exitCode = process.GetExitCode();
+            if (!settings.HandleExitCode?.Invoke(exitCode) ?? true)
+            {
+                ProcessExitCode(process.GetExitCode());
+            }
         }
 
         /// <summary>
