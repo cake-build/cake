@@ -1,24 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
-    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström and contributors</Authors>
-    <PackageTags>Cake;Build;Build automation</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</PackageIconUrl>
-    <PackageLicenseUrl>https://github.com/cake-build/frosting/blob/develop/LICENSE</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/cake-build/frosting</RepositoryUrl>
     <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
     <LangVersion>7</LangVersion>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' or '$(TargetFramework)' == 'netcoreapp2.1' ">
-    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
 
   <ItemGroup>
     <ProjectReference Include="..\Cake.Frosting\Cake.Frosting.csproj" />
@@ -36,7 +23,6 @@
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
     <PackageReference Include="Cake.Testing" Version="0.38.4" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <!-- .NET Framework packages -->
