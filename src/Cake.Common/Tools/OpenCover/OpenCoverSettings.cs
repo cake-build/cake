@@ -77,6 +77,11 @@ namespace Cake.Common.Tools.OpenCover
         public OpenCoverLogLevel LogLevel { get; set; }
 
         /// <summary>
+        /// Gets or sets the hide skipped option of OpenCover.
+        /// </summary>
+        public OpenCoverHideSkippedOption HideSkippedOption { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to merge the coverage results for an assembly
         /// regardless of where it was loaded assuming it has the same file-hash in each location.
         /// </summary>
@@ -115,6 +120,7 @@ namespace Cake.Common.Tools.OpenCover
             _excludedFileFilters = new HashSet<string>(StringComparer.Ordinal);
             Register = "user";
             LogLevel = OpenCoverLogLevel.Info;
+            HideSkippedOption = OpenCoverHideSkippedOption.None;
             _excludeDirectories = new HashSet<DirectoryPath>();
             _searchDirectories = new HashSet<DirectoryPath>();
         }
