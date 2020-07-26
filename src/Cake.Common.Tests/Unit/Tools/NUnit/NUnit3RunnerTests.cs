@@ -219,10 +219,6 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.SkipNonTestAssemblies = true;
                 fixture.Settings.Work = "out";
                 fixture.Settings.OutputFile = "stdout.txt";
-                #pragma warning disable 0618
-                fixture.Settings.ErrorOutputFile = "stderr.txt";
-                fixture.Settings.Full = true;
-                #pragma warning restore 0618
                 fixture.Settings.Results = new[]
                 {
                     new NUnit3Result { FileName = "NewTestResult.xml", Format = "nunit2", Transform = "nunit2.xslt" },
@@ -232,9 +228,6 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 fixture.Settings.TeamCity = true;
                 fixture.Settings.NoHeader = true;
                 fixture.Settings.NoColor = true;
-                #pragma warning disable 0618
-                fixture.Settings.Verbose = true;
-                #pragma warning restore 0618
                 fixture.Settings.Configuration = "Debug";
                 fixture.Settings.Process = NUnit3ProcessOption.InProcess;
                 fixture.Settings.AppDomainUsage = NUnit3AppDomainUsage.Single;
@@ -259,10 +252,9 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                 Assert.Equal("\"/Working/Test1.dll\" --test=Test1,Test2 \"--testlist=/Working/Testlist.txt\" " +
                         "--where \"cat==Data\" --timeout=5 --seed=6 --workers=7 " +
                         "--stoponerror --skipnontestassemblies \"--work=/Working/out\" \"--out=/Working/stdout.txt\" " +
-                        "\"--err=/Working/stderr.txt\" --full " +
                         "\"--result=/Working/NewTestResult.xml;format=nunit2;transform=/Working/nunit2.xslt\" " +
                         "\"--result=/Working/NewTestResult2.xml;format=nunit3\" " +
-                        "--labels=All --teamcity --noheader --nocolor --verbose " +
+                        "--labels=All --teamcity --noheader --nocolor " +
                         "\"--config=Debug\" \"--framework=net3.5\" --x86 " +
                         "--dispose-runners --shadowcopy --agents=3 " +
                         "--process=InProcess --domain=Single " +

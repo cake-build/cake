@@ -135,17 +135,3 @@ namespace Cake.Core.Tooling
     {
     }
 }
-
-// ReSharper disable once CheckNamespace
-namespace Cake.Core.Utilities
-{
-    /// <summary>
-    /// This namespace contain base classes
-    /// and functionality related to tooling.
-    /// The content in this namespace has been obsoleted.
-    /// </summary>
-    [CompilerGenerated]
-    internal class NamespaceDoc
-    {
-    }
-}

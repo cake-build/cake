@@ -19,28 +19,8 @@ namespace Cake.Core.Tooling
     {
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
-        private readonly IGlobber _globber;
         private readonly IToolLocator _tools;
         private readonly IProcessRunner _processRunner;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Tool{TSettings}" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
-        [Obsolete("Please use Tool(IFileSystem, ICakeEnvironment, IProcessRunner, IToolLocator) instead.")]
-        protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
-            : this(fileSystem, environment, processRunner, (IToolLocator)null)
-        {
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
-
-            _globber = globber;
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tool{TSettings}"/> class.
@@ -279,12 +259,7 @@ namespace Cake.Core.Tooling
         /// <returns>The resolved tool path.</returns>
         protected FilePath GetToolPath(TSettings settings)
         {
-            if (_tools != null)
-            {
-                return GetToolPathUsingToolService(settings);
-            }
-
-            return GetToolPathObsolete(settings);
+            return GetToolPathUsingToolService(settings);
         }
 
         private FilePath GetToolPathUsingToolService(TSettings settings)
@@ -309,64 +284,6 @@ namespace Cake.Core.Tooling
                 if (_fileSystem.Exist(alternativePath))
                 {
                     return alternativePath.MakeAbsolute(_environment);
-                }
-            }
-
-            return null;
-        }
-
-        [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
-        private FilePath GetToolPathObsolete(TSettings settings)
-        {
-            var toolPath = settings.ToolPath;
-            if (toolPath != null)
-            {
-                return toolPath.MakeAbsolute(_environment);
-            }
-
-            // Look for each possible executable name in various places.
-            string[] pathDirs = null;
-            foreach (var toolExeName in GetToolExecutableNames(settings))
-            {
-                // First look in ./tools/
-                toolPath = _globber.GetFiles("./tools/**/" + toolExeName).FirstOrDefault();
-                if (toolPath != null)
-                {
-                    return toolPath.MakeAbsolute(_environment);
-                }
-
-                // Cache the PATH directory list if we didn't already.
-                if (pathDirs == null)
-                {
-                    var pathEnv = _environment.GetEnvironmentVariable("PATH");
-                    if (!string.IsNullOrEmpty(pathEnv))
-                    {
-                        pathDirs = pathEnv.Split(new[] { _environment.Platform.IsUnix() ? ':' : ';' }, StringSplitOptions.RemoveEmptyEntries);
-                    }
-                    else
-                    {
-                        pathDirs = new string[] { };
-                    }
-                }
-
-                // Look in every PATH directory for the file.
-                foreach (var pathDir in pathDirs)
-                {
-                    var file = new DirectoryPath(pathDir).CombineWithFilePath(toolExeName);
-                    if (_fileSystem.Exist(file))
-                    {
-                        return file.MakeAbsolute(_environment);
-                    }
-                }
-            }
-
-            // Look through all the alternative directories for the tool.
-            var alternativePaths = GetAlternativeToolPaths(settings) ?? Enumerable.Empty<FilePath>();
-            foreach (var altPath in alternativePaths)
-            {
-                if (_fileSystem.Exist(altPath))
-                {
-                    return altPath.MakeAbsolute(_environment);
                 }
             }
 

@@ -106,23 +106,6 @@ namespace Cake.Common.Tools.NUnit
         public FilePath OutputFile { get; set; }
 
         /// <summary>
-        /// Gets or sets the location that NUnit should write test error output.
-        /// </summary>
-        /// <value>The location that NUnit should write test error output.</value>
-        [Obsolete("This argument was removed from NUnit3", false)]
-        public FilePath ErrorOutputFile { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to print full report of all test results.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if a full report of test results should be printed;
-        /// otherwise, <c>false</c>.
-        /// </value>
-        [Obsolete("This argument was removed from NUnit3", false)]
-        public bool Full { get; set; }
-
-        /// <summary>
         /// Gets or sets the results that should be saved.
         /// </summary>
         /// <value>The package owners.</value>
@@ -169,15 +152,6 @@ namespace Cake.Common.Tools.NUnit
         /// <c>true</c> disable color output; otherwise, <c>false</c>.
         /// </value>
         public bool NoColor { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to show additional information as the tests run.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> shows additional information as the tests run; otherwise, <c>false</c>.
-        /// </value>
-        [Obsolete("This argument was removed from NUnit3", false)]
-        public bool Verbose { get; set; }
 
         /// <summary>
         /// Gets or sets the name of a project configuration to load (e.g.:Debug).

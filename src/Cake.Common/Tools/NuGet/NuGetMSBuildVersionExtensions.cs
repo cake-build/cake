@@ -25,11 +25,6 @@ namespace Cake.Common.Tools.NuGet
                 case NuGetMSBuildVersion.MSBuild14:
                     return "14";
 
-#pragma warning disable CS0618
-                case NuGetMSBuildVersion.MSBuild15:
-                    return "15";
-#pragma warning restore CS0618
-
                 case NuGetMSBuildVersion.MSBuild15_1:
                     return "15.1";
 

@@ -191,47 +191,5 @@ namespace Cake.Testing
         {
             Runtime.IsCoreClr = isCoreClr;
         }
-
-        /// <summary>
-        /// Gets whether or not the current operative system is 64 bit.
-        /// </summary>
-        /// <returns>Whether or not the current operative system is 64 bit.</returns>
-        [Obsolete("Please use FakeEnvironment.Platform.Is64Bit instead.")]
-        public bool Is64BitOperativeSystem()
-        {
-            return Platform.Is64Bit;
-        }
-
-        /// <summary>
-        /// Determines whether the current machine is running Unix.
-        /// </summary>
-        /// <returns>Whether or not the current machine is running Unix.</returns>
-        [Obsolete("Please use FakeEnvironment.Platform.IsUnix instead.")]
-        public bool IsUnix()
-        {
-            return Platform.IsUnix();
-        }
-
-        /// <summary>
-        /// Gets the application root path.
-        /// </summary>
-        /// <returns>
-        /// The application root path.
-        /// </returns>
-        [Obsolete("Please use FakeEnvironment.ApplicationRoot instead.")]
-        public DirectoryPath GetApplicationRoot()
-        {
-            return ApplicationRoot;
-        }
-
-        /// <summary>
-        /// Gets the target .Net framework version that the current AppDomain is targeting.
-        /// </summary>
-        /// <returns>The target framework.</returns>
-        [Obsolete("Please use FakeEnvironment.Runtime.TargetFramework instead.")]
-        public FrameworkName GetBuiltFramework()
-        {
-            return Runtime.BuiltFramework;
-        }
     }
 }

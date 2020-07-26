@@ -733,76 +733,6 @@ namespace Cake.Common.Tests.Unit.Build
             }
         }
 
-        public sealed class TheIsRunningOnTFSProperty
-        {
-            [Fact]
-            public void Should_Return_True_If_Running_On_TFS()
-            {
-                // Given
-                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
-                var teamCityProvider = Substitute.For<ITeamCityProvider>();
-                var myGetProvider = Substitute.For<IMyGetProvider>();
-                var bambooProvider = Substitute.For<IBambooProvider>();
-                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
-                var jenkinsProvider = Substitute.For<IJenkinsProvider>();
-                var bitriseProvider = Substitute.For<IBitriseProvider>();
-                var travisCIProvider = Substitute.For<ITravisCIProvider>();
-                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
-                var goCDProvider = Substitute.For<IGoCDProvider>();
-                var gitLabCIProvider = Substitute.For<IGitLabCIProvider>();
-                var tfBuildProvider = Substitute.For<ITFBuildProvider>();
-                var tfBuildEnvironment = new TFBuildInfoFixture().CreateEnvironmentInfo();
-                var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
-                var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
-
-#pragma warning disable 618
-                tfBuildProvider.IsRunningOnTFS.Returns(true);
-                tfBuildProvider.Environment.Returns(tfBuildEnvironment);
-
-                // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider, azurePipelinesProvider);
-
-                // Then
-                Assert.True(buildSystem.IsRunningOnTFS);
-#pragma warning restore 618
-            }
-        }
-
-        public sealed class TheIsRunningOnVSTSProperty
-        {
-            [Fact]
-            public void Should_Return_True_If_Running_On_VSTS()
-            {
-                // Given
-                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
-                var teamCityProvider = Substitute.For<ITeamCityProvider>();
-                var myGetProvider = Substitute.For<IMyGetProvider>();
-                var bambooProvider = Substitute.For<IBambooProvider>();
-                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
-                var jenkinsProvider = Substitute.For<IJenkinsProvider>();
-                var bitriseProvider = Substitute.For<IBitriseProvider>();
-                var travisCIProvider = Substitute.For<ITravisCIProvider>();
-                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
-                var goCDProvider = Substitute.For<IGoCDProvider>();
-                var gitLabCIProvider = Substitute.For<IGitLabCIProvider>();
-                var tfBuildProvider = Substitute.For<ITFBuildProvider>();
-                var tfBuildEnvironment = new TFBuildInfoFixture().CreateEnvironmentInfo();
-                var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
-                var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
-
-#pragma warning disable 618
-                tfBuildProvider.IsRunningOnVSTS.Returns(true);
-                tfBuildProvider.Environment.Returns(tfBuildEnvironment);
-
-                // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider, azurePipelinesProvider);
-
-                // Then
-                Assert.True(buildSystem.IsRunningOnVSTS);
-#pragma warning restore 618
-            }
-        }
-
         public sealed class TheIsRunningOnAzurePipelinesProperty
         {
             [Fact]
@@ -911,24 +841,22 @@ namespace Cake.Common.Tests.Unit.Build
         public sealed class TheProviderProperty
         {
             [Theory]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.Local)]
-            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.AppVeyor)]
-            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.TeamCity)]
-            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.MyGet)]
-            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.Bamboo)]
-            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.ContinuaCI)]
-            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, BuildProvider.Jenkins)]
-            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, BuildProvider.Bitrise)]
-            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, BuildProvider.TravisCI)]
-            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, BuildProvider.BitbucketPipelines)]
-            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, BuildProvider.GoCD)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, BuildProvider.GitLabCI)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, BuildProvider.AzurePipelines)] // tfs
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, BuildProvider.AzurePipelinesHosted)] // vsts
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, BuildProvider.AzurePipelines)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, true, false, BuildProvider.AzurePipelinesHosted)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, BuildProvider.GitHubActions)]
-            public void Should_Return_Provider_If_Running_On_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool tfs, bool vsts, bool azurePipelines, bool azurePipelinesHosted, bool gitHubActions, BuildProvider provider)
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.Local)]
+            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.AppVeyor)]
+            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.TeamCity)]
+            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.MyGet)]
+            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, BuildProvider.Bamboo)]
+            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, BuildProvider.ContinuaCI)]
+            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, BuildProvider.Jenkins)]
+            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, BuildProvider.Bitrise)]
+            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, BuildProvider.TravisCI)]
+            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, BuildProvider.BitbucketPipelines)]
+            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, BuildProvider.GoCD)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, BuildProvider.GitLabCI)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, BuildProvider.AzurePipelines)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, BuildProvider.AzurePipelinesHosted)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, BuildProvider.GitHubActions)]
+            public void Should_Return_Provider_If_Running_On_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool azurePipelines, bool azurePipelinesHosted, bool gitHubActions, BuildProvider provider)
             {
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
@@ -974,10 +902,6 @@ namespace Cake.Common.Tests.Unit.Build
                 goCDProvider.IsRunningOnGoCD.Returns(goCD);
                 gitLabCIProvider.IsRunningOnGitLabCI.Returns(gitLabCI);
                 gitLabCIProvider.Environment.Returns(gitLabCIEnvironment);
-#pragma warning disable 618
-                tfBuildProvider.IsRunningOnTFS.Returns(tfs);
-                tfBuildProvider.IsRunningOnVSTS.Returns(vsts);
-#pragma warning restore 618
                 tfBuildProvider.IsRunningOnAzurePipelines.Returns(azurePipelines);
                 tfBuildProvider.IsRunningOnAzurePipelinesHosted.Returns(azurePipelinesHosted);
                 tfBuildProvider.Environment.Returns(tfBuildEnvironment);
@@ -998,24 +922,22 @@ namespace Cake.Common.Tests.Unit.Build
         public sealed class TheIsLocalBuildProperty
         {
             [Theory]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)]
-            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, false)] // tfs
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false)] // vsts
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, true, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false)]
-            public void Should_Return_False_If_Running_On_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool tfs, bool vsts, bool azurePipelines, bool azurePipelinesHosted, bool gitHubActions, bool isLocalBuild)
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)]
+            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, false)]
+            public void Should_Return_Whether_Or_Not_Running_On_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool azurePipelines, bool azurePipelinesHosted, bool gitHubActions, bool isLocalBuild)
             {
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
@@ -1061,10 +983,6 @@ namespace Cake.Common.Tests.Unit.Build
                 goCDProvider.IsRunningOnGoCD.Returns(goCD);
                 gitLabCIProvider.IsRunningOnGitLabCI.Returns(gitLabCI);
                 gitLabCIProvider.Environment.Returns(gitLabCIEnvironment);
-#pragma warning disable 618
-                tfBuildProvider.IsRunningOnTFS.Returns(tfs);
-                tfBuildProvider.IsRunningOnVSTS.Returns(vsts);
-#pragma warning restore 618
                 tfBuildProvider.IsRunningOnAzurePipelines.Returns(azurePipelines);
                 tfBuildProvider.IsRunningOnAzurePipelinesHosted.Returns(azurePipelinesHosted);
                 tfBuildProvider.Environment.Returns(tfBuildEnvironment);
@@ -1086,24 +1004,22 @@ namespace Cake.Common.Tests.Unit.Build
         public sealed class TheIsPullRequestProperty
         {
             [Theory]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)] // none
-            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)] // appveyor
-            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)] // teamcity
-            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false)] // myget
-            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false)] // bamboo
-            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)] // continua
-            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, true)] // jenkins
-            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, true)] // bitrise
-            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true)] // travis
-            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true)] // bitbucket
-            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false)] // gocd
-            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, true)] // gitlab
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, true)] // tfs
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, true)] // vsts
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, true)] // az pipelines
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, true, false, true)] // az pipelines hosted
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true)] // gh actions
-            public void Should_Return_True_If_Running_On_Supported_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool tfs, bool vsts, bool azurePipelines, bool azurePipelinesHosted, bool gitHubActions, bool isPullRequest)
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)] // none
+            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, true)] // appveyor
+            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, true)] // teamcity
+            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)] // myget
+            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)] // bamboo
+            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false)] // continua
+            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, true)] // jenkins
+            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, true)] // bitrise
+            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, true)] // travis
+            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, true)] // bitbucket
+            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false)] // gocd
+            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, true)] // gitlab
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, true)] // az pipelines
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, true)] // az pipelines hosted
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, true)] // gh actions
+            public void Should_Return_True_If_Running_On_Supported_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool azurePipelines, bool azurePipelinesHosted, bool gitHubActions, bool isPullRequest)
             {
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
@@ -1149,10 +1065,6 @@ namespace Cake.Common.Tests.Unit.Build
                 goCDProvider.IsRunningOnGoCD.Returns(goCD);
                 gitLabCIProvider.IsRunningOnGitLabCI.Returns(gitLabCI);
                 gitLabCIProvider.Environment.Returns(gitLabCIEnvironment);
-#pragma warning disable 618
-                tfBuildProvider.IsRunningOnTFS.Returns(tfs);
-                tfBuildProvider.IsRunningOnVSTS.Returns(vsts);
-#pragma warning restore 618
                 tfBuildProvider.IsRunningOnAzurePipelines.Returns(azurePipelines);
                 tfBuildProvider.IsRunningOnAzurePipelinesHosted.Returns(azurePipelinesHosted);
                 tfBuildProvider.Environment.Returns(tfBuildEnvironment);

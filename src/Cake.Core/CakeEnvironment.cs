@@ -110,42 +110,6 @@ namespace Cake.Core
                     dictionary => dictionary);
         }
 
-        /// <summary>
-        /// Gets whether or not the current operative system is 64 bit.
-        /// </summary>
-        /// <returns>
-        /// Whether or not the current operative system is 64 bit.
-        /// </returns>
-        [Obsolete("Please use CakeEnvironment.Platform.Is64Bit instead.")]
-        public bool Is64BitOperativeSystem()
-        {
-            return Platform.Is64Bit;
-        }
-
-        /// <summary>
-        /// Determines whether the current machine is running Unix.
-        /// </summary>
-        /// <returns>
-        /// Whether or not the current machine is running Unix.
-        /// </returns>
-        [Obsolete("Please use CakeEnvironment.Platform.IsUnix instead.")]
-        public bool IsUnix()
-        {
-            return Platform.IsUnix();
-        }
-
-        /// <summary>
-        /// Gets the application root path.
-        /// </summary>
-        /// <returns>
-        /// The application root path.
-        /// </returns>
-        [Obsolete("Please use CakeEnvironment.ApplicationRoot instead.")]
-        public DirectoryPath GetApplicationRoot()
-        {
-            return ApplicationRoot;
-        }
-
         private static void SetWorkingDirectory(DirectoryPath path)
         {
             if (path.IsRelative)
