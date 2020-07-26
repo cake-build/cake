@@ -144,17 +144,20 @@ namespace Cake.Common.Tools.Cake
 
             if (settings.Verbosity.HasValue)
             {
-                builder.Append(string.Concat("-verbosity=", settings.Verbosity.Value.ToString()));
+                builder.Append(string.Concat("--verbosity=", settings.Verbosity.Value.ToString()));
             }
 
             if (settings.Arguments != null)
             {
                 foreach (var argument in settings.Arguments)
                 {
+                    var key = argument.Key.Length == 1
+                        ? $"-{argument.Key}" : $"--{argument.Key}";
+
                     builder.Append(string.Format(
                         CultureInfo.InvariantCulture,
-                        "-{0}={1}",
-                        argument.Key,
+                        "{0}={1}",
+                        key,
                         (argument.Value ?? string.Empty).Quote()));
                 }
             }

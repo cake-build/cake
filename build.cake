@@ -199,10 +199,6 @@ Task("Copy-Files")
     // Copy icon
     CopyFileToDirectory("./nuspec/cake-medium.png", parameters.Paths.Directories.ArtifactsBinFullFx);
     CopyFileToDirectory("./nuspec/cake-medium.png", parameters.Paths.Directories.ArtifactsBinNetCore);
-
-    // Copy Cake.XML (since publish does not do this anymore)
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp2.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
 Task("Validate-Version")
@@ -599,21 +595,34 @@ Task("Run-Integration-Tests")
         },
         (parameters, cakeAssembly, context) =>
 {
-    Information("Testing: {0}", cakeAssembly);
-    CakeExecuteScript("./tests/integration/build.cake",
-        new CakeSettings {
-            ToolPath = cakeAssembly,
-            EnvironmentVariables = {
-                ["MyEnvironmentVariable"] = "Hello World",
-                ["CAKE_INTEGRATION_TEST_ROOT"] = "../.."
-            },
-            Arguments = {
-                ["target"] = Argument("integration-tests-target", "Run-All-Tests"),
-                ["verbosity"] = "quiet",
-                ["platform"] = parameters.IsRunningOnWindows ? "windows" : "posix",
-                ["customarg"] = "hello"
-            }
-    });
+    try
+    {
+        Information("Testing: {0}", cakeAssembly);
+        CakeExecuteScript("./tests/integration/build.cake",
+            new CakeSettings {
+                ToolPath = cakeAssembly,
+                EnvironmentVariables = {
+                    ["MyEnvironmentVariable"] = "Hello World",
+                    ["CAKE_INTEGRATION_TEST_ROOT"] = "../.."
+                },
+                ArgumentCustomization = args => args
+                    .AppendSwitchQuoted("--target", " ", Argument("integration-tests-target", "Run-All-Tests"))
+                    .AppendSwitchQuoted("--verbosity", " ", "quiet")
+                    .AppendSwitchQuoted("--platform", " ", parameters.IsRunningOnWindows ? "windows" : "posix")
+                    .AppendSwitchQuoted("--customarg", " ", "hello")
+                    .AppendSwitchQuoted("--multipleargs", "=", "a")
+                    .AppendSwitchQuoted("--multipleargs", "=", "b")
+            });
+    }
+    catch(Exception ex)
+    {
+        Error("While testing: {0}\r\n{1}", cakeAssembly, ex);
+        throw;
+    }
+    finally
+    {
+        Information("Done testing: {0}", cakeAssembly);
+    }
 });
 
 

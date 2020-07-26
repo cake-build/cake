@@ -52,52 +52,15 @@ namespace Cake.Core.Scripting
             IScriptConventions conventions,
             IAssemblyLoader assemblyLoader)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            if (configuration == null)
-            {
-                throw new ArgumentNullException(nameof(configuration));
-            }
-            if (engine == null)
-            {
-                throw new ArgumentNullException(nameof(engine));
-            }
-            if (aliasFinder == null)
-            {
-                throw new ArgumentNullException(nameof(aliasFinder));
-            }
-            if (analyzer == null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-            if (processor == null)
-            {
-                throw new ArgumentNullException(nameof(processor));
-            }
-            if (conventions == null)
-            {
-                throw new ArgumentNullException(nameof(conventions));
-            }
-            if (assemblyLoader == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyLoader));
-            }
-
-            _environment = environment;
-            _log = log;
-            _configuration = configuration;
-            _engine = engine;
-            _aliasFinder = aliasFinder;
-            _analyzer = analyzer;
-            _processor = processor;
-            _conventions = conventions;
-            _assemblyLoader = assemblyLoader;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _engine = engine ?? throw new ArgumentNullException(nameof(engine));
+            _aliasFinder = aliasFinder ?? throw new ArgumentNullException(nameof(aliasFinder));
+            _analyzer = analyzer ?? throw new ArgumentNullException(nameof(analyzer));
+            _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+            _conventions = conventions ?? throw new ArgumentNullException(nameof(conventions));
+            _assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
         }
 
         /// <summary>
@@ -105,8 +68,7 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="host">The script host.</param>
         /// <param name="scriptPath">The script.</param>
-        /// <param name="arguments">The arguments.</param>
-        public void Run(IScriptHost host, FilePath scriptPath, IDictionary<string, string> arguments)
+        public void Run(IScriptHost host, FilePath scriptPath)
         {
             if (host == null)
             {
@@ -115,10 +77,6 @@ namespace Cake.Core.Scripting
             if (scriptPath == null)
             {
                 throw new ArgumentNullException(nameof(scriptPath));
-            }
-            if (arguments == null)
-            {
-                throw new ArgumentNullException(nameof(arguments));
             }
 
             // Make the script path absolute.

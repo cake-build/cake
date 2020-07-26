@@ -1,115 +1,97 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
-using Cake.Arguments;
-using Cake.Common.Modules;
-using Cake.Composition;
+using Cake.Commands;
 using Cake.Core;
-using Cake.Core.Composition;
-using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
-using Cake.Core.Modules;
-using Cake.Core.Text;
-using Cake.Modules;
-using Cake.NuGet;
+using Cake.Core.IO;
+using Cake.Features.Bootstrapping;
+using Cake.Features.Building;
+using Cake.Features.Introspection;
+using Cake.Infrastructure;
+using Cake.Infrastructure.Composition;
+using Cake.Infrastructure.Converters;
+using Spectre.Cli;
 
 namespace Cake
 {
-    /// <summary>
-    /// The Cake program.
-    /// </summary>
-    public static class Program
+    public sealed class Program
     {
-        /// <summary>
-        /// The application entry point.
-        /// </summary>
-        /// <returns>The application exit code.</returns>
-        public static int Main()
+        private readonly Action<ContainerBuilder> _overrides;
+        private readonly bool _propagateExceptions;
+
+        public Program(
+            Action<ContainerBuilder> overrides = null,
+            bool propagateExceptions = false)
         {
-            ICakeLog log = null;
-
-            try
-            {
-                // Parse arguments.
-                var args = QuoteAwareStringSplitter
-                    .Split(Environment.CommandLine)
-                    .Skip(1) // Skip executable.
-                    .ToArray();
-
-                var builder = new ContainerRegistrar();
-                builder.RegisterModule(new CakeModule());
-                builder.RegisterModule(new CoreModule());
-                builder.RegisterModule(new CommonModule());
-
-                // Build the container.
-                using (var container = builder.Build())
-                {
-                    // Resolve the log.
-                    log = container.Resolve<ICakeLog>();
-
-                    // Parse the options.
-                    var parser = container.Resolve<IArgumentParser>();
-                    var options = parser.Parse(args);
-
-                    // Set verbosity.
-                    log.Verbosity = options.Verbosity;
-
-                    // Rebuild the container.
-                    builder = new ContainerRegistrar();
-                    var provider = container.Resolve<CakeConfigurationProvider>();
-                    builder.RegisterModule(new ConfigurationModule(provider, options));
-                    builder.RegisterModule(new ArgumentsModule(options));
-                    builder.RegisterModule(new ScriptingModule(options, log));
-                    builder.Update(container);
-
-                    // Register the NuGetModule
-                    builder = new ContainerRegistrar();
-                    var configuration = container.Resolve<ICakeConfiguration>();
-                    builder.RegisterModule(new NuGetModule(configuration));
-                    builder.Update(container);
-
-                    // Load all modules.
-                    var loader = container.Resolve<ModuleLoader>();
-                    loader.LoadModules(container, options);
-
-                    // Resolve and run the application.
-                    var application = container.Resolve<CakeApplication>();
-                    return application.Run(options);
-                }
-            }
-            catch (Exception ex)
-            {
-                return LogException(log, ex);
-            }
+            _overrides = overrides;
+            _propagateExceptions = propagateExceptions;
         }
 
-        private static int LogException<T>(ICakeLog log, T ex) where T : Exception
+        public static async Task<int> Main(string[] args)
         {
-            log = log ?? new CakeBuildLog(
-                new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime())));
+            return await new Program().Run(args);
+        }
 
-            if (log.Verbosity == Verbosity.Diagnostic)
+        public async Task<int> Run(string[] args)
+        {
+            var registrar = BuildTypeRegistrar();
+
+            var app = new CommandApp<DefaultCommand>(registrar);
+            app.Configure(config =>
             {
-                log.Error("Error: {0}", ex);
-            }
-            else
-            {
-                log.Error("Error: {0}", ex.Message);
-                var aex = ex as AggregateException;
-                if (aex != null)
+                config.ValidateExamples();
+
+                if (_propagateExceptions)
                 {
-                    foreach (var exception in aex.Flatten().InnerExceptions)
-                    {
-                        log.Error("\t{0}", exception.Message);
-                    }
+                    config.PropagateExceptions();
                 }
-            }
-            return 1;
+
+                // Top level examples.
+                config.AddExample(new[] { string.Empty });
+                config.AddExample(new[] { "build.cake", "--verbosity", "quiet" });
+                config.AddExample(new[] { "build.cake", "--showtree" });
+            });
+
+            return await app.RunAsync(args);
+        }
+
+        // Register everything that the CLI needs to function.
+        private ITypeRegistrar BuildTypeRegistrar()
+        {
+            var builder = new ContainerBuilder();
+
+            // Converters
+            builder.RegisterType<FilePathConverter>();
+            builder.RegisterType<VerbosityConverter>();
+
+            // Utilities
+            builder.RegisterType<ContainerConfigurator>().As<IContainerConfigurator>().SingleInstance();
+            builder.RegisterType<VersionResolver>().As<IVersionResolver>().SingleInstance();
+            builder.RegisterType<ModuleSearcher>().As<IModuleSearcher>().SingleInstance();
+
+            // Features
+            builder.RegisterType<BuildFeature>().As<IBuildFeature>().SingleInstance();
+            builder.RegisterType<BootstrapFeature>().As<IBootstrapFeature>().SingleInstance();
+            builder.RegisterType<VersionFeature>().As<IVersionFeature>().SingleInstance();
+            builder.RegisterType<InfoFeature>().As<IInfoFeature>().SingleInstance();
+
+            // Core
+            builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
+            builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();
+            builder.RegisterType<CakePlatform>().As<ICakePlatform>().SingleInstance();
+            builder.RegisterType<CakeRuntime>().As<ICakeRuntime>().SingleInstance();
+            builder.RegisterType<CakeBuildLog>().As<ICakeLog>().SingleInstance();
+            builder.RegisterType<CakeConsole>().As<IConsole>().SingleInstance();
+
+            // Register custom registrations.
+            _overrides?.Invoke(builder);
+
+            return new AutofacTypeRegistrar(builder);
         }
     }
 }

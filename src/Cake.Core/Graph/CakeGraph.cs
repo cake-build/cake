@@ -8,21 +8,37 @@ using System.Linq;
 
 namespace Cake.Core.Graph
 {
+    /// <summary>
+    /// Represents the Cake task graph.
+    /// </summary>
     internal sealed class CakeGraph
     {
         private readonly List<string> _nodes;
         private readonly List<CakeGraphEdge> _edges;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeGraph"/> class.
+        /// </summary>
         public CakeGraph()
         {
             _nodes = new List<string>();
             _edges = new List<CakeGraphEdge>();
         }
 
+        /// <summary>
+        /// Gets the nodes in the graph.
+        /// </summary>
         public IReadOnlyList<string> Nodes => _nodes;
 
+        /// <summary>
+        /// Gets the edges in the graph.
+        /// </summary>
         public IReadOnlyList<CakeGraphEdge> Edges => _edges;
 
+        /// <summary>
+        /// Adds a node to the graph.
+        /// </summary>
+        /// <param name="node">The node to add.</param>
         public void Add(string node)
         {
             if (node == null)
@@ -36,6 +52,12 @@ namespace Cake.Core.Graph
             _nodes.Add(node);
         }
 
+        /// <summary>
+        /// Connects two nodes in the graph together.
+        /// If any of the nodes are missing, they will be added.
+        /// </summary>
+        /// <param name="start">The start node.</param>
+        /// <param name="end">The end node.</param>
         public void Connect(string start, string end)
         {
             if (start.Equals(end, StringComparison.OrdinalIgnoreCase))
@@ -63,11 +85,21 @@ namespace Cake.Core.Graph
             _edges.Add(new CakeGraphEdge(start, end));
         }
 
+        /// <summary>
+        /// Gets whether or not a node exists in the graph.
+        /// </summary>
+        /// <param name="name">The name of the node.</param>
+        /// <returns>Whether or not the node exists in the graph.</returns>
         public bool Exist(string name)
         {
             return _nodes.Any(x => x.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
+        /// <summary>
+        /// Traverses the graph leading to the specified target.
+        /// </summary>
+        /// <param name="target">The target to traverse to.</param>
+        /// <returns>A list of nodes.</returns>
         public IEnumerable<string> Traverse(string target)
         {
             if (!Exist(target))
