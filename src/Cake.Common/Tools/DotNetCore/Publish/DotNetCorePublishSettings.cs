@@ -130,6 +130,14 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         public bool? PublishReadyToRun { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to show warnings emitted by ReadyToRun (R2R) compilation.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 3.x or newer. Tiered compilation is enabled by default in .NET Core 3.
+        /// </remarks>
+        public bool? PublishReadyToRunShowWarnings { get; set; }
+
+        /// <summary>
         /// Gets or sets the specified NuGet package sources to use during the restore.
         /// </summary>
         /// <remarks>
