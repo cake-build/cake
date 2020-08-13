@@ -26,5 +26,33 @@ namespace Cake.Core
             }
             return EnvironmentHelper.IsUnix(platform.Family);
         }
+
+        /// <summary>
+        /// Determines whether the specified platform is a macOS platform.
+        /// </summary>
+        /// <param name="platform">The platform.</param>
+        /// <returns><c>true</c> if the platform is a macOS platform; otherwise <c>false</c>.</returns>
+        public static bool IsOSX(this ICakePlatform platform)
+        {
+            if (platform == null)
+            {
+                throw new ArgumentNullException(nameof(platform));
+            }
+            return EnvironmentHelper.IsOSX(platform.Family);
+        }
+
+        /// <summary>
+        /// Determines whether the specified platform is a Linux platform.
+        /// </summary>
+        /// <param name="platform">The platform.</param>
+        /// <returns><c>true</c> if the platform is a Linux platform; otherwise <c>false</c>.</returns>
+        public static bool IsLinux(this ICakePlatform platform)
+        {
+            if (platform == null)
+            {
+                throw new ArgumentNullException(nameof(platform));
+            }
+            return EnvironmentHelper.IsLinux(platform.Family);
+        }
     }
 }
