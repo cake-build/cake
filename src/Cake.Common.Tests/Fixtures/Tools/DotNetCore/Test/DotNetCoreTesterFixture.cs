@@ -10,10 +10,12 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Test
     {
         public string Project { get; set; }
 
+        public string Arguments { get; set; }
+
         protected override void RunTool()
         {
             var tool = new DotNetCoreTester(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Test(Project, Settings);
+            tool.Test(Project, Arguments, Settings);
         }
     }
 }

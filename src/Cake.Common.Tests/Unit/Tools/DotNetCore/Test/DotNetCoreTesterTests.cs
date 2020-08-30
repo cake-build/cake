@@ -103,6 +103,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
             }
 
             [Fact]
+            public void Should_Add_RunSettings_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCoreTesterFixture();
+                fixture.Arguments = "MSTest.MapInconclusiveToFailed=true";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("test -- MSTest.MapInconclusiveToFailed=true", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Additional_Settings()
             {
                 // Given
