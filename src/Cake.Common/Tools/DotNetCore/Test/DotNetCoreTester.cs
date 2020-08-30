@@ -109,7 +109,14 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.Append(settings.Configuration);
             }
 
-            // Output directory
+            // Collector
+            if (!string.IsNullOrEmpty(settings.Collector))
+            {
+                builder.Append("--collect");
+                builder.AppendQuoted(settings.Collector);
+            }
+
+            // Diagnostic file
             if (settings.DiagnosticFile != null)
             {
                 builder.Append("--diag");
