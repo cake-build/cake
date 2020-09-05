@@ -37,6 +37,14 @@ namespace Cake.Common.Build.GitHubActions.Data
         public string Actor => GetEnvironmentString("GITHUB_ACTOR");
 
         /// <summary>
+        /// Gets the API URL.
+        /// </summary>
+        /// <value>
+        /// The API URL. For example: https://api.github.com.
+        /// </value>
+        public string ApiUrl => GetEnvironmentString("GITHUB_API_URL");
+
+        /// <summary>
         /// Gets the branch of the base repository.
         /// </summary>
         /// <value>
@@ -59,6 +67,14 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// The path of the file with the complete webhook event payload.
         /// </value>
         public string EventPath => GetEnvironmentString("GITHUB_EVENT_PATH");
+
+        /// <summary>
+        /// Gets the GraphQL API URL.
+        /// </summary>
+        /// <value>
+        /// The GraphQL API URL. For example: https://api.github.com/graphql.
+        /// </value>
+        public string GraphQLUrl => GetEnvironmentString("GITHUB_GRAPHQL_URL");
 
         /// <summary>
         /// Gets the branch of the head repository.
@@ -115,6 +131,14 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// The unique number for each run of a particular workflow in the repository.
         /// </value>
         public int RunNumber => GetEnvironmentInteger("GITHUB_RUN_NUMBER");
+
+        /// <summary>
+        /// Gets the URL of the GitHub server.
+        /// </summary>
+        /// <value>
+        /// The URL of the GitHub server. For example: https://github.com.
+        /// </value>
+        public string ServerUrl => GetEnvironmentString("GITHUB_SERVER_URL");
 
         /// <summary>
         /// Gets the commit SHA that triggered the workflow.
