@@ -204,6 +204,19 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 }
             }
 
+            // Publish ReadyToRunShowWarnings
+            if (settings.PublishReadyToRunShowWarnings.HasValue)
+            {
+                if (settings.PublishReadyToRunShowWarnings.Value)
+                {
+                    builder.Append("-p:PublishReadyToRunShowWarnings=true");
+                }
+                else
+                {
+                    builder.Append("-p:PublishReadyToRunShowWarnings=false");
+                }
+            }
+
             // Sources
             if (settings.Sources != null)
             {

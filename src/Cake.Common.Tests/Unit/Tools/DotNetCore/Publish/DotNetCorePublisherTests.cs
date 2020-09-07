@@ -233,6 +233,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 // Then
                 Assert.Equal("publish -p:PublishReadyToRun=true", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_PublishReadyToRunShowWarnings()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.PublishReadyToRunShowWarnings = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:PublishReadyToRunShowWarnings=true", result.Args);
+            }
         }
     }
 }
