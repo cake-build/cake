@@ -186,6 +186,58 @@ namespace Cake.Common
             return context.Environment.Platform.IsUnix();
         }
 
+        /// <summary>
+        /// Determines whether the build script running on a macOS based system.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (IsRunningOnMacOs())
+        /// {
+        ///     Information("macOS!");
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>
+        ///   <c>true</c> if the build script running on a macOS based system; otherwise <c>false</c>.
+        /// </returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Platform")]
+        public static bool IsRunningOnMacOs(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            return context.Environment.Platform.IsOSX();
+        }
+
+        /// <summary>
+        /// Determines whether the build script running on a Linux based system.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (IsRunningOnLinux())
+        /// {
+        ///     Information("Linux!");
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>
+        ///   <c>true</c> if the build script running on a Linux based system; otherwise <c>false</c>.
+        /// </returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Platform")]
+        public static bool IsRunningOnLinux(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            return context.Environment.Platform.IsLinux();
+        }
+
         private static T Convert<T>(string value)
         {
             var converter = TypeDescriptor.GetConverter(typeof(T));

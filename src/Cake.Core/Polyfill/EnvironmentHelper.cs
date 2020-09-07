@@ -111,6 +111,16 @@ namespace Cake.Core.Polyfill
                    || family == PlatformFamily.OSX;
         }
 
+        public static bool IsOSX(PlatformFamily family)
+        {
+            return family == PlatformFamily.OSX;
+        }
+
+        public static bool IsLinux(PlatformFamily family)
+        {
+            return family == PlatformFamily.Linux;
+        }
+
         public static Runtime GetRuntime()
         {
             if (IsCoreClr())
