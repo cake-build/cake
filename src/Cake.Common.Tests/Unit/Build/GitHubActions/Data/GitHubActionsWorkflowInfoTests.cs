@@ -41,6 +41,22 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
             }
         }
 
+        public sealed class TheApiUrlProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.ApiUrl;
+
+                // Then
+                Assert.Equal("https://api.github.com", result);
+            }
+        }
+
         public sealed class TheBaseRefProperty
         {
             [Fact]
@@ -86,6 +102,22 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
 
                 // Then
                 Assert.Equal("/home/runner/work/_temp/_github_workflow/event.json", result);
+            }
+        }
+
+        public sealed class TheGraphQLUrlProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.GraphQLUrl;
+
+                // Then
+                Assert.Equal("https://api.github.com/graphql", result);
             }
         }
 
@@ -198,6 +230,22 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
 
                 // Then
                 Assert.Equal(60, result);
+            }
+        }
+
+        public sealed class TheServerUrlProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.ServerUrl;
+
+                // Then
+                Assert.Equal("https://github.com", result);
             }
         }
 
