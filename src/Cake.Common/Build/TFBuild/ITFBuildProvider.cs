@@ -13,24 +13,6 @@ namespace Cake.Common.Build.TFBuild
     public interface ITFBuildProvider
     {
         /// <summary>
-        /// Gets a value indicating whether the current build is running on TFS.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on TFS; otherwise, <c>false</c>.
-        /// </value>
-        [Obsolete("Please use ITFBuildProvider.IsRunningOnAzurePipelines instead.")]
-        bool IsRunningOnTFS { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on VSTS.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on VSTS; otherwise, <c>false</c>.
-        /// </value>
-        [Obsolete("Please use ITFBuildProvider.IsRunningOnAzurePipelinesHosted instead.")]
-        bool IsRunningOnVSTS { get; }
-
-        /// <summary>
         /// Gets a value indicating whether the current build is running on Azure Pipelines.
         /// </summary>
         /// <value>

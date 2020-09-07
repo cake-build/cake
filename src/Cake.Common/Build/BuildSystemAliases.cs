@@ -339,32 +339,6 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="TFBuildProvider"/> instance that can be used to
-        /// obtain information from the Team Foundation Build environment.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var isTFSBuild = TFBuild.IsRunningOnTFS;
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Build.TFBuild"/> instance.</returns>
-        [CakePropertyAlias(Cache = true)]
-        [CakeNamespaceImport("Cake.Common.Build.TFBuild")]
-        [CakeNamespaceImport("Cake.Common.Build.TFBuild.Data")]
-        [Obsolete("Use AzurePipelines instead.")]
-        public static ITFBuildProvider TFBuild(this ICakeContext context)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var buildSystem = context.BuildSystem();
-            return buildSystem.TFBuild;
-        }
-
-        /// <summary>
         /// Gets a <see cref="GitHubActionsProvider"/> instance that can be used to
         /// obtain information from the GitHub Actions environment.
         /// </summary>

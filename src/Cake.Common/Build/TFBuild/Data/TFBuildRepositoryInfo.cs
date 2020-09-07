@@ -38,15 +38,6 @@ namespace Cake.Common.Build.TFBuild.Data
         public string SourceBranchName => GetEnvironmentString("BUILD_SOURCEBRANCHNAME");
 
         /// <summary>
-        /// Gets name of the branch the build was queued for.
-        /// </summary>
-        /// <value>
-        /// The SCM branch name.
-        /// </value>
-        [Obsolete("Please use TFBuildRepositoryInfo.SourceBranchName instead")]
-        public string Branch => SourceBranchName;
-
-        /// <summary>
         /// Gets the latest version control change that is included in this build.
         /// </summary>
         /// <remarks>Note: for Git this is the commit ID. For TFVC this is the changeset.</remarks>

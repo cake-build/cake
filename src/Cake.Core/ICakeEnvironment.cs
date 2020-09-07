@@ -57,26 +57,5 @@ namespace Cake.Core
         /// </summary>
         /// <value>The runtime Cake is running in.</value>
         ICakeRuntime Runtime { get; }
-
-        /// <summary>
-        /// Gets whether or not the current operative system is 64 bit.
-        /// </summary>
-        /// <returns>Whether or not the current operative system is 64 bit.</returns>
-        [Obsolete("Please use ICakeEnvironment.Platform.Is64Bit instead.")]
-        bool Is64BitOperativeSystem();
-
-        /// <summary>
-        /// Determines whether the current machine is running Unix.
-        /// </summary>
-        /// <returns>Whether or not the current machine is running Unix.</returns>
-        [Obsolete("Please use ICakeEnvironment.Platform.IsUnix instead.")]
-        bool IsUnix();
-
-        /// <summary>
-        /// Gets the application root path.
-        /// </summary>
-        /// <returns>The application root path.</returns>
-        [Obsolete("Please use ICakeEnvironment.ApplicationRoot instead.")]
-        DirectoryPath GetApplicationRoot();
     }
 }

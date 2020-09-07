@@ -18,7 +18,7 @@ namespace Cake.Core.Scripting.CodeGen
     /// </summary>
     public static class MethodAliasGenerator
     {
-        private static readonly System.Security.Cryptography.SHA256 SHA256 = System.Security.Cryptography.SHA256.Create();
+        private static readonly System.Security.Cryptography.SHA256 _hasher = System.Security.Cryptography.SHA256.Create();
 
         /// <summary>
         /// Generates a script method alias from the specified method.
@@ -71,7 +71,7 @@ namespace Cake.Core.Scripting.CodeGen
                 GenericParameterConstraintEmitter.BuildGenericConstraints(method, builder);
             }
 
-            hash = SHA256
+            hash = _hasher
                 .ComputeHash(Encoding.UTF8.GetBytes(builder.ToString()))
                 .Aggregate(new StringBuilder(),
                 (sb, b) => sb.AppendFormat("{0:x2}", b),

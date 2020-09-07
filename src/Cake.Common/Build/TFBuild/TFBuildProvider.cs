@@ -28,24 +28,6 @@ namespace Cake.Common.Build.TFBuild
         }
 
         /// <summary>
-        /// Gets a value indicating whether the current build is running on TFS.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on TFS; otherwise, <c>false</c>.
-        /// </value>
-        [Obsolete("Please use TFBuildProvider.IsRunningOnAzurePipelines instead.")]
-        public bool IsRunningOnTFS => IsRunningOnAzurePipelines;
-
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on VSTS.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on VSTS; otherwise, <c>false</c>.
-        /// </value>
-        [Obsolete("Please use TFBuildProvider.IsRunningOnAzurePipelinesHosted instead.")]
-        public bool IsRunningOnVSTS => IsRunningOnAzurePipelinesHosted;
-
-        /// <summary>
         /// Gets a value indicating whether the current build is running on Azure Pipelines.
         /// </summary>
         /// <value>

@@ -27,15 +27,6 @@ namespace Cake.Common.Tools.NuGet
         MSBuild14 = 14,
 
         /// <summary>
-        /// MSBuildVersion : <c>15</c>
-        /// </summary>
-        /// <remarks>
-        /// MSBuildVersion 15 isn't an valid option and will be removed in the futute.
-        /// </remarks>
-        [Obsolete("MSBuildVersion 15 isn't an valid option and will be removed in the future.")]
-        MSBuild15 = 15,
-
-        /// <summary>
         /// MSBuildVersion : <c>15.1</c>
         /// </summary>
         MSBuild15_1 = 1501,
