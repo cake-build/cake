@@ -45,6 +45,11 @@ namespace Cake.Common.Tools.DotNetCore.Test
         public string Configuration { get; set; }
 
         /// <summary>
+        /// Gets or sets the data collector for the test run.
+        /// </summary>
+        public string Collector { get; set; }
+
+        /// <summary>
         /// Gets or sets specific framework to compile.
         /// </summary>
         public string Framework { get; set; }

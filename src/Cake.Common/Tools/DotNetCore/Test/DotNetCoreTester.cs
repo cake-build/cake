@@ -36,18 +36,19 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Tests the project using the specified path with arguments and settings.
         /// </summary>
         /// <param name="project">The target project path.</param>
+        /// <param name="arguments">The arguments.</param>
         /// <param name="settings">The settings.</param>
-        public void Test(string project, DotNetCoreTestSettings settings)
+        public void Test(string project, ProcessArgumentBuilder arguments, DotNetCoreTestSettings settings)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            RunCommand(settings, GetArguments(project, settings));
+            RunCommand(settings, GetArguments(project, arguments, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, DotNetCoreTestSettings settings)
+        private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetCoreTestSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -108,7 +109,14 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.Append(settings.Configuration);
             }
 
-            // Output directory
+            // Collector
+            if (!string.IsNullOrEmpty(settings.Collector))
+            {
+                builder.Append("--collect");
+                builder.AppendQuoted(settings.Collector);
+            }
+
+            // Diagnostic file
             if (settings.DiagnosticFile != null)
             {
                 builder.Append("--diag");
@@ -148,6 +156,12 @@ namespace Cake.Common.Tools.DotNetCore.Test
             {
                 builder.Append("--runtime");
                 builder.Append(settings.Runtime);
+            }
+
+            if (!arguments.IsNullOrEmpty())
+            {
+                builder.Append("--");
+                arguments.CopyTo(builder);
             }
 
             return builder;
