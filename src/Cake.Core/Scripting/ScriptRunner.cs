@@ -87,7 +87,7 @@ namespace Cake.Core.Scripting
 
             // Analyze the script file.
             _log.Verbose("Analyzing build script...");
-            var result = _analyzer.Analyze(scriptPath.GetFilename());
+            var result = _analyzer.Analyze(scriptPath.GetFilename(), new ScriptAnalyzerSettings());
 
             // Log all errors and throw
             if (!result.Succeeded)

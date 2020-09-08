@@ -14,16 +14,30 @@ namespace Cake.Features.Introspection
 
     public sealed class VersionResolver : IVersionResolver
     {
-        public string GetProductVersion()
-        {
-            var assembly = typeof(Program).Assembly;
-            return FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
-        }
-
         public string GetVersion()
         {
             var assembly = typeof(Program).Assembly;
-            return FileVersionInfo.GetVersionInfo(assembly.Location).Comments;
+            var version = FileVersionInfo.GetVersionInfo(assembly.Location).Comments;
+
+            if (string.IsNullOrWhiteSpace(version))
+            {
+                version = "Unknown";
+            }
+
+            return version;
+        }
+
+        public string GetProductVersion()
+        {
+            var assembly = typeof(Program).Assembly;
+            var version = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
+
+            if (string.IsNullOrWhiteSpace(version))
+            {
+                version = "Unknown";
+            }
+
+            return version;
         }
     }
 }

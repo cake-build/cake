@@ -41,21 +41,23 @@ namespace Cake.Commands
             {
                 return _version.Run();
             }
-            if (settings.ShowInfo)
+            else if (settings.ShowInfo)
             {
                 return _info.Run();
-            }
-            if (settings.Bootstrap)
-            {
-                return _bootstrapper.Run(context.Remaining, new BootstrapFeatureSettings
-                {
-                    Script = settings.Script,
-                    Verbosity = settings.Verbosity
-                });
             }
 
             // Get the build host type.
             var host = GetBuildHostKind(settings);
+
+            // Run the bootstrapper?
+            if (!settings.SkipBootstrap || settings.Bootstrap)
+            {
+                int bootstrapperResult = PerformBootstrapping(context, settings, host);
+                if (bootstrapperResult != 0 || settings.Bootstrap)
+                {
+                    return bootstrapperResult;
+                }
+            }
 
             // Run the build feature.
             return _builder.Run(context.Remaining, new BuildFeatureSettings(host)
@@ -63,7 +65,8 @@ namespace Cake.Commands
                 Script = settings.Script,
                 Verbosity = settings.Verbosity,
                 Exclusive = settings.Exclusive,
-                Debug = settings.Debug
+                Debug = settings.Debug,
+                NoBootstrapping = settings.SkipBootstrap,
             });
         }
 
@@ -73,15 +76,30 @@ namespace Cake.Commands
             {
                 return BuildHostKind.DryRun;
             }
-            if (settings.ShowDescription)
+            else if (settings.ShowDescription)
             {
                 return BuildHostKind.Description;
             }
-            if (settings.ShowTree)
+            else if (settings.ShowTree)
             {
                 return BuildHostKind.Tree;
             }
+
             return BuildHostKind.Build;
+        }
+
+        private int PerformBootstrapping(CommandContext context, DefaultCommandSettings settings, BuildHostKind host)
+        {
+            if (host != BuildHostKind.Build && host != BuildHostKind.DryRun)
+            {
+                return 0;
+            }
+
+            return _bootstrapper.Run(context.Remaining, new BootstrapFeatureSettings
+            {
+                Script = settings.Script,
+                Verbosity = settings.Verbosity
+            });
         }
     }
 }
