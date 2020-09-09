@@ -19,10 +19,10 @@ jobs:
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Install .NET Core SDK 3.1.301
+      - name: Install .NET Core SDK 3.1.402
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.301'
+          dotnet-version: '3.1.402'
 
       - name: Run Cake script
         uses: ecampidoglio/cake-action@v1.1.1
