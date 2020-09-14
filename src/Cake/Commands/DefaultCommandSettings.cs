@@ -13,7 +13,7 @@ namespace Cake.Commands
     public sealed class DefaultCommandSettings : CommandSettings
     {
         [CommandArgument(0, "[SCRIPT]")]
-        [Description("The Cake script")]
+        [Description("The Cake script. Defaults to [grey]build.cake[/]")]
         [TypeConverter(typeof(FilePathConverter))]
         [DefaultValue("build.cake")]
         public FilePath Script { get; set; }
@@ -28,17 +28,21 @@ namespace Cake.Commands
         [Description("Launches script in debug mode.")]
         public bool Debug { get; set; }
 
+        [CommandOption("-e|--exclusive")]
+        [Description("Execute a single task without any dependencies.")]
+        public bool Exclusive { get; set; }
+
         [CommandOption("--dryrun|--noop|--whatif")]
         [Description("Performs a dry run.")]
         public bool DryRun { get; set; }
 
-        [CommandOption("--exclusive")]
-        [Description("Execute a single task without any dependencies.")]
-        public bool Exclusive { get; set; }
-
         [CommandOption("--bootstrap")]
-        [Description("Download/install modules defined by #module directives")]
+        [Description("Download/install modules defined by [grey]#module[/] directives, but do not run build.")]
         public bool Bootstrap { get; set; }
+
+        [CommandOption("--skip-bootstrap")]
+        [Description("Skips bootstrapping when running build.")]
+        public bool SkipBootstrap { get; set; }
 
         [CommandOption("--showdescription|--description")]
         [Description("Shows description about tasks.")]

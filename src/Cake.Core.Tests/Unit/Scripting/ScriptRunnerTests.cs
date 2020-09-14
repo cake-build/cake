@@ -250,7 +250,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Given
                 var fixture = new ScriptRunnerFixture(path);
                 fixture.ScriptAnalyzer = Substitute.For<IScriptAnalyzer>();
-                fixture.ScriptAnalyzer.Analyze(Arg.Any<FilePath>())
+                fixture.ScriptAnalyzer.Analyze(Arg.Any<FilePath>(), Arg.Any<ScriptAnalyzerSettings>())
                     .Returns(new ScriptAnalyzerResult(new ScriptInformation(path), new List<string>()));
                 var runner = fixture.CreateScriptRunner();
 
@@ -259,7 +259,8 @@ namespace Cake.Core.Tests.Unit.Scripting
 
                 // Then
                 fixture.ScriptAnalyzer.Received(1).Analyze(
-                    Arg.Is<FilePath>(f => f.FullPath == "build.cake"));
+                    Arg.Is<FilePath>(f => f.FullPath == "build.cake"),
+                    Arg.Any<ScriptAnalyzerSettings>());
             }
 
             [Fact]
@@ -350,7 +351,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 // Given
                 var fixture = new ScriptRunnerFixture();
                 fixture.ScriptAnalyzer = Substitute.For<IScriptAnalyzer>();
-                fixture.ScriptAnalyzer.Analyze(Arg.Any<FilePath>())
+                fixture.ScriptAnalyzer.Analyze(Arg.Any<FilePath>(), Arg.Any<ScriptAnalyzerSettings>())
                     .Returns(new ScriptAnalyzerResult(new ScriptInformation(fixture.Script), new List<string>(), new List<ScriptAnalyzerError>
                     {
                         new ScriptAnalyzerError("/Working/script1.cake", 2, "Error in script 1"),

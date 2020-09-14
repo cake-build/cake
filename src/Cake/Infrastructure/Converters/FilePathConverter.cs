@@ -17,6 +17,7 @@ namespace Cake.Infrastructure.Converters
             {
                 return new FilePath(stringValue);
             }
+
             throw new NotSupportedException("Can't convert value to file path.");
         }
     }

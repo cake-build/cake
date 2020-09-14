@@ -11,6 +11,7 @@ using Cake.Core.Composition;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
+using Cake.Features.Bootstrapping;
 using Cake.Features.Building.Hosts;
 using Cake.Infrastructure;
 using Cake.Infrastructure.Composition;

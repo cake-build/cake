@@ -15,6 +15,7 @@ namespace Cake.Features.Building
         public Verbosity Verbosity { get; set; }
         public bool Debug { get; set; }
         public bool Exclusive { get; set; }
+        public bool NoBootstrapping { get; set; }
 
         public BuildFeatureSettings(BuildHostKind buildHostKind)
         {

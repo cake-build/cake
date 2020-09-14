@@ -30,8 +30,9 @@ namespace Cake.Tests.Unit
                     settings.BuildHostKind == BuildHostKind.Build &&
                     settings.Debug == false &&
                     settings.Exclusive == false &&
-                    settings.Script == null &&
-                    settings.Verbosity == Verbosity.Normal));
+                    settings.Script.FullPath == "build.cake" &&
+                    settings.Verbosity == Verbosity.Normal &&
+                    settings.NoBootstrapping == false));
         }
 
         [Theory]
