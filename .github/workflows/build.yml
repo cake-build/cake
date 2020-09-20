@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+      - hotfix/*
 jobs:
   build:
     name: Build
