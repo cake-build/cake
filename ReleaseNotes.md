@@ -1,3 +1,7 @@
+### New in 0.38.5 (Released 2020/09/20)
+
+* 2859 .NET 5 shouldn't be identified as Full Framework or Mono.
+
 ### New in 0.38.4 (Released 2020/06/26)
 
 * 2813 Actually ship  0.38.3

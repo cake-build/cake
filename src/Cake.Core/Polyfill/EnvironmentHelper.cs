@@ -92,7 +92,8 @@ namespace Cake.Core.Polyfill
 #if NETCORE
             if (_isCoreClr == null)
             {
-                _isCoreClr = RuntimeInformation.FrameworkDescription.StartsWith(".NET Core");
+                _isCoreClr = RuntimeInformation.FrameworkDescription.StartsWith(".NET Core")
+                                || RuntimeInformation.FrameworkDescription.StartsWith(".NET 5");
             }
             return _isCoreClr.Value;
 #else
