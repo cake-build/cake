@@ -32,3 +32,10 @@ jobs:
         with:
           target: Run-Integration-Tests
           cake-bootstrap: true
+
+      - name: "Test .NET 5"
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          echo 'Information("IsCoreClr: {0}", Context.Environment.Runtime.IsCoreClr);' > $(pwd)/src/Cake/bin/Release/netcoreapp3.0/build.cake
+          echo 'if(!Context.Environment.Runtime.IsCoreClr) throw new Exception("NOT CORE CLR");' >> $(pwd)/src/Cake/bin/Release/netcoreapp3.0/build.cake
+          docker run --rm  --workdir "/Cake" -v "$(pwd)/src/Cake/bin/Release/netcoreapp3.0:/Cake" mcr.microsoft.com/dotnet/sdk:5.0 dotnet Cake.dll
