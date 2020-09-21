@@ -9,8 +9,8 @@
 
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.38.4" />
-    <PackageReference Include="Cake.Common" Version="0.38.4" />
+    <PackageReference Include="Cake.Core" Version="0.38.5" />
+    <PackageReference Include="Cake.Common" Version="0.38.5" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
