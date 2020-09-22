@@ -30,6 +30,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.6.0" />
     <PackageReference Include="Autofac" Version="4.9.4" />
-    <PackageReference Include="Spectre.Cli" Version="0.42.0" />
+    <PackageReference Include="Spectre.Cli" Version="0.44.0" />
   </ItemGroup>
 </Project>
