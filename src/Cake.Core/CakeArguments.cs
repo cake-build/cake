@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Cake.Core
@@ -8,7 +9,7 @@ namespace Cake.Core
     /// </summary>
     public sealed class CakeArguments : ICakeArguments
     {
-        private readonly ILookup<string, string> _arguments;
+        private readonly Dictionary<string, List<string>> _arguments;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeArguments"/> class.
@@ -16,7 +17,15 @@ namespace Cake.Core
         /// <param name="arguments">The arguments.</param>
         public CakeArguments(ILookup<string, string> arguments)
         {
-            _arguments = arguments;
+            _arguments = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+            foreach (var group in arguments)
+            {
+                _arguments[group.Key] = new List<string>();
+                foreach (var argument in group)
+                {
+                    _arguments[group.Key].Add(argument);
+                }
+            }
         }
 
         /// <summary>
@@ -28,7 +37,7 @@ namespace Cake.Core
         /// </returns>
         public bool HasArgument(string name)
         {
-            return _arguments.Contains(name);
+            return _arguments.ContainsKey(name);
         }
 
         /// <summary>
@@ -38,9 +47,8 @@ namespace Cake.Core
         /// <returns>The argument values.</returns>
         public ICollection<string> GetArguments(string name)
         {
-            return _arguments.Contains(name)
-                ? _arguments[name].ToArray()
-                : null;
+            _arguments.TryGetValue(name, out var arguments);
+            return arguments ?? (ICollection<string>)Array.Empty<string>();
         }
     }
 }
