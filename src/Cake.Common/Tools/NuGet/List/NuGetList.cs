@@ -34,21 +34,21 @@ namespace Cake.Common.Tools.NuGet.List
         }
 
         /// <summary>
-        /// Lists available packages with their versions
+        /// Lists available packages with their versions.
         /// </summary>
-        /// <param name="settings">The settings</param>
-        /// <returns>A list of available packages</returns>
+        /// <param name="settings">The settings.</param>
+        /// <returns>A list of available packages.</returns>
         public IEnumerable<NuGetListItem> List(NuGetListSettings settings)
         {
             return List(String.Empty, settings);
         }
 
         /// <summary>
-        /// Lists available packages with their versions
+        /// Lists available packages with their versions.
         /// </summary>
-        /// <param name="packageId">The source package id. If it equals an empty string, it will match all packageIds</param>
-        /// <param name="settings">The settings</param>
-        /// <returns>A list of available packages</returns>
+        /// <param name="packageId">The source package id. If it equals an empty string, it will match all packageIds.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>A list of available packages.</returns>
         public IEnumerable<NuGetListItem> List(string packageId, NuGetListSettings settings)
         {
             if (packageId == null)

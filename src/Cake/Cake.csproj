@@ -1,21 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <AssemblyName>Cake</AssemblyName>
-    <TargetFrameworks Condition=" '$(PackAsTool)' != 'true'">net461;netcoreapp2.0</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(PackAsTool)' != 'true'">
+    <TargetFrameworks>net461;netcoreapp2.0;$(TargetFrameworks);</TargetFrameworks>
+  </PropertyGroup>
+
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
+
+  <PropertyGroup Condition=" '$(PackAsTool)' == 'true'">
+    <PackageId>Cake.Tool</PackageId>
+    <ToolCommandName>dotnet-cake</ToolCommandName>
+    <PackageDescription>The Cake .NET Core Global Tool.</PackageDescription>
+  </PropertyGroup>
+
   <!-- Project references -->
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
     <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />
   </ItemGroup>
+
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.0.0" />
-    <PackageReference Include="Autofac" Version="4.6.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.6.0" />
+    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="Spectre.Cli" Version="0.42.0" />
   </ItemGroup>
 </Project>

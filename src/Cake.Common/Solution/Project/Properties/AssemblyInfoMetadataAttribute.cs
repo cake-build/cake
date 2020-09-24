@@ -18,7 +18,7 @@ namespace Cake.Common.Solution.Project.Properties
         /// <summary>
         /// Gets or sets the key for meta data.
         /// </summary>
-        /// <value>The key for meta data</value>
+        /// <value>The key for meta data.</value>
         public string Key { get; set; }
 
         /// <summary>

@@ -119,6 +119,7 @@ namespace Cake.Core.Scripting.CodeGen
 
             builder.Append("{");
             builder.AppendLine();
+            builder.AppendLine("    [System.Diagnostics.DebuggerStepThrough]");
             builder.Append("    get");
             builder.AppendLine();
             builder.AppendLine("    {");
@@ -184,12 +185,9 @@ namespace Cake.Core.Scripting.CodeGen
 
             // Property is obsolete?
             var obsolete = method.GetCustomAttribute<ObsoleteAttribute>();
-            if (obsolete != null)
+            if (obsolete != null && obsolete.IsError)
             {
-                if (obsolete.IsError)
-                {
-                    return GenerateCode(method, out hash);
-                }
+                return GenerateCode(method, out hash);
             }
 
             // Backing field.
@@ -205,9 +203,23 @@ namespace Cake.Core.Scripting.CodeGen
             builder.AppendLine();
 
             // Property
+            if (obsolete != null)
+            {
+                if (string.IsNullOrEmpty(obsolete.Message))
+                {
+                    builder.Append("[Obsolete]");
+                }
+                else
+                {
+                    builder.AppendFormat("[Obsolete(\"{0}\")]", obsolete.Message);
+                }
+
+                builder.AppendLine();
+            }
             hash = GenerateCommonInitalCode(method, ref builder);
             builder.Append("{");
             builder.AppendLine();
+            builder.AppendLine("    [System.Diagnostics.DebuggerStepThrough]");
             builder.AppendLine("    get");
             builder.Append("    {");
             builder.AppendLine();
@@ -227,10 +239,22 @@ namespace Cake.Core.Scripting.CodeGen
 
             builder.Append("        {");
             builder.AppendLine();
+
+            if (obsolete != null)
+            {
+                builder.AppendLine("#pragma warning disable CS0618");
+            }
+
             builder.AppendFormat("            _{0} = ", method.Name);
             builder.Append(method.GetFullName());
             builder.Append("(Context);");
             builder.AppendLine();
+
+            if (obsolete != null)
+            {
+                builder.AppendLine("#pragma warning restore CS0618");
+            }
+
             builder.Append("        }");
             builder.AppendLine();
             builder.AppendFormat("        return _{0}", method.Name);
@@ -251,7 +275,8 @@ namespace Cake.Core.Scripting.CodeGen
 
         private static string GetReturnType(MethodInfo method)
         {
-            return method.ReturnType.GetFullName();
+            var isDynamic = method.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(DynamicAttribute), true).Any();
+            return isDynamic ? "dynamic" : method.ReturnType.GetFullName();
         }
 
         private static string GetObsoleteMessage(MethodInfo method, ObsoleteAttribute attribute)

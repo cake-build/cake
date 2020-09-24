@@ -11,7 +11,7 @@ using Cake.Core.IO;
 namespace Cake.Common.Build.TFBuild.Data
 {
     /// <summary>
-    /// Providers TF Build agent for publishing code coverage results
+    /// Providers TF Build agent for publishing code coverage results.
     /// </summary>
     public class TFBuildPublishCodeCoverageData
     {

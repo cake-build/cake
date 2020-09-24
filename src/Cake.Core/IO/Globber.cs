@@ -45,32 +45,6 @@ namespace Cake.Core.IO
         /// Returns <see cref="Path" /> instances matching the specified pattern.
         /// </summary>
         /// <param name="pattern">The pattern to match.</param>
-        /// <param name="predicate">The predicate used to filter directories based on file system information.</param>
-        /// <returns>
-        ///   <see cref="Path" /> instances matching the specified pattern.
-        /// </returns>
-        [Obsolete("Please use the Match overload that accept globber settings instead.", false)]
-        public IEnumerable<Path> Match(string pattern, Func<IDirectory, bool> predicate)
-        {
-            if (pattern == null)
-            {
-                throw new ArgumentNullException(nameof(pattern));
-            }
-            if (string.IsNullOrWhiteSpace(pattern))
-            {
-                return Enumerable.Empty<Path>();
-            }
-
-            return Match(pattern, new GlobberSettings
-            {
-                Predicate = predicate
-            });
-        }
-
-        /// <summary>
-        /// Returns <see cref="Path" /> instances matching the specified pattern.
-        /// </summary>
-        /// <param name="pattern">The pattern to match.</param>
         /// <param name="settings">The globber settings.</param>
         /// <returns>
         ///   <see cref="Path" /> instances matching the specified pattern.

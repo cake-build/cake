@@ -10,7 +10,7 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild.Data
 {
     public sealed class TFBuildRepositoryInfoTests
     {
-        public sealed class TheBranchProperty
+        public sealed class TheSourceBranchNameProperty
         {
             [Fact]
             public void Should_Return_Correct_Value()
@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild.Data
                 var info = new TFBuildInfoFixture().CreateRepositoryInfo();
 
                 // When
-                var result = info.Branch;
+                var result = info.SourceBranchName;
 
                 // Then
                 Assert.Equal("develop", result);

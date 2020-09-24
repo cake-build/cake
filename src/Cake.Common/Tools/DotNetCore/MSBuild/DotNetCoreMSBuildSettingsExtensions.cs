@@ -160,7 +160,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="responseFile">The response file to add.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         /// <remarks>
-        /// A response file is a text file that is used to insert command-line switches. For more information see https://docs.microsoft.com/en-gb/visualstudio/msbuild/msbuild-response-files
+        /// A response file is a text file that is used to insert command-line switches. For more information see https://docs.microsoft.com/en-gb/visualstudio/msbuild/msbuild-response-files.
         /// </remarks>
         public static DotNetCoreMSBuildSettings WithResponseFile(this DotNetCoreMSBuildSettings settings, FilePath responseFile)
         {
@@ -191,7 +191,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         /// <remarks>
         /// A distributed logger consists of a central and forwarding logger. MSBuild will attach an instance of the forwarding logger to each secondary node.
-        /// For more information see https://msdn.microsoft.com/en-us/library/bb383987.aspx
+        /// For more information see https://msdn.microsoft.com/en-us/library/bb383987.aspx.
         /// </remarks>
         public static DotNetCoreMSBuildSettings WithDistributedLogger(this DotNetCoreMSBuildSettings settings, MSBuildDistributedLogger logger)
         {
@@ -214,6 +214,21 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             settings.ConsoleLoggerSettings = consoleLoggerParameters ?? throw new ArgumentNullException(nameof(consoleLoggerParameters));
 
             return settings;
+        }
+
+        /// <summary>
+        /// Adds a file logger with all the default settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <remarks>
+        /// Each file logger will be declared in the order added.
+        /// The first file logger will match up to the /fl parameter.
+        /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
+        /// </remarks>
+        public static DotNetCoreMSBuildSettings AddFileLogger(this DotNetCoreMSBuildSettings settings)
+        {
+            return AddFileLogger(settings, new MSBuildFileLoggerSettings());
         }
 
         /// <summary>
@@ -242,20 +257,68 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         }
 
         /// <summary>
-        /// Adds a file logger with all the default settings.
+        /// Enables the binary logger with all the default settings.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        /// <remarks>
-        /// Each file logger will be declared in the order added.
-        /// The first file logger will match up to the /fl parameter.
-        /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
-        /// </remarks>
-        public static DotNetCoreMSBuildSettings AddFileLogger(this DotNetCoreMSBuildSettings settings)
+        public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings)
         {
-            EnsureSettings(settings);
+            return EnableBinaryLogger(settings, MSBuildBinaryLoggerImports.Unspecified);
+        }
 
-            settings.FileLoggers.Add(new MSBuildFileLoggerSettings());
+        /// <summary>
+        /// Enables the binary logger with the specified imports and default file name.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="imports">The imports.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings, MSBuildBinaryLoggerImports imports)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.BinaryLogger = new MSBuildBinaryLoggerSettings
+            {
+                Enabled = true,
+                Imports = imports,
+            };
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Enables the binary logger with the specified log file name and no imports.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileName">The log file name.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings, string fileName)
+        {
+            return EnableBinaryLogger(settings, fileName, MSBuildBinaryLoggerImports.Unspecified);
+        }
+
+        /// <summary>
+        /// Enables the binary logger with the specified log file name and imports.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileName">The log file name.</param>
+        /// <param name="imports">The imports.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings, string fileName, MSBuildBinaryLoggerImports imports)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.BinaryLogger = new MSBuildBinaryLoggerSettings
+            {
+                Enabled = true,
+                FileName = fileName,
+                Imports = imports,
+            };
 
             return settings;
         }
@@ -264,7 +327,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// Adds a custom logger.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="loggerAssembly">The assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}</param>
+        /// <param name="loggerAssembly">The assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}.</param>
         /// <param name="loggerClass">The class implementing the logger. Should match the format [PartialOrFullNamespace.]LoggerClassName. If the assembly contains only one logger, class does not need to be specified.</param>
         /// <param name="loggerParameters">Parameters to be passed to the logger.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
@@ -364,7 +427,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="configuration">The configuration.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetConfiguration(this DotNetCoreMSBuildSettings settings, string configuration)
             => settings.WithProperty("configuration", configuration);
 
@@ -373,7 +436,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="version">The version.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         /// <remarks>
         /// Version will override VersionPrefix and VersionSuffix if set.
         /// This may also override version settings during packaging.
@@ -386,7 +449,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="fileVersion">The file version.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetFileVersion(this DotNetCoreMSBuildSettings settings, string fileVersion)
             => settings.WithProperty("FileVersion", fileVersion);
 
@@ -395,7 +458,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="informationalVersion">The informational version.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetInformationalVersion(this DotNetCoreMSBuildSettings settings, string informationalVersion)
             => settings.WithProperty("InformationalVersion", informationalVersion);
 
@@ -407,7 +470,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// each is an integer between 0 and 65534 (inclusive).
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SuppressVersionRecommendedFormatWarning(this DotNetCoreMSBuildSettings settings)
             => settings.WithProperty("nowarn", "7035");
 
@@ -416,7 +479,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="versionPrefix">The version prefix.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetVersionPrefix(this DotNetCoreMSBuildSettings settings, string versionPrefix)
             => settings.WithProperty("VersionPrefix", versionPrefix);
 
@@ -425,7 +488,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="versionSuffix">The version prefix.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetVersionSuffix(this DotNetCoreMSBuildSettings settings, string versionSuffix)
             => settings.WithProperty("VersionSuffix", versionSuffix);
 
@@ -434,7 +497,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="targetFramework">The framework to target.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         /// <remarks>
         /// For list of target frameworks see https://docs.microsoft.com/en-us/dotnet/standard/frameworks.
         /// </remarks>
@@ -446,7 +509,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="runtimeId">The runtime id of the operating system.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         /// <remarks>
         /// For list of runtime ids see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog.
         /// </remarks>

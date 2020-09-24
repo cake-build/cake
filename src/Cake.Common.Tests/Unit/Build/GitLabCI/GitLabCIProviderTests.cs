@@ -31,10 +31,10 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI
                 // Given
                 var fixture = new GitLabCIFixture();
                 fixture.IsRunningOnGitLabCI();
-                var gitlabCI = fixture.CreateGitLabCIService();
+                var gitLabCI = fixture.CreateGitLabCIService();
 
                 // When
-                var result = gitlabCI.IsRunningOnGitLabCI;
+                var result = gitLabCI.IsRunningOnGitLabCI;
 
                 // Then
                 Assert.True(result);
@@ -45,10 +45,10 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI
             {
                 // Given
                 var fixture = new GitLabCIFixture();
-                var gitlabCI = fixture.CreateGitLabCIService();
+                var gitLabCI = fixture.CreateGitLabCIService();
 
                 // When
-                var result = gitlabCI.IsRunningOnGitLabCI;
+                var result = gitLabCI.IsRunningOnGitLabCI;
 
                 // Then
                 Assert.False(result);
@@ -62,10 +62,10 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI
             {
                 // Given
                 var fixture = new GitLabCIFixture();
-                var gitlabCI = fixture.CreateGitLabCIService();
+                var gitLabCI = fixture.CreateGitLabCIService();
 
                 // When
-                var result = gitlabCI.Environment;
+                var result = gitLabCI.Environment;
 
                 // Then
                 Assert.NotNull(result);

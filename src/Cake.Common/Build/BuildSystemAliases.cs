@@ -4,10 +4,12 @@
 
 using System;
 using Cake.Common.Build.AppVeyor;
+using Cake.Common.Build.AzurePipelines;
 using Cake.Common.Build.Bamboo;
 using Cake.Common.Build.BitbucketPipelines;
 using Cake.Common.Build.Bitrise;
 using Cake.Common.Build.ContinuaCI;
+using Cake.Common.Build.GitHubActions;
 using Cake.Common.Build.GitLabCI;
 using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
@@ -27,7 +29,7 @@ namespace Cake.Common.Build
     public static class BuildSystemAliases
     {
         /// <summary>
-        /// Gets a <see cref="Cake.Common.Build.BuildSystem"/> instance that can
+        /// Gets a <see cref="Build.BuildSystem"/> instance that can
         /// be used to query for information about the current build system.
         /// </summary>
         /// <example>
@@ -36,7 +38,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Cake.Common.Build.BuildSystem"/> instance.</returns>
+        /// <returns>A <see cref="Build.BuildSystem"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         public static BuildSystem BuildSystem(this ICakeContext context)
         {
@@ -44,23 +46,27 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException(nameof(context));
             }
+
             var appVeyorProvider = new AppVeyorProvider(context.Environment, context.ProcessRunner, context.Log);
-            var teamCityProvider = new TeamCityProvider(context.Environment, context.Log);
-            var myGetProvider = new MyGetProvider(context.Environment);
+            var teamCityProvider = new TeamCityProvider(context.Environment, new BuildSystemServiceMessageWriter());
+            var myGetProvider = new MyGetProvider(context.Environment, new BuildSystemServiceMessageWriter());
             var bambooProvider = new BambooProvider(context.Environment);
-            var continuaCIProvider = new ContinuaCIProvider(context.Environment);
+            var continuaCIProvider = new ContinuaCIProvider(context.Environment, new BuildSystemServiceMessageWriter());
             var jenkinsProvider = new JenkinsProvider(context.Environment);
             var bitriseProvider = new BitriseProvider(context.Environment, context.ProcessRunner);
-            var travisCIProvider = new TravisCIProvider(context.Environment, context.Log);
+            var travisCIProvider = new TravisCIProvider(context.Environment, new BuildSystemServiceMessageWriter());
             var bitbucketPipelinesProvider = new BitbucketPipelinesProvider(context.Environment);
             var goCDProvider = new GoCDProvider(context.Environment, context.Log);
-            var gitlabCIProvider = new GitLabCIProvider(context.Environment);
-            var tfBuildProvider = new TFBuildProvider(context.Environment, context.Log);
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitlabCIProvider, tfBuildProvider);
+            var gitLabCIProvider = new GitLabCIProvider(context.Environment);
+            var tfBuildProvider = new TFBuildProvider(context.Environment, new BuildSystemServiceMessageWriter());
+            var gitHubActionsProvider = new GitHubActionsProvider(context.Environment);
+            var azurePipelinesProvider = new AzurePipelinesProvider(context.Environment, new BuildSystemServiceMessageWriter());
+
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider, azurePipelinesProvider);
         }
 
         /// <summary>
-        /// Gets a <see cref="Cake.Common.Build.AppVeyor.AppVeyorProvider"/> instance that can
+        /// Gets a <see cref="AppVeyorProvider"/> instance that can
         /// be used to manipulate the AppVeyor environment.
         /// </summary>
         /// <example>
@@ -69,7 +75,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Cake.Common.Build.AppVeyor"/> instance.</returns>
+        /// <returns>A <see cref="Build.AppVeyor"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.AppVeyor")]
         [CakeNamespaceImport("Cake.Common.Build.AppVeyor.Data")]
@@ -85,7 +91,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="Cake.Common.Build.TeamCity.TeamCityProvider"/> instance that can
+        /// Gets a <see cref="TeamCityProvider"/> instance that can
         /// be used to manipulate the TeamCity environment.
         /// </summary>
         /// <example>
@@ -94,7 +100,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Cake.Common.Build.TeamCity"/> instance.</returns>
+        /// <returns>A <see cref="Build.TeamCity"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.TeamCity")]
         public static ITeamCityProvider TeamCity(this ICakeContext context)
@@ -109,7 +115,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="Cake.Common.Build.MyGet.MyGetProvider"/> instance that can
+        /// Gets a <see cref="MyGetProvider"/> instance that can
         /// be used to manipulate the MyGet environment.
         /// </summary>
         /// <example>
@@ -118,7 +124,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Cake.Common.Build.MyGet"/> instance.</returns>
+        /// <returns>A <see cref="Build.MyGet"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.MyGet")]
         public static IMyGetProvider MyGet(this ICakeContext context)
@@ -133,7 +139,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="Cake.Common.Build.Bamboo.BambooProvider"/> instance that can
+        /// Gets a <see cref="BambooProvider"/> instance that can
         /// be used to manipulate the Bamboo environment.
         /// </summary>
         /// <example>
@@ -142,7 +148,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Cake.Common.Build.Bamboo"/> instance.</returns>
+        /// <returns>A <see cref="Build.Bamboo"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.Bamboo")]
         [CakeNamespaceImport("Cake.Common.Build.Bamboo.Data")]
@@ -158,7 +164,7 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="Cake.Common.Build.ContinuaCI.ContinuaCIProvider"/> instance that can
+        /// Gets a <see cref="ContinuaCIProvider"/> instance that can
         /// be used to manipulate the Continua CI environment.
         /// </summary>
         /// <example>
@@ -167,7 +173,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Cake.Common.Build.ContinuaCI"/> instance.</returns>
+        /// <returns>A <see cref="Build.ContinuaCI"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.ContinuaCI")]
         [CakeNamespaceImport("Cake.Common.Build.ContinuaCI.Data")]
@@ -192,7 +198,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Cake.Common.Build.Jenkins"/> instance.</returns>
+        /// <returns>A <see cref="Build.Jenkins"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.Jenkins")]
         [CakeNamespaceImport("Cake.Common.Build.Jenkins.Data")]
@@ -217,7 +223,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Cake.Common.Build.Bitrise"/> instance.</returns>
+        /// <returns>A <see cref="Build.Bitrise"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.Bitrise")]
         [CakeNamespaceImport("Cake.Common.Build.Bitrise.Data")]
@@ -242,7 +248,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Cake.Common.Build.TravisCI"/> instance.</returns>
+        /// <returns>A <see cref="Build.TravisCI"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.TravisCI")]
         [CakeNamespaceImport("Cake.Common.Build.TravisCI.Data")]
@@ -317,7 +323,7 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Cake.Common.Build.GitLabCI"/> instance.</returns>
+        /// <returns>A <see cref="Build.GitLabCI"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
         [CakeNamespaceImport("Cake.Common.Build.GitLabCI")]
         [CakeNamespaceImport("Cake.Common.Build.GitLabCI.Data")]
@@ -333,20 +339,20 @@ namespace Cake.Common.Build
         }
 
         /// <summary>
-        /// Gets a <see cref="TFBuildProvider"/> instance that can be used to
-        /// obtain information from the Team Foundation Build environment.
+        /// Gets a <see cref="GitHubActionsProvider"/> instance that can be used to
+        /// obtain information from the GitHub Actions environment.
         /// </summary>
         /// <example>
         /// <code>
-        /// var isTFSBuild = TFBuild.IsRunningOnTFS;
+        /// var isGitHubActionsBuild = GitHubActions.IsRunningOnGitHubActions;
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Build.TFBuild"/> instance.</returns>
+        /// <returns>A <see cref="Build.GitHubActions"/> instance.</returns>
         [CakePropertyAlias(Cache = true)]
-        [CakeNamespaceImport("Cake.Common.Build.TFBuild")]
-        [CakeNamespaceImport("Cake.Common.Build.TFBuild.Data")]
-        public static ITFBuildProvider TFBuild(this ICakeContext context)
+        [CakeNamespaceImport("Cake.Common.Build.GitHubActions")]
+        [CakeNamespaceImport("Cake.Common.Build.GitHubActions.Data")]
+        public static IGitHubActionsProvider GitHubActions(this ICakeContext context)
         {
             if (context == null)
             {
@@ -354,7 +360,32 @@ namespace Cake.Common.Build
             }
 
             var buildSystem = context.BuildSystem();
-            return buildSystem.TFBuild;
+            return buildSystem.GitHubActions;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="AzurePipelinesProvider"/> instance that can be used to
+        /// obtain information from the Azure Pipelines environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isAzurePipelines = AzurePipelines.IsRunningOnAzurePipelines;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Build.AzurePipelines"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.AzurePipelines")]
+        [CakeNamespaceImport("Cake.Common.Build.AzurePipelines.Data")]
+        public static IAzurePipelinesProvider AzurePipelines(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var buildSystem = context.BuildSystem();
+            return buildSystem.AzurePipelines;
         }
     }
 }

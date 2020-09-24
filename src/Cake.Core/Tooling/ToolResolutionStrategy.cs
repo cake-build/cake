@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.Configuration;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Core.Tooling
@@ -19,6 +20,7 @@ namespace Cake.Core.Tooling
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
         private readonly ICakeConfiguration _configuration;
+        private readonly ICakeLog _log;
         private readonly object _lock;
         private List<DirectoryPath> _path;
 
@@ -29,11 +31,13 @@ namespace Cake.Core.Tooling
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The globber.</param>
         /// <param name="configuration">The configuration.</param>
+        /// <param name="log">The log.</param>
         public ToolResolutionStrategy(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IGlobber globber,
-            ICakeConfiguration configuration)
+            ICakeConfiguration configuration,
+            ICakeLog log)
         {
             if (fileSystem == null)
             {
@@ -52,6 +56,7 @@ namespace Cake.Core.Tooling
             _environment = environment;
             _globber = globber;
             _configuration = configuration;
+            _log = log;
             _lock = new object();
         }
 
@@ -78,7 +83,7 @@ namespace Cake.Core.Tooling
                 throw new ArgumentException("Tool name cannot be empty.", nameof(tool));
             }
 
-            // Does this file already have registrations?
+            // Does this tool already have registrations?
             var resolve = LookInRegistrations(repository, tool);
             if (resolve == null)
             {
@@ -88,6 +93,45 @@ namespace Cake.Core.Tooling
                 {
                     // Look in the path environment variable.
                     resolve = LookInPath(tool);
+                }
+            }
+
+            return resolve;
+        }
+
+        /// <summary>
+        /// Resolves the specified tool using the specified tool repository.
+        /// </summary>
+        /// <param name="repository">The tool repository.</param>
+        /// <param name="toolExeNames">The possible names of the tool executable.</param>
+        /// <returns>The path to the tool; otherwise <c>null</c>.</returns>
+        public FilePath Resolve(IToolRepository repository, IEnumerable<string> toolExeNames)
+        {
+            if (repository == null)
+            {
+                throw new ArgumentNullException(nameof(repository));
+            }
+            if (toolExeNames == null)
+            {
+                throw new ArgumentNullException(nameof(toolExeNames));
+            }
+
+            var toolNames = toolExeNames.ToArray();
+            if (toolNames.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new ArgumentException("Tool names cannot be empty.", nameof(toolExeNames));
+            }
+
+            // Does this tool already have registrations?
+            var resolve = toolNames.Select(tool => LookInRegistrations(repository, tool)).FirstOrDefault(tool => tool != null);
+            if (resolve == null)
+            {
+                // Look in ./tools/
+                resolve = toolNames.Select(LookInToolsDirectory).FirstOrDefault(tool => tool != null);
+                if (resolve == null)
+                {
+                    // Look in the path environment variable.
+                    resolve = toolNames.Select(LookInPath).FirstOrDefault(tool => tool != null);
                 }
             }
 
@@ -122,6 +166,7 @@ namespace Cake.Core.Tooling
                     {
                         if (_fileSystem.Exist(file))
                         {
+                            _log.Debug($"Resolved tool to path {file}");
                             return file.MakeAbsolute(_environment);
                         }
                     }
@@ -130,6 +175,8 @@ namespace Cake.Core.Tooling
                     }
                 }
 
+                var allPaths = string.Join(",", _path);
+                _log.Debug($"Could not resolve path for tool \"{tool}\" using these directories: {allPaths}");
                 return null;
             }
         }

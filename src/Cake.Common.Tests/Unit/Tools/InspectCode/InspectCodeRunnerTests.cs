@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Common.Tests.Fixtures.Tools.InspectCode;
 using Cake.Common.Tools.InspectCode;
 using Cake.Core;
@@ -42,6 +43,19 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
 
                 // Then
                 Assert.Equal("/Working/tools/inspectcode.exe", result.Path.FullPath);
+            }
+
+            [Fact]
+            public void Should_Find_Inspect_Code_Runner_X86()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture(true);
+                fixture.Settings.UseX86Tool = true;
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/Working/tools/inspectcode.x86.exe", result.Path.FullPath);
             }
 
             [Fact]
@@ -289,6 +303,79 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 // Then
                 Assert.Equal("\"/profile=/Working/profile.DotSettings\" " +
                              "\"/Working/Test.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Set_Verbosity()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Verbosity = InspectCodeVerbosity.Error;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/verbosity=ERROR\" \"/Working/Test.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Set_Severity()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Severity = InspectCodeSeverity.Hint;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/severity=HINT\" \"/Working/Test.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Analyze_Output()
+            {
+                var log = new FakeLog();
+
+                // Given
+                var fixture = new InspectCodeRunFixture
+                {
+                    Log = log
+                };
+                fixture.Settings.OutputFile = new FilePath("build/violations.xml");
+
+                // When
+                fixture.Run();
+
+                // Then
+                var logContainsInspectionResults =
+                    log.Entries.Any(p => p.Message.StartsWith("Code Inspection Error(s) Located."));
+
+                Assert.True(logContainsInspectionResults);
+            }
+
+            [Fact]
+            public void Should_Not_Analyze_Output()
+            {
+                var log = new FakeLog();
+
+                // Given
+                var fixture = new InspectCodeRunFixture
+                {
+                    Log = log
+                };
+                fixture.Settings.OutputFile = new FilePath("build/violations.xml");
+                fixture.Settings.SkipOutputAnalysis = true;
+
+                // When
+                fixture.Run();
+
+                // Then
+                var logContainsInspectionResults =
+                    log.Entries.Any(p => p.Message.StartsWith("Code Inspection Error(s) Located."));
+
+                Assert.False(logContainsInspectionResults);
             }
         }
 

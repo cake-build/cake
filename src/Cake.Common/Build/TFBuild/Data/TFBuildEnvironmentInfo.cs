@@ -27,12 +27,12 @@ namespace Cake.Common.Build.TFBuild.Data
         }
 
         /// <summary>
-        /// Gets TF Build repository information
+        /// Gets TF Build repository information.
         /// </summary>
         /// <value>
         /// The TF Build repository information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
@@ -53,7 +53,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via TFBuild.</para>
         /// <example>
         /// <code>
         /// if (TFBuild.IsRunningOnTFBuild)
@@ -82,7 +82,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The TF Build Definition.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
@@ -103,7 +103,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via TFBuild.</para>
         /// <example>
         /// <code>
         /// if (TFBuild.IsRunningOnTFBuild)
@@ -132,7 +132,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The TF Build.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
@@ -153,7 +153,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via TFBuild.</para>
         /// <example>
         /// <code>
         /// if (TFBuild.IsRunningOnTFBuild)
@@ -182,7 +182,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The TF Build pull request information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
@@ -203,7 +203,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via TFBuild.</para>
         /// <example>
         /// <code>
         /// if (TFBuild.IsRunningOnTFBuild)
@@ -232,7 +232,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The TF Team Project.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
@@ -251,7 +251,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via TFBuild.</para>
         /// <example>
         /// <code>
         /// if (TFBuild.IsRunningOnTFBuild)
@@ -278,7 +278,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// <value>
         /// The TF Build agent.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TFBuild.IsRunningOnTFBuild)
@@ -297,7 +297,7 @@ namespace Cake.Common.Build.TFBuild.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TFBuild</para>
+        /// <para>Via TFBuild.</para>
         /// <example>
         /// <code>
         /// if (TFBuild.IsRunningOnTFBuild)

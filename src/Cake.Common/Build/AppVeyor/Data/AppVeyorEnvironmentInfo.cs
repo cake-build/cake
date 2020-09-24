@@ -17,7 +17,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The AppVeyor build agent API URL.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -33,7 +33,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -57,7 +57,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///  The AppVeyor unique job ID.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -73,7 +73,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -97,7 +97,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The AppVeyor Job Name.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -113,7 +113,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -137,7 +137,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   <c>true</c> if the build runs by scheduler; otherwise, <c>false</c>.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -153,7 +153,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -177,7 +177,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The platform name set on build tab of project settings (or through platform parameter in appveyor.yml).
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -193,7 +193,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -217,7 +217,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The configuration name set on build tab of project settings (or through configuration parameter in appveyor.yml).
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -233,7 +233,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -257,7 +257,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The AppVeyor project information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -278,7 +278,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// // via AppVeyor
@@ -308,7 +308,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The AppVeyor build information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -331,7 +331,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -362,7 +362,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The AppVeyor pull request information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -383,7 +383,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -412,7 +412,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The AppVeyor repository information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -435,7 +435,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)

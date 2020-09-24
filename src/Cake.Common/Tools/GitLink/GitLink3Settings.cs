@@ -23,7 +23,7 @@ namespace Cake.Common.Tools.GitLink
         public string ShaHash { get; set; }
 
         /// <summary>
-        /// Gets or sets the path to the root of the Git repository
+        /// Gets or sets the path to the root of the Git repository.
         /// </summary>
         public DirectoryPath BaseDir { get; set; }
 

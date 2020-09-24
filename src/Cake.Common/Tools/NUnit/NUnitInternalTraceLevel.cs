@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.NUnit
 {
     /// <summary>
-    /// Represents the level of detail at which NUnit should set internal tracing
+    /// Represents the level of detail at which NUnit should set internal tracing.
     /// </summary>
     public enum NUnitInternalTraceLevel
     {

@@ -5,13 +5,34 @@
 using System;
 using Cake.Common.Build.TravisCI;
 using Cake.Common.Tests.Fixtures.Build;
-using Cake.Testing.Extensions;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.TravisCI
 {
     public sealed class TravisCIProviderTests
     {
+        [Fact]
+        public void Should_Throw_If_Environment_Is_Null()
+        {
+            // Given, When
+            var result = Record.Exception(() => new TravisCIProvider(null, null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "environment");
+        }
+
+        [Fact]
+        public void Should_Throw_If_Writer_Is_Null()
+        {
+            // Given, When
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var result = Record.Exception(() => new TravisCIProvider(environment, null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "writer");
+        }
+
         public sealed class TravisCIWriteStartFold
         {
             [Fact]
@@ -25,7 +46,7 @@ namespace Cake.Common.Tests.Unit.Build.TravisCI
                 travisCI.WriteStartFold("cake");
 
                 // Then
-                Assert.Contains("travis_fold:start:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
+                Assert.Contains("travis_fold:start:cake\r", fixture.Writer.GetOutput(), StringComparison.Ordinal);
             }
         }
 
@@ -42,7 +63,7 @@ namespace Cake.Common.Tests.Unit.Build.TravisCI
                 travisCI.WriteEndFold("cake");
 
                 // Then
-                Assert.Contains("travis_fold:end:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
+                Assert.Contains("travis_fold:end:cake\r", fixture.Writer.GetOutput(), StringComparison.Ordinal);
             }
         }
 
@@ -61,8 +82,8 @@ namespace Cake.Common.Tests.Unit.Build.TravisCI
                 }
 
                 // Then
-                Assert.Contains("travis_fold:start:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
-                Assert.Contains("travis_fold:end:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
+                Assert.Contains("travis_fold:start:cake\r", fixture.Writer.GetOutput(), StringComparison.Ordinal);
+                Assert.Contains("travis_fold:end:cake\r", fixture.Writer.GetOutput(), StringComparison.Ordinal);
             }
 
             [Fact]
@@ -78,7 +99,7 @@ namespace Cake.Common.Tests.Unit.Build.TravisCI
                 }
 
                 // Then
-                Assert.Contains("travis_fold:start:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
+                Assert.Contains("travis_fold:start:cake\r", fixture.Writer.GetOutput(), StringComparison.Ordinal);
             }
 
             [Fact]
@@ -94,7 +115,7 @@ namespace Cake.Common.Tests.Unit.Build.TravisCI
                 }
 
                 // Then
-                Assert.Contains("travis_fold:end:cake\r", fixture.Log.AggregateLogMessages(), StringComparison.Ordinal);
+                Assert.Contains("travis_fold:end:cake\r", fixture.Writer.GetOutput(), StringComparison.Ordinal);
             }
         }
     }

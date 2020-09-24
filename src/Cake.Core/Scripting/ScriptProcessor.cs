@@ -232,7 +232,7 @@ namespace Cake.Core.Scripting
         private void CheckPackageVersion(PackageReference packageReference, string directiveName)
         {
             bool existsVersionParameter = packageReference.Parameters.Any(x => x.Key.Equals("version", StringComparison.OrdinalIgnoreCase));
-            if (!existsVersionParameter)
+            if (!existsVersionParameter && !_skipPackageVersionCheck)
             {
                 const string message = "The '{0}' directive is attempting to install the '{1}' package \r\n" +
                                        "without specifying a package version number.  \r\n" +
@@ -243,11 +243,7 @@ namespace Cake.Core.Scripting
                                        "environment variable \"CAKE_SETTINGS_SKIPPACKAGEVERSIONCHECK=true\", \r\n" +
                                        "read more about configuration at https://cakebuild.net/docs/fundamentals/configuration)";
 
-                _log.Warning(
-                    _skipPackageVersionCheck ? Verbosity.Verbose : Verbosity.Minimal,
-                    message,
-                    directiveName,
-                    packageReference.Package);
+                _log.Warning(Verbosity.Minimal, message, directiveName, packageReference.Package);
             }
         }
     }

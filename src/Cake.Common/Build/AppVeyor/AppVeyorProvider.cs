@@ -21,7 +21,7 @@ namespace Cake.Common.Build.AppVeyor
     {
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _processRunner;
-        private readonly ICakeLog _cakeLog;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Gets a value indicating whether the current build is running on AppVeyor.
@@ -29,7 +29,7 @@ namespace Cake.Common.Build.AppVeyor
         /// <value>
         /// <c>true</c> if the current build is running on AppVeyor.; otherwise, <c>false</c>.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -42,7 +42,7 @@ namespace Cake.Common.Build.AppVeyor
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -63,7 +63,7 @@ namespace Cake.Common.Build.AppVeyor
         /// <value>
         /// The AppVeyor environment.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -90,7 +90,7 @@ namespace Cake.Common.Build.AppVeyor
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -124,24 +124,12 @@ namespace Cake.Common.Build.AppVeyor
         /// </summary>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
-        /// <param name="cakeLog">The cake log.</param>
-        public AppVeyorProvider(ICakeEnvironment environment, IProcessRunner processRunner, ICakeLog cakeLog)
+        /// <param name="log">The cake log.</param>
+        public AppVeyorProvider(ICakeEnvironment environment, IProcessRunner processRunner, ICakeLog log)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException(nameof(processRunner));
-            }
-            if (cakeLog == null)
-            {
-                throw new ArgumentNullException(nameof(cakeLog));
-            }
-            _environment = environment;
-            _processRunner = processRunner;
-            _cakeLog = cakeLog;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _processRunner = processRunner ?? throw new ArgumentNullException(nameof(processRunner));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
             Environment = new AppVeyorEnvironmentInfo(environment);
         }
 
@@ -158,7 +146,7 @@ namespace Cake.Common.Build.AppVeyor
         /// Uploads an AppVeyor artifact.
         /// </summary>
         /// <param name="path">The file path of the artifact to upload.</param>
-        /// <param name="settings">The settings to apply when uploading an artifact</param>
+        /// <param name="settings">The settings to apply when uploading an artifact.</param>
         public void UploadArtifact(FilePath path, AppVeyorUploadArtifactsSettings settings)
         {
             if (path == null)
@@ -201,7 +189,7 @@ namespace Cake.Common.Build.AppVeyor
         /// Uploads an AppVeyor artifact.
         /// </summary>
         /// <param name="path">The file path of the artifact to upload.</param>
-        /// <param name="settingsAction">The settings to apply when uploading an artifact</param>
+        /// <param name="settingsAction">The settings to apply when uploading an artifact.</param>
         public void UploadArtifact(FilePath path, Action<AppVeyorUploadArtifactsSettings> settingsAction)
         {
             if (settingsAction == null)
@@ -240,14 +228,14 @@ namespace Cake.Common.Build.AppVeyor
 
             var url = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}/api/testresults/{1}/{2}", baseUri, resultsType, Environment.JobId).ToLowerInvariant());
 
-            _cakeLog.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Uploading [{0}] to [{1}]", path.FullPath, url);
+            _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Uploading [{0}] to [{1}]", path.FullPath, url);
             Task.Run(async () =>
             {
                 using (var client = new HttpClient())
                 {
                     var response = await client.UploadFileAsync(url, path.FullPath, "text/xml");
                     var content = await response.Content.ReadAsStringAsync();
-                    _cakeLog.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Server response [{0}:{1}]:\n\r{2}", response.StatusCode, response.ReasonPhrase, content);
+                    _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Server response [{0}:{1}]:\n\r{2}", response.StatusCode, response.ReasonPhrase, content);
                 }
             }).Wait();
         }
@@ -256,7 +244,7 @@ namespace Cake.Common.Build.AppVeyor
         /// Updates the build version.
         /// </summary>
         /// <param name="version">The new build version.</param>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -269,7 +257,7 @@ namespace Cake.Common.Build.AppVeyor
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -308,12 +296,12 @@ namespace Cake.Common.Build.AppVeyor
         }
 
         /// <summary>
-        /// Adds a message to the AppVeyor build.  Messages can be categorised as: Information, Warning or Error
+        /// Adds a message to the AppVeyor build.  Messages can be categorised as: Information, Warning or Error.
         /// </summary>
-        /// <param name="message">A short message to display</param>
-        /// <param name="category">The category of the message</param>
-        /// <param name="details">Additional message details</param>
-        /// <para>Via BuildSystem</para>
+        /// <param name="message">A short message to display.</param>
+        /// <param name="category">The category of the message.</param>
+        /// <param name="details">Additional message details.</param>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -342,7 +330,7 @@ namespace Cake.Common.Build.AppVeyor
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)

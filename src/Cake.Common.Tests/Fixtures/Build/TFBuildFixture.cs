@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Build.TFBuild;
+using Cake.Common.Tests.Fakes;
 using Cake.Core;
 using Cake.Core.IO;
-using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Build
@@ -14,7 +14,7 @@ namespace Cake.Common.Tests.Fixtures.Build
     {
         public ICakeEnvironment Environment { get; set; }
 
-        public FakeLog Log { get; set; }
+        public FakeBuildSystemServiceMessageWriter Writer { get; set; }
 
         public TFBuildFixture()
         {
@@ -22,7 +22,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.WorkingDirectory.Returns("C:\\build\\CAKE-CAKE-JOB1");
             Environment.GetEnvironmentVariable("TF_BUILD").Returns((string)null);
             Environment.Platform.Family.Returns(PlatformFamily.Windows);
-            Log = new FakeLog();
+            Writer = new FakeBuildSystemServiceMessageWriter();
         }
 
         public void IsRunningOnTFS() => IsRunningOnAzurePipelines();
@@ -35,13 +35,13 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("AGENT_NAME").Returns("On Premises");
         }
 
-        public void IsRunningOnAzurePipelinesHosted()
+        public void IsRunningOnAzurePipelinesHosted(string agentHostName = "Hosted Agent")
         {
             Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
-            Environment.GetEnvironmentVariable("AGENT_NAME").Returns("Hosted Agent");
+            Environment.GetEnvironmentVariable("AGENT_NAME").Returns(agentHostName);
         }
 
-        public TFBuildProvider CreateTFBuildService() => new TFBuildProvider(Environment, Log);
+        public TFBuildProvider CreateTFBuildService() => new TFBuildProvider(Environment, Writer);
 
         public TFBuildProvider CreateTFBuildService(PlatformFamily platformFamily, DirectoryPath workingDirectory)
         {

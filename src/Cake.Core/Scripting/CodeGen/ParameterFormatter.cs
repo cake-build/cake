@@ -9,7 +9,7 @@ using System.Reflection;
 namespace Cake.Core.Scripting.CodeGen
 {
     /// <summary>
-    /// Provides support for cleaning parameter names consisting of reserved keywords
+    /// Provides support for cleaning parameter names consisting of reserved keywords.
     /// </summary>
     internal sealed class ParameterFormatter
     {

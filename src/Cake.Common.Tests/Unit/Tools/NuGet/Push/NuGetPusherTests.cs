@@ -155,7 +155,21 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Push
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("push \"/Working/existing.nupkg\" 1234 -NonInteractive", result.Args);
+                Assert.Equal("push \"/Working/existing.nupkg\" \"1234\" -NonInteractive", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Skip_Duplicate_If_True()
+            {
+                // Given
+                var fixture = new NuGetPusherFixture();
+                fixture.Settings.SkipDuplicate = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("push \"/Working/existing.nupkg\" -NonInteractive -SkipDuplicate", result.Args);
             }
 
             [Fact]

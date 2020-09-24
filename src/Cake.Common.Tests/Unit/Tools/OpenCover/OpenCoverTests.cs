@@ -345,6 +345,27 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
             }
 
             [Fact]
+            public void Should_Append_HideSkipped()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.HideSkippedOption = OpenCoverHideSkippedOption.File
+                                                     | OpenCoverHideSkippedOption.MissingPdb
+                                                     | OpenCoverHideSkippedOption.Filter
+                                                     | OpenCoverHideSkippedOption.All
+                                                     | OpenCoverHideSkippedOption.Attribute;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:user -output:\"/Working/result.xml\" " +
+                             "-hideskipped:All", result.Args);
+            }
+
+            [Fact]
             public void Should_Append_MergeByHash()
             {
                 // Given

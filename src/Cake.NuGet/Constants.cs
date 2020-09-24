@@ -9,22 +9,22 @@ namespace Cake.NuGet
         public static class NuGet
         {
             /// <summary>
-            /// The config key name for overriding the default NuGet package source
+            /// The config key name for overriding the default NuGet package source.
             /// </summary>
             public const string Source = "NuGet_Source";
 
             /// <summary>
-            /// The config key name for using the in process client for installing packages
+            /// The config key name for using the in process client for installing packages.
             /// </summary>
             public const string UseInProcessClient = "NuGet_UseInProcessClient";
 
             /// <summary>
-            /// The config key name for enabling loading of NuGet package dependencies
+            /// The config key name for enabling loading of NuGet package dependencies.
             /// </summary>
             public const string LoadDependencies = "NuGet_LoadDependencies";
 
             /// <summary>
-            /// The config key name for overriding the default NuGet config file
+            /// The config key name for overriding the default NuGet config file.
             /// </summary>
             public const string ConfigFile = "NuGet_ConfigFile";
         }

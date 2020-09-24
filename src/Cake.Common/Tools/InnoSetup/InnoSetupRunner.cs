@@ -5,6 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using Cake.Common.Build.AppVeyor.Data;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.IO.Arguments;
@@ -76,29 +78,57 @@ namespace Cake.Common.Tools.InnoSetup
         }
 
         /// <summary>
-        /// Gets alternative file paths which the tool may exist in
+        /// Gets alternative file paths which the tool may exist in.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(InnoSetupSettings settings)
         {
-            // On 64-bit Windows, the registry key for Inno Setup will be accessible under Wow6432Node
-            string keyPath = _environment.Platform.Is64Bit
-                    ? @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Inno Setup 5_is1"
-                    : @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Inno Setup 5_is1";
-
-            using (var innoSetupKey = _registry.LocalMachine.OpenKey(keyPath))
+            foreach (var keyPath in GetAlternativeRegistryKeyPathsForVersion(settings.Version))
             {
-                string installationPath = innoSetupKey?.GetValue("InstallLocation") as string;
-                if (!string.IsNullOrEmpty(installationPath))
+                using (var innoSetupKey = _registry.LocalMachine.OpenKey(keyPath))
                 {
-                    var directory = new DirectoryPath(installationPath);
-                    var isccPath = directory.CombineWithFilePath("iscc.exe");
-                    return new[] { isccPath };
+                    var installationPath = innoSetupKey?.GetValue("InstallLocation") as string;
+                    if (!string.IsNullOrEmpty(installationPath))
+                    {
+                        var directory = new DirectoryPath(installationPath);
+                        var isccPath = directory.CombineWithFilePath("iscc.exe");
+                        return new[] { isccPath };
+                    }
                 }
             }
 
             return base.GetAlternativeToolPaths(settings);
+        }
+
+        private IEnumerable<string> GetAlternativeRegistryKeyPathsForVersion(InnoSetupVersion? version)
+        {
+            if (version != null)
+            {
+                return new[] { GetRegistryKeyPathForVersion(version.Value) };
+            }
+
+            var versionsToConsider = new[]
+            {
+                InnoSetupVersion.InnoSetup6,
+                InnoSetupVersion.InnoSetup5
+            };
+            return versionsToConsider.Select(GetRegistryKeyPathForVersion);
+        }
+
+        private string GetRegistryKeyPathForVersion(InnoSetupVersion version)
+        {
+            // On 64-bit Windows, the registry key for Inno Setup will be accessible under Wow6432Node
+            var softwareKeyPath = _environment.Platform.Is64Bit ? @"SOFTWARE\Wow6432Node\" : @"SOFTWARE\";
+            switch (version)
+            {
+                case InnoSetupVersion.InnoSetup6:
+                    return $@"{softwareKeyPath}Microsoft\Windows\CurrentVersion\Uninstall\Inno Setup 6_is1";
+                case InnoSetupVersion.InnoSetup5:
+                    return $@"{softwareKeyPath}Microsoft\Windows\CurrentVersion\Uninstall\Inno Setup 5_is1";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(version), version, "Missing switch case");
+            }
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath scriptFile, InnoSetupSettings settings)

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// Parses the Console Output of the Octo.exe call when called with list-deployments
+    /// Parses the Console Output of the Octo.exe call when called with list-deployments.
     /// </summary>
     public class DeploymentQueryResultParser
     {
@@ -20,9 +20,9 @@ namespace Cake.Common.Tools.OctopusDeploy
         }
 
         /// <summary>
-        /// Parse the results from The Deployment Query
+        /// Parse the results from The Deployment Query.
         /// </summary>
-        /// <param name="output">Console Output from the Run Process</param>
+        /// <param name="output">Console Output from the Run Process.</param>
         /// <returns>A collection of Octopus deployments.</returns>
         public IEnumerable<OctopusDeployment> ParseResults(IEnumerable<string> output)
         {
@@ -55,10 +55,10 @@ namespace Cake.Common.Tools.OctopusDeploy
         }
 
         /// <summary>
-        /// Parses a set of lines from the output
+        /// Parses a set of lines from the output.
         /// </summary>
-        /// <param name="lineSet">A set of lines to parse</param>
-        /// <returns>an OctopusDeployment or null</returns>
+        /// <param name="lineSet">A set of lines to parse.</param>
+        /// <returns>an OctopusDeployment or null.</returns>
         protected virtual OctopusDeployment ParseSet(List<string> lineSet)
         {
             // the ninth line is blank, so 8 is technically ok, but w/e

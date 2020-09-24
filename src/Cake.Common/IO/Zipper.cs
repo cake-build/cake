@@ -21,6 +21,9 @@ namespace Cake.Common.IO
     /// </summary>
     public sealed class Zipper
     {
+        private const int ValidZipDateYearMin = 1980;
+        private const int ValidZipDateYearMax = 2107;
+        private static readonly DateTimeOffset InvalidZipDateIndicator = new DateTimeOffset(ValidZipDateYearMin, 1, 1, 0, 0, 0, TimeSpan.Zero);
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
@@ -174,7 +177,7 @@ namespace Cake.Common.IO
                         _log.Verbose("Storing directory {0}", absoluteDirectoryPath);
                         var directory = _fileSystem.GetDirectory(absoluteDirectoryPath);
                         var entry = archive.CreateEntry(relativeDirectoryPath + "/");
-                        entry.LastWriteTime = (directory as Directory)?.LastWriteTime ?? DateTimeOffset.Now;
+                        entry.LastWriteTime = GetValidZipDateTimeOffset((directory as Directory)?.LastWriteTime);
                         directories.Add(relativeDirectoryPath);
                     }
 
@@ -184,7 +187,7 @@ namespace Cake.Common.IO
                     using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
                         var entry = archive.CreateEntry(relativeFilePath);
-                        entry.LastWriteTime = (file as File)?.LastWriteTime ?? DateTimeOffset.Now;
+                        entry.LastWriteTime = GetValidZipDateTimeOffset((file as File)?.LastWriteTime);
                         using (var entryStream = entry.Open())
                         {
                             fileStream.CopyTo(entryStream);
@@ -196,7 +199,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Unzips the specified file to the specified output path
+        /// Unzips the specified file to the specified output path.
         /// </summary>
         /// <param name="zipPath">Zip file path.</param>
         /// <param name="outputPath">Output directory path.</param>
@@ -227,6 +230,17 @@ namespace Cake.Common.IO
                 throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, path.FullPath, root.FullPath));
             }
             return path?.FullPath.Substring(root.FullPath.Length + (root.FullPath.Length > 1 && path.FullPath.Length > root.FullPath.Length ? 1 : 0));
+        }
+
+        private static DateTimeOffset GetValidZipDateTimeOffset(DateTime? value)
+        {
+            var offsetValue = value ?? DateTime.UtcNow;
+            if (offsetValue.Year >= ValidZipDateYearMin && offsetValue.Year <= ValidZipDateYearMax)
+            {
+                return offsetValue;
+            }
+
+            return InvalidZipDateIndicator;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Cake.Core
         /// </summary>
         /// <param name="task">The task to execute.</param>
         /// <param name="context">The context.</param>
-        /// <returns>Returned Task</returns>
+        /// <returns>Returned Task.</returns>
         Task ExecuteAsync(CakeTask task, ICakeContext context);
 
         /// <summary>
@@ -46,7 +46,8 @@ namespace Cake.Core
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="exception">The exception.</param>
-        void ReportErrors(Action<Exception> action, Exception exception);
+        /// <returns>The awaitable task.</returns>
+        Task ReportErrorsAsync(Func<Exception, Task> action, Exception exception);
 
         /// <summary>
         /// Executes the error handler.
@@ -54,13 +55,15 @@ namespace Cake.Core
         /// <param name="action">The action.</param>
         /// <param name="exception">The exception.</param>
         /// <param name="context">The context.</param>
-        void HandleErrors(Action<Exception, ICakeContext> action, Exception exception, ICakeContext context);
+        /// <returns>The awaitable task.</returns>
+        Task HandleErrorsAsync(Func<Exception, ICakeContext, Task> action, Exception exception, ICakeContext context);
 
         /// <summary>
         /// Invokes the finally handler.
         /// </summary>
         /// <param name="action">The action.</param>
-        void InvokeFinally(Action action);
+        /// <returns>The awaitable task.</returns>
+        Task InvokeFinallyAsync(Func<Task> action);
 
         /// <summary>
         /// Performs the specified setup action before each task is invoked.

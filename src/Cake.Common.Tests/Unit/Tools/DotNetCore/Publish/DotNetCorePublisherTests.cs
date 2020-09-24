@@ -108,6 +108,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 fixture.Settings.NoBuild = true;
                 fixture.Settings.NoDependencies = true;
                 fixture.Settings.NoRestore = true;
+                fixture.Settings.NoLogo = true;
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.Runtime = "runtime1";
@@ -122,7 +123,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-build --no-dependencies --no-restore --force --self-contained true --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
+                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-build --no-dependencies --no-restore --nologo --force --self-contained true --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
             }
 
             [Fact]
@@ -161,6 +162,90 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
 
                 // Then
                 Assert.Equal("--diagnostics publish", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PublishSingleFile()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.PublishSingleFile = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:PublishSingleFile=true", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PublishTrimmed()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.PublishTrimmed = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:PublishTrimmed=true", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_TieredCompilationQuickJit()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.TieredCompilationQuickJit = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:TieredCompilationQuickJit=false", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_TieredCompilation()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.TieredCompilation = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:TieredCompilation=false", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PublishReadyToRun()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.PublishReadyToRun = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:PublishReadyToRun=true", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PublishReadyToRunShowWarnings()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.PublishReadyToRunShowWarnings = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:PublishReadyToRunShowWarnings=true", result.Args);
             }
         }
     }

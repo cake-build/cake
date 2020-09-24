@@ -4,10 +4,12 @@
 
 using System;
 using Cake.Common.Build.AppVeyor;
+using Cake.Common.Build.AzurePipelines;
 using Cake.Common.Build.Bamboo;
 using Cake.Common.Build.BitbucketPipelines;
 using Cake.Common.Build.Bitrise;
 using Cake.Common.Build.ContinuaCI;
+using Cake.Common.Build.GitHubActions;
 using Cake.Common.Build.GitLabCI;
 using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
@@ -37,8 +39,10 @@ namespace Cake.Common.Build
         /// <param name="travisCIProvider">The Travis CI provider.</param>
         /// <param name="bitbucketPipelinesProvider">The Bitbucket Pipelines provider.</param>
         /// <param name="goCDProvider">The Go.CD provider.</param>
-        /// <param name="gitlabCIProvider">The GitLab CI provider.</param>
+        /// <param name="gitLabCIProvider">The GitLab CI provider.</param>
         /// <param name="tfBuildProvider">The TF Build provider.</param>
+        /// <param name="gitHubActionsProvider">The GitHub Actions provider.</param>
+        /// <param name="azurePipelinesProvider">The Azure Pipelines provider.</param>
         public BuildSystem(
             IAppVeyorProvider appVeyorProvider,
             ITeamCityProvider teamCityProvider,
@@ -50,8 +54,10 @@ namespace Cake.Common.Build
             ITravisCIProvider travisCIProvider,
             IBitbucketPipelinesProvider bitbucketPipelinesProvider,
             IGoCDProvider goCDProvider,
-            IGitLabCIProvider gitlabCIProvider,
-            ITFBuildProvider tfBuildProvider)
+            IGitLabCIProvider gitLabCIProvider,
+            ITFBuildProvider tfBuildProvider,
+            IGitHubActionsProvider gitHubActionsProvider,
+            IAzurePipelinesProvider azurePipelinesProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -93,13 +99,21 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException(nameof(goCDProvider));
             }
-            if (gitlabCIProvider == null)
+            if (gitLabCIProvider == null)
             {
-                throw new ArgumentNullException(nameof(gitlabCIProvider));
+                throw new ArgumentNullException(nameof(gitLabCIProvider));
             }
             if (tfBuildProvider == null)
             {
                 throw new ArgumentNullException(nameof(tfBuildProvider));
+            }
+            if (gitHubActionsProvider == null)
+            {
+                throw new ArgumentNullException(nameof(gitHubActionsProvider));
+            }
+            if (azurePipelinesProvider == null)
+            {
+                throw new ArgumentNullException(nameof(azurePipelinesProvider));
             }
 
             AppVeyor = appVeyorProvider;
@@ -112,8 +126,9 @@ namespace Cake.Common.Build
             TravisCI = travisCIProvider;
             BitbucketPipelines = bitbucketPipelinesProvider;
             GoCD = goCDProvider;
-            GitLabCI = gitlabCIProvider;
-            TFBuild = tfBuildProvider;
+            GitLabCI = gitLabCIProvider;
+            GitHubActions = gitHubActionsProvider;
+            AzurePipelines = azurePipelinesProvider;
 
             Provider = (AppVeyor.IsRunningOnAppVeyor ? BuildProvider.AppVeyor : BuildProvider.Local)
                 | (TeamCity.IsRunningOnTeamCity ? BuildProvider.TeamCity : BuildProvider.Local)
@@ -126,8 +141,9 @@ namespace Cake.Common.Build
                 | (BitbucketPipelines.IsRunningOnBitbucketPipelines ? BuildProvider.BitbucketPipelines : BuildProvider.Local)
                 | (GoCD.IsRunningOnGoCD ? BuildProvider.GoCD : BuildProvider.Local)
                 | (GitLabCI.IsRunningOnGitLabCI ? BuildProvider.GitLabCI : BuildProvider.Local)
-                | (TFBuild.IsRunningOnAzurePipelines ? BuildProvider.AzurePipelines : BuildProvider.Local)
-                | (TFBuild.IsRunningOnAzurePipelinesHosted ? BuildProvider.AzurePipelinesHosted : BuildProvider.Local);
+                | (GitHubActions.IsRunningOnGitHubActions ? BuildProvider.GitHubActions : BuildProvider.Local)
+                | (AzurePipelines.IsRunningOnAzurePipelines ? BuildProvider.AzurePipelines : BuildProvider.Local)
+                | (AzurePipelines.IsRunningOnAzurePipelinesHosted ? BuildProvider.AzurePipelinesHosted : BuildProvider.Local);
 
             IsLocalBuild = Provider == BuildProvider.Local;
 
@@ -137,7 +153,9 @@ namespace Cake.Common.Build
                 || ((Provider & BuildProvider.TravisCI) != 0 && TravisCI.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.BitbucketPipelines) != 0 && BitbucketPipelines.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.GitLabCI) != 0 && GitLabCI.Environment.PullRequest.IsPullRequest)
-                || ((Provider & (BuildProvider.AzurePipelines | BuildProvider.AzurePipelinesHosted)) != 0 && TFBuild.Environment.PullRequest.IsPullRequest);
+                || ((Provider & (BuildProvider.AzurePipelines | BuildProvider.AzurePipelinesHosted)) != 0 && AzurePipelines.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.GitHubActions) != 0 && GitHubActions.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.Jenkins) != 0 && Jenkins.Environment.Change.IsPullRequest);
         }
 
         /// <summary>
@@ -145,7 +163,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnAppVeyor)
+        /// if (BuildSystem.IsRunningOnAppVeyor)
         /// {
         ///     // Upload artifact to AppVeyor.
         ///     AppVeyor.UploadArtifact("./build/release_x86.zip");
@@ -162,7 +180,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnAppVeyor)
+        /// if (BuildSystem.IsRunningOnAppVeyor)
         /// {
         ///     // Upload artifact to AppVeyor.
         ///     BuildSystem.AppVeyor.UploadArtifact("./build/release_x86.zip");
@@ -176,7 +194,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnTeamCity)
+        /// if (BuildSystem.IsRunningOnTeamCity)
         /// {
         ///     TeamCity.ProgressMessage("Doing an action...");
         ///     // Do action...
@@ -193,7 +211,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnTeamCity)
+        /// if (BuildSystem.IsRunningOnTeamCity)
         /// {
         ///     // Set the build number.
         ///     BuildSystem.TeamCity.SetBuildNumber("1.2.3.4");
@@ -207,7 +225,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnMyGet)
+        /// if (BuildSystem.IsRunningOnMyGet)
         /// {
         ///     MyGet.BuildProblem("Something went wrong...");
         ///     // Do action...
@@ -224,7 +242,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnMyGet)
+        /// if (BuildSystem.IsRunningOnMyGet)
         /// {
         ///     // Set the build number.
         ///     BuildSystem.MyGet.SetBuildNumber("1.2.3.4");
@@ -238,7 +256,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnBamboo)
+        /// if (BuildSystem.IsRunningOnBamboo)
         /// {
         ///     // Get the build number.
         ///     var buildNumber = BuildSystem.Bamboo.Number;
@@ -255,7 +273,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnBamboo)
+        /// if (BuildSystem.IsRunningOnBamboo)
         /// {
         ///     //Get the Bamboo Plan Name
         ///     var planName = BuildSystem.Bamboo.Project.PlanName
@@ -269,7 +287,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnContinuaCI)
+        /// if (BuildSystem.IsRunningOnContinuaCI)
         /// {
         ///     // Get the build version.
         ///     var buildVersion = BuildSystem.ContinuaCI.Environment.Build.Version;
@@ -286,7 +304,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnContinuaCI)
+        /// if (BuildSystem.IsRunningOnContinuaCI)
         /// {
         ///     //Get the Continua CI Project Name
         ///     var projectName = BuildSystem.ContinuaCI.Environment.Project.Name;
@@ -300,7 +318,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnJenkins)
+        /// if (BuildSystem.IsRunningOnJenkins)
         /// {
         ///     // Get the build number.
         ///     var buildNumber = BuildSystem.Jenkins.Environment.Build.BuildNumber;
@@ -320,7 +338,7 @@ namespace Cake.Common.Build
         /// </value>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnJenkins)
+        /// if (BuildSystem.IsRunningOnJenkins)
         /// {
         ///     // Get the job name.
         ///     var jobName = BuildSystem.Jenkins.Environment.Build.JobName;
@@ -334,7 +352,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnBitrise)
+        /// if (BuildSystem.IsRunningOnBitrise)
         /// {
         ///     // Get the build number.
         ///     var buildNumber = BuildSystem.Bitrise.Environment.Build.BuildNumber;
@@ -351,7 +369,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnBitrise)
+        /// if (BuildSystem.IsRunningOnBitrise)
         /// {
         ///     // Get the provision profile url.
         ///     var buildNumber = BuildSystem.Bitrise.Environment.Provisioning.ProvisionUrl;
@@ -365,7 +383,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnTravisCI)
+        /// if (BuildSystem.IsRunningOnTravisCI)
         /// {
         ///     // Get the build directory.
         ///     var buildDirectory = BuildSystem.TravisCI.Environment.Build.BuildDirectory;
@@ -382,7 +400,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnTravisCI)
+        /// if (BuildSystem.IsRunningOnTravisCI)
         /// {
         ///     // Get the operating system name.
         ///     var osName = BuildSystem.TravisCI.Environment.Job.OSName;
@@ -399,7 +417,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnBitbucketPipelines)
+        /// if (BuildSystem.IsRunningOnBitbucketPipelines)
         /// {
         ///     // Get the build commit hash.
         ///     var commitHash = BuildSystem.BitbucketPipelines.Environment.Repository.Commit;
@@ -416,7 +434,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnBitbucketPipelines)
+        /// if (BuildSystem.IsRunningOnBitbucketPipelines)
         /// {
         ///     // Get the URL friendly repo name.
         ///     var repoSlug = BuildSystem.BitbucketPipelines.Environment.Repository.RepoSlug;
@@ -430,7 +448,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnGoCD)
+        /// if (BuildSystem.IsRunningOnGoCD)
         /// {
         ///     // Get the build counter.
         ///     var counter = BuildSystem.GoCD.Environment.Pipeline.Counter;
@@ -447,7 +465,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnGoCD)
+        /// if (BuildSystem.IsRunningOnGoCD)
         /// {
         ///     // Get the pipeline counter.
         ///     var counter = BuildSystem.GoCD.Environment.Environment.Pipeline.Counter;
@@ -461,7 +479,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnGitLabCI)
+        /// if (BuildSystem.IsRunningOnGitLabCI)
         /// {
         ///     // Get the build commit hash.
         ///     var commitHash = BuildSystem.GitLabCI.Environment.Build.Reference;
@@ -475,7 +493,7 @@ namespace Cake.Common.Build
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnGitLabCI)
+        /// if (BuildSystem.IsRunningOnGitLabCI)
         /// {
         ///     // Get the build commit hash.
         ///     var commitHash = BuildSystem.GitLabCI.Environment.Build.Reference;
@@ -488,88 +506,83 @@ namespace Cake.Common.Build
         public bool IsRunningOnGitLabCI => GitLabCI.IsRunningOnGitLabCI;
 
         /// <summary>
-        /// Gets a value indicating whether this instance is running on TFS.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// if(BuildSystem.IsRunningOnTFS)
-        /// {
-        ///     // Get the build commit hash.
-        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
-        /// }
-        /// </code>
-        /// </example>
-        /// <value>
-        /// <c>true</c> if this instance is running on TFS; otherwise, <c>false</c>.
-        /// </value>
-        [Obsolete("Please use BuildSystem.IsRunningOnAzurePipelines instead.")]
-        public bool IsRunningOnTFS => TFBuild.IsRunningOnTFS;
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is running on VSTS.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// if(BuildSystem.IsRunningOnVSTS)
-        /// {
-        ///     // Get the build commit hash.
-        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
-        /// }
-        /// </code>
-        /// </example>
-        /// <value>
-        /// <c>true</c> if this instance is running on VSTS; otherwise, <c>false</c>.
-        /// </value>
-        [Obsolete("Please use BuildSystem.IsRunningOnAzurePipelinesHosted instead.")]
-        public bool IsRunningOnVSTS => TFBuild.IsRunningOnVSTS;
-
-        /// <summary>
         /// Gets a value indicating whether this instance is running on Azure Pipelines.
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnAzurePipelines)
+        /// if (BuildSystem.IsRunningOnAzurePipelines)
         /// {
         ///     // Get the build commit hash.
-        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
+        ///     var commitHash = BuildSystem.AzurePipelines.Environment.Repository.SourceVersion;
         /// }
         /// </code>
         /// </example>
         /// <value>
         /// <c>true</c> if this instance is running on Azure Pipelines; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnAzurePipelines => TFBuild.IsRunningOnAzurePipelines;
+        public bool IsRunningOnAzurePipelines => AzurePipelines.IsRunningOnAzurePipelines;
 
         /// <summary>
         /// Gets a value indicating whether this instance is running on hosted Azure Pipelines.
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnAzurePipelinesHosted)
+        /// if (BuildSystem.IsRunningOnAzurePipelinesHosted)
         /// {
         ///     // Get the build commit hash.
-        ///     var commitHash = BuildSystem.TFBuild.Environment.Repository.SourceVersion;
+        ///     var commitHash = BuildSystem.AzurePipelines.Environment.Repository.SourceVersion;
         /// }
         /// </code>
         /// </example>
         /// <value>
         /// <c>true</c> if this instance is running on hosted Azure Pipelines; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRunningOnAzurePipelinesHosted => TFBuild.IsRunningOnAzurePipelinesHosted;
+        public bool IsRunningOnAzurePipelinesHosted => AzurePipelines.IsRunningOnAzurePipelinesHosted;
 
         /// <summary>
-        /// Gets the TF Build Provider.
+        /// Gets the Azure Pipelines Provider.
         /// </summary>
         /// <example>
         /// <code>
-        /// if(BuildSystem.IsRunningOnVSTS)
+        /// if (BuildSystem.IsRunningOnAzurePipelines)
         /// {
         ///     // Get the build definition name.
-        ///     var definitionName = BuildSystem.TFBuild.Environment.BuildDefinition.Name;
+        ///     var definitionName = BuildSystem.AzurePipelines.Environment.BuildDefinition.Name;
         /// }
         /// </code>
         /// </example>
-        public ITFBuildProvider TFBuild { get; }
+        public IAzurePipelinesProvider AzurePipelines { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is running on GitHub Actions.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.IsRunningOnGitHubActions)
+        /// {
+        ///     // Get the workflow name.
+        ///     var workflow = BuildSystem.GitHubActions.Environment.Workflow.Workflow;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on GitHub Actions; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnGitHubActions => GitHubActions.IsRunningOnGitHubActions;
+
+        /// <summary>
+        /// Gets the GitHub Actions Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.IsRunningOnGitHubActions)
+        /// {
+        ///     // Get the workflow name.
+        ///     var workflow = BuildSystem.GitHubActions.Environment.Workflow.Workflow;
+        /// }
+        /// </code>
+        /// </example>
+        public IGitHubActionsProvider GitHubActions { get; }
 
         /// <summary>
         /// Gets the current build provider.

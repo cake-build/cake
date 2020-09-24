@@ -44,7 +44,7 @@ Task("Cake.Common.IO.DirectoryAliases.CleanDirectory.Filter")
     var file2 = path.CombineWithFilePath("bar.qux");
     EnsureDirectoryExist(path);
     EnsureFilesExist(new FilePath[] { file1, file2 });
-    
+
     // When
     CleanDirectory(path, f => f.Path.FullPath.EndsWith("baz"));
 
@@ -95,10 +95,13 @@ Task("Cake.Common.IO.DirectoryAliases.DeleteDirectory")
     // Given
     var path = Paths.Temp.Combine("./hello");
     EnsureDirectoryExist(path);
-    
+
     // When
-    DeleteDirectory(path, false);
-    
+    DeleteDirectory(path,
+        new DeleteDirectorySettings {
+            Force = true
+        });
+
     // Then
     Assert.False(System.IO.Directory.Exists(path.FullPath));
 });
@@ -108,12 +111,16 @@ Task("Cake.Common.IO.DirectoryAliases.DeleteDirectory.Recurse")
 {
     // Given
     var root = Paths.Temp.Combine("./hello");
-    var path = root.Combine("world"); 
+    var path = root.Combine("world");
     EnsureDirectoryExist(path);
-    
+
     // When
-    DeleteDirectory(root, true);
-    
+    DeleteDirectory(root,
+        new DeleteDirectorySettings {
+            Force = true,
+            Recursive = true
+        });
+
     // Then
     Assert.False(System.IO.Directory.Exists(path.FullPath));
 });
@@ -125,10 +132,13 @@ Task("Cake.Common.IO.DirectoryAliases.DeleteDirectories")
     var path1 = Paths.Temp.Combine("./hello");
     var path2 = Paths.Temp.Combine("./world");
     EnsureDirectoriesExist(new DirectoryPath[] { path1, path2 });
-    
+
     // When
-    DeleteDirectories(new DirectoryPath[] { path1, path2 }, false);
-    
+    DeleteDirectories(new DirectoryPath[] { path1, path2 },
+        new DeleteDirectorySettings {
+            Force = true
+        });
+
     // Then
     Assert.False(System.IO.Directory.Exists(path1.FullPath));
     Assert.False(System.IO.Directory.Exists(path2.FullPath));
@@ -143,10 +153,14 @@ Task("Cake.Common.IO.DirectoryAliases.DeleteDirectories.Recurse")
     var root2 = Paths.Temp.Combine("./baz");
     var path2 = root2.Combine("qux");
     EnsureDirectoriesExist(new DirectoryPath[] { root1, path1, root2, path2 });
-    
+
     // When
-    DeleteDirectories(new DirectoryPath[] { root1, root2 }, true);
-    
+    DeleteDirectories(new DirectoryPath[] { root1, root2 },
+        new DeleteDirectorySettings {
+            Force = true,
+            Recursive = true
+        });
+
     // Then
     Assert.False(System.IO.Directory.Exists(path1.FullPath));
     Assert.False(System.IO.Directory.Exists(path2.FullPath));

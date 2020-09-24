@@ -7,7 +7,7 @@ using System;
 namespace Cake.Common.Tools.NuGet
 {
     /// <summary>
-    /// NuGet MSBuild version
+    /// NuGet MSBuild version.
     /// </summary>
     public enum NuGetMSBuildVersion
     {
@@ -25,15 +25,6 @@ namespace Cake.Common.Tools.NuGet
         /// MSBuildVersion : <c>14</c>
         /// </summary>
         MSBuild14 = 14,
-
-        /// <summary>
-        /// MSBuildVersion : <c>15</c>
-        /// </summary>
-        /// <remarks>
-        /// MSBuildVersion 15 isn't an valid option and will be removed in the futute.
-        /// </remarks>
-        [Obsolete("MSBuildVersion 15 isn't an valid option and will be removed in the future.")]
-        MSBuild15 = 15,
 
         /// <summary>
         /// MSBuildVersion : <c>15.1</c>

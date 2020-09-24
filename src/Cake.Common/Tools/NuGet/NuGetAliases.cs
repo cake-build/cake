@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using Cake.Common.Tools.NuGet.Add;
+using Cake.Common.Tools.NuGet.Delete;
 using Cake.Common.Tools.NuGet.Init;
 using Cake.Common.Tools.NuGet.Install;
 using Cake.Common.Tools.NuGet.List;
@@ -360,7 +361,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Adds NuGet package source using the specified name &amp;source to global user config
+        /// Adds NuGet package source using the specified name &amp;source to global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -388,7 +389,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Adds NuGet package source using the specified name, source &amp; settings to global user config
+        /// Adds NuGet package source using the specified name, source &amp; settings to global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -433,7 +434,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Removes NuGet package source using the specified name &amp; source from global user config
+        /// Removes NuGet package source using the specified name &amp; source from global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -461,7 +462,7 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// Removes NuGet package source using the specified name, source &amp; settings from global user config
+        /// Removes NuGet package source using the specified name, source &amp; settings from global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -1103,12 +1104,12 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// List packages on available from source using specified settings
+        /// List packages on available from source using specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="packageId">The package Id</param>
+        /// <param name="packageId">The package Id.</param>
         /// <param name="settings">The settings.</param>
-        /// <returns>List of packages with their version</returns>
+        /// <returns>List of packages with their version.</returns>
         /// <example>
         /// <code>
         /// var packageList = NuGetList("Cake", new NuGetListSettings {
@@ -1136,11 +1137,11 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// List packages on available from source using specified settings
+        /// List packages on available from source using specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="packageId">The package Id</param>
-        /// <returns>List of packages with their version</returns>
+        /// <param name="packageId">The package Id.</param>
+        /// <returns>List of packages with their version.</returns>
         /// <example>
         /// <code>
         /// var packageList = NuGetList("Cake");
@@ -1165,11 +1166,11 @@ namespace Cake.Common.Tools.NuGet
         }
 
         /// <summary>
-        /// List packages on available from source using specified settings
+        /// List packages on available from source using specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
-        /// <returns>List of packages with their version</returns>
+        /// <returns>List of packages with their version.</returns>
         /// <example>
         /// <code>
         /// var packageList = NuGetList(new NuGetListSettings {
@@ -1194,6 +1195,39 @@ namespace Cake.Common.Tools.NuGet
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetList(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             return runner.List(settings);
+        }
+
+        /// <summary>
+        /// Deletes or unlists a package from a package source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageID">The package ID (name).</param>
+        /// <param name="packageVersion">The package version.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <para>NOTE: Starting with NuGet 3.4.2, the Source parameter is a mandatory parameter.</para>
+        /// <para>It is strongly recommended that you ALWAYS set the Source property within the <see cref="NuGetDeleteSettings" /> instance.</para>
+        /// <code>
+        /// // Delete the package.
+        /// NuGetDelete("PackageName", "PackageVersion", new NuGetPushSettings {
+        ///     Source = "http://example.com/nugetfeed",
+        ///     ApiKey = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Delete")]
+        [CakeNamespaceImport("Cake.Common.Tools.NuGet.Delete")]
+        public static void NuGetDelete(this ICakeContext context, string packageID, string packageVersion, NuGetDeleteSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
+            var packer = new NuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver, context.Log);
+            packer.Delete(packageID, packageVersion, settings);
         }
     }
 }

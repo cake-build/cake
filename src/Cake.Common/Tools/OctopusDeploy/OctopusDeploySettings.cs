@@ -20,12 +20,12 @@ namespace Cake.Common.Tools.OctopusDeploy
     public abstract class OctopusDeployCommonToolSettings : OctopusDeployToolSettings
     {
         /// <summary>
-        /// Gets or sets the username to use when authenticating with the server
+        /// Gets or sets the username to use when authenticating with the server.
         /// </summary>
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the password to use when authenticating with the server
+        /// Gets or sets the password to use when authenticating with the server.
         /// </summary>
         public string Password { get; set; }
 
@@ -40,22 +40,22 @@ namespace Cake.Common.Tools.OctopusDeploy
         public string ApiKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the text file of default values
+        /// Gets or sets the text file of default values.
         /// </summary>
         public FilePath ConfigurationFile { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the enable debug logging flag is set
+        /// Gets or sets a value indicating whether the enable debug logging flag is set.
         /// </summary>
         public bool EnableDebugLogging { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the ignore SSL errors flag is set
+        /// Gets or sets a value indicating whether the ignore SSL errors flag is set.
         /// </summary>
         public bool IgnoreSslErrors { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the enable service messages flag is set
+        /// Gets or sets a value indicating whether the enable service messages flag is set.
         /// </summary>
         public bool EnableServiceMessages { get; set; }
 

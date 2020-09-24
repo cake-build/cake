@@ -84,13 +84,13 @@ namespace Cake.Common.Tools.OctopusDeploy
         }
 
         /// <summary>
-        /// Pushes the specified package to the Octopus Deploy repository
+        /// Pushes the specified package to the Octopus Deploy repository.
         /// </summary>
-        /// <param name="context">The cake context</param>
-        /// <param name="server">The Octopus server URL</param>
-        /// <param name="apiKey">The user's API key</param>
-        /// <param name="packagePath">Path to the package</param>
-        /// <param name="settings">The settings</param>
+        /// <param name="context">The cake context.</param>
+        /// <param name="server">The Octopus server URL.</param>
+        /// <param name="apiKey">The user's API key.</param>
+        /// <param name="packagePath">Path to the package.</param>
+        /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         public static void OctoPush(this ICakeContext context, string server, string apiKey, FilePath packagePath, OctopusPushSettings settings)
         {
@@ -98,13 +98,13 @@ namespace Cake.Common.Tools.OctopusDeploy
         }
 
         /// <summary>
-        /// Pushes the specified packages to the Octopus Deploy repository
+        /// Pushes the specified packages to the Octopus Deploy repository.
         /// </summary>
-        /// <param name="context">The cake context</param>
-        /// <param name="server">The Octopus server URL</param>
-        /// <param name="apiKey">The user's API key</param>
-        /// <param name="packagePaths">Paths to the packages</param>
-        /// <param name="settings">The settings</param>
+        /// <param name="context">The cake context.</param>
+        /// <param name="server">The Octopus server URL.</param>
+        /// <param name="apiKey">The user's API key.</param>
+        /// <param name="packagePaths">Paths to the packages.</param>
+        /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         public static void OctoPush(this ICakeContext context, string server, string apiKey, IEnumerable<FilePath> packagePaths, OctopusPushSettings settings)
         {
@@ -125,7 +125,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <summary>
         /// Packs the specified folder into an Octopus Deploy package.
         /// </summary>
-        /// <param name="context">The cake context</param>
+        /// <param name="context">The cake context.</param>
         /// <param name="id">The package ID.</param>
         [CakeMethodAlias]
         public static void OctoPack(this ICakeContext context, string id)
@@ -136,9 +136,9 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <summary>
         /// Packs the specified folder into an Octopus Deploy package.
         /// </summary>
-        /// <param name="context">The cake context</param>
+        /// <param name="context">The cake context.</param>
         /// <param name="id">The package ID.</param>
-        /// <param name="settings">The settings</param>
+        /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         public static void OctoPack(this ICakeContext context, string id, OctopusPackSettings settings = null)
         {
@@ -160,13 +160,13 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// Deploys the specified already existing release into a specified environment
         /// See <see href="http://docs.octopusdeploy.com/display/OD/Deploying+releases">Octopus Documentation</see> for more details.
         /// </summary>
-        /// <param name="context">The cake context</param>
-        /// <param name="server">The Octopus server URL</param>
-        /// <param name="apiKey">The user's API key</param>
-        /// <param name="projectName">Name of the target project</param>
-        /// <param name="deployTo">Target environment name</param>
-        /// <param name="releaseNumber">Version number of the release to deploy. Specify "latest" for the latest release</param>
-        /// <param name="settings">Deployment settings</param>
+        /// <param name="context">The cake context.</param>
+        /// <param name="server">The Octopus server URL.</param>
+        /// <param name="apiKey">The user's API key.</param>
+        /// <param name="projectName">Name of the target project.</param>
+        /// <param name="deployTo">Target environment name.</param>
+        /// <param name="releaseNumber">Version number of the release to deploy. Specify "latest" for the latest release.</param>
+        /// <param name="settings">Deployment settings.</param>
         /// <example>
         /// <code>
         ///     // bare minimum
@@ -208,13 +208,13 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// Promotes the specified already existing release into a specified environment
         /// See <see href="https://octopus.com/docs/api-and-integration/octo.exe-command-line/promoting-releases">Octopus Documentation</see> for more details.
         /// </summary>
-        /// <param name="context">The cake context</param>
-        /// <param name="server">The Octopus server URL</param>
-        /// <param name="apiKey">The user's API key</param>
-        /// <param name="projectName">Name of the target project</param>
-        /// <param name="deployFrom">Source environment name</param>
-        /// <param name="deployTo">Target environment name</param>
-        /// <param name="settings">Deployment settings</param>
+        /// <param name="context">The cake context.</param>
+        /// <param name="server">The Octopus server URL.</param>
+        /// <param name="apiKey">The user's API key.</param>
+        /// <param name="projectName">Name of the target project.</param>
+        /// <param name="deployFrom">Source environment name.</param>
+        /// <param name="deployTo">Target environment name.</param>
+        /// <param name="settings">Deployment settings.</param>
         /// <example>
         /// <code>
         ///     // bare minimum

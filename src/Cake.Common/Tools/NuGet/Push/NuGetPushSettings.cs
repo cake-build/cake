@@ -27,7 +27,7 @@ namespace Cake.Common.Tools.NuGet.Push
         /// For your convenience, here is the URL for some of the most popular
         /// public NuGet servers:
         /// - NuGet Gallery: https://nuget.org/api/v2/package
-        /// - MyGet: https://www.myget.org/F/&lt;your_username&gt;/api/v2/package
+        /// - MyGet: https://www.myget.org/F/&lt;your_username&gt;/api/v2/package.
         /// </remarks>
         public string Source { get; set; }
 
@@ -55,5 +55,15 @@ namespace Cake.Common.Tools.NuGet.Push
         /// </summary>
         /// <value>The NuGet configuration file.</value>
         public FilePath ConfigFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to skip a package and continue with
+        /// the next package in the push, if any when a package with the same version
+        /// already exists.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if skipping duplicates; otherwise, <c>false</c>.
+        /// </value>
+        public bool SkipDuplicate { get; set; }
     }
 }

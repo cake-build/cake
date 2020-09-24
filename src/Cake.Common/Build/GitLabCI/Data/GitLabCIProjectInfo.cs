@@ -7,7 +7,7 @@ using Cake.Core;
 namespace Cake.Common.Build.GitLabCI.Data
 {
     /// <summary>
-    /// Provides GitLab CI project information for a current build
+    /// Provides GitLab CI project information for a current build.
     /// </summary>
     public sealed class GitLabCIProjectInfo : GitLabCIInfo
     {

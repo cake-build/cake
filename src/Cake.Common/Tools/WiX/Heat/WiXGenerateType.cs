@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.WiX.Heat
 {
     /// <summary>
-    /// Type of elements to generate
+    /// Type of elements to generate.
     /// </summary>
     public enum WiXGenerateType
     {

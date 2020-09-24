@@ -603,7 +603,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Enables a Chocolatey Feature using the specified name
+        /// Enables a Chocolatey Feature using the specified name.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the feature.</param>
@@ -621,7 +621,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Enables a Chocolatey Feature using the specified name and settings
+        /// Enables a Chocolatey Feature using the specified name and settings.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the feature.</param>
@@ -656,7 +656,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Disables a Chocolatey Feature using the specified name
+        /// Disables a Chocolatey Feature using the specified name.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the feature.</param>
@@ -674,7 +674,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Disables a Chocolatey Feature using the specified name and settings
+        /// Disables a Chocolatey Feature using the specified name and settings.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the feature.</param>
@@ -709,7 +709,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Adds Chocolatey package source using the specified name &amp;source to global user config
+        /// Adds Chocolatey package source using the specified name &amp;source to global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -728,7 +728,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Adds Chocolatey package source using the specified name, source &amp; settings to global user config
+        /// Adds Chocolatey package source using the specified name, source &amp; settings to global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -767,7 +767,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Removes Chocolatey package source using the specified name &amp; source from global user config
+        /// Removes Chocolatey package source using the specified name &amp; source from global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -785,7 +785,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Removes Chocolatey package source using the specified name, source &amp; settings from global user config
+        /// Removes Chocolatey package source using the specified name, source &amp; settings from global user config.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -820,7 +820,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Enables a Chocolatey Source using the specified name
+        /// Enables a Chocolatey Source using the specified name.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -838,7 +838,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Enables a Chocolatey Source using the specified name and settings
+        /// Enables a Chocolatey Source using the specified name and settings.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -873,7 +873,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Disables a Chocolatey Source using the specified name
+        /// Disables a Chocolatey Source using the specified name.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>
@@ -891,7 +891,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Disables a Chocolatey Source using the specified name and settings
+        /// Disables a Chocolatey Source using the specified name and settings.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="name">Name of the source.</param>

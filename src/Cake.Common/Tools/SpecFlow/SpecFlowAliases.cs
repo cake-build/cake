@@ -72,7 +72,7 @@ namespace Cake.Common.Tools.SpecFlow
         /// See <see href="https://github.com/techtalk/SpecFlow/wiki/Reporting#test-execution-report">SpecFlow Documentation</see> for more information.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="action">The action to run SpecFlow for. Supported actions are: MSTest, NUnit3 and XUnit2</param>
+        /// <param name="action">The action to run SpecFlow for. Supported actions are: MSTest, NUnit3 and XUnit2.</param>
         /// <param name="projectFile">The path of the project file containing the feature files.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("TestExecutionReport")]
@@ -96,7 +96,7 @@ namespace Cake.Common.Tools.SpecFlow
         /// See <see href="https://github.com/techtalk/SpecFlow/wiki/Reporting#test-execution-report">SpecFlow Documentation</see> for more information.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="action">The action to run SpecFlow for. Supported actions are: MSTest, NUnit, NUnit3, XUnit and XUnit2</param>
+        /// <param name="action">The action to run SpecFlow for. Supported actions are: MSTest, NUnit, NUnit3, XUnit and XUnit2.</param>
         /// <param name="projectFile">The path of the project file containing the feature files.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]

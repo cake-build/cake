@@ -159,7 +159,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(task.ErrorHandler);
-                Assert.IsType<Action<Exception, ICakeContext>>(task.ErrorHandler);
+                Assert.IsType<Func<Exception, ICakeContext, Task>>(task.ErrorHandler);
             }
 
             [Fact]

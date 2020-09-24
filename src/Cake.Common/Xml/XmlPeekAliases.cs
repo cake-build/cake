@@ -92,7 +92,7 @@ namespace Cake.Common.Xml
                 throw new FileNotFoundException("Source File not found.", file.Path.FullPath);
             }
 
-            using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+            using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var xmlReader = XmlReader.Create(fileStream, GetXmlReaderSettings(settings)))
             {
                 var xmlValue = XmlPeek(xmlReader, xpath, settings);
@@ -145,7 +145,7 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Gets a XmlReaderSettings from a XmlPeekSettings
+        /// Gets a XmlReaderSettings from a XmlPeekSettings.
         /// </summary>
         /// <returns>The xml reader settings.</returns>
         /// <param name="settings">Additional settings to tweak Xml Peek behavior.</param>

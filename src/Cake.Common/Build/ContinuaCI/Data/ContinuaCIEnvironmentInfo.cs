@@ -33,7 +33,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI configuration information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
@@ -50,7 +50,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via ContinuaCI</para>
+        /// <para>Via ContinuaCI.</para>
         /// <example>
         /// <code>
         /// if (ContinuaCI.IsRunningOnContinuaCI)
@@ -75,7 +75,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI project information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
@@ -92,7 +92,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via ContinuaCI</para>
+        /// <para>Via ContinuaCI.</para>
         /// <example>
         /// <code>
         /// if (ContinuaCI.IsRunningOnContinuaCI)
@@ -117,7 +117,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI build information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
@@ -144,7 +144,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via ContinuaCI</para>
+        /// <para>Via ContinuaCI.</para>
         /// <example>
         /// <code>
         /// if (ContinuaCI.IsRunningOnContinuaCI)
@@ -179,7 +179,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI build variables.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
@@ -199,7 +199,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via ContinuaCI</para>
+        /// <para>Via ContinuaCI.</para>
         /// <example>
         /// <code>
         /// if (ContinuaCI.IsRunningOnContinuaCI)
@@ -229,12 +229,12 @@ namespace Cake.Common.Build.ContinuaCI.Data
         }
 
         /// <summary>
-        /// Gets Continua CI build agent properties
+        /// Gets Continua CI build agent properties.
         /// </summary>
         /// <value>
         ///   The Continua CI build agent properties.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
@@ -254,7 +254,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via ContinuaCI</para>
+        /// <para>Via ContinuaCI.</para>
         /// <example>
         /// <code>
         /// if (ContinuaCI.IsRunningOnContinuaCI)
@@ -289,7 +289,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// <value>
         ///   The Continua CI product version.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.ContinuaCI.IsRunningOnContinuaCI)
@@ -305,7 +305,7 @@ namespace Cake.Common.Build.ContinuaCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via ContinuaCI</para>
+        /// <para>Via ContinuaCI.</para>
         /// <example>
         /// <code>
         /// if (ContinuaCI.IsRunningOnContinuaCI)

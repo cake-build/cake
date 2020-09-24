@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -78,15 +78,19 @@ namespace Cake.Common.Solution.Project.Properties
             string attributeWithValueFormat = CSharpAttributeWithValueFormat;
             string attributeWithKeyValueFormat = CSharpAttributeWithKeyValueFormat;
 
+            var isVisualBasicAssemblyInfoFile = false;
+
             if (outputPath.GetExtension() == ".vb")
             {
+                isVisualBasicAssemblyInfoFile = true;
                 comment = VBComment;
                 usingFormat = VBUsingFormat;
                 attributeFormat = VBAttributeFormat;
                 attributeWithValueFormat = VBAttributeWithValueFormat;
                 attributeWithKeyValueFormat = VBAttributeWithKeyValueFormat;
             }
-            var data = new AssemblyInfoCreatorData(settings);
+
+            var data = new AssemblyInfoCreatorData(settings, isVisualBasicAssemblyInfoFile);
 
             outputPath = outputPath.MakeAbsolute(_environment);
             _log.Verbose("Creating assembly info file: {0}", outputPath);

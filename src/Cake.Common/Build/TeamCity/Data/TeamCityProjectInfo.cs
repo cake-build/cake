@@ -7,15 +7,15 @@ using Cake.Core;
 namespace Cake.Common.Build.TeamCity.Data
 {
     /// <summary>
-    /// Provides TeamCity project information for current build
+    /// Provides TeamCity project information for current build.
     /// </summary>
     public class TeamCityProjectInfo : TeamCityInfo
     {
         /// <summary>
-        /// Gets the TeamCity project name
+        /// Gets the TeamCity project name.
         /// </summary>
         /// <value>
-        /// The TeamCity project name
+        /// The TeamCity project name.
         /// </value>
         public string Name => GetEnvironmentString("TEAMCITY_PROJECT_NAME");
 

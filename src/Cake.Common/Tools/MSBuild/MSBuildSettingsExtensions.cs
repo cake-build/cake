@@ -242,7 +242,7 @@ namespace Cake.Common.Tools.MSBuild
         /// Adds a custom logger.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="loggerAssembly">The assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}</param>
+        /// <param name="loggerAssembly">The assembly containing the logger. Should match the format {AssemblyName[,StrongName] | AssemblyFile}.</param>
         /// <param name="loggerClass">The class implementing the logger. Should match the format [PartialOrFullNamespace.]LoggerClassName. If the assembly contains only one logger, class does not need to be specified.</param>
         /// <param name="loggerParameters">Parameters to be passed to the logger.</param>
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
@@ -263,6 +263,19 @@ namespace Cake.Common.Tools.MSBuild
                 Parameters = loggerParameters
             });
             return settings;
+        }
+
+        /// <summary>
+        /// Adds a file logger with all the default settings.
+        /// Each file logger will be declared in the order added.
+        /// The first file logger will match up to the /fl parameter.
+        /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings AddFileLogger(this MSBuildSettings settings)
+        {
+            return AddFileLogger(settings, new MSBuildFileLogger());
         }
 
         /// <summary>
@@ -290,30 +303,22 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
-        /// Adds a file logger with all the default settings.
-        /// Each file logger will be declared in the order added.
-        /// The first file logger will match up to the /fl parameter.
-        /// The next nine (max) file loggers will match up to the /fl1 through /fl9 respectively.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        public static MSBuildSettings AddFileLogger(this MSBuildSettings settings)
-        {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            settings.FileLoggers.Add(new MSBuildFileLogger());
-            return settings;
-        }
-
-        /// <summary>
         /// Enables the binary logger with all the default settings.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings EnableBinaryLogger(this MSBuildSettings settings)
+        {
+            return EnableBinaryLogger(settings, MSBuildBinaryLogImports.Unspecified);
+        }
+
+        /// <summary>
+        /// Enables the binary logger with the specified imports and default file name.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="imports">The imports.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings EnableBinaryLogger(this MSBuildSettings settings, MSBuildBinaryLogImports imports)
         {
             if (settings == null)
             {
@@ -323,10 +328,21 @@ namespace Cake.Common.Tools.MSBuild
             settings.BinaryLogger = new MSBuildBinaryLogSettings
             {
                 Enabled = true,
-                Imports = MSBuildBinaryLogImports.None,
+                Imports = imports,
             };
 
             return settings;
+        }
+
+        /// <summary>
+        /// Enables the binary logger with the specified log file name and no imports.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileName">The log file name.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings EnableBinaryLogger(this MSBuildSettings settings, string fileName)
+        {
+            return EnableBinaryLogger(settings, fileName, MSBuildBinaryLogImports.Unspecified);
         }
 
         /// <summary>
@@ -347,51 +363,6 @@ namespace Cake.Common.Tools.MSBuild
             {
                 Enabled = true,
                 FileName = fileName,
-                Imports = imports,
-            };
-
-            return settings;
-        }
-
-        /// <summary>
-        /// Enables the binary logger with the specified log file name and no imports.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <param name="fileName">The log file name.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        public static MSBuildSettings EnableBinaryLogger(this MSBuildSettings settings, string fileName)
-        {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            settings.BinaryLogger = new MSBuildBinaryLogSettings
-            {
-                Enabled = true,
-                FileName = fileName,
-                Imports = MSBuildBinaryLogImports.None,
-            };
-
-            return settings;
-        }
-
-        /// <summary>
-        /// Enables the binary logger with the specified imports and default file name.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <param name="imports">The imports.</param>
-        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
-        public static MSBuildSettings EnableBinaryLogger(this MSBuildSettings settings, MSBuildBinaryLogImports imports)
-        {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            settings.BinaryLogger = new MSBuildBinaryLogSettings
-            {
-                Enabled = true,
                 Imports = imports,
             };
 
@@ -445,7 +416,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Invoke the Restore target before any other target.
         /// </summary>
-        /// <param name="settings">The setting</param>
+        /// <param name="settings">The setting.</param>
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithRestore(this MSBuildSettings settings)
         {

@@ -17,7 +17,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The build.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Jenkins.IsRunningOnJenkins)
@@ -38,7 +38,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Jenkins</para>
+        /// <para>Via Jenkins.</para>
         /// <example>
         /// <code>
         /// if (Jenkins.IsRunningOnJenkins)
@@ -67,7 +67,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The repository.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Jenkins.IsRunningOnJenkins)
@@ -88,7 +88,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Jenkins</para>
+        /// <para>Via Jenkins.</para>
         /// <example>
         /// <code>
         /// if (Jenkins.IsRunningOnJenkins)
@@ -117,7 +117,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The job.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Jenkins.IsRunningOnJenkins)
@@ -138,7 +138,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Jenkins</para>
+        /// <para>Via Jenkins.</para>
         /// <example>
         /// <code>
         /// if (Jenkins.IsRunningOnJenkins)
@@ -167,7 +167,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The node.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Jenkins.IsRunningOnJenkins)
@@ -186,7 +186,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Jenkins</para>
+        /// <para>Via Jenkins.</para>
         /// <example>
         /// <code>
         /// if (Jenkins.IsRunningOnJenkins)
@@ -213,7 +213,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The change.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Jenkins.IsRunningOnJenkins)
@@ -234,7 +234,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Jenkins</para>
+        /// <para>Via Jenkins.</para>
         /// <example>
         /// <code>
         /// if (Jenkins.IsRunningOnJenkins)
@@ -263,7 +263,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The absolute path of the directory assigned on the master node for Jenkins to store data.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Jenkins.IsRunningOnJenkins)
@@ -279,7 +279,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Jenkins</para>
+        /// <para>Via Jenkins.</para>
         /// <example>
         /// <code>
         /// if (Jenkins.IsRunningOnJenkins)
@@ -303,7 +303,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// <value>
         /// The full URL of Jenkins.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Jenkins.IsRunningOnJenkins)
@@ -319,7 +319,7 @@ namespace Cake.Common.Build.Jenkins.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Jenkins</para>
+        /// <para>Via Jenkins.</para>
         /// <example>
         /// <code>
         /// if (Jenkins.IsRunningOnJenkins)

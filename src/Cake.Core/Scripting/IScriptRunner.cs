@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core.IO;
 
 namespace Cake.Core.Scripting
@@ -17,7 +18,6 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="host">The script host.</param>
         /// <param name="scriptPath">The script path.</param>
-        /// <param name="arguments">The arguments.</param>
-        void Run(IScriptHost host, FilePath scriptPath, IDictionary<string, string> arguments);
+        void Run(IScriptHost host, FilePath scriptPath);
     }
 }

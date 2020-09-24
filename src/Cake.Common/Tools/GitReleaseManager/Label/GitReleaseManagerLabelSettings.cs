@@ -2,24 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Core.IO;
-using Cake.Core.Tooling;
-
 namespace Cake.Common.Tools.GitReleaseManager.Label
 {
     /// <summary>
     /// Contains settings used by <see cref="GitReleaseManagerLabeller"/>.
     /// </summary>
-    public class GitReleaseManagerLabelSettings : ToolSettings
+    public class GitReleaseManagerLabelSettings : GitReleaseManagerSettings
     {
-        /// <summary>
-        /// Gets or sets the path on which GitReleaseManager should be executed.
-        /// </summary>
-        public DirectoryPath TargetDirectory { get; set; }
-
-        /// <summary>
-        /// Gets or sets the path to the GitReleaseManager log file.
-        /// </summary>
-        public FilePath LogFilePath { get; set; }
     }
 }

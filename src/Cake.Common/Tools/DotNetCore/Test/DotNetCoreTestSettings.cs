@@ -20,7 +20,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Gets or sets the filter expression to filter out tests in the current project.
         /// </summary>
         /// <remarks>
-        /// For more information on filtering support, see https://aka.ms/vstest-filtering
+        /// For more information on filtering support, see https://aka.ms/vstest-filtering.
         /// </remarks>
         public string Filter { get; set; }
 
@@ -30,7 +30,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
         public DirectoryPath TestAdapterPath { get; set; }
 
         /// <summary>
-        /// Gets or sets a logger for test results
+        /// Gets or sets a logger for test results.
         /// </summary>
         public string Logger { get; set; }
 
@@ -43,6 +43,11 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Gets or sets the configuration under which to build.
         /// </summary>
         public string Configuration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the data collector for the test run.
+        /// </summary>
+        public string Collector { get; set; }
 
         /// <summary>
         /// Gets or sets specific framework to compile.
@@ -62,6 +67,14 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Requires .NET Core 2.x or newer.
         /// </remarks>
         public bool NoRestore { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to run tests without displaying the Microsoft TestPlatform banner.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 3.0 SDK.
+        /// </remarks>
+        public bool NoLogo { get; set; }
 
         /// <summary>
         /// Gets or sets a file to write diagnostic messages to.

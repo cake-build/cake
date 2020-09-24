@@ -7,7 +7,7 @@ using Cake.Core;
 namespace Cake.Common.Build.TeamCity.Data
 {
     /// <summary>
-    /// Provides TeamCity environment information for current build
+    /// Provides TeamCity environment information for current build.
     /// </summary>
     public class TeamCityEnvironmentInfo : TeamCityInfo
     {
@@ -17,7 +17,7 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <value>
         /// The TeamCity project information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
@@ -34,7 +34,7 @@ namespace Cake.Common.Build.TeamCity.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TeamCity</para>
+        /// <para>Via TeamCity.</para>
         /// <example>
         /// <code>
         /// if (TeamCity.IsRunningOnTeamCity)
@@ -59,7 +59,7 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <value>
         /// The TeamCity build information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
@@ -78,7 +78,7 @@ namespace Cake.Common.Build.TeamCity.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TeamCity</para>
+        /// <para>Via TeamCity.</para>
         /// <example>
         /// <code>
         /// if (TeamCity.IsRunningOnTeamCity)
@@ -105,7 +105,7 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <value>
         /// The TeamCity pull-request information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
@@ -124,7 +124,7 @@ namespace Cake.Common.Build.TeamCity.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TeamCity</para>
+        /// <para>Via TeamCity.</para>
         /// <example>
         /// <code>
         /// if (TeamCity.IsRunningOnTeamCity)

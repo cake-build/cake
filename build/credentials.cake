@@ -1,19 +1,16 @@
 public class BuildCredentials
 {
-    public string UserName { get; private set; }
-    public string Password { get; private set; }
+    public string Token { get; private set; }
 
-    public BuildCredentials(string userName, string password)
+    public BuildCredentials(string token)
     {
-        UserName = userName;
-        Password = password;
+        Token = token;
     }
 
     public static BuildCredentials GetGitHubCredentials(ICakeContext context)
     {
         return new BuildCredentials(
-            context.EnvironmentVariable("CAKE_GITHUB_USERNAME"),
-            context.EnvironmentVariable("CAKE_GITHUB_PASSWORD"));
+            context.EnvironmentVariable("CAKE_GITHUB_TOKEN"));
     }
 }
 

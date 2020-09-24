@@ -5,7 +5,7 @@
 namespace Cake.Common.Build.ContinuaCI
 {
     /// <summary>
-    /// Provides the known values for Continua CI Message Types
+    /// Provides the known values for Continua CI Message Types.
     /// </summary>
     public enum ContinuaCIMessageType
     {

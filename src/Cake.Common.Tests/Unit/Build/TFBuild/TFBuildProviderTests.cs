@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Build.TFBuild;
+using Cake.Common.Tests.Fakes;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -19,92 +20,20 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new TFBuildProvider(null, new NullLog()));
+                var result = Record.Exception(() => new TFBuildProvider(null, new FakeBuildSystemServiceMessageWriter()));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
             }
 
             [Fact]
-            public void Should_Throw_If_Log_Is_Null()
+            public void Should_Throw_If_Writer_Is_Null()
             {
                 // Given, When
                 var result = Record.Exception(() => new TFBuildProvider(new FakeEnvironment(PlatformFamily.Unknown), null));
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "log");
-            }
-        }
-
-        public sealed class TheIsRunningOnTFSProperty
-        {
-            [Fact]
-            public void Should_Return_True_If_Running_On_TFS()
-            {
-                // Given
-                var fixture = new TFBuildFixture();
-                fixture.IsRunningOnTFS();
-                var tfBuild = fixture.CreateTFBuildService();
-
-                // When
-#pragma warning disable 618
-                var result = tfBuild.IsRunningOnTFS;
-#pragma warning restore 618
-
-                // Then
-                Assert.True(result);
-            }
-
-            [Fact]
-            public void Should_Return_False_If_Not_Running_On_TFS()
-            {
-                // Given
-                var fixture = new TFBuildFixture();
-                var tfBuild = fixture.CreateTFBuildService();
-
-                // When
-#pragma warning disable 618
-                var result = tfBuild.IsRunningOnTFS;
-#pragma warning restore 618
-
-                // Then
-                Assert.False(result);
-            }
-        }
-
-        public sealed class TheIsRunningOnVSTSProperty
-        {
-            [Fact]
-            public void Should_Return_True_If_Running_On_VSTS()
-            {
-                // Given
-                var fixture = new TFBuildFixture();
-                fixture.IsRunningOnVSTS();
-                var tfBuild = fixture.CreateTFBuildService();
-
-                // When
-#pragma warning disable 618
-                var result = tfBuild.IsRunningOnVSTS;
-#pragma warning restore 618
-
-                // Then
-                Assert.True(result);
-            }
-
-            [Fact]
-            public void Should_Return_False_If_Not_Running_On_VSTS()
-            {
-                // Given
-                var fixture = new TFBuildFixture();
-                var tfBuild = fixture.CreateTFBuildService();
-
-                // When
-#pragma warning disable 618
-                var result = tfBuild.IsRunningOnVSTS;
-#pragma warning restore 618
-
-                // Then
-                Assert.False(result);
+                AssertEx.IsArgumentNullException(result, "writer");
             }
         }
 
@@ -169,6 +98,23 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
 
                 // Then
                 Assert.False(result);
+            }
+
+            [Theory]
+            [InlineData("Hosted Agent 2")]
+            [InlineData("Azure Pipelines 3")]
+            public void Should_Return_True_If_Running_On_AzurePipelinesExtraAgent(string agentName)
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                fixture.IsRunningOnAzurePipelinesHosted(agentName);
+                var tfBuild = fixture.CreateTFBuildService();
+
+                // When
+                var result = tfBuild.IsRunningOnAzurePipelinesHosted;
+
+                // Then
+                Assert.True(result);
             }
         }
 

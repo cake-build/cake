@@ -9,7 +9,6 @@ using System.Globalization;
 using System.Linq;
 using Cake.Common.Build.TravisCI.Data;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 
 namespace Cake.Common.Build.TravisCI
 {
@@ -20,8 +19,10 @@ namespace Cake.Common.Build.TravisCI
     {
         private const string MessagePrefix = "travis_";
         private const string MessagePostfix = "\r";
+
         private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
+        private readonly IBuildSystemServiceMessageWriter _writer;
+
         private static readonly Dictionary<string, string> _sanitizationTokens;
 
         static TravisCIProvider()
@@ -41,25 +42,13 @@ namespace Cake.Common.Build.TravisCI
         /// Initializes a new instance of the <see cref="TravisCIProvider"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        /// <param name="log">The log.</param>
-        public TravisCIProvider(ICakeEnvironment environment, ICakeLog log)
+        /// <param name="writer">The log.</param>
+        public TravisCIProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            _environment = environment;
-            _log = log;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
             Environment = new TravisCIEnvironmentInfo(environment);
         }
-
-        /// <summary>
-        /// Gets the Travis CI environment.
-        /// </summary>
-        /// <value>
-        /// The environment.
-        /// </value>
-        public TravisCIEnvironmentInfo Environment { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is running on Travis CI.
@@ -68,6 +57,14 @@ namespace Cake.Common.Build.TravisCI
         /// <c>true</c> if this instance is running on Travis CI; otherwise, <c>false</c>.
         /// </value>
         public bool IsRunningOnTravisCI => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TRAVIS"));
+
+        /// <summary>
+        /// Gets the Travis CI environment.
+        /// </summary>
+        /// <value>
+        /// The environment.
+        /// </value>
+        public TravisCIEnvironmentInfo Environment { get; }
 
         /// <summary>
         /// Write the start of a message fold to the Travis CI build log.
@@ -107,7 +104,7 @@ namespace Cake.Common.Build.TravisCI
                             return string.Format(CultureInfo.InvariantCulture, ":{0}:{1}", keypair.Key, Sanitize(keypair.Value));
                         })
                         .ToArray());
-            _log.Write(Verbosity.Quiet, LogLevel.Information, "{0}{1}{2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);
+            _writer.Write("{0}{1}{2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);
         }
 
         private static string Sanitize(string source)

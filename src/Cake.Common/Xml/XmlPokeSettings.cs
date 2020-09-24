@@ -8,7 +8,7 @@ using System.Text;
 namespace Cake.Common.Xml
 {
     /// <summary>
-    /// Contains settings for <see cref="XmlPokeAliases"/>
+    /// Contains settings for <see cref="XmlPokeAliases"/>.
     /// </summary>
     public sealed class XmlPokeSettings
     {

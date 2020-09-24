@@ -15,7 +15,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.DupFinder
 {
     /// <summary>
-    /// DupFinder runner
+    /// DupFinder runner.
     /// </summary>
     public sealed class DupFinderRunner : Tool<DupFinderSettings>
     {
@@ -62,10 +62,13 @@ namespace Cake.Common.Tools.DupFinder
 
             Run(settings, GetArgument(settings, filePaths));
 
-            if (settings.OutputFile != null)
+            if (settings.SkipOutputAnalysis ||
+                settings.OutputFile == null)
             {
-                AnalyzeResultsFile(settings.OutputFile, settings.ThrowExceptionOnFindingDuplicates);
+                return;
             }
+
+            AnalyzeResultsFile(settings.OutputFile, settings.ThrowExceptionOnFindingDuplicates);
         }
 
         /// <summary>

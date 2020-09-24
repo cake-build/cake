@@ -1,3 +1,115 @@
+### New in 0.38.5 (Released 2020/09/20)
+
+* 2859 .NET 5 shouldn't be identified as Full Framework or Mono.
+
+### New in 0.38.4 (Released 2020/06/26)
+
+* 2813 Actually ship  0.38.3
+
+### New in 0.38.3 (Released 2020/06/26)
+
+* 2803 ArgumentOutOfRangeException: The DateTimeOffset specified cannot be converted into a Zip file timestamp .
+* 2798 Input string not in correct format starting in v0.38.0.
+* 2799 Bump .NET Core SDK to 3.1.301.
+
+### New in 0.38.2 (Released 2020/06/09)
+
+* 2790 Cake 0.38.1 is failing to write messages to TeamCity
+
+### New in 0.38.1 (Released 2020/05/30)
+
+* 2786 0.38.0 introduces TFBuild obsolete warning for everyone not just users of property
+
+### New in 0.38.0 (Released 2020/05/30)
+
+* 2784 Add NuGet Delete functionality
+* 2749 Add support for ANSI escape codes
+* 2728 Add dotnet NuGet source commands
+* 2718 Add binary logger to dotnet MSBuild settings
+* 2721 NuGet package name/path should be added in quotes
+* 2785 Provide additional logging for tool resolver
+* 2778 Update Roslyn to 3.6.0
+* 2768 Add an option to skip the default warning/error output when running JetBrains command line tools
+* 2764 Additional Jenkins information
+* 2752 MSTestRunner prioritizes VS2017 over VS2019
+* 2745 Extend XmlPeekSettings with FileShare.* option
+* 2733 NuGetSetApiKey with Verbosity set to Quiet causes an exception.
+* 2730 Better handling for GitVersion failure cases
+* 2715 Add missing dotnet NuGet command options
+* 2714 Squash warning when skip package version check
+* 2710 Add GitHub Actions GITHUB_RUN_ID & GITHUB_RUN_NUMBER
+* 2658 Rename TFBuild alias to AzurePipelines
+* 2077 Locating the correct vstest.console.exe (VS2017)
+* 2735 Improve documentation for MSBuild alias to make clear that also MSBuild projects can be passed
+
+### New in 0.37.0 (Released 2020/02/01)
+
+* 2708 Emitting debug information should be done regardless of --debug switch.
+* 2701 Api keys should be secret.
+* 2697 Update to latest release of GitReleaseManager.
+* 2696 Upgrade Cake Alias support for GitReleaseManager.
+* 2691 Missing GitHubActions Alias.
+* 2695 Cake fails to build on travis-ci with latest mono (6.8).
+* 2693 Update .NET Core SDK to 3.1.101.
+
+### New in 0.36.0 (Released 2020/01/11)
+
+* 2677 Add GitHub Actions build provider.
+* 2638 CreateAssemblyInfo alias should allow creation of custom boolean attributes and also empty attributes.
+* 2682 Add .NET Core 3.1 Runtime support.
+* 2679 Add optional GetToolExecutableNames that takes tool settings.
+* 2675 InspectCode: Add support for InspectCode.x86.exe tool.
+* 2673 DotNetCorePublishSettings should support new .NET Core 3 features.
+* 2671 NuGet Install doesn't allow to set NonInteractive to false.
+* 2663 Support Inno Setup 6.
+* 2657 Rename TFBuild.Environment.Repository.Branch to TFBuild.Environment.Repository.BranchName.
+* 2533 Setting SecurityRules with CreateAssemblyInfo.
+* 2532 Publish Cake.Testing.Xunit package.
+* 2328 InspectCode: Add support for new /verbosity argument.
+* 2652 Improve documentation for TFBuildPullRequestInfo.Id and TFBuildPullRequestInfo.Number.
+* 2661 Build not stopped when rethrowing exception in OnError.
+* 2640 Remove unnecessary parameter from AddMetadataAttribute method.
+* 2637 CreateAssemblyInfo alias creates invalid file when using .vb.
+* 2534 Windows 10: System.PlatformNotSupportedException: System.Data.SqlClient is not supported on this platform.
+* 2527 Don't limit the #load to only .cake files.
+* 2498 ParseProject fails on an absolute HintPath.
+* 2275 System.Data.SqlClient in Cake.CoreCLR Assembly Load Error.
+
+### New in 0.35.0 (Released 2019/09/28)
+
+* 2603 Add .NET Core 3 to Cake.Tool update to .NET Core 3 SDK.
+* 2625 Add NuGet Push -SkipDuplicate Flag.
+* 2618 The MSTest tool doesn't pick up the mstest.exe from Visual Studio 2019.
+* 2606 Unable to reference Newtonsoft.Json > 11.0.2.
+* 2601 Update Microsoft.CodeAnalysis.CSharp.Scripting to 3.2.1.
+* 2599 Update to Autofac 4.9.4.
+* 2585 Cake.Tool - How in the world do I run a specific task?.
+* 2590 Update confusing GitVersionVerbosity docs.
+* 2610 Aliases of type 'dynamic' cannot be accessed directly.
+* 2608 TFBuildProvider.IsHostedAgent returns wrong value when running on 2nd build agent.
+
+### New in 0.34.1 (Released 2019/07/16)
+
+* 2575 v0.34.0 fails on scripts using the dynamic keyword
+
+### New in 0.34.0 (Released 2019/07/16)
+
+* 2519 Not able to build project with ToolsVersion="15.0"
+* 2553 cake 0.33.0 compilation is failing for System.Net.Http.HttpClient on Mono 5.20.1.19
+* 2535 OctoPack doesn't work on Linux
+* 2161 If [Nuget] ConfigFile directive in cake configuration file has no folder — error rises
+* 2157 NuGetPack with nuspec that contains contentFiles becomes invalid
+* 2560 Runtime property is missing for 'dotnet pack', 'dotnet run' and 'dotnet clean'
+* 2556 DotNetCoreTestSettings: Missing RunTime Property which is needed for RID builds
+* 2551 Call MSBuild without specifying a target does not use DefaultTarget
+* 2536 Additional formatting options on XmlPoke
+* 2531 Update to NuGet client libraries to v5
+* 2530 Remove dependency on NuGet.PackageManagement
+* 2521 Update to Roslyn 3.0.0
+* 2499 NuGet Pack with assembly references support
+* 2156 Add newer nuspec properties to NuGetPackSettings
+* 1618 Support different Git servers in TeamCityPullRequestInfo
+
 ### New in 0.33.0 (Released 2019/04/01)
 
 * 2514 Add additional report types for ReportGenerator

@@ -22,7 +22,7 @@ namespace Cake.Common.Build.TFBuild.Data
         }
 
         /// <summary>
-        /// Gets a value indicating whether the pull request is from a fork of the repository
+        /// Gets a value indicating whether the pull request is from a fork of the repository.
         /// </summary>
         public bool IsFork => GetEnvironmentBoolean("SYSTEM_PULLREQUEST_ISFORK");
 
@@ -35,18 +35,20 @@ namespace Cake.Common.Build.TFBuild.Data
         public bool IsPullRequest => Id > 0;
 
         /// <summary>
-        /// Gets the pull request id.
+        /// Gets the ID of the pull request that caused this build.
+        /// This value is set only if the build ran because of a Git PR affected by a branch policy.
         /// </summary>
         /// <value>
-        ///   The pull request id.
+        ///   The ID of the pull request that caused this build.
         /// </value>
         public int Id => GetEnvironmentInteger("SYSTEM_PULLREQUEST_PULLREQUESTID");
 
         /// <summary>
-        /// Gets the GitHub pull request number.
+        /// Gets the number of the pull request that caused this build.
+        /// This value is set for pull requests from GitHub which have a different pull request ID and pull request number.
         /// </summary>
         /// <value>
-        ///   The GitHub pull request number.
+        ///   The number of the pull request that caused this build.
         /// </value>
         public int Number => GetEnvironmentInteger("SYSTEM_PULLREQUEST_PULLREQUESTNUMBER");
 
@@ -54,20 +56,20 @@ namespace Cake.Common.Build.TFBuild.Data
         /// Gets the branch that is being reviewed in a pull request.
         /// </summary>
         /// <remarks>
-        /// This property is populated only if the build ran because of a Git PR affected by a branch policy
+        /// This property is populated only if the build ran because of a Git PR affected by a branch policy.
         /// </remarks>
         public string SourceBranch => GetEnvironmentString("SYSTEM_PULLREQUEST_SOURCEBRANCH");
 
         /// <summary>
-        /// Gets the URL to the repo that contains the pull requests
+        /// Gets the URL to the repo that contains the pull requests.
         /// </summary>
         /// <remarks>
-        /// This property is populated only if the build ran because of a Git PR affected by a branch policy. It is not initialized for GitHub PRs
+        /// This property is populated only if the build ran because of a Git PR affected by a branch policy. It is not initialized for GitHub PRs.
         /// </remarks>
         public Uri SourceRepositoryUri => GetEnvironmentUri("SYSTEM_PULLREQUEST_SOURCEREPOSITORYURI");
 
         /// <summary>
-        /// Gets the branch that is the target of a pull request
+        /// Gets the branch that is the target of a pull request.
         /// </summary>
         /// <remarks>
         /// This property is populated only if the build ran because of a Git PR affected by a branch policy.

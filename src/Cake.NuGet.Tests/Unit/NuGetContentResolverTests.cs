@@ -7,6 +7,7 @@ using Cake.Core.Diagnostics;
 using Cake.Core.Polyfill;
 using Cake.NuGet.Tests.Fixtures;
 using Cake.Testing;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -227,7 +228,7 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Equal("/Working/lib/netstandard1.6/file.dll", result.ElementAt(0).Path.FullPath);
             }
 
-            [Theory]
+            [Theory(Skip = "Not possible to return files from root anymore.")]
             [InlineData(".NETStandard,Version=v1.6", Runtime.CoreClr)]
             [InlineData(".NETFramework,Version=v4.6.1", Runtime.Clr)]
             public void Should_Return_Files_When_Located_In_Root(string framework, Runtime runtime)
@@ -270,7 +271,7 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Equal($"/Working/lib/{expected}/file.dll", result.ElementAt(0).Path.FullPath);
             }
 
-            [Theory]
+            [Theory(Skip = "Not possible to return files from root anymore.")]
             [InlineData(".NETStandard,Version=v1.6", Runtime.CoreClr)]
             [InlineData(".NETFramework,Version=v4.6", Runtime.Clr)]
             public void Should_Return_From_Root_If_No_Compatible_Framework_Found(string framework, Runtime runtime)
@@ -289,7 +290,7 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Equal($"/Working/file.dll", result.ElementAt(0).Path.FullPath);
             }
 
-            [Theory]
+            [Theory(Skip = "Not possible to return files from root anymore.")]
             [InlineData(".NETStandard,Version=v1.6", Runtime.CoreClr)]
             [InlineData(".NETFramework,Version=v4.6.1", Runtime.Clr)]
             public void Should_Log_Warning_For_Files_Located_In_Root(string framework, Runtime runtime)
@@ -323,6 +324,65 @@ namespace Cake.NuGet.Tests.Unit
 
                 fixture.CreateCLRAssembly("/Working/ref/netstandard1.6/file.dll");
                 fixture.CreateCLRAssembly("/Working/ref/net46/file.dll");
+                fixture.FileSystem.CreateFile("/Working/lib/netstandard1.6/_._");
+                fixture.FileSystem.CreateFile("/Working/lib/net46/_._");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(0, result.Count);
+            }
+
+            [RuntimeFact(TestRuntime.CoreClr)]
+            public void Should_Return_Runtimes_Assemblies_If_CoreCLR()
+            {
+                // Given
+                var framework = ".NETCoreApp,Version=v2.0";
+                var runtime = Runtime.CoreClr;
+                var fixture = new NuGetAddinContentResolverFixture(framework, runtime);
+
+                fixture.CreateCLRAssembly("/Working/runtimes/win/lib/netstandard1.6/file.dll");
+                fixture.CreateCLRAssembly("/Working/runtimes/unix/lib/netstandard1.6/file.dll");
+                fixture.FileSystem.CreateFile("/Working/lib/netstandard1.6/_._");
+                fixture.FileSystem.CreateFile("/Working/lib/net46/_._");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(1, result.Count);
+            }
+
+            [RuntimeFact(TestRuntime.CoreClr)]
+            public void Should_Return_Native_Runtimes_Assemblies_If_CoreCLR()
+            {
+                // Given
+                var framework = ".NETCoreApp,Version=v2.0";
+                var runtime = Runtime.CoreClr;
+                var fixture = new NuGetAddinContentResolverFixture(framework, runtime);
+
+                fixture.CreateCLRAssembly("/Working/runtimes/win/native/file.dll");
+                fixture.CreateCLRAssembly("/Working/runtimes/linux/native/file.so");
+                fixture.CreateCLRAssembly("/Working/runtimes/osx/native/file.dylib");
+
+                // When
+                var result = fixture.GetFiles();
+
+                // Then
+                Assert.Equal(1, result.Count);
+            }
+
+            [RuntimeFact(TestRuntime.Clr)]
+            public void Should_Not_Return_Runtimes_Assemblies_If_Clr()
+            {
+                // Given
+                var framework = ".NETFramework,Version=v4.6.1";
+                var runtime = Runtime.Clr;
+                var fixture = new NuGetAddinContentResolverFixture(framework, runtime);
+
+                fixture.CreateCLRAssembly("/Working/runtimes/win/lib/netstandard1.6/file.dll");
+                fixture.CreateCLRAssembly("/Working/runtimes/unix/lib/netstandard1.6/file.dll");
                 fixture.FileSystem.CreateFile("/Working/lib/netstandard1.6/_._");
                 fixture.FileSystem.CreateFile("/Working/lib/net46/_._");
 

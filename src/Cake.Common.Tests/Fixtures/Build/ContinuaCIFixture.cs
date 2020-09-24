@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Build.ContinuaCI;
+using Cake.Common.Tests.Fakes;
 using Cake.Core;
 using NSubstitute;
 
@@ -11,12 +12,14 @@ namespace Cake.Common.Tests.Fixtures.Build
     internal sealed class ContinuaCIFixture
     {
         public ICakeEnvironment Environment { get; set; }
+        public FakeBuildSystemServiceMessageWriter Writer { get; set; }
 
         public ContinuaCIFixture()
         {
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("C:\\build\\CAKE-CAKE-JOB1");
             Environment.GetEnvironmentVariable("ContinuaCI.Version").Returns((string)null);
+            Writer = new FakeBuildSystemServiceMessageWriter();
         }
 
         public void IsRunningOnContinuaCI()
@@ -26,7 +29,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public ContinuaCIProvider CreateContinuaCIService()
         {
-            return new ContinuaCIProvider(Environment);
+            return new ContinuaCIProvider(Environment, Writer);
         }
     }
 }

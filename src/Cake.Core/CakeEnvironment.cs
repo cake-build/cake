@@ -17,8 +17,6 @@ namespace Cake.Core
     /// </summary>
     public sealed class CakeEnvironment : ICakeEnvironment
     {
-        private readonly ICakeLog _log;
-
         /// <summary>
         /// Gets or sets the working directory.
         /// </summary>
@@ -52,12 +50,10 @@ namespace Cake.Core
         /// </summary>
         /// <param name="platform">The platform.</param>
         /// <param name="runtime">The runtime.</param>
-        /// <param name="log">The log.</param>
-        public CakeEnvironment(ICakePlatform platform, ICakeRuntime runtime, ICakeLog log)
+        public CakeEnvironment(ICakePlatform platform, ICakeRuntime runtime)
         {
             Platform = platform;
             Runtime = runtime;
-            _log = log;
 
             // Get the application root.
             var assembly = AssemblyHelper.GetExecutingAssembly();
@@ -95,7 +91,7 @@ namespace Cake.Core
         /// <summary>
         /// Gets all environment variables.
         /// </summary>
-        /// <returns>The environment variables as IDictionary&lt;string, string&gt; </returns>
+        /// <returns>The environment variables as IDictionary&lt;string, string&gt;. </returns>
         public IDictionary<string, string> GetEnvironmentVariables()
         {
             return Environment.GetEnvironmentVariables()
@@ -105,61 +101,13 @@ namespace Cake.Core
                     (dictionary, entry) =>
                     {
                         var key = (string)entry.Key;
-                        var value = entry.Value as string;
-                        if (dictionary.TryGetValue(key, out var existingValue))
+                        if (!dictionary.TryGetValue(key, out _))
                         {
-                            if (!StringComparer.OrdinalIgnoreCase.Equals(value, existingValue))
-                            {
-                                _log.Warning("GetEnvironmentVariables() encountered duplicate for key: {0}, value: {1} (existing value: {2})",
-                                    key,
-                                    value,
-                                    existingValue);
-                            }
+                            dictionary.Add(key, entry.Value as string);
                         }
-                        else
-                        {
-                            dictionary.Add(key, value);
-                        }
-
                         return dictionary;
                     },
                     dictionary => dictionary);
-        }
-
-        /// <summary>
-        /// Gets whether or not the current operative system is 64 bit.
-        /// </summary>
-        /// <returns>
-        /// Whether or not the current operative system is 64 bit.
-        /// </returns>
-        [Obsolete("Please use CakeEnvironment.Platform.Is64Bit instead.")]
-        public bool Is64BitOperativeSystem()
-        {
-            return Platform.Is64Bit;
-        }
-
-        /// <summary>
-        /// Determines whether the current machine is running Unix.
-        /// </summary>
-        /// <returns>
-        /// Whether or not the current machine is running Unix.
-        /// </returns>
-        [Obsolete("Please use CakeEnvironment.Platform.IsUnix instead.")]
-        public bool IsUnix()
-        {
-            return Platform.IsUnix();
-        }
-
-        /// <summary>
-        /// Gets the application root path.
-        /// </summary>
-        /// <returns>
-        /// The application root path.
-        /// </returns>
-        [Obsolete("Please use CakeEnvironment.ApplicationRoot instead.")]
-        public DirectoryPath GetApplicationRoot()
-        {
-            return ApplicationRoot;
         }
 
         private static void SetWorkingDirectory(DirectoryPath path)

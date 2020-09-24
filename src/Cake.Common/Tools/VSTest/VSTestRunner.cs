@@ -141,15 +141,24 @@ namespace Cake.Common.Tools.VSTest
         protected override IEnumerable<string> GetToolExecutableNames() => new[] { VSTestConsoleExecutableName };
 
         /// <summary>
-        /// Gets alternative file paths which the tool may exist in
+        /// Gets alternative file paths which the tool may exist in.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(VSTestSettings settings)
         {
+            foreach (var yearAndEdition in new[] { "2019/Enterprise", "2019/Professional", "2019/Community", "2017/Enterprise", "2017/Professional", "2017/Community" })
+            {
+                var path = GetYearAndEditionToolPath(yearAndEdition);
+                if (_fileSystem.Exist(path))
+                {
+                    yield return path;
+                }
+            }
+
             foreach (var version in new[] { "15.0", "14.0", "12.0", "11.0" })
             {
-                var path = GetToolPath(version);
+                var path = GetVersionNumberToolPath(version);
                 if (_fileSystem.Exist(path))
                 {
                     yield return path;
@@ -157,7 +166,14 @@ namespace Cake.Common.Tools.VSTest
             }
         }
 
-        private FilePath GetToolPath(string version)
+        private FilePath GetYearAndEditionToolPath(string yearAndEdition)
+        {
+            var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
+            var root = programFiles.Combine(string.Concat("Microsoft Visual Studio/", yearAndEdition, "/Common7/IDE/CommonExtensions/Microsoft/TestWindow"));
+            return root.CombineWithFilePath(VSTestConsoleExecutableName);
+        }
+
+        private FilePath GetVersionNumberToolPath(string version)
         {
             var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
             var root = programFiles.Combine(string.Concat("Microsoft Visual Studio ", version, "/Common7/IDE/CommonExtensions/Microsoft/TestWindow"));

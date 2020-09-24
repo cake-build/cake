@@ -16,6 +16,8 @@ namespace Cake.Common.Tools.GitReleaseManager
     public abstract class GitReleaseManagerTool<TSettings> : Tool<TSettings>
         where TSettings : ToolSettings
     {
+        private readonly ICakeEnvironment _environment;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GitReleaseManagerTool{TSettings}"/> class.
         /// </summary>
@@ -29,6 +31,7 @@ namespace Cake.Common.Tools.GitReleaseManager
             IProcessRunner processRunner,
             IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
+            _environment = environment;
         }
 
         /// <summary>
@@ -47,6 +50,49 @@ namespace Cake.Common.Tools.GitReleaseManager
         protected sealed override IEnumerable<string> GetToolExecutableNames()
         {
             return new[] { "GitReleaseManager.exe", "gitreleasemanager.exe", "grm.exe", "dotnet-gitreleasemanager", "dotnet-gitreleasemanager.exe" };
+        }
+
+        /// <summary>
+        /// Adds common arguments to the process builder.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="builder">The process argument builder.</param>
+        /// <returns>The process argument builder.</returns>
+        protected ProcessArgumentBuilder AddBaseArguments(GitReleaseManagerSettings settings, ProcessArgumentBuilder builder)
+        {
+            // Target Directory
+            if (settings.TargetDirectory != null)
+            {
+                builder.Append("-d");
+                builder.AppendQuoted(settings.TargetDirectory.MakeAbsolute(_environment).FullPath);
+            }
+
+            // Log File Path
+            if (settings.LogFilePath != null)
+            {
+                builder.Append("-l");
+                builder.AppendQuoted(settings.LogFilePath.MakeAbsolute(_environment).FullPath);
+            }
+
+            // Debug
+            if (settings.Debug)
+            {
+                builder.Append("--debug");
+            }
+
+            // Verbose
+            if (settings.Verbose)
+            {
+                builder.Append("--verbose");
+            }
+
+            // NoLogo
+            if (settings.NoLogo)
+            {
+                builder.Append("--no-logo");
+            }
+
+            return builder;
         }
     }
 }

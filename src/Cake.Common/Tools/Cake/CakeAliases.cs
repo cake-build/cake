@@ -16,7 +16,7 @@ namespace Cake.Common.Tools.Cake
     public static class CakeAliases
     {
         /// <summary>
-        /// Executes cake script out of process
+        /// Executes cake script out of process.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="cakeScriptPath">The script file.</param>
@@ -32,7 +32,7 @@ namespace Cake.Common.Tools.Cake
         }
 
         /// <summary>
-        /// Executes cake script out of process
+        /// Executes cake script out of process.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="cakeScriptPath">The script file.</param>
@@ -55,10 +55,10 @@ namespace Cake.Common.Tools.Cake
         }
 
         /// <summary>
-        /// Executes Cake expression out of process
+        /// Executes Cake expression out of process.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="cakeExpression">The cake expression</param>
+        /// <param name="cakeExpression">The cake expression.</param>
         /// <example>
         /// <code>
         /// CakeExecuteExpression("Information(\"Hello {0}\", \"World\");");
@@ -71,10 +71,10 @@ namespace Cake.Common.Tools.Cake
         }
 
         /// <summary>
-        /// Executes Cake expression out of process
+        /// Executes Cake expression out of process.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="cakeExpression">The cake expression</param>
+        /// <param name="cakeExpression">The cake expression.</param>
         /// <param name="settings">The settings <see cref="CakeSettings"/>.</param>
         /// <example>
         /// <code>

@@ -47,22 +47,22 @@ namespace Cake.Common.Tools.OpenCover
         public bool SkipAutoProps { get; set; }
 
         /// <summary>
-        /// Gets or sets the register option
+        /// Gets or sets the register option.
         /// </summary>
         public string Register { get; set; }
 
         /// <summary>
-        /// Gets or sets the Return target code offset to be used
+        /// Gets or sets the Return target code offset to be used.
         /// </summary>
         public int? ReturnTargetCodeOffset { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the OldStyle option for OpenCover should be used
+        /// Gets or sets a value indicating whether the OldStyle option for OpenCover should be used.
         /// </summary>
         public bool OldStyle { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to merge the results with an existing file
+        /// Gets or sets a value indicating whether to merge the results with an existing file.
         /// </summary>
         public bool MergeOutput { get; set; }
 
@@ -75,6 +75,11 @@ namespace Cake.Common.Tools.OpenCover
         /// Gets or sets the log level of OpenCover.
         /// </summary>
         public OpenCoverLogLevel LogLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the hide skipped option of OpenCover.
+        /// </summary>
+        public OpenCoverHideSkippedOption HideSkippedOption { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to merge the coverage results for an assembly
@@ -115,6 +120,7 @@ namespace Cake.Common.Tools.OpenCover
             _excludedFileFilters = new HashSet<string>(StringComparer.Ordinal);
             Register = "user";
             LogLevel = OpenCoverLogLevel.Info;
+            HideSkippedOption = OpenCoverHideSkippedOption.None;
             _excludeDirectories = new HashSet<DirectoryPath>();
             _searchDirectories = new HashSet<DirectoryPath>();
         }

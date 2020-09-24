@@ -14,20 +14,25 @@ namespace Cake.Core
         /// <summary>
         /// Gets or sets the foreground color.
         /// </summary>
-        /// <value>The foreground color</value>
+        /// <value>The foreground color.</value>
         ConsoleColor ForegroundColor { get; set; }
 
         /// <summary>
         /// Gets or sets the background color.
         /// </summary>
-        /// <value>The background color</value>
+        /// <value>The background color.</value>
         ConsoleColor BackgroundColor { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the console supports ANSI escape codes.
+        /// </summary>
+        bool SupportAnsiEscapeCodes { get; }
 
         /// <summary>
         /// Writes the text representation of the specified array of objects to the
         /// console output using the specified format information.
         /// </summary>
-        /// <param name="format">A composite format string</param>
+        /// <param name="format">A composite format string.</param>
         /// <param name="arg">An array of objects to write using format.</param>
         void Write(string format, params object[] arg);
 
@@ -36,7 +41,7 @@ namespace Cake.Core
         /// by the current line terminator, to the console output using the specified
         /// format information.
         /// </summary>
-        /// <param name="format">A composite format string</param>
+        /// <param name="format">A composite format string.</param>
         /// <param name="arg">An array of objects to write using format.</param>
         void WriteLine(string format, params object[] arg);
 
@@ -44,7 +49,7 @@ namespace Cake.Core
         /// Writes the text representation of the specified array of objects to the
         /// console error output using the specified format information.
         /// </summary>
-        /// <param name="format">A composite format string</param>
+        /// <param name="format">A composite format string.</param>
         /// <param name="arg">An array of objects to write using format.</param>
         void WriteError(string format, params object[] arg);
 
@@ -53,7 +58,7 @@ namespace Cake.Core
         /// by the current line terminator, to the console error output using the
         /// specified format information.
         /// </summary>
-        /// <param name="format">A composite format string</param>
+        /// <param name="format">A composite format string.</param>
         /// <param name="arg">An array of objects to write using format.</param>
         void WriteErrorLine(string format, params object[] arg);
 

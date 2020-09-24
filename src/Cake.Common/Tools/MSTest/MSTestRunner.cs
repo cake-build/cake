@@ -108,13 +108,13 @@ namespace Cake.Common.Tools.MSTest
         }
 
         /// <summary>
-        /// Gets alternative file paths which the tool may exist in
+        /// Gets alternative file paths which the tool may exist in.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(MSTestSettings settings)
         {
-            foreach (var yearAndEdition in new[] { "2017/Enterprise", "2017/Professional", "2017/Community" })
+            foreach (var yearAndEdition in new[] { "2019/Enterprise", "2019/Professional", "2019/Community", "2017/Enterprise", "2017/Professional", "2017/Community" })
             {
                 var path = GetYearAndEditionToolPath(yearAndEdition);
                 if (_fileSystem.Exist(path))

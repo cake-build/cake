@@ -12,7 +12,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// Allows you to query your Octopus Deploy server deployment history
+    /// Allows you to query your Octopus Deploy server deployment history.
     /// </summary>
     public class OctopusDeployDeploymentQuerier : OctopusDeployTool<OctopusDeploymentQuerySettings>
     {
@@ -33,12 +33,12 @@ namespace Cake.Common.Tools.OctopusDeploy
         }
 
         /// <summary>
-        /// Pushes the specified packages to Octopus Deploy internal repository
+        /// Pushes the specified packages to Octopus Deploy internal repository.
         /// </summary>
-        /// <param name="server">The Octopus server URL</param>
-        /// <param name="apiKey">The user's API key</param>
-        /// <param name="querySettings">The query</param>
-        /// <returns>A list of Octopus Deployments</returns>
+        /// <param name="server">The Octopus server URL.</param>
+        /// <param name="apiKey">The user's API key.</param>
+        /// <param name="querySettings">The query.</param>
+        /// <returns>A list of Octopus Deployments.</returns>
         public IEnumerable<OctopusDeployment> QueryOctopusDeployments(string server, string apiKey, OctopusDeploymentQuerySettings querySettings)
         {
             if (querySettings == null)

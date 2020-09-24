@@ -5,7 +5,7 @@
 namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 {
     /// <summary>
-    /// Provides test/marker classes for tests in <see cref="GenericParameterConstraintEmitterTests"/>
+    /// Provides test/marker classes for tests in <see cref="GenericParameterConstraintEmitterTests"/>.
     /// </summary>
     internal static class GenericConstraintFakes
     {

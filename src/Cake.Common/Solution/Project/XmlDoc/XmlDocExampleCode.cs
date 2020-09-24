@@ -5,17 +5,17 @@
 namespace Cake.Common.Solution.Project.XmlDoc
 {
     /// <summary>
-    /// Parsed Xml documentation example code
+    /// Parsed Xml documentation example code.
     /// </summary>
     public sealed class XmlDocExampleCode
     {
         /// <summary>
-        /// Gets Example code parent name
+        /// Gets Example code parent name.
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Gets Example code
+        /// Gets Example code.
         /// </summary>
         public string Code { get; }
 

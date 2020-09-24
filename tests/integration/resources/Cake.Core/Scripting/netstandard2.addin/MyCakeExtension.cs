@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -25,5 +26,21 @@ public static class MyCakeExtension
     public static int TheAnswerToLife(this ICakeContext context)
     {
         return 42;
+    }
+
+    [CakePropertyAlias(Cache = true)]
+    public static dynamic TheDynamicAnswerToLife(this ICakeContext context)
+    {
+        dynamic value =  new ExpandoObject();
+        value.TheAnswerToLife = context.TheAnswerToLife();
+        return value;
+    }
+
+    [CakeMethodAlias]
+    public static dynamic GetDynamicMagicNumber(this ICakeContext context, bool value)
+    {
+        dynamic result =  new ExpandoObject();
+        result.MagicNumber = context.GetMagicNumber(value);
+        return result;
     }
 }

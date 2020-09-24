@@ -21,7 +21,7 @@ namespace Cake.Core.IO
         /// Opens the sub key with the specified name.
         /// </summary>
         /// <param name="name">The name of the key.</param>
-        /// <returns>The sub key with the specified name</returns>
+        /// <returns>The sub key with the specified name.</returns>
         IRegistryKey OpenKey(string name);
 
         /// <summary>

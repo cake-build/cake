@@ -56,7 +56,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
             builder.Append("nuget push");
 
             // Specific package
-            builder.Append(packageName);
+            builder.AppendQuoted(packageName);
 
             // Where to push package to
             if (!string.IsNullOrWhiteSpace(settings.Source))
@@ -69,7 +69,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
             if (!string.IsNullOrWhiteSpace(settings.ApiKey))
             {
                 builder.Append("--api-key");
-                builder.Append(settings.ApiKey);
+                builder.AppendQuotedSecret(settings.ApiKey);
             }
 
             // Where to push symbol package to
@@ -83,7 +83,19 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
             if (!string.IsNullOrWhiteSpace(settings.SymbolApiKey))
             {
                 builder.Append("--symbol-api-key");
-                builder.Append(settings.SymbolApiKey);
+                builder.AppendQuotedSecret(settings.SymbolApiKey);
+            }
+
+            // No service endpoint
+            if (settings.NoServiceEndpoint)
+            {
+                builder.Append("--no-service-endpoint");
+            }
+
+            // Interactive
+            if (settings.Interactive)
+            {
+                builder.Append("--interactive");
             }
 
             // Timeout
@@ -103,6 +115,12 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
             if (settings.IgnoreSymbols)
             {
                 builder.Append("--no-symbols");
+            }
+
+            // skip duplicate
+            if (settings.SkipDuplicate)
+            {
+                builder.Append("--skip-duplicate");
             }
 
             // Force English Output

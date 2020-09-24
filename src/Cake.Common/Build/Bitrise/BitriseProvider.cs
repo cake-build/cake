@@ -40,21 +40,13 @@ namespace Cake.Common.Build.Bitrise
         /// <param name="processRunner">The process runner.</param>
         public BitriseProvider(ICakeEnvironment environment, IProcessRunner processRunner)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException(nameof(processRunner));
-            }
-            _environment = environment;
-            _processRunner = processRunner;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _processRunner = processRunner ?? throw new ArgumentNullException(nameof(processRunner));
             Environment = new BitriseEnvironmentInfo(_environment);
         }
 
         /// <summary>
-        /// Sets and environment variable that can be used in next steps on Bitrise
+        /// Sets and environment variable that can be used in next steps on Bitrise.
         /// </summary>
         /// <param name="variable">The variable.</param>
         /// <param name="value">The value.</param>

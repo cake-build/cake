@@ -47,29 +47,23 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
             {
                 throw new ArgumentNullException(nameof(apiKey));
             }
-
             if (string.IsNullOrWhiteSpace(source))
             {
                 throw new ArgumentNullException(nameof(source));
             }
-
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
-            string output = null;
+
+            // Read but do not validate redirected standard output.
+            // Process wrapper logs redacted output at diagnostic verbosity.
             var processSettings = new ProcessSettings
             {
                 Arguments = GetArguments(apiKey, source, settings),
                 RedirectStandardOutput = true
             };
-            Run(settings, null, processSettings, process => output = string.Join("\r\n", process.GetStandardOutput()));
-
-            if (string.IsNullOrWhiteSpace(output) ||
-                !output.Contains(string.Concat("The API Key '", apiKey, "' was saved for '", source, "'.")))
-            {
-                throw new CakeException("SetApiKey returned unexpected response.");
-            }
+            Run(settings, null, processSettings, process => string.Join(Environment.NewLine, process.GetStandardOutput()));
         }
 
         private ProcessArgumentBuilder GetArguments(string apiKey, string source, NuGetSetApiKeySettings settings)

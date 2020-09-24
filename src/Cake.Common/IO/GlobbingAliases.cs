@@ -52,39 +52,6 @@ namespace Cake.Common.IO
         ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
         ///         "node_modules", StringComparison.OrdinalIgnoreCase);
         ///
-        /// var files = GetFiles("./**/Cake.*.dll", exclude_node_modules);
-        /// foreach(var file in files)
-        /// {
-        ///     Information("File: {0}", file);
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The glob pattern to match.</param>
-        /// <param name="predicate">The predicate used to filter directories based on file system information.</param>
-        /// <returns>A <see cref="FilePathCollection" />.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Files")]
-        [Obsolete("Please use the GetFiles overload that accept globber settings instead.", false)]
-        public static FilePathCollection GetFiles(this ICakeContext context, string pattern, Func<IDirectory, bool> predicate)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            return new FilePathCollection(context.Globber.Match(pattern, predicate).OfType<FilePath>());
-        }
-
-        /// <summary>
-        /// Gets all files matching the specified pattern.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
-        ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
-        ///         "node_modules", StringComparison.OrdinalIgnoreCase);
-        ///
         /// var files = GetFiles("./**/Cake.*.dll", new GlobberSettings { Predicate = exclude_node_modules });
         /// foreach(var file in files)
         /// {
@@ -133,39 +100,6 @@ namespace Cake.Common.IO
             }
 
             return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>());
-        }
-
-        /// <summary>
-        /// Gets all directories matching the specified pattern.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
-        ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
-        ///         "node_modules", StringComparison.OrdinalIgnoreCase);
-        ///
-        /// var directories = GetDirectories("./src/**/obj/*", exclude_node_modules);
-        /// foreach(var directory in directories)
-        /// {
-        ///     Information("Directory: {0}", directory);
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The glob pattern to match.</param>
-        /// <param name="predicate">The predicate used to filter directories based on file system information.</param>
-        /// <returns>A <see cref="DirectoryPathCollection" />.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Directories")]
-        [Obsolete("Please use the GetDirectories overload that accept globber settings instead.", false)]
-        public static DirectoryPathCollection GetDirectories(this ICakeContext context, string pattern, Func<IDirectory, bool> predicate)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            return new DirectoryPathCollection(context.Globber.Match(pattern, predicate).OfType<DirectoryPath>());
         }
 
         /// <summary>

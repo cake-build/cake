@@ -68,10 +68,10 @@ namespace Cake.Common.Tools.Roundhouse
         public string SqlFilesDirectory { get; set; }
 
         /// <summary>
-        /// Gets or sets the location of the source code repository
+        /// Gets or sets the location of the source code repository.
         /// </summary>
         /// <value>
-        /// Path to code repository to be able to correlate versions
+        /// Path to code repository to be able to correlate versions.
         /// </value>
         public string RepositoryPath { get; set; }
 
@@ -223,7 +223,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// Gets or sets the restore file path.
         /// </summary>
         /// <value>
-        /// File path of back when Restore is set to true
+        /// File path of back when Restore is set to true.
         /// </value>
         public string RestoreFilePath { get; set; }
 
@@ -263,7 +263,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// Gets or sets database type.
         /// </summary>
         /// <value>
-        /// Database Type (fully qualified class name implementing [roundhouse.sql.Database, roundhouse])
+        /// Database Type (fully qualified class name implementing [roundhouse.sql.Database, roundhouse]).
         /// </value>
         public string DatabaseType { get; set; }
 
@@ -287,7 +287,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// Gets or sets SQL Server recovery mode.
         /// </summary>
         /// <value>
-        /// This sets the recovery model for SQL Server during migration. (NoChange, Simple, Full)
+        /// This sets the recovery model for SQL Server during migration. (NoChange, Simple, Full).
         /// </value>
         public RecoveryMode? RecoveryMode { get; set; }
 

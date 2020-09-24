@@ -7,7 +7,7 @@ using Cake.Core;
 namespace Cake.Common.Build.TFBuild.Data
 {
     /// <summary>
-    /// Provides TF Build Definition information for the current build
+    /// Provides TF Build Definition information for the current build.
     /// </summary>
     public sealed class TFBuildDefinitionInfo : TFInfo
     {

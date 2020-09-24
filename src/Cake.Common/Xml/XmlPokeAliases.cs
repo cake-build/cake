@@ -111,7 +111,7 @@ namespace Cake.Common.Xml
         /// </example>
         /// <para>
         /// Credit to NAnt for the original example.
-        /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
+        /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html.
         /// </para>
         [CakeMethodAlias]
         public static void XmlPoke(this ICakeContext context, FilePath filePath, string xpath, string value)
@@ -213,7 +213,7 @@ namespace Cake.Common.Xml
         /// </example>
         /// <para>
         /// Credit to NAnt for the original example.
-        /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
+        /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html.
         /// </para>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         [CakeMethodAlias]
@@ -345,7 +345,7 @@ namespace Cake.Common.Xml
         /// </example>
         /// <para>
         /// Credit to NAnt for the original example.
-        /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
+        /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html.
         /// </para>
         [CakeMethodAlias]
         public static string XmlPokeString(this ICakeContext context, string sourceXml, string xpath, string value)
@@ -445,7 +445,7 @@ namespace Cake.Common.Xml
         /// </example>
         /// <para>
         /// Credit to NAnt for the original example.
-        /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html
+        /// http://nant.sourceforge.net/release/latest/help/tasks/xmlpoke.html.
         /// </para>
         [CakeMethodAlias]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
@@ -560,7 +560,7 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Gets a XmlReaderSettings from a XmlPokeSettings
+        /// Gets a XmlReaderSettings from a XmlPokeSettings.
         /// </summary>
         /// <returns>The xml reader settings.</returns>
         /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
@@ -573,7 +573,7 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Gets a XmlWriterSettings from a XmlPokeSettings
+        /// Gets a XmlWriterSettings from a XmlPokeSettings.
         /// </summary>
         /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
         /// <returns>The xml writer settings.</returns>

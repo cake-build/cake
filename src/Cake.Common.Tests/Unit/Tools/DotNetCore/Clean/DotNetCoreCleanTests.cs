@@ -98,13 +98,14 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Clean
                 fixture.Settings.Framework = "net451";
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.Runtime = "win7-x86";
+                fixture.Settings.NoLogo = true;
                 fixture.Project = "./src/project";
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("clean \"./src/project\" --framework net451 --runtime win7-x86 --configuration Release", result.Args);
+                Assert.Equal("clean \"./src/project\" --framework net451 --runtime win7-x86 --configuration Release --nologo", result.Args);
             }
 
             [Fact]

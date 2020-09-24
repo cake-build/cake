@@ -69,7 +69,19 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Delete
                 builder.AppendQuoted(settings.Source);
             }
 
-            // Is it CI?
+            // No service endpoint
+            if (settings.NoServiceEndpoint)
+            {
+                builder.Append("--no-service-endpoint");
+            }
+
+            // Interactive
+            if (settings.Interactive)
+            {
+                builder.Append("--interactive");
+            }
+
+            // Non-Interactive
             if (settings.NonInteractive)
             {
                 builder.Append("--non-interactive");
@@ -79,7 +91,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Delete
             if (!string.IsNullOrEmpty(settings.ApiKey))
             {
                 builder.Append("--api-key");
-                builder.AppendQuoted(settings.ApiKey);
+                builder.AppendQuotedSecret(settings.ApiKey);
             }
 
             // Force English Output

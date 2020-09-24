@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Cake.Core.Annotations;
 
@@ -17,7 +18,7 @@ namespace Cake.Core.Scripting.CodeGen
     /// </summary>
     public static class MethodAliasGenerator
     {
-        private static readonly System.Security.Cryptography.SHA256 SHA256 = System.Security.Cryptography.SHA256.Create();
+        private static readonly System.Security.Cryptography.SHA256 _hasher = System.Security.Cryptography.SHA256.Create();
 
         /// <summary>
         /// Generates a script method alias from the specified method.
@@ -48,6 +49,7 @@ namespace Cake.Core.Scripting.CodeGen
             var parameters = method.GetParameters().Skip(1).ToArray();
 
             // Generate method signature.
+            builder.AppendLine("[System.Diagnostics.DebuggerStepThrough]");
             builder.Append("public ");
             builder.Append(GetReturnType(method));
             builder.Append(" ");
@@ -69,7 +71,7 @@ namespace Cake.Core.Scripting.CodeGen
                 GenericParameterConstraintEmitter.BuildGenericConstraints(method, builder);
             }
 
-            hash = SHA256
+            hash = _hasher
                 .ComputeHash(Encoding.UTF8.GetBytes(builder.ToString()))
                 .Aggregate(new StringBuilder(),
                 (sb, b) => sb.AppendFormat("{0:x2}", b),
@@ -148,9 +150,13 @@ namespace Cake.Core.Scripting.CodeGen
 
         private static string GetReturnType(MethodInfo method)
         {
-            return method.ReturnType == typeof(void)
-                ? "void"
-                    : method.ReturnType.GetFullName();
+            if (method.ReturnType == typeof(void))
+            {
+                return "void";
+            }
+
+            var isDynamic = method.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(DynamicAttribute), true).Any();
+            return isDynamic ? "dynamic" : method.ReturnType.GetFullName();
         }
 
         private static IEnumerable<string> GetProxyParameters(IEnumerable<ParameterInfo> parameters, bool includeType)

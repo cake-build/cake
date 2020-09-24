@@ -481,6 +481,111 @@ namespace Cake.Common.Tests.Unit.Tools.GitReleaseManager.AddAssets
                              "-a \"/temp/asset1.txt\" " +
                              "-l \"/temp/log.txt\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Debug_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new GitReleaseManagerAssetsAdderFixture();
+                fixture.Settings.Debug = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("addasset -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "-a \"/temp/asset1.txt\" " +
+                             "--debug", result.Args);
+            }
+
+            [Fact]
+            public void Should_All_Debug_To_Arguments_If_Set_When_Using_Token()
+            {
+                // Given
+                var fixture = new GitReleaseManagerAssetsAdderFixture();
+                fixture.UseToken();
+                fixture.Settings.Debug = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("addasset --token \"token\" " +
+                             "-o \"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "-a \"/temp/asset1.txt\" " +
+                             "--debug", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Verbose_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new GitReleaseManagerAssetsAdderFixture();
+                fixture.Settings.Verbose = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("addasset -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "-a \"/temp/asset1.txt\" " +
+                             "--verbose", result.Args);
+            }
+
+            [Fact]
+            public void Should_All_Verbose_To_Arguments_If_Set_When_Using_Token()
+            {
+                // Given
+                var fixture = new GitReleaseManagerAssetsAdderFixture();
+                fixture.UseToken();
+                fixture.Settings.Verbose = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("addasset --token \"token\" " +
+                             "-o \"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "-a \"/temp/asset1.txt\" " +
+                             "--verbose", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_NoLogo_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new GitReleaseManagerAssetsAdderFixture();
+                fixture.Settings.NoLogo = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("addasset -u \"bob\" -p \"password\" " +
+                             "-o \"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "-a \"/temp/asset1.txt\" " +
+                             "--no-logo", result.Args);
+            }
+
+            [Fact]
+            public void Should_All_NoLogo_To_Arguments_If_Set_When_Using_Token()
+            {
+                // Given
+                var fixture = new GitReleaseManagerAssetsAdderFixture();
+                fixture.UseToken();
+                fixture.Settings.NoLogo = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("addasset --token \"token\" " +
+                             "-o \"repoOwner\" -r \"repo\" -t \"0.1.0\" " +
+                             "-a \"/temp/asset1.txt\" " +
+                             "--no-logo", result.Args);
+            }
         }
     }
 }

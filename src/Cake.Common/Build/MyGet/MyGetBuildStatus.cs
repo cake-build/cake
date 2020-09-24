@@ -5,7 +5,7 @@
 namespace Cake.Common.Build.MyGet
 {
     /// <summary>
-    /// Provides the known values for MyGet Build Status
+    /// Provides the known values for MyGet Build Status.
     /// </summary>
     public enum MyGetBuildStatus
     {

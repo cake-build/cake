@@ -9,7 +9,6 @@ using System.Globalization;
 using System.Linq;
 using Cake.Common.Build.TeamCity.Data;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Build.TeamCity
@@ -21,9 +20,19 @@ namespace Cake.Common.Build.TeamCity
     {
         private const string MessagePrefix = "##teamcity[";
         private const string MessagePostfix = "]";
+
         private static readonly Dictionary<string, string> _sanitizationTokens;
+
         private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
+        private readonly IBuildSystemServiceMessageWriter _writer;
+
+        /// <summary>
+        /// Gets a value indicating whether the current build is running on TeamCity.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the current build is running on TeamCity; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnTeamCity => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
 
         /// <summary>
         /// Gets the TeamCity environment.
@@ -31,7 +40,7 @@ namespace Cake.Common.Build.TeamCity
         /// <value>
         /// The TeamCity environment.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
@@ -52,7 +61,7 @@ namespace Cake.Common.Build.TeamCity
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TeamCity</para>
+        /// <para>Via TeamCity.</para>
         /// <example>
         /// <code>
         /// if (TeamCity.IsRunningOnTeamCity)
@@ -92,32 +101,14 @@ namespace Cake.Common.Build.TeamCity
         /// Initializes a new instance of the <see cref="TeamCityProvider"/> class.
         /// </summary>
         /// <param name="environment">The cake environment.</param>
-        /// <param name="log">The cake log.</param>
-        public TeamCityProvider(ICakeEnvironment environment, ICakeLog log)
+        /// <param name="writer">The build system service message writer.</param>
+        public TeamCityProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-
-            _environment = environment;
-            _log = log;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
 
             Environment = new TeamCityEnvironmentInfo(environment);
         }
-
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on TeamCity.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on TeamCity; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsRunningOnTeamCity => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
 
         /// <summary>
         /// Write a progress message to the TeamCity build log.
@@ -259,9 +250,9 @@ namespace Cake.Common.Build.TeamCity
         /// <summary>
         /// Report a build problem to TeamCity.
         /// </summary>
-        /// <param name="description">Description of build problem.</param>
-        /// <param name="identity">Build identity.</param>
-        public void BuildProblem(string description, string identity)
+        /// <param name="description">A human-readable plain text describing the build problem. By default, the description appears in the build status text and in the list of build's problems. The text is limited to 4000 symbols, and will be truncated if the limit is exceeded.</param>
+        /// <param name="identity">A unique problem ID (optional). Different problems must have different identity, same problems - same identity, which should not change throughout builds if the same problem, for example, the same compilation error occurs. It must be a valid Java ID up to 60 characters. If omitted, the identity is calculated based on the description text.</param>
+        public void BuildProblem(string description, string identity = null)
         {
             var tokens = new Dictionary<string, string> { { "description", description } };
             if (!string.IsNullOrEmpty(identity))
@@ -291,7 +282,7 @@ namespace Cake.Common.Build.TeamCity
         }
 
         /// <summary>
-        /// Tells TeamCity to set a named parameter with a given value
+        /// Tells TeamCity to set a named parameter with a given value.
         /// </summary>
         /// <param name="parameterName">The name of the parameter to set.</param>
         /// <param name="parameterValue">The value to set for the named parameter.</param>
@@ -329,7 +320,7 @@ namespace Cake.Common.Build.TeamCity
                             return string.Format(CultureInfo.InvariantCulture, "{0}='{1}'", keypair.Key, Sanitize(keypair.Value));
                         })
                         .ToArray());
-            _log.Write(Verbosity.Quiet, LogLevel.Information, "{0}{1} {2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);
+            _writer.Write("{0}{1} {2}{3}", MessagePrefix, messageName, valueString, MessagePostfix);
         }
 
         private static string Sanitize(string source)

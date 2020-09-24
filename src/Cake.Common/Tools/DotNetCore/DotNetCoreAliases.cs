@@ -12,6 +12,7 @@ using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.DotNetCore.NuGet.Delete;
 using Cake.Common.Tools.DotNetCore.NuGet.Push;
+using Cake.Common.Tools.DotNetCore.NuGet.Source;
 using Cake.Common.Tools.DotNetCore.Pack;
 using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Common.Tools.DotNetCore.Restore;
@@ -43,7 +44,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="assemblyPath">The assembly path.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreExecute("./bin/Debug/app.dll");
+        /// DotNetCoreExecute("./bin/Debug/app.dll");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -62,7 +63,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="arguments">The arguments.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreExecute("./bin/Debug/app.dll", "--arg");
+        /// DotNetCoreExecute("./bin/Debug/app.dll", "--arg");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -82,12 +83,12 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreExecuteSettings
-        ///     {
-        ///         FrameworkVersion = "1.0.3"
-        ///     };
+        /// var settings = new DotNetCoreExecuteSettings
+        /// {
+        ///     FrameworkVersion = "1.0.3"
+        /// };
         ///
-        ///     DotNetCoreExecute("./bin/Debug/app.dll", "--arg", settings);
+        /// DotNetCoreExecute("./bin/Debug/app.dll", "--arg", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -120,7 +121,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreRestore();
+        /// DotNetCoreRestore();
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -138,7 +139,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="root">List of projects and project folders to restore. Each value can be: a path to a project.json or global.json file, or a folder to recursively search for project.json files.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreRestore("./src/*");
+        /// DotNetCoreRestore("./src/*");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -156,17 +157,17 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreRestoreSettings
-        ///     {
-        ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
-        ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
-        ///         PackagesDirectory = "./packages",
-        ///         Verbosity = Information,
-        ///         DisableParallel = true,
-        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
-        ///     };
+        /// var settings = new DotNetCoreRestoreSettings
+        /// {
+        ///     Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
+        ///     FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
+        ///     PackagesDirectory = "./packages",
+        ///     Verbosity = Information,
+        ///     DisableParallel = true,
+        ///     InferRuntimes = new[] {"runtime1", "runtime2"}
+        /// };
         ///
-        ///     DotNetCoreRestore(settings);
+        /// DotNetCoreRestore(settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -185,17 +186,17 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreRestoreSettings
-        ///     {
-        ///         Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
-        ///         FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
-        ///         PackagesDirectory = "./packages",
-        ///         Verbosity = Information,
-        ///         DisableParallel = true,
-        ///         InferRuntimes = new[] {"runtime1", "runtime2"}
-        ///     };
+        /// var settings = new DotNetCoreRestoreSettings
+        /// {
+        ///     Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
+        ///     FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
+        ///     PackagesDirectory = "./packages",
+        ///     Verbosity = Information,
+        ///     DisableParallel = true,
+        ///     InferRuntimes = new[] {"runtime1", "runtime2"}
+        /// };
         ///
-        ///     DotNetCoreRestore("./src/*", settings);
+        /// DotNetCoreRestore("./src/*", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -224,7 +225,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="project">The projects path.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreBuild("./src/*");
+        /// DotNetCoreBuild("./src/*");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -243,14 +244,14 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreBuildSettings
-        ///     {
-        ///         Framework = "netcoreapp2.0",
-        ///         Configuration = "Debug",
-        ///         OutputDirectory = "./artifacts/"
-        ///     };
+        /// var settings = new DotNetCoreBuildSettings
+        /// {
+        ///     Framework = "netcoreapp2.0",
+        ///     Configuration = "Debug",
+        ///     OutputDirectory = "./artifacts/"
+        /// };
         ///
-        ///     DotNetCoreBuild("./src/*", settings);
+        /// DotNetCoreBuild("./src/*", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -279,7 +280,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="project">The projects path.</param>
         /// <example>
         /// <code>
-        ///     DotNetCorePack("./src/*");
+        /// DotNetCorePack("./src/*");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -298,13 +299,13 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCorePackSettings
-        ///     {
-        ///         Configuration = "Release",
-        ///         OutputDirectory = "./artifacts/"
-        ///     };
+        /// var settings = new DotNetCorePackSettings
+        /// {
+        ///     Configuration = "Release",
+        ///     OutputDirectory = "./artifacts/"
+        /// };
         ///
-        ///     DotNetCorePack("./src/*", settings);
+        /// DotNetCorePack("./src/*", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -332,7 +333,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreRun();
+        /// DotNetCoreRun();
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -350,7 +351,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="project">The project path.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreRun("./src/Project");
+        /// DotNetCoreRun("./src/Project");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -369,7 +370,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="arguments">The arguments.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreRun("./src/Project", "--args");
+        /// DotNetCoreRun("./src/Project", "--args");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -389,13 +390,13 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreRunSettings
-        ///     {
-        ///         Framework = "netcoreapp2.0",
-        ///         Configuration = "Release"
-        ///     };
+        /// var settings = new DotNetCoreRunSettings
+        /// {
+        ///     Framework = "netcoreapp2.0",
+        ///     Configuration = "Release"
+        /// };
         ///
-        ///     DotNetCoreRun("./src/Project", "--args", settings);
+        /// DotNetCoreRun("./src/Project", "--args", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -424,7 +425,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="project">The projects path.</param>
         /// <example>
         /// <code>
-        ///     DotNetCorePublish("./src/*");
+        /// DotNetCorePublish("./src/*");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -443,14 +444,14 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCorePublishSettings
-        ///     {
-        ///         Framework = "netcoreapp2.0",
-        ///         Configuration = "Release",
-        ///         OutputDirectory = "./artifacts/"
-        ///     };
+        /// var settings = new DotNetCorePublishSettings
+        /// {
+        ///     Framework = "netcoreapp2.0",
+        ///     Configuration = "Release",
+        ///     OutputDirectory = "./artifacts/"
+        /// };
         ///
-        ///     DotNetCorePublish("./src/*", settings);
+        /// DotNetCorePublish("./src/*", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -478,7 +479,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreTest();
+        /// DotNetCoreTest();
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -486,7 +487,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
         public static void DotNetCoreTest(this ICakeContext context)
         {
-            context.DotNetCoreTest(null, null);
+            context.DotNetCoreTest(null, null, null);
         }
 
         /// <summary>
@@ -495,9 +496,9 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <param name="project">The project path.</param>
         /// <example>
-        /// <para>Specify the path to the .csproj file in the test project</para>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
         /// <code>
-        ///     DotNetCoreTest("./test/Project.Tests/Project.Tests.csproj");
+        /// DotNetCoreTest("./test/Project.Tests/Project.Tests.csproj");
         /// </code>
         /// <para>You could also specify a task that runs multiple test projects.</para>
         /// <para>Cake task:</para>
@@ -514,7 +515,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// </code>
         /// <para>If your test project is using project.json, the project parameter should just be the directory path.</para>
         /// <code>
-        ///     DotNetCoreTest("./test/Project.Tests/");
+        /// DotNetCoreTest("./test/Project.Tests/");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -522,7 +523,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
         public static void DotNetCoreTest(this ICakeContext context, string project)
         {
-            context.DotNetCoreTest(project, null);
+            context.DotNetCoreTest(project, null, null);
         }
 
         /// <summary>
@@ -533,12 +534,12 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreTestSettings
-        ///     {
-        ///         Configuration = "Release"
-        ///     };
+        /// var settings = new DotNetCoreTestSettings
+        /// {
+        ///     Configuration = "Release"
+        /// };
         ///
-        ///     DotNetCoreTest("./test/Project.Tests/Project.Tests.csproj", settings);
+        /// DotNetCoreTest("./test/Project.Tests/Project.Tests.csproj", settings);
         /// </code>
         /// <para>You could also specify a task that runs multiple test projects.</para>
         /// <para>Cake task:</para>
@@ -560,18 +561,70 @@ namespace Cake.Common.Tools.DotNetCore
         /// </code>
         /// <para>If your test project is using project.json, the project parameter should just be the directory path.</para>
         /// <code>
-        ///     var settings = new DotNetCoreTestSettings
-        ///     {
-        ///         Configuration = "Release"
-        ///     };
+        /// var settings = new DotNetCoreTestSettings
+        /// {
+        ///     Configuration = "Release"
+        /// };
         ///
-        ///     DotNetCoreTest("./test/Project.Tests/", settings);
+        /// DotNetCoreTest("./test/Project.Tests/", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
         public static void DotNetCoreTest(this ICakeContext context, string project, DotNetCoreTestSettings settings)
+        {
+            context.DotNetCoreTest(project, null, settings);
+        }
+
+        /// <summary>
+        /// Test project with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project path.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreTestSettings
+        /// {
+        ///     Configuration = "Release"
+        /// };
+        ///
+        /// DotNetCoreTest("./test/Project.Tests/Project.Tests.csproj", settings);
+        /// </code>
+        /// <para>You could also specify a task that runs multiple test projects.</para>
+        /// <para>Cake task:</para>
+        /// <code>
+        /// Task("Test")
+        ///     .Does(() =>
+        /// {
+        ///     var settings = new DotNetCoreTestSettings
+        ///     {
+        ///         Configuration = "Release"
+        ///     };
+        ///
+        ///     var projectFiles = GetFiles("./test/**/*.csproj");
+        ///     foreach(var file in projectFiles)
+        ///     {
+        ///         DotNetCoreTest(file.FullPath, "MSTest.MapInconclusiveToFailed=true", settings);
+        ///     }
+        /// });
+        /// </code>
+        /// <para>If your test project is using project.json, the project parameter should just be the directory path.</para>
+        /// <code>
+        /// var settings = new DotNetCoreTestSettings
+        /// {
+        ///     Configuration = "Release"
+        /// };
+        ///
+        /// DotNetCoreTest("./test/Project.Tests/", "MSTest.MapInconclusiveToFailed=true", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        public static void DotNetCoreTest(this ICakeContext context, string project, ProcessArgumentBuilder arguments, DotNetCoreTestSettings settings)
         {
             if (context == null)
             {
@@ -584,7 +637,7 @@ namespace Cake.Common.Tools.DotNetCore
             }
 
             var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            tester.Test(project, settings);
+            tester.Test(project, arguments, settings);
         }
 
         /// <summary>
@@ -594,7 +647,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="project">The project's path.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreClean("./src/project");
+        /// DotNetCoreClean("./src/project");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -613,14 +666,14 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreCleanSettings
-        ///     {
-        ///         Framework = "netcoreapp2.0",
-        ///         Configuration = "Debug",
-        ///         OutputDirectory = "./artifacts/"
-        ///     };
+        /// var settings = new DotNetCoreCleanSettings
+        /// {
+        ///     Framework = "netcoreapp2.0",
+        ///     Configuration = "Debug",
+        ///     OutputDirectory = "./artifacts/"
+        /// };
         ///
-        ///     DotNetCoreClean("./src/project", settings);
+        /// DotNetCoreClean("./src/project", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -648,7 +701,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreNuGetDelete();
+        /// DotNetCoreNuGetDelete();
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -666,7 +719,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="packageName">Name of package to delete.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc");
+        /// DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -685,7 +738,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="packageVersion">Version of package to delete.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreRestore("Microsoft.AspNetCore.Mvc", "1.0");
+        /// DotNetCoreRestore("Microsoft.AspNetCore.Mvc", "1.0");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -697,20 +750,20 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
-        /// Deletes a package from a server
+        /// Deletes a package from a server.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageName">Name of package to delete.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreNuGetDeleteSettings
-        ///     {
-        ///         Source = "https://www.example.com/nugetfeed",
-        ///         NonInteractive = true
-        ///     };
+        /// var settings = new DotNetCoreNuGetDeleteSettings
+        /// {
+        ///     Source = "https://www.example.com/nugetfeed",
+        ///     NonInteractive = true
+        /// };
         ///
-        ///     DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc", settings);
+        /// DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -728,13 +781,13 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreNuGetDeleteSettings
-        ///     {
-        ///         Source = "https://www.example.com/nugetfeed",
-        ///         NonInteractive = true
-        ///     };
+        /// var settings = new DotNetCoreNuGetDeleteSettings
+        /// {
+        ///     Source = "https://www.example.com/nugetfeed",
+        ///     NonInteractive = true
+        /// };
         ///
-        ///     DotNetCoreNuGetDelete(settings);
+        /// DotNetCoreNuGetDelete(settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -753,15 +806,15 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="packageVersion">Version of package to delete.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
-        ///  <code>
-        ///     var settings = new DotNetCoreNuGetDeleteSettings
-        ///     {
-        ///         Source = "https://www.example.com/nugetfeed",
-        ///         NonInteractive = true
-        ///     };
+        /// <code>
+        /// var settings = new DotNetCoreNuGetDeleteSettings
+        /// {
+        ///     Source = "https://www.example.com/nugetfeed",
+        ///     NonInteractive = true
+        /// };
         ///
-        ///     DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc", "1.0", settings);
-        ///  </code>
+        /// DotNetCoreNuGetDelete("Microsoft.AspNetCore.Mvc", "1.0", settings);
+        /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
@@ -789,7 +842,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="packageName">Name of package to push.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreNuGetPush("*.nupkg");
+        /// DotNetCoreNuGetPush("*.nupkg");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -807,15 +860,15 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="packageName">Name of package to push.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
-        ///  <code>
-        ///     var settings = new DotNetCoreNuGetPushSettings
-        ///     {
-        ///         Source = "https://www.example.com/nugetfeed",
-        ///         ApiKey = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
-        ///     };
+        /// <code>
+        /// var settings = new DotNetCoreNuGetPushSettings
+        /// {
+        ///     Source = "https://www.example.com/nugetfeed",
+        ///     ApiKey = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
+        /// };
         ///
-        ///     DotNetCoreNuGetPush("foo*.nupkg", settings);
-        ///  </code>
+        /// DotNetCoreNuGetPush("foo*.nupkg", settings);
+        /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
@@ -837,13 +890,275 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// Add the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreNuGetSourceSettings
+        /// {
+        ///     Source = "https://www.example.com/nugetfeed",
+        ///     UserName = "username",
+        ///     Password = "password",
+        ///     StorePasswordInClearText = true,
+        ///     ValidAuthenticationTypes = "basic,negotiate"
+        /// };
+        ///
+        /// DotNetCoreNuGetAddSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        public static void DotNetCoreNuGetAddSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            sourcer.AddSource(name, settings);
+        }
+
+        /// <summary>
+        /// Disable the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <example>
+        /// <code>
+        /// DotNetCoreNuGetDisableSource("example");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        public static void DotNetCoreNuGetDisableSource(this ICakeContext context, string name)
+        {
+            context.DotNetCoreNuGetDisableSource(name, null);
+        }
+
+        /// <summary>
+        /// Disable the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreNuGetSourceSettings
+        /// {
+        ///     ConfigFile = "NuGet.config"
+        /// };
+        ///
+        /// DotNetCoreNuGetDisableSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        public static void DotNetCoreNuGetDisableSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            sourcer.DisableSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+        }
+
+        /// <summary>
+        /// Enable the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <example>
+        /// <code>
+        /// DotNetCoreNuGetEnableSource("example");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        public static void DotNetCoreNuGetEnableSource(this ICakeContext context, string name)
+        {
+            context.DotNetCoreNuGetEnableSource(name, null);
+        }
+
+        /// <summary>
+        /// Enable the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreNuGetSourceSettings
+        /// {
+        ///     ConfigFile = "NuGet.config"
+        /// };
+        ///
+        /// DotNetCoreNuGetEnableSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        public static void DotNetCoreNuGetEnableSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            sourcer.EnableSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+        }
+
+        /// <summary>
+        /// Determines whether the specified NuGet source exists.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <returns>Whether the specified NuGet source exists.</returns>
+        /// <example>
+        /// <code>
+        /// var exists = DotNetCoreNuGetHasSource("example");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        public static bool DotNetCoreNuGetHasSource(this ICakeContext context, string name)
+        {
+            return context.DotNetCoreNuGetHasSource(name, null);
+        }
+
+        /// <summary>
+        /// Determines whether the specified NuGet source exists.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>Whether the specified NuGet source exists.</returns>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreNuGetSourceSettings
+        /// {
+        ///     ConfigFile = "NuGet.config"
+        /// };
+        ///
+        /// var exists = DotNetCoreNuGetHasSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        public static bool DotNetCoreNuGetHasSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return sourcer.HasSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+        }
+
+        /// <summary>
+        /// Remove the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <example>
+        /// <code>
+        /// DotNetCoreNuGetRemoveSource("example");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        public static void DotNetCoreNuGetRemoveSource(this ICakeContext context, string name)
+        {
+            context.DotNetCoreNuGetRemoveSource(name, null);
+        }
+
+        /// <summary>
+        /// Remove the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreNuGetSourceSettings
+        /// {
+        ///     ConfigFile = "NuGet.config"
+        /// };
+        ///
+        /// DotNetCoreNuGetRemoveSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        public static void DotNetCoreNuGetRemoveSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            sourcer.RemoveSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+        }
+
+        /// <summary>
+        /// Update the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreNuGetSourceSettings
+        /// {
+        ///     Source = "https://www.example.com/nugetfeed",
+        ///     UserName = "username",
+        ///     Password = "password",
+        ///     StorePasswordInClearText = true,
+        ///     ValidAuthenticationTypes = "basic,negotiate"
+        /// };
+        ///
+        /// DotNetCoreNuGetUpdateSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        public static void DotNetCoreNuGetUpdateSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            sourcer.UpdateSource(name, settings);
+        }
+
+        /// <summary>
         /// Builds the specified targets in a project file found in the current working directory.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <example>
-        ///  <code>
-        ///     DotNetCoreMSBuild();
-        ///  </code>
+        /// <code>
+        /// DotNetCoreMSBuild();
+        /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("MSBuild")]
@@ -859,9 +1174,9 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <param name="projectOrDirectory">Project file or directory to search for project file.</param>
         /// <example>
-        ///  <code>
-        ///     DotNetCoreMSBuild("foobar.proj");
-        ///  </code>
+        /// <code>
+        /// DotNetCoreMSBuild("foobar.proj");
+        /// </code>
         /// </example>
         /// <remarks>
         /// If a directory is specified, MSBuild searches that directory for a project file.
@@ -885,15 +1200,15 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
-        ///  <code>
-        ///     var settings = new DotNetCoreMSBuildSettings
-        ///     {
-        ///         NoLogo = true,
-        ///         MaxCpuCount = -1
-        ///     };
+        /// <code>
+        /// var settings = new DotNetCoreMSBuildSettings
+        /// {
+        ///     NoLogo = true,
+        ///     MaxCpuCount = -1
+        /// };
         ///
-        ///     DotNetCoreMSBuild(settings);
-        ///  </code>
+        /// DotNetCoreMSBuild(settings);
+        /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("MSBuild")]
@@ -910,15 +1225,15 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="projectOrDirectory">Project file or directory to search for project file.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
-        ///  <code>
-        ///     var settings = new DotNetCoreMSBuildSettings
-        ///     {
-        ///         NoLogo = true,
-        ///         MaxCpuCount = -1
-        ///     };
+        /// <code>
+        /// var settings = new DotNetCoreMSBuildSettings
+        /// {
+        ///     NoLogo = true,
+        ///     MaxCpuCount = -1
+        /// };
         ///
-        ///     DotNetCoreMSBuild("foobar.proj", settings);
-        ///  </code>
+        /// DotNetCoreMSBuild("foobar.proj", settings);
+        /// </code>
         /// </example>
         /// <remarks>
         /// If a project file is not specified, MSBuild searches the current working directory for a file that has a file
@@ -949,13 +1264,13 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <param name="testFile">A path to the test file or glob for one or more test files.</param>
         /// <example>
-        /// <para>Specify the path to the .csproj file in the test project</para>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
         /// <code>
-        ///     DotNetCoreVSTest("./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll");
+        /// DotNetCoreVSTest("./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll");
         /// </code>
         /// <para>You could also specify a glob pattern to run multiple test projects.</para>
         /// <code>
-        ///     DotNetCoreVSTest("./**/bin/Release/netcoreapp2.1/*.Tests.dll");
+        /// DotNetCoreVSTest("./**/bin/Release/netcoreapp2.1/*.Tests.dll");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -970,26 +1285,26 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="testFile">A path to the test file or glob for one or more test files.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
-        /// <para>Specify the path to the .csproj file in the test project</para>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
         /// <code>
-        ///     var settings = new DotNetCoreVSTestSettings
-        ///     {
-        ///         Framework = "FrameworkCore10",
-        ///         Platform = "x64"
-        ///     };
+        /// var settings = new DotNetCoreVSTestSettings
+        /// {
+        ///     Framework = "FrameworkCore10",
+        ///     Platform = "x64"
+        /// };
         ///
-        ///     DotNetCoreTest("./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll", settings);
+        /// DotNetCoreTest("./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll", settings);
         /// </code>
         /// <para>You could also specify a glob pattern to run multiple test projects.</para>
         /// <code>
-        ///     var settings = new DotNetCoreVSTestSettings
-        ///     {
-        ///         Framework = "FrameworkCore10",
-        ///         Platform = "x64",
-        ///         Parallel = true
-        ///     };
+        /// var settings = new DotNetCoreVSTestSettings
+        /// {
+        ///     Framework = "FrameworkCore10",
+        ///     Platform = "x64",
+        ///     Parallel = true
+        /// };
         ///
-        ///     DotNetCoreVSTest("./**/bin/Release/netcoreapp2.1/*.Tests.dll", settings);
+        /// DotNetCoreVSTest("./**/bin/Release/netcoreapp2.1/*.Tests.dll", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -1010,13 +1325,13 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     var settings = new DotNetCoreVSTestSettings
-        ///     {
-        ///         Framework = "FrameworkCore10",
-        ///         Platform = "x64"
-        ///     };
+        /// var settings = new DotNetCoreVSTestSettings
+        /// {
+        ///     Framework = "FrameworkCore10",
+        ///     Platform = "x64"
+        /// };
         ///
-        ///     DotNetCoreVSTest(new[] { (FilePath)"./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll" }, settings);
+        /// DotNetCoreVSTest(new[] { (FilePath)"./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll" }, settings);
         /// </code>
         /// <para>You could also specify a task that runs multiple test projects.</para>
         /// <para>Cake task:</para>
@@ -1063,7 +1378,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="command">The command to execute.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreTool("cake");
+        /// DotNetCoreTool("cake");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -1090,10 +1405,12 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreTool("cake"
-        ///             new DotNetCoreToolSettings {
-        ///                 DiagnosticOutput = true
-        ///             });
+        /// var settings = new DotNetCoreToolSettings
+        /// {
+        ///     DiagnosticOutput = true
+        /// };
+        ///
+        /// DotNetCoreTool("cake", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -1119,7 +1436,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="command">The command to execute.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreTool("./src/project", "xunit", "-xml report.xml");
+        /// DotNetCoreTool("./src/project", "xunit", "-xml report.xml");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -1147,7 +1464,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="arguments">The arguments.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreTool("./src/project", "xunit", "-xml report.xml");
+        /// DotNetCoreTool("./src/project", "xunit", "-xml report.xml");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -1175,7 +1492,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreTool("./src/project", "xunit", "-xml report.xml");
+        /// DotNetCoreTool("./src/project", "xunit", "-xml report.xml");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -1199,7 +1516,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreBuildServerShutdown();
+        /// DotNetCoreBuildServerShutdown();
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -1217,10 +1534,12 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        ///     DotNetCoreBuildServerShutdown(
-        ///         new DotNetCoreBuildServerSettings {
-        ///             MSBuild = true
-        ///         });
+        /// var settings = new DotNetCoreBuildServerSettings
+        /// {
+        ///     MSBuild = true
+        /// };
+        ///
+        /// DotNetCoreBuildServerShutdown(settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]

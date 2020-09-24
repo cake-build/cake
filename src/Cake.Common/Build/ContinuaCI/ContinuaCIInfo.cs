@@ -158,7 +158,7 @@ namespace Cake.Common.Build.ContinuaCI
         /// Gets matching list of environment variables as an dictionary of <see cref="System.String"/>.
         /// </summary>
         /// <param name="variablePrefix">The prefix for the environment variables name.</param>
-        /// <returns>A dictionary of environment variables starting with variablePrefix</returns>
+        /// <returns>A dictionary of environment variables starting with variablePrefix.</returns>
         protected IDictionary<string, string> GetEnvironmentStringDictionary(string variablePrefix)
         {
             if (_allEnvironmentVariables == null)

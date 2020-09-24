@@ -20,26 +20,19 @@ namespace Cake.Common.Build.TFBuild
     {
         private const string MessagePrefix = "##vso[";
         private const string MessagePostfix = "]";
-        private readonly ICakeLog _log;
+
         private readonly ICakeEnvironment _environment;
+        private readonly IBuildSystemServiceMessageWriter _writer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TFBuildCommands"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        /// <param name="log">The log.</param>
-        public TFBuildCommands(ICakeEnvironment environment, ICakeLog log)
+        /// <param name="writer">The build system service message writer.</param>
+        public TFBuildCommands(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            _environment = environment;
-            _log = log;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
         }
 
         /// <summary>
@@ -336,7 +329,7 @@ namespace Cake.Common.Build.TFBuild
         /// Add a tag for current build.
         /// </summary>
         /// <remarks>
-        /// Requires agent version 1.95
+        /// Requires agent version 1.95.
         /// </remarks>
         /// <param name="tag">The tag.</param>
         public void AddBuildTag(string tag)
@@ -345,9 +338,9 @@ namespace Cake.Common.Build.TFBuild
         }
 
         /// <summary>
-        /// Publishes and uploads tests results
+        /// Publishes and uploads tests results.
         /// </summary>
-        /// <param name="data">The publish test results data</param>
+        /// <param name="data">The publish test results data.</param>
         public void PublishTestResults(TFBuildPublishTestResultsData data)
         {
             var properties = data.GetProperties(_environment);
@@ -355,9 +348,9 @@ namespace Cake.Common.Build.TFBuild
         }
 
         /// <summary>
-        /// Publishes and uploads code coverage results
+        /// Publishes and uploads code coverage results.
         /// </summary>
-        /// <param name="data">The code coverage data</param>
+        /// <param name="data">The code coverage data.</param>
         public void PublishCodeCoverage(TFBuildPublishCodeCoverageData data)
         {
             var properties = data.GetProperties(_environment);
@@ -365,10 +358,10 @@ namespace Cake.Common.Build.TFBuild
         }
 
         /// <summary>
-        /// Publishes and uploads code coverage results
+        /// Publishes and uploads code coverage results.
         /// </summary>
         /// <param name="summaryFilePath">The code coverage summary file path.</param>
-        /// <param name="data">The code coverage data</param>
+        /// <param name="data">The code coverage data.</param>
         public void PublishCodeCoverage(FilePath summaryFilePath, TFBuildPublishCodeCoverageData data)
         {
             if (summaryFilePath == null)
@@ -381,7 +374,7 @@ namespace Cake.Common.Build.TFBuild
         }
 
         /// <summary>
-        /// Publishes and uploads code coverage results
+        /// Publishes and uploads code coverage results.
         /// </summary>
         /// <param name="summaryFilePath">The code coverage summary file path.</param>
         /// <param name="action">The configuration action for the code coverage data.</param>
@@ -409,7 +402,7 @@ namespace Cake.Common.Build.TFBuild
             {
                 return string.Format(CultureInfo.InvariantCulture, "{0}={1};", pair.Key, pair.Value);
             }));
-            _log.Write(Verbosity.Quiet, LogLevel.Information, "{0}{1} {2}{3}{4}", MessagePrefix, actionName, props, MessagePostfix, value);
+            _writer.Write("{0}{1} {2}{3}{4}", MessagePrefix, actionName, props, MessagePostfix, value);
         }
     }
 }

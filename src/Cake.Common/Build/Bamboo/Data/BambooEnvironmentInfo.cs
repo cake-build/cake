@@ -17,7 +17,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The Bamboo plan information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Bamboo.IsRunningOnBamboo)
@@ -44,7 +44,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Bamboo</para>
+        /// <para>Via Bamboo.</para>
         /// <example>
         /// <code>
         /// if (Bamboo.IsRunningOnBamboo)
@@ -79,7 +79,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The Bamboo build information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Bamboo.IsRunningOnBamboo)
@@ -109,7 +109,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Bamboo</para>
+        /// <para>Via Bamboo.</para>
         /// <example>
         /// <code>
         /// if (Bamboo.IsRunningOnBamboo)
@@ -147,7 +147,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// <value>
         ///   The Bamboo repository information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Bamboo.IsRunningOnBamboo)
@@ -170,7 +170,7 @@ namespace Cake.Common.Build.Bamboo.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Bamboo</para>
+        /// <para>Via Bamboo.</para>
         /// <example>
         /// <code>
         /// if (Bamboo.IsRunningOnBamboo)

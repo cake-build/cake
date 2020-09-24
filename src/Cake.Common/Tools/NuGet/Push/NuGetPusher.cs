@@ -69,7 +69,7 @@ namespace Cake.Common.Tools.NuGet.Push
 
             if (settings.ApiKey != null)
             {
-                builder.AppendSecret(settings.ApiKey);
+                builder.AppendQuotedSecret(settings.ApiKey);
             }
 
             builder.Append("-NonInteractive");
@@ -88,6 +88,11 @@ namespace Cake.Common.Tools.NuGet.Push
             else
             {
                 _log.Verbose("No Source property has been set.  Depending on your configuration, this may cause problems.");
+            }
+
+            if (settings.SkipDuplicate)
+            {
+                builder.Append("-SkipDuplicate");
             }
 
             if (settings.Timeout != null)

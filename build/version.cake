@@ -19,13 +19,26 @@ public class BuildVersion
 
         if (!parameters.SkipGitVersion)
         {
+            // Temp Workaround GitVersion Azure Pipelines
+            var azurePipelines = context.AzurePipelines();
+            string sourceBranch = string.Empty;
+            if ((azurePipelines.IsRunningOnAzurePipelinesHosted || azurePipelines.IsRunningOnAzurePipelines) && azurePipelines.Environment.PullRequest.Number > 0)
+            {
+                 sourceBranch = $"PullRequest{azurePipelines.Environment.PullRequest.Number}";
+                 context.Information("Overriding Azure Pipelines branch name with: {0}", sourceBranch);
+            }
+
             context.Information("Calculating Semantic Version");
             if (!parameters.IsLocalBuild || parameters.IsPublishBuild || parameters.IsReleaseBuild)
             {
                 context.GitVersion(new GitVersionSettings{
                     UpdateAssemblyInfoFilePath = "./src/SolutionInfo.cs",
                     UpdateAssemblyInfo = true,
-                    OutputType = GitVersionOutput.BuildServer
+                    OutputType = GitVersionOutput.BuildServer,
+                    EnvironmentVariables = {
+                                                { "BUILD_SOURCEBRANCH", sourceBranch },
+                                                { "SYSTEM_PULLREQUEST_SOURCEBRANCH", sourceBranch }
+                                           }
                 });
 
                 version = context.EnvironmentVariable("GitVersion_MajorMinorPatch");
@@ -36,6 +49,10 @@ public class BuildVersion
             GitVersion assertedVersions = context.GitVersion(new GitVersionSettings
             {
                 OutputType = GitVersionOutput.Json,
+                EnvironmentVariables = {
+                                            { "BUILD_SOURCEBRANCH", sourceBranch },
+                                            { "SYSTEM_PULLREQUEST_SOURCEBRANCH", sourceBranch }
+                                       }
             });
 
             version = assertedVersions.MajorMinorPatch;

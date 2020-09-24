@@ -105,9 +105,9 @@ namespace Cake.Common.Tools.XUnit
         /// <value>
         ///   <c>null</c> (default);
         ///   <c>0</c>: run with unbounded thread count;
-        ///   <c>&gt;0</c>: limit task thread pool size to value;
+        ///   <c>&gt;0</c>: limit task thread pool size to value;.
         /// </value>
-        /// <exception cref="ArgumentOutOfRangeException" accessor="set">value &lt; 0</exception>
+        /// <exception cref="ArgumentOutOfRangeException" accessor="set">value &lt; 0.</exception>
         public int? MaxThreads
         {
             get
@@ -157,7 +157,7 @@ namespace Cake.Common.Tools.XUnit
         /// If more than one is specified, it acts as an OR operation.
         /// </remarks>
         /// <value>
-        /// The namespaces to include
+        /// The namespaces to include.
         /// </value>
         public ICollection<string> NamespacesToInclude { get; }
 
@@ -169,7 +169,7 @@ namespace Cake.Common.Tools.XUnit
         /// If more than one is specified, it acts as an OR operation.
         /// </remarks>
         /// <value>
-        /// The class names to include
+        /// The class names to include.
         /// </value>
         public ICollection<string> ClassesToInclude { get; }
 
@@ -181,7 +181,7 @@ namespace Cake.Common.Tools.XUnit
         /// If more than one is specified, it acts as an OR operation.
         /// </remarks>
         /// <value>
-        /// The namespaces to include
+        /// The namespaces to include.
         /// </value>
         public ICollection<string> MethodsToInclude { get; }
 

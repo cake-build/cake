@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// Gets or sets the package description.
         /// </summary>
         /// <value>The package description.</value>
-        /// <remarks>Markdown format is allowed for this property</remarks>
+        /// <remarks>Markdown format is allowed for this property.</remarks>
         public string Description { get; set; }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// Gets or sets the package release notes.
         /// </summary>
         /// <value>The package release notes.</value>
-        /// <remarks>Markdown format is allowed for this property</remarks>
+        /// <remarks>Markdown format is allowed for this property.</remarks>
         public ICollection<string> ReleaseNotes { get; set; } = new List<string>();
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// <summary>
         /// Gets or sets a value indicating whether to run in debug mode.
         /// </summary>
-        /// <value>The debug flag</value>
+        /// <value>The debug flag.</value>
         public bool Debug { get; set; }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// <summary>
         /// Gets or sets a value indicating whether to run in forced mode.
         /// </summary>
-        /// <value>The force flag</value>
+        /// <value>The force flag.</value>
         public bool Force { get; set; }
 
         /// <summary>
@@ -176,26 +176,26 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// <summary>
         /// Gets or sets a value indicating whether to run in limited output mode.
         /// </summary>
-        /// <value>The limit output flag</value>
+        /// <value>The limit output flag.</value>
         public bool LimitOutput { get; set; }
 
         /// <summary>
         /// Gets or sets the execution timeout value.
         /// </summary>
-        /// <value>The execution timeout</value>
-        /// <remarks>Default is 2700 seconds</remarks>
+        /// <value>The execution timeout.</value>
+        /// <remarks>Default is 2700 seconds.</remarks>
         public int ExecutionTimeout { get; set; }
 
         /// <summary>
         /// Gets or sets the location of the download cache.
         /// </summary>
-        /// <value>The download cache location</value>
+        /// <value>The download cache location.</value>
         public string CacheLocation { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to run in allow unofficial mode.
         /// </summary>
-        /// <value>The allow unofficial flag</value>
+        /// <value>The allow unofficial flag.</value>
         public bool AllowUnofficial { get; set; }
 
         /// <summary>

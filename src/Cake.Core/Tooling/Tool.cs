@@ -19,28 +19,8 @@ namespace Cake.Core.Tooling
     {
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
-        private readonly IGlobber _globber;
         private readonly IToolLocator _tools;
         private readonly IProcessRunner _processRunner;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Tool{TSettings}" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="globber">The globber.</param>
-        [Obsolete("Please use Tool(IFileSystem, ICakeEnvironment, IProcessRunner, IToolLocator) instead.")]
-        protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IGlobber globber)
-            : this(fileSystem, environment, processRunner, (IToolLocator)null)
-        {
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
-
-            _globber = globber;
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tool{TSettings}"/> class.
@@ -85,8 +65,8 @@ namespace Cake.Core.Tooling
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="arguments">The arguments.</param>
-        /// <param name="processSettings">The process settings</param>
-        /// <param name="postAction">If specified called after process exit</param>
+        /// <param name="processSettings">The process settings.</param>
+        /// <param name="postAction">If specified called after process exit.</param>
         protected void Run(
             TSettings settings,
             ProcessArgumentBuilder arguments,
@@ -114,22 +94,17 @@ namespace Cake.Core.Tooling
                 process.WaitForExit();
             }
 
-            try
-            {
-                ProcessExitCode(process.GetExitCode());
-            }
-            finally
-            {
-                // Post action specified?
-                postAction?.Invoke(process);
-            }
+            // Post action specified?
+            postAction?.Invoke(process);
+
+            ProcessExitCode(process.GetExitCode());
         }
 
         /// <summary>
         /// Customized exit code handling.
         /// Standard behavior is to fail when non zero.
         /// </summary>
-        /// <param name="exitCode">The process exit code</param>
+        /// <param name="exitCode">The process exit code.</param>
         protected virtual void ProcessExitCode(int exitCode)
         {
             // Did an error occur?
@@ -156,7 +131,7 @@ namespace Cake.Core.Tooling
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="arguments">The arguments.</param>
-        /// <param name="processSettings">The process settings</param>
+        /// <param name="processSettings">The process settings.</param>
         /// <returns>The process that the tool is running under.</returns>
         protected IProcess RunProcess(
             TSettings settings,
@@ -231,6 +206,13 @@ namespace Cake.Core.Tooling
         /// <summary>
         /// Gets the possible names of the tool executable.
         /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The name of the tool.</returns>
+        protected virtual IEnumerable<string> GetToolExecutableNames(TSettings settings) => GetToolExecutableNames();
+
+        /// <summary>
+        /// Gets the possible names of the tool executable.
+        /// </summary>
         /// <returns>The tool executable name.</returns>
         protected abstract IEnumerable<string> GetToolExecutableNames();
 
@@ -251,7 +233,7 @@ namespace Cake.Core.Tooling
         }
 
         /// <summary>
-        /// Gets alternative file paths which the tool may exist in
+        /// Gets alternative file paths which the tool may exist in.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The default tool path.</returns>
@@ -277,12 +259,7 @@ namespace Cake.Core.Tooling
         /// <returns>The resolved tool path.</returns>
         protected FilePath GetToolPath(TSettings settings)
         {
-            if (_tools != null)
-            {
-                return GetToolPathUsingToolService(settings);
-            }
-
-            return GetToolPathObsolete(settings);
+            return GetToolPathUsingToolService(settings);
         }
 
         private FilePath GetToolPathUsingToolService(TSettings settings)
@@ -294,14 +271,10 @@ namespace Cake.Core.Tooling
             }
 
             // Look for each possible executable name in various places.
-            var toolExeNames = GetToolExecutableNames();
-            foreach (var toolExeName in toolExeNames)
+            var result = _tools.Resolve(GetToolExecutableNames(settings));
+            if (result != null)
             {
-                var result = _tools.Resolve(toolExeName);
-                if (result != null)
-                {
-                    return result;
-                }
+                return result;
             }
 
             // Look through all the alternative directories for the tool.
@@ -311,66 +284,6 @@ namespace Cake.Core.Tooling
                 if (_fileSystem.Exist(alternativePath))
                 {
                     return alternativePath.MakeAbsolute(_environment);
-                }
-            }
-
-            return null;
-        }
-
-        [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
-        private FilePath GetToolPathObsolete(TSettings settings)
-        {
-            var toolPath = settings.ToolPath;
-            if (toolPath != null)
-            {
-                return toolPath.MakeAbsolute(_environment);
-            }
-
-            var toolExeNames = GetToolExecutableNames();
-            string[] pathDirs = null;
-
-            // Look for each possible executable name in various places.
-            foreach (var toolExeName in toolExeNames)
-            {
-                // First look in ./tools/
-                toolPath = _globber.GetFiles("./tools/**/" + toolExeName).FirstOrDefault();
-                if (toolPath != null)
-                {
-                    return toolPath.MakeAbsolute(_environment);
-                }
-
-                // Cache the PATH directory list if we didn't already.
-                if (pathDirs == null)
-                {
-                    var pathEnv = _environment.GetEnvironmentVariable("PATH");
-                    if (!string.IsNullOrEmpty(pathEnv))
-                    {
-                        pathDirs = pathEnv.Split(new[] { _environment.Platform.IsUnix() ? ':' : ';' }, StringSplitOptions.RemoveEmptyEntries);
-                    }
-                    else
-                    {
-                        pathDirs = new string[] { };
-                    }
-                }
-
-                // Look in every PATH directory for the file.
-                foreach (var pathDir in pathDirs)
-                {
-                    var file = new DirectoryPath(pathDir).CombineWithFilePath(toolExeName);
-                    if (_fileSystem.Exist(file))
-                    {
-                        return file.MakeAbsolute(_environment);
-                    }
-                }
-            }
-
-            // Look through all the alternative directories for the tool.
-            var alternativePaths = GetAlternativeToolPaths(settings) ?? Enumerable.Empty<FilePath>();
-            foreach (var altPath in alternativePaths)
-            {
-                if (_fileSystem.Exist(altPath))
-                {
-                    return altPath.MakeAbsolute(_environment);
                 }
             }
 

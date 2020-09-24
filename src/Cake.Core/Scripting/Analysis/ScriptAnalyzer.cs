@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -23,7 +24,8 @@ namespace Cake.Core.Scripting.Analysis
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
-        private readonly LineProcessor[] _lineProcessors;
+        private readonly LineProcessor[] _defaultProcessors;
+        private readonly LineProcessor[] _moduleProcessors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAnalyzer"/> class.
@@ -55,7 +57,7 @@ namespace Cake.Core.Scripting.Analysis
             _environment = environment;
             _log = log;
 
-            _lineProcessors = new LineProcessor[]
+            _defaultProcessors = new LineProcessor[]
             {
                 new LoadDirectiveProcessor(providers),
                 new ReferenceDirectiveProcessor(_fileSystem, _environment),
@@ -67,14 +69,21 @@ namespace Cake.Core.Scripting.Analysis
                 new DefineDirectiveProcessor(),
                 new ModuleDirectiveProcessor()
             };
+
+            _moduleProcessors = new LineProcessor[]
+            {
+                new LoadDirectiveProcessor(providers),
+                new ModuleDirectiveProcessor()
+            };
         }
 
         /// <summary>
         /// Analyzes the specified script path.
         /// </summary>
         /// <param name="path">The path to the script to analyze.</param>
+        /// <param name="settings">The script analyzer settings.</param>
         /// <returns>The script analysis result.</returns>
-        public ScriptAnalyzerResult Analyze(FilePath path)
+        public ScriptAnalyzerResult Analyze(FilePath path, ScriptAnalyzerSettings settings)
         {
             if (path == null)
             {
@@ -84,9 +93,15 @@ namespace Cake.Core.Scripting.Analysis
             // Make the script path absolute.
             path = path.MakeAbsolute(_environment);
 
+            // Get the correct callback.
+            var callback = settings.Mode == ScriptAnalyzerMode.Modules
+                ? ModuleAnalyzeCallback
+                : (Action<IScriptAnalyzerContext>)AnalyzeCallback;
+
             // Create a new context.
             var context = new ScriptAnalyzerContext(
-                _fileSystem, _environment, _log, AnalyzeCallback, path);
+                _fileSystem, _environment,
+                _log, callback, path);
 
             // Analyze the script.
             context.Analyze(path);
@@ -96,6 +111,28 @@ namespace Cake.Core.Scripting.Analysis
                 context.Current,
                 context.Lines,
                 context.Errors);
+        }
+
+        [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
+        private void ModuleAnalyzeCallback(IScriptAnalyzerContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            // Iterate all lines in the script.
+            var lines = ReadLines(context.Current.Path);
+            foreach (var line in lines)
+            {
+                foreach (var processor in _defaultProcessors)
+                {
+                    if (processor.Process(context, _environment.ExpandEnvironmentVariables(line), out var _))
+                    {
+                        break;
+                    }
+                }
+            }
         }
 
         [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
@@ -117,7 +154,7 @@ namespace Cake.Core.Scripting.Analysis
             {
                 string replacement = null;
 
-                if (!_lineProcessors.Any(p => p.Process(context, _environment.ExpandEnvironmentVariables(line), out replacement)))
+                if (!_defaultProcessors.Any(p => p.Process(context, _environment.ExpandEnvironmentVariables(line), out replacement)))
                 {
                     context.AddScriptLine(line);
                 }

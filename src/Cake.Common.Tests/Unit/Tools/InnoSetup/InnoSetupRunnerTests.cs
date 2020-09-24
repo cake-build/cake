@@ -105,34 +105,62 @@ namespace Cake.Common.Tests.Unit.Tools.InnoSetup
                 Assert.Equal("/Working/tools/iscc.exe", result.Path.FullPath);
             }
 
-            [WindowsFact]
-            public void Should_Find_InnoSetup_Runner_In_Installation_Path_If_Tool_Path_Not_Provided_x86()
+            [WindowsTheory]
+            [InlineData(true, InnoSetupVersion.InnoSetup5)]
+            [InlineData(true, InnoSetupVersion.InnoSetup6)]
+            [InlineData(false, InnoSetupVersion.InnoSetup5)]
+            [InlineData(false, InnoSetupVersion.InnoSetup6)]
+            public void Should_Find_InnoSetup_Runner_In_Installation_Path_If_Tool_Path_Not_Provided(bool is64Bit, InnoSetupVersion version)
             {
                 // Given
                 var fixture = new InnoSetupFixture();
                 fixture.GivenDefaultToolDoNotExist();
-                fixture.GivenToolIsInstalledX86();
+                fixture.GivenToolIsInstalled(is64Bit, version);
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(fixture.InstalledToolPath.FullPath, result.Path.FullPath);
+                Assert.Equal(fixture.InstalledToolPaths[version].FullPath, result.Path.FullPath);
             }
 
-            [WindowsFact]
-            public void Should_Find_InnoSetup_Runner_In_Installation_Path_If_Tool_Path_Not_Provided_x64()
+            [WindowsTheory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Use_Newest_InnoSetup_Version_If_Version_And_Tool_Path_Are_Not_Provided(bool is64Bit)
             {
                 // Given
                 var fixture = new InnoSetupFixture();
                 fixture.GivenDefaultToolDoNotExist();
-                fixture.GivenToolIsInstalledX64();
+                fixture.GivenToolIsInstalled(is64Bit, InnoSetupVersion.InnoSetup5);
+                fixture.GivenToolIsInstalled(is64Bit, InnoSetupVersion.InnoSetup6);
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal(fixture.InstalledToolPath.FullPath, result.Path.FullPath);
+                Assert.Equal(fixture.InstalledToolPaths[InnoSetupVersion.InnoSetup6].FullPath, result.Path.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData(true, InnoSetupVersion.InnoSetup5)]
+            [InlineData(true, InnoSetupVersion.InnoSetup6)]
+            [InlineData(false, InnoSetupVersion.InnoSetup5)]
+            [InlineData(false, InnoSetupVersion.InnoSetup6)]
+            public void Should_Use_Provided_InnoSetup_Version_When_Tool_Path_Is_Not_Provided(bool is64Bit, InnoSetupVersion version)
+            {
+                // Given
+                var fixture = new InnoSetupFixture();
+                fixture.GivenDefaultToolDoNotExist();
+                fixture.GivenToolIsInstalled(is64Bit, InnoSetupVersion.InnoSetup5);
+                fixture.GivenToolIsInstalled(is64Bit, InnoSetupVersion.InnoSetup6);
+                fixture.Settings.Version = version;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(fixture.InstalledToolPaths[version].FullPath, result.Path.FullPath);
             }
 
             [Fact]
