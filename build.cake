@@ -151,7 +151,7 @@ Task("Run-Unit-Tests")
         () => GetFiles("./src/**/*.Tests.csproj"),
         (parameters, project, context) =>
 {
-    foreach(var framework in new[] { "netcoreapp2.0", "netcoreapp3.0", "net461" })
+    foreach(var framework in new[] { "netcoreapp2.0", "netcoreapp3.0", "net461", "net5.0" })
     {
         FilePath testResultsPath = MakeAbsolute(parameters.Paths.Directories.TestResults
                                     .CombineWithFilePath($"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.xml"));
@@ -208,6 +208,7 @@ Task("Validate-Version")
     var fullFxExe = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx.CombineWithFilePath("Cake.exe"));
     var coreFxExe = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCore.CombineWithFilePath("Cake.dll"));
 
+    context.Information("Testing {0} version...", fullFxExe);
     IEnumerable<string> fullFxOutput;
     var fullFxResult = StartProcess(
          fullFxExe,
@@ -220,9 +221,10 @@ Task("Validate-Version")
      );
     var fullFxVersion = string.Concat(fullFxOutput);
 
+    context.Information("Testing {0} version...", coreFxExe);
     IEnumerable<string> coreFxOutput;
     var coreFxResult = StartProcess(
-         "dotnet",
+         context.Tools.Resolve("dotnet") ?? context.Tools.Resolve("dotnet.exe"),
          new ProcessSettings {
              Arguments = $"\"{coreFxExe}\" --version",
              RedirectStandardOutput = true,
@@ -590,6 +592,7 @@ Task("Run-Integration-Tests")
         parameters => new[] {
             GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp2.1/**/Cake.dll").Single(),
             GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp3.0/**/Cake.dll").Single(),
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net5.0/**/Cake.dll").Single(),
             parameters.Paths.Directories.IntegrationTestsBinFullFx.CombineWithFilePath("Cake.exe"),
             parameters.Paths.Directories.IntegrationTestsBinNetCore.CombineWithFilePath("Cake.dll")
         },
@@ -617,7 +620,7 @@ Task("Run-Integration-Tests")
     catch(Exception ex)
     {
         Error("While testing: {0}\r\n{1}", cakeAssembly, ex);
-        throw;
+        throw new Exception($"Exception while testing: {cakeAssembly}", ex);
     }
     finally
     {

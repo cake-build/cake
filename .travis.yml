@@ -14,7 +14,7 @@ mono:
   - 5.12.0
   - 5.20.1
 
-dotnet: 3.1.402
+dotnet: 5.0.100-rc.1.20452.10
 
 before_install:
   - git fetch --unshallow # Travis always does a shallow clone, but GitVersion needs the full history including branches and tags

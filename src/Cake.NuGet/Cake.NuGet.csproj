@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Cake.NuGet</AssemblyName>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;net5.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -19,18 +19,27 @@
   </ItemGroup>
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="NuGet.Frameworks" Version="5.5.1" />
-    <PackageReference Include="NuGet.Versioning" Version="5.5.1" />
-    <PackageReference Include="NuGet.Protocol" Version="5.5.1" />
-    <PackageReference Include="NuGet.Packaging" Version="5.5.1" />
-    <PackageReference Include="NuGet.Resolver" Version="5.5.1" />
-    <PackageReference Include="NuGet.Common" Version="5.5.1" />
+    <PackageReference Include="NuGet.Frameworks" Version="5.7.0" />
+    <PackageReference Include="NuGet.Versioning" Version="5.7.0" />
+    <PackageReference Include="NuGet.Protocol" Version="5.7.0" />
+    <PackageReference Include="NuGet.Packaging" Version="5.7.0" />
+    <PackageReference Include="NuGet.Resolver" Version="5.7.0" />
+    <PackageReference Include="NuGet.Common" Version="5.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.4" />
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.1.1" GeneratePathProperty="true">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <EmbeddedResource Include="$(PkgMicrosoft_NETCore_Platforms)\runtime.json">
+      <Link>runtime.json</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="5.0.0-rc.1.20451.14" GeneratePathProperty="true">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <EmbeddedResource Include="$(PkgMicrosoft_NETCore_Platforms)\runtime.json">
