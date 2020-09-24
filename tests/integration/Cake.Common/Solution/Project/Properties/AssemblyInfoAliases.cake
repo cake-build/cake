@@ -26,7 +26,8 @@ Task("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.ParseAssemblyI
                             "Eeny",
                             "Meeny",
                             "Miny",
-                            "Moe"
+                            "Moe",
+                            "Spacey"
                        }
                 );
 
