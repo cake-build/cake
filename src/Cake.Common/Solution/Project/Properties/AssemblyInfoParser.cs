@@ -19,9 +19,9 @@ namespace Cake.Common.Solution.Project.Properties
     public sealed class AssemblyInfoParser
     {
         private const string CSharpNonQuotedPattern = @"^\s*\[assembly: (?:System\.Reflection\.)?{0}(?:Attribute)? ?\((?<attributeValue>.*)\)";
-        private const string CSharpQuotedPattern = @"^\s*\[assembly: (?:System\.Reflection\.)?{0}(?:Attribute)? ?\(""(?<attributeValue>.*)""\)";
+        private const string CSharpQuotedPattern = @"^\s*\[assembly: (?:System\.Reflection\.)?{0}(?:Attribute)? ?\(\s*""(?<attributeValue>.*)""\s*\)";
         private const string VBNonQuotedPattern = @"^\s*\<Assembly: (?:System\.Reflection\.)?{0}(?:Attribute)? ?\((?<attributeValue>.*)\)";
-        private const string VBQuotedPattern = @"^\s*\<Assembly: (?:System\.Reflection\.)?{0}(?:Attribute)? ?\(""(?<attributeValue>.*)""\)";
+        private const string VBQuotedPattern = @"^\s*\<Assembly: (?:System\.Reflection\.)?{0}(?:Attribute)? ?\(\s*""(?<attributeValue>.*)""\s*\)";
         private const string DefaultVersion = "1.0.0.0";
 
         private readonly IFileSystem _fileSystem;
