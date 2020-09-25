@@ -146,7 +146,11 @@ namespace Cake.Core.Scripting
                 case ".NETCoreApp,Version=v3.1":
                     return "NETCOREAPP3_1";
 
+                case ".NETCoreApp,Version=v5.0":
+                    return "NET5_0";
+
                 default:
+                    Console.Error.WriteLine(_runtime.BuiltFramework.FullName);
                     return "NETSTANDARD2_0";
             }
         }

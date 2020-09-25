@@ -11,6 +11,7 @@ jobs:
     name: Build
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
     steps:
@@ -20,10 +21,20 @@ jobs:
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
 
+      - name: Install .NET Core SDK 2.1.810
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '2.1.810'
+
       - name: Install .NET Core SDK 3.1.402
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.402'
+
+      - name: Install .NET Core SDK 5.0.100-rc.1.20452.10
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.100-rc.1.20452.10'
 
       - name: Run Cake script
         uses: ecampidoglio/cake-action@v1.1.1

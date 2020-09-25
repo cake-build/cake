@@ -139,7 +139,15 @@ namespace Cake.Core.Polyfill
                 return netCoreAppFramwork;
             }
 
-            var assemblyPath = typeof(System.Runtime.GCSettings)?.GetTypeInfo()?.Assembly?.CodeBase;
+            var assemblyPath = typeof(System.Runtime.GCSettings)?.GetTypeInfo()
+                ?.Assembly
+#if NET5_0
+                ?.Location;
+#else
+#pragma warning disable 0618
+                ?.CodeBase;
+#pragma warning restore 0618
+#endif
             if (string.IsNullOrEmpty(assemblyPath))
             {
                 return NetStandardFramework;
