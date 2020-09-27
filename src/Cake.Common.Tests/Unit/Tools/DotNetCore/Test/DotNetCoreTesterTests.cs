@@ -126,7 +126,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 fixture.Settings.NoLogo = true;
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
-                fixture.Settings.Collector = "XPlat Code Coverage";
+                fixture.Settings.Collectors = new[] { "XPlat Code Coverage" };
                 fixture.Settings.OutputDirectory = "./artifacts/";
                 fixture.Settings.Settings = "./demo.runsettings";
                 fixture.Settings.Filter = "Priority = 1";
