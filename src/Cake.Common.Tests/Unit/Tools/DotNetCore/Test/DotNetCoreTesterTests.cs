@@ -126,12 +126,15 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 fixture.Settings.NoLogo = true;
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
-                fixture.Settings.Collector = "XPlat Code Coverage";
+                fixture.Settings.Collectors = new[] { "XPlat Code Coverage" };
                 fixture.Settings.OutputDirectory = "./artifacts/";
                 fixture.Settings.Settings = "./demo.runsettings";
                 fixture.Settings.Filter = "Priority = 1";
                 fixture.Settings.TestAdapterPath = @"/Working/custom-test-adapter";
-                fixture.Settings.Logger = @"trx;LogFileName=/Working/logfile.trx";
+#pragma warning disable CS0618
+                fixture.Settings.Logger = "trx;LogFileName=/Working/logfile.trx";
+#pragma warning restore CS0618
+                fixture.Settings.Loggers = new[] { "html;LogFileName=/Working/logfile.html" };
                 fixture.Settings.DiagnosticFile = "./artifacts/logging/diagnostics.txt";
                 fixture.Settings.ResultsDirectory = "./tests/";
                 fixture.Settings.VSTestReportPath = "./tests/TestResults.xml";
@@ -141,7 +144,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --collect \"XPlat Code Coverage\" --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --nologo --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64", result.Args);
+                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --logger \"html;LogFileName=/Working/logfile.html\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --collect \"XPlat Code Coverage\" --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --nologo --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64", result.Args);
             }
 
             [Fact]
