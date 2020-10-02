@@ -77,13 +77,17 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData(true, true)]
-            [InlineData(false, false)]
-            [InlineData(null, false)]
-            public void Should_Read_ClsCompliance(bool value, bool expected)
+            [InlineData(true, true, true)]
+            [InlineData(false, false, true)]
+            [InlineData(null, false, true)]
+            [InlineData(true, true, false)]
+            [InlineData(false, false, false)]
+            [InlineData(null, false, false)]
+            public void Should_Read_ClsCompliance(bool value, bool expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.ClsCompliant = value;
 
                 // When
@@ -94,12 +98,15 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("CompanyA", "CompanyA")]
-            [InlineData(null, "")]
-            public void Should_Read_Company(string value, string expected)
+            [InlineData("CompanyA", "CompanyA", true)]
+            [InlineData("CompanyA", "CompanyA", false)]
+            [InlineData(null, "", true)]
+            [InlineData(null, "", false)]
+            public void Should_Read_Company(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.Company = value;
 
                 // When
@@ -110,13 +117,36 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData(true, true)]
-            [InlineData(false, false)]
-            [InlineData(null, false)]
-            public void Should_Read_ComVisible(bool value, bool expected)
+            [InlineData("CompanyA", "CompanyA", true)]
+            [InlineData("CompanyA", "CompanyA", false)]
+            [InlineData(null, "", true)]
+            [InlineData(null, "", false)]
+            public void Should_Read_Company_VB_AssemblyInfo_File(string value, string expected, bool extraWhiteSpaces)
+            {
+                // Given
+                var fixture = new AssemblyInfoParserFixture_VB();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
+                fixture.Company = value;
+
+                // When
+                var result = fixture.Parse();
+
+                // Then
+                Assert.Equal(expected, result.Company);
+            }
+
+            [Theory]
+            [InlineData(true, true, true)]
+            [InlineData(false, false, true)]
+            [InlineData(null, false, true)]
+            [InlineData(true, true, false)]
+            [InlineData(false, false, false)]
+            [InlineData(null, false, false)]
+            public void Should_Read_ComVisible(bool value, bool expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.ComVisible = value;
 
                 // When
@@ -127,13 +157,17 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("Debug", "Debug")]
-            [InlineData("Release", "Release")]
-            [InlineData(null, "")]
-            public void Should_Read_Configuration(string value, string expected)
+            [InlineData("Debug", "Debug", true)]
+            [InlineData("Debug", "Debug", false)]
+            [InlineData("Release", "Release", true)]
+            [InlineData("Release", "Release", false)]
+            [InlineData(null, "", true)]
+            [InlineData(null, "", false)]
+            public void Should_Read_Configuration(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.Configuration = value;
 
                 // When
@@ -144,12 +178,15 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio and contributors", "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio and contributors")]
-            [InlineData(null, "")]
-            public void Should_Read_Copyright(string value, string expected)
+            [InlineData("Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio and contributors", "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio and contributors", true)]
+            [InlineData("Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio and contributors", "Copyright (c) Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio and contributors", false)]
+            [InlineData(null, "", true)]
+            [InlineData(null, "", false)]
+            public void Should_Read_Copyright(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.Copyright = value;
 
                 // When
@@ -160,12 +197,15 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("Assembly Description", "Assembly Description")]
-            [InlineData(null, "")]
-            public void Should_Read_Description(string value, string expected)
+            [InlineData("Assembly Description", "Assembly Description", true)]
+            [InlineData("Assembly Description", "Assembly Description", false)]
+            [InlineData(null, "", true)]
+            [InlineData(null, "", false)]
+            public void Should_Read_Description(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.Description = value;
 
                 // When
@@ -176,13 +216,17 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("1.2.3.4", "1.2.3.4")]
-            [InlineData("1.2.*.*", "1.2.*.*")]
-            [InlineData(null, "1.0.0.0")]
-            public void Should_Read_AssemblyFileVersion(string value, string expected)
+            [InlineData("1.2.3.4", "1.2.3.4", true)]
+            [InlineData("1.2.3.4", "1.2.3.4", false)]
+            [InlineData("1.2.*.*", "1.2.*.*", true)]
+            [InlineData("1.2.*.*", "1.2.*.*", false)]
+            [InlineData(null, "1.0.0.0", true)]
+            [InlineData(null, "1.0.0.0", false)]
+            public void Should_Read_AssemblyFileVersion(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.FileVersion = value;
 
                 // When
@@ -193,12 +237,15 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("D394B7DB-0DDC-4D11-AD69-C408212E1E80", "D394B7DB-0DDC-4D11-AD69-C408212E1E80")]
-            [InlineData(null, "")]
-            public void Should_Read_Guid(string value, string expected)
+            [InlineData("D394B7DB-0DDC-4D11-AD69-C408212E1E80", "D394B7DB-0DDC-4D11-AD69-C408212E1E80", true)]
+            [InlineData("D394B7DB-0DDC-4D11-AD69-C408212E1E80", "D394B7DB-0DDC-4D11-AD69-C408212E1E80", false)]
+            [InlineData(null, "", true)]
+            [InlineData(null, "", false)]
+            public void Should_Read_Guid(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.Guid = value;
 
                 // When
@@ -209,14 +256,19 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("1.2.3.4", "1.2.3.4")]
-            [InlineData("1.2.*.*", "1.2.*.*")]
-            [InlineData("1.2.3-rc1", "1.2.3-rc1")]
-            [InlineData(null, "1.0.0.0")]
-            public void Should_Read_AssemblyInformationalVersion(string value, string expected)
+            [InlineData("1.2.3.4", "1.2.3.4", true)]
+            [InlineData("1.2.3.4", "1.2.3.4", false)]
+            [InlineData("1.2.*.*", "1.2.*.*", true)]
+            [InlineData("1.2.*.*", "1.2.*.*", false)]
+            [InlineData("1.2.3-rc1", "1.2.3-rc1", true)]
+            [InlineData("1.2.3-rc1", "1.2.3-rc1", false)]
+            [InlineData(null, "1.0.0.0", true)]
+            [InlineData(null, "1.0.0.0", false)]
+            public void Should_Read_AssemblyInformationalVersion(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.InformationalVersion = value;
 
                 // When
@@ -226,11 +278,14 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 Assert.Equal(expected, result.AssemblyInformationalVersion);
             }
 
-            [Fact]
-            public void Should_Read_InternalsVisibleTo()
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Read_InternalsVisibleTo(bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.InternalsVisibleTo = new List<string>
                 {
                     "Cake.Core.Tests",
@@ -247,12 +302,15 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("Cake", "Cake")]
-            [InlineData(null, "")]
-            public void Should_Read_Product(string value, string expected)
+            [InlineData("Cake", "Cake", true)]
+            [InlineData("Cake", "Cake", false)]
+            [InlineData(null, "", true)]
+            [InlineData(null, "", false)]
+            public void Should_Read_Product(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.Product = value;
 
                 // When
@@ -263,12 +321,15 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("Cake.Common", "Cake.Common")]
-            [InlineData(null, "")]
-            public void Should_Read_Title(string value, string expected)
+            [InlineData("Cake.Common", "Cake.Common", true)]
+            [InlineData("Cake.Common", "Cake.Common", false)]
+            [InlineData(null, "", true)]
+            [InlineData(null, "", false)]
+            public void Should_Read_Title(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.Title = value;
 
                 // When
@@ -279,12 +340,15 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("Trademark Cake", "Trademark Cake")]
-            [InlineData(null, "")]
-            public void Should_Read_Trademark(string value, string expected)
+            [InlineData("Trademark Cake", "Trademark Cake", true)]
+            [InlineData("Trademark Cake", "Trademark Cake", false)]
+            [InlineData(null, "", true)]
+            [InlineData(null, "", false)]
+            public void Should_Read_Trademark(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.Trademark = value;
 
                 // When
@@ -295,13 +359,17 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Theory]
-            [InlineData("1.2.3.4", "1.2.3.4")]
-            [InlineData("1.2.*.*", "1.2.*.*")]
-            [InlineData(null, "1.0.0.0")]
-            public void Should_Read_AssemblyVersion(string value, string expected)
+            [InlineData("1.2.3.4", "1.2.3.4", true)]
+            [InlineData("1.2.3.4", "1.2.3.4", false)]
+            [InlineData("1.2.*.*", "1.2.*.*", true)]
+            [InlineData("1.2.*.*", "1.2.*.*", false)]
+            [InlineData(null, "1.0.0.0", true)]
+            [InlineData(null, "1.0.0.0", false)]
+            public void Should_Read_AssemblyVersion(string value, string expected, bool extraWhiteSpaces)
             {
                 // Given
                 var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
                 fixture.Version = value;
 
                 // When
