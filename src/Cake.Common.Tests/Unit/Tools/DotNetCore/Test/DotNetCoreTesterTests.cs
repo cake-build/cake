@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Test;
-using Cake.Core.IO;
+using Cake.Core;
 using Cake.Testing;
 using Xunit;
 
@@ -108,7 +108,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
             {
                 // Given
                 var fixture = new DotNetCoreTesterFixture();
-                fixture.Arguments = ProcessArgumentBuilder.FromStrings(new[] { "MSTest.DeploymentEnabled=false", "MSTest.MapInconclusiveToFailed=true" });
+                fixture.Arguments = new[] { "MSTest.DeploymentEnabled=false", "MSTest.MapInconclusiveToFailed=true" }.ToProcessArguments();
 
                 // When
                 var result = fixture.Run();
