@@ -113,6 +113,11 @@ public class BuildParameters
                             .WithProperty("AssemblyVersion", Version.Version)
                             .WithProperty("FileVersion", Version.Version)
                             .WithProperty("PackageReleaseNotes", string.Concat("\"", releaseNotes, "\""));
+
+        if (!IsLocalBuild)
+        {
+            MSBuildSettings.WithProperty("TemplateVersion", Version.SemVersion);
+        }
     }
 
     private static bool IsBuildTagged(BuildSystem buildSystem)

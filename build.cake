@@ -295,11 +295,11 @@ Task("Create-NuGet-Packages")
     .Does<BuildParameters>((context, parameters) =>
 {
     // Build libraries
-    var projects = GetFiles("./src/**/*.csproj");
+    var projects = GetFiles("./src/*/*.csproj");
     foreach(var project in projects)
     {
         var name = project.GetDirectory().FullPath;
-        if(name.EndsWith("Cake") || name.EndsWith("Tests"))
+        if(name.EndsWith("Cake") || name.EndsWith("Tests") || name.EndsWith("Example"))
         {
             continue;
         }
