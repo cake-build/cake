@@ -32,86 +32,15 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 ## Table of Contents
 
 1. [Documentation](https://github.com/cake-build/cake#documentation)
-2. [Example](https://github.com/cake-build/cake#example)
-    - [Install the Cake bootstrapper](https://github.com/cake-build/cake#1-install-the-cake-bootstrapper)
-    - [Create a Cake script](https://github.com/cake-build/cake#2-create-a-cake-script)
-    - [Run it!](https://github.com/cake-build/cake#3-run-it)
-3. [Contributing](https://github.com/cake-build/cake#contributing)
-4. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
-5. [License](https://github.com/cake-build/cake#license)
+2. [Contributing](https://github.com/cake-build/cake#contributing)
+3. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
+4. [License](https://github.com/cake-build/cake#license)
 
 ## Documentation
 
 You can read the latest documentation at [https://cakebuild.net/](https://cakebuild.net/).
 
-## Example
-
-This example downloads the Cake bootstrapper and executes a simple build script.
-The bootstrapper is used to bootstrap Cake in a simple way and is not in
-required in any way to execute build scripts. If you prefer to invoke the Cake
-executable yourself, [take a look at the command line usage](https://cakebuild.net/docs/cli/usage).
-
-This example is also available on our homepage:
-[https://cakebuild.net/docs/tutorials/setting-up-a-new-project](https://cakebuild.net/docs/tutorials/setting-up-a-new-project)
-
-### 1. Install the Cake bootstrapper
-
-The bootstrapper is used to download Cake and the tools required by the
-build script.
-
-##### Windows
-
-```powershell
-Invoke-WebRequest https://cakebuild.net/download/bootstrapper/windows -OutFile build.ps1
-```
-
-##### Linux
-
-```console
-curl -Lsfo build.sh https://cakebuild.net/download/bootstrapper/linux
-```
-
-##### OS X
-
-```console
-curl -Lsfo build.sh https://cakebuild.net/download/bootstrapper/osx
-```
-
-### 2. Create a Cake script
-
-Add a cake script called `build.cake` to the same location as the
-bootstrapper script that you downloaded.
-
-```cake
-var target = Argument("target", "Default");
-
-Task("Default")
-  .Does(() =>
-{
-  Information("Hello World!");
-});
-
-RunTarget(target);
-```
-
-### 3. Run it!
-
-##### Windows
-
-```powershell
-# Execute the bootstrapper script.
-./build.ps1
-```
-
-##### Linux / OS X
-
-```console
-# Adjust the permissions for the bootstrapper script.
-chmod +x build.sh
-
-# Execute the bootstrapper script.
-./build.sh
-```
+For a simple example to get started see [Setting up a new project](https://cakebuild.net/docs/getting-started/setting-up-a-new-project).
 
 ## Contributing
 
