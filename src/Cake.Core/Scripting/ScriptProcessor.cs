@@ -236,12 +236,12 @@ namespace Cake.Core.Scripting
             {
                 const string message = "The '{0}' directive is attempting to install the '{1}' package \r\n" +
                                        "without specifying a package version number.  \r\n" +
-                                       "More information on this can be found at https://cakebuild.net/docs/tutorials/pinning-cake-version \r\n" +
+                                       "More information on this can be found at https://cakebuild.net/docs/writing-builds/reproducible-builds/ \r\n" +
                                        "It's not recommended, but you can explicitly override this warning \r\n" +
                                        "by configuring the Skip Package Version Check setting to true \r\n" +
                                        "(i.e. command line parameter \"--settings_skippackageversioncheck=true\", \r\n" +
                                        "environment variable \"CAKE_SETTINGS_SKIPPACKAGEVERSIONCHECK=true\", \r\n" +
-                                       "read more about configuration at https://cakebuild.net/docs/fundamentals/configuration)";
+                                       "read more about configuration at https://cakebuild.net/docs/running-builds/configuration/)";
 
                 _log.Warning(Verbosity.Minimal, message, directiveName, packageReference.Package);
             }
