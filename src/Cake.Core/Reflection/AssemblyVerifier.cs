@@ -56,7 +56,7 @@ namespace Cake.Core.Reflection
                                                "by configuring the Skip Verification setting to true\r\n" +
                                                "(i.e. command line parameter \"--settings_skipverification=true\", \r\n" +
                                                "environment variable \"CAKE_SETTINGS_SKIPVERIFICATION=true\", \r\n" +
-                                               "read more about configuration at https://cakebuild.net/docs/fundamentals/configuration)";
+                                               "read more about configuration at https://cakebuild.net/docs/running-builds/configuration/)";
 
                         var args = new object[]
                         {
