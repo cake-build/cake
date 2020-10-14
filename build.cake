@@ -608,7 +608,7 @@ Task("Frosting-Integration-Tests")
                 "/Project/PropertyGroup/TargetFrameworks"
             );
 
-            return targetFrameworks?.Split(";")
+            return targetFrameworks?.Split(';')
                     .Where(targetFramework => context.IsRunningOnWindows()
                                                 || !targetFramework.StartsWith("net4", StringComparison.OrdinalIgnoreCase))
                     .Select(targetFramework => (targetFramework, project))
