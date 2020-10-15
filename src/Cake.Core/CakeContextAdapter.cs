@@ -37,7 +37,7 @@ namespace Cake.Core
         /// <value>
         /// The file system.
         /// </value>
-        public IFileSystem FileSystem => _context.FileSystem;
+        public virtual IFileSystem FileSystem => _context.FileSystem;
 
         /// <summary>
         /// Gets the environment.
@@ -45,7 +45,7 @@ namespace Cake.Core
         /// <value>
         /// The environment.
         /// </value>
-        public ICakeEnvironment Environment => _context.Environment;
+        public virtual ICakeEnvironment Environment => _context.Environment;
 
         /// <summary>
         /// Gets the globber.
@@ -53,7 +53,7 @@ namespace Cake.Core
         /// <value>
         /// The globber.
         /// </value>
-        public IGlobber Globber => _context.Globber;
+        public virtual IGlobber Globber => _context.Globber;
 
         /// <summary>
         /// Gets the log.
@@ -61,7 +61,7 @@ namespace Cake.Core
         /// <value>
         /// The log.
         /// </value>
-        public ICakeLog Log => _context.Log;
+        public virtual ICakeLog Log => _context.Log;
 
         /// <summary>
         /// Gets the arguments.
@@ -69,7 +69,7 @@ namespace Cake.Core
         /// <value>
         /// The arguments.
         /// </value>
-        public ICakeArguments Arguments => _context.Arguments;
+        public virtual ICakeArguments Arguments => _context.Arguments;
 
         /// <summary>
         /// Gets the process runner.
@@ -77,7 +77,7 @@ namespace Cake.Core
         /// <value>
         /// The process runner.
         /// </value>
-        public IProcessRunner ProcessRunner => _context.ProcessRunner;
+        public virtual IProcessRunner ProcessRunner => _context.ProcessRunner;
 
         /// <summary>
         /// Gets the registry.
@@ -85,7 +85,7 @@ namespace Cake.Core
         /// <value>
         /// The registry.
         /// </value>
-        public IRegistry Registry => _context.Registry;
+        public virtual IRegistry Registry => _context.Registry;
 
         /// <summary>
         /// Gets the tool locator.
@@ -93,16 +93,16 @@ namespace Cake.Core
         /// <value>
         /// The tool locator.
         /// </value>
-        public IToolLocator Tools => _context.Tools;
+        public virtual IToolLocator Tools => _context.Tools;
 
         /// <summary>
         /// Gets the data context resolver.
         /// </summary>
-        public ICakeDataResolver Data => _context.Data;
+        public virtual ICakeDataResolver Data => _context.Data;
 
         /// <summary>
         /// Gets the cake configuration.
         /// </summary>
-        public ICakeConfiguration Configuration => _context.Configuration;
+        public virtual ICakeConfiguration Configuration => _context.Configuration;
     }
 }
