@@ -34,27 +34,40 @@ namespace Cake.Infrastructure.Scripting
             if (_resolvedNames.Add(name.Name))
             {
                 _log.Verbose($"Resolving assembly {args.Name}");
-                try
-                {
-                    var assembly = AppDomain.CurrentDomain.GetAssemblies()
-                        .FirstOrDefault(x => !x.IsDynamic && x.GetName().Name == name.Name)
-                        ?? Assembly.Load(name.Name);
-                    if (assembly != null)
-                    {
-                        _log.Verbose($"Resolved {name.Name} by assembly {assembly.FullName}");
-                    }
-                    else
-                    {
-                        _log.Verbose($"Assembly {name.Name} not resolved");
-                    }
-                    return assembly;
-                }
-                catch (Exception ex)
-                {
-                    _log.Verbose($"Exception while resolving assembly {name.Name}: {ex.Message}");
-                }
+
+                return AssemblyResolve(name);
             }
             return null;
+        }
+
+        private Assembly AssemblyResolve(AssemblyName name)
+        {
+            try
+            {
+                var assembly = AppDomain.CurrentDomain.GetAssemblies()
+                    .FirstOrDefault(x => !x.IsDynamic && x.GetName().Name == name.Name)
+                    ?? Assembly.Load(name.Name);
+                if (assembly != null)
+                {
+                    _log.Verbose($"Resolved {name.Name} by assembly {assembly.FullName}");
+                }
+                else
+                {
+                    _log.Verbose($"Assembly {name.Name} not resolved");
+
+                    if (name.Name.Contains(".resources, "))
+                    {
+                        return AssemblyResolve(new AssemblyName(name.Name.Replace(".resources, ", ", ")));
+                    }
+                }
+                return assembly;
+            }
+            catch (Exception ex)
+            {
+                _log.Verbose($"Exception while resolving assembly {name.Name}: {ex.Message}");
+
+                return null;
+            }
         }
     }
 }
