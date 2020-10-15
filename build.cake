@@ -295,11 +295,11 @@ Task("Create-NuGet-Packages")
     .Does<BuildParameters>((context, parameters) =>
 {
     // Build libraries
-    var projects = GetFiles("./src/**/*.csproj");
+    var projects = GetFiles("./src/*/*.csproj");
     foreach(var project in projects)
     {
         var name = project.GetDirectory().FullPath;
-        if(name.EndsWith("Cake") || name.EndsWith("Tests"))
+        if(name.EndsWith("Cake") || name.EndsWith("Tests") || name.EndsWith("Example"))
         {
             continue;
         }
@@ -585,8 +585,65 @@ Task("Prepare-Integration-Tests")
    CopyDirectory(parameters.Paths.Directories.ArtifactsBinNetCore, parameters.Paths.Directories.IntegrationTestsBinNetCore);
 });
 
+Task("Frosting-Integration-Tests")
+    .DeferOnError()
+    .DoesForEach<BuildParameters, (string Framework, FilePath Project)>(
+        (parameters, context) => {
+            var project = context.MakeAbsolute(
+                new FilePath("tests/integration/Cake.Frosting/build/Build.csproj")
+            );
+
+            DotNetCoreBuild(project.FullPath,
+                new DotNetCoreBuildSettings
+                {
+                    Verbosity = DotNetCoreVerbosity.Quiet,
+                    Configuration = parameters.Configuration,
+                    MSBuildSettings = parameters.MSBuildSettings
+                });
+
+            context.Verbose("Peeking into {0}...", project);
+
+            var targetFrameworks = context.XmlPeek(
+                project,
+                "/Project/PropertyGroup/TargetFrameworks"
+            );
+
+            return targetFrameworks?.Split(';')
+                    .Where(targetFramework => context.IsRunningOnWindows()
+                                                || !targetFramework.StartsWith("net4", StringComparison.OrdinalIgnoreCase))
+                    .Select(targetFramework => (targetFramework, project))
+                    .ToArray();
+        },
+        (parameters, test, context) =>
+{
+    try
+    {
+        Information("Testing: {0}", test.Framework);
+
+        DotNetCoreRun(test.Project.FullPath,
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--verbosity", "=", "quiet"),
+            new DotNetCoreRunSettings
+            {
+                Configuration = parameters.Configuration,
+                Framework = test.Framework,
+                NoRestore = true,
+                NoBuild = true
+            });
+    }
+    catch(Exception ex)
+    {
+        Error("While testing: {0}\r\n{1}", test.Framework, ex);
+        throw new Exception($"Exception while testing: {test.Framework}", ex);
+    }
+    finally
+    {
+        Information("Done testing: {0}", test.Framework);
+    }
+});
 Task("Run-Integration-Tests")
     .IsDependentOn("Prepare-Integration-Tests")
+    .IsDependentOn("Frosting-Integration-Tests")
     .DeferOnError()
     .DoesForEach<BuildParameters, FilePath>(
         parameters => new[] {

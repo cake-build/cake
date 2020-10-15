@@ -1,0 +1,11 @@
+{
+  "author": "Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio and contributors",
+  "classifications": [ "Cake", "Frosting" ],
+  "name": "Cake Frosting Build Script",
+  "identity": "Cake.Frosting",
+  "shortName": "cakefrosting",
+  "sourceName": "temp",
+  "tags": {
+    "language": "C#"
+  }
+}

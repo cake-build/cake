@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net461;netcoreapp2.0;netcoreapp2.1;netcoreapp3.0;net5.0</TargetFrameworks>
+    <AssemblyName>Cake.Frosting.Example</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <LangVersion>7</LangVersion>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Frosting\Cake.Frosting.csproj" />
+  </ItemGroup>
+
+</Project>

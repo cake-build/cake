@@ -1,6 +1,7 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30516.212
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{E9FAF832-F327-4F36-8AB3-2A96345DB1A9}"
 	ProjectSection(SolutionItems) = preProject
@@ -46,6 +47,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake", "Cake\Cake.csproj", "{CE174FEE-35AB-4B01-A88A-EFCC9147C220}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Tests", "Cake.Tests\Cake.Tests.csproj", "{15A49638-46DE-4361-B86E-4873BA5EF136}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Frosting", "Cake.Frosting\Cake.Frosting.csproj", "{636D5F9E-B7D0-4402-8363-1347488BD3B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Frosting.Example", "Cake.Frosting.Example\Cake.Frosting.Example.csproj", "{2D420F2E-DD8D-432F-908F-CB617C919D77}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Frosting.Tests", "Cake.Frosting.Tests\Cake.Frosting.Tests.csproj", "{26F4E738-122C-428D-A014-62A357F39023}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Frosting.Template", "Cake.Frosting.Template\Cake.Frosting.Template.csproj", "{E5AE09CE-30D3-4C5D-97A7-A2B95C6898B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +102,22 @@ Global
 		{15A49638-46DE-4361-B86E-4873BA5EF136}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15A49638-46DE-4361-B86E-4873BA5EF136}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15A49638-46DE-4361-B86E-4873BA5EF136}.Release|Any CPU.Build.0 = Release|Any CPU
+		{636D5F9E-B7D0-4402-8363-1347488BD3B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{636D5F9E-B7D0-4402-8363-1347488BD3B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{636D5F9E-B7D0-4402-8363-1347488BD3B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{636D5F9E-B7D0-4402-8363-1347488BD3B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D420F2E-DD8D-432F-908F-CB617C919D77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D420F2E-DD8D-432F-908F-CB617C919D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D420F2E-DD8D-432F-908F-CB617C919D77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D420F2E-DD8D-432F-908F-CB617C919D77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26F4E738-122C-428D-A014-62A357F39023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26F4E738-122C-428D-A014-62A357F39023}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26F4E738-122C-428D-A014-62A357F39023}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26F4E738-122C-428D-A014-62A357F39023}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5AE09CE-30D3-4C5D-97A7-A2B95C6898B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5AE09CE-30D3-4C5D-97A7-A2B95C6898B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5AE09CE-30D3-4C5D-97A7-A2B95C6898B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5AE09CE-30D3-4C5D-97A7-A2B95C6898B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +130,7 @@ Global
 		{B46B6733-38D8-497D-B17B-603F929E8BA7} = {8615F41E-65C7-4BE5-AFD4-C9C78912AF80}
 		{2502455D-AEAC-4AD7-B29C-B1D3AFFF9E84} = {8615F41E-65C7-4BE5-AFD4-C9C78912AF80}
 		{15A49638-46DE-4361-B86E-4873BA5EF136} = {8615F41E-65C7-4BE5-AFD4-C9C78912AF80}
+		{26F4E738-122C-428D-A014-62A357F39023} = {8615F41E-65C7-4BE5-AFD4-C9C78912AF80}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35585E1D-D23E-40C8-A01E-2E5FF5B41083}
