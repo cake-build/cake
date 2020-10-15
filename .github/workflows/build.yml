@@ -21,32 +21,25 @@ jobs:
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Install .NET Core SDK 2.1.810
+      - name: Install .NET Core SDK 2.1.811
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '2.1.810'
+          dotnet-version: '2.1.811'
 
-      - name: Install .NET Core SDK 3.1.402
+      - name: Install .NET Core SDK 3.1.403
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.402'
+          dotnet-version: '3.1.403'
 
-      - name: Install .NET Core SDK 5.0.100-rc.1.20452.10
+      - name: Install .NET Core SDK 5.0.100-rc.2.20479.15
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '5.0.100-rc.1.20452.10'
+          dotnet-version: '5.0.100-rc.2.20479.15'
 
       - name: Run Cake script
-        uses: ecampidoglio/cake-action@v1.1.1
+        uses: cake-build/cake-action@v1
         env:
           DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX: 2
         with:
           target: Run-Integration-Tests
           cake-bootstrap: true
-
-      - name: "Test .NET 5"
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: |
-          echo 'Information("IsCoreClr: {0}", Context.Environment.Runtime.IsCoreClr);' > $(pwd)/src/Cake/bin/Release/netcoreapp3.0/build.cake
-          echo 'if(!Context.Environment.Runtime.IsCoreClr) throw new Exception("NOT CORE CLR");' >> $(pwd)/src/Cake/bin/Release/netcoreapp3.0/build.cake
-          docker run --rm  --workdir "/Cake" -v "$(pwd)/src/Cake/bin/Release/netcoreapp3.0:/Cake" mcr.microsoft.com/dotnet/sdk:5.0 dotnet Cake.dll
