@@ -34,11 +34,7 @@ namespace Cake.Features.Building.Hosts
             _log = log;
         }
 
-        /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="target">The target to run.</param>
-        /// <returns>The resulting report.</returns>
+        /// <inheritdoc/>
         public override async Task<CakeReport> RunTargetAsync(string target)
         {
             Settings.SetTarget(target);

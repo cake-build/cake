@@ -29,10 +29,7 @@ namespace Cake.Core.Tooling
             _comparer = new PathComparer(environment);
         }
 
-        /// <summary>
-        /// Registers the specified path with the repository.
-        /// </summary>
-        /// <param name="path">The path to register.</param>
+        /// <inheritdoc/>
         public void Register(FilePath path)
         {
             if (path == null)
@@ -55,13 +52,7 @@ namespace Cake.Core.Tooling
             }
         }
 
-        /// <summary>
-        /// Resolves the specified tool.
-        /// </summary>
-        /// <param name="tool">The tool to resolve.</param>
-        /// <returns>
-        /// The tool's file paths if any; otherwise <c>null</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public IEnumerable<FilePath> Resolve(string tool)
         {
             if (_paths.ContainsKey(tool))

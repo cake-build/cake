@@ -47,12 +47,7 @@ namespace Cake.Core.IO
             _showCommandLine = showCommandLine != null && showCommandLine.Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Starts a process using the specified information.
-        /// </summary>
-        /// <param name="filePath">The file name such as an application or document with which to start the process.</param>
-        /// <param name="settings">The information about the process to start.</param>
-        /// <returns>A process handle.</returns>
+        /// <inheritdoc/>
         public IProcess Start(FilePath filePath, ProcessSettings settings)
         {
             if (filePath == null)

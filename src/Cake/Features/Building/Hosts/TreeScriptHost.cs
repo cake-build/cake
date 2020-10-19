@@ -35,11 +35,7 @@ namespace Cake.Features.Building.Hosts
             _console = console ?? throw new ArgumentNullException(nameof(console));
         }
 
-        /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="target">The target to run.</param>
-        /// <returns>The resulting report.</returns>
+        /// <inheritdoc/>
         public override Task<CakeReport> RunTargetAsync(string target)
         {
             var topLevelTasks = GetTopLevelTasks();

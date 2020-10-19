@@ -40,10 +40,10 @@ namespace Cake.Core
         event EventHandler<TaskTeardownEventArgs> TaskTeardown;
 
         /// <summary>
-        /// Registers a new task.
+        /// Creates and registers a new Cake task.
         /// </summary>
         /// <param name="name">The name of the task.</param>
-        /// <returns>A <see cref="CakeTaskBuilder"/>.</returns>
+        /// <returns>A <see cref="CakeTaskBuilder"/> used to configure the task.</returns>
         CakeTaskBuilder RegisterTask(string name);
 
         /// <summary>

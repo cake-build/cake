@@ -4,9 +4,7 @@ using System.Linq;
 
 namespace Cake.Core
 {
-    /// <summary>
-    /// Represents arguments passed to the executing script.
-    /// </summary>
+    /// <inheritdoc/>
     public sealed class CakeArguments : ICakeArguments
     {
         private readonly Dictionary<string, List<string>> _arguments;
@@ -28,23 +26,13 @@ namespace Cake.Core
             }
         }
 
-        /// <summary>
-        /// Determines whether or not the specified argument exist.
-        /// </summary>
-        /// <param name="name">The argument name.</param>
-        /// <returns>
-        ///   <c>true</c> if the argument exist; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool HasArgument(string name)
         {
             return _arguments.ContainsKey(name);
         }
 
-        /// <summary>
-        /// Gets all values for an argument.
-        /// </summary>
-        /// <param name="name">The argument name.</param>
-        /// <returns>The argument values.</returns>
+        /// <inheritdoc/>
         public ICollection<string> GetArguments(string name)
         {
             _arguments.TryGetValue(name, out var arguments);

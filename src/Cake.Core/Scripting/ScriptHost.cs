@@ -20,10 +20,7 @@ namespace Cake.Core.Scripting
         /// <value>The engine.</value>
         protected ICakeEngine Engine { get; }
 
-        /// <summary>
-        /// Gets the context.
-        /// </summary>
-        /// <value>The context.</value>
+        /// <inheritdoc/>
         public ICakeContext Context { get; }
 
         /// <summary>
@@ -52,150 +49,71 @@ namespace Cake.Core.Scripting
             Settings = new ExecutionSettings();
         }
 
-        /// <summary>
-        /// Gets all registered tasks.
-        /// </summary>
-        /// <value>The registered tasks.</value>
+        /// <inheritdoc/>
         public IReadOnlyList<ICakeTaskInfo> Tasks => Engine.Tasks;
 
-        /// <summary>
-        /// Registers a new task.
-        /// </summary>
-        /// <param name="name">The name of the task.</param>
-        /// <returns>A <see cref="CakeTaskBuilder"/>.</returns>
+        /// <inheritdoc/>
         public CakeTaskBuilder Task(string name)
         {
             return Engine.RegisterTask(name);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// Setup(context => {
-        ///   context.Log.Information("Hello World!");
-        /// });
-        /// </code>
-        /// </example>
+        /// <inheritdoc/>
         public void Setup(Action<ISetupContext> action)
         {
             Engine.RegisterSetupAction(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// Setup&lt;Foo&gt;(context => {
-        ///   return new Foo();
-        /// });
-        /// </code>
-        /// </example>
+        /// <inheritdoc/>
         public void Setup<TData>(Func<ISetupContext, TData> action)
             where TData : class
         {
             Engine.RegisterSetupAction(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after all other tasks have been run.
-        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// Teardown(context => {
-        ///   context.Log.Information("Goodbye World!");
-        /// });
-        /// </code>
-        /// </example>
+        /// <inheritdoc/>
         public void Teardown(Action<ITeardownContext> action)
         {
             Engine.RegisterTeardownAction(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after all other tasks have been run.
-        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// Teardown((context, data) => {
-        ///   context.Log.Information("Goodbye {0}!", data.Place);
-        /// });
-        /// </code>
-        /// </example>
+        /// <inheritdoc/>
         public void Teardown<TData>(Action<ITeardownContext, TData> action) where TData : class
         {
             Engine.RegisterTeardownAction(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before each task is run.
-        /// If the task setup fails, its task will not be executed but the task teardown will be performed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void TaskSetup(Action<ITaskSetupContext> action)
         {
             Engine.RegisterTaskSetupAction(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before each task is run.
-        /// If the task setup fails, its task will not be executed but the task teardown will be performed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void TaskSetup<TData>(Action<ITaskSetupContext, TData> action) where TData : class
         {
             Engine.RegisterTaskSetupAction(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after each task has been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void TaskTeardown(Action<ITaskTeardownContext> action)
         {
             Engine.RegisterTaskTeardownAction(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after each task has been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void TaskTeardown<TData>(Action<ITaskTeardownContext, TData> action) where TData : class
         {
             Engine.RegisterTaskTeardownAction(action);
         }
 
-        /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="target">The target to run.</param>
-        /// <returns>The resulting report.</returns>
+        /// <inheritdoc/>
         public CakeReport RunTarget(string target)
         {
             return RunTargetAsync(target).GetAwaiter().GetResult();
         }
 
-        /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="target">The target to run.</param>
-        /// <returns>The resulting report.</returns>
+        /// <inheritdoc/>
         public abstract Task<CakeReport> RunTargetAsync(string target);
     }
 }

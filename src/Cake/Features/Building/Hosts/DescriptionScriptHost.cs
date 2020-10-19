@@ -31,11 +31,7 @@ namespace Cake.Features.Building.Hosts
             _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="target">The target to run.</param>
-        /// <returns>The resulting report.</returns>
+        /// <inheritdoc/>
         public override Task<CakeReport> RunTargetAsync(string target)
         {
             var maxTaskNameLength = 29;

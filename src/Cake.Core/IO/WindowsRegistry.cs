@@ -9,9 +9,7 @@ namespace Cake.Core.IO
     /// </summary>
     public sealed class WindowsRegistry : IRegistry
     {
-        /// <summary>
-        /// Gets the LocalMachine <see cref="IRegistryKey"/>.
-        /// </summary>
+        /// <inheritdoc/>
         public IRegistryKey LocalMachine => new WindowsRegistryKey(Microsoft.Win32.Registry.LocalMachine);
     }
 }

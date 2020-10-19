@@ -31,22 +31,13 @@ namespace Cake.Core.Reflection
             _verifier = verifier;
         }
 
-        /// <summary>
-        /// Loads an assembly from its assembly name.
-        /// </summary>
-        /// <param name="assemblyName">The assembly name.</param>
-        /// <returns>The loaded assembly.</returns>
+        /// <inheritdoc/>
         public Assembly Load(AssemblyName assemblyName)
         {
             return AssemblyHelper.LoadAssembly(assemblyName);
         }
 
-        /// <summary>
-        /// Loads an assembly from the specified path.
-        /// </summary>
-        /// <param name="path">The assembly path to load.</param>
-        /// <param name="verify">If the assembly should be verified whether or not it will work properly with Cake or not.</param>
-        /// <returns>The loaded assembly.</returns>
+        /// <inheritdoc/>
         public Assembly Load(FilePath path, bool verify)
         {
             var assembly = AssemblyHelper.LoadAssembly(_environment, _fileSystem, path);

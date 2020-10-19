@@ -34,10 +34,7 @@ namespace Cake.Core.Scripting
             _runtime = runtime;
         }
 
-        /// <summary>
-        /// Gets the default namespaces.
-        /// </summary>
-        /// <returns>A list containing all default namespaces.</returns>
+        /// <inheritdoc/>
         public IReadOnlyList<string> GetDefaultNamespaces()
         {
             return new List<string>
@@ -55,11 +52,7 @@ namespace Cake.Core.Scripting
             };
         }
 
-        /// <summary>
-        /// Gets the default assemblies.
-        /// </summary>
-        /// <param name="root">The root to where to find Cake related assemblies.</param>
-        /// <returns>A list containing all default assemblies.</returns>
+        /// <inheritdoc/>
         public IReadOnlyList<Assembly> GetDefaultAssemblies(DirectoryPath root)
         {
             // Prepare the default assemblies.
@@ -110,10 +103,7 @@ namespace Cake.Core.Scripting
             return result.ToArray();
         }
 
-        /// <summary>
-        /// Gets the default defines.
-        /// </summary>
-        /// <returns>A list containing all default defines.</returns>
+        /// <inheritdoc/>
         public IReadOnlyList<string> GetDefaultDefines()
         {
             return new[]

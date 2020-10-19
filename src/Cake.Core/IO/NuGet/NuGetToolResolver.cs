@@ -54,10 +54,7 @@ namespace Cake.Core.IO.NuGet
             _tools = tools;
         }
 
-        /// <summary>
-        /// Resolves the path to nuget.exe.
-        /// </summary>
-        /// <returns>The path to nuget.exe.</returns>
+        /// <inheritdoc/>
         public FilePath ResolvePath()
         {
             // Check if path already resolved

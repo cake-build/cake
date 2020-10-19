@@ -60,14 +60,7 @@ namespace Cake.Core.Tooling
             _lock = new object();
         }
 
-        /// <summary>
-        /// Resolves the specified tool using the specified tool repository.
-        /// </summary>
-        /// <param name="repository">The tool repository.</param>
-        /// <param name="tool">The tool.</param>
-        /// <returns>
-        /// The path to the tool; otherwise <c>null</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public FilePath Resolve(IToolRepository repository, string tool)
         {
             if (repository == null)
@@ -99,12 +92,7 @@ namespace Cake.Core.Tooling
             return resolve;
         }
 
-        /// <summary>
-        /// Resolves the specified tool using the specified tool repository.
-        /// </summary>
-        /// <param name="repository">The tool repository.</param>
-        /// <param name="toolExeNames">The possible names of the tool executable.</param>
-        /// <returns>The path to the tool; otherwise <c>null</c>.</returns>
+        /// <inheritdoc/>
         public FilePath Resolve(IToolRepository repository, IEnumerable<string> toolExeNames)
         {
             if (repository == null)

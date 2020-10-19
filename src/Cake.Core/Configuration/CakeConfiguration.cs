@@ -23,11 +23,7 @@ namespace Cake.Core.Configuration
             _lookup = new Dictionary<string, string>(lookup, StringComparer.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Gets the value that corresponds to the specified configuration key.
-        /// </summary>
-        /// <param name="key">The configuration key.</param>
-        /// <returns>The value for the specified configuration key, or <c>null</c> if key doesn't exists.</returns>
+        /// <inheritdoc/>
         public string GetValue(string key)
         {
             key = KeyNormalizer.Normalize(key);

@@ -8,14 +8,10 @@ namespace Cake.Core
     /// </summary>
     public sealed class SetupContext : CakeContextAdapter, ISetupContext
     {
-        /// <summary>
-        /// Gets target (initiating) task.
-        /// </summary>
+        /// <inheritdoc/>
         public ICakeTaskInfo TargetTask { get;  }
 
-        /// <summary>
-        /// Gets all registered tasks that are going to be executed.
-        /// </summary>
+        /// <inheritdoc/>
         public IReadOnlyCollection<ICakeTaskInfo> TasksToExecute { get; }
 
         /// <summary>
