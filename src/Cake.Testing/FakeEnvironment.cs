@@ -19,22 +19,13 @@ namespace Cake.Testing
         private readonly Dictionary<string, string> _environmentVariables;
         private readonly Dictionary<SpecialPath, DirectoryPath> _specialPaths;
 
-        /// <summary>
-        /// Gets or sets the working directory.
-        /// </summary>
-        /// <value>The working directory.</value>
+        /// <inheritdoc/>
         public DirectoryPath WorkingDirectory { get; set; }
 
-        /// <summary>
-        /// Gets or sets the application root path.
-        /// </summary>
-        /// <value>The application root path.</value>
+        /// <inheritdoc/>
         public DirectoryPath ApplicationRoot { get; set; }
 
-        /// <summary>
-        /// Gets the platform Cake is running on.
-        /// </summary>
-        /// <value>The platform Cake is running on.</value>
+        /// <inheritdoc/>
         ICakePlatform ICakeEnvironment.Platform => Platform;
 
         /// <summary>
@@ -43,10 +34,7 @@ namespace Cake.Testing
         /// <value>The platform Cake is running on.</value>
         public FakePlatform Platform { get; }
 
-        /// <summary>
-        /// Gets the runtime Cake is running in.
-        /// </summary>
-        /// <value>The runtime Cake is running in.</value>
+        /// <inheritdoc/>
         ICakeRuntime ICakeEnvironment.Runtime => Runtime;
 
         /// <summary>
@@ -94,13 +82,7 @@ namespace Cake.Testing
             return environment;
         }
 
-        /// <summary>
-        /// Gets a special path.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>
-        /// A <see cref="DirectoryPath" /> to the special path.
-        /// </returns>
+        /// <inheritdoc/>
         public DirectoryPath GetSpecialPath(SpecialPath path)
         {
             if (_specialPaths.ContainsKey(path))
@@ -111,13 +93,7 @@ namespace Cake.Testing
             throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, format, path));
         }
 
-        /// <summary>
-        /// Gets an environment variable.
-        /// </summary>
-        /// <param name="variable">The variable.</param>
-        /// <returns>
-        /// The value of the environment variable.
-        /// </returns>
+        /// <inheritdoc/>
         public string GetEnvironmentVariable(string variable)
         {
             if (_environmentVariables.ContainsKey(variable))
@@ -127,10 +103,7 @@ namespace Cake.Testing
             return null;
         }
 
-        /// <summary>
-        /// Gets all environment variables.
-        /// </summary>
-        /// <returns>The environment variables as IDictionary&lt;string, string&gt;. </returns>
+        /// <inheritdoc/>
         public IDictionary<string, string> GetEnvironmentVariables()
         {
             return new Dictionary<string, string>(_environmentVariables, StringComparer.OrdinalIgnoreCase);

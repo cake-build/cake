@@ -30,21 +30,13 @@ namespace Cake.Testing
         /// <value>The messages.</value>
         public List<string> ErrorMessages { get; set; }
 
-        /// <summary>
-        /// Gets or sets the foreground color.
-        /// </summary>
-        /// <value>The foreground color.</value>
+        /// <inheritdoc/>
         public ConsoleColor ForegroundColor { get; set; }
 
-        /// <summary>
-        /// Gets or sets the background color.
-        /// </summary>
-        /// <value>The background color.</value>
+        /// <inheritdoc/>
         public ConsoleColor BackgroundColor { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not the console supports ANSI escape codes.
-        /// </summary>
+        /// <inheritdoc/>
         public bool SupportAnsiEscapeCodes { get; set; }
 
         /// <summary>
@@ -79,12 +71,7 @@ namespace Cake.Testing
             };
         }
 
-        /// <summary>
-        /// Writes the text representation of the specified array of objects to the
-        /// console output using the specified format information.
-        /// </summary>
-        /// <param name="format">A composite format string.</param>
-        /// <param name="arg">An array of objects to write using format.</param>
+        /// <inheritdoc/>
         public void Write(string format, params object[] arg)
         {
             if (!string.IsNullOrWhiteSpace(format))
@@ -103,13 +90,7 @@ namespace Cake.Testing
             }
         }
 
-        /// <summary>
-        /// Writes the text representation of the specified array of objects, followed
-        /// by the current line terminator, to the console output using the specified
-        /// format information.
-        /// </summary>
-        /// <param name="format">A composite format string.</param>
-        /// <param name="arg">An array of objects to write using format.</param>
+        /// <inheritdoc/>
         public void WriteLine(string format, params object[] arg)
         {
             if (!string.IsNullOrWhiteSpace(format))
@@ -121,12 +102,7 @@ namespace Cake.Testing
             _builder.Clear();
         }
 
-        /// <summary>
-        /// Writes the text representation of the specified array of objects to the
-        /// console error output using the specified format information.
-        /// </summary>
-        /// <param name="format">A composite format string.</param>
-        /// <param name="arg">An array of objects to write using format.</param>
+        /// <inheritdoc/>
         public void WriteError(string format, params object[] arg)
         {
             if (!string.IsNullOrWhiteSpace(format))
@@ -145,13 +121,7 @@ namespace Cake.Testing
             }
         }
 
-        /// <summary>
-        /// Writes the text representation of the specified array of objects, followed
-        /// by the current line terminator, to the console error output using the
-        /// specified format information.
-        /// </summary>
-        /// <param name="format">A composite format string.</param>
-        /// <param name="arg">An array of objects to write using format.</param>
+        /// <inheritdoc/>
         public void WriteErrorLine(string format, params object[] arg)
         {
             if (!string.IsNullOrWhiteSpace(format))
@@ -163,9 +133,7 @@ namespace Cake.Testing
             _errorBuilder.Clear();
         }
 
-        /// <summary>
-        /// Sets the foreground and background console colors to their defaults.
-        /// </summary>
+        /// <inheritdoc/>
         public void ResetColor()
         {
             ForegroundColor = ConsoleColor.Gray;
