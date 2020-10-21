@@ -20,6 +20,6 @@ namespace Cake.Core.IO
         /// <returns>
         ///   <see cref="Path" /> instances matching the specified pattern.
         /// </returns>
-        IEnumerable<Path> Match(string pattern, GlobberSettings settings);
+        IEnumerable<Path> Match(GlobPattern pattern, GlobberSettings settings);
     }
 }

@@ -56,7 +56,7 @@ namespace Cake.Common.Security
         /// </example>
         public DirectoryHash Calculate(
             DirectoryPath directoryPath,
-            IEnumerable<string> pattern,
+            IEnumerable<GlobPattern> pattern,
             HashAlgorithm hashAlgorithm)
         {
             if (directoryPath == null)
@@ -104,9 +104,44 @@ namespace Cake.Common.Security
             }
         }
 
+        /// <summary>
+        /// Calculates the hash for a given directory.
+        /// </summary>
+        /// <param name="directoryPath">The directory path.</param>
+        /// <param name="pattern">The glob pattern to match.</param>
+        /// <param name="hashAlgorithm">The hash algorithm to use.</param>
+        /// <returns>A <see cref="DirectoryHash"/> instance representing the calculated hash.</returns>
+        /// <example>
+        /// <code>
+        /// Information(
+        ///     "Cake It calculates the hashes from all cs files in all subdirectories using a MD5 hash: {0}",
+        ///     CalculateDirectoryHash("C:\directoryToHash", "./**/*.cs", HashAlgorithm.MD5).ToHex());
+        /// </code>
+        /// </example>
+        public DirectoryHash Calculate(
+            DirectoryPath directoryPath,
+            IEnumerable<string> pattern,
+            HashAlgorithm hashAlgorithm)
+        {
+            if (directoryPath == null)
+            {
+                throw new ArgumentNullException(nameof(directoryPath));
+            }
+
+            if (pattern == null)
+            {
+                throw new ArgumentNullException(nameof(pattern));
+            }
+
+            return Calculate(
+                directoryPath,
+                pattern.Select(GlobPattern.FromString),
+                hashAlgorithm);
+        }
+
         private FilePathCollection GetDirectoryFiles(
             DirectoryPath directoryPath,
-            IEnumerable<string> pattern)
+            IEnumerable<GlobPattern> pattern)
         {
             var directory = new Directory(directoryPath);
 
@@ -118,7 +153,7 @@ namespace Cake.Common.Security
             }
 
             var filePathCollection = new FilePathCollection();
-            var fullGlobs = pattern.Select(x => directoryPath + x).ToArray();
+            var fullGlobs = pattern.Select(x => directoryPath + x.Pattern).ToArray();
 
             foreach (var glob in fullGlobs)
             {

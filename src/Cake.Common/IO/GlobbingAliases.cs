@@ -33,7 +33,7 @@ namespace Cake.Common.IO
         /// <returns>A <see cref="FilePathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Files")]
-        public static FilePathCollection GetFiles(this ICakeContext context, string pattern)
+        public static FilePathCollection GetFiles(this ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {
@@ -65,7 +65,7 @@ namespace Cake.Common.IO
         /// <returns>A <see cref="FilePathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Files")]
-        public static FilePathCollection GetFiles(this ICakeContext context, string pattern, GlobberSettings settings)
+        public static FilePathCollection GetFiles(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
         {
             if (context == null)
             {
@@ -92,7 +92,7 @@ namespace Cake.Common.IO
         /// <returns>A <see cref="DirectoryPathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Directories")]
-        public static DirectoryPathCollection GetDirectories(this ICakeContext context, string pattern)
+        public static DirectoryPathCollection GetDirectories(this ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {
@@ -124,7 +124,7 @@ namespace Cake.Common.IO
         /// <returns>A <see cref="DirectoryPathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Directories")]
-        public static DirectoryPathCollection GetDirectories(this ICakeContext context, string pattern, GlobberSettings settings)
+        public static DirectoryPathCollection GetDirectories(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
         {
             if (context == null)
             {
@@ -151,7 +151,7 @@ namespace Cake.Common.IO
         /// <returns>A <see cref="PathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Paths")]
-        public static PathCollection GetPaths(this ICakeContext context, string pattern)
+        public static PathCollection GetPaths(this ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {
@@ -183,7 +183,7 @@ namespace Cake.Common.IO
         /// <returns>A <see cref="PathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Paths")]
-        public static PathCollection GetPaths(this ICakeContext context, string pattern, GlobberSettings settings)
+        public static PathCollection GetPaths(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
         {
             if (context == null)
             {

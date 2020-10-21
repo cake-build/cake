@@ -49,13 +49,13 @@ namespace Cake.Core.IO
         /// <returns>
         ///   <see cref="Path" /> instances matching the specified pattern.
         /// </returns>
-        public IEnumerable<Path> Match(string pattern, GlobberSettings settings)
+        public IEnumerable<Path> Match(GlobPattern pattern, GlobberSettings settings)
         {
             if (pattern == null)
             {
                 throw new ArgumentNullException(nameof(pattern));
             }
-            if (string.IsNullOrWhiteSpace(pattern))
+            if (string.IsNullOrWhiteSpace(pattern?.Pattern))
             {
                 return Enumerable.Empty<Path>();
             }

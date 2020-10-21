@@ -14,7 +14,7 @@ namespace Cake.Common.IO
 {
     internal static class FileDeleter
     {
-        public static void DeleteFiles(ICakeContext context, string pattern)
+        public static void DeleteFiles(ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {

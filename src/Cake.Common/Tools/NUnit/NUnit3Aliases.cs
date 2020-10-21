@@ -36,7 +36,7 @@ namespace Cake.Common.Tools.NUnit
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static void NUnit3(this ICakeContext context, string pattern)
+        public static void NUnit3(this ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {
@@ -68,7 +68,7 @@ namespace Cake.Common.Tools.NUnit
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static void NUnit3(this ICakeContext context, string pattern, NUnit3Settings settings)
+        public static void NUnit3(this ICakeContext context, GlobPattern pattern, NUnit3Settings settings)
         {
             if (context == null)
             {

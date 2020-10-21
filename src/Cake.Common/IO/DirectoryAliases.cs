@@ -151,7 +151,7 @@ namespace Cake.Common.IO
         /// <param name="pattern">The pattern to match.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
-        public static void CleanDirectories(this ICakeContext context, string pattern)
+        public static void CleanDirectories(this ICakeContext context, GlobPattern pattern)
         {
             var directories = context.GetDirectories(pattern);
             if (directories.Count == 0)
@@ -180,7 +180,7 @@ namespace Cake.Common.IO
         /// <param name="predicate">The predicate used to filter directories based on file system information.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
-        public static void CleanDirectories(this ICakeContext context, string pattern, Func<IFileSystemInfo, bool> predicate)
+        public static void CleanDirectories(this ICakeContext context, GlobPattern pattern, Func<IFileSystemInfo, bool> predicate)
         {
             var directories = context.GetDirectories(pattern, new GlobberSettings { Predicate = predicate });
             if (directories.Count == 0)

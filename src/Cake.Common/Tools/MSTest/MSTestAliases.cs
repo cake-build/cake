@@ -34,7 +34,7 @@ namespace Cake.Common.Tools.MSTest
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         [CakeMethodAlias]
-        public static void MSTest(this ICakeContext context, string pattern)
+        public static void MSTest(this ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {
@@ -63,7 +63,7 @@ namespace Cake.Common.Tools.MSTest
         /// <param name="pattern">The pattern.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
-        public static void MSTest(this ICakeContext context, string pattern, MSTestSettings settings)
+        public static void MSTest(this ICakeContext context, GlobPattern pattern, MSTestSettings settings)
         {
             if (context == null)
             {
