@@ -11,7 +11,7 @@
         Clr,
 
         /// <summary>
-        /// .NET Core / .NET 5.
+        /// .NET Core or .NET 5+.
         /// </summary>
         CoreClr
     }
