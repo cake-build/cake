@@ -36,7 +36,7 @@ namespace Cake.Common.Tools.XUnit
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static void XUnit2(this ICakeContext context, string pattern)
+        public static void XUnit2(this ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {
@@ -71,7 +71,7 @@ namespace Cake.Common.Tools.XUnit
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static void XUnit2(this ICakeContext context, string pattern, XUnit2Settings settings)
+        public static void XUnit2(this ICakeContext context, GlobPattern pattern, XUnit2Settings settings)
         {
             if (context == null)
             {

@@ -31,7 +31,7 @@ namespace Cake.Common.IO
             MoveFile(context, filePath, targetDirectoryPath.GetFilePath(filePath));
         }
 
-        public static void MoveFiles(ICakeContext context, string pattern, DirectoryPath targetDirectoryPath)
+        public static void MoveFiles(ICakeContext context, GlobPattern pattern, DirectoryPath targetDirectoryPath)
         {
             if (context == null)
             {

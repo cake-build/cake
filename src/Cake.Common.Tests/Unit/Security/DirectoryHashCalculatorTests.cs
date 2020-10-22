@@ -24,7 +24,7 @@ namespace Cake.Common.Tests.Unit.Security
                 var calculator = new DirectoryHashCalculator(cakeContext, hashAlgorithmBuilder);
 
                 // When
-                var result = Record.Exception(() => calculator.Calculate(null, null, HashAlgorithm.MD5));
+                var result = Record.Exception(() => calculator.Calculate(null, null as string[], HashAlgorithm.MD5));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "directoryPath");

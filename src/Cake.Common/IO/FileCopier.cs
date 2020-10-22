@@ -60,7 +60,7 @@ namespace Cake.Common.IO
             CopyFileCore(context, filePath, targetFilePath, null);
         }
 
-        public static void CopyFiles(ICakeContext context, string pattern, DirectoryPath targetDirectoryPath, bool preserverFolderStructure)
+        public static void CopyFiles(ICakeContext context, GlobPattern pattern, DirectoryPath targetDirectoryPath, bool preserverFolderStructure)
         {
             if (context == null)
             {

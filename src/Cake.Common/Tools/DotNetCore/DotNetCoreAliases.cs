@@ -1276,7 +1276,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.VSTest")]
-        public static void DotNetCoreVSTest(this ICakeContext context, string testFile) => context.DotNetCoreVSTest(testFile, null);
+        public static void DotNetCoreVSTest(this ICakeContext context, GlobPattern testFile) => context.DotNetCoreVSTest(testFile, null);
 
         /// <summary>
         /// Test one or more projects specified by a path or glob pattern with settings using the VS Test host runner.
@@ -1310,7 +1310,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.VSTest")]
-        public static void DotNetCoreVSTest(this ICakeContext context, string testFile, DotNetCoreVSTestSettings settings)
+        public static void DotNetCoreVSTest(this ICakeContext context, GlobPattern testFile, DotNetCoreVSTestSettings settings)
         {
             var testFiles = context.GetFiles(testFile);
 
