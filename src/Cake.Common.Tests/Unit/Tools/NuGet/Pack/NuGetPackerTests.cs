@@ -313,6 +313,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -347,6 +348,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -381,6 +383,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -415,6 +418,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -453,6 +457,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -491,6 +496,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -529,6 +535,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -567,6 +574,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -605,6 +613,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -639,6 +648,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -672,6 +682,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -718,6 +729,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -797,6 +809,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;
@@ -842,6 +855,7 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     fixture.Settings.Summary = "The summary";
                     fixture.Settings.LicenseUrl = new Uri("https://license.com");
                     fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
                     fixture.Settings.IconUrl = new Uri("https://icon.com");
                     fixture.Settings.DevelopmentDependency = true;
                     fixture.Settings.RequireLicenseAcceptance = true;

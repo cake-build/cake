@@ -45,6 +45,7 @@ namespace Cake.Common.Tools.NuGet.Pack
                 { "owners", x => ToCommaSeparatedString(settings.Owners) },
                 { "licenseUrl", x => ToString(settings.LicenseUrl) },
                 { "projectUrl", x => ToString(settings.ProjectUrl) },
+                { "icon", x => ToString(settings.Icon) },
                 { "iconUrl", x => ToString(settings.IconUrl) },
                 { "requireLicenseAcceptance", x => ToString(settings.RequireLicenseAcceptance) },
                 { "developmentDependency", x => ToString(settings.DevelopmentDependency) },
