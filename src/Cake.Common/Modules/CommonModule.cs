@@ -12,10 +12,7 @@ namespace Cake.Common.Modules
     /// </summary>
     public sealed class CommonModule : ICakeModule
     {
-        /// <summary>
-        /// Performs custom registrations in the provided registrar.
-        /// </summary>
-        /// <param name="registrar">The container registrar.</param>
+        /// <inheritdoc/>
         public void Register(ICakeContainerRegistrar registrar)
         {
         }

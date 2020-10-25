@@ -140,6 +140,32 @@ namespace Cake.Common.Build.AppVeyor
         /// Updates the build version.
         /// </summary>
         /// <param name="version">The new build version.</param>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     BuildSystem.AppVeyor.UpdateBuildVersion("2.0.0.0");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor.</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     AppVeyor.UpdateBuildVersion("2.0.0.0");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on AppVeyor");
+        /// }
+        /// </code>
+        /// </example>
         void UpdateBuildVersion(string version);
 
         /// <summary>

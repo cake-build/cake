@@ -6,23 +6,13 @@ using Cake.Core.Polyfill;
 
 namespace Cake.Core
 {
-    /// <summary>
-    /// Represents the platform that Cake is running on.
-    /// </summary>
+    /// <inheritdoc/>
     public sealed class CakePlatform : ICakePlatform
     {
-        /// <summary>
-        /// Gets the platform family.
-        /// </summary>
-        /// <value>The platform family.</value>
+        /// <inheritdoc/>
         public PlatformFamily Family { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether or not the current platform is 64 bit.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if current platform is 64 bit; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool Is64Bit { get; }
 
         /// <summary>

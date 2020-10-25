@@ -14,28 +14,16 @@ namespace Cake.Testing
     /// </summary>
     public sealed class FakeRuntime : ICakeRuntime
     {
-        /// <summary>
-        /// Gets or sets the build-time .NET framework version that is being used.
-        /// </summary>
+        /// <inheritdoc/>
         public FrameworkName BuiltFramework { get; set; }
 
-        /// <summary>
-        /// Gets or sets the current executing .NET Runtime.
-        /// </summary>
-        /// <returns>The target framework.</returns>
+        /// <inheritdoc/>
         public Runtime Runtime { get; set; }
 
-        /// <summary>
-        /// Gets or sets the version of Cake executing the script.
-        /// </summary>
+        /// <inheritdoc/>
         public Version CakeVersion { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether we're running on CoreClr.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if we're running on CoreClr; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsCoreClr { get; set; }
 
         /// <summary>

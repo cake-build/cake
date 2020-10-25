@@ -67,12 +67,7 @@ namespace Cake.Core.Scripting
             _skipPackageVersionCheck = skip != null && skip.Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Installs the addins.
-        /// </summary>
-        /// <param name="addins">The addins to install.</param>
-        /// <param name="installPath">The install path.</param>
-        /// <returns>A list containing file paths to installed addin assemblies.</returns>
+        /// <inheritdoc/>
         public IReadOnlyList<FilePath> InstallAddins(
             IReadOnlyCollection<PackageReference> addins,
             DirectoryPath installPath)
@@ -125,11 +120,7 @@ namespace Cake.Core.Scripting
             return result.ToArray();
         }
 
-        /// <summary>
-        /// Installs the tools.
-        /// </summary>
-        /// <param name="tools">The tools to install.</param>
-        /// <param name="installPath">The install path.</param>
+        /// <inheritdoc/>
         public void InstallTools(
             IReadOnlyCollection<PackageReference> tools,
             DirectoryPath installPath)
@@ -145,11 +136,7 @@ namespace Cake.Core.Scripting
             InstallPackages(tools, installPath, PackageType.Tool);
         }
 
-        /// <summary>
-        /// Installs the modules.
-        /// </summary>
-        /// <param name="modules">The modules to install.</param>
-        /// <param name="installPath">The install path.</param>
+        /// <inheritdoc/>
         public void InstallModules(
             IReadOnlyCollection<PackageReference> modules,
             DirectoryPath installPath)

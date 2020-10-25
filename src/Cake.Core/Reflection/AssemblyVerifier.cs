@@ -29,10 +29,7 @@ namespace Cake.Core.Reflection
             _skipVerification = skip != null && skip.Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Verifies an assembly.
-        /// </summary>
-        /// <param name="assembly">The target assembly.</param>
+        /// <inheritdoc/>
         public void Verify(Assembly assembly)
         {
             _log.Debug(_skipVerification ? "Skipping verification of assembly '{0}'." : "Verifying assembly '{0}'.", assembly.FullName);

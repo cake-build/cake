@@ -28,38 +28,18 @@ namespace Cake.Common.Build.AzurePipelines
             Commands = new AzurePipelinesCommands(environment, writer);
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on Azure Pipelines.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on Azure Pipelines; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnAzurePipelines
             => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TF_BUILD")) && !IsHostedAgent;
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on hosted Azure Pipelines.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on hosted Azure Pipelines; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnAzurePipelinesHosted
             => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TF_BUILD")) && IsHostedAgent;
 
-        /// <summary>
-        /// Gets the Azure Pipelines environment.
-        /// </summary>
-        /// <value>
-        /// The Azure Pipelines environment.
-        /// </value>
+        /// <inheritdoc/>
         public AzurePipelinesEnvironmentInfo Environment { get; }
 
-        /// <summary>
-        /// Gets the Azure Pipelines commands provider.
-        /// </summary>
-        /// <value>
-        /// The Azure Pipelines commands provider.
-        /// </value>
+        /// <inheritdoc/>
         public IAzurePipelinesCommands Commands { get; }
 
         /// <summary>

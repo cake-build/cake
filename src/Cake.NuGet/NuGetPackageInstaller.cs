@@ -65,15 +65,7 @@ namespace Cake.NuGet
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
-        /// <summary>
-        /// Determines whether this instance can install the specified resource.
-        /// </summary>
-        /// <param name="package">The package reference.</param>
-        /// <param name="type">The package type.</param>
-        /// <returns>
-        ///   <c>true</c> if this installer can install the
-        ///   specified resource; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool CanInstall(PackageReference package, PackageType type)
         {
             if (package == null)
@@ -83,13 +75,7 @@ namespace Cake.NuGet
             return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Installs the specified resource at the given location.
-        /// </summary>
-        /// <param name="package">The package reference.</param>
-        /// <param name="type">The package type.</param>
-        /// <param name="path">The location where to install the package.</param>
-        /// <returns>The installed files.</returns>
+        /// <inheritdoc/>
         public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
         {
             if (package == null)

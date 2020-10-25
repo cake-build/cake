@@ -29,23 +29,13 @@ namespace Cake.Frosting.Internal
                 StringComparer.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Determines whether or not the specified argument exist.
-        /// </summary>
-        /// <param name="name">The argument name.</param>
-        /// <returns>
-        ///   <c>true</c> if the argument exist; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool HasArgument(string name)
         {
             return _arguments.ContainsKey(name);
         }
 
-        /// <summary>
-        /// Gets an argument.
-        /// </summary>
-        /// <param name="name">The argument name.</param>
-        /// <returns>The argument value.</returns>
+        /// <inheritdoc/>
         public ICollection<string> GetArguments(string name)
         {
             return _arguments.ContainsKey(name)

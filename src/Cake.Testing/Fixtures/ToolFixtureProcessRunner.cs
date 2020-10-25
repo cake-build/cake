@@ -39,12 +39,7 @@ namespace Cake.Testing.Fixtures
             Process = new FakeProcess();
         }
 
-        /// <summary>
-        /// Starts the specified file path.
-        /// </summary>
-        /// <param name="filePath">The file path.</param>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The (fake) tool fixture process.</returns>
+        /// <inheritdoc/>
         public IProcess Start(FilePath filePath, ProcessSettings settings)
         {
             // Invoke the intercept action.

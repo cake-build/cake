@@ -28,11 +28,7 @@ namespace Cake.Frosting
             _registrations = new CakeServices();
         }
 
-        /// <summary>
-        /// Adds a delegate for configuring additional services for the host.
-        /// </summary>
-        /// <param name="configureServices">A delegate for configuring the <see cref="ICakeServices"/>.</param>
-        /// <returns>The same <see cref="ICakeHostBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <inheritdoc/>
         public ICakeHostBuilder ConfigureServices(Action<ICakeServices> configureServices)
         {
             try
@@ -46,10 +42,7 @@ namespace Cake.Frosting
             }
         }
 
-        /// <summary>
-        /// Builds the required services and an <see cref="ICakeHost" /> using the specified options.
-        /// </summary>
-        /// <returns>The built <see cref="ICakeHost" />.</returns>
+        /// <inheritdoc/>
         public ICakeHost Build()
         {
             try

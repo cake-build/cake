@@ -12,37 +12,23 @@ using Cake.Core.Polyfill;
 
 namespace Cake.Core
 {
-    /// <summary>
-    /// Represents the environment Cake operates in.
-    /// </summary>
+    /// <inheritdoc/>
     public sealed class CakeEnvironment : ICakeEnvironment
     {
-        /// <summary>
-        /// Gets or sets the working directory.
-        /// </summary>
-        /// <value>The working directory.</value>
+        /// <inheritdoc/>
         public DirectoryPath WorkingDirectory
         {
             get { return System.IO.Directory.GetCurrentDirectory(); }
             set { SetWorkingDirectory(value); }
         }
 
-        /// <summary>
-        /// Gets the application root path.
-        /// </summary>
-        /// <value>The application root path.</value>
+        /// <inheritdoc/>
         public DirectoryPath ApplicationRoot { get; }
 
-        /// <summary>
-        /// Gets the platform Cake is running on.
-        /// </summary>
-        /// <value>The platform Cake is running on.</value>
+        /// <inheritdoc/>
         public ICakePlatform Platform { get; }
 
-        /// <summary>
-        /// Gets the runtime Cake is running in.
-        /// </summary>
-        /// <value>The runtime Cake is running in.</value>
+        /// <inheritdoc/>
         public ICakeRuntime Runtime { get; }
 
         /// <summary>
@@ -64,34 +50,19 @@ namespace Cake.Core
             WorkingDirectory = new DirectoryPath(System.IO.Directory.GetCurrentDirectory());
         }
 
-        /// <summary>
-        /// Gets a special path.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>
-        /// A <see cref="DirectoryPath" /> to the special path.
-        /// </returns>
+        /// <inheritdoc/>
         public DirectoryPath GetSpecialPath(SpecialPath path)
         {
             return SpecialPathHelper.GetFolderPath(Platform, path);
         }
 
-        /// <summary>
-        /// Gets an environment variable.
-        /// </summary>
-        /// <param name="variable">The variable.</param>
-        /// <returns>
-        /// The value of the environment variable.
-        /// </returns>
+        /// <inheritdoc/>
         public string GetEnvironmentVariable(string variable)
         {
             return Environment.GetEnvironmentVariable(variable);
         }
 
-        /// <summary>
-        /// Gets all environment variables.
-        /// </summary>
-        /// <returns>The environment variables as IDictionary&lt;string, string&gt;. </returns>
+        /// <inheritdoc/>
         public IDictionary<string, string> GetEnvironmentVariables()
         {
             return Environment.GetEnvironmentVariables()

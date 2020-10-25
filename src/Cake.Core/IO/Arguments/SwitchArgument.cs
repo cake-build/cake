@@ -26,34 +26,19 @@ namespace Cake.Core.IO.Arguments
             _separator = separator;
         }
 
-        /// <summary>
-        /// Render the arguments as a <see cref="System.String" />.
-        /// Sensitive information will be included.
-        /// </summary>
-        /// <returns>
-        /// A string representation of the argument.
-        /// </returns>
+        /// <inheritdoc/>
         public string Render()
         {
             return string.Concat(_switch, _separator, _argument.Render());
         }
 
-        /// <summary>
-        /// Renders the argument as a <see cref="System.String" />.
-        ///  The secret text will be redacted.
-        /// </summary>
-        /// <returns>A safe string representation of the argument.</returns>
+        /// <inheritdoc/>
         public string RenderSafe()
         {
             return string.Concat(_switch, _separator, _argument.RenderSafe());
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>
-        /// A string that represents the current object.
-        /// </returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return RenderSafe();

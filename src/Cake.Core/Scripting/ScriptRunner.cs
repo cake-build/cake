@@ -63,11 +63,7 @@ namespace Cake.Core.Scripting
             _assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(nameof(assemblyLoader));
         }
 
-        /// <summary>
-        /// Runs the script using the specified script host.
-        /// </summary>
-        /// <param name="host">The script host.</param>
-        /// <param name="scriptPath">The script.</param>
+        /// <inheritdoc/>
         public void Run(IScriptHost host, FilePath scriptPath)
         {
             if (host == null)

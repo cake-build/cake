@@ -31,78 +31,34 @@ namespace Cake.Core
             _context = context;
         }
 
-        /// <summary>
-        /// Gets the file system.
-        /// </summary>
-        /// <value>
-        /// The file system.
-        /// </value>
+        /// <inheritdoc/>
         public virtual IFileSystem FileSystem => _context.FileSystem;
 
-        /// <summary>
-        /// Gets the environment.
-        /// </summary>
-        /// <value>
-        /// The environment.
-        /// </value>
+        /// <inheritdoc/>
         public virtual ICakeEnvironment Environment => _context.Environment;
 
-        /// <summary>
-        /// Gets the globber.
-        /// </summary>
-        /// <value>
-        /// The globber.
-        /// </value>
+        /// <inheritdoc/>
         public virtual IGlobber Globber => _context.Globber;
 
-        /// <summary>
-        /// Gets the log.
-        /// </summary>
-        /// <value>
-        /// The log.
-        /// </value>
+        /// <inheritdoc/>
         public virtual ICakeLog Log => _context.Log;
 
-        /// <summary>
-        /// Gets the arguments.
-        /// </summary>
-        /// <value>
-        /// The arguments.
-        /// </value>
+        /// <inheritdoc/>
         public virtual ICakeArguments Arguments => _context.Arguments;
 
-        /// <summary>
-        /// Gets the process runner.
-        /// </summary>
-        /// <value>
-        /// The process runner.
-        /// </value>
+        /// <inheritdoc/>
         public virtual IProcessRunner ProcessRunner => _context.ProcessRunner;
 
-        /// <summary>
-        /// Gets the registry.
-        /// </summary>
-        /// <value>
-        /// The registry.
-        /// </value>
+        /// <inheritdoc/>
         public virtual IRegistry Registry => _context.Registry;
 
-        /// <summary>
-        /// Gets the tool locator.
-        /// </summary>
-        /// <value>
-        /// The tool locator.
-        /// </value>
+        /// <inheritdoc/>
         public virtual IToolLocator Tools => _context.Tools;
 
-        /// <summary>
-        /// Gets the data context resolver.
-        /// </summary>
+        /// <inheritdoc/>
         public virtual ICakeDataResolver Data => _context.Data;
 
-        /// <summary>
-        /// Gets the cake configuration.
-        /// </summary>
+        /// <inheritdoc/>
         public virtual ICakeConfiguration Configuration => _context.Configuration;
     }
 }

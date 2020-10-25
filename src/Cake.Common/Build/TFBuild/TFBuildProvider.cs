@@ -27,46 +27,20 @@ namespace Cake.Common.Build.TFBuild
             Commands = new TFBuildCommands(environment, writer);
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on Azure Pipelines.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on Azure Pipelines; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnAzurePipelines
             => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TF_BUILD")) && !IsHostedAgent;
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on hosted Azure Pipelines.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on hosted Azure Pipelines; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnAzurePipelinesHosted
             => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TF_BUILD")) && IsHostedAgent;
 
-        /// <summary>
-        /// Gets the TF Build environment.
-        /// </summary>
-        /// <value>
-        /// The TF Build environment.
-        /// </value>
+        /// <inheritdoc/>
         public TFBuildEnvironmentInfo Environment { get; }
 
-        /// <summary>
-        /// Gets the TF Build Commands provider.
-        /// </summary>
-        /// <value>
-        /// The TF Build commands provider.
-        /// </value>
+        /// <inheritdoc/>
         public ITFBuildCommands Commands { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on a hosted build agent.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on a hosted agent; otherwise, <c>false</c>.
-        /// </value>
         private bool IsHostedAgent => Environment.Agent.IsHosted;
     }
 }

@@ -37,14 +37,28 @@ namespace Cake.Core.Scripting
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        /// <example>
+        /// <code>
+        /// Setup(context => {
+        ///   context.Log.Information("Hello World!");
+        /// });
+        /// </code>
+        /// </example>
         void Setup(Action<ISetupContext> action);
 
         /// <summary>
         /// Allows registration of an action that's executed before any tasks are run.
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
-        /// <param name="action">The action to be executed.</param>
         /// <typeparam name="TData">The data type.</typeparam>
+        /// <param name="action">The action to be executed.</param>
+        /// <example>
+        /// <code>
+        /// Setup&lt;Foo&gt;(context => {
+        ///   return new Foo();
+        /// });
+        /// </code>
+        /// </example>
         void Setup<TData>(Func<ISetupContext, TData> action) where TData : class;
 
         /// <summary>
@@ -52,14 +66,28 @@ namespace Cake.Core.Scripting
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        /// <example>
+        /// <code>
+        /// Teardown(context => {
+        ///   context.Log.Information("Goodbye World!");
+        /// });
+        /// </code>
+        /// </example>
         void Teardown(Action<ITeardownContext> action);
 
         /// <summary>
         /// Allows registration of an action that's executed after all other tasks have been run.
         /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
         /// </summary>
-        /// <param name="action">The action to be executed.</param>
         /// <typeparam name="TData">The data type.</typeparam>
+        /// <param name="action">The action to be executed.</param>
+        /// <example>
+        /// <code>
+        /// Teardown((context, data) => {
+        ///   context.Log.Information("Goodbye {0}!", data.Place);
+        /// });
+        /// </code>
+        /// </example>
         void Teardown<TData>(Action<ITeardownContext, TData> action) where TData : class;
 
         /// <summary>

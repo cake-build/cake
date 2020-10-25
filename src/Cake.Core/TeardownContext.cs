@@ -5,22 +5,13 @@ using System;
 
 namespace Cake.Core
 {
-    /// <summary>
-    /// Acts as a context providing info about the overall build following its completion.
-    /// </summary>
+    /// <inheritdoc/>
     public sealed class TeardownContext : CakeContextAdapter, ITeardownContext
     {
-        /// <summary>
-        /// Gets a value indicating whether this build was successful.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if successful; otherwise <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool Successful => ThrownException == null;
 
-        /// <summary>
-        /// Gets the exception that was thrown by the target.
-        /// </summary>
+        /// <inheritdoc/>
         public Exception ThrownException { get; }
 
         /// <summary>

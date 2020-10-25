@@ -49,11 +49,7 @@ namespace Cake.Core.Text
             _keyExpression = CreateKeyExpression(placeholder);
         }
 
-        /// <summary>
-        /// Registers a key and an associated value.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
+        /// <inheritdoc/>
         public void Register(string key, object value)
         {
             if (key == null)
@@ -73,10 +69,7 @@ namespace Cake.Core.Text
             _tokens.Add(key, value);
         }
 
-        /// <summary>
-        /// Renders the template using the registered tokens.
-        /// </summary>
-        /// <returns>The rendered template.</returns>
+        /// <inheritdoc/>
         public string Render()
         {
             return Regex.Replace(_template, _keyExpression, Replace);

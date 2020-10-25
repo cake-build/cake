@@ -91,6 +91,7 @@ namespace Cake.NuGet.Install
             _sourceCacheContext = new SourceCacheContext();
         }
 
+        /// <inheritdoc/>
         public bool CanInstall(PackageReference package, PackageType type)
         {
             if (package == null)
@@ -100,6 +101,7 @@ namespace Cake.NuGet.Install
             return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <inheritdoc/>
         public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
         {
             if (package == null)

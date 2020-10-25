@@ -41,14 +41,7 @@ namespace Cake.Core.IO
             _comparer = new PathComparer(environment.Platform.IsUnix());
         }
 
-        /// <summary>
-        /// Returns <see cref="Path" /> instances matching the specified pattern.
-        /// </summary>
-        /// <param name="pattern">The pattern to match.</param>
-        /// <param name="settings">The globber settings.</param>
-        /// <returns>
-        ///   <see cref="Path" /> instances matching the specified pattern.
-        /// </returns>
+        /// <inheritdoc/>
         public IEnumerable<Path> Match(GlobPattern pattern, GlobberSettings settings)
         {
             if (pattern == null)

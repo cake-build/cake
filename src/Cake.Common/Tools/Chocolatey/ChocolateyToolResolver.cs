@@ -38,10 +38,7 @@ namespace Cake.Common.Tools.Chocolatey
             }
         }
 
-        /// <summary>
-        /// Resolves the path to choco.exe.
-        /// </summary>
-        /// <returns>The path to choco.exe.</returns>
+        /// <inheritdoc/>
         public FilePath ResolvePath()
         {
             // Check if path already resolved

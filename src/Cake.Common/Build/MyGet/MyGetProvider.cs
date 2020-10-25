@@ -52,12 +52,7 @@ namespace Cake.Common.Build.MyGet
             _writer = writer ?? throw new ArgumentNullException(nameof(writer));
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on MyGet.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on MyGet; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnMyGet
         {
             get
@@ -67,20 +62,13 @@ namespace Cake.Common.Build.MyGet
             }
         }
 
-        /// <summary>
-        /// Report a build problem to MyGet.
-        /// </summary>
-        /// <param name="description">Description of build problem.</param>
+        /// <inheritdoc/>
         public void BuildProblem(string description)
         {
             WriteServiceMessage("buildProblem", "description", description);
         }
 
-        /// <summary>
-        /// Allows setting an environment variable that can be used by a future process.
-        /// </summary>
-        /// <param name="name">Name of the parameter to set.</param>
-        /// <param name="value">Value to assign to the parameter.</param>
+        /// <inheritdoc/>
         public void SetParameter(string name, string value)
         {
             WriteServiceMessage("setParameter", new Dictionary<string, string>
@@ -90,12 +78,7 @@ namespace Cake.Common.Build.MyGet
             });
         }
 
-        /// <summary>
-        /// Write a status message to the MyGet build log.
-        /// </summary>
-        /// <param name="message">Message contents.</param>
-        /// <param name="status">Build status.</param>
-        /// <param name="errorDetails">Error details if status is error.</param>
+        /// <inheritdoc/>
         public void WriteStatus(string message, MyGetBuildStatus status, string errorDetails = null)
         {
             var statusToWrite = string.Empty;
@@ -130,10 +113,7 @@ namespace Cake.Common.Build.MyGet
             WriteServiceMessage("message", attrs);
         }
 
-        /// <summary>
-        /// Tells MyGet to change the current build number.
-        /// </summary>
-        /// <param name="buildNumber">The required build number.</param>
+        /// <inheritdoc/>
         public void SetBuildNumber(string buildNumber)
         {
             WriteServiceMessage("buildNumber", buildNumber);

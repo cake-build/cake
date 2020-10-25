@@ -25,20 +25,10 @@ namespace Cake.Common.Build.GitHubActions
             Environment = new GitHubActionsEnvironmentInfo(environment);
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on GitHub Actions.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on GitHub Actions; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnGitHubActions => _environment.GetEnvironmentVariable("GITHUB_ACTIONS")?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
 
-        /// <summary>
-        /// Gets the GitHub Actions environment.
-        /// </summary>
-        /// <value>
-        /// The GitHub Actions environment.
-        /// </value>
+        /// <inheritdoc/>
         public GitHubActionsEnvironmentInfo Environment { get; }
     }
 }
