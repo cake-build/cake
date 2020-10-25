@@ -35,10 +35,7 @@ namespace Cake.Common.Build.AzurePipelines
             _writer = writer ?? throw new ArgumentNullException(nameof(writer));
         }
 
-        /// <summary>
-        /// Log a warning issue to timeline record of current task.
-        /// </summary>
-        /// <param name="message">The warning message.</param>
+        /// <inheritdoc/>
         public void WriteWarning(string message)
         {
             WriteLoggingCommand("task.logissue", new Dictionary<string, string>
@@ -47,11 +44,7 @@ namespace Cake.Common.Build.AzurePipelines
             }, message);
         }
 
-        /// <summary>
-        /// Log a warning issue with detailed data to timeline record of current task.
-        /// </summary>
-        /// <param name="message">The warning message.</param>
-        /// <param name="data">The message data.</param>
+        /// <inheritdoc/>
         public void WriteWarning(string message, AzurePipelinesMessageData data)
         {
             var properties = data.GetProperties();
@@ -59,10 +52,7 @@ namespace Cake.Common.Build.AzurePipelines
             WriteLoggingCommand("task.logissue", properties, message);
         }
 
-        /// <summary>
-        /// Log an error to timeline record of current task.
-        /// </summary>
-        /// <param name="message">The error message.</param>
+        /// <inheritdoc/>
         public void WriteError(string message)
         {
             WriteLoggingCommand("task.logissue", new Dictionary<string, string>
@@ -71,11 +61,7 @@ namespace Cake.Common.Build.AzurePipelines
             }, message);
         }
 
-        /// <summary>
-        /// Log an error with detailed data to timeline record of current task.
-        /// </summary>
-        /// <param name="message">The error message.</param>
-        /// <param name="data">The message data.</param>
+        /// <inheritdoc/>
         public void WriteError(string message, AzurePipelinesMessageData data)
         {
             var properties = data.GetProperties();
@@ -83,11 +69,7 @@ namespace Cake.Common.Build.AzurePipelines
             WriteLoggingCommand("task.logissue", properties, message);
         }
 
-        /// <summary>
-        /// Set progress and current operation for current task.
-        /// </summary>
-        /// <param name="progress">Current progress as percentage.</param>
-        /// <param name="currentOperation">The current operation.</param>
+        /// <inheritdoc/>
         public void SetProgress(int progress, string currentOperation)
         {
             WriteLoggingCommand("task.setprogress", new Dictionary<string, string>
@@ -96,18 +78,13 @@ namespace Cake.Common.Build.AzurePipelines
             }, currentOperation);
         }
 
-        /// <summary>
-        /// Finish timeline record for current task and set task result to succeeded.
-        /// </summary>
+        /// <inheritdoc/>
         public void CompleteCurrentTask()
         {
             WriteLoggingCommand("task.complete", "DONE");
         }
 
-        /// <summary>
-        /// Finish timeline record for current task and set task result.
-        /// </summary>
-        /// <param name="result">The task result status.</param>
+        /// <inheritdoc/>
         public void CompleteCurrentTask(AzurePipelinesTaskResult result)
         {
             WriteLoggingCommand("task.complete", new Dictionary<string, string>
@@ -116,13 +93,7 @@ namespace Cake.Common.Build.AzurePipelines
             }, "DONE");
         }
 
-        /// <summary>
-        /// Create detail timeline record.
-        /// </summary>
-        /// <param name="name">Name of the new timeline record.</param>
-        /// <param name="type">Type of the new timeline record.</param>
-        /// <param name="order">Order of the timeline record.</param>
-        /// <returns>The timeline record ID.</returns>
+        /// <inheritdoc/>
         public Guid CreateNewRecord(string name, string type, int order)
         {
             var guid = Guid.NewGuid();
@@ -136,14 +107,7 @@ namespace Cake.Common.Build.AzurePipelines
             return guid;
         }
 
-        /// <summary>
-        /// Create detail timeline record.
-        /// </summary>
-        /// <param name="name">Name of the new timeline record.</param>
-        /// <param name="type">Type of the new timeline record.</param>
-        /// <param name="order">Order of the timeline record.</param>
-        /// <param name="data">Additional data for the new timeline record.</param>
-        /// <returns>The timeline record ID.</returns>
+        /// <inheritdoc/>
         public Guid CreateNewRecord(string name, string type, int order, AzurePipelinesRecordData data)
         {
             var guid = Guid.NewGuid();
@@ -156,11 +120,7 @@ namespace Cake.Common.Build.AzurePipelines
             return guid;
         }
 
-        /// <summary>
-        /// Update an existing detail timeline record.
-        /// </summary>
-        /// <param name="id">The ID of the existing timeline record.</param>
-        /// <param name="data">Additional data for the timeline record.</param>
+        /// <inheritdoc/>
         public void UpdateRecord(Guid id, AzurePipelinesRecordData data)
         {
             var properties = data.GetProperties();
@@ -168,14 +128,7 @@ namespace Cake.Common.Build.AzurePipelines
             WriteLoggingCommand("task.logdetail", properties, "update");
         }
 
-        /// <summary>
-        /// Sets a variable in the variable service of the task context.
-        /// </summary>
-        /// <remarks>
-        /// The variable is exposed to following tasks as an environment variable.
-        /// </remarks>
-        /// <param name="name">The variable name.</param>
-        /// <param name="value">The variable value.</param>
+        /// <inheritdoc/>
         public void SetVariable(string name, string value)
         {
             WriteLoggingCommand("task.setvariable", new Dictionary<string, string>
@@ -184,14 +137,7 @@ namespace Cake.Common.Build.AzurePipelines
             }, value);
         }
 
-        /// <summary>
-        /// Sets a secret variable in the variable service of the task context.
-        /// </summary>
-        /// <remarks>
-        /// The variable is not exposed to following tasks as an environment variable, and must be passed as inputs.
-        /// </remarks>
-        /// <param name="name">The variable name.</param>
-        /// <param name="value">The variable value.</param>
+        /// <inheritdoc/>
         public void SetSecretVariable(string name, string value)
         {
             WriteLoggingCommand("task.setvariable", new Dictionary<string, string>
@@ -201,41 +147,19 @@ namespace Cake.Common.Build.AzurePipelines
             }, value);
         }
 
-        /// <summary>
-        /// Upload and attach summary markdown to current timeline record.
-        /// </summary>
-        /// <remarks>
-        /// This summary is added to the build/release summary and is not available for download with logs.
-        /// </remarks>
-        /// <param name="markdownPath">Path to the summary markdown file.</param>
+        /// <inheritdoc/>
         public void UploadTaskSummary(FilePath markdownPath)
         {
             WriteLoggingCommand("task.uploadsummary", markdownPath.MakeAbsolute(_environment).FullPath);
         }
 
-        /// <summary>
-        /// Upload file as additional log information to the current timeline record.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// The file shall be available for download along with task logs.
-        /// </para>
-        /// <para>
-        /// Requires agent version 1.101.
-        /// </para>
-        /// </remarks>
-        /// <param name="logFile">Path to the additional log file.</param>
+        /// <inheritdoc/>
         public void UploadTaskLogFile(FilePath logFile)
         {
             WriteLoggingCommand("task.uploadfile", logFile.MakeAbsolute(_environment).FullPath);
         }
 
-        /// <summary>
-        /// Create an artifact link, such as a file or folder path or a version control path.
-        /// </summary>
-        /// <param name="name">The artifact name..</param>
-        /// <param name="type">The artifact type.</param>
-        /// <param name="location">The link path or value.</param>
+        /// <inheritdoc/>
         public void LinkArtifact(string name, AzurePipelinesArtifactType type, string location)
         {
             WriteLoggingCommand("artifact.associate", new Dictionary<string, string>
@@ -245,11 +169,7 @@ namespace Cake.Common.Build.AzurePipelines
             }, location);
         }
 
-        /// <summary>
-        /// Upload local file into a file container folder.
-        /// </summary>
-        /// <param name="folderName">Folder that the file will upload to.</param>
-        /// <param name="file">Path to the local file.</param>
+        /// <inheritdoc/>
         public void UploadArtifact(string folderName, FilePath file)
         {
             WriteLoggingCommand("artifact.upload", new Dictionary<string, string>
@@ -258,12 +178,7 @@ namespace Cake.Common.Build.AzurePipelines
             }, file.MakeAbsolute(_environment).FullPath);
         }
 
-        /// <summary>
-        /// Upload local file into a file container folder, and create an artifact.
-        /// </summary>
-        /// <param name="folderName">Folder that the file will upload to.</param>
-        /// <param name="file">Path to the local file.</param>
-        /// <param name="artifactName">The artifact name.</param>
+        /// <inheritdoc/>
         public void UploadArtifact(string folderName, FilePath file, string artifactName)
         {
             WriteLoggingCommand("artifact.upload", new Dictionary<string, string>
@@ -273,7 +188,7 @@ namespace Cake.Common.Build.AzurePipelines
             }, file.MakeAbsolute(_environment).FullPath);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void UploadArtifactDirectory(DirectoryPath directory)
         {
             if (directory == null)
@@ -284,7 +199,7 @@ namespace Cake.Common.Build.AzurePipelines
             UploadArtifactDirectory(directory, directory.GetDirectoryName());
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void UploadArtifactDirectory(DirectoryPath directory, string artifactName)
         {
             if (directory == null)
@@ -304,64 +219,39 @@ namespace Cake.Common.Build.AzurePipelines
             }, directory.MakeAbsolute(_environment).FullPath);
         }
 
-        /// <summary>
-        /// Upload additional log to build container's <c>logs/tool</c> folder.
-        /// </summary>
-        /// <param name="logFile">The log file.</param>
+        /// <inheritdoc/>
         public void UploadBuildLogFile(FilePath logFile)
         {
             WriteLoggingCommand("build.uploadlog", logFile.MakeAbsolute(_environment).FullPath);
         }
 
-        /// <summary>
-        /// Update build number for current build.
-        /// </summary>
-        /// <remarks>
-        /// Requires agent version 1.88.
-        /// </remarks>
-        /// <param name="buildNumber">The build number.</param>
+        /// <inheritdoc/>
         public void UpdateBuildNumber(string buildNumber)
         {
             WriteLoggingCommand("build.updatebuildnumber", buildNumber);
         }
 
-        /// <summary>
-        /// Add a tag for current build.
-        /// </summary>
-        /// <remarks>
-        /// Requires agent version 1.95.
-        /// </remarks>
-        /// <param name="tag">The tag.</param>
+        /// <inheritdoc/>
         public void AddBuildTag(string tag)
         {
             WriteLoggingCommand("build.addbuildtag", tag);
         }
 
-        /// <summary>
-        /// Publishes and uploads tests results.
-        /// </summary>
-        /// <param name="data">The publish test results data.</param>
+        /// <inheritdoc/>
         public void PublishTestResults(AzurePipelinesPublishTestResultsData data)
         {
             var properties = data.GetProperties(_environment);
             WriteLoggingCommand("results.publish", properties, string.Empty);
         }
 
-        /// <summary>
-        /// Publishes and uploads code coverage results.
-        /// </summary>
-        /// <param name="data">The code coverage data.</param>
+        /// <inheritdoc/>
         public void PublishCodeCoverage(AzurePipelinesPublishCodeCoverageData data)
         {
             var properties = data.GetProperties(_environment);
             WriteLoggingCommand("codecoverage.publish", properties, string.Empty);
         }
 
-        /// <summary>
-        /// Publishes and uploads code coverage results.
-        /// </summary>
-        /// <param name="summaryFilePath">The code coverage summary file path.</param>
-        /// <param name="data">The code coverage data.</param>
+        /// <inheritdoc/>
         public void PublishCodeCoverage(FilePath summaryFilePath, AzurePipelinesPublishCodeCoverageData data)
         {
             if (summaryFilePath == null)
@@ -373,11 +263,7 @@ namespace Cake.Common.Build.AzurePipelines
             WriteLoggingCommand("codecoverage.publish", properties, string.Empty);
         }
 
-        /// <summary>
-        /// Publishes and uploads code coverage results.
-        /// </summary>
-        /// <param name="summaryFilePath">The code coverage summary file path.</param>
-        /// <param name="action">The configuration action for the code coverage data.</param>
+        /// <inheritdoc/>
         public void PublishCodeCoverage(FilePath summaryFilePath, Action<AzurePipelinesPublishCodeCoverageData> action)
         {
             if (action == null)

@@ -26,62 +26,10 @@ namespace Cake.Common.Build.TeamCity
         private readonly ICakeEnvironment _environment;
         private readonly IBuildSystemServiceMessageWriter _writer;
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on TeamCity.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on TeamCity; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnTeamCity => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
 
-        /// <summary>
-        /// Gets the TeamCity environment.
-        /// </summary>
-        /// <value>
-        /// The TeamCity environment.
-        /// </value>
-        /// <para>Via BuildSystem.</para>
-        /// <example>
-        /// <code>
-        /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
-        /// {
-        ///     Information(
-        ///         @"Environment:
-        ///         PullRequest: {0}
-        ///         Build Configuration Name: {1}
-        ///         TeamCity Project Name: {2}",
-        ///         BuildSystem.TeamCity.Environment.PullRequest.IsPullRequest,
-        ///         BuildSystem.TeamCity.Environment.Build.BuildConfName,
-        ///         BuildSystem.TeamCity.Environment.Project.Name
-        ///         );
-        /// }
-        /// else
-        /// {
-        ///     Information("Not running on TeamCity");
-        /// }
-        /// </code>
-        /// </example>
-        /// <para>Via TeamCity.</para>
-        /// <example>
-        /// <code>
-        /// if (TeamCity.IsRunningOnTeamCity)
-        /// {
-        ///     Information(
-        ///         @"Environment:
-        ///         PullRequest: {0}
-        ///         Build Configuration Name: {1}
-        ///         TeamCity Project Name: {2}",
-        ///         BuildSystem.TeamCity.Environment.PullRequest.IsPullRequest,
-        ///         BuildSystem.TeamCity.Environment.Build.BuildConfName,
-        ///         BuildSystem.TeamCity.Environment.Project.Name
-        ///         );
-        /// }
-        /// else
-        /// {
-        ///     Information("Not running on TeamCity");
-        /// }
-        /// </code>
-        /// </example>
+        /// <inheritdoc/>
         public TeamCityEnvironmentInfo Environment { get; }
 
         static TeamCityProvider()
@@ -110,75 +58,49 @@ namespace Cake.Common.Build.TeamCity
             Environment = new TeamCityEnvironmentInfo(environment);
         }
 
-        /// <summary>
-        /// Write a progress message to the TeamCity build log.
-        /// </summary>
-        /// <param name="message">Build log message.</param>
+        /// <inheritdoc/>
         public void WriteProgressMessage(string message)
         {
             WriteServiceMessage("progressMessage", message);
         }
 
-        /// <summary>
-        /// Write a progressStart message to the TeamCity build log.
-        /// </summary>
-        /// <param name="message">Build log message.</param>
+        /// <inheritdoc/>
         public void WriteStartProgress(string message)
         {
             WriteServiceMessage("progressStart", message);
         }
 
-        /// <summary>
-        /// Write a progressFinish message to the TeamCity build log.
-        /// </summary>
-        /// <param name="message">Build log message.</param>
+        /// <inheritdoc/>
         public void WriteEndProgress(string message)
         {
             WriteServiceMessage("progressFinish", message);
         }
 
-        /// <summary>
-        /// Write the start of a message block to the TeamCity build log.
-        /// </summary>
-        /// <param name="blockName">Block name.</param>
+        /// <inheritdoc/>
         public void WriteStartBlock(string blockName)
         {
             WriteServiceMessage("blockOpened", "name", blockName);
         }
 
-        /// <summary>
-        /// Write the end of a message block to the TeamCity build log.
-        /// </summary>
-        /// <param name="blockName">Block name.</param>
+        /// <inheritdoc/>
         public void WriteEndBlock(string blockName)
         {
             WriteServiceMessage("blockClosed", "name", blockName);
         }
 
-        /// <summary>
-        /// Write the start of a build block to the TeamCity build log.
-        /// </summary>
-        /// <param name="compilerName">Build compiler name.</param>
+        /// <inheritdoc/>
         public void WriteStartBuildBlock(string compilerName)
         {
             WriteServiceMessage("compilationStarted", "compiler", compilerName);
         }
 
-        /// <summary>
-        /// Write the end of a build block to the TeamCity build log.
-        /// </summary>
-        /// <param name="compilerName">Build compiler name.</param>
+        /// <inheritdoc/>
         public void WriteEndBuildBlock(string compilerName)
         {
             WriteServiceMessage("compilationFinished", "compiler", compilerName);
         }
 
-        /// <summary>
-        /// Write a status message to the TeamCity build log.
-        /// </summary>
-        /// <param name="message">Message contents.</param>
-        /// <param name="status">Build status.</param>
-        /// <param name="errorDetails">Error details if status is error.</param>
+        /// <inheritdoc/>
         public void WriteStatus(string message, string status = "NORMAL", string errorDetails = null)
         {
             var attrs = new Dictionary<string, string>
@@ -195,11 +117,7 @@ namespace Cake.Common.Build.TeamCity
             WriteServiceMessage("message", attrs);
         }
 
-        /// <summary>
-        /// Tell TeamCity to import data of a given type.
-        /// </summary>
-        /// <param name="type">Date type.</param>
-        /// <param name="path">Data file path.</param>
+        /// <inheritdoc/>
         public void ImportData(string type, FilePath path)
         {
             if (type == null)
@@ -218,11 +136,7 @@ namespace Cake.Common.Build.TeamCity
             });
         }
 
-        /// <summary>
-        /// Tell TeamCity to import coverage from dotCover snapshot file.
-        /// </summary>
-        /// <param name="snapshotFile">Snapshot file path.</param>
-        /// <param name="dotCoverHome">The full path to the dotCover home folder to override the bundled dotCover.</param>
+        /// <inheritdoc/>
         public void ImportDotCoverCoverage(FilePath snapshotFile, DirectoryPath dotCoverHome = null)
         {
             if (snapshotFile == null)
@@ -247,11 +161,7 @@ namespace Cake.Common.Build.TeamCity
             });
         }
 
-        /// <summary>
-        /// Report a build problem to TeamCity.
-        /// </summary>
-        /// <param name="description">A human-readable plain text describing the build problem. By default, the description appears in the build status text and in the list of build's problems. The text is limited to 4000 symbols, and will be truncated if the limit is exceeded.</param>
-        /// <param name="identity">A unique problem ID (optional). Different problems must have different identity, same problems - same identity, which should not change throughout builds if the same problem, for example, the same compilation error occurs. It must be a valid Java ID up to 60 characters. If omitted, the identity is calculated based on the description text.</param>
+        /// <inheritdoc/>
         public void BuildProblem(string description, string identity = null)
         {
             var tokens = new Dictionary<string, string> { { "description", description } };
@@ -263,29 +173,19 @@ namespace Cake.Common.Build.TeamCity
             WriteServiceMessage("buildProblem", tokens);
         }
 
-        /// <summary>
-        /// Tells TeamCity to publish artifacts in the given directory.
-        /// </summary>
-        /// <param name="path">Path to artifacts.</param>
+        /// <inheritdoc/>
         public void PublishArtifacts(string path)
         {
             WriteServiceMessage("publishArtifacts", " ", path);
         }
 
-        /// <summary>
-        /// Tells TeamCity to change the current build number.
-        /// </summary>
-        /// <param name="buildNumber">The required build number.</param>
+        /// <inheritdoc/>
         public void SetBuildNumber(string buildNumber)
         {
             WriteServiceMessage("buildNumber", buildNumber);
         }
 
-        /// <summary>
-        /// Tells TeamCity to set a named parameter with a given value.
-        /// </summary>
-        /// <param name="parameterName">The name of the parameter to set.</param>
-        /// <param name="parameterValue">The value to set for the named parameter.</param>
+        /// <inheritdoc/>
         public void SetParameter(string parameterName, string parameterValue)
         {
             WriteServiceMessage("setParameter", new Dictionary<string, string>

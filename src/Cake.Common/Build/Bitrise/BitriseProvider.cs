@@ -17,20 +17,10 @@ namespace Cake.Common.Build.Bitrise
         private readonly ICakeEnvironment _environment;
         private readonly IProcessRunner _processRunner;
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on Bitrise.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on Bitrise; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnBitrise => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("BITRISE_BUILD_URL"));
 
-        /// <summary>
-        /// Gets the Bitrise environment.
-        /// </summary>
-        /// <value>
-        /// The Bamboo environment.
-        /// </value>
+        /// <inheritdoc/>
         public BitriseEnvironmentInfo Environment { get; }
 
         /// <summary>
@@ -45,11 +35,7 @@ namespace Cake.Common.Build.Bitrise
             Environment = new BitriseEnvironmentInfo(_environment);
         }
 
-        /// <summary>
-        /// Sets and environment variable that can be used in next steps on Bitrise.
-        /// </summary>
-        /// <param name="variable">The variable.</param>
-        /// <param name="value">The value.</param>
+        /// <inheritdoc/>
         public void SetEnvironmentString(string variable, string value)
         {
             var arguments = new ProcessArgumentBuilder()

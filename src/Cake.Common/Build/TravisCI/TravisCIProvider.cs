@@ -50,35 +50,19 @@ namespace Cake.Common.Build.TravisCI
             Environment = new TravisCIEnvironmentInfo(environment);
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is running on Travis CI.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is running on Travis CI; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnTravisCI => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TRAVIS"));
 
-        /// <summary>
-        /// Gets the Travis CI environment.
-        /// </summary>
-        /// <value>
-        /// The environment.
-        /// </value>
+        /// <inheritdoc/>
         public TravisCIEnvironmentInfo Environment { get; }
 
-        /// <summary>
-        /// Write the start of a message fold to the Travis CI build log.
-        /// </summary>
-        /// <param name="name">Name of the group.</param>
+        /// <inheritdoc/>
         public void WriteStartFold(string name)
         {
             WriteServiceMessage("fold", "start", name);
         }
 
-        /// <summary>
-        /// Write the start of a message fold to the Travis CI build log.
-        /// </summary>
-        /// <param name="name">Name of the group.</param>
+        /// <inheritdoc/>
         public void WriteEndFold(string name)
         {
             WriteServiceMessage("fold", "end", name);
