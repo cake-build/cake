@@ -102,24 +102,66 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="System.String"/> to <see cref="ProcessArgumentBuilder"/>.
+        /// Performs an implicit conversion from <see cref="string"/> to <see cref="ProcessArgumentBuilder"/>.
         /// </summary>
         /// <param name="value">The text value to convert.</param>
-        /// <returns>A <see cref="FilePath"/>.</returns>
+        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
         public static implicit operator ProcessArgumentBuilder(string value)
         {
             return FromString(value);
         }
 
         /// <summary>
-        /// Performs a conversion from <see cref="System.String"/> to <see cref="ProcessArgumentBuilder"/>.
+        /// Performs a conversion from <see cref="string"/> to <see cref="ProcessArgumentBuilder"/>.
         /// </summary>
         /// <param name="value">The text value to convert.</param>
-        /// <returns>A <see cref="FilePath"/>.</returns>
+        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
         public static ProcessArgumentBuilder FromString(string value)
         {
             var builder = new ProcessArgumentBuilder();
             builder.Append(new TextArgument(value));
+            return builder;
+        }
+
+        /// <summary>
+        /// Performs a conversion from <see cref="string"/> to <see cref="ProcessArgumentBuilder"/>.
+        /// </summary>
+        /// <param name="value">The text value to convert.</param>
+        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
+        public static ProcessArgumentBuilder FromStringQuoted(string value)
+        {
+            var builder = new ProcessArgumentBuilder();
+            builder.AppendQuoted(new TextArgument(value));
+            return builder;
+        }
+
+        /// <summary>
+        /// Performs a conversion from <see cref="IEnumerable{String}"/> to <see cref="ProcessArgumentBuilder"/>.
+        /// </summary>
+        /// <param name="values">The text values to convert.</param>
+        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
+        public static ProcessArgumentBuilder FromStrings(IEnumerable<string> values)
+        {
+            var builder = new ProcessArgumentBuilder();
+            foreach (var value in values)
+            {
+                builder.Append(new TextArgument(value));
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Performs a conversion from <see cref="IEnumerable{String}"/> to <see cref="ProcessArgumentBuilder"/>.
+        /// </summary>
+        /// <param name="values">The text values to convert.</param>
+        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
+        public static ProcessArgumentBuilder FromStringsQuoted(IEnumerable<string> values)
+        {
+            var builder = new ProcessArgumentBuilder();
+            foreach (var value in values)
+            {
+                builder.AppendQuoted(new TextArgument(value));
+            }
             return builder;
         }
 
@@ -138,7 +180,7 @@ namespace Cake.Core.IO
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator" /> that can be used to iterate through the collection.
+        /// An <see cref="IEnumerator" /> that can be used to iterate through the collection.
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
