@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using Cake.Core;
 
 namespace Cake.Common.Build.MyGet
@@ -19,22 +20,25 @@ namespace Cake.Common.Build.MyGet
         private const string MessagePrefix = "##myget[";
         private const string MessagePostfix = "]";
 
-        private static readonly Dictionary<string, string> _sanitizationTokens;
+        private static readonly Dictionary<char, string> _sanitizationTokens;
+        private static readonly char[] _specialCharacters;
 
         private readonly ICakeEnvironment _environment;
         private readonly IBuildSystemServiceMessageWriter _writer;
 
         static MyGetProvider()
         {
-            _sanitizationTokens = new Dictionary<string, string>
+            _sanitizationTokens = new Dictionary<char, string>
             {
-                { "|", "||" },
-                { "\'", "|\'" },
-                { "\n", "|n" },
-                { "\r", "|r" },
-                { "[", "|['" },
-                { "]", "|]" }
+                { '|', "||" },
+                { '\'', "|\'" },
+                { '\n', "|n" },
+                { '\r', "|r" },
+                { '[', "|[" },
+                { ']', "|]" }
             };
+
+            _specialCharacters = _sanitizationTokens.Keys.ToArray();
         }
 
         /// <summary>
@@ -137,7 +141,7 @@ namespace Cake.Common.Build.MyGet
 
         private void WriteServiceMessage(string messageName, string attributeValue)
         {
-            WriteServiceMessage(messageName, new Dictionary<string, string> { { " ", attributeValue } });
+            WriteServiceMessage(messageName, new Dictionary<string, string> { { string.Empty, attributeValue } });
         }
 
         private void WriteServiceMessage(string messageName, string attributeName, string attributeValue)
@@ -153,11 +157,12 @@ namespace Cake.Common.Build.MyGet
                     values
                         .Select(keypair =>
                         {
-                            if (string.IsNullOrWhiteSpace(keypair.Key))
+                            var sanitizedValue = Sanitize(keypair.Value);
+                            if (string.IsNullOrEmpty(keypair.Key))
                             {
-                                return string.Format(CultureInfo.InvariantCulture, "'{0}'", Sanitize(keypair.Value));
+                                return string.Format(CultureInfo.InvariantCulture, "'{0}'", sanitizedValue);
                             }
-                            return string.Format(CultureInfo.InvariantCulture, "{0}='{1}'", keypair.Key, Sanitize(keypair.Value));
+                            return string.Format(CultureInfo.InvariantCulture, "{0}='{1}'", keypair.Key, sanitizedValue);
                         })
                         .ToArray());
 
@@ -166,12 +171,33 @@ namespace Cake.Common.Build.MyGet
 
         private static string Sanitize(string source)
         {
-            foreach (var charPair in _sanitizationTokens)
+            if (string.IsNullOrEmpty(source))
             {
-                source = source.Replace(charPair.Key, charPair.Value);
+                return string.Empty;
             }
 
-            return source;
+            // When source does not contain special characters, then it is possible to skip building new string.
+            // This approach can possibly iterate through string 2 times, but special characters are exceptional.
+            if (source.IndexOfAny(_specialCharacters) < 0)
+            {
+                return source;
+            }
+
+            var stringBuilder = new StringBuilder(source.Length * 2);
+            for (int index = 0; index < source.Length; index++)
+            {
+                char sourceChar = source[index];
+                if (_sanitizationTokens.TryGetValue(sourceChar, out var replacement))
+                {
+                    stringBuilder.Append(replacement);
+                }
+                else
+                {
+                    stringBuilder.Append(sourceChar);
+                }
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }
