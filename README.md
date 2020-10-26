@@ -72,7 +72,7 @@ Cake is provided as-is under the MIT license. For more information see [LICENSE]
 
 ## Thanks
 
-A big thank you has to go to [JetBrains](https://www.jetbrains.com) who provide each of the Cake Developers with an [Open Source License](https://www.jetbrains.com/support/community/#section=open-source) for [ReSharper](https://www.jetbrains.com/resharper/) that helps with the development of Cake.
+A big thank you has to go to [JetBrains](https://www.jetbrains.com) who provide each of the Cake Developers with an [Open Source License](https://www.jetbrains.com/community/opensource/#support) for [ReSharper](https://www.jetbrains.com/resharper/) that helps with the development of Cake.
 
 ### Sponsors
 
