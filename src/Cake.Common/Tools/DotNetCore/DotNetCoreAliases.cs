@@ -419,6 +419,31 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// Run project with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreRunSettings
+        /// {
+        ///     Framework = "netcoreapp2.0",
+        ///     Configuration = "Release"
+        /// };
+        ///
+        /// DotNetCoreRun("./src/Project", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Run")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        public static void DotNetCoreRun(this ICakeContext context, string project, DotNetCoreRunSettings settings)
+        {
+            context.DotNetCoreRun(project, null, settings);
+        }
+
+        /// <summary>
         /// Publish all projects.
         /// </summary>
         /// <param name="context">The context.</param>
