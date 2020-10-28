@@ -1,4 +1,4 @@
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.5.1"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.7.0"
 #load "./../../../utilities/xunit.cake"
 #load "./../../../utilities/paths.cake"
 
