@@ -170,30 +170,36 @@ Task("Cake.Common.IO.DirectoryAliases.MakeRelative.DefinedRootPath")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./hello/world");
+    var directoryPath = Paths.Temp.Combine("./hello/world");
+    var filePath = Paths.Temp.Combine("./hello/world/test.cake");
     var rootPath1 = Paths.Temp;
     var rootPath2 = Paths.Temp.Combine("./cake/world");
 
     // When
-    var relativePath1 = MakeRelative(path, rootPath1);
-    var relativePath2 = MakeRelative(path, rootPath2);
+    var relativeDirectoryPath1 = MakeRelative(directoryPath, rootPath1);
+    var relativeDirectoryPath2 = MakeRelative(directoryPath, rootPath2);
+    var relativeFilePath = MakeRelative(filePath, rootPath2);
     
     // Then
-    Assert.Equal("hello/world", relativePath1.ToString());
-    Assert.Equal("../../hello/world", relativePath2.ToString());
+    Assert.Equal("hello/world", relativeDirectoryPath1.ToString());
+    Assert.Equal("../../hello/world", relativeDirectoryPath2.ToString());
+    Assert.Equal("../../hello/world/test.cake", relativeFilePath.ToString());
 });
 
 Task("Cake.Common.IO.DirectoryAliases.MakeRelative.WorkingDirectory")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./hello/world");
+    var directoryPath = Paths.Temp.Combine("./hello/world");
+    var filePath = Paths.Temp.Combine("./hello/world/test.cake");
 
     // When
-    var relativePath = MakeRelative(path);
+    var relativeDirectoryPath = MakeRelative(directoryPath);
+    var relativeFilePath = MakeRelative(filePath);
 
     // Then
-    Assert.Equal("temp/hello/world", relativePath.ToString());
+    Assert.Equal("temp/hello/world", relativeDirectoryPath.ToString());
+    Assert.Equal("temp/hello/world/test.cake", relativeFilePath.ToString());
 });
 
 //////////////////////////////////////////////////////////////////////////////

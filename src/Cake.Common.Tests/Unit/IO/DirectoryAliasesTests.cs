@@ -1020,23 +1020,46 @@ namespace Cake.Common.Tests.Unit.IO
         public sealed class TheMakeRelativeMethod
         {
             [Fact]
-            public void Should_Throw_If_Context_Is_Null()
+            public void Should_Throw_For_DirectoryPath_If_Context_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => DirectoryAliases.MakeRelative(null, "./build"));
+                var result = Record.Exception(() => DirectoryAliases.MakeRelative(null, new DirectoryPath("./build")));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "context");
             }
 
             [Fact]
-            public void Should_Throw_If_Path_Is_Null()
+            public void Should_Throw_For_FilePath_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => DirectoryAliases.MakeRelative(null, new FilePath("./build")));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_DirectoryPath_Is_Null()
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
-
+                DirectoryPath path = null;
                 // When
-                var result = Record.Exception(() => DirectoryAliases.MakeRelative(context, null));
+                var result = Record.Exception(() => DirectoryAliases.MakeRelative(context, path));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
+            public void Should_Throw_If_FilePath_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                FilePath path = null;
+                // When
+                var result = Record.Exception(() => DirectoryAliases.MakeRelative(context, path));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "path");
@@ -1054,7 +1077,7 @@ namespace Cake.Common.Tests.Unit.IO
                 context.Environment.WorkingDirectory.Returns(d => rootPath);
 
                 // When
-                var result = DirectoryAliases.MakeRelative(context, path);
+                var result = DirectoryAliases.MakeRelative(context, new DirectoryPath(path));
 
                 // Then
                 Assert.Equal(expected, result.FullPath);
@@ -1071,7 +1094,42 @@ namespace Cake.Common.Tests.Unit.IO
                 var context = Substitute.For<ICakeContext>();
 
                 // When
-                var result = DirectoryAliases.MakeRelative(context, path, rootPath);
+                var result = DirectoryAliases.MakeRelative(context, new DirectoryPath(path), new DirectoryPath(rootPath));
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData(@"\Working", @"\Working\build\file.cake", "build/file.cake")]
+            [InlineData(@"\Working", @"\Working\file.cake", "file.cake")]
+            [InlineData("C:/Working/build/core", "C:/Working/stage/core/file.cake", "../../stage/core/file.cake")]
+            [InlineData("C:/Working/build/core", "C:/Working/file.cake", "../../file.cake")]
+            public void Should_Return_Relative_File_Path_For_Working_Directory(string rootPath, string path, string expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.WorkingDirectory.Returns(d => rootPath);
+
+                // When
+                var result = DirectoryAliases.MakeRelative(context, new FilePath(path));
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData(@"\Working", @"\Working\build\file.cake", "build/file.cake")]
+            [InlineData(@"\Working", @"\Working\file.cake", "file.cake")]
+            [InlineData("C:/Working/build/core", "C:/Working/stage/core/file.cake", "../../stage/core/file.cake")]
+            [InlineData("C:/Working/build/core", "C:/Working/file.cake", "../../file.cake")]
+            public void Should_Return_Relative_File_Path_For_Defined_Root_Directory(string rootPath, string path, string expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = DirectoryAliases.MakeRelative(context, new FilePath(path), new DirectoryPath(rootPath));
 
                 // Then
                 Assert.Equal(expected, result.FullPath);
