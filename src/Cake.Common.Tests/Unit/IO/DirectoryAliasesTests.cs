@@ -12,6 +12,7 @@ using Cake.Common.Tests.Fixtures.IO;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -1013,6 +1014,67 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.Equal("/Working/build", result.FullPath);
+            }
+        }
+
+        public sealed class TheMakeRelativeMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => DirectoryAliases.MakeRelative(null, "./build"));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() => DirectoryAliases.MakeRelative(context, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "path");
+            }
+
+            [WindowsTheory]
+            [InlineData(@"\Working", @"\Working\build", "build")]
+            [InlineData(@"\Working", @"\Working", ".")]
+            [InlineData("C:/Working/build/core", "C:/Working/stage/core", "../../stage/core")]
+            [InlineData("C:/Working/build/core", "C:/Working", "../..")]
+            public void Should_Return_Relative_Directory_Path_For_Working_Directory(string rootPath, string path, string expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.WorkingDirectory.Returns(d => rootPath);
+
+                // When
+                var result = DirectoryAliases.MakeRelative(context, path);
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData(@"\Working", @"\Working\build", "build")]
+            [InlineData(@"\Working", @"\Working", ".")]
+            [InlineData("C:/Working/build/core", "C:/Working/stage/core", "../../stage/core")]
+            [InlineData("C:/Working/build/core", "C:/Working", "../..")]
+            public void Should_Return_Relative_Directory_Path_For_Defined_Root_Directory(string rootPath, string path, string expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = DirectoryAliases.MakeRelative(context, path, rootPath);
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
             }
         }
 

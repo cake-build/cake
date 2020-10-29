@@ -451,6 +451,37 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
+        /// Makes the path relative (if absolute) to a specified root directory. If no root directory is defined
+        /// the current working directory is used as default root.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var path = MakeRelative(Directory("C:\Cake\Tests\Integration"));
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="rootPath">The root path.</param>
+        /// <returns>A relative directory path.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Path")]
+        public static DirectoryPath MakeRelative(this ICakeContext context, DirectoryPath path, DirectoryPath rootPath = null)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (path == null)
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+
+            var root = rootPath ?? context.Environment.WorkingDirectory;
+            return RelativePathResolver.Resolve(root, path);
+        }
+
+        /// <summary>
         /// Moves an existing directory to a new location, providing the option to specify a new directory name.
         /// </summary>
         /// <param name="context">The context.</param>
