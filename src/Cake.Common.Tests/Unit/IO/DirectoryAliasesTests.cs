@@ -1045,6 +1045,7 @@ namespace Cake.Common.Tests.Unit.IO
                 // Given
                 var context = Substitute.For<ICakeContext>();
                 DirectoryPath path = null;
+
                 // When
                 var result = Record.Exception(() => DirectoryAliases.MakeRelative(context, path));
 
@@ -1058,6 +1059,7 @@ namespace Cake.Common.Tests.Unit.IO
                 // Given
                 var context = Substitute.For<ICakeContext>();
                 FilePath path = null;
+
                 // When
                 var result = Record.Exception(() => DirectoryAliases.MakeRelative(context, path));
 
