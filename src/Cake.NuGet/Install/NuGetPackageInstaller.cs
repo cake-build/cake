@@ -133,8 +133,8 @@ namespace Cake.NuGet.Install
 
             if (packageIdentity.Version.IsPrerelease && !package.IsPrerelease())
             {
-                // TODO: Is this allowed? If not, log and return
-                return Array.Empty<IFile>();
+                // If a prerelease version is explicitly specified, we should install that with or without prerelease flag.
+                _log.Debug("Prerelease version string explicitly specified. Installing prerelease package version.");
             }
 
             var pathResolver = new PackagePathResolver(packageRoot);
