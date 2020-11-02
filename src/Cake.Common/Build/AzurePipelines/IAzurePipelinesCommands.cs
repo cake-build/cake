@@ -129,7 +129,7 @@ namespace Cake.Common.Build.AzurePipelines
         /// <summary>
         /// Create an artifact link, such as a file or folder path or a version control path.
         /// </summary>
-        /// <param name="name">The artifact name..</param>
+        /// <param name="name">The artifact name.</param>
         /// <param name="type">The artifact type.</param>
         /// <param name="location">The link path or value.</param>
         void LinkArtifact(string name, AzurePipelinesArtifactType type, string location);

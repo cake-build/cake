@@ -12,7 +12,7 @@ namespace Cake.Common.Build.TravisCI.Data
     public sealed class TravisCIJobInfo : TravisCIInfo
     {
         /// <summary>
-        /// Gets the job identifier for the current job..
+        /// Gets the job identifier for the current job.
         /// </summary>
         /// <value>
         /// The job identifier.

@@ -61,7 +61,7 @@ namespace Cake.Common.IO
         /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The glob pattern to match.</param>
-        /// <param name="settings">The globber settings..</param>
+        /// <param name="settings">The globber settings.</param>
         /// <returns>A <see cref="FilePathCollection" />.</returns>
         [CakeMethodAlias]
         [CakeAliasCategory("Files")]
