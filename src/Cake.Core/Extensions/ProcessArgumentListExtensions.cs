@@ -685,7 +685,7 @@ namespace Cake.Core
         /// <summary>
         /// Copies all the arguments of the source <see cref="ProcessArgumentBuilder"/> to target <see cref="ProcessArgumentBuilder"/>.
         /// </summary>
-        /// <param name="source">The argument builder to copy from..</param>
+        /// <param name="source">The argument builder to copy from.</param>
         /// <param name="target">The argument builder to copy to.</param>
         public static void CopyTo(this ProcessArgumentBuilder source, ProcessArgumentBuilder target)
         {

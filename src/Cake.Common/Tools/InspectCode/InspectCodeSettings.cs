@@ -18,8 +18,8 @@ namespace Cake.Common.Tools.InspectCode
         Not (yet) supported options:
         - /toolset                  MsBuild toolset version. Highest available is used by default. Example: /toolset=12.0.
         - /dumpIssuesTypes (/it)    Dump issues types (default: False).
-        - /targets-for-references   MSBuild targets. These targets will be executed to get referenced assemblies of projects..
-        - /targets-for-items        MSBuild targets. These targets will be executed to get other items (e.g. Compile item) of projects..
+        - /targets-for-references   MSBuild targets. These targets will be executed to get referenced assemblies of projects.
+        - /targets-for-items        MSBuild targets. These targets will be executed to get other items (e.g. Compile item) of projects.
          */
 
         /// <summary>
