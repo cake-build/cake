@@ -113,6 +113,12 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 builder.Append("--no-restore");
             }
 
+            // No Logo
+            if (settings.NoLogo)
+            {
+                builder.Append("--nologo");
+            }
+
             // Force
             if (settings.Force)
             {
@@ -195,6 +201,19 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 else
                 {
                     builder.Append("-p:PublishReadyToRun=false");
+                }
+            }
+
+            // Publish ReadyToRunShowWarnings
+            if (settings.PublishReadyToRunShowWarnings.HasValue)
+            {
+                if (settings.PublishReadyToRunShowWarnings.Value)
+                {
+                    builder.Append("-p:PublishReadyToRunShowWarnings=true");
+                }
+                else
+                {
+                    builder.Append("-p:PublishReadyToRunShowWarnings=false");
                 }
             }
 

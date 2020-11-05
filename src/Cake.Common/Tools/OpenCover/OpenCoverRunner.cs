@@ -16,6 +16,7 @@ namespace Cake.Common.Tools.OpenCover
     /// </summary>
     public sealed class OpenCoverRunner : Tool<OpenCoverSettings>
     {
+        private const string HideSkippedConstant = "-hideskipped";
         private readonly ICakeEnvironment _environment;
 
         /// <summary>
@@ -163,6 +164,20 @@ namespace Cake.Common.Tools.OpenCover
             if (settings.LogLevel != OpenCoverLogLevel.Info)
             {
                 builder.AppendSwitch("-log", ":", settings.LogLevel.ToString());
+            }
+
+            // HideSkipped Option
+            if (settings.HideSkippedOption != OpenCoverHideSkippedOption.None)
+            {
+                if (settings.HideSkippedOption == OpenCoverHideSkippedOption.All)
+                {
+                    builder.AppendSwitch(HideSkippedConstant, ":", "All");
+                }
+                else
+                {
+                    var hideSkippedOptions = string.Join(";", settings.HideSkippedOption.GetFlags());
+                    builder.AppendSwitch(HideSkippedConstant, ":", hideSkippedOptions);
+                }
             }
 
             // Merge by hash

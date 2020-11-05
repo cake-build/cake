@@ -9,7 +9,7 @@ using System.Text;
 namespace Cake.Core.Scripting.CodeGen
 {
     /// <summary>
-    /// Responsible for generating generic parameter constraints on generated generic methods
+    /// Responsible for generating generic parameter constraints on generated generic methods.
     /// </summary>
     internal sealed class GenericParameterConstraintEmitter
     {

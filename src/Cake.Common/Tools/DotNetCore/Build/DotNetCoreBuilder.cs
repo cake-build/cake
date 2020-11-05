@@ -117,6 +117,12 @@ namespace Cake.Common.Tools.DotNetCore.Build
                 builder.Append("--no-restore");
             }
 
+            // No Logo
+            if (settings.NoLogo)
+            {
+                builder.Append("--nologo");
+            }
+
             if (settings.MSBuildSettings != null)
             {
                 builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);

@@ -129,7 +129,7 @@ namespace Cake.Common.Build.TFBuild
         /// <summary>
         /// Create an artifact link, such as a file or folder path or a version control path.
         /// </summary>
-        /// <param name="name">The artifact name..</param>
+        /// <param name="name">The artifact name.</param>
         /// <param name="type">The artifact type.</param>
         /// <param name="location">The link path or value.</param>
         void LinkArtifact(string name, TFBuildArtifactType type, string location);
@@ -181,7 +181,7 @@ namespace Cake.Common.Build.TFBuild
         /// Add a tag for current build.
         /// </summary>
         /// <remarks>
-        /// Requires agent version 1.95
+        /// Requires agent version 1.95.
         /// </remarks>
         /// <param name="tag">The tag.</param>
         void AddBuildTag(string tag);
@@ -189,20 +189,20 @@ namespace Cake.Common.Build.TFBuild
         /// <summary>
         /// Publishes and uploads tests results.
         /// </summary>
-        /// <param name="data">The publish test results data</param>
+        /// <param name="data">The publish test results data.</param>
         void PublishTestResults(TFBuildPublishTestResultsData data);
 
         /// <summary>
-        /// Publishes and uploads code coverage results
+        /// Publishes and uploads code coverage results.
         /// </summary>
-        /// <param name="data">The code coverage data</param>
+        /// <param name="data">The code coverage data.</param>
         void PublishCodeCoverage(TFBuildPublishCodeCoverageData data);
 
         /// <summary>
         /// Publishes and uploads code coverage results.
         /// </summary>
         /// <param name="summaryFilePath">The code coverage summary file path.</param>
-        /// <param name="data">The code coverage data</param>
+        /// <param name="data">The code coverage data.</param>
         void PublishCodeCoverage(FilePath summaryFilePath, TFBuildPublishCodeCoverageData data);
 
         /// <summary>

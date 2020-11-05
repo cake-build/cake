@@ -34,6 +34,7 @@ namespace Cake.Common.Tests.Fixtures
 
         public FilePath Path { get; set; }
         public bool CreateAssemblyInfo { get; set; }
+        public bool ExtraWhiteSpaces { get; set; }
 
         public AssemblyInfoParserFixture()
         {
@@ -118,7 +119,16 @@ namespace Cake.Common.Tests.Fixtures
             }
 
             var creator = new AssemblyInfoCreator(FileSystem, Environment, Substitute.For<ICakeLog>());
-            creator.Create(path, settings);
+            if (ExtraWhiteSpaces)
+            {
+                creator.Create(path, settings, "[assembly: {0} ]",
+                    "[assembly: {0}( {1} )]",
+                    "[assembly: {0}( {1}, {2} )]");
+            }
+            else
+            {
+                creator.Create(path, settings);
+            }
         }
     }
 }

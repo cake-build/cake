@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.0;net5.0</TargetFrameworks>
+    <PackAsTool>true</PackAsTool>
+
+    <!-- Make sure start same folder .NET Core CLI and Visual Studio -->
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Cake.Frosting\Cake.Frosting.csproj" />
+  </ItemGroup>
+
+</Project>

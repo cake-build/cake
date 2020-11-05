@@ -419,6 +419,31 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// Run project with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreRunSettings
+        /// {
+        ///     Framework = "netcoreapp2.0",
+        ///     Configuration = "Release"
+        /// };
+        ///
+        /// DotNetCoreRun("./src/Project", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Run")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        public static void DotNetCoreRun(this ICakeContext context, string project, DotNetCoreRunSettings settings)
+        {
+            context.DotNetCoreRun(project, null, settings);
+        }
+
+        /// <summary>
         /// Publish all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -487,7 +512,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
         public static void DotNetCoreTest(this ICakeContext context)
         {
-            context.DotNetCoreTest(null, null);
+            context.DotNetCoreTest(null, null, null);
         }
 
         /// <summary>
@@ -496,7 +521,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <param name="project">The project path.</param>
         /// <example>
-        /// <para>Specify the path to the .csproj file in the test project</para>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
         /// <code>
         /// DotNetCoreTest("./test/Project.Tests/Project.Tests.csproj");
         /// </code>
@@ -523,7 +548,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
         public static void DotNetCoreTest(this ICakeContext context, string project)
         {
-            context.DotNetCoreTest(project, null);
+            context.DotNetCoreTest(project, null, null);
         }
 
         /// <summary>
@@ -574,6 +599,58 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
         public static void DotNetCoreTest(this ICakeContext context, string project, DotNetCoreTestSettings settings)
         {
+            context.DotNetCoreTest(project, null, settings);
+        }
+
+        /// <summary>
+        /// Test project with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project path.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreTestSettings
+        /// {
+        ///     Configuration = "Release"
+        /// };
+        ///
+        /// DotNetCoreTest("./test/Project.Tests/Project.Tests.csproj", settings);
+        /// </code>
+        /// <para>You could also specify a task that runs multiple test projects.</para>
+        /// <para>Cake task:</para>
+        /// <code>
+        /// Task("Test")
+        ///     .Does(() =>
+        /// {
+        ///     var settings = new DotNetCoreTestSettings
+        ///     {
+        ///         Configuration = "Release"
+        ///     };
+        ///
+        ///     var projectFiles = GetFiles("./test/**/*.csproj");
+        ///     foreach(var file in projectFiles)
+        ///     {
+        ///         DotNetCoreTest(file.FullPath, "MSTest.MapInconclusiveToFailed=true", settings);
+        ///     }
+        /// });
+        /// </code>
+        /// <para>If your test project is using project.json, the project parameter should just be the directory path.</para>
+        /// <code>
+        /// var settings = new DotNetCoreTestSettings
+        /// {
+        ///     Configuration = "Release"
+        /// };
+        ///
+        /// DotNetCoreTest("./test/Project.Tests/", "MSTest.MapInconclusiveToFailed=true", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        public static void DotNetCoreTest(this ICakeContext context, string project, ProcessArgumentBuilder arguments, DotNetCoreTestSettings settings)
+        {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
@@ -585,7 +662,7 @@ namespace Cake.Common.Tools.DotNetCore
             }
 
             var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            tester.Test(project, settings);
+            tester.Test(project, arguments, settings);
         }
 
         /// <summary>
@@ -698,7 +775,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
-        /// Deletes a package from a server
+        /// Deletes a package from a server.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="packageName">Name of package to delete.</param>
@@ -1212,7 +1289,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="context">The context.</param>
         /// <param name="testFile">A path to the test file or glob for one or more test files.</param>
         /// <example>
-        /// <para>Specify the path to the .csproj file in the test project</para>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
         /// <code>
         /// DotNetCoreVSTest("./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll");
         /// </code>
@@ -1224,7 +1301,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.VSTest")]
-        public static void DotNetCoreVSTest(this ICakeContext context, string testFile) => context.DotNetCoreVSTest(testFile, null);
+        public static void DotNetCoreVSTest(this ICakeContext context, GlobPattern testFile) => context.DotNetCoreVSTest(testFile, null);
 
         /// <summary>
         /// Test one or more projects specified by a path or glob pattern with settings using the VS Test host runner.
@@ -1233,7 +1310,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <param name="testFile">A path to the test file or glob for one or more test files.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
-        /// <para>Specify the path to the .csproj file in the test project</para>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
         /// <code>
         /// var settings = new DotNetCoreVSTestSettings
         /// {
@@ -1258,7 +1335,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.VSTest")]
-        public static void DotNetCoreVSTest(this ICakeContext context, string testFile, DotNetCoreVSTestSettings settings)
+        public static void DotNetCoreVSTest(this ICakeContext context, GlobPattern testFile, DotNetCoreVSTestSettings settings)
         {
             var testFiles = context.GetFiles(testFile);
 

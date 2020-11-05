@@ -27,12 +27,12 @@ namespace Cake.Common.Build.AzurePipelines.Data
         }
 
         /// <summary>
-        /// Gets Azure Pipelines repository information
+        /// Gets Azure Pipelines repository information.
         /// </summary>
         /// <value>
         /// The Azure Pipelines repository information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
@@ -53,7 +53,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AzurePipelines</para>
+        /// <para>Via AzurePipelines.</para>
         /// <example>
         /// <code>
         /// if (AzurePipelines.IsRunningOnAzurePipelines)
@@ -82,7 +82,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         /// The Azure Pipelines Build Definition.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
@@ -103,7 +103,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AzurePipelines</para>
+        /// <para>Via AzurePipelines.</para>
         /// <example>
         /// <code>
         /// if (AzurePipelines.IsRunningOnAzurePipelines)
@@ -132,7 +132,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         /// The Azure Pipelines Build.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
@@ -153,7 +153,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AzurePipelines</para>
+        /// <para>Via AzurePipelines.</para>
         /// <example>
         /// <code>
         /// if (AzurePipelines.IsRunningOnAzurePipelines)
@@ -182,7 +182,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         /// The Azure Pipelines pull request information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
@@ -203,7 +203,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AzurePipelines</para>
+        /// <para>Via AzurePipelines.</para>
         /// <example>
         /// <code>
         /// if (AzurePipelines.IsRunningOnAzurePipelines)
@@ -232,7 +232,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         /// The Azure Pipelines Team Project.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
@@ -251,7 +251,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AzurePipelines</para>
+        /// <para>Via AzurePipelines.</para>
         /// <example>
         /// <code>
         /// if (AzurePipelines.IsRunningOnAzurePipelines)
@@ -278,7 +278,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         /// The Azure Pipelines agent.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
@@ -297,7 +297,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AzurePipelines</para>
+        /// <para>Via AzurePipelines.</para>
         /// <example>
         /// <code>
         /// if (AzurePipelines.IsRunningOnAzurePipelines)

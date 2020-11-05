@@ -35,40 +35,19 @@ namespace Cake.Common.Build.GoCD
             Environment = new GoCDEnvironmentInfo(environment);
         }
 
-         /// <summary>
-        /// Gets a value indicating whether the current build is running on Go.CD.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on Go.CD.; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnGoCD => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("GO_SERVER_URL"));
 
-        /// <summary>
-        /// Gets the Go.CD environment.
-        /// </summary>
-        /// <value>
-        /// The Go.CD environment.
-        /// </value>
+        /// <inheritdoc/>
         public GoCDEnvironmentInfo Environment { get; }
 
-        /// <summary>
-        /// Gets the Go.CD build history, including the repository modifications that caused the pipeline to start.
-        /// </summary>
-        /// <param name="username">The Go.CD username.</param>
-        /// <param name="password">The Go.CD password.</param>
-        /// <returns>The Go.CD build history.</returns>
+        /// <inheritdoc/>
         public GoCDHistoryInfo GetHistory(string username, string password)
         {
             return GetHistory(username, password, Environment.GoCDUrl);
         }
 
-        /// <summary>
-        /// Gets the Go.CD build history, including the repository modifications that caused the pipeline to start.
-        /// </summary>
-        /// <param name="username">The Go.CD username.</param>
-        /// <param name="password">The Go.CD password.</param>
-        /// <param name="serverUrl">The Go.CD server URL.</param>
-        /// <returns>The Go.CD build history.</returns>
+        /// <inheritdoc/>
         public GoCDHistoryInfo GetHistory(string username, string password, string serverUrl)
         {
             if (username == null)

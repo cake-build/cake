@@ -9,14 +9,14 @@ using Cake.Common.Polyfill;
 namespace Cake.Common.Xml
 {
     /// <summary>
-    /// Contains settings for <see cref="XmlTransformation"/>
+    /// Contains settings for <see cref="XmlTransformation"/>.
     /// </summary>
     public sealed class XmlTransformationSettings
     {
         internal XmlWriterSettings XmlWriterSettings { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether overwriting existing file is permitted
+        /// Gets or sets a value indicating whether overwriting existing file is permitted.
         /// </summary>
         public bool Overwrite { get; set; }
 
@@ -120,7 +120,7 @@ namespace Cake.Common.Xml
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the XmlWriter will add closing tags to all unclosed element tags when the Close method is called
+        /// Gets or sets a value indicating whether the XmlWriter will add closing tags to all unclosed element tags when the Close method is called.
         /// </summary>
         public bool WriteEndDocumentOnClose
         {

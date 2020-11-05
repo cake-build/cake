@@ -8,7 +8,7 @@ using Cake.Core;
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    /// Provides Azure Pipelines Team Project information for the current build
+    /// Provides Azure Pipelines Team Project information for the current build.
     /// </summary>
     public sealed class AzurePipelinesTeamProjectInfo : AzurePipelinesInfo
     {

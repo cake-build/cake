@@ -11,7 +11,7 @@ namespace Cake.Common.Solution.Project
     /// </summary>
     /// <remarks>
     /// Schema from https://msdn.microsoft.com/en-us/library/ms164283.aspx
-    /// and https://msdn.microsoft.com/en-us/library/bb629388.aspx
+    /// and https://msdn.microsoft.com/en-us/library/bb629388.aspx.
     /// </remarks>
     public sealed class ProjectAssemblyReference
     {

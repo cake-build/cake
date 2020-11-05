@@ -31,7 +31,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The GitLab CI runner information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GitLabCI.IsRunningOnGitLabCI)
@@ -52,7 +52,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GitLabCI</para>
+        /// <para>Via GitLabCI.</para>
         /// <example>
         /// <code>
         /// if (GitLabCI.IsRunningOnGitLabCI)
@@ -81,7 +81,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The GitLab CI server information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GitLabCI.IsRunningOnGitLabCI)
@@ -102,7 +102,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GitLabCI</para>
+        /// <para>Via GitLabCI.</para>
         /// <example>
         /// <code>
         /// if (GitLabCI.IsRunningOnGitLabCI)
@@ -131,7 +131,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The GitLab CI build information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GitLabCI.IsRunningOnGitLabCI)
@@ -156,7 +156,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GitLabCI</para>
+        /// <para>Via GitLabCI.</para>
         /// <example>
         /// <code>
         ///     Information(
@@ -182,7 +182,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The GitLab CI pull request information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GitLabCI.IsRunningOnGitLabCI)
@@ -203,7 +203,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GitLabCI</para>
+        /// <para>Via GitLabCI.</para>
         /// <example>
         /// <code>
         /// if (GitLabCI.IsRunningOnGitLabCI)
@@ -232,7 +232,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The GitLab CI project information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.GitLabCI.IsRunningOnGitLabCI)
@@ -259,7 +259,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via GitLabCI</para>
+        /// <para>Via GitLabCI.</para>
         /// <example>
         /// <code>
         ///     Information(

@@ -23,12 +23,7 @@ namespace Cake.Testing.Fixtures
         {
         }
 
-        /// <summary>
-        /// Creates a <see cref="ToolFixtureResult"/> from a tool path and process settings.
-        /// </summary>
-        /// <param name="path">The tool path.</param>
-        /// <param name="process">The process settings.</param>
-        /// <returns>A tool fixture result.</returns>
+        /// <inheritdoc/>
         protected sealed override ToolFixtureResult CreateResult(FilePath path, ProcessSettings process)
         {
             return new ToolFixtureResult(path, process);

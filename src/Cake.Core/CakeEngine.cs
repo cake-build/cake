@@ -23,30 +23,19 @@ namespace Cake.Core
         private readonly List<CakeTask> _tasks;
         private readonly CakeEngineActions _actions;
 
-        /// <summary>
-        /// Gets all registered tasks.
-        /// </summary>
-        /// <value>The registered tasks.</value>
+        /// <inheritdoc/>
         public IReadOnlyList<ICakeTaskInfo> Tasks => _tasks;
 
-        /// <summary>
-        /// Raised during setup before any tasks are run.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<SetupEventArgs> Setup;
 
-        /// <summary>
-        /// Raised during teardown after all other tasks have been run.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<TeardownEventArgs> Teardown;
 
-        /// <summary>
-        /// Raised before each task is run.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<TaskSetupEventArgs> TaskSetup;
 
-        /// <summary>
-        /// Raised after each task has been run.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<TaskTeardownEventArgs> TaskTeardown;
 
         /// <summary>
@@ -66,13 +55,7 @@ namespace Cake.Core
             _actions = new CakeEngineActions(data);
         }
 
-        /// <summary>
-        /// Creates and registers a new Cake task.
-        /// </summary>
-        /// <param name="name">The name of the task.</param>
-        /// <returns>
-        /// A <see cref="CakeTaskBuilder"/> used to configure the task.
-        /// </returns>
+        /// <inheritdoc/>
         public CakeTaskBuilder RegisterTask(string name)
         {
             if (_tasks.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
@@ -86,43 +69,26 @@ namespace Cake.Core
             return new CakeTaskBuilder(task);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterSetupAction(Action<ISetupContext> action)
         {
             _actions.RegisterSetup(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterSetupAction<TData>(Func<ISetupContext, TData> action)
             where TData : class
         {
             _actions.RegisterSetup(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after all other tasks have been run.
-        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterTeardownAction(Action<ITeardownContext> action)
         {
             _actions.RegisterTeardown(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after all other tasks have been run.
-        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
+        /// <inheritdoc/>
         /// <param name="action">The action to be executed.</param>
         public void RegisterTeardownAction<TData>(Action<ITeardownContext, TData> action)
             where TData : class
@@ -130,57 +96,33 @@ namespace Cake.Core
             _actions.RegisterTeardown(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before each task is run.
-        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterTaskSetupAction(Action<ITaskSetupContext> action)
         {
             _actions.RegisterTaskSetup(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before each task is run.
-        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterTaskSetupAction<TData>(Action<ITaskSetupContext, TData> action)
             where TData : class
         {
             _actions.RegisterTaskSetup(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after each task has been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterTaskTeardownAction(Action<ITaskTeardownContext> action)
         {
             _actions.RegisterTaskTeardown(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after each task has been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterTaskTeardownAction<TData>(Action<ITaskTeardownContext, TData> action)
             where TData : class
         {
             _actions.RegisterTaskTeardown(action);
         }
 
-        /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="strategy">The execution strategy.</param>
-        /// <param name="settings">The execution settings.</param>
-        /// <returns>The resulting report.</returns>
+        /// <inheritdoc/>
         public async Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, ExecutionSettings settings)
         {
             if (settings == null)

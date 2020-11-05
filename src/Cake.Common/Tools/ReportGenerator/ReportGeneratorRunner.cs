@@ -126,7 +126,7 @@ namespace Cake.Common.Tools.ReportGenerator
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "ReportGenerator.exe" };
+            return new[] { "reportgenerator", "ReportGenerator.exe" };
         }
 
         private void AppendQuoted(ProcessArgumentBuilder builder, string key, string value)

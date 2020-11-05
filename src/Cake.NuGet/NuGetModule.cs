@@ -27,10 +27,7 @@ namespace Cake.NuGet
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
-        /// <summary>
-        /// Performs custom registrations in the provided registrar.
-        /// </summary>
-        /// <param name="registrar">The container registrar.</param>
+        /// <inheritdoc/>
         public void Register(ICakeContainerRegistrar registrar)
         {
             if (registrar == null)

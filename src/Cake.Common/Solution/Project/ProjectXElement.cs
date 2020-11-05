@@ -5,59 +5,59 @@
 namespace Cake.Common.Solution.Project
 {
     /// <summary>
-    /// MSBuild Project Xml Element XNames
+    /// MSBuild Project Xml Element XNames.
     /// </summary>
     internal static class ProjectXElement
     {
         private const string XmlNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 
         /// <summary>
-        /// Project root element
+        /// Project root element.
         /// </summary>
         internal const string Project = "{" + XmlNamespace + "}Project";
 
         /// <summary>
-        /// Item group element
+        /// Item group element.
         /// </summary>
         internal const string ItemGroup = "{" + XmlNamespace + "}ItemGroup";
 
         /// <summary>
-        /// Assembly reference element
+        /// Assembly reference element.
         /// </summary>
         internal const string Reference = "{" + XmlNamespace + "}Reference";
 
         /// <summary>
-        /// Namespace import element
+        /// Namespace import element.
         /// </summary>
         internal const string Import = "{" + XmlNamespace + "}Import";
 
         /// <summary>
-        /// Namespace compile element
+        /// Namespace compile element.
         /// </summary>
         internal const string Compile = "{" + XmlNamespace + "}Compile";
 
         /// <summary>
-        /// Namespace property group element
+        /// Namespace property group element.
         /// </summary>
         internal const string PropertyGroup = "{" + XmlNamespace + "}PropertyGroup";
 
         /// <summary>
-        /// Namespace root namespace element
+        /// Namespace root namespace element.
         /// </summary>
         internal const string RootNamespace = "{" + XmlNamespace + "}RootNamespace";
 
         /// <summary>
-        /// Namespace output type element
+        /// Namespace output type element.
         /// </summary>
         internal const string OutputType = "{" + XmlNamespace + "}OutputType";
 
         /// <summary>
-        /// Namespace output path element
+        /// Namespace output path element.
         /// </summary>
         internal const string OutputPath = "{" + XmlNamespace + "}OutputPath";
 
         /// <summary>
-        /// Namespace assembly name element
+        /// Namespace assembly name element.
         /// </summary>
         internal const string AssemblyName = "{" + XmlNamespace + "}AssemblyName";
 

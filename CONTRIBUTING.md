@@ -23,7 +23,7 @@ By contributing to Cake, you assert that:
 * You have the right to assign the copyright for the work (it is not owned by your employer, or
   you have been given copyright assignment in writing).
 * You [license](https://github.com/cake-build/cake/blob/develop/LICENSE) the contribution under the terms applied to the rest of the Cake project.
-* You agree to follow the [code of conduct](https://github.com/cake-build/cake/blob/develop/CODEOFCONDUCT.md).
+* You agree to follow the [code of conduct](https://github.com/cake-build/cake/blob/develop/CODE_OF_CONDUCT.md).
 
 ## Definition of trivial contributions
 It's hard to define what is a trivial contribution. Sometimes even a 1 character change can be considered significant.

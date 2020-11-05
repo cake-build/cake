@@ -1,27 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <AssemblyName>Cake.Tests</AssemblyName>
-    <TargetFrameworks>net461;netcoreapp2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <IsCakeTestProject>true</IsCakeTestProject>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
+
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
-  <!-- Project references -->
+
   <ItemGroup>
-    <ProjectReference Include="..\Cake\Cake.csproj" />
-    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
-    <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj" />
-    <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj" />
-  </ItemGroup>
-  <!-- Global packages -->
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.0-preview-20201020-06" />
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
-    <PackageReference Include="NSubstitute" Version="3.1.0" />
-    <PackageReference Include="Castle.Core" Version="4.2.1" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NSubstitute" Version="4.2.2" />
+    <PackageReference Include="Castle.Core" Version="4.4.1" />
   </ItemGroup>
   <!-- .NET Framework packages -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
@@ -30,7 +28,10 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\MonoScriptProcessor\ArrayInitializer\*;Data\MonoScriptProcessor\Blocks\*;Data\MonoScriptProcessor\Complex\*;Data\MonoScriptProcessor\Mixed\*;Data\MonoScriptProcessor\MixedComments\*;Data\MonoScriptProcessor\Simple\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+    <ProjectReference Include="..\Cake\Cake.csproj" />
+    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+    <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj" />
+    <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj" />
   </ItemGroup>
+
 </Project>

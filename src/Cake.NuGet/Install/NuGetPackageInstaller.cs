@@ -60,7 +60,7 @@ namespace Cake.NuGet.Install
         /// <param name="environment">The environment.</param>
         /// <param name="contentResolver">The content resolver.</param>
         /// <param name="log">The log.</param>
-        /// <param name="config">the configuration</param>
+        /// <param name="config">the configuration.</param>
         public NuGetPackageInstaller(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -91,6 +91,7 @@ namespace Cake.NuGet.Install
             _sourceCacheContext = new SourceCacheContext();
         }
 
+        /// <inheritdoc/>
         public bool CanInstall(PackageReference package, PackageType type)
         {
             if (package == null)
@@ -100,6 +101,7 @@ namespace Cake.NuGet.Install
             return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <inheritdoc/>
         public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
         {
             if (package == null)
@@ -131,8 +133,8 @@ namespace Cake.NuGet.Install
 
             if (packageIdentity.Version.IsPrerelease && !package.IsPrerelease())
             {
-                // TODO: Is this allowed? If not, log and return
-                return Array.Empty<IFile>();
+                // If a prerelease version is explicitly specified, we should install that with or without prerelease flag.
+                _log.Debug("Prerelease version string explicitly specified. Installing prerelease package version.");
             }
 
             var pathResolver = new PackagePathResolver(packageRoot);

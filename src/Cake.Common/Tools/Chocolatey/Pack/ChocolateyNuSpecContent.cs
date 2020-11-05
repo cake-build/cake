@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.Chocolatey.Pack
 {
     /// <summary>
-    /// Represents a Chocolatey nuspec file
+    /// Represents a Chocolatey nuspec file.
     /// </summary>
     public sealed class ChocolateyNuSpecContent
     {

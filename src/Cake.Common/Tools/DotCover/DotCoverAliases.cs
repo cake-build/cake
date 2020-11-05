@@ -134,7 +134,7 @@ namespace Cake.Common.Tools.DotCover
         /// <param name="context">The context.</param>
         /// <param name="sourceFile">The DotCover coverage snapshot file name.</param>
         /// <param name="outputFile">The DotCover output file.</param>
-        /// <param name="settings">The settings</param>
+        /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
         /// DotCoverReport(new FilePath("./result.dcvr"),
@@ -206,7 +206,7 @@ namespace Cake.Common.Tools.DotCover
         /// <param name="context">The context.</param>
         /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
         /// <param name="outputFile">The merged output file.</param>
-        /// <param name="settings">The settings</param>
+        /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
         /// DotCoverMerge(new[] {

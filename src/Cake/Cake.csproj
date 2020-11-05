@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <AssemblyName>Cake</AssemblyName>
     <OutputType>Exe</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.0;net5.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(PackAsTool)' != 'true'">
@@ -25,9 +25,13 @@
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
     <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />
   </ItemGroup>
+
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.6.0" />
-    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.8.0-5.final" />
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0-rc.2.20475.5" />
+    <PackageReference Include="System.Reflection.Metadata" Version="5.0.0-rc.2.20475.5" />
+    <PackageReference Include="Autofac" Version="6.0.0" />
+    <PackageReference Include="Spectre.Cli" Version="0.45.0" />
   </ItemGroup>
 </Project>

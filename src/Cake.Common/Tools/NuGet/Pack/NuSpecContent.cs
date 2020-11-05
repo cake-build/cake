@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.NuGet.Pack
 {
     /// <summary>
-    /// Represents a NuGet nuspec file
+    /// Represents a NuGet nuspec file.
     /// </summary>
     public sealed class NuSpecContent
     {

@@ -12,7 +12,7 @@ namespace Cake.Common.Build.Bamboo.Data
     public sealed class BambooPlanInfo : BambooInfo
     {
         /// <summary>
-        /// Gets the Bamboo Plan Name
+        /// Gets the Bamboo Plan Name.
         /// </summary>
         /// <value>
         ///   The Bamboo Plan Name.
@@ -20,7 +20,7 @@ namespace Cake.Common.Build.Bamboo.Data
         public string PlanName => GetEnvironmentString("bamboo_planName");
 
         /// <summary>
-        /// Gets the Bamboo short Plan Name
+        /// Gets the Bamboo short Plan Name.
         /// </summary>
         /// <value>
         ///   The Bamboo Plan Name in its short form.
@@ -28,7 +28,7 @@ namespace Cake.Common.Build.Bamboo.Data
         public string ShortPlanName => GetEnvironmentString("bamboo_shortPlanName");
 
         /// <summary>
-        /// Gets the key of the current plan, in the form PROJECT-PLAN, e.g. BAM-MAIN
+        /// Gets the key of the current plan, in the form PROJECT-PLAN, e.g. BAM-MAIN.
         /// </summary>
         /// <value>
         /// The project name.

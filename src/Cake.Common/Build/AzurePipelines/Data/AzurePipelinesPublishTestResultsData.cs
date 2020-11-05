@@ -11,12 +11,12 @@ using Cake.Core.IO;
 namespace Cake.Common.Build.AzurePipelines.Data
 {
     /// <summary>
-    ///  Description of test result information to publish to Azure Pipelines
+    ///  Description of test result information to publish to Azure Pipelines.
     /// </summary>
     public class AzurePipelinesPublishTestResultsData
     {
         /// <summary>
-        /// Gets or sets the type test runner the results are formatted in
+        /// Gets or sets the type test runner the results are formatted in.
         /// </summary>
         public AzurePipelinesTestRunnerType? TestRunner { get; set; }
 
@@ -31,12 +31,12 @@ namespace Cake.Common.Build.AzurePipelines.Data
         public bool? MergeTestResults { get; set; }
 
         /// <summary>
-        /// Gets or sets the platform for which the tests were run on
+        /// Gets or sets the platform for which the tests were run on.
         /// </summary>
         public string Platform { get; set; }
 
         /// <summary>
-        /// Gets or sets the configuration for which the tests were run on
+        /// Gets or sets the configuration for which the tests were run on.
         /// </summary>
         public string Configuration { get; set; }
 
@@ -46,7 +46,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         public string TestRunTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets whether to opt in/out of publishing test run level attachments
+        /// Gets or sets whether to opt in/out of publishing test run level attachments.
         /// </summary>
         public bool? PublishRunAttachments { get; set; }
 

@@ -50,6 +50,14 @@ namespace Cake.Common.Tools.DotNetCore.Pack
         public bool NoRestore { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to display the startup banner or the copyright message.
+        /// </summary>
+        /// <remarks>
+        /// Available since .NET Core 3.0 SDK.
+        /// </remarks>
+        public bool NoLogo { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to generate the symbols nupkg.
         /// </summary>
         public bool IncludeSymbols { get; set; }
@@ -64,7 +72,7 @@ namespace Cake.Common.Tools.DotNetCore.Pack
         /// Gets or sets a value indicating whether to set the serviceable flag in the package.
         /// </summary>
         /// <remarks>
-        /// For more information, see https://aka.ms/nupkgservicing
+        /// For more information, see https://aka.ms/nupkgservicing.
         /// </remarks>
         public bool Serviceable { get; set; }
 

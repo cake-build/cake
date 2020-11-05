@@ -123,7 +123,7 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
-        /// Unzips the specified file
+        /// Unzips the specified file.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="zipFile">Zip file to unzip.</param>

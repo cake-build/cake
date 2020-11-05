@@ -27,7 +27,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <summary>
         /// Gets or Sets a value that indicates how many deployments to retrieve
         /// in Date Descending order (most recent first)
-        /// Default: 1
+        /// Default: 1.
         /// </summary>
         public int Count { get; set; } = 1;
     }

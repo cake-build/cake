@@ -72,14 +72,14 @@ namespace Cake.Common.Solution.Project.XmlDoc
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static IEnumerable<XmlDocExampleCode> ParseXmlDocFilesExampleCode(this ICakeContext context, string pattern)
+        public static IEnumerable<XmlDocExampleCode> ParseXmlDocFilesExampleCode(this ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (string.IsNullOrWhiteSpace(pattern))
+            if (string.IsNullOrWhiteSpace(pattern?.Pattern))
             {
                 throw new ArgumentNullException(nameof(pattern));
             }

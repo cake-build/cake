@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.GitVersion
 {
     /// <summary>
-    /// GitVersion information
+    /// GitVersion information.
     /// </summary>
     public sealed class GitVersion
     {
@@ -120,17 +120,17 @@ namespace Cake.Common.Tools.GitVersion
         public string NuGetVersion { get; set; }
 
         /// <summary>
-        /// Gets or sets the commits since version source
+        /// Gets or sets the commits since version source.
         /// </summary>
         public int? CommitsSinceVersionSource { get; set; }
 
         /// <summary>
-        /// Gets or sets the commits since version source padded
+        /// Gets or sets the commits since version source padded.
         /// </summary>
         public string CommitsSinceVersionSourcePadded { get; set; }
 
         /// <summary>
-        /// Gets or sets the commit date
+        /// Gets or sets the commit date.
         /// </summary>
         public string CommitDate { get; set; }
     }

@@ -35,7 +35,7 @@ namespace Cake.Common.Tools.ReportGenerator
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static void ReportGenerator(this ICakeContext context, string pattern, DirectoryPath targetDir)
+        public static void ReportGenerator(this ICakeContext context, GlobPattern pattern, DirectoryPath targetDir)
         {
             if (context == null)
             {
@@ -60,7 +60,7 @@ namespace Cake.Common.Tools.ReportGenerator
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static void ReportGenerator(this ICakeContext context, string pattern, DirectoryPath targetDir, ReportGeneratorSettings settings)
+        public static void ReportGenerator(this ICakeContext context, GlobPattern pattern, DirectoryPath targetDir, ReportGeneratorSettings settings)
         {
             if (context == null)
             {

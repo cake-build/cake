@@ -7,22 +7,14 @@ using Cake.Core;
 namespace Cake.Testing
 {
     /// <summary>
-    /// An implementation of a fake <see cref="ICakePlatform"/>
+    /// An implementation of a fake <see cref="ICakePlatform"/>.
     /// </summary>
     public sealed class FakePlatform : ICakePlatform
     {
-        /// <summary>
-        /// Gets or sets the platform family.
-        /// </summary>
-        /// <value>The platform family.</value>
+        /// <inheritdoc/>
         public PlatformFamily Family { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not the current operative system is 64 bit.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if current operative system is 64 bit; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool Is64Bit { get; set; }
 
         /// <summary>

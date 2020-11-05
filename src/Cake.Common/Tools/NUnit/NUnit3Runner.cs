@@ -114,18 +114,6 @@ namespace Cake.Common.Tools.NUnit
                 builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--out={0}", settings.OutputFile.MakeAbsolute(_environment).FullPath));
             }
 
-            #pragma warning disable 0618
-            if (settings.ErrorOutputFile != null)
-            {
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--err={0}", settings.ErrorOutputFile.MakeAbsolute(_environment).FullPath));
-            }
-
-            if (settings.Full)
-            {
-                builder.Append("--full");
-            }
-            #pragma warning restore 0618
-
             if (HasResults(settings) && settings.NoResults)
             {
                 throw new ArgumentException(
@@ -172,13 +160,6 @@ namespace Cake.Common.Tools.NUnit
             {
                 builder.Append("--nocolor");
             }
-
-            #pragma warning disable 0618
-            if (settings.Verbose)
-            {
-                builder.Append("--verbose");
-            }
-            #pragma warning restore 0618
 
             if (settings.Configuration != null)
             {
@@ -267,9 +248,9 @@ namespace Cake.Common.Tools.NUnit
 
         /// <summary>
         /// Customized NUnit 3 exit code handling.
-        /// Throws <see cref="CakeException"/> on non-zero exit code
+        /// Throws <see cref="CakeException"/> on non-zero exit code.
         /// </summary>
-        /// <param name="exitCode">The process exit code</param>
+        /// <param name="exitCode">The process exit code.</param>
         protected override void ProcessExitCode(int exitCode)
         {
             string error;

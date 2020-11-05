@@ -9,7 +9,7 @@ namespace Cake.Core.IO.Globbing
 {
     internal static class GlobNodeValidator
     {
-        public static void Validate(string pattern, GlobNode node)
+        public static void Validate(GlobPattern pattern, GlobNode node)
         {
             var previous = (GlobNode)null;
             var current = node;

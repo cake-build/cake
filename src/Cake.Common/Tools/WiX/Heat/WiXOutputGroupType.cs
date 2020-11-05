@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.WiX.Heat
 {
     /// <summary>
-    /// The Output Group of Visual Studio project
+    /// The Output Group of Visual Studio project.
     /// </summary>
     public enum WiXOutputGroupType
     {

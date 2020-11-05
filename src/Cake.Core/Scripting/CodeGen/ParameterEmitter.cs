@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 namespace Cake.Core.Scripting.CodeGen
 {
     /// <summary>
-    /// Responsible for generating parameter tokens in method alias generation
+    /// Responsible for generating parameter tokens in method alias generation.
     /// </summary>
     internal sealed class ParameterEmitter
     {

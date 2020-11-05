@@ -35,7 +35,7 @@ namespace Cake.Common.Build.ContinuaCI
         /// </summary>
         /// <param name="name">Name of the variable to set.</param>
         /// <param name="value">Value to assign to the variable.</param>
-        /// <param name="skipIfNotDefined">Set to 'true' to prevent the build failing if the variable has not been defined for the configuration..</param>
+        /// <param name="skipIfNotDefined">Set to 'true' to prevent the build failing if the variable has not been defined for the configuration.</param>
         void SetVariable(string name, string value, bool skipIfNotDefined = true);
 
         /// <summary>

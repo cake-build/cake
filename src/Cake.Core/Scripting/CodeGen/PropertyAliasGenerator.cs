@@ -119,6 +119,7 @@ namespace Cake.Core.Scripting.CodeGen
 
             builder.Append("{");
             builder.AppendLine();
+            builder.AppendLine("    [System.Diagnostics.DebuggerStepThrough]");
             builder.Append("    get");
             builder.AppendLine();
             builder.AppendLine("    {");
@@ -218,6 +219,7 @@ namespace Cake.Core.Scripting.CodeGen
             hash = GenerateCommonInitalCode(method, ref builder);
             builder.Append("{");
             builder.AppendLine();
+            builder.AppendLine("    [System.Diagnostics.DebuggerStepThrough]");
             builder.AppendLine("    get");
             builder.Append("    {");
             builder.AppendLine();

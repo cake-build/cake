@@ -27,7 +27,7 @@ namespace Cake.Common.Tools.NuGet.Push
         /// For your convenience, here is the URL for some of the most popular
         /// public NuGet servers:
         /// - NuGet Gallery: https://nuget.org/api/v2/package
-        /// - MyGet: https://www.myget.org/F/&lt;your_username&gt;/api/v2/package
+        /// - MyGet: https://www.myget.org/F/&lt;your_username&gt;/api/v2/package.
         /// </remarks>
         public string Source { get; set; }
 

@@ -33,13 +33,13 @@ namespace Cake.Core.IO
         /// <summary>
         /// Get the standard error of process.
         /// </summary>
-        /// <returns>Returns process error output if <see cref="ProcessSettings.RedirectStandardError">RedirectStandardError</see> is true</returns>
+        /// <returns>Returns process error output if <see cref="ProcessSettings.RedirectStandardError">RedirectStandardError</see> is true.</returns>
         IEnumerable<string> GetStandardError();
 
         /// <summary>
-        /// Get the standard output of process
+        /// Get the standard output of process.
         /// </summary>
-        /// <returns>Returns process output if <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true</returns>
+        /// <returns>Returns process output if <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true.</returns>
         IEnumerable<string> GetStandardOutput();
 
         /// <summary>

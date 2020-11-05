@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.SignTool
 {
     /// <summary>
-    /// Digest algorithm for SignTool
+    /// Digest algorithm for SignTool.
     /// </summary>
     public enum SignToolDigestAlgorithm
     {

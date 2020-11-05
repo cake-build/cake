@@ -1,4 +1,5 @@
-﻿public void Obsolete_ExplicitWarning_WithMessage()
+﻿[System.Diagnostics.DebuggerStepThrough]
+public void Obsolete_ExplicitWarning_WithMessage()
 {
     Context.Log.Warning("Warning: The alias Obsolete_ExplicitWarning_WithMessage has been made obsolete. Please use Foo.Bar instead.");
 #pragma warning disable 0618

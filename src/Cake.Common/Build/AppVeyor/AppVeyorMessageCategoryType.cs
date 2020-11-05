@@ -5,7 +5,7 @@
 namespace Cake.Common.Build.AppVeyor
 {
     /// <summary>
-    /// AppVeyor AddMessage categories
+    /// AppVeyor AddMessage categories.
     /// </summary>
     public enum AppVeyorMessageCategoryType
     {

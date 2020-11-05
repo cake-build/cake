@@ -10,7 +10,7 @@ namespace Cake.Core
     public static partial class CakeTaskBuilderExtensions
     {
         /// <summary>
-        /// Defers all exceptions until after all actions for this task have completed
+        /// Defers all exceptions until after all actions for this task have completed.
         /// </summary>
         /// <param name="builder">The task builder.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>

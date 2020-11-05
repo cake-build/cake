@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.DotNetCore.Run;
+using Cake.Core.IO;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Run
 {
@@ -10,7 +11,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Run
     {
         public string Project { get; set; }
 
-        public string Arguments { get; set; }
+        public ProcessArgumentBuilder Arguments { get; set; }
 
         protected override void RunTool()
         {

@@ -108,11 +108,19 @@ public class BuildParameters
             new [] { "cake.portable" });
 
         var releaseNotes = string.Join("\n", ReleaseNotes.Notes.ToArray()).Replace("\"", "\"\"");
-        MSBuildSettings = new DotNetCoreMSBuildSettings()
+        MSBuildSettings = new DotNetCoreMSBuildSettings
+                            {
+                                WarningCodesAsMessage = { "NETSDK1138" } // EolTargetFrameworks
+                            }
                             .WithProperty("Version", Version.SemVersion)
                             .WithProperty("AssemblyVersion", Version.Version)
                             .WithProperty("FileVersion", Version.Version)
                             .WithProperty("PackageReleaseNotes", string.Concat("\"", releaseNotes, "\""));
+
+        if (!IsLocalBuild)
+        {
+            MSBuildSettings.WithProperty("TemplateVersion", Version.SemVersion);
+        }
     }
 
     private static bool IsBuildTagged(BuildSystem buildSystem)

@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Cake.Common.Tools.DotCover
 {
     /// <summary>
-    /// Represents DotCover ReportType
+    /// Represents DotCover ReportType.
     /// </summary>
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public enum DotCoverReportType

@@ -114,12 +114,12 @@ namespace Cake.Common.Tools.MSBuild
         public ICollection<MSBuildLogger> Loggers => _loggers;
 
         /// <summary>
-        /// Gets the file loggers
+        /// Gets the file loggers.
         /// </summary>
         public ICollection<MSBuildFileLogger> FileLoggers => _fileLoggers;
 
         /// <summary>
-        /// Gets or sets the binary logging options
+        /// Gets or sets the binary logging options.
         /// </summary>
         public MSBuildBinaryLogSettings BinaryLogger { get; set; }
 

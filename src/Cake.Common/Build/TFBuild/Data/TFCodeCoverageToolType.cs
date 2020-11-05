@@ -5,7 +5,7 @@
 namespace Cake.Common.Build.TFBuild.Data
 {
     /// <summary>
-    ///  Provides the known values for the Code Coverage tool formats
+    ///  Provides the known values for the Code Coverage tool formats.
     /// </summary>
     public enum TFCodeCoverageToolType
     {

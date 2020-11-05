@@ -67,12 +67,7 @@ namespace Cake.Core.Scripting
             _skipPackageVersionCheck = skip != null && skip.Equals("true", StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Installs the addins.
-        /// </summary>
-        /// <param name="addins">The addins to install.</param>
-        /// <param name="installPath">The install path.</param>
-        /// <returns>A list containing file paths to installed addin assemblies.</returns>
+        /// <inheritdoc/>
         public IReadOnlyList<FilePath> InstallAddins(
             IReadOnlyCollection<PackageReference> addins,
             DirectoryPath installPath)
@@ -125,11 +120,7 @@ namespace Cake.Core.Scripting
             return result.ToArray();
         }
 
-        /// <summary>
-        /// Installs the tools.
-        /// </summary>
-        /// <param name="tools">The tools to install.</param>
-        /// <param name="installPath">The install path.</param>
+        /// <inheritdoc/>
         public void InstallTools(
             IReadOnlyCollection<PackageReference> tools,
             DirectoryPath installPath)
@@ -145,11 +136,7 @@ namespace Cake.Core.Scripting
             InstallPackages(tools, installPath, PackageType.Tool);
         }
 
-        /// <summary>
-        /// Installs the modules.
-        /// </summary>
-        /// <param name="modules">The modules to install.</param>
-        /// <param name="installPath">The install path.</param>
+        /// <inheritdoc/>
         public void InstallModules(
             IReadOnlyCollection<PackageReference> modules,
             DirectoryPath installPath)
@@ -236,12 +223,12 @@ namespace Cake.Core.Scripting
             {
                 const string message = "The '{0}' directive is attempting to install the '{1}' package \r\n" +
                                        "without specifying a package version number.  \r\n" +
-                                       "More information on this can be found at https://cakebuild.net/docs/tutorials/pinning-cake-version \r\n" +
+                                       "More information on this can be found at https://cakebuild.net/docs/writing-builds/reproducible-builds/ \r\n" +
                                        "It's not recommended, but you can explicitly override this warning \r\n" +
                                        "by configuring the Skip Package Version Check setting to true \r\n" +
                                        "(i.e. command line parameter \"--settings_skippackageversioncheck=true\", \r\n" +
                                        "environment variable \"CAKE_SETTINGS_SKIPPACKAGEVERSIONCHECK=true\", \r\n" +
-                                       "read more about configuration at https://cakebuild.net/docs/fundamentals/configuration)";
+                                       "read more about configuration at https://cakebuild.net/docs/running-builds/configuration/)";
 
                 _log.Warning(Verbosity.Minimal, message, directiveName, packageReference.Package);
             }

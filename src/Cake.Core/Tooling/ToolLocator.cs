@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Core.IO;
 
 namespace Cake.Core.Tooling
@@ -42,10 +43,7 @@ namespace Cake.Core.Tooling
             _strategy = strategy;
         }
 
-        /// <summary>
-        /// Registers the specified tool file path.
-        /// </summary>
-        /// <param name="path">The tool path.</param>
+        /// <inheritdoc/>
         public void RegisterFile(FilePath path)
         {
             if (path == null)
@@ -56,11 +54,7 @@ namespace Cake.Core.Tooling
             _repository.Register(path.MakeAbsolute(_environment));
         }
 
-        /// <summary>
-        /// Resolves the path to the specified tool.
-        /// </summary>
-        /// <param name="tool">The tool.</param>
-        /// <returns>A path if the tool was found; otherwise <c>null</c>.</returns>
+        /// <inheritdoc/>
         public FilePath Resolve(string tool)
         {
             if (tool == null)
@@ -73,6 +67,17 @@ namespace Cake.Core.Tooling
             }
 
             return _strategy.Resolve(_repository, tool);
+        }
+
+        /// <inheritdoc/>
+        public FilePath Resolve(IEnumerable<string> toolExeNames)
+        {
+            if (toolExeNames == null)
+            {
+                throw new ArgumentNullException(nameof(toolExeNames));
+            }
+
+            return _strategy.Resolve(_repository, toolExeNames);
         }
     }
 }

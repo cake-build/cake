@@ -10,7 +10,7 @@ namespace Cake.Common.Tools.OctopusDeploy
     public sealed class OctopusPushSettings : OctopusDeployCommonToolSettings
     {
         /// <summary>
-        /// Gets or sets a value indicating whether to overwrite an existing package
+        /// Gets or sets a value indicating whether to overwrite an existing package.
         /// </summary>
         public bool ReplaceExisting { get; set; }
     }

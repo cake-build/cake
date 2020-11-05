@@ -21,7 +21,7 @@ namespace Cake.Common.Tools.Chocolatey.Install
         /// <summary>
         /// Gets or sets a value indicating whether to force installation of the x86 version of package.
         /// </summary>
-        /// <value>The force x86 flag</value>
+        /// <value>The force x86 flag.</value>
         public bool Forcex86 { get; set; }
 
         /// <summary>
@@ -32,19 +32,19 @@ namespace Cake.Common.Tools.Chocolatey.Install
         /// <summary>
         /// Gets or sets a value indicating whether to allow downgrade of package.
         /// </summary>
-        /// <value>The downgrade package flag</value>
+        /// <value>The downgrade package flag.</value>
         public bool AllowDowngrade { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to ignore dependencies.
         /// </summary>
-        /// <value>The ignore dependencies flag</value>
+        /// <value>The ignore dependencies flag.</value>
         public bool IgnoreDependencies { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to force dependencies.
         /// </summary>
-        /// <value>The force dependencies flag</value>
+        /// <value>The force dependencies flag.</value>
         public bool ForceDependencies { get; set; }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Cake.Common.Tools.Chocolatey.Install
         /// <summary>
         /// Gets or sets a value indicating whether to ignore checksums.
         /// </summary>
-        /// <value>The ignore checksums flag</value>
+        /// <value>The ignore checksums flag.</value>
         public bool IgnoreChecksums { get; set; }
     }
 }

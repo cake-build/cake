@@ -12,22 +12,12 @@ namespace Cake.Common.Build.BitbucketPipelines
     /// </summary>
     public sealed class BitbucketPipelinesProvider : IBitbucketPipelinesProvider
     {
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on Pipelines.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on Pipelines; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnBitbucketPipelines => !string.IsNullOrWhiteSpace(Environment.Repository.RepoOwner) &&
                                                      !string.IsNullOrWhiteSpace(Environment.Repository.RepoSlug) &&
                                                      !string.IsNullOrWhiteSpace(Environment.Repository.Commit);
 
-        /// <summary>
-        /// Gets the Pipelines environment.
-        /// </summary>
-        /// <value>
-        /// The Pipelines environment.
-        /// </value>
+        /// <inheritdoc/>
         public BitbucketPipelinesEnvironmentInfo Environment { get; }
 
         /// <summary>

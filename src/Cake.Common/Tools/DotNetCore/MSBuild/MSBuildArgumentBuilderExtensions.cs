@@ -18,7 +18,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
     public static class MSBuildArgumentBuilderExtensions
     {
         /// <summary>
-        /// Adds MSBuild arguments
+        /// Adds MSBuild arguments.
         /// </summary>
         /// <param name="builder">Argument builder.</param>
         /// <param name="settings">MSBuild settings to add.</param>

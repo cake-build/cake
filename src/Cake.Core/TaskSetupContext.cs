@@ -6,9 +6,7 @@ using System;
 
 namespace Cake.Core
 {
-    /// <summary>
-    /// Acts as a context providing info about a <see cref="CakeTask"/> before its invocation.
-    /// </summary>
+    /// <inheritdoc/>
     public sealed class TaskSetupContext : CakeContextAdapter, ITaskSetupContext
     {
         /// <summary>
@@ -27,12 +25,7 @@ namespace Cake.Core
             Task = task;
         }
 
-        /// <summary>
-        /// Gets the <see cref="ICakeTaskInfo"/> describing the <see cref="CakeTask"/> that has just been invoked.
-        /// </summary>
-        /// <value>
-        /// The task.
-        /// </value>
+        /// <inheritdoc/>
         public ICakeTaskInfo Task { get; }
     }
 }

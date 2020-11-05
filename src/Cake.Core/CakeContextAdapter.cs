@@ -20,7 +20,7 @@ namespace Cake.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeContextAdapter"/> class.
         /// </summary>
-        /// <param name="context">The Cake Context</param>
+        /// <param name="context">The Cake Context.</param>
         protected CakeContextAdapter(ICakeContext context)
         {
             if (context == null)
@@ -31,78 +31,34 @@ namespace Cake.Core
             _context = context;
         }
 
-        /// <summary>
-        /// Gets the file system.
-        /// </summary>
-        /// <value>
-        /// The file system.
-        /// </value>
-        public IFileSystem FileSystem => _context.FileSystem;
+        /// <inheritdoc/>
+        public virtual IFileSystem FileSystem => _context.FileSystem;
 
-        /// <summary>
-        /// Gets the environment.
-        /// </summary>
-        /// <value>
-        /// The environment.
-        /// </value>
-        public ICakeEnvironment Environment => _context.Environment;
+        /// <inheritdoc/>
+        public virtual ICakeEnvironment Environment => _context.Environment;
 
-        /// <summary>
-        /// Gets the globber.
-        /// </summary>
-        /// <value>
-        /// The globber.
-        /// </value>
-        public IGlobber Globber => _context.Globber;
+        /// <inheritdoc/>
+        public virtual IGlobber Globber => _context.Globber;
 
-        /// <summary>
-        /// Gets the log.
-        /// </summary>
-        /// <value>
-        /// The log.
-        /// </value>
-        public ICakeLog Log => _context.Log;
+        /// <inheritdoc/>
+        public virtual ICakeLog Log => _context.Log;
 
-        /// <summary>
-        /// Gets the arguments.
-        /// </summary>
-        /// <value>
-        /// The arguments.
-        /// </value>
-        public ICakeArguments Arguments => _context.Arguments;
+        /// <inheritdoc/>
+        public virtual ICakeArguments Arguments => _context.Arguments;
 
-        /// <summary>
-        /// Gets the process runner.
-        /// </summary>
-        /// <value>
-        /// The process runner.
-        /// </value>
-        public IProcessRunner ProcessRunner => _context.ProcessRunner;
+        /// <inheritdoc/>
+        public virtual IProcessRunner ProcessRunner => _context.ProcessRunner;
 
-        /// <summary>
-        /// Gets the registry.
-        /// </summary>
-        /// <value>
-        /// The registry.
-        /// </value>
-        public IRegistry Registry => _context.Registry;
+        /// <inheritdoc/>
+        public virtual IRegistry Registry => _context.Registry;
 
-        /// <summary>
-        /// Gets the tool locator.
-        /// </summary>
-        /// <value>
-        /// The tool locator.
-        /// </value>
-        public IToolLocator Tools => _context.Tools;
+        /// <inheritdoc/>
+        public virtual IToolLocator Tools => _context.Tools;
 
-        /// <summary>
-        /// Gets the data context resolver.
-        /// </summary>
-        public ICakeDataResolver Data => _context.Data;
+        /// <inheritdoc/>
+        public virtual ICakeDataResolver Data => _context.Data;
 
-        /// <summary>
-        /// Gets the cake configuration.
-        /// </summary>
-        public ICakeConfiguration Configuration => _context.Configuration;
+        /// <inheritdoc/>
+        public virtual ICakeConfiguration Configuration => _context.Configuration;
     }
 }

@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.DotNetCore.VSTest
         /// Gets or sets the filter expression to run test that match.
         /// </summary>
         /// <remarks>
-        /// For more information on filtering support, see https://aka.ms/vstest-filtering
+        /// For more information on filtering support, see https://aka.ms/vstest-filtering.
         /// </remarks>
         public string TestCaseFilter { get; set; }
 

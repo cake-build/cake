@@ -4,18 +4,14 @@ using System.Collections.Generic;
 namespace Cake.Core
 {
     /// <summary>
-    /// Acts as a context providing info about the overall build following its completion
+    /// Acts as a context providing info about the overall build following its completion.
     /// </summary>
     public sealed class SetupContext : CakeContextAdapter, ISetupContext
     {
-        /// <summary>
-        /// Gets target (initiating) task.
-        /// </summary>
+        /// <inheritdoc/>
         public ICakeTaskInfo TargetTask { get;  }
 
-        /// <summary>
-        /// Gets all registered tasks that are going to be executed.
-        /// </summary>
+        /// <inheritdoc/>
         public IReadOnlyCollection<ICakeTaskInfo> TasksToExecute { get; }
 
         /// <summary>

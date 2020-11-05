@@ -36,7 +36,7 @@ namespace Cake.Common.Tools.MSpec
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static void MSpec(this ICakeContext context, string pattern)
+        public static void MSpec(this ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {
@@ -71,7 +71,7 @@ namespace Cake.Common.Tools.MSpec
         /// </code>
         /// </example>
         [CakeMethodAlias]
-        public static void MSpec(this ICakeContext context, string pattern, MSpecSettings settings)
+        public static void MSpec(this ICakeContext context, GlobPattern pattern, MSpecSettings settings)
         {
             if (context == null)
             {

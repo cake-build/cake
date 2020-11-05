@@ -11,7 +11,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Execute
     {
         public FilePath AssemblyPath { get; set; }
 
-        public string Arguments { get; set; }
+        public ProcessArgumentBuilder Arguments { get; set; }
 
         protected override void RunTool()
         {

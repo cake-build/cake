@@ -2,10 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+
 namespace Cake.Core
 {
     /// <summary>
-    /// Represents arguments passed to script.
+    /// Represents arguments passed to the executing script.
     /// </summary>
     public interface ICakeArguments
     {
@@ -19,10 +21,10 @@ namespace Cake.Core
         bool HasArgument(string name);
 
         /// <summary>
-        /// Gets an argument.
+        /// Gets all values for an argument.
         /// </summary>
         /// <param name="name">The argument name.</param>
-        /// <returns>The argument value.</returns>
-        string GetArgument(string name);
+        /// <returns>The argument values.</returns>
+        ICollection<string> GetArguments(string name);
     }
 }

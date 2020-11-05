@@ -94,7 +94,7 @@ namespace Cake.Common.Tools.XUnit
         }
 
         /// <summary>
-        /// Adds a namespace to the settings, to include in test execution.  Namespace should be fully qualified; i.e., MyNameSpace.MySubNamespace
+        /// Adds a namespace to the settings, to include in test execution.  Namespace should be fully qualified; i.e., MyNameSpace.MySubNamespace.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="namespaceToInclude">The namespace to include.</param>
@@ -117,7 +117,7 @@ namespace Cake.Common.Tools.XUnit
         }
 
         /// <summary>
-        /// Adds a class name to the settings, to include in test execution. Class name should be fully qualified; i.e., MyNameSpace.MyClassName
+        /// Adds a class name to the settings, to include in test execution. Class name should be fully qualified; i.e., MyNameSpace.MyClassName.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="classNameToInclude">The class name to include.</param>
@@ -140,7 +140,7 @@ namespace Cake.Common.Tools.XUnit
         }
 
         /// <summary>
-        /// Adds a method name to the settings, to include in test execution. Method name should be fully qualified; i.e., MyNameSpace.MyClassName.MyMethod
+        /// Adds a method name to the settings, to include in test execution. Method name should be fully qualified; i.e., MyNameSpace.MyClassName.MyMethod.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="methodNameToInclude">The method name to include.</param>

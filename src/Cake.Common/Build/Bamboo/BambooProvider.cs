@@ -25,20 +25,10 @@ namespace Cake.Common.Build.Bamboo
             Environment = new BambooEnvironmentInfo(environment);
         }
 
-         /// <summary>
-        /// Gets a value indicating whether the current build is running on Bamboo.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on Bamboo.; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnBamboo => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("bamboo_buildNumber"));
 
-        /// <summary>
-        /// Gets the Bamboo environment.
-        /// </summary>
-        /// <value>
-        /// The Bamboo environment.
-        /// </value>
+        /// <inheritdoc/>
         public BambooEnvironmentInfo Environment { get; }
     }
 }

@@ -2,15 +2,15 @@
 #module nuget:?package=Cake.DotNetTool.Module&version=0.4.0
 
 // Install addins.
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=0.10.1"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=0.10.2"
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=0.10.1"
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.11.1"
 
 // Install tools.
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.4.2"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.7.922"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.5.8"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.5.1"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.7.1"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.7.0"
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.1.2"
@@ -151,7 +151,7 @@ Task("Run-Unit-Tests")
         () => GetFiles("./src/**/*.Tests.csproj"),
         (parameters, project, context) =>
 {
-    foreach(var framework in new[] { "netcoreapp2.0", "netcoreapp3.0", "net461" })
+    foreach(var framework in new[] { "netcoreapp2.0", "netcoreapp3.0", "net461", "net5.0" })
     {
         FilePath testResultsPath = MakeAbsolute(parameters.Paths.Directories.TestResults
                                     .CombineWithFilePath($"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.xml"));
@@ -199,10 +199,6 @@ Task("Copy-Files")
     // Copy icon
     CopyFileToDirectory("./nuspec/cake-medium.png", parameters.Paths.Directories.ArtifactsBinFullFx);
     CopyFileToDirectory("./nuspec/cake-medium.png", parameters.Paths.Directories.ArtifactsBinNetCore);
-
-    // Copy Cake.XML (since publish does not do this anymore)
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp2.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
 Task("Validate-Version")
@@ -212,6 +208,7 @@ Task("Validate-Version")
     var fullFxExe = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx.CombineWithFilePath("Cake.exe"));
     var coreFxExe = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCore.CombineWithFilePath("Cake.dll"));
 
+    context.Information("Testing {0} version...", fullFxExe);
     IEnumerable<string> fullFxOutput;
     var fullFxResult = StartProcess(
          fullFxExe,
@@ -224,9 +221,10 @@ Task("Validate-Version")
      );
     var fullFxVersion = string.Concat(fullFxOutput);
 
+    context.Information("Testing {0} version...", coreFxExe);
     IEnumerable<string> coreFxOutput;
     var coreFxResult = StartProcess(
-         "dotnet",
+         context.Tools.Resolve("dotnet") ?? context.Tools.Resolve("dotnet.exe"),
          new ProcessSettings {
              Arguments = $"\"{coreFxExe}\" --version",
              RedirectStandardOutput = true,
@@ -297,11 +295,11 @@ Task("Create-NuGet-Packages")
     .Does<BuildParameters>((context, parameters) =>
 {
     // Build libraries
-    var projects = GetFiles("./src/**/*.csproj");
+    var projects = GetFiles("./src/*/*.csproj");
     foreach(var project in projects)
     {
         var name = project.GetDirectory().FullPath;
-        if(name.EndsWith("Cake") || name.EndsWith("Tests"))
+        if(name.EndsWith("Cake") || name.EndsWith("Tests") || name.EndsWith("Example"))
         {
             continue;
         }
@@ -571,7 +569,7 @@ Task("Create-Release-Notes")
     GitReleaseManagerCreate(parameters.GitHub.Token, "cake-build", "cake", new GitReleaseManagerCreateSettings {
         Milestone         = parameters.Version.Milestone,
         Name              = parameters.Version.Milestone,
-        Prerelease        = true,
+        Prerelease        = false,
         TargetCommitish   = "main"
     });
 });
@@ -587,33 +585,104 @@ Task("Prepare-Integration-Tests")
    CopyDirectory(parameters.Paths.Directories.ArtifactsBinNetCore, parameters.Paths.Directories.IntegrationTestsBinNetCore);
 });
 
+Task("Frosting-Integration-Tests")
+    .DeferOnError()
+    .DoesForEach<BuildParameters, (string Framework, FilePath Project)>(
+        (parameters, context) => {
+            var project = context.MakeAbsolute(
+                new FilePath("tests/integration/Cake.Frosting/build/Build.csproj")
+            );
+
+            DotNetCoreBuild(project.FullPath,
+                new DotNetCoreBuildSettings
+                {
+                    Verbosity = DotNetCoreVerbosity.Quiet,
+                    Configuration = parameters.Configuration,
+                    MSBuildSettings = parameters.MSBuildSettings
+                });
+
+            context.Verbose("Peeking into {0}...", project);
+
+            var targetFrameworks = context.XmlPeek(
+                project,
+                "/Project/PropertyGroup/TargetFrameworks"
+            );
+
+            return targetFrameworks?.Split(';')
+                    .Where(targetFramework => context.IsRunningOnWindows()
+                                                || !targetFramework.StartsWith("net4", StringComparison.OrdinalIgnoreCase))
+                    .Select(targetFramework => (targetFramework, project))
+                    .ToArray();
+        },
+        (parameters, test, context) =>
+{
+    try
+    {
+        Information("Testing: {0}", test.Framework);
+
+        DotNetCoreRun(test.Project.FullPath,
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--verbosity", "=", "quiet"),
+            new DotNetCoreRunSettings
+            {
+                Configuration = parameters.Configuration,
+                Framework = test.Framework,
+                NoRestore = true,
+                NoBuild = true
+            });
+    }
+    catch(Exception ex)
+    {
+        Error("While testing: {0}\r\n{1}", test.Framework, ex);
+        throw new Exception($"Exception while testing: {test.Framework}", ex);
+    }
+    finally
+    {
+        Information("Done testing: {0}", test.Framework);
+    }
+});
 Task("Run-Integration-Tests")
     .IsDependentOn("Prepare-Integration-Tests")
+    .IsDependentOn("Frosting-Integration-Tests")
     .DeferOnError()
     .DoesForEach<BuildParameters, FilePath>(
         parameters => new[] {
             GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp2.1/**/Cake.dll").Single(),
             GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp3.0/**/Cake.dll").Single(),
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net5.0/**/Cake.dll").Single(),
             parameters.Paths.Directories.IntegrationTestsBinFullFx.CombineWithFilePath("Cake.exe"),
             parameters.Paths.Directories.IntegrationTestsBinNetCore.CombineWithFilePath("Cake.dll")
         },
         (parameters, cakeAssembly, context) =>
 {
-    Information("Testing: {0}", cakeAssembly);
-    CakeExecuteScript("./tests/integration/build.cake",
-        new CakeSettings {
-            ToolPath = cakeAssembly,
-            EnvironmentVariables = {
-                ["MyEnvironmentVariable"] = "Hello World",
-                ["CAKE_INTEGRATION_TEST_ROOT"] = "../.."
-            },
-            Arguments = {
-                ["target"] = Argument("integration-tests-target", "Run-All-Tests"),
-                ["verbosity"] = "quiet",
-                ["platform"] = parameters.IsRunningOnWindows ? "windows" : "posix",
-                ["customarg"] = "hello"
-            }
-    });
+    try
+    {
+        Information("Testing: {0}", cakeAssembly);
+        CakeExecuteScript("./tests/integration/build.cake",
+            new CakeSettings {
+                ToolPath = cakeAssembly,
+                EnvironmentVariables = {
+                    ["MyEnvironmentVariable"] = "Hello World",
+                    ["CAKE_INTEGRATION_TEST_ROOT"] = "../.."
+                },
+                ArgumentCustomization = args => args
+                    .AppendSwitchQuoted("--target", " ", Argument("integration-tests-target", "Run-All-Tests"))
+                    .AppendSwitchQuoted("--verbosity", " ", "quiet")
+                    .AppendSwitchQuoted("--platform", " ", parameters.IsRunningOnWindows ? "windows" : "posix")
+                    .AppendSwitchQuoted("--customarg", " ", "hello")
+                    .AppendSwitchQuoted("--multipleargs", "=", "a")
+                    .AppendSwitchQuoted("--multipleargs", "=", "b")
+            });
+    }
+    catch(Exception ex)
+    {
+        Error("While testing: {0}\r\n{1}", cakeAssembly, ex);
+        throw new Exception($"Exception while testing: {cakeAssembly}", ex);
+    }
+    finally
+    {
+        Information("Done testing: {0}", cakeAssembly);
+    }
 });
 
 

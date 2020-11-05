@@ -74,7 +74,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The tag information for the build.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -93,7 +93,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)
@@ -120,7 +120,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// <value>
         ///   The commit information for the build.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
@@ -147,7 +147,7 @@ namespace Cake.Common.Build.AppVeyor.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via AppVeyor</para>
+        /// <para>Via AppVeyor.</para>
         /// <example>
         /// <code>
         /// if (AppVeyor.IsRunningOnAppVeyor)

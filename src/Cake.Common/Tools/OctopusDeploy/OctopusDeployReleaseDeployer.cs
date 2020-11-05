@@ -33,12 +33,12 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <summary>
         /// Requests a deployment of a specified release to an environment.
         /// </summary>
-        /// <param name="server">Octopus Server URL</param>
-        /// <param name="apiKey">The user's API key</param>
-        /// <param name="projectName">Name of the target project</param>
-        /// <param name="deployTo">Environment to deploy to, e.g., Production</param>
-        /// <param name="releaseNumber">Release number to be deployed to</param>
-        /// <param name="settings">Settings for the deployment</param>
+        /// <param name="server">Octopus Server URL.</param>
+        /// <param name="apiKey">The user's API key.</param>
+        /// <param name="projectName">Name of the target project.</param>
+        /// <param name="deployTo">Environment to deploy to, e.g., Production.</param>
+        /// <param name="releaseNumber">Release number to be deployed to.</param>
+        /// <param name="settings">Settings for the deployment.</param>
         public void DeployRelease(string server, string apiKey, string projectName, string deployTo, string releaseNumber, OctopusDeployReleaseDeploymentSettings settings)
         {
             if (String.IsNullOrEmpty(server))

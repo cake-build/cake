@@ -26,7 +26,7 @@ namespace Cake.Common.Build.TeamCity
         /// <value>
         /// The TeamCity environment.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
@@ -47,7 +47,7 @@ namespace Cake.Common.Build.TeamCity
         /// }
         /// </code>
         /// </example>
-        /// <para>Via TeamCity</para>
+        /// <para>Via TeamCity.</para>
         /// <example>
         /// <code>
         /// if (TeamCity.IsRunningOnTeamCity)
@@ -73,9 +73,9 @@ namespace Cake.Common.Build.TeamCity
         /// <summary>
         /// Report a build problem to TeamCity.
         /// </summary>
-        /// <param name="description">Description of build problem.</param>
-        /// <param name="identity">Build identity.</param>
-        void BuildProblem(string description, string identity);
+        /// <param name="description">A human-readable plain text describing the build problem. By default, the description appears in the build status text and in the list of build's problems. The text is limited to 4000 symbols, and will be truncated if the limit is exceeded.</param>
+        /// <param name="identity">A unique problem ID (optional). Different problems must have different identity, same problems - same identity, which should not change throughout builds if the same problem, for example, the same compilation error occurs. It must be a valid Java ID up to 60 characters. If omitted, the identity is calculated based on the description text.</param>
+        void BuildProblem(string description, string identity = null);
 
         /// <summary>
         /// Tell TeamCity to import data of a given type.
@@ -104,7 +104,7 @@ namespace Cake.Common.Build.TeamCity
         void SetBuildNumber(string buildNumber);
 
         /// <summary>
-        /// Tells TeamCity to set a named parameter with a given value
+        /// Tells TeamCity to set a named parameter with a given value.
         /// </summary>
         /// <param name="parameterName">The name of the parameter to set.</param>
         /// <param name="parameterValue">The value to set for the named parameter.</param>

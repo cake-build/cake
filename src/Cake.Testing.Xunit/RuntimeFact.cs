@@ -19,7 +19,7 @@ namespace Cake.Testing.Xunit
             else if (runtime.HasFlag(TestRuntime.CoreClr)
             && EnvironmentHelper.GetRuntime() != Runtime.CoreClr)
             {
-                Skip = ".NET Core 2 test.";
+                Skip = ".NET Core test.";
             }
         }
     }

@@ -17,7 +17,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The application.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Bitrise.IsRunningOnBitrise)
@@ -38,7 +38,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Bitrise</para>
+        /// <para>Via Bitrise.</para>
         /// <example>
         /// <code>
         /// if (Bitrise.IsRunningOnBitrise)
@@ -67,7 +67,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The build.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Bitrise.IsRunningOnBitrise)
@@ -92,7 +92,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Bitrise</para>
+        /// <para>Via Bitrise.</para>
         /// <example>
         /// <code>
         /// if (Bitrise.IsRunningOnBitrise)
@@ -125,7 +125,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The Bitrise pull request information.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Bitrise.IsRunningOnBitrise)
@@ -144,7 +144,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Bitrise</para>
+        /// <para>Via Bitrise.</para>
         /// <example>
         /// <code>
         /// if (Bitrise.IsRunningOnBitrise)
@@ -171,7 +171,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The directory.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Bitrise.IsRunningOnBitrise)
@@ -190,7 +190,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Bitrise</para>
+        /// <para>Via Bitrise.</para>
         /// <example>
         /// <code>
         /// if (Bitrise.IsRunningOnBitrise)
@@ -217,7 +217,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The provisioning.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Bitrise.IsRunningOnBitrise)
@@ -238,7 +238,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Bitrise</para>
+        /// <para>Via Bitrise.</para>
         /// <example>
         /// <code>
         /// if (Bitrise.IsRunningOnBitrise)
@@ -267,7 +267,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The repository.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Bitrise.IsRunningOnBitrise)
@@ -292,7 +292,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Bitrise</para>
+        /// <para>Via Bitrise.</para>
         /// <example>
         /// <code>
         /// if (Bitrise.IsRunningOnBitrise)
@@ -325,7 +325,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// <value>
         /// The workflow.
         /// </value>
-        /// <para>Via BuildSystem</para>
+        /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
         /// if (BuildSystem.Bitrise.IsRunningOnBitrise)
@@ -344,7 +344,7 @@ namespace Cake.Common.Build.Bitrise.Data
         /// }
         /// </code>
         /// </example>
-        /// <para>Via Bitrise</para>
+        /// <para>Via Bitrise.</para>
         /// <example>
         /// <code>
         /// if (Bitrise.IsRunningOnBitrise)

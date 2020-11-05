@@ -29,10 +29,7 @@ namespace Cake.Core
             _console = console;
         }
 
-        /// <summary>
-        /// Writes the specified report to a target.
-        /// </summary>
-        /// <param name="report">The report to write.</param>
+        /// <inheritdoc/>
         public void Write(CakeReport report)
         {
             if (report == null)

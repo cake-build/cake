@@ -5,7 +5,7 @@
 namespace Cake.Common.Tools.DotNetCore
 {
     /// <summary>
-    /// Contains the verbosity of logging to use..
+    /// Contains the verbosity of logging to use.
     /// </summary>
     public enum DotNetCoreVerbosity
     {

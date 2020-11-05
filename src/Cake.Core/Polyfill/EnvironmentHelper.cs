@@ -92,8 +92,8 @@ namespace Cake.Core.Polyfill
 #if NETCORE
             if (_isCoreClr == null)
             {
-                _isCoreClr = RuntimeInformation.FrameworkDescription.StartsWith(".NET Core")
-                                || RuntimeInformation.FrameworkDescription.StartsWith(".NET 5");
+                _isCoreClr = Environment.Version.Major >= 5
+                             || RuntimeInformation.FrameworkDescription.StartsWith(".NET Core");
             }
             return _isCoreClr.Value;
 #else
@@ -110,6 +110,16 @@ namespace Cake.Core.Polyfill
         {
             return family == PlatformFamily.Linux
                    || family == PlatformFamily.OSX;
+        }
+
+        public static bool IsOSX(PlatformFamily family)
+        {
+            return family == PlatformFamily.OSX;
+        }
+
+        public static bool IsLinux(PlatformFamily family)
+        {
+            return family == PlatformFamily.Linux;
         }
 
         public static Runtime GetRuntime()
@@ -129,7 +139,15 @@ namespace Cake.Core.Polyfill
                 return netCoreAppFramwork;
             }
 
-            var assemblyPath = typeof(System.Runtime.GCSettings)?.GetTypeInfo()?.Assembly?.CodeBase;
+            var assemblyPath = typeof(System.Runtime.GCSettings)?.GetTypeInfo()
+                ?.Assembly
+#if NET5_0
+                ?.Location;
+#else
+#pragma warning disable 0618
+                ?.CodeBase;
+#pragma warning restore 0618
+#endif
             if (string.IsNullOrEmpty(assemblyPath))
             {
                 return NetStandardFramework;

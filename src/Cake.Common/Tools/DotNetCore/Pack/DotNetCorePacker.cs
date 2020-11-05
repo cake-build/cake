@@ -85,6 +85,12 @@ namespace Cake.Common.Tools.DotNetCore.Pack
                 builder.Append("--no-restore");
             }
 
+            // No Logo
+            if (settings.NoLogo)
+            {
+                builder.Append("--nologo");
+            }
+
             // Include symbols
             if (settings.IncludeSymbols)
             {

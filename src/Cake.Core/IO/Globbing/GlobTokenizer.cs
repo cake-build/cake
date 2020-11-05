@@ -13,9 +13,9 @@ namespace Cake.Core.IO.Globbing
 {
     internal static class GlobTokenizer
     {
-        public static GlobTokenBuffer Tokenize(string input)
+        public static GlobTokenBuffer Tokenize(GlobPattern input)
         {
-            return Tokenize(new StringReader(input));
+            return Tokenize(new StringReader(input.Pattern));
         }
 
         private static GlobTokenBuffer Tokenize(StringReader reader)

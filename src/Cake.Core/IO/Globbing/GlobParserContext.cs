@@ -12,12 +12,12 @@ namespace Cake.Core.IO.Globbing
     {
         private readonly GlobTokenBuffer _buffer;
 
-        public string Pattern { get; }
+        public GlobPattern Pattern { get; }
         public int TokenCount => _buffer.Count;
         public GlobToken CurrentToken { get; private set; }
         public RegexOptions Options { get; }
 
-        public GlobParserContext(string pattern, GlobTokenBuffer buffer, bool caseSensitive)
+        public GlobParserContext(GlobPattern pattern, GlobTokenBuffer buffer, bool caseSensitive)
         {
             _buffer = buffer;
 

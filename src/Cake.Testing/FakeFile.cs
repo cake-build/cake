@@ -16,32 +16,16 @@ namespace Cake.Testing
     {
         private readonly FakeFileSystemTree _tree;
 
-        /// <summary>
-        /// Gets the path to the file.
-        /// </summary>
-        /// <value>The path.</value>
+        /// <inheritdoc/>
         public FilePath Path { get; }
 
-        /// <summary>
-        /// Gets the path to the file.
-        /// </summary>
-        /// <value>The path.</value>
+        /// <inheritdoc/>
         Path IFileSystemInfo.Path => Path;
 
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> exists.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the entry exists; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool Exists { get; internal set; }
 
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> is hidden.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the entry is hidden; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool Hidden { get; internal set; }
 
         /// <summary>
@@ -50,18 +34,10 @@ namespace Cake.Testing
         /// <value>The last write time.</value>
         public DateTime LastWriteTime { get; internal set; }
 
-        /// <summary>
-        /// Gets the length of the file.
-        /// </summary>
-        /// <value>
-        /// The length of the file.
-        /// </value>
+        /// <inheritdoc/>
         public long Length { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the file attributes.
-        /// </summary>
-        /// <value>The file attributes.</value>
+        /// <inheritdoc/>
         public FileAttributes Attributes { get; set; }
 
         internal object ContentLock { get; } = new object();
@@ -92,32 +68,19 @@ namespace Cake.Testing
             Hidden = false;
         }
 
-        /// <summary>
-        /// Copies the file to the specified destination path.
-        /// </summary>
-        /// <param name="destination">The destination path.</param>
-        /// <param name="overwrite">Will overwrite existing destination file if set to <c>true</c>.</param>
+        /// <inheritdoc/>
         public void Copy(FilePath destination, bool overwrite)
         {
             _tree.CopyFile(this, destination, overwrite);
         }
 
-        /// <summary>
-        /// Moves the file to the specified destination path.
-        /// </summary>
-        /// <param name="destination">The destination path.</param>
+        /// <inheritdoc/>
         public void Move(FilePath destination)
         {
             _tree.MoveFile(this, destination);
         }
 
-        /// <summary>
-        /// Opens the file using the specified options.
-        /// </summary>
-        /// <param name="fileMode">The file mode.</param>
-        /// <param name="fileAccess">The file access.</param>
-        /// <param name="fileShare">The file share.</param>
-        /// <returns>A <see cref="Stream" /> to the file.</returns>
+        /// <inheritdoc/>
         public Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
         {
             bool fileWasCreated;
@@ -129,9 +92,7 @@ namespace Cake.Testing
             return new FakeFileStream(this) { Position = position };
         }
 
-        /// <summary>
-        /// Deletes the file.
-        /// </summary>
+        /// <inheritdoc/>
         public void Delete()
         {
             _tree.DeleteFile(this);

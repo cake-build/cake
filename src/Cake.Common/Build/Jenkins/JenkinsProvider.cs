@@ -25,20 +25,10 @@ namespace Cake.Common.Build.Jenkins
             Environment = new JenkinsEnvironmentInfo(_environment);
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is running on jenkins.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is running on jenkins; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnJenkins => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("JENKINS_URL"));
 
-        /// <summary>
-        /// Gets the Jenkins environment.
-        /// </summary>
-        /// <value>
-        /// The Jenkins environment.
-        /// </value>
+        /// <inheritdoc/>
         public JenkinsEnvironmentInfo Environment { get; }
     }
 }

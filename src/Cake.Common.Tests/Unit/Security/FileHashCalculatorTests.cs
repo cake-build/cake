@@ -18,8 +18,9 @@ namespace Cake.Common.Tests.Unit.Security
             public void Should_Throw_If_File_Path_Is_Null()
             {
                 // Given
+                var hashAlgorithmBuilder = Substitute.For<IHashAlgorithmBuilder>();
                 var fileSystem = Substitute.For<IFileSystem>();
-                var calculator = new FileHashCalculator(fileSystem);
+                var calculator = new FileHashCalculator(fileSystem, hashAlgorithmBuilder);
 
                 // When
                 var result = Record.Exception(() => calculator.Calculate(null, HashAlgorithm.MD5));
@@ -32,12 +33,13 @@ namespace Cake.Common.Tests.Unit.Security
             public void Should_Throw_If_File_Does_Not_Exist()
             {
                 // Given
+                var hashAlgorithmBuilder = Substitute.For<IHashAlgorithmBuilder>();
                 var fileSystem = Substitute.For<IFileSystem>();
                 var file = Substitute.For<IFile>();
                 file.Exists.Returns(false);
                 fileSystem.GetFile(Arg.Any<FilePath>()).Returns(file);
 
-                var calculator = new FileHashCalculator(fileSystem);
+                var calculator = new FileHashCalculator(fileSystem, hashAlgorithmBuilder);
 
                 // When
                 var result = Record.Exception(() => calculator.Calculate("./non-existent-path", HashAlgorithm.MD5));

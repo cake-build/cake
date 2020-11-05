@@ -13,7 +13,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.NuGet.Sources
 {
     /// <summary>
-    /// The NuGet sources is used to work with user config feeds &amp; credentials
+    /// The NuGet sources is used to work with user config feeds &amp; credentials.
     /// </summary>
     public sealed class NuGetSources : NuGetTool<NuGetSourcesSettings>
     {
@@ -35,7 +35,7 @@ namespace Cake.Common.Tools.NuGet.Sources
         }
 
         /// <summary>
-        /// Adds NuGet package source using the specified settings to global user config
+        /// Adds NuGet package source using the specified settings to global user config.
         /// </summary>
         /// <param name="name">Name of the source.</param>
         /// <param name="source">Path to the package(s) source.</param>
@@ -73,7 +73,7 @@ namespace Cake.Common.Tools.NuGet.Sources
         }
 
         /// <summary>
-        /// Remove specified NuGet package source
+        /// Remove specified NuGet package source.
         /// </summary>
         /// <param name="name">Name of the source.</param>
         /// <param name="source">Path to the package(s) source.</param>

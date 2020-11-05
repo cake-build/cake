@@ -100,7 +100,7 @@ namespace Cake.Common.IO
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Copy")]
-        public static void CopyFiles(this ICakeContext context, string pattern, DirectoryPath targetDirectoryPath)
+        public static void CopyFiles(this ICakeContext context, GlobPattern pattern, DirectoryPath targetDirectoryPath)
         {
             FileCopier.CopyFiles(context, pattern, targetDirectoryPath, false);
         }
@@ -166,7 +166,7 @@ namespace Cake.Common.IO
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Copy")]
-        public static void CopyFiles(this ICakeContext context, string pattern, DirectoryPath targetDirectoryPath, bool preserveFolderStructure)
+        public static void CopyFiles(this ICakeContext context, GlobPattern pattern, DirectoryPath targetDirectoryPath, bool preserveFolderStructure)
         {
             FileCopier.CopyFiles(context, pattern, targetDirectoryPath, preserveFolderStructure);
         }
@@ -251,7 +251,7 @@ namespace Cake.Common.IO
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Move")]
-        public static void MoveFiles(this ICakeContext context, string pattern, DirectoryPath targetDirectoryPath)
+        public static void MoveFiles(this ICakeContext context, GlobPattern pattern, DirectoryPath targetDirectoryPath)
         {
             FileMover.MoveFiles(context, pattern, targetDirectoryPath);
         }
@@ -305,7 +305,7 @@ namespace Cake.Common.IO
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Delete")]
-        public static void DeleteFiles(this ICakeContext context, string pattern)
+        public static void DeleteFiles(this ICakeContext context, GlobPattern pattern)
         {
             FileDeleter.DeleteFiles(context, pattern);
         }

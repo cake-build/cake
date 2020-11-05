@@ -1,4 +1,5 @@
-﻿public TOut Generic_ExtensionMethodWithGenericReturnValueAndTypeParamConstraints<TIn, TOut>(TIn arg)
+﻿[System.Diagnostics.DebuggerStepThrough]
+public TOut Generic_ExtensionMethodWithGenericReturnValueAndTypeParamConstraints<TIn, TOut>(TIn arg)
 where TIn : class, new()
 where TOut : System.Collections.ArrayList, System.IDisposable
 {

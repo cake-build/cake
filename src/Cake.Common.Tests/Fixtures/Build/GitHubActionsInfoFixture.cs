@@ -26,9 +26,11 @@ namespace Cake.Common.Tests.Fixtures.Build
 
             Environment.GetEnvironmentVariable("GITHUB_ACTION").Returns("run1");
             Environment.GetEnvironmentVariable("GITHUB_ACTOR").Returns("dependabot");
+            Environment.GetEnvironmentVariable("GITHUB_API_URL").Returns("https://api.github.com");
             Environment.GetEnvironmentVariable("GITHUB_BASE_REF").Returns("master");
             Environment.GetEnvironmentVariable("GITHUB_EVENT_NAME").Returns("pull_request");
             Environment.GetEnvironmentVariable("GITHUB_EVENT_PATH").Returns("/home/runner/work/_temp/_github_workflow/event.json");
+            Environment.GetEnvironmentVariable("GITHUB_GRAPHQL_URL").Returns("https://api.github.com/graphql");
             Environment.GetEnvironmentVariable("GITHUB_HEAD_REF").Returns("dependabot/nuget/Microsoft.SourceLink.GitHub-1.0.0");
             Environment.GetEnvironmentVariable("GITHUB_JOB").Returns("job");
             Environment.GetEnvironmentVariable("GITHUB_REF").Returns("refs/pull/1/merge");
@@ -36,6 +38,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("GITHUB_REPOSITORY_OWNER").Returns("cake-build");
             Environment.GetEnvironmentVariable("GITHUB_RUN_ID").Returns("34058136");
             Environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER").Returns("60");
+            Environment.GetEnvironmentVariable("GITHUB_SERVER_URL").Returns("https://github.com");
             Environment.GetEnvironmentVariable("GITHUB_SHA").Returns("d1e4f990f57349334368c8253382abc63be02d73");
             Environment.GetEnvironmentVariable("GITHUB_WORKFLOW").Returns("Build");
             Environment.GetEnvironmentVariable("GITHUB_WORKSPACE").Returns("/home/runner/work/cake/cake");

@@ -10,7 +10,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.OctopusDeploy
 {
     /// <summary>
-    /// The Octopus Deploy release creator runner
+    /// The Octopus Deploy release creator runner.
     /// </summary>
     public sealed class OctopusDeployReleaseCreator : OctopusDeployTool<CreateReleaseSettings>
     {
@@ -31,10 +31,10 @@ namespace Cake.Common.Tools.OctopusDeploy
         }
 
         /// <summary>
-        /// Creates a release for the specified project in OctopusDeploy
+        /// Creates a release for the specified project in OctopusDeploy.
         /// </summary>
-        /// <param name="projectName">The target project name</param>
-        /// <param name="settings">The settings</param>
+        /// <param name="projectName">The target project name.</param>
+        /// <param name="settings">The settings.</param>
         public void CreateRelease(string projectName, CreateReleaseSettings settings)
         {
             if (projectName == null)

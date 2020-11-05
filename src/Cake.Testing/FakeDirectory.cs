@@ -18,20 +18,10 @@ namespace Cake.Testing
     {
         private readonly FakeFileSystemTree _tree;
 
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> exists.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the entry exists; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool Exists { get; internal set; }
 
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="IFileSystemInfo" /> is hidden.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the entry is hidden; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool Hidden { get; internal set; }
 
         /// <summary>
@@ -40,16 +30,10 @@ namespace Cake.Testing
         /// <value>The last write time.</value>
         public DateTime LastWriteTime { get; internal set; }
 
-        /// <summary>
-        /// Gets the path to the directory.
-        /// </summary>
-        /// <value>The path.</value>
+        /// <inheritdoc/>
         public DirectoryPath Path { get; }
 
-        /// <summary>
-        /// Gets the path to the entry.
-        /// </summary>
-        /// <value>The path.</value>
+        /// <inheritdoc/>
         Path IFileSystemInfo.Path => Path;
 
         internal FakeDirectory Parent { get; set; }
@@ -63,38 +47,25 @@ namespace Cake.Testing
             Content = new FakeDirectoryContent(this, tree.Comparer);
         }
 
-        /// <summary>
-        /// Creates the directory.
-        /// </summary>
+        /// <inheritdoc/>
         public void Create()
         {
             _tree.CreateDirectory(this);
         }
 
-        /// <summary>
-        /// Moves the directory to the specified destination path.
-        /// </summary>
-        /// <param name="destination">The destination path.</param>
+        /// <inheritdoc/>
         public void Move(DirectoryPath destination)
         {
             _tree.MoveDirectory(this, destination);
         }
 
-        /// <summary>
-        /// Deletes the directory.
-        /// </summary>
-        /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
+        /// <inheritdoc/>
         public void Delete(bool recursive)
         {
             _tree.DeleteDirectory(this, recursive);
         }
 
-        /// <summary>
-        /// Gets directories matching the specified filter and scope.
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <param name="scope">The search scope.</param>
-        /// <returns>Directories matching the filter and scope.</returns>
+        /// <inheritdoc/>
         public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope)
         {
             var result = new List<IDirectory>();
@@ -137,12 +108,7 @@ namespace Cake.Testing
             return result;
         }
 
-        /// <summary>
-        /// Gets files matching the specified filter and scope.
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <param name="scope">The search scope.</param>
-        /// <returns>Files matching the specified filter and scope.</returns>
+        /// <inheritdoc/>
         public IEnumerable<IFile> GetFiles(string filter, SearchScope scope)
         {
             var result = new List<IFile>();

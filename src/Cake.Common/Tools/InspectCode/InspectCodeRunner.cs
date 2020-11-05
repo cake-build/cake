@@ -15,7 +15,7 @@ using Cake.Core.Tooling;
 namespace Cake.Common.Tools.InspectCode
 {
     /// <summary>
-    /// InspectCode runner
+    /// InspectCode runner.
     /// </summary>
     public sealed class InspectCodeRunner : Tool<InspectCodeSettings>
     {

@@ -37,7 +37,7 @@ namespace Cake.Common.Build.Bamboo.Data
         public string Scm => GetEnvironmentString("bamboo_planRepository_type");
 
         /// <summary>
-        /// Gets the repository name as named in Bamboo
+        /// Gets the repository name as named in Bamboo.
         /// </summary>
         /// <value>
         ///   The bamboo repository name.
