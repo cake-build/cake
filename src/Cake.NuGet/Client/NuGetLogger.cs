@@ -8,7 +8,7 @@ using Cake.Core.Diagnostics;
 using NuGet.Common;
 using LogLevel = NuGet.Common.LogLevel;
 
-namespace Cake.NuGet.Install
+namespace Cake.NuGet
 {
     internal sealed class NuGetLogger : ILogger
     {

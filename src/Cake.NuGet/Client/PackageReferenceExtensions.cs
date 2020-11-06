@@ -6,7 +6,7 @@ using System.Linq;
 using Cake.Core.Configuration;
 using Cake.Core.Packaging;
 
-namespace Cake.NuGet.Install.Extensions
+namespace Cake.NuGet
 {
     internal static class PackageReferenceExtensions
     {

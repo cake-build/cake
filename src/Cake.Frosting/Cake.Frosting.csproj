@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
+    <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

@@ -53,7 +53,6 @@ namespace Cake.NuGet.Tests.Unit
             {
                 // Given
                 var fixture = new NuGetModuleFixture<NuGetLoadDirectiveProvider>();
-                fixture.Configuration.SetValue(Constants.NuGet.UseInProcessClient, bool.TrueString);
                 var module = fixture.CreateModule();
 
                 // When
@@ -65,29 +64,11 @@ namespace Cake.NuGet.Tests.Unit
                 fixture.Builder.Received(1).Singleton();
             }
 
-            [RuntimeFact(TestRuntime.CoreClr)]
-            public void Should_Not_Register_The_NuGet_Load_Directive_Provider_When_Not_Using_In_Process_Client()
-            {
-                // Given
-                var fixture = new NuGetModuleFixture<NuGetLoadDirectiveProvider>();
-                fixture.Configuration.SetValue(Constants.NuGet.UseInProcessClient, bool.FalseString);
-                var module = fixture.CreateModule();
-
-                // When
-                module.Register(fixture.Registrar);
-
-                // Then
-                fixture.Registrar.Received(0).RegisterType<NuGetLoadDirectiveProvider>();
-                fixture.Builder.Received(0).As<ILoadDirectiveProvider>();
-                fixture.Builder.Received(0).Singleton();
-            }
-
             [Fact]
             public void Should_Register_The_NuGet_Package_Installer()
             {
                 // Given
                 var fixture = new NuGetModuleFixture<NuGetPackageInstaller>();
-                fixture.Configuration.SetValue(Constants.NuGet.UseInProcessClient, bool.FalseString);
                 var module = fixture.CreateModule();
 
                 // When
@@ -95,29 +76,6 @@ namespace Cake.NuGet.Tests.Unit
 
                 // Then
                 fixture.Registrar.Received(1).RegisterType<NuGetPackageInstaller>();
-                fixture.Builder.Received(1).As<INuGetPackageInstaller>();
-                fixture.Builder.Received(1).As<IPackageInstaller>();
-                fixture.Builder.Received(1).Singleton();
-            }
-
-            [Theory]
-            [InlineData(true)]
-            [InlineData(null)]
-            public void Should_Register_The_In_Process_NuGet_Package_Installer_If_Set_In_Configuration(bool? config)
-            {
-                // Given
-                var fixture = new NuGetModuleFixture<Install.NuGetPackageInstaller>();
-                if (config.HasValue)
-                {
-                    fixture.Configuration.SetValue(Constants.NuGet.UseInProcessClient, config.Value ? bool.TrueString : bool.FalseString);
-                }
-                var module = fixture.CreateModule();
-
-                // When
-                module.Register(fixture.Registrar);
-
-                // Then
-                fixture.Registrar.Received(1).RegisterType<Install.NuGetPackageInstaller>();
                 fixture.Builder.Received(1).As<INuGetPackageInstaller>();
                 fixture.Builder.Received(1).As<IPackageInstaller>();
                 fixture.Builder.Received(1).Singleton();
