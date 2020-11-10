@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core.IO;
 
 namespace Cake.Frosting.Internal
@@ -12,9 +13,7 @@ namespace Cake.Frosting.Internal
 
         public WorkingDirectory(DirectoryPath path)
         {
-            Guard.ArgumentNotNull(path, nameof(path));
-
-            Path = path;
+            Path = path ?? throw new ArgumentNullException(nameof(path));
         }
     }
 }

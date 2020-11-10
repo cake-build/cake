@@ -1,4 +1,4 @@
-﻿using Cake.Features.Introspection;
+﻿using Cake.Cli;
 
 namespace Cake.Tests.Fakes
 {

@@ -21,6 +21,7 @@
 
   <!-- Project references -->
   <ItemGroup>
+    <ProjectReference Include="..\Cake.Cli\Cake.Cli.csproj" />
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
     <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />
@@ -32,6 +33,5 @@
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="5.0.0" />
     <PackageReference Include="Autofac" Version="6.0.0" />
-    <PackageReference Include="Spectre.Cli" Version="0.45.0" />
   </ItemGroup>
 </Project>

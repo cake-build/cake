@@ -4,25 +4,21 @@
 
 using Cake.Core;
 
-namespace Cake.Frosting.Tests.Fakes
+namespace Cake.Frosting.Tests
 {
     public sealed class FakeLifetime : FrostingLifetime
     {
-        public bool CalledSetup { get; private set; }
-        public bool CalledTeardown { get; private set; }
+        public int SetupCount { get; set; }
+        public int TeardownCount { get; set; }
 
         public override void Setup(ICakeContext context)
         {
-            CalledSetup = true;
+            SetupCount++;
         }
 
         public override void Teardown(ICakeContext context, ITeardownContext info)
         {
-            CalledTeardown = true;
-        }
-
-        public sealed class WithoutOverrides : FrostingLifetime
-        {
+            TeardownCount++;
         }
     }
 }

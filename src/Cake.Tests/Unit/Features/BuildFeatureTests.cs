@@ -1,6 +1,7 @@
 ﻿using System;
+using Cake.Cli;
+using Cake.Core;
 using Cake.Features.Building;
-using Cake.Features.Building.Hosts;
 using Cake.Tests.Fixtures;
 using Xunit;
 

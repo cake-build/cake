@@ -5,15 +5,26 @@ using System.Threading.Tasks;
 
 namespace Cake.Core.Diagnostics
 {
-    internal sealed class CakeDebugger : ICakeDebugger
+    /// <summary>
+    /// The Cake debugger.
+    /// </summary>
+    public sealed class CakeDebugger : ICakeDebugger
     {
         private readonly ICakeLog _log;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeDebugger"/> class.
+        /// </summary>
+        /// <param name="log">The log.</param>
         public CakeDebugger(ICakeLog log)
         {
             _log = log;
         }
 
+        /// <summary>
+        /// Waits for a debugger to attach.
+        /// </summary>
+        /// <param name="timeout">The timeout.</param>
         public void WaitForAttach(TimeSpan timeout)
         {
             var processId = Process.GetCurrentProcess().Id;

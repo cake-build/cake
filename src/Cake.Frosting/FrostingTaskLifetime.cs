@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
 using Cake.Core;
-using Cake.Frosting.Internal;
 
 namespace Cake.Frosting
 {
@@ -19,7 +17,7 @@ namespace Cake.Frosting
     /// <summary>
     /// Base class for the lifetime for a task.
     /// </summary>
-    /// <typeparam name="TContext">The build script context type.</typeparam>
+    /// <typeparam name="TContext">The build context type.</typeparam>
     /// <seealso cref="ICakeContext" />
     public abstract class FrostingTaskLifetime<TContext> : IFrostingTaskLifetime
         where TContext : ICakeContext
@@ -30,9 +28,7 @@ namespace Cake.Frosting
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="info">The setup information.</param>
-        public virtual void Setup(TContext context, ITaskSetupContext info)
-        {
-        }
+        public abstract void Setup(TContext context, ITaskSetupContext info);
 
         /// <summary>
         /// This method is executed after each task have been run.
@@ -40,24 +36,36 @@ namespace Cake.Frosting
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="info">The teardown information.</param>
-        public virtual void Teardown(TContext context, ITaskTeardownContext info)
-        {
-        }
+        public abstract void Teardown(TContext context, ITaskTeardownContext info);
 
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Explicit implementation.")]
-        void IFrostingTaskLifetime.Setup(ICakeContext context, ITaskSetupContext info)
+        /// <inheritdoc/>
+        void IFrostingTaskSetup.Setup(ICakeContext context, ITaskSetupContext info)
         {
-            Guard.ArgumentNotNull(context, nameof(context));
-            Guard.ArgumentNotNull(info, nameof(info));
+            if (context is null)
+            {
+                throw new System.ArgumentNullException(nameof(context));
+            }
+
+            if (info is null)
+            {
+                throw new System.ArgumentNullException(nameof(info));
+            }
 
             Setup((TContext)context, info);
         }
 
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Explicit implementation.")]
-        void IFrostingTaskLifetime.Teardown(ICakeContext context, ITaskTeardownContext info)
+        /// <inheritdoc/>
+        void IFrostingTaskTeardown.Teardown(ICakeContext context, ITaskTeardownContext info)
         {
-            Guard.ArgumentNotNull(context, nameof(context));
-            Guard.ArgumentNotNull(info, nameof(info));
+            if (context is null)
+            {
+                throw new System.ArgumentNullException(nameof(context));
+            }
+
+            if (info is null)
+            {
+                throw new System.ArgumentNullException(nameof(info));
+            }
 
             Teardown((TContext)context, info);
         }

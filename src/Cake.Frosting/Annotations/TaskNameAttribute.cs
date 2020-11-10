@@ -4,7 +4,6 @@
 
 using System;
 
-// ReSharper disable once CheckNamespace
 namespace Cake.Frosting
 {
     /// <summary>
@@ -15,15 +14,14 @@ namespace Cake.Frosting
     public sealed class TaskNameAttribute : Attribute
     {
         /// <summary>
-        /// Gets the name of the task.
+        /// Gets the task name.
         /// </summary>
-        /// <value>The name.</value>
         public string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">The name of the task.</param>
+        /// <param name="name">The task name.</param>
         public TaskNameAttribute(string name)
         {
             Name = name;

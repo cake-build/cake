@@ -26,6 +26,11 @@ namespace Cake.Core.Scripting
         IReadOnlyList<ICakeTaskInfo> Tasks { get; }
 
         /// <summary>
+        /// Gets the execution settings.
+        /// </summary>
+        ExecutionSettings Settings { get; }
+
+        /// <summary>
         /// Registers a new task.
         /// </summary>
         /// <param name="name">The name of the task.</param>
