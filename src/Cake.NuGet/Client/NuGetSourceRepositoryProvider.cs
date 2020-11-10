@@ -12,7 +12,7 @@ using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using PackageReference = Cake.Core.Packaging.PackageReference;
 
-namespace Cake.NuGet.Install
+namespace Cake.NuGet
 {
     internal sealed class NuGetSourceRepositoryProvider
     {
@@ -23,17 +23,17 @@ namespace Cake.NuGet.Install
 
         public NuGetSourceRepositoryProvider(ISettings settings, ICakeConfiguration config, PackageReference package, string packagesRoot)
         {
-            if (settings == null)
+            if (settings is null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            if (config == null)
+            if (config is null)
             {
                 throw new ArgumentNullException(nameof(config));
             }
 
-            if (package == null)
+            if (package is null)
             {
                 throw new ArgumentNullException(nameof(package));
             }
@@ -47,7 +47,6 @@ namespace Cake.NuGet.Install
             _repositories = new HashSet<SourceRepository>(sourceComparer);
             _primaryRepositories = new HashSet<SourceRepository>(sourceComparer);
             _localRepositories = new HashSet<SourceRepository>(sourceComparer);
-
             _localRepositories.Add(CreateRepository(packagesRoot));
             _localRepositories.Add(CreateRepository(SettingsUtility.GetGlobalPackagesFolder(settings)));
             _localRepositories.AddRange(SettingsUtility.GetFallbackPackageFolders(settings).Select(CreateRepository));

@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using NuGet.Protocol.Core.Types;
 
-namespace Cake.NuGet.Install
+namespace Cake.NuGet
 {
     internal sealed class NuGetSourceRepositoryComparer : IEqualityComparer<SourceRepository>
     {

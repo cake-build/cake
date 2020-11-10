@@ -10,7 +10,6 @@ using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.NuGet.Install.Extensions;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Frameworks;
@@ -23,11 +22,11 @@ using NuGet.Versioning;
 using PackageReference = Cake.Core.Packaging.PackageReference;
 using PackageType = Cake.Core.Packaging.PackageType;
 
-namespace Cake.NuGet.Install
+namespace Cake.NuGet
 {
-    internal sealed class NuGetPackageInstaller : INuGetPackageInstaller, IDisposable
+    internal sealed class InProcessInstaller : IDisposable
     {
-        private static readonly ISet<string> _blackListedPackages;
+        private static readonly ISet<string> _denyListPackages;
 
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
@@ -39,12 +38,13 @@ namespace Cake.NuGet.Install
         private readonly NuGetFramework _currentFramework;
         private readonly SourceCacheContext _sourceCacheContext;
 
-        static NuGetPackageInstaller()
+        static InProcessInstaller()
         {
             // Set User Agent string
             UserAgent.SetUserAgentString(new UserAgentStringBuilder("Cake NuGet Client"));
 
-            _blackListedPackages = new HashSet<string>(new[]
+            // Define packages we don't want to install
+            _denyListPackages = new HashSet<string>(new[]
             {
                 "Cake",
                 "Cake.Common",
@@ -54,14 +54,14 @@ namespace Cake.NuGet.Install
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NuGetPackageInstaller"/> class.
+        /// Initializes a new instance of the <see cref="InProcessInstaller"/> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="contentResolver">The content resolver.</param>
         /// <param name="log">The log.</param>
         /// <param name="config">the configuration.</param>
-        public NuGetPackageInstaller(
+        public InProcessInstaller(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             INuGetContentResolver contentResolver,
@@ -91,7 +91,6 @@ namespace Cake.NuGet.Install
             _sourceCacheContext = new SourceCacheContext();
         }
 
-        /// <inheritdoc/>
         public bool CanInstall(PackageReference package, PackageType type)
         {
             if (package == null)
@@ -101,7 +100,6 @@ namespace Cake.NuGet.Install
             return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <inheritdoc/>
         public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
         {
             if (package == null)
@@ -199,7 +197,7 @@ namespace Cake.NuGet.Install
                     }
                 }
 
-                if (_blackListedPackages.Contains(packageToInstall.Id))
+                if (_denyListPackages.Contains(packageToInstall.Id))
                 {
                     const string format = "Package {0} depends on package {1}. This dependency won't be loaded.";
                     _log.Debug(format, package.Package, packageToInstall.ToString());

@@ -27,10 +27,10 @@ namespace Cake.NuGet
             ICakeConfiguration configuration,
             ICakeLog log)
         {
-            _environment = environment;
-            _installer = installer;
-            _configuration = configuration;
-            _log = log;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _installer = installer ?? throw new ArgumentNullException(nameof(installer));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
         public bool CanLoad(IScriptAnalyzerContext context, LoadReference reference)

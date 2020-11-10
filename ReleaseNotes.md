@@ -1,3 +1,54 @@
+### New in 1.0.0-rc0001 (Released 2020/11/05)
+
+* 2292 Remove obsolete methods and properties.
+* 2874 Merge frosting into main Cake repo.
+* 2883 (Frosting) Add support for .NET 5.
+* 2857 Add support for .NET 5.
+* 2776 Checklist for 1.0.
+* 2755 Add DirectoryHashCalculator.
+* 2333 RFC-0001: Rewrite Cake CLI.
+* 2199 Add GlobPattern class.
+* 741 Add IsRunningOnMacOs() alias.
+* 2913 Add overload for DotNetCoreRun.
+* 2908 Future proof .NET [Core] detection.
+* 2897 Add tests for MyGetProvider.
+* 2895 Custom contexts should inherit from CakeContextAdapter.
+* 2877 Add NuGet's Icon setting to NuGetPackSettings.
+* 2870 Add helpers for adding multiple strings to ProcessArgumentBuilder.
+* 2866 Support multiple dotnet test options.
+* 2847 Add new GitHub Actions URL environment variables.
+* 2844 Add missing dotnet test options.
+* 2839 Add support for PublishReadyToRunShowWarnings property in DotNetCorePublish.
+* 2833 Implicit bootstrapping of modules.
+* 2831 ParseAssemblyInfo does not detect lines with extra spaces.
+* 2825 Add option to ignore tool exit code.
+* 2822 Add support of ReportGenerator global tool.
+* 2820 Add DebuggerStepThroughAttribute to generated code.
+* 2817 Bump dependencies.
+* 2801 Inconsistent NuGet file name case.
+* 2792 Add dotnet nologo options.
+* 2743 Tool resolution for multiple names should be breadth first.
+* 2703 OpenCover is missing hideskipped setting.
+* 2623 DotNetCoreTestSettings Can Have Multiple Logger's.
+* 2595 Misleading output message when trying to install prerelease package with the in-process nuget installer.
+* 2925 Fix sentences which end with double full stop.
+* 2918 Incorrect link for ReSharper's Open Source webpage in Cake readme.
+* 2894 Remove unnecessary documentation and replace it with .
+* 2879 Update links pointing to cakebuild.net to new URL structure.
+* 2836 Update README with more up-to-date "getting started" information.
+* 2811 Identity of BuildProblem in TeamCityProvider should be optional.
+* 2920 Bump Cake script dependencies.
+* 2899 Update to .NET 5 SDK RC 2.
+* 2850 Bump .NET Core SDK to 3.1.402.
+* 2818 Start producing 1.0.0-rc0001 NuGet Packages.
+* 2814 Switch GRM to not mark GitHub release as a pre-release.
+* 2781 Bump StyleCop to latest version.
+* 2911 C# syntax errors in exceptions causes Specre.CLI internal error.
+* 2861 Fix error output in 1.0 preview.
+* 2853 Custom argument names are not case insensitive in 1.0 preview.
+* 2887 (Frosting) Fix line endings in build.sh within template package.
+* 2734 Can't resolve resource assemblies.
+
 ### New in 0.38.5 (Released 2020/09/20)
 
 * 2859 .NET 5 shouldn't be identified as Full Framework or Mono.

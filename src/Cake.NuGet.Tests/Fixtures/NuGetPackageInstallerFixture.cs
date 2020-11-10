@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if !NETCORE
 using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Configuration;
@@ -15,7 +14,16 @@ using NSubstitute;
 
 namespace Cake.NuGet.Tests.Fixtures
 {
-    internal sealed class NuGetPackageInstallerFixture
+    internal sealed class OutOfProcessFixture : NuGetPackageInstallerFixture
+    {
+        public OutOfProcessFixture()
+            : base()
+        {
+            Config?.GetValue(Constants.NuGet.UseInProcessClient).Returns(bool.FalseString);
+        }
+    }
+
+    internal abstract class NuGetPackageInstallerFixture
     {
         public ICakeEnvironment Environment { get; set; }
         public FakeFileSystem FileSystem { get; set; }
@@ -29,6 +37,9 @@ namespace Cake.NuGet.Tests.Fixtures
         public DirectoryPath InstallPath { get; set; }
 
         public ICakeConfiguration Config { get; set; }
+
+        public InProcessInstaller InProc { get; set; }
+        public OutOfProcessInstaller OutProc { get; set; }
 
         public NuGetPackageInstallerFixture()
         {
@@ -48,6 +59,9 @@ namespace Cake.NuGet.Tests.Fixtures
             ProcessRunner = Substitute.For<IProcessRunner>();
             ProcessRunner.When(p => p.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()))
                 .Do(info => FileSystem.CreateDirectory(InstallPath.Combine(Package.Package.ToLowerInvariant()).Combine(Package.Package)));
+
+            InProc = new InProcessInstaller(FileSystem, Environment, ContentResolver, Log, Config);
+            OutProc = new OutOfProcessInstaller(FileSystem, Environment, ProcessRunner, ToolResolver, ContentResolver, Log, Config);
         }
 
         public void InstallPackageAtSpecifiedPath(DirectoryPath path)
@@ -58,7 +72,7 @@ namespace Cake.NuGet.Tests.Fixtures
 
         public NuGetPackageInstaller CreateInstaller()
         {
-            return new NuGetPackageInstaller(FileSystem, Environment, ProcessRunner, ToolResolver, ContentResolver, Log, Config);
+            return new NuGetPackageInstaller(Config, InProc, OutProc);
         }
 
         public IReadOnlyCollection<IFile> Install()
@@ -74,4 +88,3 @@ namespace Cake.NuGet.Tests.Fixtures
         }
     }
 }
-#endif

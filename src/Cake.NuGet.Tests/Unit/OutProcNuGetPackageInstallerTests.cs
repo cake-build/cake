@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if !NETCORE
 using System.Collections.Generic;
-using System.Linq;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Cake.NuGet.Tests.Fixtures;
@@ -16,95 +14,8 @@ using Verbosity = Cake.Core.Diagnostics.Verbosity;
 
 namespace Cake.NuGet.Tests.Unit
 {
-    public sealed class NuGetPackageInstallerTests
+    public sealed class OutProcNuGetPackageInstallerTests
     {
-        public sealed class TheConstructor
-        {
-            [Fact]
-            public void Should_Throw_If_File_System_Is_Null()
-            {
-                // Given
-                var fixture = new NuGetPackageInstallerFixture();
-                fixture.FileSystem = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateInstaller());
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "fileSystem");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given
-                var fixture = new NuGetPackageInstallerFixture();
-                fixture.Environment = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateInstaller());
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "environment");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Process_Runner_Is_Null()
-            {
-                // Given
-                var fixture = new NuGetPackageInstallerFixture();
-                fixture.ProcessRunner = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateInstaller());
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "processRunner");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Tool_Resolver_Is_Null()
-            {
-                // Given
-                var fixture = new NuGetPackageInstallerFixture();
-                fixture.ToolResolver = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateInstaller());
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "toolResolver");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Content_Resolver_Is_Null()
-            {
-                // Given
-                var fixture = new NuGetPackageInstallerFixture();
-                fixture.ContentResolver = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateInstaller());
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "contentResolver");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Log_Is_Null()
-            {
-                // Given
-                var fixture = new NuGetPackageInstallerFixture();
-                fixture.Log = null;
-
-                // When
-                var result = Record.Exception(() => fixture.CreateInstaller());
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "log");
-            }
-        }
-
         public sealed class TheCanInstallMethod
         {
             private string NUGET_CONFIGKEY = "NuGet_Source";
@@ -113,7 +24,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Throw_If_URI_Is_Null()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.Package = null;
 
                 // When
@@ -127,7 +38,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Be_Able_To_Install_If_Scheme_Is_Correct()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.Package = new PackageReference("nuget:?package=Cake.Core");
 
                 // When
@@ -141,7 +52,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Not_Be_Able_To_Install_If_Scheme_Is_Incorrect()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.Package = new PackageReference("homebrew:?package=Cake.Core");
 
                 // When
@@ -154,7 +65,7 @@ namespace Cake.NuGet.Tests.Unit
             [Fact]
             public void Should_Ignore_Custom_Source_If_AbsoluteUri_Is_Used()
             {
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.Package = new PackageReference("nuget:http://absolute/?package=Cake.Core");
 
                 // When
@@ -168,7 +79,7 @@ namespace Cake.NuGet.Tests.Unit
             [Fact]
             public void Should_Use_Custom_Source_If_RelativeUri_Is_Used()
             {
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.Package = new PackageReference("nuget:?package=Cake.Core");
 
                 // When
@@ -182,7 +93,7 @@ namespace Cake.NuGet.Tests.Unit
             [Fact]
             public void Should_Use_NoCache_Flag_If_Parameter_Is_Used()
             {
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.Package = new PackageReference("nuget:?package=Cake.Core&nocache");
 
                 // When
@@ -199,7 +110,7 @@ namespace Cake.NuGet.Tests.Unit
             [Fact]
             public void Should_Not_Use_NoCache_Flag_If_Parameter_Is_Not_Used()
             {
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.Package = new PackageReference("nuget:?package=Cake.Core");
 
                 // When
@@ -220,7 +131,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Throw_If_Uri_Is_Null()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.Package = null;
 
                 // When
@@ -234,7 +145,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Throw_If_Install_Path_Is_Null()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.InstallPath = null;
 
                 // When
@@ -248,7 +159,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Create_Install_Directory_If_It_Do_Not_Exist()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
 
                 // When
                 fixture.Install();
@@ -261,7 +172,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Install_Resource()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
 
                 // When
                 fixture.Install();
@@ -283,7 +194,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Create_Directory_For_Installed_Package()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
 
                 // When
                 fixture.Install();
@@ -296,10 +207,8 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Install_Resource_Without_Version_Number_If_None_Is_Provided()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture()
-                {
-                    Package = new PackageReference("nuget:https://myget.org/temp/?package=Cake.Foo&prerelease")
-                };
+                var fixture = new OutOfProcessFixture();
+                fixture.Package = new PackageReference("nuget:https://myget.org/temp/?package=Cake.Foo&prerelease");
 
                 // When
                 fixture.Install();
@@ -322,10 +231,8 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Look_For_Files_In_The_Correct_Directory(string uri, string path)
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture()
-                {
-                    Package = new PackageReference(uri)
-                };
+                var fixture = new OutOfProcessFixture();
+                fixture.Package = new PackageReference(uri);
 
                 fixture.InstallPackageAtSpecifiedPath(path);
 
@@ -342,7 +249,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Not_Install_If_Resource_Already_Is_Installed()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.FileSystem.CreateDirectory("/Working/nuget/cake.foo.1.2.3/Cake.Foo");
                 fixture.ContentResolver.GetFiles(
                     Arg.Any<DirectoryPath>(), Arg.Any<PackageReference>(), Arg.Any<PackageType>())
@@ -362,7 +269,7 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Return_Correct_Files_When_Resource_Has_Dependencies()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
                 fixture.FileSystem.CreateFile("/Working/nuget/cake.foo.1.2.3/Cake.Abc/Cake.Abc.dll");
                 fixture.FileSystem.CreateFile("/Working/nuget/cake.foo.1.2.3/Cake.Foo/Cake.Foo.dll");
                 fixture.FileSystem.CreateFile("/Working/nuget/cake.foo.1.2.3/Cake.Xyz/Cake.Xyz.dll");
@@ -384,7 +291,8 @@ namespace Cake.NuGet.Tests.Unit
             public void Should_Delete_Installation_Directory_If_Installation_Failed()
             {
                 // Given
-                var fixture = new NuGetPackageInstallerFixture();
+                var fixture = new OutOfProcessFixture();
+
                 var process = Substitute.For<IProcess>();
                 process.GetExitCode().Returns(128);
                 fixture.ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(process);
@@ -396,15 +304,17 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.False(fixture.FileSystem.GetDirectory("/Working/nuget/cake.foo.1.2.3").Exists);
             }
 
-            // the case where Config is not set is covered by Should_Install_Resource and many of the other tests
             [Fact]
             public void Should_Use_Explicit_NuGet_Config_If_Set()
             {
-                var fixture = new NuGetPackageInstallerFixture();
-                fixture.Config.GetValue(Arg.Is(Constants.NuGet.ConfigFile)).Returns("/Working/nuget.config");
+                // Given
+                var fixture = new OutOfProcessFixture();
+                fixture.Config.GetValue(Constants.NuGet.ConfigFile).Returns("/Working/nuget.config");
 
+                // When
                 fixture.Install();
 
+                // Then
                 fixture.ProcessRunner.Received(1).Start(
                     Arg.Is<FilePath>(path => path.FullPath == "/Working/tools/nuget.exe"),
                     Arg.Is<ProcessSettings>(settings =>
@@ -421,4 +331,3 @@ namespace Cake.NuGet.Tests.Unit
         }
     }
 }
-#endif

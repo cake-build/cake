@@ -9,6 +9,7 @@ using Cake.Core.Composition;
 using Cake.Core.Modules;
 using Cake.Frosting.Internal;
 using Cake.Frosting.Internal.Composition;
+using Cake.NuGet;
 
 namespace Cake.Frosting
 {
@@ -52,6 +53,7 @@ namespace Cake.Frosting
                 var registrar = new CakeServices();
                 registrar.RegisterModule(new CoreModule());
                 registrar.RegisterModule(new Module());
+                registrar.RegisterModule(new NuGetModule());
                 var container = registrar.Build();
 
                 // Add custom registrations to the container.

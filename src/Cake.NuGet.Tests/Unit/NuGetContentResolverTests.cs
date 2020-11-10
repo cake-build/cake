@@ -8,7 +8,6 @@ using Cake.Core.Polyfill;
 using Cake.NuGet.Tests.Fixtures;
 using Cake.Testing;
 using Cake.Testing.Xunit;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.NuGet.Tests.Unit

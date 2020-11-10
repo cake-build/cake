@@ -40,7 +40,7 @@ namespace Cake.Infrastructure
             // External modules
             new CoreModule().Register(registrar);
             new CommonModule().Register(registrar);
-            new NuGetModule(configuration).Register(registrar);
+            new NuGetModule().Register(registrar);
 
             // Misc registrations.
             registrar.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().Singleton();
