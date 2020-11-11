@@ -29,8 +29,8 @@
   <!-- Global packages -->
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.8.0-5.final" />
-    <PackageReference Include="System.Collections.Immutable" Version="5.0.0-rc.2.20475.5" />
-    <PackageReference Include="System.Reflection.Metadata" Version="5.0.0-rc.2.20475.5" />
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="5.0.0" />
     <PackageReference Include="Autofac" Version="6.0.0" />
     <PackageReference Include="Spectre.Cli" Version="0.45.0" />
   </ItemGroup>
