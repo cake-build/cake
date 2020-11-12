@@ -8,6 +8,7 @@ namespace Cake.Core.IO
 {
     internal sealed class WindowsRegistryKey : IRegistryKey
     {
+#pragma warning disable CA1416
         private readonly RegistryKey _key;
         private bool _disposed;
 
@@ -40,5 +41,6 @@ namespace Cake.Core.IO
         {
             return _key.GetValue(name);
         }
+#pragma warning restore CA1416
     }
 }
