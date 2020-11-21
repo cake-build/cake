@@ -1,8 +1,8 @@
 <!--
 BEFORE YOU SUBMIT AN ISSUE:
 
-DO NOT CREATE AN ISSUE FOR A QUESTION - questions are better served in chat, and can be later raised as an issue if required.
--  chat - https://gitter.im/cake-build/cake
+DO NOT CREATE AN ISSUE FOR A QUESTION - questions are better served in discussions, and can be later raised as an issue if required.
+-  discussions - https://github.com/cake-build/cake/discussions
 
 DELETE EVERYTHING IN THIS COMMENT BLOCK
 

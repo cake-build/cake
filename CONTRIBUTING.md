@@ -64,9 +64,9 @@ Any new code should also have reasonable unit test coverage.
 ## Contributing process
 ### Get buyoff or find open community issues or features
 
- * Through GitHub, or through the [Gitter chat](https://gitter.im/cake-build/cake) (preferred),
+ * Through GitHub, or through the [GitHub discussions](https://github.com/cake-build/cake/discussions) (preferred),
    you talk about a feature you would like to see (or a bug), and why it should be in Cake.
-   * If approved through the Gitter chat, ensure an accompanying GitHub issue is created with
+   * If approved through the GitHub discussions, ensure an accompanying GitHub issue is created with
      information and a link back to the discussion.
  * Once you get a nod from one of the [Cake Team](https://github.com/cake-build?tab=members), you can start on the feature.
  * Alternatively, if a feature is on the issues list with the
