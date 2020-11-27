@@ -17,9 +17,9 @@
 
   <ItemGroup>
     <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
-    <Content Include="../../build.config" Link="templates/cakefrosting/build.config" PackagePath="/content/templates/cakefrosting/build.config" />
     <Content Include="build.ps1" Link="templates/cakefrosting/build.ps1"  PackagePath="/content/templates/cakefrosting/build.ps1" />
     <Content Include="build.sh" Link="templates/cakefrosting/build.sh" PackagePath="/content/templates/cakefrosting/build.sh" />
+    <Content Include="global.json" Link="templates/cakefrosting/global.json"  PackagePath="/content/templates/cakefrosting/global.json" />
     <Compile Remove="**\*" />
   </ItemGroup>
 
