@@ -1,21 +1,15 @@
 using Cake.Core;
 using Cake.Frosting;
+using Microsoft.Extensions.DependencyInjection;
 
 public class Program : IFrostingStartup
 {
     public static int Main(string[] args)
-    {
-        // Create the host.
-        var host = new CakeHostBuilder()
-            .WithArguments(args)
+        => new CakeHost()
             .UseStartup<Program>()
-            .Build();
+            .Run(args);
 
-        // Run the host.
-        return host.Run();
-    }
-
-    public void Configure(ICakeServices services)
+    public void Configure(IServiceCollection services)
     {
         services.UseContext<Context>();
         services.UseLifetime<Lifetime>();

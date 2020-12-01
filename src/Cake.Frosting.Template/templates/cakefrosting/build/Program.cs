@@ -4,11 +4,9 @@ using Cake.Frosting;
 public static class Program
 {
     public static int Main(string[] args)
-    {
-        return new CakeHost()
-            .UseContext<Settings>()
+        => new CakeHost()
+            .UseStartup<Program>()
             .Run(args);
-    }
 }
 
 public class Settings : FrostingContext
