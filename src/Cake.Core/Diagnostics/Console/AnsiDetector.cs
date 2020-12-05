@@ -55,6 +55,13 @@ namespace Cake.Core.Diagnostics
                 return true;
             }
 
+            // Azure Pipelines doesn't set the TERM environment variable but supports ANSI
+            // https://github.com/microsoft/azure-pipelines-agent/issues/1569
+            if (!string.IsNullOrWhiteSpace(environment.GetEnvironmentVariable("TF_BUILD")))
+            {
+                return true;
+            }
+
             // Running on Windows?
             if (environment.Platform.Family == PlatformFamily.Windows)
             {
