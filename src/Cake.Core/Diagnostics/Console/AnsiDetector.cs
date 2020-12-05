@@ -62,6 +62,16 @@ namespace Cake.Core.Diagnostics
                 return true;
             }
 
+            // Check if the terminal is of type ANSI/VT100/xterm compatible.
+            var term = environment.GetEnvironmentVariable("TERM");
+            if (!string.IsNullOrWhiteSpace(term))
+            {
+                if (_regexes.Any(regex => regex.IsMatch(term)))
+                {
+                    return true;
+                }
+            }
+
             // Running on Windows?
             if (environment.Platform.Family == PlatformFamily.Windows)
             {
@@ -73,16 +83,6 @@ namespace Cake.Core.Diagnostics
                 }
 
                 return Windows.SupportsAnsi();
-            }
-
-            // Check if the terminal is of type ANSI/VT100/xterm compatible.
-            var term = environment.GetEnvironmentVariable("TERM");
-            if (!string.IsNullOrWhiteSpace(term))
-            {
-                if (_regexes.Any(regex => regex.IsMatch(term)))
-                {
-                    return true;
-                }
             }
 
             return false;
