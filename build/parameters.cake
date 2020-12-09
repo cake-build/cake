@@ -104,7 +104,7 @@ public class BuildParameters
         Packages = BuildPackages.GetPackages(
             Paths.Directories.NuGetRoot,
             Version.SemVersion,
-            new [] { 
+            new [] {
                 "Cake",
                 "Cake.Core",
                 "Cake.Common",
@@ -114,7 +114,8 @@ public class BuildParameters
                 "Cake.NuGet",
                 "Cake.Tool",
                 "Cake.Frosting",
-                "Cake.Frosting.Template"
+                "Cake.Frosting.Template",
+                "Cake.Cli"
                 },
             new [] { "cake.portable" });
 

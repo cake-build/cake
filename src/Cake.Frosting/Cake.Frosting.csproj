@@ -8,7 +8,12 @@
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
+
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Cli\Cake.Cli.csproj" />
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
     <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />

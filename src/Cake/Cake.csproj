@@ -21,6 +21,7 @@
 
   <!-- Project references -->
   <ItemGroup>
+    <ProjectReference Include="..\Cake.Cli\Cake.Cli.csproj" />
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
     <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />
@@ -28,10 +29,9 @@
 
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.8.0-5.final" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.9.0-1.final" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="5.0.0" />
-    <PackageReference Include="Autofac" Version="6.0.0" />
-    <PackageReference Include="Spectre.Cli" Version="0.45.0" />
+    <PackageReference Include="Autofac" Version="6.1.0" />
   </ItemGroup>
 </Project>

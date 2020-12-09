@@ -33,6 +33,7 @@ namespace Cake.Core.Modules
             registrar.RegisterType<CakeEngine>().As<ICakeEngine>().Singleton();
             registrar.RegisterType<CakeContext>().As<ICakeContext>().Singleton();
             registrar.RegisterType<CakeDataService>().As<ICakeDataResolver>().As<ICakeDataService>().Singleton();
+            registrar.RegisterType<DefaultExecutionStrategy>().As<IExecutionStrategy>().Singleton();
 
             // Environment
             registrar.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();

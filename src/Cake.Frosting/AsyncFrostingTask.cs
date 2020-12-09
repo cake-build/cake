@@ -3,10 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Cake.Core;
-using Cake.Frosting.Internal;
 
 namespace Cake.Frosting
 {
@@ -55,6 +53,10 @@ namespace Cake.Frosting
         /// <param name="context">The context.</param>
         public virtual void OnError(Exception exception, T context)
         {
+            if (exception is null)
+            {
+                throw new ArgumentNullException(nameof(exception));
+            }
         }
 
         /// <summary>
@@ -65,35 +67,51 @@ namespace Cake.Frosting
         {
         }
 
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Explicit implementation.")]
+        /// <inheritdoc/>
         Task IFrostingTask.RunAsync(ICakeContext context)
         {
-            Guard.ArgumentNotNull(context, nameof(context));
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
 
             return RunAsync((T)context);
         }
 
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Explicit implementation.")]
+        /// <inheritdoc/>
         bool IFrostingTask.ShouldRun(ICakeContext context)
         {
-            Guard.ArgumentNotNull(context, nameof(context));
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
 
             return ShouldRun((T)context);
         }
 
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Explicit implementation.")]
+        /// <inheritdoc/>
         void IFrostingTask.OnError(Exception exception, ICakeContext context)
         {
-            Guard.ArgumentNotNull(exception, nameof(exception));
-            Guard.ArgumentNotNull(context, nameof(context));
+            if (exception is null)
+            {
+                throw new ArgumentNullException(nameof(exception));
+            }
+
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
 
             OnError(exception, (T)context);
         }
 
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Explicit implementation.")]
+        /// <inheritdoc/>
         void IFrostingTask.Finally(ICakeContext context)
         {
-            Guard.ArgumentNotNull(context, nameof(context));
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
 
             Finally((T)context);
         }

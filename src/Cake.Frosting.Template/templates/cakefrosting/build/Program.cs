@@ -1,24 +1,53 @@
 using Cake.Core;
 using Cake.Frosting;
 
-public class Program : IFrostingStartup
+public static class Program
 {
     public static int Main(string[] args)
-    {
-        // Create the host.
-        var host = new CakeHostBuilder()
-            .WithArguments(args)
+        => new CakeHost()
             .UseStartup<Program>()
-            .Build();
+            .Run(args);
+}
 
-        // Run the host.
-        return host.Run();
-    }
+public class Settings : FrostingContext
+{
+    public bool Delay { get; set; }
 
-    public void Configure(ICakeServices services)
+    public Settings(ICakeContext context)
+        : base(context)
     {
-        services.UseContext<Context>();
-        services.UseLifetime<Lifetime>();
-        services.UseWorkingDirectory("..");
+        Delay = context.Arguments.HasArgument("delay");
     }
+}
+
+[TaskName("Hello")]
+public sealed class HelloTask : FrostingTask<Settings>
+{
+    public override void Run(Settings context)
+    {
+        context.Log.Information("Hello");
+    }
+}
+
+[TaskName("World")]
+[IsDependentOn(typeof(HelloTask))]
+public sealed class WorldTask : AsyncFrostingTask<Settings>
+{
+    // Tasks can be asynchronous
+    public override async Task RunAsync(Settings context)
+    {
+        if (context.Delay)
+        {
+            context.Log.Information("Waiting...");
+            await Task.Delay(1500);
+        }
+
+        context.Log.Information("World");
+    }
+}
+
+[TaskName("Default")]
+[IsDependentOn(typeof(WorldTask))]
+public class DefaultTask : FrostingTask
+{
 }

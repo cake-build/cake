@@ -4,7 +4,6 @@
 
 using System.Reflection;
 
-// ReSharper disable once CheckNamespace
 namespace Cake.Frosting.Internal
 {
     internal static class MethodInfoExtensions

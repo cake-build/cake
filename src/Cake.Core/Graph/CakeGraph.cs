@@ -11,7 +11,7 @@ namespace Cake.Core.Graph
     /// <summary>
     /// Represents the Cake task graph.
     /// </summary>
-    internal sealed class CakeGraph
+    public sealed class CakeGraph
     {
         private readonly List<string> _nodes;
         private readonly List<CakeGraphEdge> _edges;

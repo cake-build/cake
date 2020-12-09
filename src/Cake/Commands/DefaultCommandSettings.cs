@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using Cake.Cli;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Infrastructure.Converters;
 using Spectre.Cli;
 
 namespace Cake.Commands
@@ -29,7 +29,7 @@ namespace Cake.Commands
         public bool Debug { get; set; }
 
         [CommandOption("-e|--exclusive")]
-        [Description("Execute a single task without any dependencies.")]
+        [Description("Executes the target task without any dependencies.")]
         public bool Exclusive { get; set; }
 
         [CommandOption("--dryrun|--noop|--whatif")]
@@ -44,11 +44,11 @@ namespace Cake.Commands
         [Description("Skips bootstrapping when running build.")]
         public bool SkipBootstrap { get; set; }
 
-        [CommandOption("--showdescription|--description")]
-        [Description("Shows description about tasks.")]
+        [CommandOption("--description|--showdescription")]
+        [Description("Shows task descriptions.")]
         public bool ShowDescription { get; set; }
 
-        [CommandOption("--showtree|--tree")]
+        [CommandOption("--tree|--showtree")]
         [Description("Shows the task dependency tree.")]
         public bool ShowTree { get; set; }
 
