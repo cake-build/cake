@@ -94,6 +94,16 @@ namespace Cake.Common.Build.AzurePipelines
         void SetVariable(string name, string value);
 
         /// <summary>
+        /// Sets a output variable in the variable service of the task context.
+        /// </summary>
+        /// <remarks>
+        /// The variable is exposed to following tasks as an environment variable.
+        /// </remarks>
+        /// <param name="name">The variable name.</param>
+        /// <param name="value">The variable value.</param>
+        void SetOutputVariable(string name, string value);
+
+        /// <summary>
         /// Sets a secret variable in the variable service of the task context.
         /// </summary>
         /// <remarks>
