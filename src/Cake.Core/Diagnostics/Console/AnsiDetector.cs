@@ -42,6 +42,13 @@ namespace Cake.Core.Diagnostics
 
         public static bool SupportsAnsi(ICakeEnvironment environment)
         {
+            // Prevents the addition of ANSI color if NO_COLOR env. variable is present
+            // https://no-color.org
+            if (!string.IsNullOrWhiteSpace(environment.GetEnvironmentVariable("NO_COLOR")))
+            {
+                return false;
+            }
+
             // Github action doesn't setup a correct PTY but supports ANSI.
             if (!string.IsNullOrWhiteSpace(environment.GetEnvironmentVariable("GITHUB_ACTION")))
             {
