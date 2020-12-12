@@ -102,10 +102,10 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 }
 
                 [Theory]
-                [InlineData(LogLevel.Warning, "\u001b[40m\u001b[33;1mHello, \u001b[0m\u001b[40m\u001b[33;1mWorld\u001b[0m")]
-                [InlineData(LogLevel.Information, "\u001b[40m\u001b[37;1mHello, \u001b[0m\u001b[44m\u001b[37;1mWorld\u001b[0m")]
-                [InlineData(LogLevel.Verbose, "\u001b[40m\u001b[37mHello, \u001b[0m\u001b[40m\u001b[37;1mWorld\u001b[0m")]
-                [InlineData(LogLevel.Debug, "\u001b[40m\u001b[30;1mHello, \u001b[0m\u001b[40m\u001b[37mWorld\u001b[0m")]
+                [InlineData(LogLevel.Warning, "\u001b[33;1mHello, \u001b[0m\u001b[33;1mWorld\u001b[0m")]
+                [InlineData(LogLevel.Information, "\u001b[37;1mHello, \u001b[0m\u001b[44m\u001b[37;1mWorld\u001b[0m")]
+                [InlineData(LogLevel.Verbose, "\u001b[37mHello, \u001b[0m\u001b[37;1mWorld\u001b[0m")]
+                [InlineData(LogLevel.Debug, "\u001b[30;1mHello, \u001b[0m\u001b[37mWorld\u001b[0m")]
                 public void Should_Colorize_Tokens_Correctly(LogLevel level, string expected)
                 {
                     // Given
@@ -266,7 +266,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
 
                 [Theory]
                 [InlineData(false, "#[Black|DarkGray]Executing: if ($LASTEXITCODE -gt 0) { throw \"script failed with exit code $LASTEXITCODE\" }[/]")]
-                [InlineData(true, "\u001b[40m\u001b[30;1mExecuting: if ($LASTEXITCODE -gt 0) { throw \"script failed with exit code $LASTEXITCODE\" }\u001b[0m")]
+                [InlineData(true, "\u001b[30;1mExecuting: if ($LASTEXITCODE -gt 0) { throw \"script failed with exit code $LASTEXITCODE\" }\u001b[0m")]
                 public void Should_Output_Escaped_Tokens_Correctly(bool ansi, string expected)
                 {
                     // Given
