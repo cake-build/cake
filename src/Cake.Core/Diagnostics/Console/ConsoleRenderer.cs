@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using Cake.Core.Diagnostics.Console;
 using Cake.Core.Diagnostics.Formatting;
 
 namespace Cake.Core.Diagnostics
@@ -63,24 +62,24 @@ namespace Cake.Core.Diagnostics
         {
             if (colorize && token is PropertyToken)
             {
-                if (palette.ArgumentBackground != ConsoleColorEx.Default)
+                if (palette.ArgumentBackground != Constants.DefaultConsoleColor)
                 {
                     _console.BackgroundColor = palette.ArgumentBackground;
                 }
 
-                if (palette.ArgumentForeground != ConsoleColorEx.Default)
+                if (palette.ArgumentForeground != Constants.DefaultConsoleColor)
                 {
                     _console.ForegroundColor = palette.ArgumentForeground;
                 }
             }
             else
             {
-                if (palette.Background != ConsoleColorEx.Default)
+                if (palette.Background != Constants.DefaultConsoleColor)
                 {
                     _console.BackgroundColor = palette.Background;
                 }
 
-                if (palette.Foreground != ConsoleColorEx.Default)
+                if (palette.Foreground != Constants.DefaultConsoleColor)
                 {
                     _console.ForegroundColor = palette.Foreground;
                 }
