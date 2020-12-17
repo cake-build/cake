@@ -20,11 +20,6 @@
     <Compile Remove="**\*" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="build.ps1" />
-    <None Remove="build.sh" />
-  </ItemGroup>
-
   <Target Name="VersionBuild" BeforeTargets="PrepareForBuild" Condition="'$(TemplateVersion)'!=''">
    <XmlPoke XmlInputPath="templates\cakefrosting\build\Build.csproj" Query="Project/ItemGroup/PackageReference/@Version" Value="$(TemplateVersion)" />
   </Target>
