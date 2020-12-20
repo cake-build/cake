@@ -1,3 +1,20 @@
+### New in 1.0.0-rc0002 (Released 2020/12/20)
+
+* 2930 Increase potential breaking change property.
+* 2904 (Frosting) Tool installer should respect configuration.
+* 2933 Enable NuGet provider in Frosting.
+* 2838 Add MakeRelative alias to DirectoryPath and FilePath.
+* 2886 (Frosting) Support all commands that Cake does.
+* 2893 (Frosting) Align command line parsing with Cake.
+* 2892 (Frosting) Add ANSI console.
+* 2962 Document breaking changes in 1.0 CLI.
+* 2980 Update to .NET 5 SDK 5.0.101.
+* 2929 GitReleaseManager milestone should use SemVersion.
+* 2928 Cake.Frosting and Cake.Frosting.Template not pushed to NuGet.
+* 2900 Update to .NET 5 SDK "RTM".
+* 2963 EndOfStreamException thrown when using loaddependencies=true.
+* 2956 Wrong Cake version in build.config.
+
 ### New in 1.0.0-rc0001 (Released 2020/11/05)
 
 * 2292 Remove obsolete methods and properties.
