@@ -10,6 +10,8 @@ namespace Cake.Core.IO
     public sealed class WindowsRegistry : IRegistry
     {
         /// <inheritdoc/>
+#pragma warning disable CA1416
         public IRegistryKey LocalMachine => new WindowsRegistryKey(Microsoft.Win32.Registry.LocalMachine);
+#pragma warning restore CA1416
     }
 }

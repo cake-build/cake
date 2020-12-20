@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using NuGet.Client;
@@ -21,7 +20,6 @@ namespace Cake.NuGet
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
-        private readonly ICakeLog _log;
 
         private static readonly Lazy<RuntimeGraph> RuntimeGraph = new Lazy<RuntimeGraph>(() =>
         {
@@ -39,13 +37,11 @@ namespace Cake.NuGet
         public NuGetContentResolver(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
-            IGlobber globber,
-            ICakeLog log)
+            IGlobber globber)
         {
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _globber = globber;
-            _log = log;
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _globber = globber ?? throw new ArgumentNullException(nameof(globber));
         }
 
         public IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, PackageReference package, PackageType type)

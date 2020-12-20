@@ -10,7 +10,7 @@ namespace Cake.Core.Graph
     /// <summary>
     /// Responsible for building the Cake task graph.
     /// </summary>
-    internal static class CakeGraphBuilder
+    public static class CakeGraphBuilder
     {
         /// <summary>
         /// Builds a <see cref="CakeGraph"/> from the specified tasks.

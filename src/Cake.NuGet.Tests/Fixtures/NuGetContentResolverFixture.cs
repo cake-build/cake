@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Runtime.Versioning;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Cake.Core.Polyfill;
@@ -51,7 +50,7 @@ namespace Cake.NuGet.Tests.Fixtures
 
         public IReadOnlyCollection<IFile> GetFiles()
         {
-            var resolver = new NuGetContentResolver(FileSystem, Environment, Globber, Log);
+            var resolver = new NuGetContentResolver(FileSystem, Environment, Globber);
             return resolver.GetFiles(Path, Package, PackageType);
         }
 

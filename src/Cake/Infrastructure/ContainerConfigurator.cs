@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Cli;
 using Cake.Common.Modules;
 using Cake.Core;
 using Cake.Core.Composition;
@@ -9,7 +10,6 @@ using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Modules;
 using Cake.Core.Scripting;
-using Cake.Features.Building.Hosts;
 using Cake.Infrastructure.Scripting;
 using Cake.NuGet;
 using Spectre.Cli;
@@ -40,7 +40,7 @@ namespace Cake.Infrastructure
             // External modules
             new CoreModule().Register(registrar);
             new CommonModule().Register(registrar);
-            new NuGetModule(configuration).Register(registrar);
+            new NuGetModule().Register(registrar);
 
             // Misc registrations.
             registrar.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().Singleton();

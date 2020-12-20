@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <PackageType>Template</PackageType>
@@ -6,20 +6,17 @@
     <Title>Cake.Frosting templates for the .NET SDK.</Title>
     <Description>Cake.Frosting templates for the .NET SDK.</Description>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-
     <IncludeContentInPack>true</IncludeContentInPack>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <ContentTargetFolders>content</ContentTargetFolders>
-    <NoWarn>NU5110;NU5111;NU5128</NoWarn>
+    <NoWarn>$(NoWarn);NU5110;NU5111;NU5128</NoWarn>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
 
   <ItemGroup>
     <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
-    <Content Include="../../build.config" Link="templates/cakefrosting/build.config" PackagePath="/content/templates/cakefrosting/build.config" />
-    <Content Include="build.ps1" Link="templates/cakefrosting/build.ps1"  PackagePath="/content/templates/cakefrosting/build.ps1" />
-    <Content Include="build.sh" Link="templates/cakefrosting/build.sh" PackagePath="/content/templates/cakefrosting/build.sh" />
     <Compile Remove="**\*" />
   </ItemGroup>
 

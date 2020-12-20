@@ -5,16 +5,15 @@
 using System;
 using System.Threading.Tasks;
 using Autofac;
+using Cake.Cli;
 using Cake.Commands;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Features.Bootstrapping;
 using Cake.Features.Building;
-using Cake.Features.Introspection;
 using Cake.Infrastructure;
 using Cake.Infrastructure.Composition;
-using Cake.Infrastructure.Converters;
 using Spectre.Cli;
 
 namespace Cake
@@ -77,8 +76,8 @@ namespace Cake
             // Features
             builder.RegisterType<BuildFeature>().As<IBuildFeature>().SingleInstance();
             builder.RegisterType<BootstrapFeature>().As<IBootstrapFeature>().SingleInstance();
-            builder.RegisterType<VersionFeature>().As<IVersionFeature>().SingleInstance();
-            builder.RegisterType<InfoFeature>().As<IInfoFeature>().SingleInstance();
+            builder.RegisterType<VersionFeature>().As<ICakeVersionFeature>().SingleInstance();
+            builder.RegisterType<InfoFeature>().As<ICakeInfoFeature>().SingleInstance();
 
             // Core
             builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();

@@ -9,7 +9,7 @@ namespace Cake.Core
     internal static class Constants
     {
         public static readonly Version LatestBreakingChange = new Version(0, 26, 0);
-        public static readonly Version LatestPotentialBreakingChange = new Version(0, 33, 0);
+        public static readonly Version LatestPotentialBreakingChange = new Version(1, 0, 0);
 
         public static class Settings
         {

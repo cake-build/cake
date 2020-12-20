@@ -4,15 +4,14 @@
 
 using System;
 
-// ReSharper disable once CheckNamespace
 namespace Cake.Frosting
 {
     /// <summary>
     /// Represents a dependency.
     /// </summary>
-    /// <seealso cref="System.Attribute" />
+    /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public sealed class DependencyAttribute : Attribute
+    public sealed class DependencyAttribute : Attribute, ITaskDependency
     {
         /// <summary>
         /// Gets the depdendency task type.
