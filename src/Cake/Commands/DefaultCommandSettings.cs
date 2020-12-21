@@ -18,24 +18,6 @@ namespace Cake.Commands
         [DefaultValue("build.cake")]
         public FilePath Script { get; set; }
 
-        [CommandOption("-v|--verbosity")]
-        [Description("Specifies the amount of information to be displayed.")]
-        [TypeConverter(typeof(VerbosityConverter))]
-        [DefaultValue(Verbosity.Normal)]
-        public Verbosity Verbosity { get; set; }
-
-        [CommandOption("-d|--debug")]
-        [Description("Launches script in debug mode.")]
-        public bool Debug { get; set; }
-
-        [CommandOption("-e|--exclusive")]
-        [Description("Executes the target task without any dependencies.")]
-        public bool Exclusive { get; set; }
-
-        [CommandOption("--dryrun|--noop|--whatif")]
-        [Description("Performs a dry run.")]
-        public bool DryRun { get; set; }
-
         [CommandOption("--bootstrap")]
         [Description("Download/install modules defined by [grey]#module[/] directives, but do not run build.")]
         public bool Bootstrap { get; set; }
@@ -44,13 +26,31 @@ namespace Cake.Commands
         [Description("Skips bootstrapping when running build.")]
         public bool SkipBootstrap { get; set; }
 
-        [CommandOption("--description|--showdescription")]
-        [Description("Shows task descriptions.")]
-        public bool ShowDescription { get; set; }
+        [CommandOption("--debug|-d")]
+        [Description("Launches script in debug mode.")]
+        public bool Debug { get; set; }
+
+        [CommandOption("--verbosity|-v <VERBOSITY>")]
+        [Description("Specifies the amount of information to be displayed.\n(Quiet, Minimal, Normal, Verbose, Diagnostic)")]
+        [TypeConverter(typeof(VerbosityConverter))]
+        [DefaultValue(Verbosity.Normal)]
+        public Verbosity Verbosity { get; set; }
+
+        [CommandOption("--description|--descriptions|--showdescription|--showdescriptions")]
+        [Description("Shows description for each task.")]
+        public bool Description { get; set; }
 
         [CommandOption("--tree|--showtree")]
         [Description("Shows the task dependency tree.")]
-        public bool ShowTree { get; set; }
+        public bool Tree { get; set; }
+
+        [CommandOption("--dryrun|--noop|--whatif")]
+        [Description("Performs a dry run.")]
+        public bool DryRun { get; set; }
+
+        [CommandOption("--exclusive|-e")]
+        [Description("Executes the target task without any dependencies.")]
+        public bool Exclusive { get; set; }
 
         [CommandOption("--version|--ver")]
         [Description("Displays version information.")]

@@ -141,7 +141,7 @@ namespace Cake.Frosting.Internal
             {
                 return provider.GetRequiredService<FrostingTreeRunner>();
             }
-            else if (settings.Descriptions)
+            else if (settings.Description)
             {
                 return provider.GetRequiredService<FrostingDescriptionRunner>();
             }

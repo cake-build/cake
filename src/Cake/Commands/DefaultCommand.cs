@@ -115,11 +115,11 @@ namespace Cake.Commands
             {
                 return BuildHostKind.DryRun;
             }
-            else if (settings.ShowDescription)
+            else if (settings.Description)
             {
                 return BuildHostKind.Description;
             }
-            else if (settings.ShowTree)
+            else if (settings.Tree)
             {
                 return BuildHostKind.Tree;
             }
