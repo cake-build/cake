@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Cake.Core
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    internal sealed class CakeDataService : ICakeDataService
+    public sealed class CakeDataService : ICakeDataService
     {
         private readonly Dictionary<Type, object> _data;
 
