@@ -62,7 +62,7 @@ namespace Cake.Frosting.Internal
                     runner.Settings.UseExclusiveTarget();
                 }
 
-                runner.Run(settings.Target, settings.Verbosity, settings.WorkingDirectory);
+                runner.Run(settings.Target, settings.Verbosity);
             }
             catch (Exception ex)
             {
