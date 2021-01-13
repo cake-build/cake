@@ -15,7 +15,7 @@ using Cake.Core.Scripting;
 using Cake.Infrastructure;
 using Cake.Infrastructure.Composition;
 using Cake.Infrastructure.Scripting;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Features.Building
 {

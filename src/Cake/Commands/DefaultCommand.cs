@@ -8,7 +8,7 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Features.Bootstrapping;
 using Cake.Features.Building;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Commands
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cake.Core.Composition;
 using Cake.Core.Configuration;
 using Cake.Infrastructure;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Tests.Fakes
 {
