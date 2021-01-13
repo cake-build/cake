@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Frosting.Internal
 {

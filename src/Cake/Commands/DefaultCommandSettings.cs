@@ -6,7 +6,7 @@ using System.ComponentModel;
 using Cake.Cli;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Commands
 {

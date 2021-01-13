@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Tests.Fakes
 {

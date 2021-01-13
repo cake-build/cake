@@ -6,7 +6,7 @@ using System;
 using Autofac;
 using Autofac.Builder;
 using Cake.Core.Composition;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Infrastructure.Composition
 {

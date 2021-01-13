@@ -12,7 +12,7 @@ using Cake.Core.Modules;
 using Cake.Core.Scripting;
 using Cake.Infrastructure.Scripting;
 using Cake.NuGet;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Infrastructure
 {

@@ -7,7 +7,7 @@ using Cake.Core.Diagnostics;
 using Cake.Features.Building;
 using Cake.Tests.Fixtures;
 using NSubstitute;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 using Xunit;
 
 namespace Cake.Tests.Unit

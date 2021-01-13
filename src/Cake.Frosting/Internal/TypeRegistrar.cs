@@ -5,7 +5,7 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Frosting.Internal
 {
