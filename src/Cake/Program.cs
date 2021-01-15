@@ -43,6 +43,22 @@ namespace Cake
             var app = new CommandApp<DefaultCommand>(registrar);
             app.Configure(config =>
             {
+#pragma warning disable SA1114 // Parameter list should follow declaration
+#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
+#pragma warning disable SA1111 // Closing parenthesis should be on line of last parameter
+                config.SetApplicationName(
+#if NETCOREAPP2_0
+
+                    "dotnet Cake.dll"
+#elif NETFRAMEWORK
+                    "Cake.exe"
+#else
+                    "dotnet cake"
+#endif
+                );
+#pragma warning restore SA1111 // Closing parenthesis should be on line of last parameter
+#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
+#pragma warning restore SA1114 // Parameter list should follow declaration
                 config.ValidateExamples();
 
                 if (_propagateExceptions)
