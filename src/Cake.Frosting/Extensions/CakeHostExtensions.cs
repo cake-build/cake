@@ -111,7 +111,7 @@ namespace Cake.Frosting
         }
 
         /// <summary>
-        /// Registers a tasl teardown action.
+        /// Registers a task teardown action.
         /// </summary>
         /// <typeparam name="TTeardown">The task teardown action.</typeparam>
         /// <param name="host">The <see cref="CakeHost"/> to configure.</param>
@@ -135,7 +135,7 @@ namespace Cake.Frosting
         }
 
         /// <summary>
-        /// Registers a specific tool for installation.
+        /// Registers a package installer.
         /// </summary>
         /// <typeparam name="TPackageInstaller">The type of the package installer.</typeparam>
         /// <param name="host">The <see cref="CakeHost"/> to configure.</param>
