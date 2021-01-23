@@ -48,11 +48,15 @@ namespace Cake.Frosting.Internal
                     return 0;
                 }
 
-                // Install tools
-                InstallTools(provider);
+                // Set the log verbosity
+                var log = provider.GetRequiredService<ICakeLog>();
+                log.Verbosity = settings.Verbosity;
 
                 // Run
                 var runner = GetFrostingEngine(provider, settings);
+
+                // Install tools
+                InstallTools(provider);
 
                 // Set the working directory
                 SetWorkingDirectory(provider, settings);
@@ -62,7 +66,7 @@ namespace Cake.Frosting.Internal
                     runner.Settings.UseExclusiveTarget();
                 }
 
-                runner.Run(settings.Target, settings.Verbosity);
+                runner.Run(settings.Target);
             }
             catch (Exception ex)
             {

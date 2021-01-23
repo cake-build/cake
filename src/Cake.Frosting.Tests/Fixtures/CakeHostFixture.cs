@@ -31,12 +31,6 @@ namespace Cake.Frosting.Tests
 
             FileSystem = new FakeFileSystem(Environment);
             FileSystem.CreateDirectory("/Working");
-
-            Host.ConfigureServices(services => services.AddSingleton<IFileSystem>(FileSystem));
-            Host.ConfigureServices(services => services.AddSingleton<ICakeEnvironment>(Environment));
-            Host.ConfigureServices(services => services.AddSingleton<IConsole>(Console));
-            Host.ConfigureServices(services => services.AddSingleton<ICakeLog>(Log));
-            Host.ConfigureServices(services => services.AddSingleton<IToolInstaller>(Installer));
         }
 
         public void RegisterTask<T>()
@@ -47,6 +41,12 @@ namespace Cake.Frosting.Tests
 
         public int Run(params string[] args)
         {
+            Host.ConfigureServices(services => services.AddSingleton<IFileSystem>(FileSystem));
+            Host.ConfigureServices(services => services.AddSingleton<ICakeEnvironment>(Environment));
+            Host.ConfigureServices(services => services.AddSingleton<IConsole>(Console));
+            Host.ConfigureServices(services => services.AddSingleton(Log));
+            Host.ConfigureServices(services => services.AddSingleton(Installer));
+
             if (Strategy != null)
             {
                 Host.ConfigureServices(services => services.AddSingleton(Strategy));
