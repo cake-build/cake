@@ -6,6 +6,7 @@ using System;
 using Cake.Core.Composition;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
+using CoreConstants = Cake.Core.Constants;
 
 namespace Cake.Frosting
 {
@@ -152,7 +153,7 @@ namespace Cake.Frosting
         /// <param name="host">The <see cref="CakeHost"/> to configure.</param>
         /// <param name="uri">The tool URI.</param>
         /// <returns>The same <see cref="CakeHost"/> instance so that multiple calls can be chained.</returns>
-        public static CakeHost UseTool(this CakeHost host, Uri uri)
+        public static CakeHost InstallTool(this CakeHost host, Uri uri)
         {
             return host.ConfigureServices(services => services.UseTool(uri));
         }
@@ -178,6 +179,18 @@ namespace Cake.Frosting
         public static CakeHost UseCakeSetting(this CakeHost host, string key, string value)
         {
             return host.ConfigureServices(services => services.UseCakeSetting(key, value));
+        }
+
+        /// <summary>
+        /// Sets the specified path as the path where tools and addins will be installed.
+        /// </summary>
+        /// <param name="host">The <see cref="CakeHost"/> to configure.</param>
+        /// <param name="path">The tool path.</param>
+        /// <returns>The same <see cref="CakeHost"/> instance so that multiple calls can be chained.</returns>
+        public static CakeHost SetToolPath(this CakeHost host, DirectoryPath path)
+        {
+            host.UseCakeSetting(CoreConstants.Paths.Tools, path.FullPath);
+            return host;
         }
     }
 }

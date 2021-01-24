@@ -13,7 +13,7 @@ namespace Cake.Frosting.Internal
     internal interface IFrostingEngine
     {
         ExecutionSettings Settings { get; }
-        CakeReport Run(string target, Verbosity verbosity);
+        CakeReport Run(string target);
     }
 
     internal abstract class FrostingEngine<THost> : IFrostingEngine
@@ -51,10 +51,8 @@ namespace Cake.Frosting.Internal
             _tasks = new List<IFrostingTask>(tasks ?? Array.Empty<IFrostingTask>());
         }
 
-        public CakeReport Run(string target, Verbosity verbosity)
+        public CakeReport Run(string target)
         {
-            _log.Verbosity = verbosity;
-
             ConfigureTasks();
             ConfigureLifetime();
             ConfigureTaskLifetime();
