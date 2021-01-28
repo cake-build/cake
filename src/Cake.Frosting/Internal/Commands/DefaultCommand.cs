@@ -28,6 +28,7 @@ namespace Cake.Frosting.Internal
             // Register arguments
             var arguments = new CakeArguments(context.Remaining.Parsed);
             _services.AddSingleton<ICakeArguments>(arguments);
+            _services.AddSingleton(context.Remaining);
 
             var provider = _services.BuildServiceProvider();
 
