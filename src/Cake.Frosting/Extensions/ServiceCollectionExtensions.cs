@@ -178,5 +178,16 @@ namespace Cake.Frosting
             services.AddSingleton(new FrostingConfigurationValue(key, value));
             return services;
         }
+
+        /// <summary>
+        /// Sets the tool path configuration to the specified value.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <param name="toolPath">The tool path value.</param>
+        /// <returns>The same <see cref="IServiceCollection"/> instance so that multiple calls can be chained.</returns>
+        public static IServiceCollection UseToolPath(this IServiceCollection services, DirectoryPath toolPath)
+        {
+            return services.UseCakeSetting("paths_tools", toolPath.FullPath);
+        }
     }
 }

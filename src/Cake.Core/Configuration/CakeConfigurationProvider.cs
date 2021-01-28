@@ -4,6 +4,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Cake.Core.Configuration.Parser;
 using Cake.Core.IO;
 
@@ -43,17 +45,39 @@ namespace Cake.Core.Configuration
         /// <param name="arguments">The arguments.</param>
         /// <returns>The created configuration.</returns>
         public ICakeConfiguration CreateConfiguration(DirectoryPath path, IDictionary<string, string> arguments)
+            => CreateConfiguration(path, Enumerable.Empty<KeyValuePair<string, string>>(), arguments);
+
+        /// <summary>
+        /// Creates a configuration from the provided arguments.
+        /// </summary>
+        /// <param name="path">The directory to look for the configuration file.</param>
+        /// <param name="baseConfiguration">The initial base configuration.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <returns>The created configuration.</returns>
+        public ICakeConfiguration CreateConfiguration(DirectoryPath path, IEnumerable<KeyValuePair<string, string>> baseConfiguration, IDictionary<string, string> arguments)
         {
             if (path == null)
             {
                 throw new ArgumentNullException(nameof(path));
             }
+
+            if (baseConfiguration == null)
+            {
+                throw new ArgumentNullException(nameof(baseConfiguration));
+            }
+
             if (arguments == null)
             {
                 throw new ArgumentNullException(nameof(arguments));
             }
 
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            // Add base configuration.
+            foreach (var kv in baseConfiguration)
+            {
+                result[KeyNormalizer.Normalize(kv.Key)] = kv.Value;
+            }
 
             // Get all environment variables.
             foreach (var variable in _environment.GetEnvironmentVariables())
