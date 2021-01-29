@@ -1,3 +1,15 @@
+### New in 1.0.0-rc0003 (Released 2021/01/29)
+
+* 3029 Add ICakeArguments.GetArgument extension
+* 3007 Different arguments between script runner and Frosting
+* 3018 Cake displays raw ANSI output after running specific executables
+* 3009 Make Cake Core CakeDataService Public
+* 2961 Update dotnet cake usage instructions (dotnet cake --help)
+* 2066 cake.coreclr help information error
+* 3032 Frosting project fails on Linux
+* 3050 Frosting: Rename CakeHost extension from UseTool to InstallTool
+* 3020 Migrate to Spectre.Console
+
 ### New in 1.0.0-rc0002 (Released 2020/12/20)
 
 * 2930 Increase potential breaking change property.
