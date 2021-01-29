@@ -9,6 +9,7 @@ public static class Program
     {
         return new CakeHost()
             .UseContext<BuildContext>()
+            .UseWorkingDirectory("..")
             .Run(args);
     }
 }

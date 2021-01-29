@@ -8,7 +8,7 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Features.Bootstrapping;
 using Cake.Features.Building;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Commands
 {
@@ -115,11 +115,11 @@ namespace Cake.Commands
             {
                 return BuildHostKind.DryRun;
             }
-            else if (settings.ShowDescription)
+            else if (settings.Description)
             {
                 return BuildHostKind.Description;
             }
-            else if (settings.ShowTree)
+            else if (settings.Tree)
             {
                 return BuildHostKind.Tree;
             }

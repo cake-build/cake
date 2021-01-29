@@ -61,12 +61,21 @@ namespace Cake.Core.IO
 
             ProcessStartInfo info = GetProcessStartInfo(filePath, settings, out Func<string, string> filterUnsafe);
 
+            // The process we are about to execute can modify the Console Mode and disable features such as ANSI support.
+            // We're capturing the current Console Mode (if any) here so that we can reset it to its original value later.
+            // See https://github.com/cake-build/cake/issues/3018 for an example.
+            var consoleMode = ConsoleMode.GetCurrent(_environment);
+
             // Start and return the process.
-            var process = Process.Start(info);
-            if (process == null)
+            var process = new Process
             {
-                return null;
-            }
+                StartInfo = info,
+                EnableRaisingEvents = true
+            };
+
+            process.Exited += (_, __) => consoleMode.Reset();
+
+            process.Start();
 
             var processWrapper = new ProcessWrapper(process, _log, filterUnsafe, settings.RedirectedStandardOutputHandler,
                 filterUnsafe, settings.RedirectedStandardErrorHandler);

@@ -14,7 +14,7 @@ using Cake.Core.Modules;
 using Cake.Frosting.Internal;
 using Cake.NuGet;
 using Microsoft.Extensions.DependencyInjection;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Frosting
 {

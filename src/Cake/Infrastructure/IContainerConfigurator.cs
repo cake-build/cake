@@ -4,7 +4,7 @@
 
 using Cake.Core.Composition;
 using Cake.Core.Configuration;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Infrastructure
 {

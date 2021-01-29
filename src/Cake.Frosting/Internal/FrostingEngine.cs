@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
 using Cake.Core.Scripting;
 
 namespace Cake.Frosting.Internal
@@ -14,7 +13,7 @@ namespace Cake.Frosting.Internal
     internal interface IFrostingEngine
     {
         ExecutionSettings Settings { get; }
-        CakeReport Run(string target, Verbosity verbosity, DirectoryPath workingDirectory);
+        CakeReport Run(string target);
     }
 
     internal abstract class FrostingEngine<THost> : IFrostingEngine
@@ -52,10 +51,8 @@ namespace Cake.Frosting.Internal
             _tasks = new List<IFrostingTask>(tasks ?? Array.Empty<IFrostingTask>());
         }
 
-        public CakeReport Run(string target, Verbosity verbosity, DirectoryPath workingDirectory)
+        public CakeReport Run(string target)
         {
-            _log.Verbosity = verbosity;
-
             ConfigureTasks();
             ConfigureLifetime();
             ConfigureTaskLifetime();

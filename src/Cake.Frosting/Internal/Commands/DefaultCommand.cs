@@ -10,7 +10,7 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Microsoft.Extensions.DependencyInjection;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Frosting.Internal
 {
@@ -48,11 +48,15 @@ namespace Cake.Frosting.Internal
                     return 0;
                 }
 
-                // Install tools
-                InstallTools(provider);
+                // Set the log verbosity
+                var log = provider.GetRequiredService<ICakeLog>();
+                log.Verbosity = settings.Verbosity;
 
                 // Run
                 var runner = GetFrostingEngine(provider, settings);
+
+                // Install tools
+                InstallTools(provider);
 
                 // Set the working directory
                 SetWorkingDirectory(provider, settings);
@@ -62,7 +66,7 @@ namespace Cake.Frosting.Internal
                     runner.Settings.UseExclusiveTarget();
                 }
 
-                runner.Run(settings.Target, settings.Verbosity, settings.WorkingDirectory);
+                runner.Run(settings.Target);
             }
             catch (Exception ex)
             {
@@ -141,7 +145,7 @@ namespace Cake.Frosting.Internal
             {
                 return provider.GetRequiredService<FrostingTreeRunner>();
             }
-            else if (settings.Descriptions)
+            else if (settings.Description)
             {
                 return provider.GetRequiredService<FrostingDescriptionRunner>();
             }

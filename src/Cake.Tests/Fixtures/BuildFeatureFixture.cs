@@ -10,7 +10,7 @@ using Cake.Infrastructure.Composition;
 using Cake.Testing;
 using Cake.Tests.Fakes;
 using NSubstitute;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Tests.Fixtures
 {

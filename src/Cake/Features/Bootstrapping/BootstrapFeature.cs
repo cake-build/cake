@@ -11,7 +11,7 @@ using Cake.Core.IO;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Infrastructure;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Features.Bootstrapping
 {

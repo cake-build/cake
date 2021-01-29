@@ -25,22 +25,9 @@ namespace Cake.Core.Tooling
         /// <param name="strategy">The tool resolution strategy.</param>
         public ToolLocator(ICakeEnvironment environment, IToolRepository repository, IToolResolutionStrategy strategy)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (repository == null)
-            {
-                throw new ArgumentNullException(nameof(repository));
-            }
-            if (strategy == null)
-            {
-                throw new ArgumentNullException(nameof(strategy));
-            }
-
-            _environment = environment;
-            _repository = repository;
-            _strategy = strategy;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
         }
 
         /// <inheritdoc/>

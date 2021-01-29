@@ -6,7 +6,7 @@ using System.ComponentModel;
 using Cake.Cli;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Frosting.Internal
 {
@@ -17,34 +17,34 @@ namespace Cake.Frosting.Internal
         [Description("Target task to invoke.")]
         public string Target { get; set; }
 
-        [CommandOption("-e|--exclusive")]
-        [Description("Executes the target task without any dependencies.")]
-        public bool Exclusive { get; set; }
-
         [CommandOption("--working|-w <PATH>")]
         [TypeConverter(typeof(DirectoryPathConverter))]
         [Description("Sets the working directory")]
         public DirectoryPath WorkingDirectory { get; set; }
 
         [CommandOption("--verbosity|-v <VERBOSITY>")]
+        [Description("Specifies the amount of information to be displayed.\n(Quiet, Minimal, Normal, Verbose, Diagnostic)")]
         [TypeConverter(typeof(VerbosityConverter))]
         [DefaultValue(Verbosity.Normal)]
-        [Description("Specifies the amount of information to be displayed.\n(Quiet, Minimal, Normal, Verbose, Diagnostic)")]
         public Verbosity Verbosity { get; set; }
+
+        [CommandOption("--description|--descriptions|--showdescription|--showdescriptions")]
+        [Description("Shows description for each task.")]
+        public bool Description { get; set; }
+
+        [CommandOption("--tree|--showtree")]
+        [Description("Shows the task dependency tree.")]
+        public bool Tree { get; set; }
 
         [CommandOption("--dryrun|--noop|--whatif")]
         [Description("Performs a dry run.")]
         public bool DryRun { get; set; }
 
-        [CommandOption("--tree")]
-        [Description("Shows the task dependency tree.")]
-        public bool Tree { get; set; }
+        [CommandOption("--exclusive|-e")]
+        [Description("Executes the target task without any dependencies.")]
+        public bool Exclusive { get; set; }
 
-        [CommandOption("--descriptions")]
-        [Description("Shows task descriptions.")]
-        public bool Descriptions { get; set; }
-
-        [CommandOption("--version")]
+        [CommandOption("--version|--ver")]
         [Description("Displays version information.")]
         public bool Version { get; set; }
 
