@@ -17,5 +17,15 @@ namespace Cake.Frosting.Internal
 
             return dependency.Task.GetTaskName();
         }
+
+        public static string GetTaskName(this IReverseTaskDependency dependency)
+        {
+            if (dependency is null)
+            {
+                throw new ArgumentNullException(nameof(dependency));
+            }
+
+            return dependency.Task.GetTaskName();
+        }
     }
 }

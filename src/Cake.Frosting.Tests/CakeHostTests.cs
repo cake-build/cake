@@ -166,6 +166,26 @@ namespace Cake.Frosting.Tests
         }
 
         [Fact]
+        public void Should_Execute_Dependee_Task()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<CleanTask>();
+            fixture.RegisterTask<DependeeTask>();
+            fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+            // When
+            fixture.Run("--target", nameof(CleanTask));
+
+            // Then
+            Received.InOrder(() =>
+            {
+                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == nameof(DependeeTask)), Arg.Any<ICakeContext>());
+                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == nameof(CleanTask)), Arg.Any<ICakeContext>());
+            });
+        }
+
+        [Fact]
         public void Should_Execute_Tasks_In_Correct_Order()
         {
             // Given

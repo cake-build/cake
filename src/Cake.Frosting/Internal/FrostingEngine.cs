@@ -164,7 +164,7 @@ namespace Cake.Frosting.Internal
                     // Add reverse dependencies
                     foreach (var dependee in task.GetReverseDependencies())
                     {
-                        var dependeeName = dependee.GetType().GetTaskName();
+                        var dependeeName = dependee.GetTaskName();
                         if (!typeof(IFrostingTask).IsAssignableFrom(dependee.Task))
                         {
                             throw new FrostingException($"The reverse dependency '{dependeeName}' is not a valid task.");
