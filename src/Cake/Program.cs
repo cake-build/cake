@@ -69,7 +69,7 @@ namespace Cake
                 // Top level examples.
                 config.AddExample(new[] { string.Empty });
                 config.AddExample(new[] { "build.cake", "--verbosity", "quiet" });
-                config.AddExample(new[] { "build.cake", "--showtree" });
+                config.AddExample(new[] { "build.cake", "--tree" });
             });
 
             return await app.RunAsync(args);
