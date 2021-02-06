@@ -20,6 +20,6 @@
 
     <ItemGroup>
       <PackageReference Include="Autofac" Version="6.1.0" />
-      <PackageReference Include="Spectre.Console" Version="0.37.0" />
+      <PackageReference Include="Spectre.Console" Version="0.36.0" />
   </ItemGroup>
 </Project>
