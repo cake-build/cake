@@ -1,3 +1,72 @@
+### New in 1.0.0 (Released 2021/02/07)
+
+* 3050 Frosting: Rename CakeHost extension from UseTool to InstallTool.
+* 2930 Increase potential breaking change property.
+* 2333 RFC-0001: Rewrite Cake CLI.
+* 2292 Remove obsolete methods and properties.
+* 3020 Migrate to Spectre.Console.
+* 2933 Enable NuGet provider in Frosting.
+* 2874 Merge frosting into main Cake repo.
+* 2883 (Frosting) Add support for .NET 5.
+* 2857 Add support for .NET 5.
+* 2776 Checklist for 1.0.
+* 2755 Add DirectoryHashCalculator.
+* 2199 Add GlobPattern class.
+* 741 Add IsRunningOnMacOs() alias.
+* 3083 Update --tree usage example to match option in the help info.
+* 3069 Don't promote UseWorkingDirectory in Frosting default template.
+* 3029 Add ICakeArguments.GetArgument extension.
+* 3018 Cake displays raw ANSI output after running specific executables.
+* 3009 Make Cake Core CakeDataService Public.
+* 2913 Add overload for DotNetCoreRun.
+* 2908 Future proof .NET [Core] detection.
+* 2897 Add tests for MyGetProvider.
+* 2895 Custom contexts should inherit from CakeContextAdapter.
+* 2877 Add NuGet's Icon setting to NuGetPackSettings.
+* 2870 Add helpers for adding multiple strings to ProcessArgumentBuilder.
+* 2866 Support multiple dotnet test options.
+* 2847 Add new GitHub Actions URL environment variables.
+* 2844 Add missing dotnet test options.
+* 2839 Add support for PublishReadyToRunShowWarnings property in DotNetCorePublish.
+* 2838 Add MakeRelative alias to DirectoryPath and FilePath.
+* 2833 Implicit bootstrapping of modules.
+* 2831 ParseAssemblyInfo does not detect lines with extra spaces.
+* 2886 (Frosting) Support all commands that Cake does.
+* 2825 Add option to ignore tool exit code.
+* 2822 Add support of ReportGenerator global tool.
+* 2820 Add DebuggerStepThroughAttribute to generated code.
+* 2817 Bump dependencies.
+* 2801 Inconsistent NuGet file name case.
+* 2792 Add dotnet nologo options.
+* 2743 Tool resolution for multiple names should be breadth first.
+* 2703 OpenCover is missing hideskipped setting.
+* 2623 DotNetCoreTestSettings Can Have Multiple Logger's.
+* 2595 Misleading output message when trying to install prerelease package with the in-process nuget installer.
+* 2892 (Frosting) Add ANSI console.
+* 2893 (Frosting) Align command line parsing with Cake.
+* 2962 Document breaking changes in 1.0 CLI.
+* 2925 Fix sentences which end with double full stop.
+* 2918 Incorrect link for ReSharper's Open Source webpage in Cake readme.
+* 2894 Remove unnecessary documentation and replace it with .
+* 2879 Update links pointing to cakebuild.net to new URL structure.
+* 2836 Update README with more up-to-date "getting started" information.
+* 2811 Identity of BuildProblem in TeamCityProvider should be optional.
+* 1690 Casing causes 'More than one build script specified.' message.
+* 3077 Regression: rc0003 outputs extra characters on OSX.
+* 3072 Attribute [IsDependeeOf] doesn't work.
+* 3038 Tool resolving in Frosting tasks.
+* 3032 Frosting project fails on Linux.
+* 3007 Different arguments between script runner and Frosting.
+* 2963 EndOfStreamException thrown when using loaddependencies=true.
+* 2961 Update dotnet cake usage instructions (dotnet cake --help).
+* 2956 Wrong Cake version in build.config.
+* 2911 C*  syntax errors in exceptions causes Specre.CLI internal error.
+* 2861 Fix error output in 1.0 preview.
+* 2853 Custom argument names are not case insensitive in 1.0 preview.
+* 2887 (Frosting) Fix line endings in build.sh within template package.
+* 2734 Can't resolve resource assemblies.
+* 2066 cake.coreclr help information error.
+
 ### New in 1.0.0-rc0003 (Released 2021/01/29)
 
 * 3029 Add ICakeArguments.GetArgument extension
