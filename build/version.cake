@@ -59,7 +59,7 @@ public class BuildVersion
             semVersion = assertedVersions.LegacySemVerPadded;
             milestone = string.Concat("v", version);
 
-            context.Information("Calculated Semantic Version: {0}", semVersion);
+            context.Information("Calculated Semantic Version: {0} (Version: {1}, Milestone: {2})", semVersion, version, milestone);
         }
 
         if (string.IsNullOrEmpty(version) || string.IsNullOrEmpty(semVersion))
@@ -68,6 +68,8 @@ public class BuildVersion
             version = ReadSolutionInfoVersion(context);
             semVersion = version;
             milestone = string.Concat("v", version);
+
+            context.Information("Fetched Semantic Version: {0} (Version: {1}, Milestone: {2})", semVersion, version, milestone);
         }
 
         var cakeVersion = typeof(ICakeContext).Assembly.GetName().Version.ToString();

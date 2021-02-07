@@ -5,17 +5,16 @@
 using System;
 using System.Threading.Tasks;
 using Autofac;
+using Cake.Cli;
 using Cake.Commands;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Features.Bootstrapping;
 using Cake.Features.Building;
-using Cake.Features.Introspection;
 using Cake.Infrastructure;
 using Cake.Infrastructure.Composition;
-using Cake.Infrastructure.Converters;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake
 {
@@ -44,6 +43,22 @@ namespace Cake
             var app = new CommandApp<DefaultCommand>(registrar);
             app.Configure(config =>
             {
+#pragma warning disable SA1114 // Parameter list should follow declaration
+#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
+#pragma warning disable SA1111 // Closing parenthesis should be on line of last parameter
+                config.SetApplicationName(
+#if NETCOREAPP2_0
+
+                    "dotnet Cake.dll"
+#elif NETFRAMEWORK
+                    "Cake.exe"
+#else
+                    "dotnet cake"
+#endif
+                );
+#pragma warning restore SA1111 // Closing parenthesis should be on line of last parameter
+#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
+#pragma warning restore SA1114 // Parameter list should follow declaration
                 config.ValidateExamples();
 
                 if (_propagateExceptions)
@@ -54,7 +69,7 @@ namespace Cake
                 // Top level examples.
                 config.AddExample(new[] { string.Empty });
                 config.AddExample(new[] { "build.cake", "--verbosity", "quiet" });
-                config.AddExample(new[] { "build.cake", "--showtree" });
+                config.AddExample(new[] { "build.cake", "--tree" });
             });
 
             return await app.RunAsync(args);
@@ -77,8 +92,8 @@ namespace Cake
             // Features
             builder.RegisterType<BuildFeature>().As<IBuildFeature>().SingleInstance();
             builder.RegisterType<BootstrapFeature>().As<IBootstrapFeature>().SingleInstance();
-            builder.RegisterType<VersionFeature>().As<IVersionFeature>().SingleInstance();
-            builder.RegisterType<InfoFeature>().As<IInfoFeature>().SingleInstance();
+            builder.RegisterType<VersionFeature>().As<ICakeVersionFeature>().SingleInstance();
+            builder.RegisterType<InfoFeature>().As<ICakeInfoFeature>().SingleInstance();
 
             // Core
             builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();

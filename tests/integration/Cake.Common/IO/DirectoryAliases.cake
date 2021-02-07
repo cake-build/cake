@@ -166,6 +166,42 @@ Task("Cake.Common.IO.DirectoryAliases.DeleteDirectories.Recurse")
     Assert.False(System.IO.Directory.Exists(path2.FullPath));
 });
 
+Task("Cake.Common.IO.DirectoryAliases.MakeRelative.DefinedRootPath")
+    .Does(() =>
+{
+    // Given
+    var directoryPath = Paths.Temp.Combine("./hello/world");
+    var filePath = Paths.Temp.Combine("./hello/world/test.cake");
+    var rootPath1 = Paths.Temp;
+    var rootPath2 = Paths.Temp.Combine("./cake/world");
+
+    // When
+    var relativeDirectoryPath1 = MakeRelative(directoryPath, rootPath1);
+    var relativeDirectoryPath2 = MakeRelative(directoryPath, rootPath2);
+    var relativeFilePath = MakeRelative(filePath, rootPath2);
+    
+    // Then
+    Assert.Equal("hello/world", relativeDirectoryPath1.ToString());
+    Assert.Equal("../../hello/world", relativeDirectoryPath2.ToString());
+    Assert.Equal("../../hello/world/test.cake", relativeFilePath.ToString());
+});
+
+Task("Cake.Common.IO.DirectoryAliases.MakeRelative.WorkingDirectory")
+    .Does(() =>
+{
+    // Given
+    var directoryPath = Paths.Temp.Combine("./hello/world");
+    var filePath = Paths.Temp.Combine("./hello/world/test.cake");
+
+    // When
+    var relativeDirectoryPath = MakeRelative(directoryPath);
+    var relativeFilePath = MakeRelative(filePath);
+
+    // Then
+    Assert.Equal("temp/hello/world", relativeDirectoryPath.ToString());
+    Assert.Equal("temp/hello/world/test.cake", relativeFilePath.ToString());
+});
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Common.IO.DirectoryAliases")
@@ -177,4 +213,6 @@ Task("Cake.Common.IO.DirectoryAliases")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectory")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectory.Recurse")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectories")
-    .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectories.Recurse");
+    .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectories.Recurse")
+    .IsDependentOn("Cake.Common.IO.DirectoryAliases.MakeRelative.DefinedRootPath")
+    .IsDependentOn("Cake.Common.IO.DirectoryAliases.MakeRelative.WorkingDirectory");

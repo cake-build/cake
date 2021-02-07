@@ -4,123 +4,168 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
+using Cake.Cli;
+using Cake.Common.Modules;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
-using Cake.Core.IO;
-using Cake.Core.Packaging;
+using Cake.Core.Modules;
 using Cake.Frosting.Internal;
-using Cake.Frosting.Internal.Commands;
-using Cake.Frosting.Internal.Composition;
+using Cake.NuGet;
+using Microsoft.Extensions.DependencyInjection;
+using Spectre.Console.Cli;
 
 namespace Cake.Frosting
 {
-    internal sealed class CakeHost : ICakeHost
+    /// <summary>
+    /// The Cake host.
+    /// </summary>
+    public sealed class CakeHost
     {
-        private readonly CakeHostOptions _options;
-        private readonly IFileSystem _fileSystem;
-        private readonly IFrostingContext _context;
-        private readonly IEnumerable<IFrostingTask> _tasks;
-        private readonly IFrostingLifetime _lifetime;
-        private readonly IFrostingTaskLifetime _taskLifetime;
-        private readonly ICakeEnvironment _environment;
-        private readonly ICakeEngine _engine;
-        private readonly ICakeLog _log;
-        private readonly IToolInstaller _installer;
-        private readonly List<PackageReference> _tools;
-        private readonly CommandFactory _commandFactory;
-        private readonly WorkingDirectory _workingDirectory;
-        private readonly EngineInitializer _engineInitializer;
+        private readonly IServiceCollection _services;
+        private readonly List<Assembly> _assemblies;
 
-        // ReSharper disable once NotAccessedField.Local
-        private readonly Container _container;
-
-        public CakeHost(IFrostingContext context, Container container, CakeHostOptions options,
-            IFileSystem fileSystem, ICakeEnvironment environment, ICakeEngine engine, ICakeLog log,
-            IToolInstaller installer, IEnumerable<PackageReference> tools,
-            EngineInitializer engineInitializer, CommandFactory commandFactory,
-            WorkingDirectory workingDirectory = null, IEnumerable<IFrostingTask> tasks = null,
-            IFrostingLifetime lifetime = null, IFrostingTaskLifetime taskLifetime = null)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeHost"/> class.
+        /// </summary>
+        public CakeHost()
         {
-            Guard.ArgumentNotNull(context, nameof(context));
-            Guard.ArgumentNotNull(container, nameof(container));
-            Guard.ArgumentNotNull(options, nameof(options));
-            Guard.ArgumentNotNull(fileSystem, nameof(fileSystem));
-            Guard.ArgumentNotNull(environment, nameof(environment));
-            Guard.ArgumentNotNull(engine, nameof(engine));
-            Guard.ArgumentNotNull(log, nameof(log));
-            Guard.ArgumentNotNull(engineInitializer, nameof(engineInitializer));
-            Guard.ArgumentNotNull(commandFactory, nameof(commandFactory));
-
-            // Mandatory arguments.
-            _context = context;
-            _container = container;
-            _options = options;
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _engine = engine;
-            _log = log;
-            _installer = installer;
-            _tools = new List<PackageReference>(tools ?? Enumerable.Empty<PackageReference>());
-            _engineInitializer = engineInitializer;
-            _commandFactory = commandFactory;
-
-            // Optional arguments.
-            _workingDirectory = workingDirectory;
-            _tasks = tasks;
-            _lifetime = lifetime;
-            _taskLifetime = taskLifetime;
+            _services = CreateServiceCollection();
+            _assemblies = new List<Assembly>
+            {
+                Assembly.GetEntryAssembly()
+            };
         }
 
-        public int Run()
+        /// <summary>
+        /// Creates a <see cref="CakeHost"/>.
+        /// </summary>
+        /// <returns>The created <see cref="CakeHost"/>.</returns>
+        public static CakeHost Create()
         {
-            try
+            return new CakeHost();
+        }
+
+        /// <summary>
+        /// Registers an assembly which will be used to find tasks.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <returns>The same <see cref="CakeHost"/> instance so that multiple calls can be chained.</returns>
+        public CakeHost AddAssembly(Assembly assembly)
+        {
+            _assemblies.Add(assembly);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a delegate for configuring additional services for the host.
+        /// </summary>
+        /// <param name="services">A delegate for configuring the <see cref="IServiceCollection"/>.</param>
+        /// <returns>The same <see cref="CakeHost"/> instance so that multiple calls can be chained.</returns>
+        public CakeHost ConfigureServices(Action<IServiceCollection> services)
+        {
+            services(_services);
+            return this;
+        }
+
+        /// <summary>
+        /// Runs the build with the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>The exit code.</returns>
+        public int Run(IEnumerable<string> args)
+        {
+            RegisterTasks(_assemblies);
+
+            // Register all the user's registrations
+            var registrar = new TypeRegistrar();
+            registrar.RegisterInstance(typeof(IServiceCollection), _services);
+
+            // Run the application
+            var app = new CommandApp<DefaultCommand>(registrar);
+            app.Configure(config =>
             {
-                // Update the log verbosity.
-                _log.Verbosity = _options.Verbosity;
+                config.ValidateExamples();
 
-                // Set the working directory.
-                _environment.WorkingDirectory = GetWorkingDirectory();
-                _log.Debug("Working directory: {0}", _environment.WorkingDirectory.FullPath);
+                // Top level examples.
+                config.AddExample(new[] { string.Empty });
+                config.AddExample(new[] { "--verbosity", "quiet" });
+                config.AddExample(new[] { "--tree" });
+            });
 
-                // Install tools.
-                if (_tools.Count > 0)
+            return app.Run(args);
+        }
+
+        private ServiceCollection CreateServiceCollection()
+        {
+            var services = new ServiceCollection();
+
+            services.AddSingleton<ICakeLog, CakeBuildLog>();
+            services.AddSingleton<IConsole, CakeConsole>();
+            services.AddSingleton<ICakeReportPrinter, CakeReportPrinter>();
+            services.AddSingleton<ICakeConfiguration, FrostingConfiguration>();
+
+            services.AddSingleton<BuildScriptHost<IFrostingContext>>();
+            services.AddSingleton<DryRunScriptHost<IFrostingContext>>();
+            services.AddSingleton<TreeScriptHost>();
+            services.AddSingleton<DescriptionScriptHost>();
+
+            services.AddSingleton<IVersionResolver, VersionResolver>();
+            services.AddSingleton<VersionFeature>();
+            services.AddSingleton<InfoFeature>();
+
+            services.AddSingleton<FrostingRunner>();
+            services.AddSingleton<FrostingDryRunner>();
+            services.AddSingleton<FrostingTreeRunner>();
+            services.AddSingleton<FrostingDescriptionRunner>();
+
+            services.AddSingleton<IToolInstaller, ToolInstaller>();
+
+            services.UseModule<CoreModule>();
+            services.UseModule<CommonModule>();
+            services.UseModule<NuGetModule>();
+
+            services.AddSingleton<FrostingContext>();
+            services.AddSingleton<IFrostingContext>(f => f.GetService<FrostingContext>());
+
+            return services;
+        }
+
+        private void RegisterTasks(IEnumerable<Assembly> assemblies)
+        {
+            // Find tasks in registered assemblies.
+            var tasks = GetTasks(assemblies);
+            if (tasks.Length > 0)
+            {
+                foreach (var task in tasks)
                 {
-                    _log.Verbose("Installing tools...");
-                    foreach (var tool in _tools)
-                    {
-                        _installer.Install(tool);
-                    }
+                    _services.AddSingleton(typeof(IFrostingTask), task);
+                }
+            }
+        }
+
+        private static Type[] GetTasks(IEnumerable<Assembly> assemblies)
+        {
+            var result = new List<Type>();
+            foreach (var assembly in assemblies)
+            {
+                if (assembly == null)
+                {
+                    continue;
                 }
 
-                // Initialize the engine and register everything.
-                _engineInitializer.Initialize(_engine, _context, _tasks, _lifetime, _taskLifetime);
-
-                // Get the command and execute.
-                var command = _commandFactory.GetCommand(_options);
-                var result = command.ExecuteAsync(_engine, _options).GetAwaiter().GetResult();
-
-                // Return success.
-                return result ? 0 : 1;
-            }
-            catch (Exception exception)
-            {
-                ErrorHandler.OutputError(_log, exception);
-                return ErrorHandler.GetExitCode(exception);
-            }
-        }
-
-        private DirectoryPath GetWorkingDirectory()
-        {
-            var workingDirectory = _options.WorkingDirectory ?? _workingDirectory?.Path ?? ".";
-            workingDirectory = workingDirectory.MakeAbsolute(_environment);
-
-            if (!_fileSystem.Exist(workingDirectory))
-            {
-                throw new FrostingException($"The working directory '{workingDirectory.FullPath}' does not exist.");
+                foreach (var type in assembly.GetExportedTypes())
+                {
+                    var info = type.GetTypeInfo();
+                    if (typeof(IFrostingTask).IsAssignableFrom(type) && info.IsClass && !info.IsAbstract)
+                    {
+                        result.Add(type);
+                    }
+                }
             }
 
-            return workingDirectory;
+            return result.ToArray();
         }
     }
 }

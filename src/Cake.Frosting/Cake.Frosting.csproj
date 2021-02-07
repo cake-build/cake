@@ -8,9 +8,22 @@
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
+
   <ItemGroup>
+    <Compile Include="..\Cake.Core\Constants.cs" Link="Internal\Imported\Constants.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Cli\Cake.Cli.csproj" />
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
+    <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Internal\Imported\" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

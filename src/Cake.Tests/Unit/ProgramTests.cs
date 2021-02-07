@@ -1,11 +1,13 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
+using Cake.Cli;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Features.Building;
-using Cake.Features.Introspection;
 using Cake.Tests.Fixtures;
 using NSubstitute;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 using Xunit;
 
 namespace Cake.Tests.Unit
@@ -103,14 +105,14 @@ namespace Cake.Tests.Unit
         {
             // Given
             var fixture = new ProgramFixture();
-            var feature = Substitute.For<IVersionFeature>();
+            var feature = Substitute.For<ICakeVersionFeature>();
             fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
 
             // When
             var result = await fixture.Run(args);
 
             // Then
-            feature.Received(1).Run();
+            feature.Received(1).Run(fixture.Console);
         }
 
         [Theory]
@@ -119,14 +121,14 @@ namespace Cake.Tests.Unit
         {
             // Given
             var fixture = new ProgramFixture();
-            var feature = Substitute.For<IInfoFeature>();
+            var feature = Substitute.For<ICakeInfoFeature>();
             fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
 
             // When
             var result = await fixture.Run(args);
 
             // Then
-            feature.Received(1).Run();
+            feature.Received(1).Run(fixture.Console);
         }
     }
 }

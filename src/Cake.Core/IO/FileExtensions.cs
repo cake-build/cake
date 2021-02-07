@@ -130,11 +130,18 @@ namespace Cake.Core.IO
                     fs.Position = 0x3C;
 
                     // Go to Magic header
-                    fs.Position = reader.ReadUInt32() + MagicOffset;
+                    long offset = reader.ReadUInt32() + MagicOffset;
+
+                    if (offset + sizeof(UInt16) > fs.Length)
+                    {
+                        return false;
+                    }
+
+                    fs.Position = offset;
 
                     // Check magic to get 32 / 64 bit offset
                     var is32Bit = reader.ReadUInt16() == Magic32Bit;
-                    var offset = fs.Position + (is32Bit ? Offset32Bit : Offset64Bit) + OffsetDictionary;
+                    offset = fs.Position + (is32Bit ? Offset32Bit : Offset64Bit) + OffsetDictionary;
 
                     if (offset + 4 > fs.Length)
                     {

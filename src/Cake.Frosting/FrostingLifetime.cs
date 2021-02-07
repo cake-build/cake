@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
+using System;
 using Cake.Core;
-using Cake.Frosting.Internal;
 
 namespace Cake.Frosting
 {
@@ -29,9 +28,7 @@ namespace Cake.Frosting
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="context">The context.</param>
-        public virtual void Setup(TContext context)
-        {
-        }
+        public abstract void Setup(TContext context);
 
         /// <summary>
         /// This method is executed after all tasks have been run.
@@ -39,23 +36,31 @@ namespace Cake.Frosting
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="info">The teardown information.</param>
-        public virtual void Teardown(TContext context, ITeardownContext info)
-        {
-        }
+        public abstract void Teardown(TContext context, ITeardownContext info);
 
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Explicit implementation.")]
-        void IFrostingLifetime.Setup(ICakeContext context)
+        /// <inheritdoc/>
+        void IFrostingSetup.Setup(ICakeContext context)
         {
-            Guard.ArgumentNotNull(context, nameof(context));
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
 
             Setup((TContext)context);
         }
 
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Explicit implementation.")]
-        void IFrostingLifetime.Teardown(ICakeContext context, ITeardownContext info)
+        /// <inheritdoc/>
+        void IFrostingTeardown.Teardown(ICakeContext context, ITeardownContext info)
         {
-            Guard.ArgumentNotNull(context, nameof(context));
-            Guard.ArgumentNotNull(info, nameof(info));
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (info is null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
 
             Teardown((TContext)context, info);
         }

@@ -2,28 +2,70 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Frosting.Example
+using System.Threading.Tasks;
+using Cake.Core;
+using Cake.Core.Diagnostics;
+using Cake.Frosting;
+
+public static class Program
 {
-    public class Program
+    public static int Main(string[] args)
     {
-        public static int Main(string[] args)
-        {
-            // Create the host.
-            var host = new CakeHostBuilder()
-                .UseStartup<Startup>()
-                .WithArguments(args)
-                .Build();
-
-            // Run the host.
-            return host.Run();
-        }
+        return new CakeHost()
+            .UseContext<BuildContext>()
+            .Run(args);
     }
+}
 
-    public class Startup : IFrostingStartup
+public class BuildContext : FrostingContext
+{
+    public bool Delay { get; set; }
+
+    public BuildContext(ICakeContext context)
+        : base(context)
     {
-        public void Configure(ICakeServices services)
-        {
-            services.UseContext<Settings>();
-        }
+        Delay = context.Arguments.HasArgument("delay");
     }
+}
+
+[TaskName("Hello")]
+public sealed class HelloTask : FrostingTask<BuildContext>
+{
+    public override void Run(BuildContext context)
+    {
+        context.Log.Information("Hello");
+    }
+}
+
+[TaskName("Dependee")]
+[IsDependeeOf(typeof(WorldTask))]
+public sealed class DependeeTask : FrostingTask<BuildContext>
+{
+    public override void Run(BuildContext context)
+    {
+        context.Log.Information("Dependee of World");
+    }
+}
+
+[TaskName("World")]
+[IsDependentOn(typeof(HelloTask))]
+public sealed class WorldTask : AsyncFrostingTask<BuildContext>
+{
+    // Tasks can be asynchronous
+    public override async Task RunAsync(BuildContext context)
+    {
+        if (context.Delay)
+        {
+            context.Log.Information("Waiting...");
+            await Task.Delay(1500);
+        }
+
+        context.Log.Information("World");
+    }
+}
+
+[TaskName("Default")]
+[IsDependentOn(typeof(WorldTask))]
+public class DefaultTask : FrostingTask
+{
 }

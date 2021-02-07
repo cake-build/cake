@@ -7,16 +7,23 @@ using System.Collections.Generic;
 
 namespace Cake.Core
 {
+    /// <summary>
+    /// Implementation of <see cref="ICakeDataService"/>.
+    /// </summary>
     // ReSharper disable once ClassNeverInstantiated.Global
-    internal sealed class CakeDataService : ICakeDataService
+    public sealed class CakeDataService : ICakeDataService
     {
         private readonly Dictionary<Type, object> _data;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeDataService"/> class.
+        /// </summary>
         public CakeDataService()
         {
             _data = new Dictionary<Type, object>();
         }
 
+        /// <inheritdoc/>
         public TData Get<TData>()
             where TData : class
         {
@@ -32,6 +39,7 @@ namespace Cake.Core
             throw new InvalidOperationException("The context data has not been setup.");
         }
 
+        /// <inheritdoc/>
         public void Add<TData>(TData value)
             where TData : class
         {

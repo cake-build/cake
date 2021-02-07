@@ -104,7 +104,19 @@ public class BuildParameters
         Packages = BuildPackages.GetPackages(
             Paths.Directories.NuGetRoot,
             Version.SemVersion,
-            new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.Testing.Xunit", "Cake.CoreCLR", "Cake.NuGet", "Cake.Tool" },
+            new [] {
+                "Cake",
+                "Cake.Core",
+                "Cake.Common",
+                "Cake.Testing",
+                "Cake.Testing.Xunit",
+                "Cake.CoreCLR",
+                "Cake.NuGet",
+                "Cake.Tool",
+                "Cake.Frosting",
+                "Cake.Frosting.Template",
+                "Cake.Cli"
+                },
             new [] { "cake.portable" });
 
         var releaseNotes = string.Join("\n", ReleaseNotes.Notes.ToArray()).Replace("\"", "\"\"");

@@ -4,7 +4,7 @@
 
 using System;
 using Autofac;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Infrastructure.Composition
 {

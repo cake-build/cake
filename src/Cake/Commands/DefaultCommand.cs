@@ -3,12 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Features.Bootstrapping;
 using Cake.Features.Building;
-using Cake.Features.Introspection;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Commands
 {
@@ -16,21 +16,24 @@ namespace Cake.Commands
     {
         private readonly IBuildFeature _builder;
         private readonly IBootstrapFeature _bootstrapper;
-        private readonly IVersionFeature _version;
-        private readonly IInfoFeature _info;
+        private readonly ICakeVersionFeature _version;
+        private readonly ICakeInfoFeature _info;
+        private readonly IConsole _console;
         private readonly ICakeLog _log;
 
         public DefaultCommand(
             IBuildFeature builder,
             IBootstrapFeature bootstrapper,
-            IVersionFeature version,
-            IInfoFeature info,
+            ICakeVersionFeature version,
+            ICakeInfoFeature info,
+            IConsole console,
             ICakeLog log)
         {
             _builder = builder;
             _bootstrapper = bootstrapper;
             _version = version;
             _info = info;
+            _console = console;
             _log = log;
         }
 
@@ -43,11 +46,13 @@ namespace Cake.Commands
 
                 if (settings.ShowVersion)
                 {
-                    return _version.Run();
+                    _version.Run(_console);
+                    return 0;
                 }
                 else if (settings.ShowInfo)
                 {
-                    return _info.Run();
+                    _info.Run(_console);
+                    return 0;
                 }
 
                 // Get the build host type.
@@ -79,7 +84,8 @@ namespace Cake.Commands
             }
         }
 
-        private static int LogException<T>(ICakeLog log, T ex) where T : Exception
+        private static int LogException<T>(ICakeLog log, T ex)
+            where T : Exception
         {
             log = log ?? new CakeBuildLog(
                 new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime())));
@@ -99,6 +105,7 @@ namespace Cake.Commands
                     }
                 }
             }
+
             return 1;
         }
 
@@ -108,11 +115,11 @@ namespace Cake.Commands
             {
                 return BuildHostKind.DryRun;
             }
-            else if (settings.ShowDescription)
+            else if (settings.Description)
             {
                 return BuildHostKind.Description;
             }
-            else if (settings.ShowTree)
+            else if (settings.Tree)
             {
                 return BuildHostKind.Tree;
             }

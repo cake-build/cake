@@ -9,7 +9,7 @@ namespace Cake.Frosting
     /// <summary>
     /// Represent errors that occur during execution of Cake.
     /// </summary>
-    /// <seealso cref="System.Exception" />
+    /// <seealso cref="Exception" />
     public sealed class FrostingException : Exception
     {
         /// <summary>

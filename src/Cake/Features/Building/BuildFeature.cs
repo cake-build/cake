@@ -6,17 +6,16 @@ using System;
 using System.Linq;
 using System.Threading;
 using Autofac;
+using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Composition;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
-using Cake.Features.Bootstrapping;
-using Cake.Features.Building.Hosts;
 using Cake.Infrastructure;
 using Cake.Infrastructure.Composition;
 using Cake.Infrastructure.Scripting;
-using Spectre.Cli;
+using Spectre.Console.Cli;
 
 namespace Cake.Features.Building
 {

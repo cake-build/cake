@@ -3,14 +3,51 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Cake.Core;
 
-// ReSharper disable once CheckNamespace
 namespace Cake.Frosting.Internal
 {
     internal static class FrostingTaskExtensions
     {
+        public static string GetTaskName(this IFrostingTask task)
+        {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            return task.GetType().GetTaskName();
+        }
+
+        public static string GetTaskDescription(this IFrostingTask task)
+        {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            var attribute = task.GetType().GetCustomAttribute<TaskDescriptionAttribute>();
+            return attribute != null ? attribute.Description : string.Empty;
+        }
+
+        public static IEnumerable<ITaskDependency> GetDependencies(this IFrostingTask task)
+        {
+            var result = new List<ITaskDependency>();
+            result.AddRange(task.GetType().GetCustomAttributes<DependencyAttribute>());
+            result.AddRange(task.GetType().GetCustomAttributes<IsDependentOnAttribute>());
+            return result;
+        }
+
+        public static IEnumerable<IReverseTaskDependency> GetReverseDependencies(this IFrostingTask task)
+        {
+            var result = new List<IReverseTaskDependency>();
+            result.AddRange(task.GetType().GetCustomAttributes<ReverseDependencyAttribute>());
+            result.AddRange(task.GetType().GetCustomAttributes<IsDependeeOfAttribute>());
+            return result;
+        }
+
         public static bool IsRunOverridden(this IFrostingTask task, IFrostingContext context)
         {
             if (task.IsFrostingTask())

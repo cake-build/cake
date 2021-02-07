@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.Configuration;
 using Cake.Core.Packaging;
-using Cake.NuGet.Install;
 using Cake.NuGet.Tests.Stubs;
 using NSubstitute;
 using NuGet.Configuration;

@@ -36,16 +36,8 @@ namespace Cake.Core.Scripting
         /// <param name="context">The context.</param>
         protected ScriptHost(ICakeEngine engine, ICakeContext context)
         {
-            if (engine == null)
-            {
-                throw new ArgumentNullException(nameof(engine));
-            }
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            Engine = engine;
-            Context = context;
+            Engine = engine ?? throw new ArgumentNullException(nameof(engine));
+            Context = context ?? throw new ArgumentNullException(nameof(context));
             Settings = new ExecutionSettings();
         }
 

@@ -9,6 +9,7 @@ namespace Cake.Core.IO
     /// </summary>
     public sealed class WindowsRegistry : IRegistry
     {
+#pragma warning disable CA1416
         /// <inheritdoc/>
         public IRegistryKey CurrentUser => new WindowsRegistryKey(Microsoft.Win32.Registry.CurrentUser);
 
@@ -26,5 +27,6 @@ namespace Cake.Core.IO
 
         /// <inheritdoc/>
         public IRegistryKey CurrentConfig => new WindowsRegistryKey(Microsoft.Win32.Registry.CurrentConfig);
+#pragma warning restore CA1416
     }
 }

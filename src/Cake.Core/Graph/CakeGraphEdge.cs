@@ -7,7 +7,7 @@ namespace Cake.Core.Graph
     /// <summary>
     /// Represents an edge in a <see cref="CakeGraph"/>.
     /// </summary>
-    internal sealed class CakeGraphEdge
+    public sealed class CakeGraphEdge
     {
         /// <summary>
         /// Gets the start node of the edge.
