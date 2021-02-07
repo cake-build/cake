@@ -3,8 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Cake.Cli;
+using System.Collections.Generic;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Features.Bootstrapping;
 using Cake.Features.Building;
@@ -88,7 +89,7 @@ namespace Cake.Commands
             where T : Exception
         {
             log = log ?? new CakeBuildLog(
-                new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime())));
+                new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime()), new CakeConfiguration(new Dictionary<string, string>())));
 
             if (log.Verbosity == Verbosity.Diagnostic)
             {

@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using Cake.Core.Configuration;
 
 namespace Cake.Core.Diagnostics
 {
@@ -40,13 +41,32 @@ namespace Cake.Core.Diagnostics
             };
         }
 
-        public static bool SupportsAnsi(ICakeEnvironment environment)
+        public static bool SupportsAnsi(ICakeEnvironment environment, ICakeConfiguration configuration)
         {
             // Prevents the addition of ANSI color if NO_COLOR env. variable is present
             // https://no-color.org
             if (!string.IsNullOrWhiteSpace(environment.GetEnvironmentVariable("NO_COLOR")))
             {
                 return false;
+            }
+
+            if (configuration == null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
+
+            var color = configuration.GetValue(Constants.Settings.Color)?.ToLowerInvariant();
+
+            switch (color)
+            {
+                case "always":
+                    return true;
+
+                case "never":
+                    return false;
+
+                default:
+                    break;
             }
 
             // Github action doesn't setup a correct PTY but supports ANSI.
