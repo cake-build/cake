@@ -43,7 +43,7 @@ public class BuildVersion
 
                 version = context.EnvironmentVariable("GitVersion_MajorMinorPatch");
                 semVersion = context.EnvironmentVariable("GitVersion_LegacySemVerPadded");
-                milestone = string.Concat("v", semVersion);
+                milestone = string.Concat("v", version);
             }
 
             GitVersion assertedVersions = context.GitVersion(new GitVersionSettings
@@ -57,7 +57,7 @@ public class BuildVersion
 
             version = assertedVersions.MajorMinorPatch;
             semVersion = assertedVersions.LegacySemVerPadded;
-            milestone = string.Concat("v", semVersion);
+            milestone = string.Concat("v", version);
 
             context.Information("Calculated Semantic Version: {0} (Version: {1}, Milestone: {2})", semVersion, version, milestone);
         }
@@ -67,7 +67,7 @@ public class BuildVersion
             context.Information("Fetching version from first SolutionInfo...");
             version = ReadSolutionInfoVersion(context);
             semVersion = version;
-            milestone = string.Concat("v", semVersion);
+            milestone = string.Concat("v", version);
 
             context.Information("Fetched Semantic Version: {0} (Version: {1}, Milestone: {2})", semVersion, version, milestone);
         }

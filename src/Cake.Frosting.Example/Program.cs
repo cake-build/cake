@@ -37,6 +37,16 @@ public sealed class HelloTask : FrostingTask<BuildContext>
     }
 }
 
+[TaskName("Dependee")]
+[IsDependeeOf(typeof(WorldTask))]
+public sealed class DependeeTask : FrostingTask<BuildContext>
+{
+    public override void Run(BuildContext context)
+    {
+        context.Log.Information("Dependee of World");
+    }
+}
+
 [TaskName("World")]
 [IsDependentOn(typeof(HelloTask))]
 public sealed class WorldTask : AsyncFrostingTask<BuildContext>
