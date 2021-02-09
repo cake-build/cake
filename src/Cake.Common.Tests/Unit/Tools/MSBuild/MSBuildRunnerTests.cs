@@ -993,7 +993,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
+                Assert.Equal("/v:normal /target:Build /bl:\"mylog.binlog\";ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
@@ -1007,7 +1007,25 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
+                Assert.Equal("/v:normal /target:Build /bl:\"mylog.binlog\";ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Quote_Binary_Logging_FilePath()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.BinaryLogger = new MSBuildBinaryLogSettings()
+                {
+                    Enabled = true,
+                    FileName = "C:/Working Directory/src folder/mylog.binlog"
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:Build /bl:\"C:/Working Directory/src folder/mylog.binlog\" \"C:/Working/src/Solution.sln\"", result.Args);
             }
 
             [Theory]
