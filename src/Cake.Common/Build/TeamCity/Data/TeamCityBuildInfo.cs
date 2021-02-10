@@ -70,6 +70,14 @@ namespace Cake.Common.Build.TeamCity.Data
         }
 
         /// <summary>
+        /// Gets the branch display name.
+        /// </summary>
+        /// <value>
+        /// The  branch display name.
+        /// </value>
+        public string BranchName => Properties.ContainsKey("teamcity.build.branch") ? Properties["teamcity.build.branch"] : string.Empty;
+
+        /// <summary>
         /// Gets the TeamCity properties.
         /// </summary>
         /// <value>

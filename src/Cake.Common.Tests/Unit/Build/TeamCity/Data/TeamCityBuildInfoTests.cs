@@ -106,6 +106,22 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
             }
         }
 
+        public sealed class TheBranchProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new TeamCityInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.BranchName;
+
+                // Then
+                Assert.Equal(string.Empty, result);
+            }
+        }
+
         public sealed class ThePropertiesProperty
         {
             [Fact]
