@@ -4,6 +4,11 @@
 
 using System;
 using System.Globalization;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using Cake.Core;
 
 namespace Cake.Common.Build.TeamCity.Data
@@ -65,12 +70,51 @@ namespace Cake.Common.Build.TeamCity.Data
         }
 
         /// <summary>
+        /// Gets the TeamCity properties.
+        /// </summary>
+        /// <value>
+        /// The TeamCity properties as a key/value dictionary.
+        /// </value>
+        public Dictionary<string, string> Properties => _properties.Value;
+
+        private readonly Lazy<Dictionary<string, string>> _properties;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TeamCityBuildInfo"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
         public TeamCityBuildInfo(ICakeEnvironment environment)
             : base(environment)
         {
+            _properties = new Lazy<Dictionary<string, string>>(() =>
+            {
+                var buildPropertiesFile = GetEnvironmentString("TEAMCITY_BUILD_PROPERTIES_FILE");
+                var buildPropertiesXmlFile = $"{buildPropertiesFile}.xml";
+                if (!File.Exists(buildPropertiesXmlFile))
+                {
+                    return new Dictionary<string, string>();
+                }
+
+                var buildPropertiesXml = XDocument.Load(buildPropertiesXmlFile);
+
+                var configurationPropertiesFile = buildPropertiesXml.XPathSelectElement("//entry[key='teamcity.configuration.properties.file']")?.Value;
+                if (configurationPropertiesFile == null)
+                {
+                    return new Dictionary<string, string>();
+                }
+
+                var configurationPropertiesXmlFile = $"{configurationPropertiesFile}.xml";
+                if (!File.Exists(configurationPropertiesXmlFile))
+                {
+                    return new Dictionary<string, string>();
+                }
+
+                var configurationPropertiesXml = XDocument.Load(configurationPropertiesXmlFile);
+
+                return configurationPropertiesXml.XPathSelectElements("//entry")
+                                                 .Where(entry => entry.Attribute("key") != null)
+                                                 .ToDictionary(entry => entry.Attribute("key").Value, entry => entry.Value);
+            });
         }
     }
 }

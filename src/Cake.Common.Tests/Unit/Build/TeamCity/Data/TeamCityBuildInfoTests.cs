@@ -105,5 +105,21 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
                 Assert.Equal(null, result);
             }
         }
+
+        public sealed class ThePropertiesProperty
+        {
+            [Fact]
+            public void Should_Return_Empty_When_Path_Unknown()
+            {
+                // Given
+                var info = new TeamCityInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.Properties;
+
+                // Then
+                Assert.Empty(result);
+            }
+        }
     }
 }

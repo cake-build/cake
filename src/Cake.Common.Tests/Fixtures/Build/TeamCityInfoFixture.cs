@@ -24,6 +24,8 @@ namespace Cake.Common.Tests.Fixtures.Build
 
             Environment.GetEnvironmentVariable("TEAMCITY_PROJECT_NAME").Returns("Cake");
 
+            Environment.GetEnvironmentVariable("TEAMCITY_BUILD_PROPERTIES_FILE").Returns("path/to/file");
+
             Environment.GetEnvironmentVariable("Git_Branch").Returns("refs/pull-requests/7/from");
         }
 
