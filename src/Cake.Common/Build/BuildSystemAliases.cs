@@ -48,7 +48,7 @@ namespace Cake.Common.Build
             }
 
             var appVeyorProvider = new AppVeyorProvider(context.Environment, context.ProcessRunner, context.Log);
-            var teamCityProvider = new TeamCityProvider(context.Environment, new BuildSystemServiceMessageWriter());
+            var teamCityProvider = new TeamCityProvider(context.Environment, context.FileSystem, new BuildSystemServiceMessageWriter());
             var myGetProvider = new MyGetProvider(context.Environment, new BuildSystemServiceMessageWriter());
             var bambooProvider = new BambooProvider(context.Environment);
             var continuaCIProvider = new ContinuaCIProvider(context.Environment, new BuildSystemServiceMessageWriter());

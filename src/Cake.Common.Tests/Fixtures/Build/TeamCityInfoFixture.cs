@@ -4,29 +4,54 @@
 
 using Cake.Common.Build.TeamCity.Data;
 using Cake.Core;
-using NSubstitute;
+using Cake.Core.IO;
+using Cake.Testing;
 
 namespace Cake.Common.Tests.Fixtures.Build
 {
     internal sealed class TeamCityInfoFixture
     {
+        public IFileSystem FileSystem { get; set; }
         public ICakeEnvironment Environment { get; set; }
 
         public TeamCityInfoFixture()
         {
-            Environment = Substitute.For<ICakeEnvironment>();
+            Environment = FakeEnvironment.CreateUnixEnvironment();
+            FileSystem = new FakeFileSystem(Environment);
+            ((FakeFileSystem)FileSystem).CreateDirectory("/Working");
 
-            Environment.GetEnvironmentVariable("TEAMCITY_BUILDCONF_NAME").Returns(@"Cake Build");
-            Environment.GetEnvironmentVariable("BUILD_NUMBER").Returns("10-Foo");
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_BUILDCONF_NAME", @"Cake Build");
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_NUMBER", "10-Foo");
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_PROJECT_NAME", "Cake");
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_BUILD_PROPERTIES_FILE", "/Working/file.properties");
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("Git_Branch", "refs/pull-requests/7/from");
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_DATE", "20200822");
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_TIME", "123456");
+        }
 
-            Environment.GetEnvironmentVariable("BUILD_START_DATE").Returns("20200822");
-            Environment.GetEnvironmentVariable("BUILD_START_TIME").Returns("123456");
+        public void SetPropertiesFileContent(string xml)
+        {
+            ((FakeFileSystem)FileSystem).GetFile("/Working/file.properties.xml").SetContent(xml);
+        }
 
-            Environment.GetEnvironmentVariable("TEAMCITY_PROJECT_NAME").Returns("Cake");
+        public void SetBuildConfigurationFileContent(string xml)
+        {
+            ((FakeFileSystem)FileSystem).GetFile("/Working/file.build.configuration.xml").SetContent(xml);
+        }
 
-            Environment.GetEnvironmentVariable("TEAMCITY_BUILD_PROPERTIES_FILE").Returns("path/to/file");
+        public void SetGitBranch(string branch)
+        {
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("Git_Branch", branch);
+        }
 
-            Environment.GetEnvironmentVariable("Git_Branch").Returns("refs/pull-requests/7/from");
+        public void SetBuildStartDate(string startDate)
+        {
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_DATE", startDate);
+        }
+
+        public void SetBuildStartTime(string startTime)
+        {
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_TIME", startTime);
         }
 
         public TeamCityPullRequestInfo CreatePullRequestInfo()
@@ -36,12 +61,12 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public TeamCityEnvironmentInfo CreateEnvironmentInfo()
         {
-            return new TeamCityEnvironmentInfo(Environment);
+            return new TeamCityEnvironmentInfo(Environment, FileSystem);
         }
 
         public TeamCityBuildInfo CreateBuildInfo()
         {
-            return new TeamCityBuildInfo(Environment);
+            return new TeamCityBuildInfo(Environment, FileSystem);
         }
 
         public TeamCityProjectInfo CreateProjectInfo()
