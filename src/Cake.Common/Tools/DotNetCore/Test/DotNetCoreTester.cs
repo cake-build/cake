@@ -173,6 +173,12 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.Append(settings.Runtime);
             }
 
+            // Blame
+            if (settings.Blame)
+            {
+                builder.Append("--blame");
+            }
+
             if (!arguments.IsNullOrEmpty())
             {
                 builder.Append("--");
