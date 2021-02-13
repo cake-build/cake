@@ -247,6 +247,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 // Then
                 Assert.Equal("publish -p:PublishReadyToRunShowWarnings=true", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_IncludeNativeLibrariesForSelfExtract()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.IncludeNativeLibrariesForSelfExtract = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:IncludeNativeLibrariesForSelfExtract=true", result.Args);
+            }
         }
     }
 }

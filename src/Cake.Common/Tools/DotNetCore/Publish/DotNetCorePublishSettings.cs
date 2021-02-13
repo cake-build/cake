@@ -138,6 +138,14 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         public bool? PublishReadyToRunShowWarnings { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to bundle native libraries when publishing a platform-specific single-file executable.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET 5 or newer.
+        /// </remarks>
+        public bool? IncludeNativeLibrariesForSelfExtract { get; set; }
+
+        /// <summary>
         /// Gets or sets the specified NuGet package sources to use during the restore.
         /// </summary>
         /// <remarks>
