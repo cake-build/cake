@@ -17,6 +17,7 @@ namespace Cake.Core.Diagnostics
     internal static class AnsiDetector
     {
         private static readonly Regex[] _regexes;
+        private static readonly Regex _teamCityVersionWithAnsiSupportRegEx;
 
         static AnsiDetector()
         {
@@ -38,6 +39,11 @@ namespace Cake.Core.Diagnostics
                 new Regex("konsole"), // Konsole
                 new Regex("bvterm"), // Bitvise SSH Client
             };
+
+            // TeamCity old version numbers look like 9.1.2, 9.1.6, 10.0.5, etc.
+            // TeamCity current version numbers look like 2017.1, 2019.2.1, 2020.2, etc.
+            // https://confluence.jetbrains.com/display/TW/Previous+Releases+Downloads
+            _teamCityVersionWithAnsiSupportRegEx = new Regex(@"^(\d{2,4}\.|9\.([1-9]\d*))");
         }
 
         public static bool SupportsAnsi(ICakeEnvironment environment)
@@ -55,6 +61,31 @@ namespace Cake.Core.Diagnostics
                 return true;
             }
 
+            // Azure Pipelines doesn't set the TERM environment variable but supports ANSI
+            // https://github.com/microsoft/azure-pipelines-agent/issues/1569
+            if (!string.IsNullOrWhiteSpace(environment.GetEnvironmentVariable("TF_BUILD")))
+            {
+                return true;
+            }
+
+            // TeamCity doesn't set the TERM environment variable but supports ANSI since 9.1
+            // https://blog.jetbrains.com/teamcity/2015/07/teamcity-9-1-release-truly-historical-and-very-personal-builds/
+            var teamCityVersion = environment.GetEnvironmentVariable("TEAMCITY_VERSION");
+            if (!string.IsNullOrWhiteSpace(teamCityVersion) && _teamCityVersionWithAnsiSupportRegEx.IsMatch(teamCityVersion))
+            {
+                return true;
+            }
+
+            // Check if the terminal is of type ANSI/VT100/xterm compatible.
+            var term = environment.GetEnvironmentVariable("TERM");
+            if (!string.IsNullOrWhiteSpace(term))
+            {
+                if (_regexes.Any(regex => regex.IsMatch(term)))
+                {
+                    return true;
+                }
+            }
+
             // Running on Windows?
             if (environment.Platform.Family == PlatformFamily.Windows)
             {
@@ -66,16 +97,6 @@ namespace Cake.Core.Diagnostics
                 }
 
                 return Windows.SupportsAnsi();
-            }
-
-            // Check if the terminal is of type ANSI/VT100/xterm compatible.
-            var term = environment.GetEnvironmentVariable("TERM");
-            if (!string.IsNullOrWhiteSpace(term))
-            {
-                if (_regexes.Any(regex => regex.IsMatch(term)))
-                {
-                    return true;
-                }
             }
 
             return false;
