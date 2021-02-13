@@ -23,7 +23,33 @@ namespace Cake.Core.Tests.Unit.IO
                 builder.Clear();
 
                 // Then
-                Assert.Empty(builder.Render());
+                Assert.Empty(builder);
+            }
+        }
+
+        public sealed class TheFromStringsMethod
+        {
+            [Fact]
+            public void Should_Return_Empty_Builder_When_Values_Is_Null()
+            {
+                // Given, When
+                var builder = ProcessArgumentBuilder.FromStrings(null);
+
+                // Then
+                Assert.Empty(builder);
+            }
+        }
+
+        public sealed class TheFromStringsQuotedMethod
+        {
+            [Fact]
+            public void Should_Return_Empty_Builder_When_Values_Is_Null()
+            {
+                // Given, When
+                var builder = ProcessArgumentBuilder.FromStringsQuoted(null);
+
+                // Then
+                Assert.Empty(builder);
             }
         }
 
