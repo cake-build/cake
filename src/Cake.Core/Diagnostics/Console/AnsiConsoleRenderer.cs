@@ -24,7 +24,8 @@ namespace Cake.Core.Diagnostics
 
             _ansiLookup = new Dictionary<ConsoleColor, string>
             {
-                { ConsoleColor.DarkGray, $"\u001b[30;1m" }, // Bright black
+                { Constants.DefaultConsoleColor, string.Empty }, // Default
+                { ConsoleColor.DarkGray, "\u001b[30;1m" },  // Bright black
                 { ConsoleColor.Red, "\u001b[31;1m" },       // Bright red
                 { ConsoleColor.Green, "\u001b[32;1m" },     // Bright green
                 { ConsoleColor.Yellow, "\u001b[33;1m" },    // Bright yellow
@@ -44,6 +45,7 @@ namespace Cake.Core.Diagnostics
 
             _ansiBackgroundLookup = new Dictionary<ConsoleColor, string>
             {
+                { Constants.DefaultConsoleColor, string.Empty }, // Default
                 { ConsoleColor.DarkGray, "\u001b[40;1m" },  // Bright black
                 { ConsoleColor.Red, "\u001b[41;1m" },       // Bright red
                 { ConsoleColor.Green, "\u001b[42;1m" },     // Bright green
