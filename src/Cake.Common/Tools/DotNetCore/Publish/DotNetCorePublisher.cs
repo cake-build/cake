@@ -217,6 +217,32 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 }
             }
 
+            // Include Native Libraries For Self-Extract
+            if (settings.IncludeNativeLibrariesForSelfExtract.HasValue)
+            {
+                if (settings.IncludeNativeLibrariesForSelfExtract.Value)
+                {
+                    builder.Append("-p:IncludeNativeLibrariesForSelfExtract=true");
+                }
+                else
+                {
+                    builder.Append("-p:IncludeNativeLibrariesForSelfExtract=false");
+                }
+            }
+
+            // Include All Content For Self-Extract
+            if (settings.IncludeAllContentForSelfExtract.HasValue)
+            {
+                if (settings.IncludeAllContentForSelfExtract.Value)
+                {
+                    builder.Append("-p:IncludeAllContentForSelfExtract=true");
+                }
+                else
+                {
+                    builder.Append("-p:IncludeAllContentForSelfExtract=false");
+                }
+            }
+
             // Sources
             if (settings.Sources != null)
             {
