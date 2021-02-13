@@ -146,6 +146,15 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         public bool? IncludeNativeLibrariesForSelfExtract { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to bundle all content when publishing a platform-specific single-file executable.
+        /// This will extract all files before running the executable and preserves the original .NET Core single-file deployment behavior.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET 5 or newer.
+        /// </remarks>
+        public bool? IncludeAllContentForSelfExtract { get; set; }
+
+        /// <summary>
         /// Gets or sets the specified NuGet package sources to use during the restore.
         /// </summary>
         /// <remarks>
