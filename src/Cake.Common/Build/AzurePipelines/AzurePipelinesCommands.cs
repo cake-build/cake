@@ -138,6 +138,16 @@ namespace Cake.Common.Build.AzurePipelines
         }
 
         /// <inheritdoc/>
+        public void SetOutputVariable(string name, string value)
+        {
+            WriteLoggingCommand("task.setvariable", new Dictionary<string, string>
+            {
+                ["variable"] = name,
+                ["isOutput"] = "true"
+            }, value);
+        }
+
+        /// <inheritdoc/>
         public void SetSecretVariable(string name, string value)
         {
             WriteLoggingCommand("task.setvariable", new Dictionary<string, string>
