@@ -19,6 +19,9 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("TEAMCITY_BUILDCONF_NAME").Returns(@"Cake Build");
             Environment.GetEnvironmentVariable("BUILD_NUMBER").Returns("10-Foo");
 
+            Environment.GetEnvironmentVariable("BUILD_START_DATE").Returns("20200822");
+            Environment.GetEnvironmentVariable("BUILD_START_TIME").Returns("123456");
+
             Environment.GetEnvironmentVariable("TEAMCITY_PROJECT_NAME").Returns("Cake");
 
             Environment.GetEnvironmentVariable("Git_Branch").Returns("refs/pull-requests/7/from");
