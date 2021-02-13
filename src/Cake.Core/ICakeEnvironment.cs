@@ -21,6 +21,12 @@ namespace Cake.Core
         DirectoryPath WorkingDirectory { get; set; }
 
         /// <summary>
+        /// Gets the working directory where the runner was invoked from.
+        /// </summary>
+        /// <value>The launch directory.</value>
+        DirectoryPath LaunchDirectory { get; }
+
+        /// <summary>
         /// Gets the application root path.
         /// </summary>
         /// <value>The application root path.</value>
