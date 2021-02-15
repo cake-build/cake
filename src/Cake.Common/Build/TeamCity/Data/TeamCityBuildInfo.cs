@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Globalization;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -73,19 +73,77 @@ namespace Cake.Common.Build.TeamCity.Data
         /// Gets the branch display name.
         /// </summary>
         /// <value>
-        /// The  branch display name.
+        /// The branch display name.
         /// </value>
-        public string BranchName => Properties.ContainsKey("teamcity.build.branch") ? Properties["teamcity.build.branch"] : string.Empty;
+        public string BranchName => ConfigProperties.ContainsKey("teamcity.build.branch") ? ConfigProperties["teamcity.build.branch"] : string.Empty;
 
         /// <summary>
-        /// Gets the TeamCity properties.
+        /// Gets the vcs branch name.
         /// </summary>
         /// <value>
-        /// The TeamCity properties as a key/value dictionary.
+        /// The vcs branch name.
         /// </value>
-        public Dictionary<string, string> Properties => _properties.Value;
+        public string VcsBranchName
+        {
+            get
+            {
+                var rootBranchKey = ConfigProperties.Keys.FirstOrDefault(k => k.StartsWith("teamcity.build.vcs.branch."));
+                return !string.IsNullOrWhiteSpace(rootBranchKey) ? ConfigProperties[rootBranchKey] : string.Empty;
+            }
+        }
 
-        private readonly Lazy<Dictionary<string, string>> _properties;
+        /// <summary>
+        /// Gets the TeamCity build properties.
+        /// </summary>
+        /// <value>
+        /// The TeamCity  build properties as a key/value dictionary.
+        /// </value>
+        public Dictionary<string, string> BuildProperties => _buildProperties.Value;
+
+        /// <summary>
+        /// Gets the TeamCity config properties.
+        /// </summary>
+        /// <value>
+        /// The TeamCity config properties as a key/value dictionary.
+        /// </value>
+        public Dictionary<string, string> ConfigProperties => _configProperties.Value;
+
+        /// <summary>
+        /// Gets the TeamCity runner properties.
+        /// </summary>
+        /// <value>
+        /// The TeamCity runner properties as a key/value dictionary.
+        /// </value>
+        public Dictionary<string, string> RunnerProperties => _runnerProperties.Value;
+
+        private readonly Lazy<Dictionary<string, string>> _buildProperties;
+        private readonly Lazy<Dictionary<string, string>> _configProperties;
+        private readonly Lazy<Dictionary<string, string>> _runnerProperties;
+
+        private Dictionary<string, string> ReadAndParseFile(IFileSystem fileSystem, string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                return new Dictionary<string, string>();
+            }
+
+            var configurationPropertiesXmlFile = fileSystem.GetFile($"{fileName}.xml");
+            if (!configurationPropertiesXmlFile.Exists)
+            {
+                return new Dictionary<string, string>();
+            }
+
+            var configurationPropertiesXml = XDocument.Load(configurationPropertiesXmlFile.OpenRead());
+
+            return configurationPropertiesXml.XPathSelectElements("//entry")
+                .Where(entry => entry.Attribute("key") != null)
+                .ToDictionary(entry => entry.Attribute("key").Value, entry => entry.Value);
+        }
+
+        private string BuildValueIfExists(string key)
+        {
+            return BuildProperties.ContainsKey(key) ? BuildProperties[key] : string.Empty;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TeamCityBuildInfo"/> class.
@@ -95,35 +153,9 @@ namespace Cake.Common.Build.TeamCity.Data
         public TeamCityBuildInfo(ICakeEnvironment environment, IFileSystem fileSystem)
             : base(environment)
         {
-            _properties = new Lazy<Dictionary<string, string>>(() =>
-            {
-                var buildPropertiesFile = GetEnvironmentString("TEAMCITY_BUILD_PROPERTIES_FILE");
-                var buildPropertiesXmlFile = fileSystem.GetFile($"{buildPropertiesFile}.xml");
-                if (!buildPropertiesXmlFile.Exists)
-                {
-                    return new Dictionary<string, string>();
-                }
-
-                var buildPropertiesXml = XDocument.Load(buildPropertiesXmlFile.OpenRead());
-
-                var configurationPropertiesFile = buildPropertiesXml.XPathSelectElement("//entry[@key='teamcity.configuration.properties.file']")?.Value;
-                if (configurationPropertiesFile == null)
-                {
-                    return new Dictionary<string, string>();
-                }
-
-                var configurationPropertiesXmlFile = fileSystem.GetFile($"{configurationPropertiesFile}.xml");
-                if (!configurationPropertiesXmlFile.Exists)
-                {
-                    return new Dictionary<string, string>();
-                }
-
-                var configurationPropertiesXml = XDocument.Load(configurationPropertiesXmlFile.OpenRead());
-
-                return configurationPropertiesXml.XPathSelectElements("//entry")
-                                                 .Where(entry => entry.Attribute("key") != null)
-                                                 .ToDictionary(entry => entry.Attribute("key").Value, entry => entry.Value);
-            });
+            _buildProperties = new Lazy<Dictionary<string, string>>(() => ReadAndParseFile(fileSystem, GetEnvironmentString("TEAMCITY_BUILD_PROPERTIES_FILE")));
+            _configProperties = new Lazy<Dictionary<string, string>>(() => ReadAndParseFile(fileSystem, BuildValueIfExists("teamcity.configuration.properties.file")));
+            _runnerProperties = new Lazy<Dictionary<string, string>>(() => ReadAndParseFile(fileSystem, BuildValueIfExists("teamcity.runner.properties.file")));
         }
     }
 }

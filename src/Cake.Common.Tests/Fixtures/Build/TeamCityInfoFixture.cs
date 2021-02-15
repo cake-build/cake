@@ -23,20 +23,25 @@ namespace Cake.Common.Tests.Fixtures.Build
             ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_BUILDCONF_NAME", @"Cake Build");
             ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_NUMBER", "10-Foo");
             ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_PROJECT_NAME", "Cake");
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_BUILD_PROPERTIES_FILE", "/Working/file.properties");
+            ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_BUILD_PROPERTIES_FILE", "/Working/teamcity.build.properties");
             ((FakeEnvironment)Environment).SetEnvironmentVariable("Git_Branch", "refs/pull-requests/7/from");
             ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_DATE", "20200822");
             ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_TIME", "123456");
         }
 
-        public void SetPropertiesFileContent(string xml)
+        public void SetBuildPropertiesContent(string xml)
         {
-            ((FakeFileSystem)FileSystem).GetFile("/Working/file.properties.xml").SetContent(xml);
+            ((FakeFileSystem)FileSystem).GetFile("/Working/teamcity.build.properties.xml").SetContent(xml);
         }
 
-        public void SetBuildConfigurationFileContent(string xml)
+        public void SetConfigPropertiesContent(string xml)
         {
-            ((FakeFileSystem)FileSystem).GetFile("/Working/file.build.configuration.xml").SetContent(xml);
+            ((FakeFileSystem)FileSystem).GetFile("/Working/teamcity.config.configuration.xml").SetContent(xml);
+        }
+
+        public void SetRunnerPropertiesContent(string xml)
+        {
+            ((FakeFileSystem)FileSystem).GetFile("/Working/teamcity.runner.configuration.xml").SetContent(xml);
         }
 
         public void SetGitBranch(string branch)

@@ -682,16 +682,15 @@ namespace Cake.Common.Tests.Properties {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
         ///&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;
         ///&lt;properties&gt;
-        ///&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
-        ///&lt;entry key=&quot;build.counter&quot;&gt;414&lt;/entry&gt;
-        ///&lt;entry key=&quot;build.number&quot;&gt;3246&lt;/entry&gt;
-        ///&lt;entry key=&quot;teamcity.build.branch&quot;&gt;branchName&lt;/entry&gt;
-        ///&lt;entry key=&quot;teamcity.build.branch.is_default&quot;&gt;true&lt;/entry&gt;
+        ///&lt;comment&gt;TeamCity build properties without &apos;system.&apos; prefix&lt;/comment&gt;
+        ///&lt;entry key=&quot;teamcity.build.properties.file&quot;&gt;/Working/teamcity.build.configuration&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.configuration.properties.file&quot;&gt;/Working/teamcity.config.configuration&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.runner.properties.file&quot;&gt;/Working/teamcity.runner.configuration&lt;/entry&gt;
         ///&lt;/properties&gt;.
         /// </summary>
-        public static string TeamCity_Build_Configuration_Xml {
+        public static string TeamCity_Build_Properties_Xml {
             get {
-                return ResourceManager.GetString("TeamCity_Build_Configuration_Xml", resourceCulture);
+                return ResourceManager.GetString("TeamCity_Build_Properties_Xml", resourceCulture);
             }
         }
         
@@ -699,13 +698,31 @@ namespace Cake.Common.Tests.Properties {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
         ///&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;
         ///&lt;properties&gt;
-        ///&lt;comment&gt;TeamCity build properties without &apos;system.&apos; prefix&lt;/comment&gt;
-        ///&lt;entry key=&quot;teamcity.configuration.properties.file&quot;&gt;/Working/file.build.configuration&lt;/entry&gt;
+        ///&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+        ///&lt;entry key=&quot;build.counter&quot;&gt;414&lt;/entry&gt;
+        ///&lt;entry key=&quot;build.number&quot;&gt;3246&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.build.branch&quot;&gt;pull/5&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.build.branch.is_default&quot;&gt;true&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.build.vcs.branch.MyVcsRootName&quot;&gt;refs/pull/5/merge&lt;/entry&gt;
         ///&lt;/properties&gt;.
         /// </summary>
-        public static string TeamCity_Properties_Xml {
+        public static string TeamCity_Config_Properties_Xml {
             get {
-                return ResourceManager.GetString("TeamCity_Properties_Xml", resourceCulture);
+                return ResourceManager.GetString("TeamCity_Config_Properties_Xml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
+        ///&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;
+        ///&lt;properties&gt;
+        ///&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+        ///&lt;entry key=&quot;command.executable&quot;&gt;run.cmd&lt;/entry&gt;
+        ///&lt;/properties&gt;.
+        /// </summary>
+        public static string TeamCity_Runner_Properties_Xml {
+            get {
+                return ResourceManager.GetString("TeamCity_Runner_Properties_Xml", resourceCulture);
             }
         }
         
