@@ -73,6 +73,12 @@ namespace Cake.Common.Solution
             foreach (var line in file.ReadLines(Encoding.UTF8))
             {
                 var trimmed = line.Trim();
+
+                if (trimmed == string.Empty)
+                {
+                    continue;
+                }
+
                 if (line.StartsWith("Project(\"{"))
                 {
                     var project = ParseSolutionProjectLine(file, line);
