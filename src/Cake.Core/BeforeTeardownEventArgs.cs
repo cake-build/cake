@@ -7,11 +7,9 @@ using System;
 namespace Cake.Core
 {
     /// <summary>
-    /// [deprecated] TeardownEventArgs is obsolete and will be removed in a future release. Use <see cref="BeforeTeardownEventArgs" /> instead.
-    /// Event data for the <see cref="ICakeEngine.Teardown"/> event.
+    /// Event data for the <see cref="ICakeEngine.BeforeTeardown"/> event.
     /// </summary>
-    [Obsolete("TeardownEventArgs is obsolete and will be removed in a future release. Use BeforeTeardownEventArgs instead.")]
-    public sealed class TeardownEventArgs : EventArgs
+    public sealed class BeforeTeardownEventArgs : EventArgs
     {
         /// <summary>
         /// Gets the teardown context.
@@ -19,10 +17,10 @@ namespace Cake.Core
         public ITeardownContext TeardownContext { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TeardownEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="BeforeTeardownEventArgs"/> class.
         /// </summary>
         /// <param name="teardownContext">The teardown context.</param>
-        public TeardownEventArgs(ITeardownContext teardownContext)
+        public BeforeTeardownEventArgs(ITeardownContext teardownContext)
         {
             TeardownContext = teardownContext;
         }

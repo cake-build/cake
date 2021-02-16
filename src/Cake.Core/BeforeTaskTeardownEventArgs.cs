@@ -7,11 +7,9 @@ using System;
 namespace Cake.Core
 {
     /// <summary>
-    /// [deprecated] TaskTeardownEventArgs is obsolete and will be removed in a future release. Use <see cref="BeforeTaskTeardownEventArgs" /> instead.
-    /// Event data for the <see cref="ICakeEngine.TaskTeardown"/> event.
+    /// Event data for the <see cref="ICakeEngine.BeforeTaskTeardown"/> event.
     /// </summary>
-    [Obsolete("TaskTeardownEventArgs is obsolete and will be removed in a future release. Use BeforeTaskTeardownEventArgs instead.")]
-    public sealed class TaskTeardownEventArgs : EventArgs
+    public sealed class BeforeTaskTeardownEventArgs : EventArgs
     {
         /// <summary>
         /// Gets the task teardown context.
@@ -19,10 +17,10 @@ namespace Cake.Core
         public ITaskTeardownContext TaskTeardownContext { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskTeardownEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="BeforeTaskTeardownEventArgs"/> class.
         /// </summary>
         /// <param name="taskTeardownContext">The task teardown context.</param>
-        public TaskTeardownEventArgs(ITaskTeardownContext taskTeardownContext)
+        public BeforeTaskTeardownEventArgs(ITaskTeardownContext taskTeardownContext)
         {
             TaskTeardownContext = taskTeardownContext;
         }
