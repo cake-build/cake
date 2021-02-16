@@ -74,6 +74,13 @@ namespace Cake.Common.Tools.VSTest
         public FilePath Diag { get; set; }
 
         /// <summary>
+        /// Gets or sets the result directory.
+        /// Test results directory will be created in specified path if not exists.
+        /// VSTest.Console.exe flag <see href="https://docs.microsoft.com/en-us/visualstudio/test/vstest-console-options#ResultDirectory">/ResultsDirectory</see>.
+        /// </summary>
+        public DirectoryPath ResultsDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of your logger. Possible values:
         /// - A blank string (or null): no logger
         /// - "trx": Visual Studio's built-in logger
