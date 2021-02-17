@@ -24,6 +24,7 @@ namespace Cake.Common.Build.TeamCity
         private static readonly Dictionary<string, string> _sanitizationTokens;
 
         private readonly ICakeEnvironment _environment;
+        private readonly IFileSystem _fileSystem;
         private readonly IBuildSystemServiceMessageWriter _writer;
 
         /// <inheritdoc/>
@@ -49,13 +50,15 @@ namespace Cake.Common.Build.TeamCity
         /// Initializes a new instance of the <see cref="TeamCityProvider"/> class.
         /// </summary>
         /// <param name="environment">The cake environment.</param>
+        /// <param name="fileSystem">The cake file system.</param>
         /// <param name="writer">The build system service message writer.</param>
-        public TeamCityProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
+        public TeamCityProvider(ICakeEnvironment environment, IFileSystem fileSystem, IBuildSystemServiceMessageWriter writer)
         {
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             _writer = writer ?? throw new ArgumentNullException(nameof(writer));
 
-            Environment = new TeamCityEnvironmentInfo(environment);
+            Environment = new TeamCityEnvironmentInfo(environment, fileSystem);
         }
 
         /// <inheritdoc/>

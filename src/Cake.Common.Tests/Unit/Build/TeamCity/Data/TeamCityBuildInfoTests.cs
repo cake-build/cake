@@ -5,7 +5,6 @@
 using System;
 using System.Globalization;
 using Cake.Common.Tests.Fixtures.Build;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
@@ -69,8 +68,8 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
                 var startTime = now.ToString("HHmmss", CultureInfo.InvariantCulture);
 
                 var fixture = new TeamCityInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("BUILD_START_DATE").Returns(startDate);
-                fixture.Environment.GetEnvironmentVariable("BUILD_START_TIME").Returns(startTime);
+                fixture.SetBuildStartDate(startDate);
+                fixture.SetBuildStartTime(startTime);
 
                 var info = fixture.CreateBuildInfo();
 
@@ -93,8 +92,8 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
             {
                 // Given
                 var fixture = new TeamCityInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("BUILD_START_DATE").Returns(startDate);
-                fixture.Environment.GetEnvironmentVariable("BUILD_START_TIME").Returns(startTime);
+                fixture.SetBuildStartDate(startDate);
+                fixture.SetBuildStartTime(startTime);
 
                 var info = fixture.CreateBuildInfo();
 
@@ -103,6 +102,165 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
 
                 // Then
                 Assert.Equal(null, result);
+            }
+        }
+
+        public sealed class TheBranchProperty
+        {
+            [Fact]
+            public void Should_Return_Empty_When_No_Properties()
+            {
+                // Given
+                var info = new TeamCityInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.BranchName;
+
+                // Then
+                Assert.Equal(string.Empty, result);
+            }
+
+            [Fact]
+            public void Should_Return_Value_From_Properties()
+            {
+                // Given
+                var fixture = new TeamCityInfoFixture();
+                fixture.SetBuildPropertiesContent(Properties.Resources.TeamCity_Build_Properties_Xml);
+                fixture.SetConfigPropertiesContent(Properties.Resources.TeamCity_Config_Properties_Xml);
+                var info = fixture.CreateBuildInfo();
+
+                // When
+                var result = info.BranchName;
+
+                // Then
+                Assert.Equal("pull/5", result);
+            }
+        }
+
+        public sealed class TheVcsBranchProperty
+        {
+            [Fact]
+            public void Should_Return_Empty_When_No_Properties()
+            {
+                // Given
+                var info = new TeamCityInfoFixture().CreateBuildInfo();
+
+                // When
+                var result = info.VcsBranchName;
+
+                // Then
+                Assert.Equal(string.Empty, result);
+            }
+
+            [Fact]
+            public void Should_Return_Value_From_Properties()
+            {
+                // Given
+                var fixture = new TeamCityInfoFixture();
+                fixture.SetBuildPropertiesContent(Properties.Resources.TeamCity_Build_Properties_Xml);
+                fixture.SetConfigPropertiesContent(Properties.Resources.TeamCity_Config_Properties_Xml);
+                var info = fixture.CreateBuildInfo();
+
+                // When
+                var result = info.VcsBranchName;
+
+                // Then
+                Assert.Equal("refs/pull/5/merge", result);
+            }
+        }
+
+        public sealed class ThePropertiesProperties
+        {
+            [Fact]
+            public void Should_Return_Empty_ForAll_When_File_Not_Created()
+            {
+                // Given
+                var fixture = new TeamCityInfoFixture();
+                var info = fixture.CreateBuildInfo();
+
+                // When
+                var buildProperties = info.BuildProperties;
+                var configProperties = info.ConfigProperties;
+                var runnerProperties = info.RunnerProperties;
+
+                // Then
+                Assert.Empty(buildProperties);
+                Assert.Empty(configProperties);
+                Assert.Empty(runnerProperties);
+            }
+
+            [Fact]
+            public void Should_Return_Empty_When_Config_Properties_File_Not_Created()
+            {
+                // Given
+                var fixture = new TeamCityInfoFixture();
+                fixture.SetBuildPropertiesContent(Properties.Resources.TeamCity_Build_Properties_Xml);
+                var info = fixture.CreateBuildInfo();
+
+                // When
+                var buildProperties = info.BuildProperties;
+                var configProperties = info.ConfigProperties;
+
+                // Then
+                Assert.NotEmpty(buildProperties);
+                Assert.Empty(configProperties);
+            }
+
+            [Fact]
+            public void Should_Return_Config_Values_When_Files_Exist()
+            {
+                // Given
+                var fixture = new TeamCityInfoFixture();
+                fixture.SetBuildPropertiesContent(Properties.Resources.TeamCity_Build_Properties_Xml);
+                fixture.SetConfigPropertiesContent(Properties.Resources.TeamCity_Config_Properties_Xml);
+                var info = fixture.CreateBuildInfo();
+
+                // When
+                var buildProperties = info.BuildProperties;
+                var configProperties = info.ConfigProperties;
+
+                // Then
+                Assert.NotEmpty(buildProperties);
+                Assert.NotEmpty(configProperties);
+                Assert.Equal(5, configProperties.Count);
+                Assert.Equal("3246", configProperties["build.number"]);
+            }
+
+            [Fact]
+            public void Should_Return_Empty_When_Runner_Properties_File_Not_Created()
+            {
+                // Given
+                var fixture = new TeamCityInfoFixture();
+                fixture.SetBuildPropertiesContent(Properties.Resources.TeamCity_Build_Properties_Xml);
+                var info = fixture.CreateBuildInfo();
+
+                // When
+                var buildProperties = info.BuildProperties;
+                var runnerProperties = info.RunnerProperties;
+
+                // Then
+                Assert.NotEmpty(buildProperties);
+                Assert.Empty(runnerProperties);
+            }
+
+            [Fact]
+            public void Should_Return_Runner_Values_When_Files_Exist()
+            {
+                // Given
+                var fixture = new TeamCityInfoFixture();
+                fixture.SetBuildPropertiesContent(Properties.Resources.TeamCity_Build_Properties_Xml);
+                fixture.SetRunnerPropertiesContent(Properties.Resources.TeamCity_Runner_Properties_Xml);
+                var info = fixture.CreateBuildInfo();
+
+                // When
+                var buildProperties = info.BuildProperties;
+                var runnerProperties = info.RunnerProperties;
+
+                // Then
+                Assert.NotEmpty(buildProperties);
+                Assert.NotEmpty(runnerProperties);
+                Assert.Single(runnerProperties);
+                Assert.Equal("run.cmd", runnerProperties["command.executable"]);
             }
         }
     }

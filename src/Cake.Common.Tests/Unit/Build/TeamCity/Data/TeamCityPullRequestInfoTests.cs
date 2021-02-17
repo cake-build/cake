@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
@@ -23,7 +22,7 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
             {
                 // Given
                 var fixture = new TeamCityInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("Git_Branch").Returns(value);
+                fixture.SetGitBranch(value);
                 var info = fixture.CreatePullRequestInfo();
 
                 // When
@@ -46,7 +45,7 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
             {
                 // Given
                 var fixture = new TeamCityInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("Git_Branch").Returns(value);
+                fixture.SetGitBranch(value);
                 var info = fixture.CreatePullRequestInfo();
 
                 // When

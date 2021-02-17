@@ -1372,4 +1372,34 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
   &lt;/files&gt;
 &lt;/package&gt;</value>
   </data>
+  <data name="TeamCity_Config_Properties_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;
+&lt;properties&gt;
+&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+&lt;entry key="build.counter"&gt;414&lt;/entry&gt;
+&lt;entry key="build.number"&gt;3246&lt;/entry&gt;
+&lt;entry key="teamcity.build.branch"&gt;pull/5&lt;/entry&gt;
+&lt;entry key="teamcity.build.branch.is_default"&gt;true&lt;/entry&gt;
+&lt;entry key="teamcity.build.vcs.branch.MyVcsRootName"&gt;refs/pull/5/merge&lt;/entry&gt;
+&lt;/properties&gt;</value>
+  </data>
+  <data name="TeamCity_Build_Properties_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;
+&lt;properties&gt;
+&lt;comment&gt;TeamCity build properties without 'system.' prefix&lt;/comment&gt;
+&lt;entry key="teamcity.build.properties.file"&gt;/Working/teamcity.build.configuration&lt;/entry&gt;
+&lt;entry key="teamcity.configuration.properties.file"&gt;/Working/teamcity.config.configuration&lt;/entry&gt;
+&lt;entry key="teamcity.runner.properties.file"&gt;/Working/teamcity.runner.configuration&lt;/entry&gt;
+&lt;/properties&gt;</value>
+  </data>
+  <data name="TeamCity_Runner_Properties_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;
+&lt;properties&gt;
+&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+&lt;entry key="command.executable"&gt;run.cmd&lt;/entry&gt;
+&lt;/properties&gt;</value>
+  </data>
 </root>

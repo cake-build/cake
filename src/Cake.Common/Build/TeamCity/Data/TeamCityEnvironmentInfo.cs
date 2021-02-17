@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Build.TeamCity.Data
 {
@@ -149,11 +150,12 @@ namespace Cake.Common.Build.TeamCity.Data
         /// Initializes a new instance of the <see cref="TeamCityEnvironmentInfo"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public TeamCityEnvironmentInfo(ICakeEnvironment environment)
+        /// <param name="fileSystem">The file system.</param>
+        public TeamCityEnvironmentInfo(ICakeEnvironment environment, IFileSystem fileSystem)
             : base(environment)
         {
             Project = new TeamCityProjectInfo(environment);
-            Build = new TeamCityBuildInfo(environment);
+            Build = new TeamCityBuildInfo(environment, fileSystem);
             PullRequest = new TeamCityPullRequestInfo(environment);
         }
     }
