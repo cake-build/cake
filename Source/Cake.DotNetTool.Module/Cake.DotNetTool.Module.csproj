@@ -4,7 +4,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>        
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <PropertyGroup>
     <CodeAnalysisRuleSet>Cake.DotNetTool.Module.ruleset</CodeAnalysisRuleSet>
