@@ -20,7 +20,7 @@
 
         <!-- Properties related to packaging -->
         <Authors>Gary Ewan Park</Authors>
-        <Copyright>Copyright © $(FullYear) — Gary Ewan Park</Copyright>
+        <Copyright>Copyright © $(FullYear) — Cake Contributions</Copyright>
         <Description>Cake Module that extends Cake with ability to install tools using dotnet cli.</Description>
         <PackageIconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</PackageIconUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
