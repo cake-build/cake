@@ -22,6 +22,7 @@
         <Authors>Gary Ewan Park</Authors>
         <Copyright>Copyright © $(FullYear) — Cake Contributions</Copyright>
         <Description>Cake Module that extends Cake with ability to install tools using dotnet cli.</Description>
+        <PackageIcon>icon.png</PackageIcon>
         <PackageIconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</PackageIconUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/cake-contrib/Cake.DotNetTool.Module/</PackageProjectUrl>
@@ -32,6 +33,10 @@
 
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="0.33.0" PrivateAssets="All" />
+    <PackageReference Include="CakeContrib.Guidelines" Version="0.5.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
