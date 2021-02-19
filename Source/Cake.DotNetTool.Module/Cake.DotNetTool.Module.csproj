@@ -11,8 +11,30 @@
     <DefineConstants>TRACE;DEBUG;NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
+    <PropertyGroup>
+        <StartYear>2016</StartYear>
+        <EndYear>$([System.DateTime]::Today.Year)</EndYear>
+        <FullYear Condition="'$(StartYear)'=='$(EndYear)'">$(StartYear)</FullYear>
+        <FullYear Condition="'$(StartYear)'!='$(EndYear)'">$(StartYear)-$(EndYear)</FullYear>
+
+        <!-- Properties related to packaging -->
+        <Authors>Gary Ewan Park</Authors>
+        <Copyright>Copyright © $(FullYear) — Gary Ewan Park</Copyright>
+        <Description>Cake Module that extends Cake with ability to install tools using dotnet cli.</Description>
+        <PackageIconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</PackageIconUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/cake-contrib/Cake.DotNetTool.Module/</PackageProjectUrl>
+        <PackageTags>Cake;Script;Build;DotNetTool;Module</PackageTags>
+        <RepositoryUrl>https://github.com/cake-contrib/Cake.DotNetTool.Module.git</RepositoryUrl>
+        <PackageReleaseNotes>https://github.com/cake-contrib/Cake.DotNetTool.Module/releases/tag/$(Version)</PackageReleaseNotes>
+    </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="0.33.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>
