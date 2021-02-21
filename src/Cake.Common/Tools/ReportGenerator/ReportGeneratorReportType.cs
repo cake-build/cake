@@ -98,6 +98,38 @@ namespace Cake.Common.Tools.ReportGenerator
         /// <remarks>
         /// Requires ReportGenerator 4.0.10+
         /// </remarks>
-        HtmlInline_AzurePipelines_Dark = 17
+        HtmlInline_AzurePipelines_Dark = 17,
+
+        /// <summary>
+        /// Creates xml report in Clover format.
+        /// </summary>
+        /// <remarks>
+        /// Requires ReportGenerator 4.0.6+
+        /// </remarks>
+        Clover = 18,
+
+        /// <summary>
+        /// Creates summary report in JSON format.
+        /// </summary>
+        /// <remarks>
+        /// Requires ReportGenerator 4.5.2+
+        /// </remarks>
+        JsonSummary = 19,
+
+        /// <summary>
+        /// Creates summary report in lcov format.
+        /// </summary>
+        /// <remarks>
+        /// Requires ReportGenerator 4.3.0+
+        /// </remarks>
+        lcov = 20,
+
+        /// <summary>
+        /// Outputs summary report as TeamCity statistics messages.
+        /// </summary>
+        /// <remarks>
+        /// Requires ReportGenerator 4.1.3+
+        /// </remarks>
+        TeamCitySummary = 21
     }
 }

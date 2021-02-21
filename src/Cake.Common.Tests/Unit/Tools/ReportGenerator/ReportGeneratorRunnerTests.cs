@@ -175,6 +175,10 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
             [InlineData("MHtml", 15)]
             [InlineData("SonarQube", 16)]
             [InlineData("HtmlInline_AzurePipelines_Dark", 17)]
+            [InlineData("Clover", 18)]
+            [InlineData("JsonSummary", 19)]
+            [InlineData("lcov", 20)]
+            [InlineData("TeamCitySummary", 21)]
             public void Should_Set_Report_Types(string expected, int enumValue)
             {
                 // Given
