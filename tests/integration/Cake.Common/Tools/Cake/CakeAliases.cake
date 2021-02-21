@@ -29,9 +29,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.NotOk")
     // Given
     var path = Paths.Resources.Combine("./Cake.Common/Tools/Cake");
     var file = path.CombineWithFilePath("./test.cake");
-    var expect = Context.Environment.Runtime.IsCoreClr
-                    ? ".NET Core CLI: Process returned an error (exit code 1)."
-                    : "Cake: Process returned an error (exit code 1).";
+    var expect = "Process returned an error (exit code 1).";
 
     // When
     var exception = Record.Exception(
@@ -41,7 +39,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.NotOk")
     // Then
     Assert.NotNull(exception);
     Assert.IsType<CakeException>(exception);
-    Assert.Equal(expect, exception.Message);
+    Assert.EndsWith(expect, exception.Message);
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression")
@@ -68,9 +66,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk")
 {
     // Given
     var script = "System.Environment.Exit((Argument<string>(\"ok\", \"no\")==\"yes\") ? 0 : 1);";
-    var expect = Context.Environment.Runtime.IsCoreClr
-                    ? ".NET Core CLI: Process returned an error (exit code 1)."
-                    : "Cake: Process returned an error (exit code 1).";
+    var expect = "Process returned an error (exit code 1).";
 
     // When
     var exception = Record.Exception(
@@ -80,7 +76,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk")
     // Then
     Assert.NotNull(exception);
     Assert.IsType<CakeException>(exception);
-    Assert.Equal(expect, exception.Message);
+    Assert.EndsWith(expect, exception.Message);
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases")
