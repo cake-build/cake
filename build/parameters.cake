@@ -115,7 +115,8 @@ public class BuildParameters
                 "Cake.Tool",
                 "Cake.Frosting",
                 "Cake.Frosting.Template",
-                "Cake.Cli"
+                "Cake.Cli",
+                "Cake.DotNetTool.Module"
                 },
             new [] { "cake.portable" });
 
