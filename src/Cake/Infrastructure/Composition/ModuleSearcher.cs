@@ -23,6 +23,11 @@ namespace Cake.Infrastructure.Composition
 
     public sealed class ModuleSearcher : IModuleSearcher
     {
+        private static readonly Dictionary<string, string> _excludedModules = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Cake.DotNetTool.Module", "Cake.DotNetTool.Module is now included with Cake, so should no longer be installed separately to module directory or using #module directive" }
+            };
+
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
@@ -64,6 +69,12 @@ namespace Cake.Infrastructure.Composition
         {
             try
             {
+                if (_excludedModules.TryGetValue(path.GetFilenameWithoutExtension().FullPath, out var message))
+                {
+                    _log.Warning("{0}, Assembly {1} is excluded from loading.", message, path);
+                    return null;
+                }
+
                 var loader = new AssemblyLoader(_environment, _fileSystem, new AssemblyVerifier(configuration, _log));
                 var assembly = loader.Load(path, true);
 

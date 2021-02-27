@@ -10,6 +10,7 @@ using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Modules;
 using Cake.Core.Scripting;
+using Cake.DotNetTool.Module;
 using Cake.Infrastructure.Scripting;
 using Cake.NuGet;
 using Spectre.Console.Cli;
@@ -41,6 +42,7 @@ namespace Cake.Infrastructure
             new CoreModule().Register(registrar);
             new CommonModule().Register(registrar);
             new NuGetModule().Register(registrar);
+            new DotNetToolModule().Register(registrar);
 
             // Misc registrations.
             registrar.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().Singleton();
