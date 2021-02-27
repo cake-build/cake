@@ -1,11 +1,11 @@
-﻿using Cake.Core;
+﻿using System.Collections.Generic;
+using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Cake.Testing;
 using NSubstitute;
-using System.Collections.Generic;
 
 namespace Cake.DotNetTool.Module.Tests
 {

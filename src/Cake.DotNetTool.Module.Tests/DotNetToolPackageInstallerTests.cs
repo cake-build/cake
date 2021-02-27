@@ -1,9 +1,5 @@
-﻿using Cake.Core.Diagnostics;
-using Cake.Core.IO;
+﻿using System;
 using Cake.Core.Packaging;
-using NSubstitute;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Cake.DotNetTool.Module.Tests
