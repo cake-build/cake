@@ -110,6 +110,10 @@ namespace Cake.DotNetTool.Module
             {
                 toolLocation = "global";
             }
+            else if (package.Parameters.ContainsKey("local"))
+            {
+                toolLocation = "local";
+            }
 
             // First we need to check if the Tool is already installed
             var installedTools = GetInstalledTools(toolLocation);
@@ -163,7 +167,15 @@ namespace Cake.DotNetTool.Module
         private List<DotNetToolPackage> GetInstalledTools(string toolLocation)
         {
             var toolLocationArgument = string.Empty;
-            if (toolLocation != "global")
+            if (toolLocation == "global")
+            {
+                toolLocationArgument = "--global";
+            }
+            else if (toolLocation == "local")
+            {
+                toolLocationArgument = "--local";
+            }
+            else
             {
                 toolLocationArgument = string.Format("--tool-path \"{0}\"", toolLocation);
                 var toolLocationDirectoryPath = new DirectoryPath(toolLocation).MakeAbsolute(_environment);
@@ -176,10 +188,6 @@ namespace Cake.DotNetTool.Module
                     _log.Debug("Specified installation location doesn't currently exist.");
                     return new List<DotNetToolPackage>();
                 }
-            }
-            else
-            {
-                toolLocationArgument = "--global";
             }
 
             var isInstalledProcess = _processRunner.Start(
@@ -196,7 +204,7 @@ namespace Cake.DotNetTool.Module
             var installedTools = isInstalledProcess.GetStandardOutput().ToList();
             var installedToolNames = new List<DotNetToolPackage>();
 
-            const string pattern = @"(?<packageName>[^\s]+)\s+(?<packageVersion>[^\s]+)\s+(?<packageShortCode>[^`s])";
+            const string pattern = @"(?<packageName>[^\s]+)\s+(?<packageVersion>[^\s]+)\s+(?<packageShortCode>[^\s]+)(?:\s+(?<packageManifest>[^\s]+))?";
 
             foreach (var installedTool in installedTools.Skip(2))
             {
@@ -207,7 +215,8 @@ namespace Cake.DotNetTool.Module
                     {
                         Id = match.Groups["packageName"].Value,
                         Version = match.Groups["packageVersion"].Value,
-                        ShortCode = match.Groups["packageShortCode"].Value
+                        ShortCode = match.Groups["packageShortCode"].Value,
+                        Manifest = match.Groups["packageManifest"].Value
                     });
                 }
             }
@@ -237,7 +246,7 @@ namespace Cake.DotNetTool.Module
             {
                 _log.Warning("dotnet exited with {0}", exitCode);
                 var output = string.Join(Environment.NewLine, process.GetStandardError());
-                _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
+                _log.Verbose(Verbosity.Diagnostic, "Output:{0}{1}", Environment.NewLine, output);
             }
         }
 
@@ -257,10 +266,21 @@ namespace Cake.DotNetTool.Module
             {
                 arguments.Append("--global");
             }
+            else if (definition.Parameters.ContainsKey("local"))
+            {
+                arguments.Append("--local");
+            }
             else
             {
                 arguments.Append("--tool-path");
                 arguments.AppendQuoted(toolDirectoryPath.FullPath);
+            }
+
+            // Tool manifest
+            if (definition.Parameters.ContainsKey("tool-manifest"))
+            {
+                arguments.Append("--tool-manifest");
+                arguments.AppendQuoted(definition.Parameters["tool-manifest"].First());
             }
 
             if (operation != DotNetToolOperation.Uninstall)
