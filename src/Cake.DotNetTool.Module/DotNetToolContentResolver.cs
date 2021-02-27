@@ -27,8 +27,8 @@ namespace Cake.DotNetTool.Module
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="globber">The Globber.</param>
-        /// <param name="log">The Log</param>
-        /// <param name="config">the configuration</param>
+        /// <param name="log">The Log.</param>
+        /// <param name="config">the configuration.</param>
         public DotNetToolContentResolver(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -58,9 +58,9 @@ namespace Cake.DotNetTool.Module
 
             if (type == PackageType.Tool)
             {
-                if(package.Parameters.ContainsKey("global"))
+                if (package.Parameters.ContainsKey("global"))
                 {
-                    if(_environment.Platform.IsUnix())
+                    if (_environment.Platform.IsUnix())
                     {
                         return GetToolFiles(new DirectoryPath(_environment.GetEnvironmentVariable("HOME")).Combine(".dotnet/tools"), package);
                     }

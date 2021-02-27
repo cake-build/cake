@@ -29,7 +29,7 @@ namespace Cake.DotNetTool.Module
         /// <param name="processRunner">The process runner.</param>
         /// <param name="log">The log.</param>
         /// <param name="contentResolver">The DotNetTool Package Content Resolver.</param>
-        /// <param name="config">the configuration</param>
+        /// <param name="config">the configuration.</param>
         /// <param name="fileSystem">The file system.</param>
         public DotNetToolPackageInstaller(ICakeEnvironment environment, IProcessRunner processRunner, ICakeLog log, IDotNetToolContentResolver contentResolver, ICakeConfiguration config, IFileSystem fileSystem)
         {
@@ -102,7 +102,7 @@ namespace Cake.DotNetTool.Module
             _log.Debug("Configured Tools Folder: {0}", toolsFolderDirectoryPath);
 
             var toolLocation = toolsFolderDirectoryPath.FullPath;
-            if(package.Parameters.ContainsKey("global"))
+            if (package.Parameters.ContainsKey("global"))
             {
                 toolLocation = "global";
             }
@@ -111,8 +111,8 @@ namespace Cake.DotNetTool.Module
             var installedTools = GetInstalledTools(toolLocation);
 
             _log.Debug("Checking for tool: {0}", package.Package.ToLowerInvariant());
-            
-            var installedTool = installedTools.FirstOrDefault(t => t.Id.ToLowerInvariant() == package.Package.ToLowerInvariant());
+
+            var installedTool = installedTools.FirstOrDefault(t => string.Equals(t.Id, package.Package, StringComparison.InvariantCultureIgnoreCase));
 
             if (installedTool != null)
             {
@@ -138,7 +138,7 @@ namespace Cake.DotNetTool.Module
                 else
                 {
                     _log.Information("Tool {0} is already installed, with required version.", package.Package);
-                }                
+                }
             }
             else
             {
@@ -159,7 +159,7 @@ namespace Cake.DotNetTool.Module
         private List<DotNetToolPackage> GetInstalledTools(string toolLocation)
         {
             var toolLocationArgument = string.Empty;
-            if(toolLocation != "global")
+            if (toolLocation != "global")
             {
                 toolLocationArgument = string.Format("--tool-path \"{0}\"", toolLocation);
                 var toolLocationDirectoryPath = new DirectoryPath(toolLocation).MakeAbsolute(_environment);
@@ -167,7 +167,7 @@ namespace Cake.DotNetTool.Module
 
                 // If the requested tools path doesn't exist, then there can't be any tools
                 // installed there, so simply return an empty list.
-                if(!toolLocationDirectory.Exists)
+                if (!toolLocationDirectory.Exists)
                 {
                     _log.Debug("Specified installation location doesn't currently exist.");
                     return new List<DotNetToolPackage>();
@@ -180,25 +180,27 @@ namespace Cake.DotNetTool.Module
 
             var isInstalledProcess = _processRunner.Start(
                 "dotnet",
-                new ProcessSettings {
-                    Arguments = string.Format("tool list {0}", toolLocationArgument),
+                new ProcessSettings
+                {
+                    Arguments = string.Concat("tool list ", toolLocationArgument),
                     RedirectStandardOutput = true,
-                    Silent = _log.Verbosity < Verbosity.Diagnostic });
+                    Silent = _log.Verbosity < Verbosity.Diagnostic
+                });
 
             isInstalledProcess.WaitForExit();
 
             var installedTools = isInstalledProcess.GetStandardOutput().ToList();
             var installedToolNames = new List<DotNetToolPackage>();
 
-            string pattern = @"(?<packageName>[^\s]+)\s+(?<packageVersion>[^\s]+)\s+(?<packageShortCode>[^`s])";
+            const string pattern = @"(?<packageName>[^\s]+)\s+(?<packageVersion>[^\s]+)\s+(?<packageShortCode>[^`s])";
 
-            foreach(var installedTool in installedTools.Skip(2))
+            foreach (var installedTool in installedTools.Skip(2))
             {
                 foreach (Match match in Regex.Matches(installedTool, pattern, RegexOptions.IgnoreCase))
                 {
                     _log.Debug("Adding tool {0}", match.Groups["packageName"].Value);
-                    installedToolNames.Add(new DotNetToolPackage 
-                    { 
+                    installedToolNames.Add(new DotNetToolPackage
+                    {
                         Id = match.Groups["packageName"].Value,
                         Version = match.Groups["packageVersion"].Value,
                         ShortCode = match.Groups["packageShortCode"].Value
@@ -216,11 +218,13 @@ namespace Cake.DotNetTool.Module
             _log.Debug("Running dotnet tool with operation {0}: {1}...", operation, package.Package);
             var process = _processRunner.Start(
                 "dotnet",
-                new ProcessSettings {
+                new ProcessSettings
+                {
                     Arguments = GetArguments(package, operation, _log, toolsFolderDirectoryPath),
                     RedirectStandardOutput = true,
                     Silent = _log.Verbosity < Verbosity.Diagnostic,
-                    NoWorkingDirectory = true });
+                    NoWorkingDirectory = true
+                });
 
             process.WaitForExit();
 
@@ -245,7 +249,7 @@ namespace Cake.DotNetTool.Module
             arguments.Append(Enum.GetName(typeof(DotNetToolOperation), operation).ToLowerInvariant());
             arguments.AppendQuoted(definition.Package);
 
-            if(definition.Parameters.ContainsKey("global"))
+            if (definition.Parameters.ContainsKey("global"))
             {
                 arguments.Append("--global");
             }
@@ -271,14 +275,14 @@ namespace Cake.DotNetTool.Module
                 }
 
                 // Config File
-                if(definition.Parameters.ContainsKey("configfile"))
+                if (definition.Parameters.ContainsKey("configfile"))
                 {
                     arguments.Append("--configfile");
                     arguments.AppendQuoted(definition.Parameters["configfile"].First());
                 }
 
                 // Whether to ignore failed sources
-                if(definition.Parameters.ContainsKey("ignore-failed-sources"))
+                if (definition.Parameters.ContainsKey("ignore-failed-sources"))
                 {
                     arguments.Append("--ignore-failed-sources");
                 }
@@ -290,7 +294,7 @@ namespace Cake.DotNetTool.Module
                     arguments.Append(definition.Parameters["framework"].First());
                 }
 
-                switch(log.Verbosity)
+                switch (log.Verbosity)
                 {
                     case Verbosity.Quiet:
                         arguments.Append("--verbosity");
@@ -301,7 +305,7 @@ namespace Cake.DotNetTool.Module
                         arguments.Append("minimal");
                         break;
                     case Verbosity.Normal:
-                    arguments.Append("--verbosity");
+                        arguments.Append("--verbosity");
                         arguments.Append("normal");
                         break;
                     case Verbosity.Verbose:
@@ -318,7 +322,7 @@ namespace Cake.DotNetTool.Module
                         break;
                 }
             }
-            
+
             return arguments;
         }
     }
