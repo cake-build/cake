@@ -1,0 +1,27 @@
+﻿ <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Cake.DotNetTool.Module</AssemblyName>
+    <TargetFrameworks>net461;netstandard2.0;net5.0</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>Cake.DotNetTool.Module.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup>
+      <Description>Cake Module that extends Cake with ability to install tools using dotnet cli.</Description>
+  </PropertyGroup>
+
+  <!-- Import shared functionality -->
+  <Import Project="..\Shared.msbuild" />
+  <!-- Project references -->
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+  </ItemGroup>
+
+</Project>

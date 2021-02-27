@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Cake.DotNetTool.Module.Tests</AssemblyName>
+    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <IsCakeTestProject>true</IsCakeTestProject>
+  </PropertyGroup>
+  <!-- Import shared functionality -->
+  <Import Project="..\Shared.msbuild" />
+  <!-- Project references -->
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+    <ProjectReference Include="..\Cake.DotNetTool.Module\Cake.DotNetTool.Module.csproj" />
+    <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj" />
+    <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj" />
+  </ItemGroup>
+  <!-- Global packages -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NSubstitute" Version="4.2.2" />
+    <PackageReference Include="Castle.Core" Version="4.4.1" />
+  </ItemGroup>
+</Project>
