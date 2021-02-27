@@ -13,6 +13,7 @@ public class Program : IFrostingStartup
     {
         services.UseContext<Context>();
         services.UseLifetime<Lifetime>();
+        services.UseTool(new System.Uri("nuget:?package=xunit.runner.console"));
         services.UseWorkingDirectory("..");
     }
 }
