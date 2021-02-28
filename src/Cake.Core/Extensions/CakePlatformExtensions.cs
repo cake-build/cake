@@ -14,6 +14,20 @@ namespace Cake.Core
     public static class CakePlatformExtensions
     {
         /// <summary>
+        /// Determines whether the specified platform is a Windows platform.
+        /// </summary>
+        /// <param name="platform">The platform.</param>
+        /// <returns><c>true</c> if the platform is a Windows platform; otherwise <c>false</c>.</returns>
+        public static bool IsWindows(this ICakePlatform platform)
+        {
+            if (platform == null)
+            {
+                throw new ArgumentNullException(nameof(platform));
+            }
+            return EnvironmentHelper.IsWindows(platform.Family);
+        }
+
+        /// <summary>
         /// Determines whether the specified platform is a Unix platform.
         /// </summary>
         /// <param name="platform">The platform.</param>
