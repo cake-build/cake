@@ -9,6 +9,7 @@
     <license type="expression">MIT</license>
     <projectUrl>https://cakebuild.net</projectUrl>
     <icon>cake-medium.png</icon>
+    <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <repository type="git" url="https://github.com/cake-build/cake"/>
     <copyright>Copyright (c) .NET Foundation and contributors</copyright>
