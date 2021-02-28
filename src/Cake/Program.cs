@@ -96,6 +96,7 @@ namespace Cake
             builder.RegisterType<InfoFeature>().As<ICakeInfoFeature>().SingleInstance();
 
             // Core
+            builder.RegisterType<LaunchInfo>().As<ILaunchInfo>().SingleInstance();
             builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
             builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();
             builder.RegisterType<CakePlatform>().As<ICakePlatform>().SingleInstance();

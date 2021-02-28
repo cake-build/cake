@@ -36,6 +36,7 @@ namespace Cake.Core.Modules
             registrar.RegisterType<DefaultExecutionStrategy>().As<IExecutionStrategy>().Singleton();
 
             // Environment
+            registrar.RegisterType<LaunchInfo>().As<ILaunchInfo>().Singleton();
             registrar.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();
             registrar.RegisterType<CakeRuntime>().As<ICakeRuntime>().Singleton();
             registrar.RegisterType<CakePlatform>().As<ICakePlatform>().Singleton();

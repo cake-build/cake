@@ -6,6 +6,7 @@ using System;
 using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 using Cake.Features.Bootstrapping;
 using Cake.Features.Building;
 using Spectre.Console.Cli;
@@ -88,7 +89,7 @@ namespace Cake.Commands
             where T : Exception
         {
             log = log ?? new CakeBuildLog(
-                new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime())));
+                new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime(), new LaunchInfo())));
 
             if (log.Verbosity == Verbosity.Diagnostic)
             {

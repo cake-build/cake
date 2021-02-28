@@ -22,12 +22,6 @@ namespace Cake.Testing
         /// <inheritdoc/>
         public DirectoryPath WorkingDirectory { get; set; }
 
-        /// <summary>
-        /// Gets the working directory where the runner was invoked from.
-        /// </summary>
-        /// <value>The launch directory.</value>
-        public DirectoryPath LaunchDirectory { get; }
-
         /// <inheritdoc/>
         public DirectoryPath ApplicationRoot { get; set; }
 
@@ -49,6 +43,15 @@ namespace Cake.Testing
         /// <value>The runtime Cake is running in.</value>
         public FakeRuntime Runtime { get; }
 
+        /// <inheritdoc/>
+        ILaunchInfo ICakeEnvironment.LaunchInfo => LaunchInfo;
+
+        /// <summary>
+        /// Gets launch info.
+        /// </summary>
+        /// <value>The runtime Cake is running in.</value>
+        public FakeLaunchInfo LaunchInfo { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FakeEnvironment"/> class.
         /// </summary>
@@ -57,8 +60,8 @@ namespace Cake.Testing
         public FakeEnvironment(PlatformFamily family, bool is64Bit = true)
         {
             Platform = new FakePlatform(family, is64Bit);
-            LaunchDirectory = Environment.CurrentDirectory;
             Runtime = new FakeRuntime();
+            LaunchInfo = new FakeLaunchInfo();
             _environmentVariables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _specialPaths = new Dictionary<SpecialPath, DirectoryPath>();
         }
