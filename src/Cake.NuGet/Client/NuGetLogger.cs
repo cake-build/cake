@@ -20,8 +20,6 @@ namespace Cake.NuGet
             {
                 case LogLevel.Minimal:
                     return Core.Diagnostics.LogLevel.Information;
-                case LogLevel.Verbose:
-                    return Core.Diagnostics.LogLevel.Verbose;
                 case LogLevel.Warning:
                     return Core.Diagnostics.LogLevel.Warning;
                 case LogLevel.Error:
@@ -36,9 +34,8 @@ namespace Cake.NuGet
             switch (logLevel)
             {
                 case LogLevel.Debug:
-                    return Verbosity.Diagnostic;
                 case LogLevel.Verbose:
-                    return Verbosity.Verbose;
+                    return Verbosity.Diagnostic;
                 case LogLevel.Warning:
                     return Verbosity.Minimal;
                 case LogLevel.Error:
@@ -55,7 +52,7 @@ namespace Cake.NuGet
 
         public void LogDebug(string data) => _log.Debug(data);
 
-        public void LogVerbose(string data) => _log.Verbose(data);
+        public void LogVerbose(string data) => _log.Debug(data);
 
         public void LogInformation(string data) => _log.Debug(data);
 
