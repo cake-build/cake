@@ -156,7 +156,7 @@ namespace Cake.Common.Build.TeamCity.Data
         {
             Project = new TeamCityProjectInfo(environment);
             Build = new TeamCityBuildInfo(environment, fileSystem);
-            PullRequest = new TeamCityPullRequestInfo(environment);
+            PullRequest = new TeamCityPullRequestInfo(environment, Build);
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public TeamCityPullRequestInfo CreatePullRequestInfo()
         {
-            return new TeamCityPullRequestInfo(Environment);
+            return new TeamCityPullRequestInfo(Environment, CreateBuildInfo());
         }
 
         public TeamCityEnvironmentInfo CreateEnvironmentInfo()
