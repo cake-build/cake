@@ -44,7 +44,7 @@ namespace Cake.Testing
         public FakeRuntime Runtime { get; }
 
         /// <inheritdoc/>
-        public DirectoryPath LaunchDirectory { get; set; }
+        public DirectoryPath LaunchDirectory { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FakeEnvironment"/> class.
