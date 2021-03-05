@@ -44,13 +44,7 @@ namespace Cake.Testing
         public FakeRuntime Runtime { get; }
 
         /// <inheritdoc/>
-        ILaunchInfo ICakeEnvironment.LaunchInfo => LaunchInfo;
-
-        /// <summary>
-        /// Gets launch info.
-        /// </summary>
-        /// <value>The runtime Cake is running in.</value>
-        public FakeLaunchInfo LaunchInfo { get; }
+        public DirectoryPath LaunchDirectory { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FakeEnvironment"/> class.
@@ -61,7 +55,10 @@ namespace Cake.Testing
         {
             Platform = new FakePlatform(family, is64Bit);
             Runtime = new FakeRuntime();
-            LaunchInfo = new FakeLaunchInfo();
+
+            var launchInfo = new FakeLaunchInfo();
+            LaunchDirectory = launchInfo.LaunchDirectory;
+
             _environmentVariables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _specialPaths = new Dictionary<SpecialPath, DirectoryPath>();
         }

@@ -23,7 +23,7 @@ namespace Cake.Core
         }
 
         /// <inheritdoc/>
-        public ILaunchInfo LaunchInfo { get; }
+        public DirectoryPath LaunchDirectory { get; }
 
         /// <inheritdoc/>
         public DirectoryPath ApplicationRoot { get; }
@@ -44,7 +44,7 @@ namespace Cake.Core
         {
             Platform = platform;
             Runtime = runtime;
-            LaunchInfo = launchInfo;
+            LaunchDirectory = launchInfo.LaunchDirectory;
 
             // Get the application root.
             var assembly = AssemblyHelper.GetExecutingAssembly();
