@@ -1,3 +1,36 @@
+### New in 1.1.0 (Released 2021/03/06)
+
+* 2983 No possibility of adding variable with isOutput=true in Azure Pipelines
+* 2903 Integrate Cake.DotNetTool.Module
+* 2685 Better dotnet tool integration
+* 3190 Working directory is not respected in BuildContext constructor
+* 3143 ParseSolution throws IndexOutOfRangeException on empty lines
+* 3058 Regression: Tools are no longer not restored in working directory
+* 2852 Terminal output colours
+* 3219 Update nuspec iconUrl in packages to use CDN URL
+* 3216 Remap NuGetLogger Verbose/Verbose to ICakeLog Debug/Diagnostic
+* 3213 Add iconUrl fallback to Cake and Cake.CoreCLR packages
+* 3193 Update Cake unit MS Test SDK dependencies to 16.9.1
+* 3191 Update Roslyn (Microsoft.CodeAnalysis.CSharp.Scripting) to 3.9.0-4.final
+* 3188 Update Cake.NuGet dependencies to latest stable
+* 3144 TeamCity pull request info requires "GIT_BRANCH" environment variable
+* 3133 Add IncludeNativeLibrariesForSelfExtract and IncludeAllContentForSelfExtract to DotNetCorePublishSettings
+* 3127 Add ResultsDirectory to VSTestSettings
+* 3125 ReportGenerator missing report types
+* 3081 Add netcoreapp3.1 target to Cake
+* 3066 Prefer tools with platform affinity
+* 3040 Package ID Prefix Reservation for Cake.* on nuget.org for cake-build organization
+* 3024 WindowsRegistry: Expose other root registry keys to Cake scripts (e.g. HKEY_CURRENT_USER)
+* 2975 Add support for opting out of ANSI coloring via NO_COLOR env. variable
+* 2967 Expose TeamCity build properties dictionary via TeamCityBuildInfo
+* 2966 Enable AnsiConsoleRenderer in TeamCity and Azure Pipelines
+* 2955 Add Build Start Date & Time to TeamCity build information
+* 2941 ProcessArgumentBuilder helpers should return empty builder when values is null
+* 2932 Add dotnet test --blame Flag to DotNetCoreTestSettings
+* 2314 There's no way to set platform like Debug|iPhone
+* 1633 Some command line output ignores system foreground color configuration
+* 2904 (Frosting) Tool installer should respect configuration
+
 ### New in 1.0.0 (Released 2021/02/07)
 
 * 3050 Frosting: Rename CakeHost extension from UseTool to InstallTool.
