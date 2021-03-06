@@ -63,6 +63,23 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets the platform target.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetPlatformTarget(this MSBuildSettings settings, string target)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.WithProperty("Platform", target);
+            return settings;
+        }
+
+        /// <summary>
         /// Sets the MSBuild platform.
         /// </summary>
         /// <param name="settings">The settings.</param>

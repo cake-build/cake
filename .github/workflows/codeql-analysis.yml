@@ -2,22 +2,22 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ develop, main, release/1.0.0 ]
+    branches: [ develop, main]
   pull_request:
-    branches: [ develop, release/1.0.0 ]
+    branches: [ develop ]
   schedule:
     - cron: '41 21 * * 2'
 
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     strategy:
       fail-fast: false
       matrix:
         language: [ 'csharp' ]
- 
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2

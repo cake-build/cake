@@ -103,5 +103,11 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Gets or sets the target runtime to test for. This setting is only available from .NET Core 3.x upward.
         /// </summary>
         public string Runtime { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to run the tests in blame mode. This option is helpful in isolating a problematic test causing the test host to crash.
+        /// Outputs a 'Sequence.xml' file in the current directory that captures the order of execution of test before the crash.
+        /// </summary>
+        public bool Blame { get; set; }
     }
 }

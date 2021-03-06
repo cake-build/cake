@@ -28,6 +28,7 @@ namespace Cake.Frosting.Internal
             // Register arguments
             var arguments = new CakeArguments(context.Remaining.Parsed);
             _services.AddSingleton<ICakeArguments>(arguments);
+            _services.AddSingleton(context.Remaining);
 
             var provider = _services.BuildServiceProvider();
 
@@ -52,14 +53,14 @@ namespace Cake.Frosting.Internal
                 var log = provider.GetRequiredService<ICakeLog>();
                 log.Verbosity = settings.Verbosity;
 
+                // Set the working directory
+                SetWorkingDirectory(provider, settings);
+
                 // Run
                 var runner = GetFrostingEngine(provider, settings);
 
                 // Install tools
                 InstallTools(provider);
-
-                // Set the working directory
-                SetWorkingDirectory(provider, settings);
 
                 if (settings.Exclusive)
                 {

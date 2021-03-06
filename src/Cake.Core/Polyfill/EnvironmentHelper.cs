@@ -101,6 +101,11 @@ namespace Cake.Core.Polyfill
 #endif
         }
 
+        public static bool IsWindows(PlatformFamily family)
+        {
+            return family == PlatformFamily.Windows;
+        }
+
         public static bool IsUnix()
         {
             return IsUnix(GetPlatformFamily());

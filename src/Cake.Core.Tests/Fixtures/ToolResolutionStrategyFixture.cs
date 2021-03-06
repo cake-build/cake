@@ -18,9 +18,9 @@ namespace Cake.Core.Tests.Fixtures
         public FakeConfiguration Configuration { get; set; }
         public IToolRepository Repository { get; set; }
 
-        public ToolResolutionStrategyFixture()
+        public ToolResolutionStrategyFixture(FakeEnvironment environment = null)
         {
-            Environment = FakeEnvironment.CreateUnixEnvironment();
+            Environment = environment ?? FakeEnvironment.CreateUnixEnvironment();
             FileSystem = new FakeFileSystem(Environment);
             Globber = new Globber(FileSystem, Environment);
             Configuration = new FakeConfiguration();

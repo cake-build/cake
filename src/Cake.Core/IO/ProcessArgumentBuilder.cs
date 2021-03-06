@@ -143,9 +143,12 @@ namespace Cake.Core.IO
         public static ProcessArgumentBuilder FromStrings(IEnumerable<string> values)
         {
             var builder = new ProcessArgumentBuilder();
-            foreach (var value in values)
+            if (values != null)
             {
-                builder.Append(new TextArgument(value));
+                foreach (var value in values)
+                {
+                    builder.Append(new TextArgument(value));
+                }
             }
             return builder;
         }
@@ -158,9 +161,12 @@ namespace Cake.Core.IO
         public static ProcessArgumentBuilder FromStringsQuoted(IEnumerable<string> values)
         {
             var builder = new ProcessArgumentBuilder();
-            foreach (var value in values)
+            if (values != null)
             {
-                builder.AppendQuoted(new TextArgument(value));
+                foreach (var value in values)
+                {
+                    builder.AppendQuoted(new TextArgument(value));
+                }
             }
             return builder;
         }

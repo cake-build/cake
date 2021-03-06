@@ -5,7 +5,7 @@
 using Cake.Common.Build.TeamCity;
 using Cake.Common.Tests.Fakes;
 using Cake.Core;
-using Cake.Testing;
+using Cake.Core.IO;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Build
@@ -13,6 +13,7 @@ namespace Cake.Common.Tests.Fixtures.Build
     internal sealed class TeamCityFixture
     {
         public ICakeEnvironment Environment { get; set; }
+        public IFileSystem FileSystem { get; set; }
         public FakeBuildSystemServiceMessageWriter Writer { get; set; }
 
         public TeamCityFixture()
@@ -20,6 +21,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.WorkingDirectory.Returns("C:\\build\\CAKE-CAKE-JOB1");
             Environment.GetEnvironmentVariable("TEAMCITY_VERSION").Returns((string)null);
+            FileSystem = Substitute.For<IFileSystem>();
             Writer = new FakeBuildSystemServiceMessageWriter();
         }
 
@@ -30,7 +32,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public TeamCityProvider CreateTeamCityService()
         {
-            return new TeamCityProvider(Environment, Writer);
+            return new TeamCityProvider(Environment, FileSystem, Writer);
         }
     }
 }

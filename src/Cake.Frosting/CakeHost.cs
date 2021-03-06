@@ -11,6 +11,7 @@ using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Modules;
+using Cake.DotNetTool.Module;
 using Cake.Frosting.Internal;
 using Cake.NuGet;
 using Microsoft.Extensions.DependencyInjection;
@@ -125,6 +126,7 @@ namespace Cake.Frosting
             services.UseModule<CoreModule>();
             services.UseModule<CommonModule>();
             services.UseModule<NuGetModule>();
+            services.UseModule<DotNetToolModule>();
 
             services.AddSingleton<FrostingContext>();
             services.AddSingleton<IFrostingContext>(f => f.GetService<FrostingContext>());

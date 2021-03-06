@@ -901,6 +901,50 @@ Global
 	EndGlobalSection
 EndGlobal</value>
   </data>
+  <data name="Solution_WithProjectsAndFoldersAndMissingLine" xml:space="preserve">
+    <value>Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2400A22B-695E-4BDF-93CB-8757F5FB3FB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{69930DD1-1688-4407-B4AB-B9E2C0BFB284}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dummy", "src\dummy\dummy.csproj", "{ADCB37DA-2469-462F-99F6-9D4FB7691A3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dummy.Tests", "test\dummy.Tests\dummy.Tests.csproj", "{5D553DC6-36AB-4823-85BD-A33F57C81381}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "executable", "executable\executable.csproj", "{CF305C72-F3E0-44AA-9474-6F12C5276F9F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ADCB37DA-2469-462F-99F6-9D4FB7691A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADCB37DA-2469-462F-99F6-9D4FB7691A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADCB37DA-2469-462F-99F6-9D4FB7691A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADCB37DA-2469-462F-99F6-9D4FB7691A3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D553DC6-36AB-4823-85BD-A33F57C81381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D553DC6-36AB-4823-85BD-A33F57C81381}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D553DC6-36AB-4823-85BD-A33F57C81381}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D553DC6-36AB-4823-85BD-A33F57C81381}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF305C72-F3E0-44AA-9474-6F12C5276F9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF305C72-F3E0-44AA-9474-6F12C5276F9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF305C72-F3E0-44AA-9474-6F12C5276F9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF305C72-F3E0-44AA-9474-6F12C5276F9F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+
+		{ADCB37DA-2469-462F-99F6-9D4FB7691A3B} = {2400A22B-695E-4BDF-93CB-8757F5FB3FB7}
+		{5D553DC6-36AB-4823-85BD-A33F57C81381} = {69930DD1-1688-4407-B4AB-B9E2C0BFB284}
+	EndGlobalSection
+EndGlobal</value>
+  </data>
   <data name="Nuspec_Metadata_PackWithTargetFrameworkDependencies" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
@@ -1327,5 +1371,35 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;file src="LICENSE" /&gt;
   &lt;/files&gt;
 &lt;/package&gt;</value>
+  </data>
+  <data name="TeamCity_Config_Properties_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;
+&lt;properties&gt;
+&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+&lt;entry key="build.counter"&gt;414&lt;/entry&gt;
+&lt;entry key="build.number"&gt;3246&lt;/entry&gt;
+&lt;entry key="teamcity.build.branch"&gt;pull/5&lt;/entry&gt;
+&lt;entry key="teamcity.build.branch.is_default"&gt;true&lt;/entry&gt;
+&lt;entry key="teamcity.build.vcs.branch.MyVcsRootName"&gt;refs/pull/5/merge&lt;/entry&gt;
+&lt;/properties&gt;</value>
+  </data>
+  <data name="TeamCity_Build_Properties_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;
+&lt;properties&gt;
+&lt;comment&gt;TeamCity build properties without 'system.' prefix&lt;/comment&gt;
+&lt;entry key="teamcity.build.properties.file"&gt;/Working/teamcity.build.configuration&lt;/entry&gt;
+&lt;entry key="teamcity.configuration.properties.file"&gt;/Working/teamcity.config.configuration&lt;/entry&gt;
+&lt;entry key="teamcity.runner.properties.file"&gt;/Working/teamcity.runner.configuration&lt;/entry&gt;
+&lt;/properties&gt;</value>
+  </data>
+  <data name="TeamCity_Runner_Properties_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;
+&lt;properties&gt;
+&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+&lt;entry key="command.executable"&gt;run.cmd&lt;/entry&gt;
+&lt;/properties&gt;</value>
   </data>
 </root>

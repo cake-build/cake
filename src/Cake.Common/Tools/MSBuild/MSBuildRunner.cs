@@ -150,7 +150,7 @@ namespace Cake.Common.Tools.MSBuild
                 string binaryOptions = null;
                 if (!string.IsNullOrEmpty(settings.BinaryLogger.FileName))
                 {
-                    binaryOptions = settings.BinaryLogger.FileName;
+                    binaryOptions = settings.BinaryLogger.FileName.Quote();
                 }
 
                 if (settings.BinaryLogger.Imports != MSBuildBinaryLogImports.Unspecified)

@@ -36,6 +36,7 @@
 #load "./Cake.Core/Scripting/UsingDirective.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
 #load "./Cake.Core/CakeAliases.cake"
+#load "./Cake.DotNetTool.Module/Cake.DotNetTool.Module.cake"
 
 //////////////////////////////////////////////////
 // ARGUMENTS
@@ -84,7 +85,8 @@ Task("Cake.Common")
 Task("Run-All-Tests")
     .IsDependentOn("Setup-Tests")
     .IsDependentOn("Cake.Core")
-    .IsDependentOn("Cake.Common");
+    .IsDependentOn("Cake.Common")
+    .IsDependentOn("Cake.DotNetTool.Module");
 
 //////////////////////////////////////////////////
 

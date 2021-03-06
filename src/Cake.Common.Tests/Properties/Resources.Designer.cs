@@ -660,6 +660,71 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Solution_WithProjectsAndFolders", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft Visual Studio Solution File, Format Version 12.00
+        ///# Visual Studio 14
+        ///VisualStudioVersion = 14.0.25123.0
+        ///MinimumVisualStudioVersion = 10.0.40219.1
+        ///Project(&quot;{2150E333-8FDC-42A3-9474-1A3956D46DE8}&quot;) = &quot;src&quot;, &quot;src&quot;, &quot;{2400A22B-695E-4BDF-93CB-8757F5FB3FB7}&quot;
+        ///EndProject
+        ///Project(&quot;{2150E333-8FDC-42A3-9474-1A3956D46DE8}&quot;) = &quot;test&quot;, &quot;test&quot;, &quot;{69930DD1-1688-4407-B4AB-B9E2C0BFB284}&quot;
+        ///EndProject
+        ///Project(&quot;{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}&quot;) = &quot;dummy&quot;, &quot;src\dummy\dummy.csproj&quot;, &quot;{ADCB37DA-2469-462F-99 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Solution_WithProjectsAndFoldersAndMissingLine {
+            get {
+                return ResourceManager.GetString("Solution_WithProjectsAndFoldersAndMissingLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
+        ///&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;
+        ///&lt;properties&gt;
+        ///&lt;comment&gt;TeamCity build properties without &apos;system.&apos; prefix&lt;/comment&gt;
+        ///&lt;entry key=&quot;teamcity.build.properties.file&quot;&gt;/Working/teamcity.build.configuration&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.configuration.properties.file&quot;&gt;/Working/teamcity.config.configuration&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.runner.properties.file&quot;&gt;/Working/teamcity.runner.configuration&lt;/entry&gt;
+        ///&lt;/properties&gt;.
+        /// </summary>
+        public static string TeamCity_Build_Properties_Xml {
+            get {
+                return ResourceManager.GetString("TeamCity_Build_Properties_Xml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
+        ///&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;
+        ///&lt;properties&gt;
+        ///&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+        ///&lt;entry key=&quot;build.counter&quot;&gt;414&lt;/entry&gt;
+        ///&lt;entry key=&quot;build.number&quot;&gt;3246&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.build.branch&quot;&gt;pull/5&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.build.branch.is_default&quot;&gt;true&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.build.vcs.branch.MyVcsRootName&quot;&gt;refs/pull/5/merge&lt;/entry&gt;
+        ///&lt;/properties&gt;.
+        /// </summary>
+        public static string TeamCity_Config_Properties_Xml {
+            get {
+                return ResourceManager.GetString("TeamCity_Config_Properties_Xml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
+        ///&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;
+        ///&lt;properties&gt;
+        ///&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+        ///&lt;entry key=&quot;command.executable&quot;&gt;run.cmd&lt;/entry&gt;
+        ///&lt;/properties&gt;.
+        /// </summary>
+        public static string TeamCity_Runner_Properties_Xml {
+            get {
+                return ResourceManager.GetString("TeamCity_Runner_Properties_Xml", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to using System.Reflection;

@@ -17,7 +17,7 @@
     <copyright>Copyright (c) .NET Foundation and contributors</copyright>
     <licenseUrl>https://github.com/cake-build/cake/blob/develop/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://raw.githubusercontent.com/cake-build/graphics/master/png/cake-medium.png</iconUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/cake-build/graphics/png/cake-medium.png</iconUrl>
   </metadata>
   <files></files>
 </package>

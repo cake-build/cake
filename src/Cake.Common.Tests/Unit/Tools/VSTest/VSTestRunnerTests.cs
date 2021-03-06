@@ -256,6 +256,20 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
         }
 
         [Fact]
+        public void Should_Use_ResultsDirectory_If_Provided()
+        {
+            // Given
+            var fixture = new VSTestRunnerFixture();
+            fixture.Settings.ResultsDirectory = new DirectoryPath("./Path to/");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("\"/Working/Test1.dll\" /ResultsDirectory:\"/Working/Path to\"", result.Args);
+        }
+
+        [Fact]
         public void Should_Use_SettingsFile_If_Provided()
         {
             // Given

@@ -117,6 +117,11 @@ namespace Cake.Common.Tools.VSTest
                 builder.AppendSwitchQuoted("/Diag", ":", settings.Diag.MakeAbsolute(_environment).FullPath);
             }
 
+            if (settings.ResultsDirectory != null)
+            {
+                builder.AppendSwitchQuoted("/ResultsDirectory", ":", settings.ResultsDirectory.MakeAbsolute(_environment).FullPath);
+            }
+
             if (!string.IsNullOrEmpty(settings.Logger))
             {
                 builder.Append("/Logger:{0}", settings.Logger.Trim());

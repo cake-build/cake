@@ -256,6 +256,20 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
             }
 
             [Fact]
+            public void Should_Set_Output_Variable()
+            {
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+
+                // When
+                service.Commands.SetOutputVariable("Output Variable", "Output Value");
+
+                // Then
+                Assert.Contains(fixture.Writer.Entries, m => m == "##vso[task.setvariable variable=Output Variable;isOutput=true;]Output Value");
+            }
+
+            [Fact]
             public void Should_Upload_Task_Summary()
             {
                 // Given

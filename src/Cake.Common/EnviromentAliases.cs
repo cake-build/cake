@@ -157,7 +157,11 @@ namespace Cake.Common
         [CakeAliasCategory("Platform")]
         public static bool IsRunningOnWindows(this ICakeContext context)
         {
-            return !IsRunningOnUnix(context);
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            return context.Environment.Platform.IsWindows();
         }
 
         /// <summary>
