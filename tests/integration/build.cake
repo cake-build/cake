@@ -37,6 +37,7 @@
 #load "./Cake.Core/Tooling/ToolLocator.cake"
 #load "./Cake.Core/CakeAliases.cake"
 #load "./Cake.DotNetTool.Module/Cake.DotNetTool.Module.cake"
+#load "./Cake.NuGet/InProcessInstaller.cake"
 
 //////////////////////////////////////////////////
 // ARGUMENTS
@@ -82,11 +83,15 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases")
     .IsDependentOn("Cake.Common.Tools.TextTransform.TextTransformAliases");
 
+Task("Cake.NuGet")
+    .IsDependentOn("Cake.NuGet.InProcessInstaller");
+
 Task("Run-All-Tests")
     .IsDependentOn("Setup-Tests")
     .IsDependentOn("Cake.Core")
     .IsDependentOn("Cake.Common")
-    .IsDependentOn("Cake.DotNetTool.Module");
+    .IsDependentOn("Cake.DotNetTool.Module")
+    .IsDependentOn("Cake.NuGet");
 
 //////////////////////////////////////////////////
 

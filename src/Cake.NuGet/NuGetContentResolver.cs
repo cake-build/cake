@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using NuGet.Client;
@@ -20,6 +21,7 @@ namespace Cake.NuGet
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
+        private readonly ICakeLog _log;
 
         private static readonly Lazy<RuntimeGraph> RuntimeGraph = new Lazy<RuntimeGraph>(() =>
         {
@@ -37,11 +39,13 @@ namespace Cake.NuGet
         public NuGetContentResolver(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
-            IGlobber globber)
+            IGlobber globber,
+            ICakeLog log)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             _globber = globber ?? throw new ArgumentNullException(nameof(globber));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
         public IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, PackageReference package, PackageType type)
@@ -67,6 +71,7 @@ namespace Cake.NuGet
         {
             if (!_fileSystem.Exist(path))
             {
+                _log.Debug("Path not found at {0}.", path);
                 return Array.Empty<IFile>();
             }
 
@@ -81,25 +86,29 @@ namespace Cake.NuGet
             var assemblies = GetFiles(path, package, new[] { path.FullPath + "/**/*.{dll,so,dylib}" })
                 .Where(file => !"Cake.Core.dll".Equals(file.Path.GetFilename().FullPath, StringComparison.OrdinalIgnoreCase))
                 .ToDictionary(x => path.GetRelativePath(x.Path).FullPath);
+            if (assemblies.Count == 0)
+            {
+                _log.Debug("Assemblies not found at {0}.", path);
+            }
 
             var conventions = new ManagedCodeConventions(RuntimeGraph.Value);
-
             var collection = new ContentItemCollection();
             collection.Load(assemblies.Keys);
-
             var criteria = conventions.Criteria.ForFrameworkAndRuntime(tfm, rid);
+
             var managedAssemblies = collection.FindBestItemGroup(criteria, conventions.Patterns.RuntimeAssemblies);
-
-            var files = managedAssemblies?.Items.Select(x => assemblies[x.Path]).Where(x => x.IsClrAssembly()) ?? Enumerable.Empty<IFile>();
-
+            var files = managedAssemblies?.Items.Select(x => assemblies[x.Path]).Where(x => x.IsClrAssembly()).ToArray() ?? Array.Empty<IFile>();
             if (_environment.Runtime.IsCoreClr)
             {
                 var nativeAssemblies = collection.FindBestItemGroup(criteria, conventions.Patterns.NativeLibraries);
-
-                files = (nativeAssemblies?.Items.Select(x => assemblies[x.Path]) ?? Enumerable.Empty<IFile>()).Concat(files);
+                files = (nativeAssemblies?.Items.Select(x => assemblies[x.Path]) ?? Array.Empty<IFile>()).Concat(files).ToArray();
+            }
+            if (files.Length == 0)
+            {
+                _log.Debug("Assemblies not found for tfm {0} and rid {1}.", tfm, rid);
             }
 
-            return files.ToArray();
+            return files;
         }
 
         private IReadOnlyCollection<IFile> GetToolFiles(DirectoryPath path, PackageReference package)
