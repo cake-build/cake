@@ -40,6 +40,11 @@ namespace Cake.Infrastructure.Composition
             _builder.RegisterInstance(implementation).As(service).SingleInstance();
         }
 
+        public void RegisterLazy(Type service, Func<object> factory)
+        {
+            _builder.Register(_ => factory()).As(service);
+        }
+
         public ICakeRegistrationBuilder RegisterInstance<TImplementation>(TImplementation instance)
             where TImplementation : class
         {

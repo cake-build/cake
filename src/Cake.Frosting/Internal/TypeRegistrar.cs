@@ -34,5 +34,10 @@ namespace Cake.Frosting.Internal
         {
             _collection.AddSingleton(service, implementation);
         }
+
+        public void RegisterLazy(Type service, Func<object> factory)
+        {
+            _collection.AddSingleton(service, _ => factory());
+        }
     }
 }
