@@ -141,6 +141,8 @@ namespace Cake.Core.Scripting
 
                 default:
                     Console.Error.WriteLine(_runtime.BuiltFramework.FullName);
+                    Console.Error.Flush();
+
                     return "NETSTANDARD2_0";
             }
         }

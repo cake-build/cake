@@ -50,24 +50,28 @@ namespace Cake.Core
         public void Write(string format, params object[] arg)
         {
             Console.Write(format, arg);
+            Console.Out.Flush();
         }
 
         /// <inheritdoc/>
         public void WriteLine(string format, params object[] arg)
         {
             Console.WriteLine(format, arg);
+            Console.Out.Flush();
         }
 
         /// <inheritdoc/>
         public void WriteError(string format, params object[] arg)
         {
             Console.Error.Write(format, arg);
+            Console.Error.Flush();
         }
 
         /// <inheritdoc/>
         public void WriteErrorLine(string format, params object[] arg)
         {
             Console.Error.WriteLine(format, arg);
+            Console.Error.Flush();
         }
 
         /// <inheritdoc/>

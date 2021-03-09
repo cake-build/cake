@@ -20,6 +20,7 @@ namespace Cake.Common.Build
         public void Write(string format, params object[] args)
         {
             Console.Out.WriteLine(format, args);
+            Console.Out.Flush();
         }
     }
 }
