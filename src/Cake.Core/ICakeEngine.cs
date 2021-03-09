@@ -20,24 +20,44 @@ namespace Cake.Core
         IReadOnlyList<ICakeTaskInfo> Tasks { get; }
 
         /// <summary>
-        /// Raised during setup before any tasks are run.
+        /// Raised at the start of setup before any tasks are run.
         /// </summary>
         event EventHandler<SetupEventArgs> Setup;
 
         /// <summary>
-        /// Raised during teardown after all other tasks have been run.
+        /// Raised at the end of setup before any tasks are run.
+        /// </summary>
+        event EventHandler<SetupEventArgs> PostSetup;
+
+        /// <summary>
+        /// Raised at the start of teardown after all other tasks have been run.
         /// </summary>
         event EventHandler<TeardownEventArgs> Teardown;
 
         /// <summary>
-        /// Raised before each task is run.
+        /// Raised at the end of teardown after all other tasks have been run.
+        /// </summary>
+        event EventHandler<TeardownEventArgs> PostTeardown;
+
+        /// <summary>
+        /// Raised at the start of task setup before each task is run.
         /// </summary>
         event EventHandler<TaskSetupEventArgs> TaskSetup;
 
         /// <summary>
-        /// Raised after each task has been run.
+        /// Raised at the end of task setup before each task is run.
+        /// </summary>
+        event EventHandler<TaskSetupEventArgs> PostTaskSetup;
+
+        /// <summary>
+        /// Raised at the start of task teardown after each task has been run.
         /// </summary>
         event EventHandler<TaskTeardownEventArgs> TaskTeardown;
+
+        /// <summary>
+        /// Raised at the end of task teardown after each task has been run.
+        /// </summary>
+        event EventHandler<TaskTeardownEventArgs> PostTaskTeardown;
 
         /// <summary>
         /// Creates and registers a new Cake task.

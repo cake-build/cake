@@ -1566,6 +1566,27 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
+            public void Should_Raise_PostSetup_Event()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+
+                // When
+                var result = Assert.Raises<SetupEventArgs>(
+                    handler => engine.PostSetup += handler,
+                    handler => engine.PostSetup -= handler,
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal(engine, result.Sender);
+                Assert.Equal(fixture.Context, result.Arguments.Context);
+            }
+
+            [Fact]
             public async Task Should_Invoke_All_Handlers()
             {
                 // Given
@@ -1635,6 +1656,26 @@ namespace Cake.Core.Tests.Unit
                 var result = Assert.Raises<TaskSetupEventArgs>(
                     handler => engine.TaskSetup += handler,
                     handler => engine.TaskSetup -= handler,
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal(engine, result.Sender);
+            }
+
+            [Fact]
+            public void Should_Raise_Task_PostSetup_Event()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+
+                // When
+                var result = Assert.Raises<TaskSetupEventArgs>(
+                    handler => engine.PostTaskSetup += handler,
+                    handler => engine.PostTaskSetup -= handler,
                     async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
@@ -1749,6 +1790,26 @@ namespace Cake.Core.Tests.Unit
             }
 
             [Fact]
+            public void Should_Raise_Task_PostTeardown_Event()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+
+                // When
+                var result = Assert.Raises<TaskTeardownEventArgs>(
+                    handler => engine.PostTaskTeardown += handler,
+                    handler => engine.PostTaskTeardown -= handler,
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal(engine, result.Sender);
+            }
+
+            [Fact]
             public void Should_Raise_Task_Teardown_Event_With_Task_Context()
             {
                 // Given
@@ -1842,6 +1903,26 @@ namespace Cake.Core.Tests.Unit
                 var result = Assert.Raises<TeardownEventArgs>(
                     handler => engine.Teardown += handler,
                     handler => engine.Teardown -= handler,
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal(engine, result.Sender);
+            }
+
+            [Fact]
+            public void Should_Raise_PostTeardown_Event()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+
+                // When
+                var result = Assert.Raises<TeardownEventArgs>(
+                    handler => engine.PostTeardown += handler,
+                    handler => engine.PostTeardown -= handler,
                     async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then

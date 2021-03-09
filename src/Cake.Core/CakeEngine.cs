@@ -30,13 +30,25 @@ namespace Cake.Core
         public event EventHandler<SetupEventArgs> Setup;
 
         /// <inheritdoc/>
+        public event EventHandler<SetupEventArgs> PostSetup;
+
+        /// <inheritdoc/>
         public event EventHandler<TeardownEventArgs> Teardown;
+
+        /// <inheritdoc/>
+        public event EventHandler<TeardownEventArgs> PostTeardown;
 
         /// <inheritdoc/>
         public event EventHandler<TaskSetupEventArgs> TaskSetup;
 
         /// <inheritdoc/>
+        public event EventHandler<TaskSetupEventArgs> PostTaskSetup;
+
+        /// <inheritdoc/>
         public event EventHandler<TaskTeardownEventArgs> TaskTeardown;
+
+        /// <inheritdoc/>
+        public event EventHandler<TaskTeardownEventArgs> PostTaskTeardown;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeEngine"/> class.
@@ -232,17 +244,29 @@ namespace Cake.Core
         {
             stopWatch.Restart();
 
-            PublishEvent(Setup, new SetupEventArgs(context));
+            var setupEventArgs = new SetupEventArgs(context);
+            PublishEvent(Setup, setupEventArgs);
 
             if (_actions.Setups.Count > 0)
             {
                 foreach (var setup in _actions.Setups)
                 {
-                    strategy.PerformSetup(setup, new SetupContext(context, targetTask, tasks));
+                    PerformTaskSetup(context, strategy, targetTask, false);
+                    try
+                    {
+                        strategy.PerformSetup(setup, new SetupContext(context, targetTask, tasks));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
                 }
 
                 report.Add("Setup", CakeReportEntryCategory.Setup, stopWatch.Elapsed);
             }
+
+            PublishEvent(PostSetup, setupEventArgs);
         }
 
         private static bool ShouldTaskExecute(ICakeContext context, CakeTask task, CakeTaskCriteria criteria, bool isTarget)
@@ -326,7 +350,8 @@ namespace Cake.Core
             bool skipped)
         {
             var taskSetupContext = new TaskSetupContext(context, task);
-            PublishEvent(TaskSetup, new TaskSetupEventArgs(taskSetupContext));
+            var taskSetupEventArgs = new TaskSetupEventArgs(taskSetupContext);
+            PublishEvent(TaskSetup, taskSetupEventArgs);
             // Trying to stay consistent with the behavior of script-level Setup & Teardown (if setup fails, don't run the task, but still run the teardown)
             if (_actions.TaskSetup != null)
             {
@@ -340,6 +365,7 @@ namespace Cake.Core
                     throw;
                 }
             }
+            PublishEvent(PostTaskSetup, taskSetupEventArgs);
         }
 
         private void PerformTaskTeardown(ICakeContext context, IExecutionStrategy strategy, ICakeTaskInfo task, TimeSpan duration, bool skipped, Exception taskException)
@@ -347,7 +373,8 @@ namespace Cake.Core
             var exceptionWasThrown = taskException != null;
 
             var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped, taskException);
-            PublishEvent(TaskTeardown, new TaskTeardownEventArgs(taskTeardownContext));
+            var taskTeardownEventArgs = new TaskTeardownEventArgs(taskTeardownContext);
+            PublishEvent(TaskTeardown, taskTeardownEventArgs);
             if (_actions.TaskTeardown != null)
             {
                 try
@@ -366,6 +393,7 @@ namespace Cake.Core
                     _log.Error("Task Teardown error ({0}): {1}", task.Name, ex.ToString());
                 }
             }
+            PublishEvent(PostTaskTeardown, taskTeardownEventArgs);
         }
 
         private void SkipTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, CakeReport report,
@@ -421,7 +449,8 @@ namespace Cake.Core
             stopWatch.Restart();
 
             var teardownContext = new TeardownContext(context, thrownException);
-            PublishEvent(Teardown, new TeardownEventArgs(teardownContext));
+            var teardownEventArgs = new TeardownEventArgs(teardownContext);
+            PublishEvent(Teardown, teardownEventArgs);
 
             if (_actions.Teardowns.Count > 0)
             {
@@ -462,6 +491,8 @@ namespace Cake.Core
                     ProcessTeardownExceptions(exceptions, exceptionWasThrown);
                 }
             }
+
+            PublishEvent(PostTeardown, teardownEventArgs);
         }
 
         private void ProcessTeardownExceptions(List<Exception> exceptions, bool exceptionWasThrown)
