@@ -50,7 +50,7 @@ namespace Cake.NuGet.Tests.Fixtures
 
         public IReadOnlyCollection<IFile> GetFiles()
         {
-            var resolver = new NuGetContentResolver(FileSystem, Environment, Globber);
+            var resolver = new NuGetContentResolver(FileSystem, Environment, Globber, Log);
             return resolver.GetFiles(Path, Package, PackageType);
         }
 

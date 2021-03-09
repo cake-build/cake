@@ -126,6 +126,7 @@ namespace Cake.NuGet
             var packageIdentity = GetPackageId(package, localAndPrimaryRepositories, targetFramework, _sourceCacheContext, _nugetLogger);
             if (packageIdentity == null)
             {
+                _log.Debug("No package identity returned.");
                 return Array.Empty<IFile>();
             }
 
@@ -161,7 +162,11 @@ namespace Cake.NuGet
 
             var resolver = new PackageResolver();
             var packagesToInstall = resolver.Resolve(resolverContext, CancellationToken.None)
-                .Select(p => availablePackages.Single(x => PackageIdentityComparer.Default.Equals(x, p)));
+                .Select(p => availablePackages.Single(x => PackageIdentityComparer.Default.Equals(x, p))).ToArray();
+            if (packagesToInstall.Length == 0)
+            {
+                _log.Debug("No packages to install after running package resolver.");
+            }
 
             var packageExtractionContext = new PackageExtractionContext(
                 PackageSaveMode.Nuspec | PackageSaveMode.Files | PackageSaveMode.Nupkg,
@@ -207,8 +212,12 @@ namespace Cake.NuGet
                 // If the installed package is not the target package, create a new PackageReference
                 // which is passed to the content resolver. This makes logging make more sense.
                 var installedPackageReference = isTargetPackage ? package : new PackageReference($"nuget:?package={packageToInstall.Id}");
-
-                installedFiles.AddRange(_contentResolver.GetFiles(installPath, installedPackageReference, type));
+                var assemblies = _contentResolver.GetFiles(installPath, installedPackageReference, type);
+                if (assemblies.Count == 0)
+                {
+                    _log.Debug("No assemblies found after running content resolver.");
+                }
+                installedFiles.AddRange(assemblies);
             }
 
             return installedFiles;
@@ -241,28 +250,33 @@ namespace Cake.NuGet
 
         private static NuGetVersion GetNuGetVersion(PackageReference package, IEnumerable<SourceRepository> repositories, NuGetFramework targetFramework, SourceCacheContext sourceCacheContext, ILogger logger)
         {
+            NuGetVersion version = null;
+            VersionRange versionRange = null;
             if (package.Parameters.ContainsKey("version"))
             {
-                return new NuGetVersion(package.Parameters["version"].First());
+                var versionString = package.Parameters["version"].First();
+                if (NuGetVersion.TryParse(versionString, out version))
+                {
+                    return version;
+                }
+                VersionRange.TryParse(versionString, out versionRange);
             }
 
             var includePrerelease = package.IsPrerelease();
-            NuGetVersion version = null;
             foreach (var sourceRepository in repositories)
             {
                 try
                 {
                     var dependencyInfoResource = sourceRepository.GetResourceAsync<DependencyInfoResource>().Result;
                     var dependencyInfo = dependencyInfoResource.ResolvePackages(package.Package, targetFramework, sourceCacheContext, logger, CancellationToken.None).Result;
-                    var foundVersion = dependencyInfo
+                    var foundVersions = dependencyInfo
                         .Where(p => p.Listed && (includePrerelease || !p.Version.IsPrerelease))
                         .OrderByDescending(p => p.Version, VersionComparer.Default)
-                        .Select(p => p.Version)
-                        .FirstOrDefault();
+                        .Select(p => p.Version);
+                    var foundVersion = versionRange != null ? versionRange.FindBestMatch(foundVersions) : foundVersions.FirstOrDefault();
 
                     // Find the highest possible version
-                    version = version ?? foundVersion;
-                    if (foundVersion != null && foundVersion > version)
+                    if (version == null || foundVersion > version)
                     {
                         version = foundVersion;
                     }
