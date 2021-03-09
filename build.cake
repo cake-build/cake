@@ -1,6 +1,3 @@
-// Install modules
-#module nuget:?package=Cake.DotNetTool.Module&version=1.0.1
-
 // Install addins.
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=1.0.0"
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=1.0.0"
