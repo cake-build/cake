@@ -17,7 +17,7 @@ namespace Cake.Core.Tests.Unit
             [InlineData(PlatformFamily.Linux)]
             [InlineData(PlatformFamily.OSX)]
             [InlineData(PlatformFamily.Windows)]
-            public void Should_Not_Changes_When_WorkingDirectory_Changed(PlatformFamily family)
+            public void Should_Not_Change_When_WorkingDirectory_Changed(PlatformFamily family)
             {
                 // Given
                 var context = Substitute.For<ICakeContext>();
