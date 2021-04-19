@@ -31,10 +31,10 @@ jobs:
         with:
           dotnet-version: '3.1.406'
 
-      - name: Install .NET Core SDK 5.0.200
+      - name: Install .NET Core SDK 5.0.202
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '5.0.200'
+          dotnet-version: '5.0.202'
 
       - name: Install .NET Core SDK (global.json)
         uses: actions/setup-dotnet@v1
