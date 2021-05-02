@@ -190,6 +190,13 @@ namespace Cake.Common.Tools.NuGet.Pack
                 builder.Append("-Symbols");
             }
 
+            // SymbolPackageFormat
+            if (!string.IsNullOrWhiteSpace(settings.SymbolPackageFormat))
+            {
+                builder.Append("-SymbolPackageFormat");
+                builder.Append(settings.SymbolPackageFormat);
+            }
+
             // Verbosity
             if (settings.Verbosity != null)
             {
