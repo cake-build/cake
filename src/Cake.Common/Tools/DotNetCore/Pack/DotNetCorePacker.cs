@@ -97,6 +97,12 @@ namespace Cake.Common.Tools.DotNetCore.Pack
                 builder.Append("--include-symbols");
             }
 
+            // Symbol package format
+            if (!string.IsNullOrWhiteSpace(settings.SymbolPackageFormat))
+            {
+                builder.Append(string.Concat("-p:SymbolPackageFormat=", settings.SymbolPackageFormat));
+            }
+
             // Include source
             if (settings.IncludeSource)
             {
