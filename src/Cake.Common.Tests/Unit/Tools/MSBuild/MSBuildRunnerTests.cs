@@ -904,6 +904,37 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Use_IncludeSymbols_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.IncludeSymbols = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:IncludeSymbols=true /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_SymbolPackageFormat_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.IncludeSymbols = true;
+                fixture.Settings.SymbolPackageFormat = "snupkg";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Append_Logger_To_Process_Arguments()
             {
                 // Given

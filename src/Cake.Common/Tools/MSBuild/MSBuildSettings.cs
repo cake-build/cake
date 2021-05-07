@@ -109,6 +109,17 @@ namespace Cake.Common.Tools.MSBuild
         public Verbosity Verbosity { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether a symbol package should be created.
+        /// </summary>
+        public bool? IncludeSymbols { get; set; }
+
+        /// <summary>
+        /// Gets or sets the symbol package format.
+        /// </summary>
+        /// <value>The symbol package format.</value>
+        public string SymbolPackageFormat { get; set; }
+
+        /// <summary>
         /// Gets the loggers.
         /// </summary>
         public ICollection<MSBuildLogger> Loggers => _loggers;
@@ -151,7 +162,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Gets or sets a value indicating whether or not to lock the package dependency graph while
         /// restoring, using the packages.lock.json file.
-        /// This setting is available with atleast Visual Studio 2017 version 15.9 and above or NET SDK version 2.1.500 and above.
+        /// This setting is available with at least Visual Studio 2017 version 15.9 and above or NET SDK version 2.1.500 and above.
         /// </summary>
         public bool? RestoreLockedMode { get; set; }
 

@@ -58,9 +58,15 @@ namespace Cake.Common.Tools.DotNetCore.Pack
         public bool NoLogo { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to generate the symbols nupkg.
+        /// Gets or sets a value indicating whether to generate the symbols package.
         /// </summary>
         public bool IncludeSymbols { get; set; }
+
+        /// <summary>
+        /// Gets or sets the symbol package format.
+        /// </summary>
+        /// <value>The symbol package format.</value>
+        public string SymbolPackageFormat { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to includes the source files in the NuGet package.

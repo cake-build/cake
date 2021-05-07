@@ -54,6 +54,12 @@ namespace Cake.Common.Tools.NuGet.Pack
         public bool Symbols { get; set; }
 
         /// <summary>
+        /// Gets or sets the symbol package format.
+        /// </summary>
+        /// <value>The symbol package format.</value>
+        public string SymbolPackageFormat { get; set; }
+
+        /// <summary>
         /// Gets or sets the package ID.
         /// </summary>
         /// <value>The package ID.</value>
