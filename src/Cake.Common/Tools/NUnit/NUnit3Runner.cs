@@ -220,6 +220,14 @@ namespace Cake.Common.Tools.NUnit
                 }
             }
 
+            if (settings.TestParams != null && settings.TestParams.Count > 0)
+            {
+                foreach (var testParam in settings.TestParams)
+                {
+                    builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "--testparam:{0}={1}", testParam.Key, testParam.Value));
+                }
+            }
+
             return builder;
         }
 
