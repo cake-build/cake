@@ -16,6 +16,7 @@
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
 
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)../../nuspec/cake-medium.png" Pack="true" PackagePath="content\templates\cakefrosting\.template.config\image.png" />
     <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
     <Compile Remove="**\*" />
   </ItemGroup>
