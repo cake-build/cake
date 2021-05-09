@@ -115,6 +115,30 @@ namespace Cake.Infrastructure.Scripting
 
             foreach (var diagnostic in diagnostics)
             {
+                // Suppress some diagnostic information. See https://github.com/cake-build/cake/issues/3337
+                switch (diagnostic.Id)
+                {
+                    // CS1701 Compiler Warning (level 2)
+                    // Assuming assembly reference "Assembly Name #1" matches "Assembly Name #2", you may need to supply runtime policy
+                    // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-messages/cs1701
+                    case "CS1701":
+                        continue;
+
+                    // CS1702 Compiler Warning (level 3)
+                    // Assuming assembly reference "Assembly Name #1" matches "Assembly Name #2", you may need to supply runtime policy
+                    // https://docs.microsoft.com/en-us/dotnet/csharp/misc/cs1702
+                    case "CS1702":
+                        continue;
+
+                    // CS1705 Compiler Error
+                    // Assembly 'AssemblyName1' uses 'TypeName' which has a higher version than referenced assembly 'AssemblyName2'
+                    case "CS1705":
+                        continue;
+
+                    default:
+                        break;
+                }
+
                 switch (diagnostic.Severity)
                 {
                     case DiagnosticSeverity.Info:
