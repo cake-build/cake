@@ -255,6 +255,25 @@ namespace Cake.Core.Tests.Unit.IO
             }
         }
 
+        public sealed class TheGetParentMethod
+        {
+            [WindowsTheory]
+            [InlineData("C:/Data", "C:/")]
+            [InlineData("C:/Data/Work", "C:/Data")]
+            [InlineData("C:/Data/Work/file.txt", "C:/Data/Work")]
+            public void Should_Return_Parent_Directory(string directoryPath, string parentPath)
+            {
+                // Given
+                var path = new DirectoryPath(directoryPath);
+
+                // When
+                var result = path.GetParent();
+
+                // Then
+                Assert.Equal(parentPath, result.FullPath);
+            }
+        }
+
         public sealed class TheMakeAbsoluteMethod
         {
             public sealed class ThatTakesAnEnvironment
