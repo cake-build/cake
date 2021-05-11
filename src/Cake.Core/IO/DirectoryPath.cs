@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.IO;
 using System.Linq;
 
 namespace Cake.Core.IO
@@ -58,7 +57,9 @@ namespace Cake.Core.IO
         /// <returns>A <see cref="DirectoryPath"/> to the parent directory of the given <see cref="DirectoryPath"/>.</returns>
         public DirectoryPath GetParent()
         {
-            return new DirectoryPath(new DirectoryInfo(FullPath).Parent.FullName);
+            string[] segments = Segments.Take(Segments.Length - 1).ToArray();
+            string path = PathHelper.Combine(segments);
+            return new DirectoryPath(path);
         }
 
         /// <summary>
