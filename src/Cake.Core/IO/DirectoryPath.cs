@@ -56,6 +56,24 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
+        /// Gets the directory path of a <see cref="DirectoryPath"/>.
+        /// </summary>
+        /// <returns>A <see cref="DirectoryPath"/> to the parent directory of the given <see cref="DirectoryPath"/>.</returns>
+        public DirectoryPath GetParent()
+        {
+            var segments = Segments.Take(Segments.Length - 1).ToArray();
+            var path = PathHelper.Combine(segments);
+
+            // If it was an absolute path with no parent.
+            if (path == @"\\")
+            {
+                return null;
+            }
+
+            return (path != string.Empty) ? new DirectoryPath(path) : null;
+        }
+
+        /// <summary>
         /// Combines the current path with a <see cref="FilePath"/>.
         /// The provided <see cref="FilePath"/> must be relative.
         /// </summary>
