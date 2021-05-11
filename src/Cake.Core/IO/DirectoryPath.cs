@@ -55,7 +55,6 @@ namespace Cake.Core.IO
         /// <summary>
         /// Gets the directory path of a <see cref="DirectoryPath"/>.
         /// </summary>
-        /// <param name="path">The path.</param>
         /// <returns>A <see cref="DirectoryPath"/> to the parent directory of the given <see cref="DirectoryPath"/>.</returns>
         public DirectoryPath GetParent()
         {
