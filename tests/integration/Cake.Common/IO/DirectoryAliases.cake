@@ -202,6 +202,45 @@ Task("Cake.Common.IO.DirectoryAliases.MakeRelative.WorkingDirectory")
     Assert.Equal("temp/hello/world/test.cake", relativeFilePath.ToString());
 });
 
+Task("Cake.Common.IO.Paths.ConvertableDirectoryPath.DirectoryPathPlusConvertableDirectoryPath")
+    .Does(context =>
+{
+    // Given
+    var directoryPath = new DirectoryPath("./root");
+
+    // When
+    var result = directoryPath + context.Directory("other");
+
+    // Then
+    Assert.Equal("root/other", result.ToString());
+});
+
+Task("Cake.Common.IO.Paths.ConvertableDirectoryPath.ConvertableDirectoryPathPlusDirectoryPath")
+    .Does(context =>
+{
+    // Given
+    var convertableDirectoryPath = context.Directory("./root");
+
+    // When
+    var result = convertableDirectoryPath + new DirectoryPath("other");
+
+    // Then
+    Assert.Equal("root/other", result.ToString());
+});
+
+Task("Cake.Common.IO.Paths.ConvertableDirectoryPath.ConvertableDirectoryPathPlusConvertableDirectoryPath")
+    .Does(context =>
+{
+    // Given
+    var convertableDirectoryPath = context.Directory("./root");
+
+    // When
+    var result = convertableDirectoryPath + context.Directory("other");
+
+    // Then
+    Assert.Equal("root/other", result.ToString());
+});
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Common.IO.DirectoryAliases")
@@ -215,4 +254,8 @@ Task("Cake.Common.IO.DirectoryAliases")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectories")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectories.Recurse")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases.MakeRelative.DefinedRootPath")
-    .IsDependentOn("Cake.Common.IO.DirectoryAliases.MakeRelative.WorkingDirectory");
+    .IsDependentOn("Cake.Common.IO.DirectoryAliases.MakeRelative.WorkingDirectory")
+    .IsDependentOn("Cake.Common.IO.Paths.ConvertableDirectoryPath.DirectoryPathPlusConvertableDirectoryPath")
+    .IsDependentOn("Cake.Common.IO.Paths.ConvertableDirectoryPath.ConvertableDirectoryPathPlusDirectoryPath")
+    .IsDependentOn("Cake.Common.IO.Paths.ConvertableDirectoryPath.ConvertableDirectoryPathPlusConvertableDirectoryPath")
+;
