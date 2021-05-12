@@ -257,20 +257,79 @@ namespace Cake.Core.Tests.Unit.IO
 
         public sealed class TheGetParentMethod
         {
-            [WindowsTheory]
-            [InlineData("C:/Data", "C:/")]
-            [InlineData("C:/Data/Work", "C:/Data")]
-            [InlineData("C:/Data/Work/file.txt", "C:/Data/Work")]
-            public void Should_Return_Parent_Directory(string directoryPath, string parentPath)
+            public sealed class InWindowsFormat
             {
-                // Given
-                var path = new DirectoryPath(directoryPath);
+                [WindowsTheory]
+                [InlineData("C:/Data", "C:/")]
+                [InlineData("C:/Data/Work", "C:/Data")]
+                [InlineData("C:/Data/Work/file.txt", "C:/Data/Work")]
+                [InlineData(@"\\A\B\C", @"\\A\B")]
+                [InlineData(@"\\A\B\c.txt", @"\\A\B")]
+                public void Should_Return_Parent_Directory(string directoryPath, string parentPath)
+                {
+                    // Given
+                    var path = new DirectoryPath(directoryPath);
 
-                // When
-                var result = path.GetParent();
+                    // When
+                    var result = path.GetParent();
 
-                // Then
-                Assert.Equal(parentPath, result.FullPath);
+                    // Then
+                    Assert.Equal(parentPath, result.FullPath);
+                }
+
+                [WindowsTheory]
+                [InlineData("C:/")]
+                [InlineData("C:")]
+                [InlineData(@"\\A\")]
+                [InlineData(@"\\A")]
+                public void Should_Return_Null_If_No_Parent(string directoryPath)
+                {
+                    // Given
+                    var path = new DirectoryPath(directoryPath);
+
+                    // When
+                    var result = path.GetParent();
+
+                    // Then
+                    Assert.Equal(result, null);
+                }
+                public sealed class InUnixFormat
+                {
+                    [Theory]
+                    [InlineData("/C/Data", "/C")]
+                    [InlineData("/C/Data/Work", "/C/Data")]
+                    [InlineData("/C/Data/Work/file.txt", "/C/Data/Work")]
+                    [InlineData(@"\\A\B\C", @"\\A\B")]
+                    [InlineData(@"\\A\B\c.txt", @"\\A\B")]
+                    public void Should_Return_Parent_Directory(string directoryPath, string parentPath)
+                    {
+                        // Given
+                        var path = new DirectoryPath(directoryPath);
+
+                        // When
+                        var result = path.GetParent();
+
+                        // Then
+                        Assert.Equal(parentPath, result.FullPath);
+                    }
+
+                    [Theory]
+                    [InlineData("/C/")]
+                    [InlineData("/C")]
+                    [InlineData(@"\\A\")]
+                    [InlineData(@"\\A")]
+                    public void Should_Return_Null_If_No_Parent(string directoryPath)
+                    {
+                        // Given
+                        var path = new DirectoryPath(directoryPath);
+
+                        // When
+                        var result = path.GetParent();
+
+                        // Then
+                        Assert.Equal(result, null);
+                    }
+                }
             }
         }
 

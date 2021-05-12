@@ -59,7 +59,13 @@ namespace Cake.Core.IO
         {
             string[] segments = Segments.Take(Segments.Length - 1).ToArray();
             string path = PathHelper.Combine(segments);
-            return new DirectoryPath(path);
+
+            // If it was an absolute path with no parent.
+            if (path == @"\\")
+            {
+                return null;
+            }
+            return (path != string.Empty) ? new DirectoryPath(path) : null;
         }
 
         /// <summary>
