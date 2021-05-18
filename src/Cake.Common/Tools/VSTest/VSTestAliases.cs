@@ -51,7 +51,7 @@ namespace Cake.Common.Tools.VSTest
         /// </summary>
         /// <example>
         /// <code>
-        /// VSTest("./Tests/*.UnitTests.dll", new VSTestSettings() { Logger = VSTestLogger.Trx });
+        /// VSTest("./Tests/*.UnitTests.dll", new VSTestSettings() { Logger = "trx" });
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
