@@ -34,6 +34,7 @@
 #load "./Cake.Core/Scripting/LoadDirective.cake"
 #load "./Cake.Core/Scripting/SystemCollections.cake"
 #load "./Cake.Core/Scripting/UsingDirective.cake"
+#load "./Cake.Core/Scripting/SpectreConsole.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
 #load "./Cake.Core/CakeAliases.cake"
 #load "./Cake.DotNetTool.Module/Cake.DotNetTool.Module.cake"
@@ -58,6 +59,7 @@ Task("Cake.Core")
     .IsDependentOn("Cake.Core.Scripting.LoadDirective")
     .IsDependentOn("Cake.Core.Scripting.SystemCollections")
     .IsDependentOn("Cake.Core.Scripting.UsingDirective")
+    .IsDependentOn("Cake.Core.Scripting.Spectre.Console")
     .IsDependentOn("Cake.Core.Tooling.ToolLocator")
     .IsDependentOn("Cake.Core.CakeAliases");
 
