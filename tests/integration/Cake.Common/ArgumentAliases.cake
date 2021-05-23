@@ -53,6 +53,38 @@ Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments")
     Assert.Equal(new[] {"a", "b"}, arg);
 });
 
+Task("Cake.Common.ArgumentAliases.Argument.DirectoryPathArgument")
+    .Does(() =>
+{
+    // Given, When
+    var arg = Argument<DirectoryPath>("testAssemblyDirectoryPath");
+
+    // Then
+    Assert.Equal(Context.Environment.ApplicationRoot.FullPath, arg.FullPath);
+});
+
+Task("Cake.Common.ArgumentAliases.Argument.FilePathArgument")
+    .Does(() =>
+{
+    // Given
+    var testAssemblyPath = Context
+                            .Environment
+                            .ApplicationRoot
+                            .CombineWithFilePath(
+#if NETCOREAPP
+                                "Cake.dll"
+#else
+                                "Cake.exe"
+#endif
+                            );
+
+    // When
+    var arg = Argument<FilePath>("testAssemblyFilePath");
+
+    // Then
+    Assert.Equal(testAssemblyPath.FullPath, arg.FullPath);
+});
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Common.ArgumentAliases")
@@ -60,4 +92,7 @@ Task("Cake.Common.ArgumentAliases")
   .IsDependentOn("Cake.Common.ArgumentAliases.HasArgument.ThatDoNotExist")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument.WithDefaultValue")
-  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.MultipleArguments");
+  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.MultipleArguments")
+  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.DirectoryPathArgument")
+  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.FilePathArgument")
+;

@@ -14,7 +14,7 @@ namespace Cake.Commands
     {
         [CommandArgument(0, "[SCRIPT]")]
         [Description("The Cake script. Defaults to [grey]build.cake[/]")]
-        [TypeConverter(typeof(FilePathConverter))]
+        [TypeConverter(typeof(Cli.FilePathConverter))]
         [DefaultValue("build.cake")]
         public FilePath Script { get; set; }
 

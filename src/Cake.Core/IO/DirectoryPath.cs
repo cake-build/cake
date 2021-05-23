@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Cake.Core.IO
@@ -10,6 +11,7 @@ namespace Cake.Core.IO
     /// <summary>
     /// Represents a directory path.
     /// </summary>
+    [TypeConverter(typeof(DirectoryPathConverter))]
     public sealed class DirectoryPath : Path
     {
         /// <summary>

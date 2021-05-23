@@ -3,12 +3,14 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.ComponentModel;
 
 namespace Cake.Core.IO
 {
     /// <summary>
     /// Represents a file path.
     /// </summary>
+    [TypeConverter(typeof(FilePathConverter))]
     public sealed class FilePath : Path
     {
         /// <summary>
