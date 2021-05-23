@@ -669,6 +669,8 @@ Task("Run-Integration-Tests")
                     .AppendSwitchQuoted("--customarg", " ", "hello")
                     .AppendSwitchQuoted("--multipleargs", "=", "a")
                     .AppendSwitchQuoted("--multipleargs", "=", "b")
+                    .AppendSwitchQuoted("--testAssemblyDirectoryPath", "=", cakeAssembly.GetDirectory().FullPath)
+                    .AppendSwitchQuoted("--testAssemblyFilePath", "=", cakeAssembly.FullPath)
             });
     }
     catch(Exception ex)
