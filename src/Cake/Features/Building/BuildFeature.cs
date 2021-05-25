@@ -44,7 +44,7 @@ namespace Cake.Features.Building
 
         public int Run(IRemainingArguments arguments, BuildFeatureSettings settings)
         {
-            using (new ScriptAssemblyResolver(_log))
+            using (new ScriptAssemblyResolver(_environment, _log))
             {
                 return RunCore(arguments, settings);
             }

@@ -7,18 +7,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Infrastructure.Scripting
 {
     public sealed class ScriptAssemblyResolver : IDisposable
     {
+        private const string AssemblyResourcesExtension = ".resources";
+
+        private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
+
+        private readonly Lazy<bool> _shouldTryResolveNeutral;
         private readonly HashSet<string> _resolvedNames = new HashSet<string>();
 
-        public ScriptAssemblyResolver(ICakeLog log)
+        public ScriptAssemblyResolver(ICakeEnvironment environment, ICakeLog log)
         {
+            _environment = environment;
             _log = log;
+
+            _shouldTryResolveNeutral = new Lazy<bool>(GetShouldTryResolveNeutral);
+
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
         }
 
@@ -37,7 +47,7 @@ namespace Cake.Infrastructure.Scripting
 
             var assemblyName = new AssemblyName(fullName);
             var shortName = assemblyName.Name;
-            var version = assemblyName.Version.ToString();
+            var version = assemblyName.Version;
 
             // Preventing indirect recursive calls via Assembly.Load()
             if (!_resolvedNames.Add(shortName + version))
@@ -53,7 +63,7 @@ namespace Cake.Infrastructure.Scripting
         {
             var fullName = assemblyName.FullName;
             var shortName = assemblyName.Name;
-            var version = assemblyName.Version.ToString();
+            var version = assemblyName.Version;
 
             Assembly assembly = null;
             try
@@ -61,7 +71,7 @@ namespace Cake.Infrastructure.Scripting
                 assembly = AppDomain.CurrentDomain.GetAssemblies()
                     .FirstOrDefault(x => !x.IsDynamic
                         && x.GetName().Name == shortName
-                        && x.GetName().Version.ToString() == version)
+                        && x.GetName().Version == version)
                     ?? Assembly.Load(fullName);
             }
             catch (Exception ex)
@@ -75,20 +85,12 @@ namespace Cake.Infrastructure.Scripting
                 return assembly;
             }
 
-#if NETCORE
-            // Since .NET Core 3.0
-            var runtimeMainVer = Environment.Version.Major;
-            if (runtimeMainVer >= 5
-                || (runtimeMainVer == 3
-                    && RuntimeInformation.FrameworkDescription.StartsWith(".NET Core")))
-#endif
+            if (_shouldTryResolveNeutral.Value)
             {
-                var resources = ".resources";
-
                 // This occurs when current culture differs from assembly neutral culture
-                if (shortName.EndsWith(resources))
+                if (shortName.EndsWith(AssemblyResourcesExtension))
                 {
-                    assemblyName.Name = shortName.Remove(shortName.Length - resources.Length);
+                    assemblyName.Name = shortName.Remove(shortName.Length - AssemblyResourcesExtension.Length);
 
                     _log.Verbose($"Trying to resolve assembly {shortName} as '{assemblyName.FullName}'...");
                     return AssemblyResolve(assemblyName);
@@ -97,6 +99,13 @@ namespace Cake.Infrastructure.Scripting
 
             _log.Verbose($"Assembly '{fullName}' not resolved");
             return null;
+        }
+
+        private bool GetShouldTryResolveNeutral()
+        {
+            // Since .NET Core 3.0
+            var runtimeVersionMajor = _environment.Runtime.BuiltFramework.Version.Major;
+            return runtimeVersionMajor >= 5 || (runtimeVersionMajor == 3 && _environment.Runtime.IsCoreClr);
         }
     }
 }
