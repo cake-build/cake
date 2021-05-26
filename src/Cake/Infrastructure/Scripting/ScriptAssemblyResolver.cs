@@ -6,18 +6,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Infrastructure.Scripting
 {
     public sealed class ScriptAssemblyResolver : IDisposable
     {
+        private const string AssemblyResourcesExtension = ".resources";
+
+        private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
+
+        private readonly Lazy<bool> _shouldTryResolveNeutral;
         private readonly HashSet<string> _resolvedNames = new HashSet<string>();
 
-        public ScriptAssemblyResolver(ICakeLog log)
+        public ScriptAssemblyResolver(ICakeEnvironment environment, ICakeLog log)
         {
+            _environment = environment;
             _log = log;
+
+            _shouldTryResolveNeutral = new Lazy<bool>(GetShouldTryResolveNeutral);
+
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
         }
 
@@ -28,46 +39,73 @@ namespace Cake.Infrastructure.Scripting
 
         private Assembly AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            var name = new AssemblyName(args.Name);
-
-            // Prevent recursion from the Assembly.Load() call inside
-            if (_resolvedNames.Add(name.Name))
+            var fullName = args?.Name;
+            if (string.IsNullOrEmpty(fullName))
             {
-                _log.Verbose($"Resolving assembly {args.Name}");
-
-                return AssemblyResolve(name);
+                return null;
             }
-            return null;
+
+            var assemblyName = new AssemblyName(fullName);
+            var shortName = assemblyName.Name;
+            var version = assemblyName.Version;
+
+            // Preventing indirect recursive calls via Assembly.Load()
+            if (!_resolvedNames.Add(shortName + version))
+            {
+                return null;
+            }
+
+            _log.Verbose($"Resolving assembly '{fullName}' using runtime installed at '{RuntimeEnvironment.GetRuntimeDirectory()}'...");
+            return AssemblyResolve(assemblyName);
         }
 
-        private Assembly AssemblyResolve(AssemblyName name)
+        private Assembly AssemblyResolve(AssemblyName assemblyName)
         {
+            var fullName = assemblyName.FullName;
+            var shortName = assemblyName.Name;
+            var version = assemblyName.Version;
+
+            Assembly assembly = null;
             try
             {
-                var assembly = AppDomain.CurrentDomain.GetAssemblies()
-                    .FirstOrDefault(x => !x.IsDynamic && x.GetName().Name == name.Name)
-                    ?? Assembly.Load(name.Name);
-                if (assembly != null)
-                {
-                    _log.Verbose($"Resolved {name.Name} by assembly {assembly.FullName}");
-                }
-                else
-                {
-                    _log.Verbose($"Assembly {name.Name} not resolved");
-
-                    if (name.Name.Contains(".resources, "))
-                    {
-                        return AssemblyResolve(new AssemblyName(name.Name.Replace(".resources, ", ", ")));
-                    }
-                }
-                return assembly;
+                assembly = AppDomain.CurrentDomain.GetAssemblies()
+                    .FirstOrDefault(x => !x.IsDynamic
+                        && x.GetName().Name == shortName
+                        && x.GetName().Version == version)
+                    ?? Assembly.Load(fullName);
             }
             catch (Exception ex)
             {
-                _log.Verbose($"Exception while resolving assembly {name.Name}: {ex.Message}");
-
-                return null;
+                _log.Verbose($"Exception occurred while resolving assembly {shortName}: {ex.Message}");
             }
+
+            if (assembly != null)
+            {
+                _log.Verbose($"Assembly {shortName} resolved as '{assembly.FullName}' (file location: '{assembly.Location}')");
+                return assembly;
+            }
+
+            if (_shouldTryResolveNeutral.Value)
+            {
+                // This occurs when current culture differs from assembly neutral culture
+                if (shortName.EndsWith(AssemblyResourcesExtension))
+                {
+                    assemblyName.Name = shortName.Remove(shortName.Length - AssemblyResourcesExtension.Length);
+
+                    _log.Verbose($"Trying to resolve assembly {shortName} as '{assemblyName.FullName}'...");
+                    return AssemblyResolve(assemblyName);
+                }
+            }
+
+            _log.Verbose($"Assembly '{fullName}' not resolved");
+            return null;
+        }
+
+        private bool GetShouldTryResolveNeutral()
+        {
+            // Since .NET Core 3.0
+            var runtimeVersionMajor = _environment.Runtime.BuiltFramework.Version.Major;
+            return runtimeVersionMajor >= 5 || (runtimeVersionMajor == 3 && _environment.Runtime.IsCoreClr);
         }
     }
 }
