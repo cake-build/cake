@@ -22,6 +22,11 @@ namespace Cake.Core
         /// <summary>
         /// The task was skipped.
         /// </summary>
-        Skipped
+        Skipped,
+
+        /// <summary>
+        /// The task failed.
+        /// </summary>
+        Failed
     }
 }

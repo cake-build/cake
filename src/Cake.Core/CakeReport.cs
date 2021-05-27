@@ -62,6 +62,16 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Adds a failed task result to the report.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        /// <param name="span">The span.</param>
+        public void AddFailed(string task, TimeSpan span)
+        {
+            Add(task, CakeReportEntryCategory.Task, span, CakeTaskExecutionStatus.Failed);
+        }
+
+        /// <summary>
         /// Adds a delegated task result to the report.
         /// </summary>
         /// <param name="task">The task.</param>
