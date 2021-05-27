@@ -130,5 +130,46 @@ namespace Cake.Core.Tests.Unit
                 Assert.Equal(CakeTaskExecutionStatus.Delegated, lastTask.ExecutionStatus);
             }
         }
+
+        public sealed class TheAddFailedMethod
+        {
+            [Fact]
+            public void Should_Add_A_New_Task()
+            {
+                // Given
+                var report = new CakeReport();
+                var taskName = "task";
+                var duration = TimeSpan.FromMilliseconds(100);
+
+                // When
+                report.AddFailed(taskName, duration);
+
+                // Then
+                var firstTask = report.First();
+                Assert.Equal(taskName, firstTask.TaskName);
+                Assert.Equal(duration, firstTask.Duration);
+                Assert.Equal(CakeTaskExecutionStatus.Failed, firstTask.ExecutionStatus);
+            }
+
+            [Fact]
+            public void Should_Add_To_End_Of_Sequence()
+            {
+                // Given
+                var report = new CakeReport();
+                report.AddSkipped("task 1");
+
+                var taskName = "task 2";
+                var duration = TimeSpan.FromMilliseconds(100);
+
+                // When
+                report.AddFailed(taskName, duration);
+
+                // Then
+                var lastTask = report.Last();
+                Assert.Equal(taskName, lastTask.TaskName);
+                Assert.Equal(duration, lastTask.Duration);
+                Assert.Equal(CakeTaskExecutionStatus.Failed, lastTask.ExecutionStatus);
+            }
+        }
     }
 }

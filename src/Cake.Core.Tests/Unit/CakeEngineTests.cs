@@ -1540,6 +1540,24 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.Equal(CakeTaskExecutionStatus.Delegated, report.First(e => e.TaskName == "B").ExecutionStatus);
             }
+
+            [Fact]
+            public async Task Should_Return_Report_That_Marks_Failed_Tasks_As_Failed()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").IsDependentOn("B");
+                engine.RegisterTask("B").ContinueOnError().Does(() => throw new Exception("error"));
+
+                // When
+                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
+
+                // Then
+                Assert.Equal(CakeTaskExecutionStatus.Delegated, report.First(e => e.TaskName == "A").ExecutionStatus);
+                Assert.Equal(CakeTaskExecutionStatus.Failed, report.First(e => e.TaskName == "B").ExecutionStatus);
+            }
         }
 
         public sealed class TheSetupEvent
