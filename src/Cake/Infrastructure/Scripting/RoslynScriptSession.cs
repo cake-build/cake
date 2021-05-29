@@ -5,14 +5,18 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Reflection;
 using Cake.Core.Scripting;
+using Cake.Infrastructure.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 
@@ -21,10 +25,15 @@ namespace Cake.Infrastructure.Scripting
     public sealed class RoslynScriptSession : IScriptSession
     {
         private readonly IScriptHost _host;
+        private readonly IFileSystem _fileSystem;
         private readonly IAssemblyLoader _loader;
         private readonly ICakeLog _log;
         private readonly ICakeConfiguration _configuration;
         private readonly IScriptHostSettings _settings;
+
+        private readonly bool _scriptCacheEnabled;
+        private readonly bool _regenerateCache;
+        private readonly DirectoryPath _scriptCachePath;
 
         public HashSet<FilePath> ReferencePaths { get; }
 
@@ -40,6 +49,7 @@ namespace Cake.Infrastructure.Scripting
             IScriptHostSettings settings)
         {
             _host = host;
+            _fileSystem = host.Context.FileSystem;
             _loader = loader;
             _log = log;
             _configuration = configuration;
@@ -48,6 +58,11 @@ namespace Cake.Infrastructure.Scripting
             ReferencePaths = new HashSet<FilePath>(PathComparer.Default);
             References = new HashSet<Assembly>();
             Namespaces = new HashSet<string>(StringComparer.Ordinal);
+
+            var cacheEnabled = configuration.GetValue(Constants.Settings.EnableScriptCache) ?? bool.FalseString;
+            _scriptCacheEnabled = cacheEnabled.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase);
+            _regenerateCache = host.Context.Arguments.HasArgument(Constants.Cache.InvalidateScriptCache);
+            _scriptCachePath = configuration.GetScriptCachePath(settings.Script.GetDirectory(), host.Context.Environment);
         }
 
         public void AddReference(Assembly assembly)
@@ -82,6 +97,30 @@ namespace Cake.Infrastructure.Scripting
 
         public void Execute(Script script)
         {
+            var scriptName = _settings.Script.GetFilename();
+            var cacheDLLFileName = $"{scriptName}.dll";
+            var cacheHashFileName = $"{scriptName}.hash";
+            var cachedAssembly = _scriptCachePath.CombineWithFilePath(cacheDLLFileName);
+            var hashFile = _scriptCachePath.CombineWithFilePath(cacheHashFileName);
+            string scriptHash = default;
+            if (_scriptCacheEnabled && _fileSystem.Exist(cachedAssembly) && !_regenerateCache)
+            {
+                _log.Verbose($"Cache enabled: Checking cache build script ({cacheDLLFileName})");
+                scriptHash = FastHash.GenerateHash(Encoding.UTF8.GetBytes(string.Concat(script.Lines)));
+                var cachedHash = _fileSystem.Exist(hashFile)
+                               ? _fileSystem.GetFile(hashFile).ReadLines(Encoding.UTF8).FirstOrDefault()
+                               : string.Empty;
+                if (scriptHash.Equals(cachedHash, StringComparison.Ordinal))
+                {
+                    _log.Verbose("Running cached build script...");
+                    RunScriptAssembly(cachedAssembly.FullPath);
+                    return;
+                }
+                else
+                {
+                    _log.Verbose("Cache check failed.");
+                }
+            }
             // Generate the script code.
             var generator = new RoslynCodeGenerator();
             var code = generator.Generate(script);
@@ -159,7 +198,42 @@ namespace Cake.Infrastructure.Scripting
                 throw new CakeException(message);
             }
 
-            roslynScript.RunAsync(_host).Wait();
+            if (_scriptCacheEnabled)
+            {
+                // Verify cache directory exists
+                if (!_fileSystem.GetDirectory(_scriptCachePath).Exists)
+                {
+                    _fileSystem.GetDirectory(_scriptCachePath).Create();
+                }
+                if (string.IsNullOrWhiteSpace(scriptHash))
+                {
+                    scriptHash = FastHash.GenerateHash(Encoding.UTF8.GetBytes(string.Concat(script.Lines)));
+                }
+                var emitResult = compilation.Emit(cachedAssembly.FullPath);
+
+                if (emitResult.Success)
+                {
+                    using (var stream = _fileSystem.GetFile(hashFile).OpenWrite())
+                    using (var writer = new StreamWriter(stream, Encoding.UTF8))
+                    {
+                        writer.Write(scriptHash);
+                    }
+                    RunScriptAssembly(cachedAssembly.FullPath);
+                }
+            }
+            else
+            {
+                roslynScript.RunAsync(_host).GetAwaiter().GetResult();
+            }
+        }
+
+        private void RunScriptAssembly(string assemblyPath)
+        {
+            var assembly = _loader.Load(assemblyPath, false);
+            var type = assembly.GetType("Submission#0");
+            var factoryMethod = type.GetMethod("<Factory>", new[] { typeof(object[]) });
+            var task = (Task<object>)factoryMethod.Invoke(null, new object[] { new object[] { _host, null } });
+            task.GetAwaiter().GetResult();
         }
     }
 }

@@ -59,5 +59,9 @@ namespace Cake.Commands
         [CommandOption("--info")]
         [Description("Displays additional information about Cake.")]
         public bool ShowInfo { get; set; }
+
+        [CommandOption("--" + Infrastructure.Constants.Cache.InvalidateScriptCache)]
+        [Description("Forces the script to be recompiled if caching is enabled.")]
+        public bool Recompile { get; set; }
     }
 }
