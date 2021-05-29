@@ -27,5 +27,11 @@ namespace Cake.Core
             public const string Addins = "Paths_Addins";
             public const string Modules = "Paths_Modules";
         }
+
+        public static class Cache
+        {
+            public const string Enabled = "Cache_Enabled";
+            public const string Path = "Cache_Path";
+        }
     }
 }

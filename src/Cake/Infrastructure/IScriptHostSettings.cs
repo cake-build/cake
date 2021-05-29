@@ -2,10 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Core.IO;
+
 namespace Cake.Infrastructure
 {
     public interface IScriptHostSettings
     {
         bool Debug { get; }
+
+        FilePath Script { get; }
     }
 }
