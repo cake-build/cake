@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Linq;
 using Cake.Core.Graph;
 using Xunit;
@@ -152,7 +153,7 @@ namespace Cake.Core.Tests.Unit.Graph
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Unidirectional edges in graph are not allowed.", result?.Message);
+                Assert.Equal($"Unidirectional edges in graph are not allowed.{Environment.NewLine}\"start\" and \"end\" cannot depend on each other.", result?.Message);
             }
 
             [Fact]
@@ -167,7 +168,7 @@ namespace Cake.Core.Tests.Unit.Graph
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Unidirectional edges in graph are not allowed.", result?.Message);
+                Assert.Equal($"Unidirectional edges in graph are not allowed.{Environment.NewLine}\"start\" and \"end\" cannot depend on each other.", result?.Message);
             }
         }
 

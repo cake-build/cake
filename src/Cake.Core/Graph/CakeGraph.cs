@@ -67,7 +67,8 @@ namespace Cake.Core.Graph
             if (_edges.Any(x => x.Start.Equals(end, StringComparison.OrdinalIgnoreCase)
                 && x.End.Equals(start, StringComparison.OrdinalIgnoreCase)))
             {
-                throw new CakeException("Unidirectional edges in graph are not allowed.");
+                var firstBadEdge = _edges.First(x => x.Start.Equals(end, StringComparison.OrdinalIgnoreCase) && x.End.Equals(start, StringComparison.OrdinalIgnoreCase));
+                throw new CakeException($"Unidirectional edges in graph are not allowed.{Environment.NewLine}\"{firstBadEdge.Start}\" and \"{firstBadEdge.End}\" cannot depend on each other.");
             }
             if (_edges.Any(x => x.Start.Equals(start, StringComparison.OrdinalIgnoreCase)
                 && x.End.Equals(end, StringComparison.OrdinalIgnoreCase)))
