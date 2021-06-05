@@ -82,7 +82,7 @@ namespace Cake.Frosting.Internal
             where T : Exception
         {
             log = log ?? new CakeBuildLog(
-                new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime())));
+                new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime(), new LaunchInfo())));
 
             if (log.Verbosity == Verbosity.Diagnostic)
             {

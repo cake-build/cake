@@ -80,6 +80,9 @@ namespace Cake
         {
             var builder = new ContainerBuilder();
 
+            var launchInfo = new LaunchInfo();
+            builder.RegisterInstance(launchInfo).As<ILaunchInfo>();
+
             // Converters
             builder.RegisterType<Cli.FilePathConverter>();
             builder.RegisterType<VerbosityConverter>();

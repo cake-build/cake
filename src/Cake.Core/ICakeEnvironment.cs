@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
-using System.Runtime.Versioning;
 using Cake.Core.IO;
 
 namespace Cake.Core
@@ -19,6 +17,12 @@ namespace Cake.Core
         /// </summary>
         /// <value>The working directory.</value>
         DirectoryPath WorkingDirectory { get; set; }
+
+        /// <summary>
+        /// Gets the working directory where the runner was invoked from.
+        /// </summary>
+        /// <value>The launch directory.</value>
+        DirectoryPath LaunchDirectory { get; }
 
         /// <summary>
         /// Gets the application root path.
