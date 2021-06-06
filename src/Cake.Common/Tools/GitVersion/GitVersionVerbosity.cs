@@ -12,26 +12,26 @@ namespace Cake.Common.Tools.GitVersion
         /// <summary>
         /// No messages will be logged.
         /// </summary>
-        None,
+        Quiet,
 
         /// <summary>
         /// Log error messages.
         /// </summary>
-        Error,
+        Minimal,
 
         /// <summary>
         /// Log error and warning messages.
         /// </summary>
-        Warn,
+        Normal,
 
         /// <summary>
         /// Log error, warning and info messages.
         /// </summary>
-        Info,
+        Verbose,
 
         /// <summary>
         /// Log error, warning, info and debug messages (log all).
         /// </summary>
-        Debug
+        Diagnostic
     }
 }

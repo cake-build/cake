@@ -174,23 +174,23 @@ namespace Cake.Common.Tools.GitVersion
             {
                 switch (settings.Verbosity.Value)
                 {
-                    case GitVersionVerbosity.None:
+                    case GitVersionVerbosity.Quiet:
                         builder.Append("-verbosity");
                         builder.Append(nameof(Verbosity.Quiet));
                         break;
-                    case GitVersionVerbosity.Debug:
+                    case GitVersionVerbosity.Diagnostic:
                         builder.Append("-verbosity");
                         builder.Append(nameof(Verbosity.Diagnostic));
                         break;
-                    case GitVersionVerbosity.Info:
+                    case GitVersionVerbosity.Verbose:
                         builder.Append("-verbosity");
                         builder.Append(nameof(Verbosity.Verbose));
                         break;
-                    case GitVersionVerbosity.Warn:
+                    case GitVersionVerbosity.Normal:
                         builder.Append("-verbosity");
                         builder.Append(nameof(Verbosity.Normal));
                         break;
-                    case GitVersionVerbosity.Error:
+                    case GitVersionVerbosity.Minimal:
                         builder.Append("-verbosity");
                         builder.Append(nameof(Verbosity.Minimal));
                         break;
