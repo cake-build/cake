@@ -1402,4 +1402,72 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
 &lt;entry key="command.executable"&gt;run.cmd&lt;/entry&gt;
 &lt;/properties&gt;</value>
   </data>
+  <data name="XmlTransformationWithArguments_Xsl" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"&gt;
+&lt;xsl:output method="html" encoding="utf-8"/&gt;
+&lt;xsl:param name="BackgroundColor"&gt;&lt;/xsl:param&gt;
+&lt;xsl:param name="Color"&gt;&lt;/xsl:param&gt;
+
+&lt;xsl:template match="/"&gt;
+&lt;html&gt;
+    &lt;body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE"&gt;
+        &lt;xsl:for-each select="breakfast_menu/food"&gt;
+            &lt;div style="background-color:{$BackgroundColor};color:{$Color};padding:4px"&gt;
+                &lt;span style="font-weight:bold"&gt;
+                    &lt;xsl:value-of select="name" /&gt;
+                    -
+                &lt;/span&gt;
+                &lt;xsl:value-of select="price" /&gt;
+            &lt;/div&gt;
+            &lt;div style="margin-left:20px;margin-bottom:1em;font-size:10pt"&gt;
+                &lt;p&gt;
+                    &lt;xsl:value-of select="description" /&gt;
+                    &lt;span style="font-style:italic"&gt;
+                        (
+                        &lt;xsl:value-of select="calories" /&gt;
+                        calories per serving)
+                    &lt;/span&gt;
+                &lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/xsl:for-each&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+&lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</value>
+  </data>
+  <data name="XmlTransformationWithArgumentsAndNamespace_Xsl" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:input="http://example.com" exclude-result-prefixes="input" version="1.0"&gt;
+&lt;xsl:output method="html" encoding="utf-8"/&gt;
+&lt;xsl:param name="input:BackgroundColor"&gt;&lt;/xsl:param&gt;
+&lt;xsl:param name="input:Color"&gt;&lt;/xsl:param&gt;
+
+&lt;xsl:template match="/"&gt;
+&lt;html&gt;
+    &lt;body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE"&gt;
+        &lt;xsl:for-each select="breakfast_menu/food"&gt;
+            &lt;div style="background-color:{$input:BackgroundColor};color:{$input:Color};padding:4px"&gt;
+                &lt;span style="font-weight:bold"&gt;
+                    &lt;xsl:value-of select="name" /&gt;
+                    -
+                &lt;/span&gt;
+                &lt;xsl:value-of select="price" /&gt;
+            &lt;/div&gt;
+            &lt;div style="margin-left:20px;margin-bottom:1em;font-size:10pt"&gt;
+                &lt;p&gt;
+                    &lt;xsl:value-of select="description" /&gt;
+                    &lt;span style="font-style:italic"&gt;
+                        (
+                        &lt;xsl:value-of select="calories" /&gt;
+                        calories per serving)
+                    &lt;/span&gt;
+                &lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/xsl:for-each&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+&lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</value>
+  </data>
 </root>

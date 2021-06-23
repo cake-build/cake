@@ -953,5 +953,44 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("XmlTransformation_Xsl", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; version=&quot;1.0&quot;&gt;
+        ///&lt;xsl:output method=&quot;html&quot; encoding=&quot;utf-8&quot;/&gt;
+        ///&lt;xsl:param name=&quot;BackgroundColor&quot;&gt;&lt;/xsl:param&gt;
+        ///&lt;xsl:param name=&quot;Color&quot;&gt;&lt;/xsl:param&gt;
+        ///
+        ///&lt;xsl:template match=&quot;/&quot;&gt;
+        ///&lt;html&gt;
+        ///    &lt;body style=&quot;font-family:Arial;font-size:12pt;background-color:#EEEEEE&quot;&gt;
+        ///        &lt;xsl:for-each select=&quot;breakfast_menu/food&quot;&gt;
+        ///            &lt;div style=&quot;background-color:{$BackgroundColor};color:{$Color};padding:4px&quot;&gt;
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string XmlTransformationWithArguments_Xsl {
+            get {
+                return ResourceManager.GetString("XmlTransformationWithArguments_Xsl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:input=&quot;http://example.com&quot; exclude-result-prefixes=&quot;input&quot; version=&quot;1.0&quot;&gt;
+        ///&lt;xsl:output method=&quot;html&quot; encoding=&quot;utf-8&quot;/&gt;
+        ///&lt;xsl:param name=&quot;input:BackgroundColor&quot;&gt;&lt;/xsl:param&gt;
+        ///&lt;xsl:param name=&quot;input:Color&quot;&gt;&lt;/xsl:param&gt;
+        ///
+        ///&lt;xsl:template match=&quot;/&quot;&gt;
+        ///&lt;html&gt;
+        ///    &lt;body style=&quot;font-family:Arial;font-size:12pt;background-color:#EEEEEE&quot;&gt;
+        ///        &lt;xsl:for-each select=&quot;breakfast_menu/food&quot;&gt;
+        ///            &lt;di [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string XmlTransformationWithArgumentsAndNamespace_Xsl {
+            get {
+                return ResourceManager.GetString("XmlTransformationWithArgumentsAndNamespace_Xsl", resourceCulture);
+            }
+        }
     }
 }

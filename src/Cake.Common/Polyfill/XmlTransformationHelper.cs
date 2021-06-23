@@ -9,11 +9,11 @@ namespace Cake.Common.Polyfill
 {
     internal static class XmlTransformationHelper
     {
-        public static void Transform(XmlReader xsl, XmlReader xml, XmlWriter result)
+        public static void Transform(XmlReader xsl, XsltArgumentList arguments, XmlReader xml, XmlWriter result)
         {
             var xslTransform = new XslCompiledTransform();
             xslTransform.Load(xsl);
-            xslTransform.Transform(xml, result);
+            xslTransform.Transform(xml, arguments, result);
         }
     }
 }

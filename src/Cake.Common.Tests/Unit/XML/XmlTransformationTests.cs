@@ -5,6 +5,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Xsl;
 using Cake.Common.Tests.Fixtures;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Xml;
@@ -239,6 +240,56 @@ namespace Cake.Common.Tests.Unit.XML
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "settings");
+            }
+
+            [Fact]
+            public void Should_Throw_If_XslArguments_Was_Null()
+            {
+                // Given
+                var xml = Resources.XmlTransformation_Xml;
+                var xsl = Resources.XmlTransformation_Xsl;
+
+                // When
+                var result = Record.Exception(() => XmlTransformation.Transform(xsl, null, xml));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "arguments");
+            }
+
+            [Fact]
+            public void Should_Transform_Xml_String_And_Xsl_String_WithArguments_To_Result_String()
+            {
+                // Given
+                var xml = Resources.XmlTransformation_Xml;
+                var xsl = Resources.XmlTransformationWithArguments_Xsl;
+                var htm = Resources.XmlTransformation_Htm_NoXmlDeclaration;
+                var arguments = new XsltArgumentList();
+                arguments.AddParam("BackgroundColor", string.Empty, "teal");
+                arguments.AddParam("Color", string.Empty, "white");
+
+                // When
+                var result = XmlTransformation.Transform(xsl, arguments, xml);
+
+                // Then
+                Assert.Equal(htm, result, ignoreLineEndingDifferences: true);
+            }
+
+            [Fact]
+            public void Should_Transform_Xml_String_And_Xsl_String_WithArgumentsAndNamespace_To_Result_String()
+            {
+                // Given
+                var xml = Resources.XmlTransformation_Xml;
+                var xsl = Resources.XmlTransformationWithArgumentsAndNamespace_Xsl;
+                var htm = Resources.XmlTransformation_Htm_NoXmlDeclaration;
+                var arguments = new XsltArgumentList();
+                arguments.AddParam("BackgroundColor", "http://example.com", "teal");
+                arguments.AddParam("Color", "http://example.com", "white");
+
+                // When
+                var result = XmlTransformation.Transform(xsl, arguments, xml);
+
+                // Then
+                Assert.Equal(htm, result, ignoreLineEndingDifferences: true);
             }
         }
     }
