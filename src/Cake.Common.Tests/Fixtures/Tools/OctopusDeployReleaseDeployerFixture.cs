@@ -15,7 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
         internal string Project { get; set; }
 
-        internal string DeployTo { get; set; }
+        internal string[] DeployTo { get; set; }
 
         internal string ReleaseNumber { get; set; }
 
@@ -25,7 +25,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
             Server = "http://octopus";
             ApiKey = "API-12345";
             Project = "MyProject";
-            DeployTo = "Testing";
+            DeployTo = new string[] { "Testing" };
             ReleaseNumber = "0.15.1";
         }
 

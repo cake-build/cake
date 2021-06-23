@@ -10,7 +10,7 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
 {
     public sealed class OctoDeployReleaseTests
     {
-        private const string MinimalParameters = "deploy-release --project=\"MyProject\" --deployto=\"Testing\" --releasenumber=\"0.15.1\" --server http://octopus --apiKey API-12345";
+        private const string MinimalParameters = "deploy-release --project=\"MyProject\" --releasenumber=\"0.15.1\" --deployto=\"Testing\" --server http://octopus --apiKey API-12345";
 
         public sealed class TheBaseArgumentBuilder
         {
@@ -62,6 +62,48 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 // Given
                 var fixture = new OctopusDeployReleaseDeployerFixture();
                 fixture.DeployTo = null;
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "deployTo");
+            }
+
+            [Fact]
+            public void Should_Throw_If_DeployTo_Is_Empty()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseDeployerFixture();
+                fixture.DeployTo = new string[] { };
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "deployTo");
+            }
+
+            [Fact]
+            public void Should_Throw_If_DeployTo_Contains_Null_Items()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseDeployerFixture();
+                fixture.DeployTo = new string[] { "Testing", null };
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "deployTo");
+            }
+
+            [Fact]
+            public void Should_Throw_If_DeployTo_Contains_Empty_Items()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseDeployerFixture();
+                fixture.DeployTo = new string[] { "Testing", string.Empty };
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
@@ -455,6 +497,20 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
 
                 // Then
                 Assert.Equal(MinimalParameters + " --channel \"somechannel\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Exclude_Machines_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseDeployerFixture();
+                fixture.Settings.ExcludeMachines = @"somemachine";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(MinimalParameters + " --excludemachines \"somemachine\"", result.Args);
             }
 
             [Fact]

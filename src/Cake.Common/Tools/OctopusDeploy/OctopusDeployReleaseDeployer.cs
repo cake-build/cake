@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -39,7 +40,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <param name="deployTo">Environment to deploy to, e.g., Production.</param>
         /// <param name="releaseNumber">Release number to be deployed to.</param>
         /// <param name="settings">Settings for the deployment.</param>
-        public void DeployRelease(string server, string apiKey, string projectName, string deployTo, string releaseNumber, OctopusDeployReleaseDeploymentSettings settings)
+        public void DeployRelease(string server, string apiKey, string projectName, string[] deployTo, string releaseNumber, OctopusDeployReleaseDeploymentSettings settings)
         {
             if (String.IsNullOrEmpty(server))
             {
@@ -56,7 +57,7 @@ namespace Cake.Common.Tools.OctopusDeploy
                 throw new ArgumentNullException(nameof(projectName));
             }
 
-            if (String.IsNullOrEmpty(deployTo))
+            if (deployTo == null || deployTo.Length == 0 || deployTo.Any(environment => string.IsNullOrEmpty(environment)))
             {
                 throw new ArgumentNullException(nameof(deployTo));
             }

@@ -106,5 +106,10 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// Gets or sets the channel to use when getting the release to deploy.
         /// </summary>
         public string Channel { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the comma-separated list of machine names to exclude in the deployed environment.If not specified all machines in the environment will be considered.
+        /// </summary>
+        public string ExcludeMachines { get; set; }
     }
 }

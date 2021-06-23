@@ -14,11 +14,11 @@ namespace Cake.Common.Tools.OctopusDeploy
         private readonly ICakeEnvironment _environment;
 
         private readonly string _projectName;
-        private readonly string _deployTo;
+        private readonly string[] _deployTo;
         private readonly string _releaseNumber;
         private readonly OctopusDeployReleaseDeploymentSettings _settings;
 
-        public DeployReleaseArgumentBuilder(string server, string apiKey, string projectName, string deployTo, string releaseNumber, OctopusDeployReleaseDeploymentSettings settings, ICakeEnvironment environment)
+        public DeployReleaseArgumentBuilder(string server, string apiKey, string projectName, string[] deployTo, string releaseNumber, OctopusDeployReleaseDeploymentSettings settings, ICakeEnvironment environment)
             : base(server, apiKey, environment, settings)
         {
             _projectName = projectName;
@@ -34,8 +34,12 @@ namespace Cake.Common.Tools.OctopusDeploy
             Builder.Append("deploy-release");
 
             Builder.AppendSwitchQuoted("--project", "=", _projectName);
-            Builder.AppendSwitchQuoted("--deployto", "=", _deployTo);
             Builder.AppendSwitchQuoted("--releasenumber", "=", _releaseNumber);
+
+            foreach (var environment in _deployTo)
+            {
+                Builder.AppendSwitchQuoted("--deployto", "=", environment);
+            }
 
             AppendCommonArguments();
 
@@ -100,6 +104,8 @@ namespace Cake.Common.Tools.OctopusDeploy
             AppendMultipleTimes("tenanttag", _settings.TenantTags);
 
             AppendArgumentIfNotNull("channel", _settings.Channel);
+
+            AppendArgumentIfNotNull("excludemachines", _settings.ExcludeMachines);
         }
     }
 }
