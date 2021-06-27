@@ -106,42 +106,45 @@ namespace Cake.Common.IO
                 throw new DirectoryNotFoundException(message);
             }
 
-            if (preserverFolderStructure)
+            if (filePaths.Any())
             {
-                var commonPath = string.Empty;
-                var separatedPath = filePaths
-                    .First(str => str.ToString().Length == filePaths.Max(st2 => st2.ToString().Length)).ToString()
-                    .Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)
-                    .ToList();
-
-                foreach (string pathSegment in separatedPath)
+                if (preserverFolderStructure)
                 {
-                    if (commonPath.Length == 0 && filePaths.All(str => str.ToString().StartsWith(pathSegment)))
+                    var commonPath = string.Empty;
+                    var separatedPath = filePaths
+                        .First(str => str.ToString().Length == filePaths.Max(st2 => st2.ToString().Length)).ToString()
+                        .Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)
+                        .ToList();
+
+                    foreach (string pathSegment in separatedPath)
                     {
-                        commonPath = pathSegment;
+                        if (commonPath.Length == 0 && filePaths.All(str => str.ToString().StartsWith(pathSegment)))
+                        {
+                            commonPath = pathSegment;
+                        }
+                        else if (filePaths.All(str => str.ToString().StartsWith(commonPath + "/" + pathSegment)))
+                        {
+                            commonPath += "/" + pathSegment;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
-                    else if (filePaths.All(str => str.ToString().StartsWith(commonPath + "/" + pathSegment)))
+
+                    // Iterate all files and copy them.
+                    foreach (var filePath in filePaths)
                     {
-                        commonPath += "/" + pathSegment;
-                    }
-                    else
-                    {
-                        break;
+                        CopyFileCore(context, filePath, absoluteTargetDirectoryPath.GetFilePath(filePath), context.DirectoryExists(commonPath) ? commonPath : null);
                     }
                 }
-
-                // Iterate all files and copy them.
-                foreach (var filePath in filePaths)
+                else
                 {
-                    CopyFileCore(context, filePath, absoluteTargetDirectoryPath.GetFilePath(filePath), context.DirectoryExists(commonPath) ? commonPath : null);
-                }
-            }
-            else
-            {
-                // Iterate all files and copy them.
-                foreach (var filePath in filePaths)
-                {
-                    CopyFileCore(context, filePath, absoluteTargetDirectoryPath.GetFilePath(filePath), null);
+                    // Iterate all files and copy them.
+                    foreach (var filePath in filePaths)
+                    {
+                        CopyFileCore(context, filePath, absoluteTargetDirectoryPath.GetFilePath(filePath), null);
+                    }
                 }
             }
         }
