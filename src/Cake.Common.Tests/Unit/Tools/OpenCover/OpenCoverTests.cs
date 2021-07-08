@@ -229,7 +229,7 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
             {
                 // Given
                 var fixture = new OpenCoverFixture();
-                fixture.Settings.Register = "Path32";
+                fixture.Settings.Register = new OpenCoverRegisterOptionDll("Path32");
 
                 // When
                 var result = fixture.Run();
@@ -238,6 +238,72 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                 Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
                              "-targetargs:\"-argument\" " +
                              "-register:Path32 -output:\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_No_Register()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.Register = null;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-output:\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_Admin_Register()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.Register = new OpenCoverRegisterOptionAdmin();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register -output:\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_User_Register()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.Register = new OpenCoverRegisterOptionUser();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:user -output:\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_break_when_old_string_registrations_are_used()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+#pragma warning disable CS0618 // Type or member is obsolete
+                fixture.Settings.Register = "Path64";
+#pragma warning restore CS0618 // Type or member is obsolete
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-register:Path64 -output:\"/Working/result.xml\"", result.Args);
             }
 
             [Fact]
