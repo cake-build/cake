@@ -138,6 +138,12 @@ namespace Cake.Common.IO
             }
             else
             {
+                // #1663: For empty enumerations, just return.
+                if (!filePaths.Any())
+                {
+                    return;
+                }
+
                 // Iterate all files and copy them.
                 foreach (var filePath in filePaths)
                 {
