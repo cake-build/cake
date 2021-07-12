@@ -8,6 +8,7 @@ using Autofac;
 using Cake.Cli;
 using Cake.Commands;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Features.Bootstrapping;

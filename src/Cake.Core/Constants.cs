@@ -19,6 +19,7 @@ namespace Cake.Core
             public const string SkipPackageVersionCheck = "Settings_SkipPackageVersionCheck";
             public const string NoMonoCoersion = "Settings_NoMonoCoersion";
             public const string ShowProcessCommandLine = "Settings_ShowProcessCommandLine";
+            public const string Color = "Settings_Color";
         }
 
         public static class Paths

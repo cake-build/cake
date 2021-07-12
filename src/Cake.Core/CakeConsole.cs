@@ -36,14 +36,20 @@ namespace Cake.Core
         /// Initializes a new instance of the <see cref="CakeConsole"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public CakeConsole(ICakeEnvironment environment)
+        /// <param name="configuration">The configuration.</param>
+        public CakeConsole(ICakeEnvironment environment, ICakeConfiguration configuration)
         {
             if (environment == null)
             {
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            _supportAnsiEscapeCodes = new Lazy<bool>(() => AnsiDetector.SupportsAnsi(environment));
+            if (configuration is null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
+
+            _supportAnsiEscapeCodes = new Lazy<bool>(() => AnsiDetector.SupportsAnsi(environment, configuration));
         }
 
         /// <inheritdoc/>
