@@ -144,6 +144,57 @@ namespace Cake.Common.Tests.Unit.IO.Paths
                 }
             }
 
+            public sealed class AddingDirectoryPathAndConvertableDirectoryPath
+            {
+                [Fact]
+                public void Should_Combine_The_Two_Paths()
+                {
+                    // Given
+                    var path = new DirectoryPath("./root");
+
+                    // When
+                    var result = path + new ConvertableDirectoryPath("other");
+
+                    // Then
+                    Assert.Equal("root/other", result.Path.FullPath);
+                }
+
+                [Fact]
+                public void Should_Return_A_New_Convertable_Directory_Path()
+                {
+                    // Given
+                    var path = new DirectoryPath("./root");
+
+                    // When
+                    var result = path + new ConvertableDirectoryPath("other");
+
+                    // Then
+                    Assert.IsType<ConvertableDirectoryPath>(result);
+                }
+
+                [Fact]
+                public void Should_Throw_If_Left_Operand_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() =>
+                        (DirectoryPath)null + new ConvertableDirectoryPath("other"));
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "left");
+                }
+
+                [Fact]
+                public void Should_Throw_If_Right_Operand_Is_Null()
+                {
+                    // Given, When
+                    var result = Record.Exception(() =>
+                        new DirectoryPath("./root") + (ConvertableDirectoryPath)null);
+
+                    // Then
+                    AssertEx.IsArgumentNullException(result, "right");
+                }
+            }
+
             public sealed class AddingConvertableFilePath
             {
                 [Fact]

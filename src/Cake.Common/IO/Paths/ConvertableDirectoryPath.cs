@@ -67,6 +67,28 @@ namespace Cake.Common.IO.Paths
         }
 
         /// <summary>
+        /// Operator that combines A <see cref="DirectoryPath"/> instance
+        /// with a <see cref="ConvertableDirectoryPath"/> instance.
+        /// </summary>
+        /// <param name="left">The left directory path operand.</param>
+        /// <param name="right">The right directory path operand.</param>
+        /// <returns>A new directory path representing a combination of the two provided paths.</returns>
+        public static ConvertableDirectoryPath operator +(DirectoryPath left, ConvertableDirectoryPath right)
+        {
+            if (left is null)
+            {
+                throw new ArgumentNullException(nameof(left));
+            }
+
+            if (right is null)
+            {
+                throw new ArgumentNullException(nameof(right));
+            }
+
+            return new ConvertableDirectoryPath(left.Combine(right));
+        }
+
+        /// <summary>
         /// Operator that combines A <see cref="ConvertableDirectoryPath"/> instance
         /// with a <see cref="DirectoryPath"/> instance.
         /// </summary>
