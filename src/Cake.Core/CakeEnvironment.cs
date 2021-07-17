@@ -5,9 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Versioning;
-using Cake.Core.CommandLineArguments;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
 
@@ -80,12 +77,6 @@ namespace Cake.Core
                         return dictionary;
                     },
                     dictionary => dictionary);
-        }
-
-        /// <inheritdoc/>
-        public IDictionary<string, string> GetArguments()
-        {
-            return CommandLineArgumentsParser.Parse(Environment.GetCommandLineArgs());
         }
 
         private static void SetWorkingDirectory(DirectoryPath path)

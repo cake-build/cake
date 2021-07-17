@@ -139,41 +139,6 @@ namespace Cake.Common
         }
 
         /// <summary>
-        /// Retrieves all command line arguments.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var args = Arguments();
-        ///
-        /// if (args.ContainsKey("verbose"))
-        /// {
-        ///     Information("Verbose output enabled");
-        /// }
-        ///
-        /// foreach(var arg in args)
-        /// {
-        ///     Information(
-        ///         "Key: {0}\tValue: \"{1}\"",
-        ///         arg.Key,
-        ///         arg.Value
-        ///         );
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <returns>The command line arguments.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Arguments")]
-        public static IDictionary<string, string> Arguments(this ICakeContext context)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            return context.Environment.GetArguments();
-        }
-
-        /// <summary>
         /// Determines whether the build script is running on Windows.
         /// </summary>
         /// <example>

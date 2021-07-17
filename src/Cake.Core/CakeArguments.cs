@@ -38,5 +38,14 @@ namespace Cake.Core
             _arguments.TryGetValue(name, out var arguments);
             return arguments ?? (ICollection<string>)Array.Empty<string>();
         }
+
+        /// <inheritdoc/>
+        public IDictionary<string, ICollection<string>> GetArguments()
+        {
+            var arguments = _arguments
+                .ToDictionary(x => x.Key, x => (ICollection<string>)x.Value.ToList());
+
+            return arguments;
+        }
     }
 }

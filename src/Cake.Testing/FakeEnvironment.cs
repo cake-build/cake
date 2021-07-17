@@ -111,12 +111,6 @@ namespace Cake.Testing
             return new Dictionary<string, string>(_environmentVariables, StringComparer.OrdinalIgnoreCase);
         }
 
-        /// <inheritdoc/>
-        public IDictionary<string, string> GetArguments()
-        {
-            return new Dictionary<string, string>(_commandLineArguments, StringComparer.OrdinalIgnoreCase);
-        }
-
         /// <summary>
         /// Changes the operative system bitness.
         /// </summary>

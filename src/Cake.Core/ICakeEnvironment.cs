@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
-using System.Runtime.Versioning;
 using Cake.Core.IO;
 
 namespace Cake.Core
@@ -45,12 +43,6 @@ namespace Cake.Core
         /// </summary>
         /// <returns>The environment variables as IDictionary&lt;string, string&gt;.</returns>
         IDictionary<string, string> GetEnvironmentVariables();
-
-        /// <summary>
-        /// Gets all command line arguments.
-        /// </summary>
-        /// <returns>The command line arguments as IDictionary&lt;string, string&gt;.</returns>
-        IDictionary<string, string> GetArguments();
 
         /// <summary>
         /// Gets the platform Cake is running on.
