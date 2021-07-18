@@ -138,8 +138,8 @@ namespace Cake.Common.Tools.NuGet.Sources
 
             var result = false;
 
-            Run(settings, GetHasArguments(settings),  processSettings,
-                process => result = process.GetStandardOutput().Any(line => line.TrimStart() == source));
+            Run(settings, GetHasArguments(settings), processSettings,
+                process => result = process.GetStandardOutput().Any(line => line.TrimStart().Equals(source, StringComparison.OrdinalIgnoreCase)));
 
             // Return whether or not the source exist.
             return result;
