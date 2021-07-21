@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Common.IO;
 using Cake.Common.IO.Paths;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -317,6 +318,68 @@ namespace Cake.Common.IO
             {
                 CreateDirectory(context, path);
             }
+        }
+
+        /// <summary>
+        /// Deletes the specified directory and its contents if it exists.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// EnsureDirectoryDoesNotExist("./be/gone");
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("DoesNotExist")]
+        public static void EnsureDirectoryDoesNotExist(this ICakeContext context, DirectoryPath path)
+        {
+            context.EnsureDirectoryDoesNotExist(path, new DeleteDirectorySettings { Recursive = true, Force = true });
+        }
+
+        /// <summary>
+        /// Deletes the specified directory if it exists.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// EnsureDirectoryDoesNotExist("./be/gone", new DeleteDirectorySettings {
+        ///     Recursive = true,
+        ///     Force = true
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        /// <param name="settings">The delete settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("DoesNotExist")]
+        public static void EnsureDirectoryDoesNotExist(this ICakeContext context, DirectoryPath path, DeleteDirectorySettings settings)
+        {
+            if (context.DirectoryExists(path))
+            {
+                context.DeleteDirectory(path, settings);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the specified directory if it exists.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// EnsureDirectoryDoesNotExist("./be/gone", new EnsureDirectoryDoesNotExistSettings {
+        ///     Recursive = true,
+        ///     Force = true
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        /// <param name="settings">The delete settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("DoesNotExist")]
+        public static void EnsureDirectoryDoesNotExist(this ICakeContext context, DirectoryPath path, EnsureDirectoryDoesNotExistSettings settings)
+        {
+            context.EnsureDirectoryDoesNotExist(path, settings as DeleteDirectorySettings);
         }
 
         /// <summary>
