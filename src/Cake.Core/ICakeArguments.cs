@@ -26,5 +26,11 @@ namespace Cake.Core
         /// <param name="name">The argument name.</param>
         /// <returns>The argument values.</returns>
         ICollection<string> GetArguments(string name);
+
+        /// <summary>
+        /// Gets all command line arguments.
+        /// </summary>
+        /// <returns>The command line arguments as IDictionary&lt;string, ICollection&lt;string&gt;&gt;.</returns>
+        IDictionary<string, ICollection<string>> GetArguments();
     }
 }
