@@ -22,7 +22,7 @@ namespace Cake.Common
         /// </summary>
         public ReleaseNotesParser()
         {
-            _versionRegex = new RegexRegex(@"^(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[a-z][0-9a-z-]*)?$");
+            _versionRegex = new RegexRegex(@"^(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[a-z][0-9a-z-]*)?");
         }
 
         /// <summary>
