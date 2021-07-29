@@ -5,8 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Versioning;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
 

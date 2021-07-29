@@ -188,6 +188,40 @@ namespace Cake.Common
                 : Convert<T>(value);
         }
 
+        /// <summary>
+        /// Retrieves all command line arguments.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var args = context.Arguments();
+        ///
+        /// if (args.ContainsKey("verbose"))
+        /// {
+        ///     Information("Verbose output enabled");
+        /// }
+        ///
+        /// foreach(var arg in args)
+        /// {
+        ///     Information(
+        ///         "Key: {0}\tValue: \"{1}\"",
+        ///         arg.Key,
+        ///         string.Join(";", arg.Value)
+        ///         );
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>The command line arguments.</returns>
+        [CakeMethodAlias]
+        public static IDictionary<string, ICollection<string>> Arguments(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            return context.Arguments.GetArguments();
+        }
+
         private static T Convert<T>(string value)
         {
             var converter = TypeDescriptor.GetConverter(typeof(T));
