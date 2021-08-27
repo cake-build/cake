@@ -47,6 +47,79 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets the tool version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="version">The string version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings UseToolVersion(this MSBuildSettings settings, string version)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            // check to see if the version is null/empty or is not a num
+            if (string.IsNullOrEmpty(version))
+            {
+                throw new ArgumentException(nameof(version));
+            }
+            version = version.Replace(" ", string.Empty);
+            settings.ToolVersion = GetMSBuildToolVersionFromString(version.ToUpper());
+            return settings;
+        }
+
+        /// <summary>
+        /// Helper that gets the MSBuildToolVersion from the version string.
+        /// </summary>
+        /// <param name="version">The string version.</param>
+        /// <returns>The matched MSBuildToolVersion enum <see cref="MSBuildToolVersion"/>.</returns>
+        private static MSBuildToolVersion GetMSBuildToolVersionFromString(string version)
+        {
+            switch (version)
+            {
+                case "2":
+                case "2.0":
+                case "NET20": return MSBuildToolVersion.NET20;
+                case "3":
+                case "3.0":
+                case "NET30": return MSBuildToolVersion.NET30;
+                case "3.5":
+                case "NET35": return MSBuildToolVersion.NET35;
+                case "4":
+                case "4.0":
+                case "NET40": return MSBuildToolVersion.NET40;
+                case "4.5":
+                case "NET45": return MSBuildToolVersion.NET45;
+                case "4.5.1":
+                case "NET451": return MSBuildToolVersion.NET451;
+                case "4.6":
+                case "NET46": return MSBuildToolVersion.NET46;
+                case "4.5.2":
+                case "NET452": return MSBuildToolVersion.NET452;
+                case "2005":
+                case "VS2005": return MSBuildToolVersion.VS2005;
+                case "2008":
+                case "VS2008": return MSBuildToolVersion.VS2008;
+                case "2010":
+                case "VS2010": return MSBuildToolVersion.VS2010;
+                case "2011":
+                case "VS2011": return MSBuildToolVersion.VS2011;
+                case "2012":
+                case "VS2012": return MSBuildToolVersion.VS2011;
+                case "2013":
+                case "VS2013": return MSBuildToolVersion.VS2013;
+                case "2015":
+                case "VS2015": return MSBuildToolVersion.VS2015;
+                case "2017":
+                case "VS2017": return MSBuildToolVersion.VS2017;
+                case "2019":
+                case "VS2019": return MSBuildToolVersion.VS2019;
+                default: return MSBuildToolVersion.Default;
+            }
+        }
+
+        /// <summary>
         /// Sets the platform target.
         /// </summary>
         /// <param name="settings">The settings.</param>

@@ -67,6 +67,55 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal(settings, result);
             }
+
+            [Fact]
+            public void Should_Set_Tool_Version_FromStringOverride()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.UseToolVersion("net20");
+
+                // Then
+                Assert.Equal(MSBuildToolVersion.NET20, settings.ToolVersion);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration_FromStringOverride()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.UseToolVersion("net35");
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+
+            [Fact]
+            public void Should_ThrowArgumetnException_When_String_Is_Null()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Throws<System.ArgumentException>(() => settings.UseToolVersion(null));
+            }
+
+            [Fact]
+            public void Should_Return_Default_When_Input_Is_Bad()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.UseToolVersion("fjaldskjflaksdjflkas");
+
+                // Then
+                Assert.Equal(MSBuildToolVersion.Default, settings.ToolVersion);
+            }
         }
 
         public sealed class TheSetPlatformTargetMethod
