@@ -1,3 +1,41 @@
+### New in 1.2.0 (Released 2021/08/29)
+
+* 2690 Consider adding some kind of "GetArguments()" alias, similar to the EnvironmentVariables() one.
+* 2578 Feature request: nuget version ranges support.
+* 2362 Add Support for New snupkg Symbol Packages.
+* 3429 Microsoft.Extensions.DependencyInjection to 5.0.2.
+* 3427 Update Microsoft.CodeAnalysis.CSharp.Scripting to 3.11.0.
+* 3425 Update NuGet Client libraries to 5.11.0.
+* 3423 Update Spectre.Console to 0.41.0.
+* 3337 Suppress compilation warnings CS1701, CS1702, and CS1705.
+* 3316 Bump NuGet client libraries to 5.9.1.
+* 3314 Bump .NET SDK to 5.0.202.
+* 3294 Clean up task builder extensions.
+* 3281 GitVersion Tool: Remap existing verbosity values to valid GitVersion values.
+* 3255 Update NuGet client libraries to 5.9.0.
+* 3253 Update Microsoft.CodeAnalysis.CSharp.Scripting to 3.9.0 stable.
+* 3246 Update Spectre.Console to 0.38.0.
+* 3223 Feature request: Environment variable substitution in cake.config.
+* 2654 NUnit3Settings should support TestParam.
+* 2168 TypeConverter to enable Argument(...).
+* 2030 NuGetHasSource is case sensitive.
+* 3365 Typo in documentation of NuGetAdd alias.
+* 3355 VSTest alias documentation contains holdover from <v0.17.0.
+* 3283 Update GitVersion alias reference page with dotnet tool usage example.
+* 3259 TypeLoadException: Missing implementation of RegisterLazy.
+* 3431 Update Microsoft.NET.Test.Sdk to 16.11.0.
+* 3421 Update .NET SDK to 5.0.400.
+* 3372 Update Microsoft.NET.Test.Sdk to 16.9.4.
+* 3370 Update Spectre.Console to 0.39.0.
+* 3368 Update .NET SDK to 5.0.203 and .NET Core 3.1.409 and 2.1.816.
+* 3250 Update .NET SDK to 5.0.200.
+* 3248 Remove Cake.DotNetTool.Module from build.cake.
+* 3360 using Spectre.Console; makes error CS0246.
+* 3352 Cake Frosting Parent DirectoryPath Fails To Combine with Slash.
+* 3243 Error messages logged via Error(...) are displayed in random places in the build log.
+* 3226 Still can't resolve resource assemblies after GH2734.
+* 1663 CopyFiles alias throws exception if empty enumeration is passed.
+
 ### New in 1.1.0 (Released 2021/03/06)
 
 * 2983 No possibility of adding variable with isOutput=true in Azure Pipelines
