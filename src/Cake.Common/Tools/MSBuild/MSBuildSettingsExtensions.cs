@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Common.Tools.MSBuild
@@ -64,8 +65,12 @@ namespace Cake.Common.Tools.MSBuild
             {
                 throw new ArgumentException(nameof(version));
             }
-            version = version.Replace(" ", string.Empty);
-            settings.ToolVersion = GetMSBuildToolVersionFromString(version.ToUpper());
+            var sanitizeVersion = version.Replace(" ", string.Empty);
+            var mSBuildToolVersion = GetMSBuildToolVersionFromString(sanitizeVersion.ToUpper());
+            if (mSBuildToolVersion == MSBuildToolVersion.NETCustom || mSBuildToolVersion == MSBuildToolVersion.VSCustom)
+            {
+                settings.CustomVersion = version;
+            }
             return settings;
         }
 
@@ -97,6 +102,7 @@ namespace Cake.Common.Tools.MSBuild
                 case "NET46": return MSBuildToolVersion.NET46;
                 case "4.5.2":
                 case "NET452": return MSBuildToolVersion.NET452;
+                case string dotNet when Regex.Match(dotNet, @"^[0-9,.]*$").Success: return MSBuildToolVersion.NETCustom;
                 case "2005":
                 case "VS2005": return MSBuildToolVersion.VS2005;
                 case "2008":
@@ -115,6 +121,7 @@ namespace Cake.Common.Tools.MSBuild
                 case "VS2017": return MSBuildToolVersion.VS2017;
                 case "2019":
                 case "VS2019": return MSBuildToolVersion.VS2019;
+                case string vs when vs.Contains("VS") || Regex.Match(vs, @"\d{4}").Success: return MSBuildToolVersion.VSCustom;
                 default: return MSBuildToolVersion.Default;
             }
         }
