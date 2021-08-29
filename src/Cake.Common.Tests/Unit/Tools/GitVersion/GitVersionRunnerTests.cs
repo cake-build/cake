@@ -356,11 +356,11 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
             }
 
             [Theory]
-            [InlineData(GitVersionVerbosity.None, "None")]
-            [InlineData(GitVersionVerbosity.Debug, "Debug")]
-            [InlineData(GitVersionVerbosity.Info, "Info")]
-            [InlineData(GitVersionVerbosity.Warn, "Warn")]
-            [InlineData(GitVersionVerbosity.Error, "Error")]
+            [InlineData(GitVersionVerbosity.None, nameof(Verbosity.Quiet))]
+            [InlineData(GitVersionVerbosity.Debug, nameof(Verbosity.Diagnostic))]
+            [InlineData(GitVersionVerbosity.Info, nameof(Verbosity.Verbose))]
+            [InlineData(GitVersionVerbosity.Warn, nameof(Verbosity.Normal))]
+            [InlineData(GitVersionVerbosity.Error, nameof(Verbosity.Minimal))]
             public void Should_Add_Verbosity_To_Arguments_If_Set(GitVersionVerbosity verbosity, string arg)
             {
                 // Given
@@ -375,10 +375,10 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
             }
 
             [Theory]
-            [InlineData(Verbosity.Quiet, "None")]
-            [InlineData(Verbosity.Diagnostic, "Debug")]
-            [InlineData(Verbosity.Verbose, "Debug")]
-            [InlineData(Verbosity.Minimal, "Error")]
+            [InlineData(Verbosity.Quiet, nameof(Verbosity.Quiet))]
+            [InlineData(Verbosity.Diagnostic, nameof(Verbosity.Diagnostic))]
+            [InlineData(Verbosity.Verbose, nameof(Verbosity.Verbose))]
+            [InlineData(Verbosity.Minimal, nameof(Verbosity.Minimal))]
             public void Should_Add_Default_Verbosity_To_Arguments_If_Not_Set(Verbosity verbosity, string arg)
             {
                 // Given

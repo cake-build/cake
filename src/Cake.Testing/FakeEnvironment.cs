@@ -17,6 +17,7 @@ namespace Cake.Testing
     public sealed class FakeEnvironment : ICakeEnvironment
     {
         private readonly Dictionary<string, string> _environmentVariables;
+        private readonly Dictionary<string, string> _commandLineArguments;
         private readonly Dictionary<SpecialPath, DirectoryPath> _specialPaths;
 
         /// <inheritdoc/>
@@ -53,6 +54,7 @@ namespace Cake.Testing
             Platform = new FakePlatform(family, is64Bit);
             Runtime = new FakeRuntime();
             _environmentVariables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            _commandLineArguments = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _specialPaths = new Dictionary<SpecialPath, DirectoryPath>();
         }
 
@@ -145,6 +147,16 @@ namespace Cake.Testing
         public void SetEnvironmentVariable(string variable, string value)
         {
             _environmentVariables[variable] = value;
+        }
+
+        /// <summary>
+        /// Sets a command line argument.
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="value">The value.</param>
+        public void SetCommandLineArgument(string argument, string value)
+        {
+            _commandLineArguments[argument] = value;
         }
 
         /// <summary>

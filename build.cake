@@ -1,6 +1,3 @@
-// Install modules
-#module nuget:?package=Cake.DotNetTool.Module&version=1.0.1
-
 // Install addins.
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=1.0.0"
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=1.0.0"
@@ -10,7 +7,7 @@
 #tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.4.2"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.7.922"
 #tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.7.1"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.7.0"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=NuGet.CommandLine&version=5.9.1"
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.1.2"
@@ -672,6 +669,8 @@ Task("Run-Integration-Tests")
                     .AppendSwitchQuoted("--customarg", " ", "hello")
                     .AppendSwitchQuoted("--multipleargs", "=", "a")
                     .AppendSwitchQuoted("--multipleargs", "=", "b")
+                    .AppendSwitchQuoted("--testAssemblyDirectoryPath", "=", cakeAssembly.GetDirectory().FullPath)
+                    .AppendSwitchQuoted("--testAssemblyFilePath", "=", cakeAssembly.FullPath)
             });
     }
     catch(Exception ex)

@@ -141,6 +141,8 @@ namespace Cake.Core.Scripting
 
                 default:
                     Console.Error.WriteLine(_runtime.BuiltFramework.FullName);
+                    Console.Error.Flush();
+
                     return "NETSTANDARD2_0";
             }
         }
@@ -164,9 +166,9 @@ namespace Cake.Core.Scripting
         private static string[] GetCakeAssemblyNames()
         {
 #if NETCORE
-            return new[] { "Cake.Core.dll", "Cake.Common.dll" };
+            return new[] { "Cake.Core.dll", "Cake.Common.dll", "Spectre.Console.dll" };
 #else
-            return new[] { "Cake.Core.dll", "Cake.Common.dll", "Cake.exe" };
+            return new[] { "Cake.Core.dll", "Cake.Common.dll", "Cake.exe", "Spectre.Console.dll" };
 #endif
         }
     }

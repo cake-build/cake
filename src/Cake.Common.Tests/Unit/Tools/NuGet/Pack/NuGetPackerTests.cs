@@ -280,6 +280,21 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                     Assert.Equal("pack \"/Working/existing.temp.nuspec\" -Symbols", result.Args);
                 }
 
+                [Fact]
+                public void Should_Add_SymbolPackageFormat_To_Arguments_If_Set()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.Settings.Symbols = true;
+                    fixture.Settings.SymbolPackageFormat = "snupkg";
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.temp.nuspec\" -Symbols -SymbolPackageFormat snupkg", result.Args);
+                }
+
                 [Theory]
                 [InlineData(NuGetVerbosity.Detailed, "pack \"/Working/existing.temp.nuspec\" -Verbosity detailed")]
                 [InlineData(NuGetVerbosity.Normal, "pack \"/Working/existing.temp.nuspec\" -Verbosity normal")]
@@ -1101,6 +1116,21 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
 
                     // Then
                     Assert.Equal("pack \"/Working/existing.csproj\" -Symbols", result.Args);
+                }
+
+                [Fact]
+                public void Should_Add_SymbolPackageFormat_To_Arguments_If_Set()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithProjectFileFixture();
+                    fixture.Settings.Symbols = true;
+                    fixture.Settings.SymbolPackageFormat = "snupkg";
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal("pack \"/Working/existing.csproj\" -Symbols -SymbolPackageFormat snupkg", result.Args);
                 }
 
                 [Theory]

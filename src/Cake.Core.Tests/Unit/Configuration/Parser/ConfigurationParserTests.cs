@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Cake.Core.Configuration.Parser;
 using Cake.Core.Tests.Properties;
@@ -114,6 +115,137 @@ namespace Cake.Core.Tests.Unit.Configuration.Parser
                 Assert.True(result.ContainsKey("Section2_Baz"));
                 Assert.Equal("Qux", result["Section2_Baz"]);
             }
+
+            public sealed class EnvironmentVariableSubstitution
+            {
+                [Theory]
+                [MemberData(nameof(EnvironmentVariableSubstitutionTestData))]
+                public void Should_Substitute_Environment_Variables(EnvironmentVariableTestHarness harness)
+                {
+                    // Given
+                    var environment = harness.CreateEnvironment();
+                    var fileSystem = new FakeFileSystem(environment);
+                    fileSystem.CreateFile("/Working/cake.config").SetContent(harness.IniFileContents);
+                    var parser = new ConfigurationParser(fileSystem, environment);
+
+                    // When
+                    var result = parser.Read("/Working/cake.config");
+
+                    // Then
+                    harness.Assert(result);
+                }
+
+                public static IEnumerable<object[]> EnvironmentVariableSubstitutionTestData()
+                {
+                    yield return new object[]
+                    {
+                            new EnvironmentVariableTestHarness()
+                            {
+                                Testcase = $"Basic environment variable substitution",
+                                CreateEnvironment = () => FakeEnvironment.CreateUnixEnvironment().AddEnvironmentVariable("VALUE", "world"),
+                                IniFileContents = "[Section1]\nHello=%VALUE%",
+                                Assert = result => Assert.Equal("world", result["Section1_Hello"])
+                            },
+                    };
+
+                    yield return new object[]
+                    {
+                            new EnvironmentVariableTestHarness()
+                            {
+                                Testcase = $"Casing of substitution token should not matter",
+                                CreateEnvironment = () => FakeEnvironment.CreateUnixEnvironment().AddEnvironmentVariable("VALUE", "world"),
+                                IniFileContents = "[Section1]\nHello=%value%",
+                                Assert = result => Assert.Equal("world", result["Section1_Hello"])
+                            },
+                    };
+
+                    yield return new object[]
+                    {
+                            new EnvironmentVariableTestHarness()
+                            {
+                                Testcase = $"Should respect leading text",
+                                CreateEnvironment = () => FakeEnvironment.CreateUnixEnvironment().AddEnvironmentVariable("VALUE", "world"),
+                                IniFileContents = "[Section1]\nHello=it is a wonderful %VALUE%",
+                                Assert = result => Assert.Equal("it is a wonderful world", result["Section1_Hello"])
+                            },
+                    };
+
+                    yield return new object[]
+                    {
+                            new EnvironmentVariableTestHarness()
+                            {
+                                Testcase = $"Should respect trailing text",
+                                CreateEnvironment = () => FakeEnvironment.CreateUnixEnvironment().AddEnvironmentVariable("VALUE", "John"),
+                                IniFileContents = "[Section1]\nHello=%VALUE%, nice to meet you.",
+                                Assert = result => Assert.Equal("John, nice to meet you.", result["Section1_Hello"])
+                            },
+                    };
+
+                    yield return new object[]
+                    {
+                            new EnvironmentVariableTestHarness()
+                            {
+                                Testcase = $"No environment variable found for substitution token, should not substitute",
+                                CreateEnvironment = () => FakeEnvironment.CreateUnixEnvironment(),
+                                IniFileContents = "[Section1]\nHello=%VALUE%",
+                                Assert = result => Assert.Equal("%VALUE%", result["Section1_Hello"])
+                            },
+                    };
+
+                    yield return new object[]
+                    {
+                            new EnvironmentVariableTestHarness()
+                            {
+                                Testcase = $"Special characters should be allowed",
+                                CreateEnvironment = () => FakeEnvironment.CreateUnixEnvironment().AddEnvironmentVariable("ProgramFiles(x86)", "PATH TO PROGRAM FILES"),
+                                IniFileContents = "[Section1]\nSpecialPath=%ProgramFiles(x86)%",
+                                Assert = result => Assert.Equal("PATH TO PROGRAM FILES", result["Section1_SpecialPath"])
+                            },
+                    };
+
+                    yield return new object[]
+                    {
+                            new EnvironmentVariableTestHarness()
+                            {
+                                Testcase = $"More than one environment variable to substitute, should substitute all",
+                                CreateEnvironment = () => FakeEnvironment.CreateUnixEnvironment()
+                                                            .AddEnvironmentVariable("VARIABLE1", "Value1")
+                                                            .AddEnvironmentVariable("VARIABLE2", "Value2"),
+                                IniFileContents = "[Section1]\nValue1=%VARIABLE1%\nValue2=%VARIABLE2%",
+                                Assert = result =>
+                                {
+                                    Assert.Equal("Value1", result["Section1_Value1"]);
+                                    Assert.Equal("Value2", result["Section1_Value2"]);
+                                }
+                            },
+                    };
+                }
+
+                public class EnvironmentVariableTestHarness
+                {
+                    public string Testcase { get; set; }
+
+                    public Func<FakeEnvironment> CreateEnvironment { get; set; }
+
+                    public string IniFileContents { get; set; }
+
+                    public Action<IDictionary<string, string>> Assert { get; set; }
+
+                    public override string ToString()
+                    {
+                        return $"Testcase={Testcase}";
+                    }
+                }
+            }
+        }
+    }
+
+    internal static class FakeEnvironmentExtensions
+    {
+        internal static FakeEnvironment AddEnvironmentVariable(this FakeEnvironment environment, string variable, string value)
+        {
+            environment.SetEnvironmentVariable(variable, value);
+            return environment;
         }
     }
 }

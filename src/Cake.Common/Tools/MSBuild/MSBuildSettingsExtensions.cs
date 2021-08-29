@@ -240,6 +240,38 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets whether or not a symbol package should be created.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="includeSymbols"><c>true</c> if a symbol package should be created; otherwise <c>false</c>.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetIncludeSymbols(this MSBuildSettings settings, bool includeSymbols)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.IncludeSymbols = includeSymbols;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets the symbol package format.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="symbolPackageFormat">The symbol package format.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetSymbolPackageFormat(this MSBuildSettings settings, string symbolPackageFormat)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.SymbolPackageFormat = symbolPackageFormat;
+            return settings;
+        }
+
+        /// <summary>
         /// Sets the build log verbosity.
         /// </summary>
         /// <param name="settings">The settings.</param>

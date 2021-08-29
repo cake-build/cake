@@ -244,6 +244,12 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                     ["two"] = "2",
                     ["three"] = "3"
                 };
+                fixture.Settings.TestParams = new Dictionary<string, string>
+                {
+                    ["uno"] = "1",
+                    ["dos"] = "2",
+                    ["tres"] = "3"
+                };
 
                 // When
                 var result = fixture.Run();
@@ -262,7 +268,10 @@ namespace Cake.Common.Tests.Unit.Tools.NUnit
                         "\"--configfile=/Working/app.config\" " +
                         "\"--params=one=1\" " +
                         "\"--params=two=2\" " +
-                        "\"--params=three=3\"", result.Args);
+                        "\"--params=three=3\" " +
+                        "\"--testparam:uno=1\" " +
+                        "\"--testparam:dos=2\" " +
+                        "\"--testparam:tres=3\"", result.Args);
             }
 
             [Fact]

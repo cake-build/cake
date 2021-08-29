@@ -18,7 +18,7 @@ namespace Cake.Frosting.Internal
         public string Target { get; set; }
 
         [CommandOption("--working|-w <PATH>")]
-        [TypeConverter(typeof(DirectoryPathConverter))]
+        [TypeConverter(typeof(Cli.DirectoryPathConverter))]
         [Description("Sets the working directory")]
         public DirectoryPath WorkingDirectory { get; set; }
 

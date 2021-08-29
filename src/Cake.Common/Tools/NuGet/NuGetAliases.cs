@@ -1018,7 +1018,7 @@ namespace Cake.Common.Tools.NuGet
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        /// NuGetAdd("MyNuGetPackage", new NuGetAddSettings({
+        /// NuGetAdd("MyNuGetPackage", new NuGetAddSettings {
         ///     Source = "//bar/packages/"
         ///     });
         /// </code>

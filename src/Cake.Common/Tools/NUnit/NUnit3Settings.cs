@@ -237,6 +237,16 @@ namespace Cake.Common.Tools.NUnit
             new Dictionary<string, string>(StringComparer.Ordinal);
 
         /// <summary>
+        /// Gets or sets the test parameters that should be passed to the runner.
+        /// </summary>
+        /// <value>
+        /// List of test parameters (key/value) which are passed to the runner.
+        /// </value>
+        public IDictionary<string, string> TestParams { get; set; } =
+            // “Case-sensitive.” https://github.com/nunit/docs/wiki/Console-Command-Line#options
+            new Dictionary<string, string>(StringComparer.Ordinal);
+
+        /// <summary>
         /// Gets or sets the level of detail at which the runner should write to its internal trace log.
         /// Corresponds to the -trace=LEVEL command line argument.
         /// If <c>null</c>, no argument will be specified.

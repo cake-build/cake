@@ -99,6 +99,18 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append(string.Concat("/p:Platform=", GetPlatformName(platform, isSolution)));
             }
 
+            // Set include symbols?
+            if (settings.IncludeSymbols.HasValue)
+            {
+                builder.Append(string.Concat("/p:IncludeSymbols=", settings.IncludeSymbols.Value ? "true" : "false"));
+            }
+
+            // Set symbol package format?
+            if (!string.IsNullOrWhiteSpace(settings.SymbolPackageFormat))
+            {
+                builder.Append(string.Concat("/p:SymbolPackageFormat=", settings.SymbolPackageFormat));
+            }
+
             // Got any properties?
             if (settings.Properties.Count > 0)
             {

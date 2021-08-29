@@ -37,11 +37,11 @@ namespace Cake.Core.Configuration.Parser
             using (var stream = file.OpenRead())
             using (var reader = new StreamReader(stream))
             {
-                return Read(reader.ReadToEnd());
+                return Read(_environment, reader.ReadToEnd());
             }
         }
 
-        private static IDictionary<string, string> Read(string text)
+        private static IDictionary<string, string> Read(ICakeEnvironment environment, string text)
         {
             var tokens = ConfigurationTokenizer.Tokenize(text);
             var section = string.Empty;
@@ -56,7 +56,7 @@ namespace Cake.Core.Configuration.Parser
                         break;
                     case ConfigurationTokenKind.Value:
                         var pair = ParseKeyAndValue(tokens, section);
-                        result[pair.Key] = pair.Value;
+                        result[pair.Key] = environment.ExpandEnvironmentVariables(pair.Value);
                         break;
                     default:
                         throw new InvalidOperationException("Encountered unexpected token.");

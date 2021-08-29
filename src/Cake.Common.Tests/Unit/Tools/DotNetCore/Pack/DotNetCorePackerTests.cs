@@ -114,6 +114,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 fixture.Settings.VersionSuffix = "rc1";
                 fixture.Settings.IncludeSource = true;
                 fixture.Settings.IncludeSymbols = true;
+                fixture.Settings.SymbolPackageFormat = "snupkg";
                 fixture.Settings.Serviceable = true;
                 fixture.Settings.Runtime = "win7-x86";
                 fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
@@ -122,7 +123,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack --output \"/Working/artifacts\" --no-build --no-dependencies --no-restore --nologo --include-symbols --include-source --configuration Release --version-suffix rc1 --serviceable --runtime win7-x86 --verbosity minimal", result.Args);
+                Assert.Equal("pack --output \"/Working/artifacts\" --no-build --no-dependencies --no-restore --nologo --include-symbols -p:SymbolPackageFormat=snupkg --include-source --configuration Release --version-suffix rc1 --serviceable --runtime win7-x86 --verbosity minimal", result.Args);
             }
 
             [Fact]

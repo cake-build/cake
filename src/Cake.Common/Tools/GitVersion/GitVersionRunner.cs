@@ -176,23 +176,23 @@ namespace Cake.Common.Tools.GitVersion
                 {
                     case GitVersionVerbosity.None:
                         builder.Append("-verbosity");
-                        builder.Append(nameof(GitVersionVerbosity.None));
+                        builder.Append(nameof(Verbosity.Quiet));
                         break;
                     case GitVersionVerbosity.Debug:
                         builder.Append("-verbosity");
-                        builder.Append(nameof(GitVersionVerbosity.Debug));
+                        builder.Append(nameof(Verbosity.Diagnostic));
                         break;
                     case GitVersionVerbosity.Info:
                         builder.Append("-verbosity");
-                        builder.Append(nameof(GitVersionVerbosity.Info));
+                        builder.Append(nameof(Verbosity.Verbose));
                         break;
                     case GitVersionVerbosity.Warn:
                         builder.Append("-verbosity");
-                        builder.Append(nameof(GitVersionVerbosity.Warn));
+                        builder.Append(nameof(Verbosity.Normal));
                         break;
                     case GitVersionVerbosity.Error:
                         builder.Append("-verbosity");
-                        builder.Append(nameof(GitVersionVerbosity.Error));
+                        builder.Append(nameof(Verbosity.Minimal));
                         break;
                 }
             }
@@ -202,16 +202,19 @@ namespace Cake.Common.Tools.GitVersion
                 {
                     case Verbosity.Quiet:
                         builder.Append("-verbosity");
-                        builder.Append(nameof(GitVersionVerbosity.None));
+                        builder.Append(nameof(Verbosity.Quiet));
                         break;
                     case Verbosity.Diagnostic:
+                        builder.Append("-verbosity");
+                        builder.Append(nameof(Verbosity.Diagnostic));
+                        break;
                     case Verbosity.Verbose:
                         builder.Append("-verbosity");
-                        builder.Append(nameof(GitVersionVerbosity.Debug));
+                        builder.Append(nameof(Verbosity.Verbose));
                         break;
                     case Verbosity.Minimal:
                         builder.Append("-verbosity");
-                        builder.Append(nameof(GitVersionVerbosity.Error));
+                        builder.Append(nameof(Verbosity.Minimal));
                         break;
                 }
             }
