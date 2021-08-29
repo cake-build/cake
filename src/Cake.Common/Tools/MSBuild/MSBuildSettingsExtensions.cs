@@ -71,6 +71,7 @@ namespace Cake.Common.Tools.MSBuild
             {
                 settings.CustomVersion = version;
             }
+            settings.ToolVersion = mSBuildToolVersion;
             return settings;
         }
 
@@ -102,7 +103,6 @@ namespace Cake.Common.Tools.MSBuild
                 case "NET46": return MSBuildToolVersion.NET46;
                 case "4.5.2":
                 case "NET452": return MSBuildToolVersion.NET452;
-                case string dotNet when Regex.Match(dotNet, @"^[0-9,.]*$").Success: return MSBuildToolVersion.NETCustom;
                 case "2005":
                 case "VS2005": return MSBuildToolVersion.VS2005;
                 case "2008":
@@ -122,6 +122,7 @@ namespace Cake.Common.Tools.MSBuild
                 case "2019":
                 case "VS2019": return MSBuildToolVersion.VS2019;
                 case string vs when vs.Contains("VS") || Regex.Match(vs, @"\d{4}").Success: return MSBuildToolVersion.VSCustom;
+                case string dotNet when Regex.Match(dotNet, @"^[0-9,.]*$").Success: return MSBuildToolVersion.NETCustom;
                 default: return MSBuildToolVersion.Default;
             }
         }

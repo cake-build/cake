@@ -116,6 +116,30 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal(MSBuildToolVersion.Default, settings.ToolVersion);
             }
+
+            [Fact]
+            public void Should_Return_VSCustom_When_VsVersion_CantBeMatch()
+            {
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.UseToolVersion("2022");
+
+                // Then
+                Assert.Equal(MSBuildToolVersion.VSCustom, settings.ToolVersion);
+            }
+
+            [Fact]
+            public void Should_Return_VSCustom_When_NETFramework_CantBeMatch()
+            {
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.UseToolVersion("5");
+
+                // Then
+                Assert.Equal(MSBuildToolVersion.NETCustom, settings.ToolVersion);
+            }
         }
 
         public sealed class TheSetPlatformTargetMethod
