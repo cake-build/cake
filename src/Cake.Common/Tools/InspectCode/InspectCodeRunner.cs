@@ -208,6 +208,11 @@ namespace Cake.Common.Tools.InspectCode
                 builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/severity={0}", settings.Severity.ToString().ToUpper(CultureInfo.InvariantCulture)));
             }
 
+            if (settings.Build.HasValue)
+            {
+                builder.Append(settings.Build.Value ? "--build" : "--no-build");
+            }
+
             builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
 
             return builder;
