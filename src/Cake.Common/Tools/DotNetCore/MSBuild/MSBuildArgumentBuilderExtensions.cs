@@ -188,6 +188,13 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             {
                 builder.AppendMSBuildSwitch("nologo");
             }
+
+            // Set Continuous Integration Build?
+            if (settings.ContinuousIntegrationBuild.HasValue)
+            {
+                var continuousIntegrationBuild = settings.ContinuousIntegrationBuild.Value ? "true" : "false";
+                builder.AppendMSBuildSwitch("property", $"ContinuousIntegrationBuild={continuousIntegrationBuild}");
+            }
         }
 
         private static string GetLoggerValue(MSBuildLogger logger)

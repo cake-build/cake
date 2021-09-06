@@ -224,6 +224,26 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
+        /// </summary>
+        /// <remarks>
+        /// For more information see https://devblogs.microsoft.com/dotnet/producing-packages-with-source-link/#deterministic-builds.
+        /// </remarks>
+        /// <param name="settings">The settings.</param>
+        /// <param name="continuousIntegrationBuild">A value indicating whether to normalize stored file paths used when producing deterministic builds.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetContinuousIntegrationBuild(this MSBuildSettings settings, bool? continuousIntegrationBuild = true)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.ContinuousIntegrationBuild = continuousIntegrationBuild;
+            return settings;
+        }
+
+        /// <summary>
         /// Sets whether or not any targets should be passed to MSBuild.
         /// </summary>
         /// <param name="settings">The settings.</param>

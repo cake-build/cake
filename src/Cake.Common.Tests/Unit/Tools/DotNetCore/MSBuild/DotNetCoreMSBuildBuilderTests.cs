@@ -608,6 +608,47 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Fact]
+            public void Should_Add_ContinuousIntegrationBuild_If_Set_To_True()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.ContinuousIntegrationBuild = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:ContinuousIntegrationBuild=true", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ContinuousIntegrationBuild_If_Set_To_False()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.ContinuousIntegrationBuild = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:ContinuousIntegrationBuild=false", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Add_ContinuousIntegrationBuild_If_Not_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.DoesNotContain("/property:ContinuousIntegrationBuild=", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_ResponseFile_Argument()
             {
                 // Given

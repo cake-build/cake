@@ -111,6 +111,13 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append(string.Concat("/p:SymbolPackageFormat=", settings.SymbolPackageFormat));
             }
 
+            // Set Continuous Integration Build?
+            if (settings.ContinuousIntegrationBuild.HasValue)
+            {
+                var continuousIntegrationBuild = settings.ContinuousIntegrationBuild.Value ? "true" : "false";
+                builder.Append(string.Concat("/p:ContinuousIntegrationBuild=", continuousIntegrationBuild));
+            }
+
             // Got any properties?
             if (settings.Properties.Count > 0)
             {
