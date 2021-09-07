@@ -352,6 +352,38 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheSetContinuousIntegrationBuildMethod
+        {
+            [Theory]
+            [InlineData(null)]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Set_ContinuousIntegrationBuild(bool? continuousIntegrationBuild)
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                settings.SetContinuousIntegrationBuild(continuousIntegrationBuild);
+
+                // Then
+                Assert.Equal(continuousIntegrationBuild, settings.ContinuousIntegrationBuild);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetContinuousIntegrationBuild();
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheNoImplicitTargetMethod
         {
             [Theory]

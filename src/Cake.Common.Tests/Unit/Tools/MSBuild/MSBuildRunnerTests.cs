@@ -935,6 +935,49 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Add_ContinuousIntegrationBuild_If_Set_To_True()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ContinuousIntegrationBuild = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:ContinuousIntegrationBuild=true /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ContinuousIntegrationBuild_If_Set_To_False()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ContinuousIntegrationBuild = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:ContinuousIntegrationBuild=false /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Add_ContinuousIntegrationBuild_If_Not_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.DoesNotContain("/p:ContinuousIntegrationBuild=", result.Args);
+            }
+
+            [Fact]
             public void Should_Append_Logger_To_Process_Arguments()
             {
                 // Given

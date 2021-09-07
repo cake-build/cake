@@ -43,6 +43,14 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         public bool NoLogo { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
+        /// </summary>
+        /// <remarks>
+        /// For more information see https://devblogs.microsoft.com/dotnet/producing-packages-with-source-link/#deterministic-builds.
+        /// </remarks>
+        public bool? ContinuousIntegrationBuild { get; set; }
+
+        /// <summary>
         /// Gets the project-level properties to set or override.
         /// </summary>
         public IDictionary<string, ICollection<string>> Properties { get; }
