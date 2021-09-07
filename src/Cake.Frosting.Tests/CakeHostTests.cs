@@ -313,5 +313,22 @@ namespace Cake.Frosting.Tests
             fixture.Installer.Received(1).Install(
                 Arg.Is<PackageReference>(p => p.OriginalString == "foo:?package=Bar"));
         }
+
+        [Fact]
+        public void Should_pass_target_within_cakeContext_arguments()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+            // When
+            fixture.Run("--target", nameof(DummyTask));
+
+            // Then
+            fixture.Strategy
+                .Received(1)
+                .ExecuteAsync(Arg.Any<CakeTask>(), Arg.Is<ICakeContext>(cc => cc.Arguments.HasArgument("target") && cc.Arguments.GetArgument("target").Equals(nameof(DummyTask))));
+        }
     }
 }

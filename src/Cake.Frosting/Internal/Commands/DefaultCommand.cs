@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cake.Cli;
 using Cake.Core;
@@ -26,7 +27,7 @@ namespace Cake.Frosting.Internal
         public override int Execute(CommandContext context, DefaultCommandSettings settings)
         {
             // Register arguments
-            var arguments = new CakeArguments(context.Remaining.Parsed);
+            var arguments = CreateCakeArguments(context.Remaining, settings);
             _services.AddSingleton<ICakeArguments>(arguments);
             _services.AddSingleton(context.Remaining);
 
@@ -101,6 +102,31 @@ namespace Cake.Frosting.Internal
             }
 
             return 1;
+        }
+
+        private static CakeArguments CreateCakeArguments(IRemainingArguments remainingArguments, DefaultCommandSettings settings)
+        {
+            var arguments = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+            // Keep the actual remaining arguments in the cake arguments
+            foreach (var group in remainingArguments.Parsed)
+            {
+                arguments[group.Key] = new List<string>();
+                foreach (var argument in group)
+                {
+                    arguments[group.Key].Add(argument);
+                }
+            }
+
+            // Fixes #3291, We have to add arguments manually which are defined within the DefaultCommandSettings type. Those are not considered "as remaining" because they could be parsed
+            const string targetArgumentName = "target";
+            if (!arguments.ContainsKey(targetArgumentName))
+            {
+                arguments[targetArgumentName] = new List<string>();
+            }
+            arguments[targetArgumentName].Add(settings.Target);
+
+            var argumentLookUp = arguments.SelectMany(a => a.Value, Tuple.Create).ToLookup(a => a.Item1.Key, a => a.Item2);
+            return new CakeArguments(argumentLookUp);
         }
 
         private void InstallTools(ServiceProvider provider)
