@@ -96,6 +96,15 @@ namespace Cake.Common.Tools.MSBuild
         public bool? NoLogo { get; set; }
 
         /// <summary>
+        /// Gets or sets the default value of all the version numbers embedded in the build output.
+        /// </summary>
+        public string Version
+        {
+            get => GetPropertyValueOrDefault("Version");
+            set => this.WithProperty("Version", value);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>
@@ -197,6 +206,17 @@ namespace Cake.Common.Tools.MSBuild
             Configuration = string.Empty;
             Verbosity = Verbosity.Normal;
             MSBuildPlatform = MSBuildPlatform.Automatic;
+        }
+
+        private string GetPropertyValueOrDefault(string propertyName, string @default = null)
+        {
+            if (!Properties.TryGetValue(propertyName, out var propertyValues))
+            {
+                return @default;
+            }
+
+            var propertyValue = string.Join(";", propertyValues);
+            return propertyValue;
         }
     }
 }

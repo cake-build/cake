@@ -608,6 +608,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Fact]
+            public void Should_Add_Version_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.Version = "1.0.0-test";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:Version=1.0.0-test", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_ContinuousIntegrationBuild_If_Set_To_True()
             {
                 // Given

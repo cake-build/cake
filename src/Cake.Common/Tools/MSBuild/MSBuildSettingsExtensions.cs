@@ -305,6 +305,19 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets the version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="version">The version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <remarks>
+        /// Version will override VersionPrefix and VersionSuffix if set.
+        /// This may also override version settings during packaging.
+        /// </remarks>
+        public static MSBuildSettings SetVersion(this MSBuildSettings settings, string version)
+            => settings.WithProperty("Version", version);
+
+        /// <summary>
         /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>

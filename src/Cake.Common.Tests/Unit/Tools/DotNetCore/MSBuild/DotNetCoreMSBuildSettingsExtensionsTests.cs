@@ -762,6 +762,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 // Then
                 Assert.True(settings.Properties.ContainsKey(key));
                 Assert.Equal(Version, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(Version, settings.Version);
             }
 
             [Fact]

@@ -9,6 +9,33 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
 {
     public sealed class DotNetCoreMSBuildSettingsTests
     {
+        public sealed class TheVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.Version);
+            }
+
+            [Fact]
+            public void Should_Add_Version_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.Version = "1.0.0-test";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("Version"));
+                Assert.True(settings.Properties["Version"].Contains("1.0.0-test"));
+            }
+        }
+
         public sealed class TheDistributedFileLoggerProperty
         {
             [Fact]
