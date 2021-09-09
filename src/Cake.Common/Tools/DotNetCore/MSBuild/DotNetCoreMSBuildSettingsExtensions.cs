@@ -489,6 +489,15 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             => settings.WithProperty("InformationalVersion", informationalVersion);
 
         /// <summary>
+        /// Sets the package version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageVersion">The package version.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetPackageVersion(this DotNetCoreMSBuildSettings settings, string packageVersion)
+            => settings.WithProperty("PackageVersion", packageVersion);
+
+        /// <summary>
         /// Suppress warning CS7035.
         /// This is useful when using semantic versioning and either the file or informational version
         /// doesn't match the recommended format.

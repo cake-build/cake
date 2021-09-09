@@ -878,6 +878,39 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
         }
 
+        public sealed class TheSetPackageVersionMethod
+        {
+            private const string PackageVersion = "1.0.0-test";
+
+            [Fact]
+            public void Should_Set_PackageVersion()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+                const string key = "PackageVersion";
+
+                // When
+                settings.SetPackageVersion(PackageVersion);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(PackageVersion, settings.Properties[key].FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                var result = settings.SetPackageVersion(PackageVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSuppressVersionRecommendedFormatWarningMethod
         {
             [Fact]

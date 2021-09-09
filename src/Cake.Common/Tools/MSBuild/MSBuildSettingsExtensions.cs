@@ -363,6 +363,15 @@ namespace Cake.Common.Tools.MSBuild
             => settings.WithProperty("InformationalVersion", informationalVersion);
 
         /// <summary>
+        /// Sets the package version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageVersion">The package version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetPackageVersion(this MSBuildSettings settings, string packageVersion)
+            => settings.WithProperty("PackageVersion", packageVersion);
+
+        /// <summary>
         /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>

@@ -231,6 +231,19 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class ThePackageVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.PackageVersion);
+            }
+        }
+
         public sealed class TheLoggersProperty
         {
             [Fact]

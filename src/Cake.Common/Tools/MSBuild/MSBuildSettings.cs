@@ -150,6 +150,15 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Gets or sets the version number of the NuGet package generated.
+        /// </summary>
+        public string PackageVersion
+        {
+            get => GetPropertyValueOrDefault("PackageVersion");
+            set => this.WithProperty("PackageVersion", value);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>
