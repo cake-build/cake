@@ -471,6 +471,15 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             => settings.WithProperty("FileVersion", fileVersion);
 
         /// <summary>
+        /// Sets the assembly version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="assemblyVersion">The assembly version.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetAssemblyVersion(this DotNetCoreMSBuildSettings settings, string assemblyVersion)
+            => settings.WithProperty("AssemblyVersion", assemblyVersion);
+
+        /// <summary>
         /// Sets the informational version.
         /// </summary>
         /// <param name="settings">The settings.</param>

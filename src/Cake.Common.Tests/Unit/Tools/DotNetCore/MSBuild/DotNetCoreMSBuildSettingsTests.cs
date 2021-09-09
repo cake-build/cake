@@ -117,6 +117,33 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
         }
 
+        public sealed class TheAssemblyVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.AssemblyVersion);
+            }
+
+            [Fact]
+            public void Should_Add_AssemblyVersion_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.AssemblyVersion = "1.0.0.0";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("AssemblyVersion"));
+                Assert.True(settings.Properties["AssemblyVersion"].Contains("1.0.0.0"));
+            }
+        }
+
         public sealed class TheDistributedFileLoggerProperty
         {
             [Fact]
