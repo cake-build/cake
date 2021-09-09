@@ -52,6 +52,15 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         }
 
         /// <summary>
+        /// Gets or sets the base version number embedded in the build output.
+        /// </summary>
+        public string VersionPrefix
+        {
+            get => GetPropertyValueOrDefault("VersionPrefix");
+            set => this.WithProperty("VersionPrefix", value);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>

@@ -950,6 +950,21 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Add_VersionPrefix_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.VersionPrefix = "1.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:VersionPrefix=1.0.0 /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_ContinuousIntegrationBuild_If_Set_To_True()
             {
                 // Given

@@ -318,6 +318,15 @@ namespace Cake.Common.Tools.MSBuild
             => settings.WithProperty("Version", version);
 
         /// <summary>
+        /// Sets the version prefix.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="versionPrefix">The version prefix.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetVersionPrefix(this MSBuildSettings settings, string versionPrefix)
+            => settings.WithProperty("VersionPrefix", versionPrefix);
+
+        /// <summary>
         /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>
