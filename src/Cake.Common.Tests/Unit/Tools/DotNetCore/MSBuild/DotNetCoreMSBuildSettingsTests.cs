@@ -63,6 +63,33 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
         }
 
+        public sealed class TheVersionSuffixProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.VersionSuffix);
+            }
+
+            [Fact]
+            public void Should_Add_VersionSuffix_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.VersionSuffix = "test";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("VersionSuffix"));
+                Assert.True(settings.Properties["VersionSuffix"].Contains("test"));
+            }
+        }
+
         public sealed class TheDistributedFileLoggerProperty
         {
             [Fact]

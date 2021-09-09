@@ -493,6 +493,40 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheSetVersionSuffixMethod
+        {
+            private const string VersionSuffix = "test";
+
+            [Fact]
+            public void Should_Set_VersionSuffix()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "VersionSuffix";
+
+                // When
+                settings.SetVersionSuffix(VersionSuffix);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(VersionSuffix, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(VersionSuffix, settings.VersionSuffix);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetVersionSuffix(VersionSuffix);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetContinuousIntegrationBuildMethod
         {
             [Theory]

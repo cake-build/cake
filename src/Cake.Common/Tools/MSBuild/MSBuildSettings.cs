@@ -114,6 +114,15 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Gets or sets the pre-release label of the version number embedded in the build output.
+        /// </summary>
+        public string VersionSuffix
+        {
+            get => GetPropertyValueOrDefault("VersionSuffix");
+            set => this.WithProperty("VersionSuffix", value);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>

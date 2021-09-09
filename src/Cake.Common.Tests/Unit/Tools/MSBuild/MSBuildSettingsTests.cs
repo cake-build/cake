@@ -192,6 +192,19 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheVersionSuffixProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.VersionSuffix);
+            }
+        }
+
         public sealed class TheLoggersProperty
         {
             [Fact]
