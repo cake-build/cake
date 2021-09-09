@@ -144,6 +144,33 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
         }
 
+        public sealed class TheInformationalVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.InformationalVersion);
+            }
+
+            [Fact]
+            public void Should_Add_InformationalVersion_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.InformationalVersion = "1.0.0-test+7ad03d0";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("InformationalVersion"));
+                Assert.True(settings.Properties["InformationalVersion"].Contains("1.0.0-test+7ad03d0"));
+            }
+        }
+
         public sealed class TheDistributedFileLoggerProperty
         {
             [Fact]

@@ -354,6 +354,15 @@ namespace Cake.Common.Tools.MSBuild
             => settings.WithProperty("AssemblyVersion", assemblyVersion);
 
         /// <summary>
+        /// Sets the informational version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="informationalVersion">The informational version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetInformationalVersion(this MSBuildSettings settings, string informationalVersion)
+            => settings.WithProperty("InformationalVersion", informationalVersion);
+
+        /// <summary>
         /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>

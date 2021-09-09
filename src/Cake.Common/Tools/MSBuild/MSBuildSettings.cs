@@ -141,6 +141,15 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Gets or sets the assembly informational version number embedded in the build output.
+        /// </summary>
+        public string InformationalVersion
+        {
+            get => GetPropertyValueOrDefault("InformationalVersion");
+            set => this.WithProperty("InformationalVersion", value);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>

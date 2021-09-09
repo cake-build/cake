@@ -678,6 +678,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Fact]
+            public void Should_Add_InformationalVersion_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.InformationalVersion = "1.0.0-test+7ad03d0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:InformationalVersion=1.0.0-test+7ad03d0", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_ContinuousIntegrationBuild_If_Set_To_True()
             {
                 // Given
