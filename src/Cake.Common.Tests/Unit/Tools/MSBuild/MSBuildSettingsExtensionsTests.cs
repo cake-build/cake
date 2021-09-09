@@ -663,6 +663,40 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheSetPackageReleaseNotesMethod
+        {
+            private const string PackageReleaseNotes = "1.0.0-test";
+
+            [Fact]
+            public void Should_Set_PackageReleaseNotes()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "PackageReleaseNotes";
+
+                // When
+                settings.SetPackageReleaseNotes(PackageReleaseNotes);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(PackageReleaseNotes, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(PackageReleaseNotes, settings.PackageReleaseNotes);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetPackageReleaseNotes(PackageReleaseNotes);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetContinuousIntegrationBuildMethod
         {
             [Theory]

@@ -198,6 +198,33 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
         }
 
+        public sealed class ThePackageReleaseNotesProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.PackageReleaseNotes);
+            }
+
+            [Fact]
+            public void Should_Add_PackageReleaseNotes_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.PackageReleaseNotes = "https://...";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("PackageReleaseNotes"));
+                Assert.True(settings.Properties["PackageReleaseNotes"].Contains("https://..."));
+            }
+        }
+
         public sealed class TheDistributedFileLoggerProperty
         {
             [Fact]

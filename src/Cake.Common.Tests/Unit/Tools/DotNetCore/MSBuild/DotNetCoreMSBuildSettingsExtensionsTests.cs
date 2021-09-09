@@ -911,6 +911,39 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
         }
 
+        public sealed class TheSetPackageReleaseNotesMethod
+        {
+            private const string PackageReleaseNotes = "https://";
+
+            [Fact]
+            public void Should_Set_PackageReleaseNotes()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+                const string key = "PackageReleaseNotes";
+
+                // When
+                settings.SetPackageReleaseNotes(PackageReleaseNotes);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(PackageReleaseNotes, settings.Properties[key].FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                var result = settings.SetPackageReleaseNotes(PackageReleaseNotes);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSuppressVersionRecommendedFormatWarningMethod
         {
             [Fact]

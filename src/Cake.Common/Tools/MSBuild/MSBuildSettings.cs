@@ -159,6 +159,15 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Gets or sets the release notes of the NuGet package generated.
+        /// </summary>
+        public string PackageReleaseNotes
+        {
+            get => GetPropertyValueOrDefault("PackageReleaseNotes");
+            set => this.WithProperty("PackageReleaseNotes", value);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>

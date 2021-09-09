@@ -706,6 +706,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Fact]
+            public void Should_Add_PackageReleaseNotes_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.PackageReleaseNotes = "https://";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:PackageReleaseNotes=https://", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_ContinuousIntegrationBuild_If_Set_To_True()
             {
                 // Given

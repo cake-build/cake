@@ -372,6 +372,15 @@ namespace Cake.Common.Tools.MSBuild
             => settings.WithProperty("PackageVersion", packageVersion);
 
         /// <summary>
+        /// Sets the package release notes.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageReleaseNotes">The package release notes.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetPackageReleaseNotes(this MSBuildSettings settings, string packageReleaseNotes)
+            => settings.WithProperty("PackageReleaseNotes", packageReleaseNotes);
+
+        /// <summary>
         /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>
