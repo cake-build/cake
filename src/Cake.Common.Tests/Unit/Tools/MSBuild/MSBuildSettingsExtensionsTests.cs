@@ -527,6 +527,40 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheSetFileVersionMethod
+        {
+            private const string FileVersion = "1.0.0.0";
+
+            [Fact]
+            public void Should_Set_FileVersion()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "FileVersion";
+
+                // When
+                settings.SetFileVersion(FileVersion);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(FileVersion, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(FileVersion, settings.FileVersion);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetFileVersion(FileVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetContinuousIntegrationBuildMethod
         {
             [Theory]

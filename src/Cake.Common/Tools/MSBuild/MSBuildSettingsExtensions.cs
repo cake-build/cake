@@ -336,6 +336,15 @@ namespace Cake.Common.Tools.MSBuild
             => settings.WithProperty("VersionSuffix", versionSuffix);
 
         /// <summary>
+        /// Sets the file version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileVersion">The file version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetFileVersion(this MSBuildSettings settings, string fileVersion)
+            => settings.WithProperty("FileVersion", fileVersion);
+
+        /// <summary>
         /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>

@@ -90,6 +90,33 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
         }
 
+        public sealed class TheFileVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.FileVersion);
+            }
+
+            [Fact]
+            public void Should_Add_FileVersion_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.FileVersion = "1.0.0.0";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("FileVersion"));
+                Assert.True(settings.Properties["FileVersion"].Contains("1.0.0.0"));
+            }
+        }
+
         public sealed class TheDistributedFileLoggerProperty
         {
             [Fact]
