@@ -107,6 +107,11 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Custom Visual Studio build
         /// </summary>
-        NETCustom = 9
+        NETCustom = 9,
+
+        /// <summary>
+        /// MSBuild tool version: <c>Visual Studio 2022</c>
+        /// </summary>
+        VS2022 = 10
     }
 }

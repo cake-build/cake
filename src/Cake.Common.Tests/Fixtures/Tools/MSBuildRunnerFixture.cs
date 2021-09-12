@@ -36,6 +36,8 @@ namespace Cake.Common.Tests.Fixtures.Tools
                 "/Program86/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/amd64/MSBuild.exe",
                 "/Program86/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/MSBuild.exe",
                 "/Program86/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/amd64/MSBuild.exe",
+                "/Program/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe",
+                "/Program/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/amd64/MSBuild.exe",
                 "/usr/bin/msbuild",
                 "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild"
             };
@@ -48,6 +50,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
 
             // Prepare the environment.
             Environment.SetSpecialPath(SpecialPath.ProgramFilesX86, "/Program86");
+            Environment.SetSpecialPath(SpecialPath.ProgramFiles, "/Program");
             Environment.SetSpecialPath(SpecialPath.Windows, "/Windows");
             Environment.ChangeOperativeSystemBitness(is64BitOperativeSystem);
             Environment.ChangeOperatingSystemFamily(platformFamily);
