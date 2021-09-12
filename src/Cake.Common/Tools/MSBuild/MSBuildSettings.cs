@@ -21,6 +21,7 @@ namespace Cake.Common.Tools.MSBuild
         private readonly HashSet<string> _warningsAsErrorCodes;
         private readonly HashSet<string> _warningsAsMessageCodes;
         private readonly HashSet<string> _consoleLoggerParameters;
+        internal string CustomVersion { get; set; }
 
         /// <summary>
         /// Gets the targets.
