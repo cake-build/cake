@@ -166,6 +166,97 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.Version);
+            }
+        }
+
+        public sealed class TheVersionPrefixProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.VersionPrefix);
+            }
+        }
+
+        public sealed class TheVersionSuffixProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.VersionSuffix);
+            }
+        }
+
+        public sealed class TheFileVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.FileVersion);
+            }
+        }
+
+        public sealed class TheAssemblyVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.AssemblyVersion);
+            }
+        }
+
+        public sealed class ThePackageVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.PackageVersion);
+            }
+        }
+
+        public sealed class ThePackageReleaseNotesProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // Then
+                Assert.Null(settings.PackageReleaseNotes);
+            }
+        }
+
         public sealed class TheLoggersProperty
         {
             [Fact]

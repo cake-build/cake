@@ -762,6 +762,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 // Then
                 Assert.True(settings.Properties.ContainsKey(key));
                 Assert.Equal(Version, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(Version, settings.Version);
             }
 
             [Fact]
@@ -811,6 +812,39 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
         }
 
+        public sealed class TheSetAssemblyVersionMethod
+        {
+            private const string AssemblyVersion = "1.0.0.0";
+
+            [Fact]
+            public void Should_Set_AssemblyVersion()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+                const string key = "AssemblyVersion";
+
+                // When
+                settings.SetAssemblyVersion(AssemblyVersion);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(AssemblyVersion, settings.Properties[key].FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                var result = settings.SetAssemblyVersion(AssemblyVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetInformationalVersionMethod
         {
             private const string InformationalVersion = "1.0.0-test";
@@ -838,6 +872,72 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
 
                 // When
                 var result = settings.SetInformationalVersion(InformationalVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetPackageVersionMethod
+        {
+            private const string PackageVersion = "1.0.0-test";
+
+            [Fact]
+            public void Should_Set_PackageVersion()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+                const string key = "PackageVersion";
+
+                // When
+                settings.SetPackageVersion(PackageVersion);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(PackageVersion, settings.Properties[key].FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                var result = settings.SetPackageVersion(PackageVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetPackageReleaseNotesMethod
+        {
+            private const string PackageReleaseNotes = "https://";
+
+            [Fact]
+            public void Should_Set_PackageReleaseNotes()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+                const string key = "PackageReleaseNotes";
+
+                // When
+                settings.SetPackageReleaseNotes(PackageReleaseNotes);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(PackageReleaseNotes, settings.Properties[key].FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                var result = settings.SetPackageReleaseNotes(PackageReleaseNotes);
 
                 // Then
                 Assert.Equal(settings, result);

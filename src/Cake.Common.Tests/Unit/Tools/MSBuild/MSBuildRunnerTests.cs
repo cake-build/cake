@@ -935,6 +935,126 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Add_Version_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.Version = "1.0.0-test";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:Version=1.0.0-test /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_VersionPrefix_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.VersionPrefix = "1.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:VersionPrefix=1.0.0 /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_VersionSuffix_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.VersionSuffix = "test";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:VersionSuffix=test /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_FileVersion_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.FileVersion = "1.0.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:FileVersion=1.0.0.0 /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_AssemblyVersion_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.AssemblyVersion = "1.0.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:AssemblyVersion=1.0.0.0 /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_InformationalVersion_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.InformationalVersion = "1.0.0-test+7ad03d0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:InformationalVersion=1.0.0-test+7ad03d0 /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PackageVersion_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.PackageVersion = "1.0.0-test";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:PackageVersion=1.0.0-test /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PackageReleaseNotes_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.PackageReleaseNotes = "https://";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:PackageReleaseNotes=https:// /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_ContinuousIntegrationBuild_If_Set_To_True()
             {
                 // Given

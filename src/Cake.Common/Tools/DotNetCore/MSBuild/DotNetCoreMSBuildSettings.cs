@@ -43,6 +43,78 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         public bool NoLogo { get; set; }
 
         /// <summary>
+        /// Gets or sets the default value of all the version numbers embedded in the build output.
+        /// </summary>
+        public string Version
+        {
+            get => GetPropertyValueOrDefault("Version");
+            set => this.WithProperty("Version", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the base version number embedded in the build output.
+        /// </summary>
+        public string VersionPrefix
+        {
+            get => GetPropertyValueOrDefault("VersionPrefix");
+            set => this.WithProperty("VersionPrefix", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the pre-release label of the version number embedded in the build output.
+        /// </summary>
+        public string VersionSuffix
+        {
+            get => GetPropertyValueOrDefault("VersionSuffix");
+            set => this.WithProperty("VersionSuffix", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the file version number embedded in the build output.
+        /// </summary>
+        public string FileVersion
+        {
+            get => GetPropertyValueOrDefault("FileVersion");
+            set => this.WithProperty("FileVersion", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the assembly version number embedded in the build output.
+        /// </summary>
+        public string AssemblyVersion
+        {
+            get => GetPropertyValueOrDefault("AssemblyVersion");
+            set => this.WithProperty("AssemblyVersion", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the assembly informational version number embedded in the build output.
+        /// </summary>
+        public string InformationalVersion
+        {
+            get => GetPropertyValueOrDefault("InformationalVersion");
+            set => this.WithProperty("InformationalVersion", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the version number of the NuGet package generated.
+        /// </summary>
+        public string PackageVersion
+        {
+            get => GetPropertyValueOrDefault("PackageVersion");
+            set => this.WithProperty("PackageVersion", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the release notes of the NuGet package generated.
+        /// </summary>
+        public string PackageReleaseNotes
+        {
+            get => GetPropertyValueOrDefault("PackageReleaseNotes");
+            set => this.WithProperty("PackageReleaseNotes", value);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>
@@ -156,6 +228,17 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             WarningCodesAsError = new List<string>();
             WarningCodesAsMessage = new List<string>();
             IgnoreProjectExtensions = new List<string>();
+        }
+
+        private string GetPropertyValueOrDefault(string propertyName, string @default = null)
+        {
+            if (!Properties.TryGetValue(propertyName, out var propertyValues))
+            {
+                return @default;
+            }
+
+            var propertyValue = string.Join(";", propertyValues);
+            return propertyValue;
         }
     }
 }

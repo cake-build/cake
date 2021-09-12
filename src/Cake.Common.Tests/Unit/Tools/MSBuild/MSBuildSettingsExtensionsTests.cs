@@ -425,6 +425,278 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
         }
 
+        public sealed class TheSetVersionMethod
+        {
+            private const string Version = "1.0.0-test";
+
+            [Fact]
+            public void Should_Set_Version()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "Version";
+
+                // When
+                settings.SetVersion(Version);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(Version, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(Version, settings.Version);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetVersion(Version);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetVersionPrefixMethod
+        {
+            private const string VersionPrefix = "1.0.0";
+
+            [Fact]
+            public void Should_Set_VersionPrefix()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "VersionPrefix";
+
+                // When
+                settings.SetVersionPrefix(VersionPrefix);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(VersionPrefix, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(VersionPrefix, settings.VersionPrefix);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetVersionPrefix(VersionPrefix);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetVersionSuffixMethod
+        {
+            private const string VersionSuffix = "test";
+
+            [Fact]
+            public void Should_Set_VersionSuffix()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "VersionSuffix";
+
+                // When
+                settings.SetVersionSuffix(VersionSuffix);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(VersionSuffix, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(VersionSuffix, settings.VersionSuffix);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetVersionSuffix(VersionSuffix);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetFileVersionMethod
+        {
+            private const string FileVersion = "1.0.0.0";
+
+            [Fact]
+            public void Should_Set_FileVersion()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "FileVersion";
+
+                // When
+                settings.SetFileVersion(FileVersion);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(FileVersion, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(FileVersion, settings.FileVersion);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetFileVersion(FileVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetAssemblyVersionMethod
+        {
+            private const string AssemblyVersion = "1.0.0.0";
+
+            [Fact]
+            public void Should_Set_AssemblyVersion()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "AssemblyVersion";
+
+                // When
+                settings.SetAssemblyVersion(AssemblyVersion);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(AssemblyVersion, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(AssemblyVersion, settings.AssemblyVersion);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetAssemblyVersion(AssemblyVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetInformationalVersionMethod
+        {
+            private const string InformationalVersion = "1.0.0-test+7ad03d0";
+
+            [Fact]
+            public void Should_Set_InformationalVersion()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "InformationalVersion";
+
+                // When
+                settings.SetInformationalVersion(InformationalVersion);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(InformationalVersion, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(InformationalVersion, settings.InformationalVersion);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetInformationalVersion(InformationalVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetPackageVersionMethod
+        {
+            private const string PackageVersion = "1.0.0-test";
+
+            [Fact]
+            public void Should_Set_PackageVersion()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "PackageVersion";
+
+                // When
+                settings.SetPackageVersion(PackageVersion);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(PackageVersion, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(PackageVersion, settings.PackageVersion);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetPackageVersion(PackageVersion);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
+        public sealed class TheSetPackageReleaseNotesMethod
+        {
+            private const string PackageReleaseNotes = "1.0.0-test";
+
+            [Fact]
+            public void Should_Set_PackageReleaseNotes()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+                const string key = "PackageReleaseNotes";
+
+                // When
+                settings.SetPackageReleaseNotes(PackageReleaseNotes);
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey(key));
+                Assert.Equal(PackageReleaseNotes, settings.Properties[key].FirstOrDefault());
+                Assert.Equal(PackageReleaseNotes, settings.PackageReleaseNotes);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new MSBuildSettings();
+
+                // When
+                var result = settings.SetPackageReleaseNotes(PackageReleaseNotes);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetContinuousIntegrationBuildMethod
         {
             [Theory]

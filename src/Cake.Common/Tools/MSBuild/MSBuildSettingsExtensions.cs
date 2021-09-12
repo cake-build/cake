@@ -305,6 +305,82 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets the version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="version">The version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <remarks>
+        /// Version will override VersionPrefix and VersionSuffix if set.
+        /// This may also override version settings during packaging.
+        /// </remarks>
+        public static MSBuildSettings SetVersion(this MSBuildSettings settings, string version)
+            => settings.WithProperty("Version", version);
+
+        /// <summary>
+        /// Sets the version prefix.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="versionPrefix">The version prefix.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetVersionPrefix(this MSBuildSettings settings, string versionPrefix)
+            => settings.WithProperty("VersionPrefix", versionPrefix);
+
+        /// <summary>
+        /// Sets the version suffix.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="versionSuffix">The version suffix.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetVersionSuffix(this MSBuildSettings settings, string versionSuffix)
+            => settings.WithProperty("VersionSuffix", versionSuffix);
+
+        /// <summary>
+        /// Sets the file version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileVersion">The file version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetFileVersion(this MSBuildSettings settings, string fileVersion)
+            => settings.WithProperty("FileVersion", fileVersion);
+
+        /// <summary>
+        /// Sets the assembly version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="assemblyVersion">The assembly version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetAssemblyVersion(this MSBuildSettings settings, string assemblyVersion)
+            => settings.WithProperty("AssemblyVersion", assemblyVersion);
+
+        /// <summary>
+        /// Sets the informational version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="informationalVersion">The informational version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetInformationalVersion(this MSBuildSettings settings, string informationalVersion)
+            => settings.WithProperty("InformationalVersion", informationalVersion);
+
+        /// <summary>
+        /// Sets the package version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageVersion">The package version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetPackageVersion(this MSBuildSettings settings, string packageVersion)
+            => settings.WithProperty("PackageVersion", packageVersion);
+
+        /// <summary>
+        /// Sets the package release notes.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageReleaseNotes">The package release notes.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetPackageReleaseNotes(this MSBuildSettings settings, string packageReleaseNotes)
+            => settings.WithProperty("PackageReleaseNotes", packageReleaseNotes);
+
+        /// <summary>
         /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
         /// </summary>
         /// <remarks>

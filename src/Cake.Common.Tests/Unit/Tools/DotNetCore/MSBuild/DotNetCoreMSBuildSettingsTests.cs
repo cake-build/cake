@@ -9,6 +9,222 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
 {
     public sealed class DotNetCoreMSBuildSettingsTests
     {
+        public sealed class TheVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.Version);
+            }
+
+            [Fact]
+            public void Should_Add_Version_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.Version = "1.0.0-test";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("Version"));
+                Assert.True(settings.Properties["Version"].Contains("1.0.0-test"));
+            }
+        }
+
+        public sealed class TheVersionPrefixProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.VersionPrefix);
+            }
+
+            [Fact]
+            public void Should_Add_VersionPrefix_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.VersionPrefix = "1.0.0";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("VersionPrefix"));
+                Assert.True(settings.Properties["VersionPrefix"].Contains("1.0.0"));
+            }
+        }
+
+        public sealed class TheVersionSuffixProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.VersionSuffix);
+            }
+
+            [Fact]
+            public void Should_Add_VersionSuffix_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.VersionSuffix = "test";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("VersionSuffix"));
+                Assert.True(settings.Properties["VersionSuffix"].Contains("test"));
+            }
+        }
+
+        public sealed class TheFileVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.FileVersion);
+            }
+
+            [Fact]
+            public void Should_Add_FileVersion_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.FileVersion = "1.0.0.0";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("FileVersion"));
+                Assert.True(settings.Properties["FileVersion"].Contains("1.0.0.0"));
+            }
+        }
+
+        public sealed class TheAssemblyVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.AssemblyVersion);
+            }
+
+            [Fact]
+            public void Should_Add_AssemblyVersion_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.AssemblyVersion = "1.0.0.0";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("AssemblyVersion"));
+                Assert.True(settings.Properties["AssemblyVersion"].Contains("1.0.0.0"));
+            }
+        }
+
+        public sealed class TheInformationalVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.InformationalVersion);
+            }
+
+            [Fact]
+            public void Should_Add_InformationalVersion_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.InformationalVersion = "1.0.0-test+7ad03d0";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("InformationalVersion"));
+                Assert.True(settings.Properties["InformationalVersion"].Contains("1.0.0-test+7ad03d0"));
+            }
+        }
+
+        public sealed class ThePackageVersionProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.PackageVersion);
+            }
+
+            [Fact]
+            public void Should_Add_PackageVersion_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.PackageVersion = "1.0.0-test";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("PackageVersion"));
+                Assert.True(settings.Properties["PackageVersion"].Contains("1.0.0-test"));
+            }
+        }
+
+        public sealed class ThePackageReleaseNotesProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.PackageReleaseNotes);
+            }
+
+            [Fact]
+            public void Should_Add_PackageReleaseNotes_Property_To_Configuration()
+            {
+                // Given
+                var settings = new DotNetCoreMSBuildSettings();
+
+                // When
+                settings.PackageReleaseNotes = "https://...";
+
+                // Then
+                Assert.True(settings.Properties.ContainsKey("PackageReleaseNotes"));
+                Assert.True(settings.Properties["PackageReleaseNotes"].Contains("https://..."));
+            }
+        }
+
         public sealed class TheDistributedFileLoggerProperty
         {
             [Fact]
