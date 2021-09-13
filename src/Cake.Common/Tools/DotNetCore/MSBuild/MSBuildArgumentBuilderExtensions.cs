@@ -255,6 +255,8 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                     return "15.0";
                 case MSBuildVersion.MSBuild16:
                     return "16.0";
+                case MSBuildVersion.MSBuild17:
+                    return "17.0";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(toolVersion), toolVersion, "Invalid value");
             }
