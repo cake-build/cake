@@ -131,7 +131,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        /// GitReleaseManagerAddAssets("token", "owner", "repo", "0.1.0", "c:/temp/asset1.txt,c:/temp/asset2.txt" new GitReleaseManagerAddAssetsSettings {
+        /// GitReleaseManagerAddAssets("token", "owner", "repo", "0.1.0", "c:/temp/asset1.txt,c:/temp/asset2.txt", new GitReleaseManagerAddAssetsSettings {
         ///     TargetDirectory   = "c:/repo",
         ///     LogFilePath       = "c:/temp/grm.log"
         /// });
@@ -318,8 +318,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         /// <param name="repository">The repository.</param>
         /// <example>
         /// <code>
-        /// GitReleaseManagerLabel("token", "owner", "repo")
-        /// });
+        /// GitReleaseManagerLabel("token", "owner", "repo");
         /// </code>
         /// </example>
         [CakeMethodAlias]
