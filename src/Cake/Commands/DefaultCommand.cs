@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -80,33 +81,8 @@ namespace Cake.Commands
             }
             catch (Exception ex)
             {
-                return LogException(_log, ex);
+                return _log.LogException(ex);
             }
-        }
-
-        private static int LogException<T>(ICakeLog log, T ex)
-            where T : Exception
-        {
-            log = log ?? new CakeBuildLog(
-                new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime())));
-
-            if (log.Verbosity == Verbosity.Diagnostic)
-            {
-                log.Error("Error: {0}", ex);
-            }
-            else
-            {
-                log.Error("Error: {0}", ex.Message);
-                if (ex is AggregateException aex)
-                {
-                    foreach (var exception in aex.Flatten().InnerExceptions)
-                    {
-                        log.Error("\t{0}", exception.Message);
-                    }
-                }
-            }
-
-            return 1;
         }
 
         private BuildHostKind GetBuildHostKind(DefaultCommandSettings settings)

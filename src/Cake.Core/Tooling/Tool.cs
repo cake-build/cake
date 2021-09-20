@@ -115,7 +115,7 @@ namespace Cake.Core.Tooling
             if (exitCode != 0)
             {
                 const string message = "{0}: Process returned an error (exit code {1}).";
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), exitCode));
+                throw new CakeException(exitCode, string.Format(CultureInfo.InvariantCulture, message, GetToolName(), exitCode));
             }
         }
 

@@ -11,6 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>Cake;Script;Build</PackageTags>
     <PackageProjectUrl>https://cakebuild.net</PackageProjectUrl>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <!-- Define .NET Core constants -->

@@ -72,36 +72,11 @@ namespace Cake.Frosting.Internal
             }
             catch (Exception ex)
             {
-                LogException(provider.GetService<ICakeLog>(), ex);
+                provider.GetService<ICakeLog>().LogException(ex);
                 return -1;
             }
 
             return 0;
-        }
-
-        private static int LogException<T>(ICakeLog log, T ex)
-            where T : Exception
-        {
-            log = log ?? new CakeBuildLog(
-                new CakeConsole(new CakeEnvironment(new CakePlatform(), new CakeRuntime())));
-
-            if (log.Verbosity == Verbosity.Diagnostic)
-            {
-                log.Error("Error: {0}", ex);
-            }
-            else
-            {
-                log.Error("Error: {0}", ex.Message);
-                if (ex is AggregateException aex)
-                {
-                    foreach (var exception in aex.Flatten().InnerExceptions)
-                    {
-                        log.Error("\t{0}", exception.Message);
-                    }
-                }
-            }
-
-            return 1;
         }
 
         private static CakeArguments CreateCakeArguments(IRemainingArguments remainingArguments, DefaultCommandSettings settings)

@@ -79,10 +79,29 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk")
     Assert.EndsWith(expect, exception.Message);
 });
 
+Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.CakeException.CustomExitCode")
+    .Does(() =>
+{
+    // Given
+    var script = "throw new CakeException(42);";
+    var expect = 42;
+
+    // When
+     var exception = Record.Exception(
+        () => CakeExecuteExpression(script)
+    );
+
+    // Then
+    Assert.NotNull(exception);
+    Assert.IsType<CakeException>(exception);
+    Assert.Equal(expect, (exception as CakeException)?.ExitCode);
+});
+
 Task("Cake.Common.Tools.Cake.CakeAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.Ok")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.NotOk")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.Ok")
-    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk");
+    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk")
+    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.CakeException.CustomExitCode");
