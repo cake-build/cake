@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Cake.NuGet</AssemblyName>
-    <TargetFrameworks>net461;netstandard2.0;net5.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0;net5.0;net6.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -29,16 +29,7 @@
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.0-preview.7.21377.19" GeneratePathProperty="true">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-    <EmbeddedResource Include="$(PkgMicrosoft_NETCore_Platforms)\runtime.json">
-      <Link>runtime.json</Link>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+  <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.0-preview.7.21377.19" GeneratePathProperty="true">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>

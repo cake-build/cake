@@ -4,7 +4,7 @@
     <AssemblyName>Cake</AssemblyName>
     <OutputType>Exe</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.0;netcoreapp3.1;net5.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(PackAsTool)' != 'true'">
@@ -30,7 +30,7 @@
 
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.11.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.0.0-4.final" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="5.0.0" />
     <PackageReference Include="Autofac" Version="6.2.0" />

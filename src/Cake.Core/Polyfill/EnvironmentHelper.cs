@@ -146,7 +146,7 @@ namespace Cake.Core.Polyfill
 
             var assemblyPath = typeof(System.Runtime.GCSettings)?.GetTypeInfo()
                 ?.Assembly
-#if NET5_0
+#if NET5_0_OR_GREATER
                 ?.Location;
 #else
 #pragma warning disable 0618
