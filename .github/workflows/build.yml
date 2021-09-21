@@ -21,20 +21,15 @@ jobs:
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Install .NET Core SDK 2.1.816
+      - name: Install .NET Core SDK 2.1.x
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '2.1.816'
+          dotnet-version: '2.1.x'
 
-      - name: Install .NET Core SDK 3.1.409
+      - name: Install .NET Core SDK 3.1.x
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.409'
-
-      - name: Install .NET Core SDK 5.0.203
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.203'
+          dotnet-version: '3.1.x'
 
       - name: Install .NET Core SDK (global.json)
         uses: actions/setup-dotnet@v1
