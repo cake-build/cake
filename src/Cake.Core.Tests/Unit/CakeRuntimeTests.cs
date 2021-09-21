@@ -40,7 +40,9 @@ namespace Cake.Core.Tests.Unit
                 Assert.Equal(".NETStandard,Version=v2.0", framework.FullName);
 #else
                 var expect = string.Concat(".NETCoreApp,Version=v",
-#if NET5_0
+#if NET6_0
+                                "6.0");
+#elif NET5_0
                                 "5.0");
 #elif NETCOREAPP2_0
                                 "2.0");
@@ -64,6 +66,7 @@ namespace Cake.Core.Tests.Unit
                             case ".NETCoreApp,Version=v3.0":
                             case ".NETCoreApp,Version=v3.1":
                             case ".NETCoreApp,Version=v5.0":
+                            case ".NETCoreApp,Version=v6.0":
                                 {
                                     TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
                                     expect = framework.FullName;
@@ -79,6 +82,7 @@ namespace Cake.Core.Tests.Unit
                             case ".NETCoreApp,Version=v3.0":
                             case ".NETCoreApp,Version=v3.1":
                             case ".NETCoreApp,Version=v5.0":
+                            case ".NETCoreApp,Version=v6.0":
                             {
                                 TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
                                 expect = framework.FullName;
@@ -93,6 +97,7 @@ namespace Cake.Core.Tests.Unit
                         {
                             case ".NETCoreApp,Version=v3.1":
                             case ".NETCoreApp,Version=v5.0":
+                            case ".NETCoreApp,Version=v6.0":
                             {
                                 TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
                                 expect = framework.FullName;
@@ -106,6 +111,20 @@ namespace Cake.Core.Tests.Unit
                         switch (framework.FullName)
                         {
                             case ".NETCoreApp,Version=v5.0":
+                            case ".NETCoreApp,Version=v6.0":
+                                {
+                                    TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
+                                    expect = framework.FullName;
+                                    break;
+                                }
+                        }
+                        break;
+                    }
+                    case ".NETCoreApp,Version=v5.0":
+                    {
+                        switch (framework.FullName)
+                        {
+                            case ".NETCoreApp,Version=v6.0":
                                 {
                                     TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
                                     expect = framework.FullName;
