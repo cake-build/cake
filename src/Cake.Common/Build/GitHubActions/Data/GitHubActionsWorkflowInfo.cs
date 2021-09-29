@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Build.GitHubActions.Data
 {
@@ -27,6 +28,14 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// The unique identifier of the action.
         /// </value>
         public string Action => GetEnvironmentString("GITHUB_ACTION");
+
+        /// <summary>
+        /// Gets the path where your action is located. You can use this path to access files located in the same repository as your action. This variable is only supported in composite run steps actions.
+        /// </summary>
+        /// <value>
+        /// The path where your action is located. You can use this path to access files located in the same repository as your action. This variable is only supported in composite run steps actions.
+        /// </value>
+        public DirectoryPath ActionPath => GetEnvironmentDirectoryPath("GITHUB_ACTION_PATH");
 
         /// <summary>
         /// Gets the name of the person or app that initiated the workflow.
@@ -66,7 +75,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The path of the file with the complete webhook event payload.
         /// </value>
-        public string EventPath => GetEnvironmentString("GITHUB_EVENT_PATH");
+        public FilePath EventPath => GetEnvironmentFilePath("GITHUB_EVENT_PATH");
 
         /// <summary>
         /// Gets the GraphQL API URL.
@@ -162,6 +171,6 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The GitHub workspace directory path.
         /// </value>
-        public string Workspace => GetEnvironmentString("GITHUB_WORKSPACE");
+        public DirectoryPath Workspace => GetEnvironmentDirectoryPath("GITHUB_WORKSPACE");
     }
 }

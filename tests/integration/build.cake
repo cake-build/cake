@@ -7,6 +7,7 @@
 #load "setup.cake"
 #load "teardown.cake"
 #load "./Cake.Common/ArgumentAliases.cake"
+#load "./Cake.Common/Build/BuildSystemAliases.cake"
 #load "./Cake.Common/EnvironmentAliases.cake"
 #load "./Cake.Common/Diagnostics/LoggingAliases.cake"
 #load "./Cake.Common/IO/DirectoryAliases.cake"
@@ -67,6 +68,7 @@ Task("Cake.Core")
 
 Task("Cake.Common")
     .IsDependentOn("Cake.Common.ArgumentAliases")
+    .IsDependentOn("Cake.Common.Build.BuildSystemAliases")
     .IsDependentOn("Cake.Common.EnvironmentAliases")
     .IsDependentOn("Cake.Common.Diagnostics.LoggingAliases")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases")

@@ -3,8 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Build.GitHubActions.Commands;
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Build.GitHubActions
 {
@@ -19,10 +21,12 @@ namespace Cake.Common.Build.GitHubActions
         /// Initializes a new instance of the <see cref="GitHubActionsProvider"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public GitHubActionsProvider(ICakeEnvironment environment)
+        /// <param name="fileSystem">The file system.</param>
+        public GitHubActionsProvider(ICakeEnvironment environment, IFileSystem fileSystem)
         {
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment = new GitHubActionsEnvironmentInfo(environment);
+            Commands = new GitHubActionsCommands(environment, fileSystem, Environment, _ => new System.Net.Http.HttpClient());
         }
 
         /// <inheritdoc/>
@@ -30,5 +34,8 @@ namespace Cake.Common.Build.GitHubActions
 
         /// <inheritdoc/>
         public GitHubActionsEnvironmentInfo Environment { get; }
+
+        /// <inheritdoc/>
+        public GitHubActionsCommands Commands { get; }
     }
 }

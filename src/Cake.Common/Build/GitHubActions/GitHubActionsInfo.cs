@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Build.GitHubActions
 {
@@ -24,13 +25,37 @@ namespace Cake.Common.Build.GitHubActions
         }
 
         /// <summary>
-        /// Gets an environment variable as a <see cref="System.String"/>.
+        /// Gets an environment variable as a <see cref="string"/>.
         /// </summary>
         /// <param name="variable">The environment variable name.</param>
         /// <returns>The environment variable.</returns>
         protected string GetEnvironmentString(string variable)
         {
             return _environment.GetEnvironmentVariable(variable) ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets an environment variable as a <see cref="DirectoryPath"/>.
+        /// </summary>
+        /// <param name="variable">The environment variable name.</param>
+        /// <returns>The environment variable.</returns>
+        protected DirectoryPath GetEnvironmentDirectoryPath(string variable)
+        {
+            return _environment.GetEnvironmentVariable(variable) is string value
+                ? DirectoryPath.FromString(value)
+                : null;
+        }
+
+        /// <summary>
+        /// Gets an environment variable as a <see cref="FilePath"/>.
+        /// </summary>
+        /// <param name="variable">The environment variable name.</param>
+        /// <returns>The environment variable.</returns>
+        protected FilePath GetEnvironmentFilePath(string variable)
+        {
+            return _environment.GetEnvironmentVariable(variable) is string value
+                ? FilePath.FromString(value)
+                : null;
         }
 
         /// <summary>

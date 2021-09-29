@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Build.GitHubActions.Data
 {
@@ -21,6 +22,7 @@ namespace Cake.Common.Build.GitHubActions.Data
             Runner = new GitHubActionsRunnerInfo(environment);
             Workflow = new GitHubActionsWorkflowInfo(environment);
             PullRequest = new GitHubActionsPullRequestInfo(environment);
+            Runtime = new GitHubActionsRuntimeInfo(environment);
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// }
         /// </code>
         /// </example>
-        public string Home => GetEnvironmentString("HOME");
+        public DirectoryPath Home => GetEnvironmentDirectoryPath("HOME");
 
         /// <summary>
         /// Gets GitHub Actions runner information.
@@ -201,5 +203,25 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// </code>
         /// </example>
         public GitHubActionsPullRequestInfo PullRequest { get; }
+
+        /// <summary>
+        /// Gets GitHub Actions runtime information.
+        /// </summary>
+        /// <value>
+        /// The GitHub Actions runtime information.
+        /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// // TODO
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// // TODO
+        /// </code>
+        /// </example>
+        public GitHubActionsRuntimeInfo Runtime { get; }
     }
 }

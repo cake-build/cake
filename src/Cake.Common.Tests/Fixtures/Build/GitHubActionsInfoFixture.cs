@@ -10,7 +10,9 @@ namespace Cake.Common.Tests.Fixtures.Build
 {
     internal sealed class GitHubActionsInfoFixture
     {
-        public ICakeEnvironment Environment { get; set; }
+        public const string ActionRuntimeToken = "zht1j5NeW2T5ZsOxncX4CUEiWYhD4ZRwoDghkARk";
+        public const string ActionRuntimeUrl = "https://pipelines.actions.githubusercontent.com/ip0FyYnZXxdEOcOwPHkRsZJd2x6G5XoT486UsAb0/";
+        public ICakeEnvironment Environment { get; }
 
         public GitHubActionsInfoFixture()
         {
@@ -19,12 +21,14 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("GITHUB_ACTIONS").Returns("true");
             Environment.GetEnvironmentVariable("HOME").Returns("/home/runner");
 
+            Environment.GetEnvironmentVariable("RUNNER_NAME").Returns("RunnerName");
             Environment.GetEnvironmentVariable("RUNNER_OS").Returns("Linux");
             Environment.GetEnvironmentVariable("RUNNER_TEMP").Returns("/home/runner/work/_temp");
             Environment.GetEnvironmentVariable("RUNNER_TOOL_CACHE").Returns("/opt/hostedtoolcache");
             Environment.GetEnvironmentVariable("RUNNER_WORKSPACE").Returns("/home/runner/work/cake");
 
             Environment.GetEnvironmentVariable("GITHUB_ACTION").Returns("run1");
+            Environment.GetEnvironmentVariable("GITHUB_ACTION_PATH").Returns("/path/to/action");
             Environment.GetEnvironmentVariable("GITHUB_ACTOR").Returns("dependabot");
             Environment.GetEnvironmentVariable("GITHUB_API_URL").Returns("https://api.github.com");
             Environment.GetEnvironmentVariable("GITHUB_BASE_REF").Returns("master");
@@ -42,6 +46,12 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("GITHUB_SHA").Returns("d1e4f990f57349334368c8253382abc63be02d73");
             Environment.GetEnvironmentVariable("GITHUB_WORKFLOW").Returns("Build");
             Environment.GetEnvironmentVariable("GITHUB_WORKSPACE").Returns("/home/runner/work/cake/cake");
+
+            Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_TOKEN").Returns(ActionRuntimeToken);
+            Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL").Returns(ActionRuntimeUrl);
+            Environment.GetEnvironmentVariable("GITHUB_ENV").Returns("/opt/github.env");
+            Environment.GetEnvironmentVariable("GITHUB_PATH").Returns("/opt/github.path");
+            Environment.WorkingDirectory.Returns("/home/runner/work/cake/cake");
         }
 
         public GitHubActionsRunnerInfo CreateRunnerInfo()
@@ -62,6 +72,11 @@ namespace Cake.Common.Tests.Fixtures.Build
         public GitHubActionsEnvironmentInfo CreateEnvironmentInfo()
         {
             return new GitHubActionsEnvironmentInfo(Environment);
+        }
+
+        public GitHubActionsRuntimeInfo CreateRuntimeInfo()
+        {
+            return new GitHubActionsRuntimeInfo(Environment);
         }
     }
 }
