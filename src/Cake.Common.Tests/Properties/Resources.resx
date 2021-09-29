@@ -1402,4 +1402,30 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
 &lt;entry key="command.executable"&gt;run.cmd&lt;/entry&gt;
 &lt;/properties&gt;</value>
   </data>
+  <data name="Solution_WithProjectUsingAbsolutePath" xml:space="preserve">
+    <value>Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dummy", "C:\project\dummy\src\dummy\dummy.csproj", "{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E70E9E11-7FE4-43FA-8552-347EDAF69F86}
+	EndGlobalSection
+EndGlobal</value>
+  </data>
 </root>

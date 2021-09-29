@@ -157,10 +157,17 @@ namespace Cake.Common.Solution
                 }
                 result[position].Append(c);
             }
+
+            var projectPath = new FilePath(pathBuilder.ToString());
+
+            var projectFullPath = projectPath.IsRelative ?
+                file.Path.GetDirectory().CombineWithFilePath(projectPath) :
+                projectPath;
+
             return new SolutionProject(
                 idBuilder.ToString(),
                 nameBuilder.ToString(),
-                file.Path.GetDirectory().CombineWithFilePath(pathBuilder.ToString()),
+                projectFullPath,
                 projectTypeBuilder.ToString());
         }
 

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
 using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.DotNetCore
@@ -20,5 +21,11 @@ namespace Cake.Common.Tools.DotNetCore
         /// Gets or sets a value indicating whether to not enable diagnostic output.
         /// </summary>
         public bool DiagnosticOutput { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dotnet roll forward policy.
+        /// </summary>
+        [DefaultValue(DotNetCoreRollForward.Minor)]
+        public DotNetCoreRollForward? RollForward { get; set; }
     }
 }
