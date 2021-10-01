@@ -130,6 +130,25 @@ namespace Cake.Common.Tests.Unit.Solution
                 var onlyProjects = result.Projects.Where(x => !(x is SolutionFolder)).ToList();
                 Assert.Equal(3, onlyProjects.Count);
             }
+
+            [Fact]
+            public void Should_Properly_Parse_Projects_With_Absolute_Path()
+            {
+                // Given
+                var fixture = new SolutionParserFixture();
+                var slnFilePath = fixture.WithSolutionFile(Resources.Solution_WithProjectUsingAbsolutePath);
+                var solutionParser = new SolutionParser(fixture.FileSystem, fixture.Environment);
+
+                // When
+                var result = solutionParser.Parse(slnFilePath);
+
+                // Then
+                Assert.NotNull(result);
+                Assert.NotNull(result.Projects);
+                Assert.Single(result.Projects);
+                var onlyProjects = result.Projects.Where(x => !(x is SolutionFolder)).ToList();
+                Assert.Single(onlyProjects);
+            }
         }
     }
 }
