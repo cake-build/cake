@@ -1,0 +1,19 @@
+maintainers:
+  - agc93
+  - daveaglick
+  - devlead
+  - ecampidoglio
+  - gep13
+  - jericho
+  - bjorkstromm
+  - pascalberger
+  - patriksvensson
+  - augustoproiete
+  - nils-a
+
+features:
+  - comments
+  - pr_description_required
+  - no_newbies # Derek will consider this rule only during October for Hacktoberfest
+
+contributing_url: https://github.com/cake-build/cake/#contributing
