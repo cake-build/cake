@@ -68,7 +68,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("run", result.Args);
+                Assert.Equal("run --roll-forward Minor", result.Args);
             }
 
             [Fact]
@@ -82,7 +82,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("run --project \"./tools/tool/\" -- --args=\"value\"", result.Args);
+                Assert.Equal("run --project \"./tools/tool/\" --roll-forward Minor -- --args=\"value\"", result.Args);
             }
 
             [Fact]
@@ -97,7 +97,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("run --framework dnxcore50 --configuration Release --runtime win7-x86", result.Args);
+                Assert.Equal("run --framework dnxcore50 --configuration Release --runtime win7-x86 --roll-forward Minor", result.Args);
             }
 
             [Fact]
@@ -111,7 +111,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("--diagnostics run", result.Args);
+                Assert.Equal("--diagnostics run --roll-forward Minor", result.Args);
             }
         }
     }

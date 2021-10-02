@@ -1295,8 +1295,8 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             [InlineData(false, null, MSBuildBinaryLoggerImports.Unspecified, "msbuild")]
             [InlineData(true, null, MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger")]
             [InlineData(true, null, MSBuildBinaryLoggerImports.None, "msbuild /binarylogger:ProjectImports=None")]
-            [InlineData(true, "mylog.binlog", MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger:mylog.binlog")]
-            [InlineData(true, "mylog.binlog", MSBuildBinaryLoggerImports.Embed, "msbuild /binarylogger:mylog.binlog;ProjectImports=Embed")]
+            [InlineData(true, "mylog.binlog", MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger:\"mylog.binlog\"")]
+            [InlineData(true, "mylog.binlog", MSBuildBinaryLoggerImports.Embed, "msbuild /binarylogger:\"mylog.binlog\";ProjectImports=Embed")]
             public void Should_Append_Binary_Logging_If_Specified(bool enabled, string fileName, MSBuildBinaryLoggerImports imports, string args)
             {
                 // Given
@@ -1318,8 +1318,8 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             [Theory]
             [InlineData(null, MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger")]
             [InlineData(null, MSBuildBinaryLoggerImports.None, "msbuild /binarylogger:ProjectImports=None")]
-            [InlineData("mylog.binlog", MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger:mylog.binlog")]
-            [InlineData("mylog.binlog", MSBuildBinaryLoggerImports.Embed, "msbuild /binarylogger:mylog.binlog;ProjectImports=Embed")]
+            [InlineData("mylog.binlog", MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger:\"mylog.binlog\"")]
+            [InlineData("mylog.binlog", MSBuildBinaryLoggerImports.Embed, "msbuild /binarylogger:\"mylog.binlog\";ProjectImports=Embed")]
             public void Should_Append_Binary_Logging_If_Enabled(string fileName, MSBuildBinaryLoggerImports imports, string args)
             {
                 // Given
