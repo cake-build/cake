@@ -91,6 +91,16 @@ namespace Cake.Common.Tools.DotNetCore.Run
                 builder.Append(settings.Runtime);
             }
 
+            // Sources
+            if (settings.Sources != null)
+            {
+                foreach (var source in settings.Sources)
+                {
+                    builder.Append("--source");
+                    builder.AppendQuoted(source);
+                }
+            }
+
             // Arguments
             if (!arguments.IsNullOrEmpty())
             {

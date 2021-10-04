@@ -93,11 +93,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.Runtime = "win7-x86";
+                fixture.Settings.Sources = new[] { "https://api.nuget.org/v3/index.json" };
+
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("run --framework dnxcore50 --configuration Release --runtime win7-x86", result.Args);
+                Assert.Equal("run --framework dnxcore50 --configuration Release --runtime win7-x86 --source \"https://api.nuget.org/v3/index.json\"", result.Args);
             }
 
             [Fact]

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+
 namespace Cake.Common.Tools.DotNetCore.Run
 {
     /// <summary>
@@ -30,6 +32,14 @@ namespace Cake.Common.Tools.DotNetCore.Run
         /// This makes run faster, but requires build to be done before run is executed.
         /// </summary>
         public bool NoBuild { get; set; }
+
+        /// <summary>
+        /// Gets or sets the specified NuGet package sources to use during the run is executed.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.x or newer.
+        /// </remarks>
+        public ICollection<string> Sources { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the target runtime.
