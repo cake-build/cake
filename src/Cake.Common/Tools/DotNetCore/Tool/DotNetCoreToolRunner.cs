@@ -51,12 +51,10 @@ namespace Cake.Common.Tools.DotNetCore.Tool
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            var processSettings = new ProcessSettings();
-
-            if (projectPath != null)
+            var processSettings = new ProcessSettings
             {
-                processSettings.WorkingDirectory = projectPath.GetDirectory();
-            }
+                WorkingDirectory = settings.WorkingDirectory ?? projectPath?.GetDirectory()
+            };
 
             RunCommand(settings, GetArguments(command, arguments, settings), processSettings);
         }
