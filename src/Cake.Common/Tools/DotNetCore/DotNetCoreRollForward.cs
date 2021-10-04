@@ -37,6 +37,6 @@ namespace Cake.Common.Tools.DotNetCore
         /// <summary>
         /// Don't roll forward. Only bind to specified version.
         /// </summary>
-        Disable
+        Disable,
     }
 }

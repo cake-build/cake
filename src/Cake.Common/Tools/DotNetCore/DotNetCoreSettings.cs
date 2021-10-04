@@ -24,6 +24,6 @@ namespace Cake.Common.Tools.DotNetCore
         /// <summary>
         /// Gets or sets the dotnet roll forward policy.
         /// </summary>
-        public DotNetCoreRollForward RollForward { get; set; }
+        public DotNetCoreRollForward? RollForward { get; set; }
     }
 }

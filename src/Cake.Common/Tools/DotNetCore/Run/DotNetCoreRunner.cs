@@ -92,8 +92,11 @@ namespace Cake.Common.Tools.DotNetCore.Run
             }
 
             // Roll Forward Policy
-            builder.Append("--roll-forward");
-            builder.Append(settings.RollForward.ToString());
+            if (!(settings.RollForward is null))
+            {
+                builder.Append("--roll-forward");
+                builder.Append(settings.RollForward.ToString());
+            }
 
             // Arguments
             if (!arguments.IsNullOrEmpty())

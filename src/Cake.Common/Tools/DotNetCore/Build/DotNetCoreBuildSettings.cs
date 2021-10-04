@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core.IO;
 
@@ -64,6 +65,14 @@ namespace Cake.Common.Tools.DotNetCore.Build
         /// Available since .NET Core 3.0 SDK.
         /// </remarks>
         public bool NoLogo { get; set; }
+
+        /// <summary>
+        /// Gets or sets the specified NuGet package sources to use during the build.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.x or newer.
+        /// </remarks>
+        public ICollection<string> Sources { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
