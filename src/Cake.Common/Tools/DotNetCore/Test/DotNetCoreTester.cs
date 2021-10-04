@@ -173,6 +173,16 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.Append(settings.Runtime);
             }
 
+            // Sources
+            if (settings.Sources != null)
+            {
+                foreach (var source in settings.Sources)
+                {
+                    builder.Append("--source");
+                    builder.AppendQuoted(source);
+                }
+            }
+
             // Blame
             if (settings.Blame)
             {
