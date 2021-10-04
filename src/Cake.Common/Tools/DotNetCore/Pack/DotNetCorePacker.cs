@@ -136,6 +136,16 @@ namespace Cake.Common.Tools.DotNetCore.Pack
                 builder.Append(settings.Runtime);
             }
 
+            // Sources
+            if (settings.Sources != null)
+            {
+                foreach (var source in settings.Sources)
+                {
+                    builder.Append("--source");
+                    builder.AppendQuoted(source);
+                }
+            }
+
             if (settings.MSBuildSettings != null)
             {
                 builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
