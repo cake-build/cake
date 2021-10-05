@@ -54,7 +54,8 @@ namespace Cake.Common.Tools.NuGet.Pack
                 { "copyright", x => ToString(settings.Copyright) },
                 { "language", x => ToString(settings.Language) },
                 { "tags", x => ToSpaceSeparatedString(settings.Tags) },
-                { "serviceable", x => ToString(settings.Serviceable) }
+                { "serviceable", x => ToString(settings.Serviceable) },
+                { "readme", x => settings.ReadMePath is { } readme ? string.Concat("docs\\", readme.GetFilename().FullPath) : null },
             };
         }
 
@@ -108,17 +109,25 @@ namespace Cake.Common.Tools.NuGet.Pack
         private static void CreateFileElements(XmlDocument document, NuGetPackSettings settings,
             XmlNamespaceManager namespaceManager)
         {
-            if (settings.Files != null && settings.Files.Count > 0)
-            {
-                var filesPath = string.Format(CultureInfo.InvariantCulture,
-                    "//*[local-name()='package']/*[local-name()='files']");
-                var filesElement = document.SelectSingleNode(filesPath, namespaceManager);
-                if (filesElement == null)
-                {
-                    var package = GetPackageElement(document);
-                    filesElement = document.CreateAndAppendElement(package, "files");
-                }
+            var hasFiles = settings.Files != null && settings.Files.Count > 0;
+            var hasReadMe = settings.ReadMePath != null;
 
+            if (!hasFiles && !hasReadMe)
+            {
+                return;
+            }
+
+            var filesPath = string.Format(CultureInfo.InvariantCulture,
+                "//*[local-name()='package']/*[local-name()='files']");
+            var filesElement = document.SelectSingleNode(filesPath, namespaceManager);
+            if (filesElement == null)
+            {
+                var package = GetPackageElement(document);
+                filesElement = document.CreateAndAppendElement(package, "files");
+            }
+
+            if (hasFiles)
+            {
                 filesElement.RemoveAll();
                 foreach (var file in settings.Files)
                 {
@@ -130,6 +139,13 @@ namespace Cake.Common.Tools.NuGet.Pack
                         fileElement.AddAttributeIfSpecified(file.Target, "target");
                     }
                 }
+            }
+
+            if (hasReadMe)
+            {
+                var fileElement = document.CreateAndAppendElement(filesElement, "file");
+                fileElement.AddAttributeIfSpecified(settings.ReadMePath.FullPath, "src");
+                fileElement.AddAttributeIfSpecified("docs", "target");
             }
         }
 

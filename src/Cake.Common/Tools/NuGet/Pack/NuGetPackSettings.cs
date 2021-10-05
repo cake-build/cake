@@ -272,5 +272,11 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <c>true</c> if the output should be placed in the tool folder inside the NuGet package; otherwise <c>false</c>.
         /// </value>
         public bool OutputToToolFolder { get; set; }
+
+        /// <summary>
+        /// Gets or sets Path to markdown Markdown (.md) file containing package readme packed into docs folder.
+        /// </summary>
+        /// <value>The readme path.</value>
+        public FilePath ReadMePath { get; set; }
     }
 }

@@ -643,6 +643,33 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Nuspec_Repository", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;TheID&lt;/id&gt;
+        ///    &lt;version&gt;1.0.0&lt;/version&gt;
+        ///    &lt;title&gt;The Title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;description&gt;The Description&lt;/description&gt;
+        ///    &lt;readme&gt;docs\NuGet.org.md&lt;/readme&gt;
+        ///  &lt;/metadata&gt;
+        ///  &lt;files&gt;
+        ///    &lt;file src=&quot;Cake.Core.dll&quot; target=&quot;lib/net45&quot; /&gt;
+        ///    &lt;file src=&quot;Cake.Core.xml&quot; target=&quot;lib/net45&quot; /&gt;
+        ///    &lt;file src=&quot;Cake.Core.pdb&quot; target=&quot;lib/net45&quot; /&gt;
+        ///    &lt;file src=&quot;LICENSE&quot; /&gt;
+        ///    &lt;file src=&quot;../nuspec/NuGet.org.md&quot; target=&quot;docs\&quot; /&gt;
+        ///  &lt;/files&gt;
+        ///&lt;/package&gt;
+        /// </summary>
+        public static string Nuspec_ReadMe {
+            get {
+                return ResourceManager.GetString("Nuspec_ReadMe", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Microsoft Visual Studio Solution File, Format Version 12.00

@@ -899,6 +899,30 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                         Resources.Nuspec_Metadata_WithoutNamespaces_WithTargetFramworkDependencies.NormalizeLineEndings(),
                         result.NuspecContent.NormalizeLineEndings());
                 }
+
+                [Fact]
+                public void Should_Add_ReadMe_Element_To_Nuspec_If_Missing()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.WithNuSpecXml(Resources.Nuspec_NoMetadataElement);
+
+                    fixture.Settings.Id = "TheID";
+                    fixture.Settings.Version = "1.0.0";
+                    fixture.Settings.Title = "The Title";
+                    fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                    fixture.Settings.Owners = new[] { "Owner #1", "Owner #2" };
+                    fixture.Settings.Description = "The Description";
+                    fixture.Settings.ReadMePath = "../nuspec/NuGet.org.md";
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(
+                        Resources.Nuspec_ReadMe.NormalizeLineEndings(),
+                        result.NuspecContent.NormalizeLineEndings());
+                }
             }
 
             public sealed class WithProjectFile
