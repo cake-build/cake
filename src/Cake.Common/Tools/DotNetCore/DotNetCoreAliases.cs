@@ -9,6 +9,7 @@ using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
+using Cake.Common.Tools.DotNetCore.Format;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.DotNetCore.NuGet.Delete;
 using Cake.Common.Tools.DotNetCore.NuGet.Push;
@@ -1580,6 +1581,120 @@ namespace Cake.Common.Tools.DotNetCore
             var buildServer = new DotNetCoreBuildServer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
 
             buildServer.Shutdown(settings ?? new DotNetCoreBuildServerSettings());
+        }
+
+
+
+
+
+
+
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
+        public static void DotNetCoreFormat(this ICakeContext context, string project)
+        {
+            context.DotNetCoreFormat(project, null);
+        }
+
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
+        public static void DotNetCoreFormat(this ICakeContext context, string project, DotNetCoreFormatSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetCoreFormatSettings();
+            }
+
+            var formater = new DotNetCoreFormater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formater.Format(project, settings);
+        }
+
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
+        public static void DotNetCoreFormatWhitespace(this ICakeContext context, string project)
+        {
+            context.DotNetCoreFormatWhitespace(project, null);
+        }
+
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
+        public static void DotNetCoreFormatWhitespace(this ICakeContext context, string project, DotNetCoreFormatSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetCoreFormatSettings();
+            }
+
+            var formater = new DotNetCoreFormater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formater.Whitespace(project, settings);
+        }
+
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
+        public static void DotNetCoreFormatStyle(this ICakeContext context, string project)
+        {
+            context.DotNetCoreFormatStyle(project, null);
+        }
+
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
+        public static void DotNetCoreFormatStyle(this ICakeContext context, string project, DotNetCoreFormatSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetCoreFormatSettings();
+            }
+
+            var formater = new DotNetCoreFormater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formater.Style(project, settings);
+        }
+
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
+        public static void DotNetCoreFormatAnalyzers(this ICakeContext context, string project)
+        {
+            context.DotNetCoreFormatAnalyzers(project, null);
+        }
+
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
+        public static void DotNetCoreFormatAnalyzers(this ICakeContext context, string project, DotNetCoreFormatSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetCoreFormatSettings();
+            }
+
+            var formater = new DotNetCoreFormater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formater.Analyzers(project, settings);
         }
     }
 }
