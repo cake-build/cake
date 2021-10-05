@@ -20,5 +20,10 @@ namespace Cake.Common.Tools.DotNetCore
         /// Gets or sets a value indicating whether to not enable diagnostic output.
         /// </summary>
         public bool DiagnosticOutput { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dotnet roll forward policy.
+        /// </summary>
+        public DotNetCoreRollForward? RollForward { get; set; }
     }
 }

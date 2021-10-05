@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Run;
+using Cake.Common.Tools.DotNetCore;
 using Cake.Testing;
 using Xunit;
 
@@ -94,12 +95,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 fixture.Settings.Configuration = "Release";
                 fixture.Settings.Runtime = "win7-x86";
                 fixture.Settings.Sources = new[] { "https://api.nuget.org/v3/index.json" };
+                fixture.Settings.RollForward = DotNetCoreRollForward.Major;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("run --framework dnxcore50 --configuration Release --runtime win7-x86 --source \"https://api.nuget.org/v3/index.json\"", result.Args);
+                Assert.Equal("run --framework dnxcore50 --configuration Release --runtime win7-x86 --source \"https://api.nuget.org/v3/index.json\" --roll-forward Major", result.Args);
             }
 
             [Fact]
@@ -114,6 +116,26 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
 
                 // Then
                 Assert.Equal("--diagnostics run", result.Args);
+            }
+
+            [Theory]
+            [InlineData(DotNetCoreRollForward.Minor, "run --roll-forward Minor")]
+            [InlineData(DotNetCoreRollForward.LatestPatch, "run --roll-forward LatestPatch")]
+            [InlineData(DotNetCoreRollForward.Major, "run --roll-forward Major")]
+            [InlineData(DotNetCoreRollForward.LatestMinor, "run --roll-forward LatestMinor")]
+            [InlineData(DotNetCoreRollForward.LatestMajor, "run --roll-forward LatestMajor")]
+            [InlineData(DotNetCoreRollForward.Disable, "run --roll-forward Disable")]
+            public void Should_Add_RollForward_Arguments(DotNetCoreRollForward rollForward, string expected)
+            {
+                // Given
+                var fixture = new DotNetCoreRunnerFixture();
+                fixture.Settings.RollForward = rollForward;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
             }
         }
     }
