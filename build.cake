@@ -196,6 +196,10 @@ Task("Copy-Files")
     // Copy icon
     CopyFileToDirectory("./nuspec/cake-medium.png", parameters.Paths.Directories.ArtifactsBinFullFx);
     CopyFileToDirectory("./nuspec/cake-medium.png", parameters.Paths.Directories.ArtifactsBinNetCore);
+
+    // copy NuGet.org-specific ReadMe
+    CopyFileToDirectory("./nuspec/NuGet.org.md", parameters.Paths.Directories.ArtifactsBinFullFx);
+    CopyFileToDirectory("./nuspec/NuGet.org.md", parameters.Paths.Directories.ArtifactsBinNetCore);
 });
 
 Task("Validate-Version")

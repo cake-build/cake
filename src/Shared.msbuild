@@ -12,6 +12,7 @@
     <PackageTags>Cake;Script;Build</PackageTags>
     <PackageProjectUrl>https://cakebuild.net</PackageProjectUrl>
     <LangVersion>8.0</LangVersion>
+    <PackageReadmeFile>NuGet.org.md</PackageReadmeFile>
   </PropertyGroup>
 
   <!-- Define .NET Core constants -->
@@ -26,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SolutionInfo.cs" />
     <None Include="../../LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)"/>
     <None Include="../../nuspec/cake-medium.png" Pack="true" PackagePath=""/>
+    <None Include="../../nuspec/NuGet.org.md" Pack="true" PackagePath=""/>
   </ItemGroup>
 
   <!-- Warnings as errors -->

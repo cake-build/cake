@@ -14,6 +14,7 @@
     <repository type="git" url="https://github.com/cake-build/cake"/>
     <copyright>Copyright (c) .NET Foundation and contributors</copyright>
     <tags>Cake Script Build</tags>
+    <readme>NuGet.org.md</readme>
   </metadata>
   <files>
   </files>
