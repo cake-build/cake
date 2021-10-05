@@ -19,6 +19,17 @@
 
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
+  
+  <!-- 
+  Cake.DotNetTool.Module ships a snupkg and hence can not currently
+  add  PackageReadmeFile - see https://github.com/NuGet/Home/issues/10791
+  This block can be removed when building is done soely using
+  .NET 6 RC2 or later.
+  -->
+  <PropertyGroup>
+    <PackageReadmeFile></PackageReadmeFile>
+  </PropertyGroup>
+   
   <!-- Project references -->
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
