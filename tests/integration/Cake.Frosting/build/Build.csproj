@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.0;net5.0</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.0;net5.0;net6.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
 
     <!-- Make sure start same folder .NET Core CLI and Visual Studio -->

@@ -48,6 +48,8 @@ Task("Cake.Core.Scripting.DefineDirective.Runtime")
                     "3.1",
 #elif NET5_0
                     "5.0",
+#elif NET6_0
+                    "6.0",
 #endif
                     context.Environment.Runtime.BuiltFramework.FullName);
 });
@@ -64,11 +66,11 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
     Assert.True(cake);
 });
 
-#if NET5_0
+#if NET5_0 || NET6_0
     Task("Cake.Core.Scripting.DefineDirective.C#9")
     .Does(() =>
 {
-    // givem
+    // given
     var csharpNine = new CSharpNine(true);
     Assert.True(csharpNine.IsNine);
 });
@@ -76,11 +78,31 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
 public record CSharpNine(bool IsNine);
 #endif
 
+#if NET6_0
+    Task("Cake.Core.Scripting.DefineDirective.C#10")
+    .Does(() =>
+{
+    // Given
+    const string world = "world";
+    const string hello = "Hello";
+
+    // When
+    const string helloWorld = $"{hello} {world}!";
+
+    // Then
+    Assert.Equal("Hello world!", helloWorld);
+});
+
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
-#if NET5_0
+#if NET5_0 || NET6_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#9")
+#endif
+#if NET6_0
+    .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#10")
 #endif
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Defined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.NotDefined")

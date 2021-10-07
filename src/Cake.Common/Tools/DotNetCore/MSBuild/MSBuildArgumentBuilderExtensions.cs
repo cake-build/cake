@@ -110,7 +110,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                 string binaryOptions = null;
                 if (!string.IsNullOrEmpty(settings.BinaryLogger.FileName))
                 {
-                    binaryOptions = settings.BinaryLogger.FileName;
+                    binaryOptions = settings.BinaryLogger.FileName.Quote();
                 }
 
                 if (settings.BinaryLogger.Imports != MSBuildBinaryLoggerImports.Unspecified)
@@ -188,6 +188,13 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             {
                 builder.AppendMSBuildSwitch("nologo");
             }
+
+            // Set Continuous Integration Build?
+            if (settings.ContinuousIntegrationBuild.HasValue)
+            {
+                var continuousIntegrationBuild = settings.ContinuousIntegrationBuild.Value ? "true" : "false";
+                builder.AppendMSBuildSwitch("property", $"ContinuousIntegrationBuild={continuousIntegrationBuild}");
+            }
         }
 
         private static string GetLoggerValue(MSBuildLogger logger)
@@ -248,6 +255,8 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                     return "15.0";
                 case MSBuildVersion.MSBuild16:
                     return "16.0";
+                case MSBuildVersion.MSBuild17:
+                    return "17.0";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(toolVersion), toolVersion, "Invalid value");
             }

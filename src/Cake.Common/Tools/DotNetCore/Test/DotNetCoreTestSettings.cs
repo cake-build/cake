@@ -109,5 +109,13 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Outputs a 'Sequence.xml' file in the current directory that captures the order of execution of test before the crash.
         /// </summary>
         public bool Blame { get; set; }
+
+        /// <summary>
+        /// Gets or sets the specified NuGet package sources to use during testing.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET Core 2.x or newer.
+        /// </remarks>
+        public ICollection<string> Sources { get; set; } = new List<string>();
     }
 }

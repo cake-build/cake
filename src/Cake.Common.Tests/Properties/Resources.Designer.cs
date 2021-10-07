@@ -679,6 +679,26 @@ namespace Cake.Common.Tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Microsoft Visual Studio Solution File, Format Version 12.00
+        ///# Visual Studio Version 16
+        ///VisualStudioVersion = 16.0.31702.278
+        ///MinimumVisualStudioVersion = 10.0.40219.1
+        ///Project(&quot;{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}&quot;) = &quot;dummy&quot;, &quot;C:\project\dummy\src\dummy\dummy.csproj&quot;, &quot;{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}&quot;
+        ///EndProject
+        ///Global
+        ///	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+        ///		Debug|Any CPU = Debug|Any CPU
+        ///		Release|Any CPU = Release|Any CPU
+        ///	EndGlobalSection
+        ///	GlobalSection(ProjectCon [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Solution_WithProjectUsingAbsolutePath {
+            get {
+                return ResourceManager.GetString("Solution_WithProjectUsingAbsolutePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
         ///&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;
         ///&lt;properties&gt;

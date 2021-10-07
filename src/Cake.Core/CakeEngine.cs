@@ -316,9 +316,13 @@ namespace Cake.Core
             {
                 report.AddDelegated(task.Name, stopWatch.Elapsed);
             }
-            else
+            else if (taskException is null)
             {
                 report.Add(task.Name, CakeReportEntryCategory.Task, stopWatch.Elapsed);
+            }
+            else
+            {
+                report.AddFailed(task.Name, stopWatch.Elapsed);
             }
         }
 

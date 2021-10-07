@@ -599,6 +599,73 @@ namespace Cake.Common.Tests.Unit.IO
             }
         }
 
+        public sealed class TheEnsureDoNotExistsMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given
+                var path = new DirectoryPath("/Temp");
+
+                // When
+                var result = Record.Exception(() =>
+                     DirectoryAliases.EnsureDirectoryDoesNotExist(null, path));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Directory_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() =>
+                     DirectoryAliases.EnsureDirectoryDoesNotExist(context, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
+            public void Should_Not_Throw_Exception_Or_Fail_For_Non_Existing_Directory()
+            {
+                // Given
+                var fileSystem = Substitute.For<IFileSystem>();
+
+                var context = Substitute.For<ICakeContext>();
+                context.FileSystem.Returns(fileSystem);
+
+                // When
+                var result = Record.Exception(() =>
+                DirectoryAliases.EnsureDirectoryDoesNotExist(context, "/Temp"));
+
+                // Then
+                Assert.Null(result);
+            }
+
+            [Fact]
+            public void Should_Delete_Directory_If_It_Exists()
+            {
+                // Given
+                var fileSystem = Substitute.For<IFileSystem>();
+                var directory = Substitute.For<IDirectory>();
+                directory.Exists.Returns(true);
+                fileSystem.GetDirectory(Arg.Is<DirectoryPath>(p => p.FullPath == "/Temp")).Returns(directory);
+
+                var context = Substitute.For<ICakeContext>();
+                context.FileSystem.Returns(fileSystem);
+
+                // When
+                DirectoryAliases.EnsureDirectoryDoesNotExist(context, "/Temp");
+
+                // Then
+                directory.Received(1).Delete(true);
+            }
+        }
+
         public sealed class TheDeleteDirectoryMethod
         {
             [Fact]

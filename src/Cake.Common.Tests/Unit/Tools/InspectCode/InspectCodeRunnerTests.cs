@@ -408,6 +408,48 @@ namespace Cake.Common.Tests.Unit.Tools.InspectCode
                 // Then
                 Assert.Equal("\"/config=/Working/config.xml\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Not_Contain_Build_Or_NoBuild_If_Build_Is_Not_Set()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.DoesNotContain("--build", result.Args);
+                Assert.DoesNotContain("--no-build", result.Args);
+            }
+
+            [Fact]
+            public void Should_Contain_Build_If_Build_Is_Set_To_True()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Build = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Contains("--build", result.Args);
+            }
+
+            [Fact]
+            public void Should_Contain_NoBuild_If_Build_Is_Set_To_False()
+            {
+                // Given
+                var fixture = new InspectCodeRunFixture();
+                fixture.Settings.Build = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Contains("--no-build", result.Args);
+            }
         }
     }
 }

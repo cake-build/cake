@@ -127,6 +127,23 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         }
 
         /// <summary>
+        /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
+        /// </summary>
+        /// <remarks>
+        /// For more information see https://devblogs.microsoft.com/dotnet/producing-packages-with-source-link/#deterministic-builds.
+        /// </remarks>
+        /// <param name="settings">The settings.</param>
+        /// <param name="continuousIntegrationBuild">A value indicating whether to normalize stored file paths used when producing deterministic builds.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetContinuousIntegrationBuild(this DotNetCoreMSBuildSettings settings, bool? continuousIntegrationBuild = true)
+        {
+            EnsureSettings(settings);
+
+            settings.ContinuousIntegrationBuild = continuousIntegrationBuild;
+            return settings;
+        }
+
+        /// <summary>
         /// Sets the version of the Toolset to use to build the project.
         /// </summary>
         /// <param name="settings">The settings.</param>
@@ -454,6 +471,15 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             => settings.WithProperty("FileVersion", fileVersion);
 
         /// <summary>
+        /// Sets the assembly version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="assemblyVersion">The assembly version.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetAssemblyVersion(this DotNetCoreMSBuildSettings settings, string assemblyVersion)
+            => settings.WithProperty("AssemblyVersion", assemblyVersion);
+
+        /// <summary>
         /// Sets the informational version.
         /// </summary>
         /// <param name="settings">The settings.</param>
@@ -461,6 +487,24 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetInformationalVersion(this DotNetCoreMSBuildSettings settings, string informationalVersion)
             => settings.WithProperty("InformationalVersion", informationalVersion);
+
+        /// <summary>
+        /// Sets the package version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageVersion">The package version.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetPackageVersion(this DotNetCoreMSBuildSettings settings, string packageVersion)
+            => settings.WithProperty("PackageVersion", packageVersion);
+
+        /// <summary>
+        /// Sets the package release notes.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageReleaseNotes">The package release notes.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetPackageReleaseNotes(this DotNetCoreMSBuildSettings settings, string packageReleaseNotes)
+            => settings.WithProperty("PackageReleaseNotes", packageReleaseNotes);
 
         /// <summary>
         /// Suppress warning CS7035.
