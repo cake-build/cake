@@ -2,21 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cake.Common.Tools.DotNetCore.Format
 {
+    /// <summary>
+    /// .NET Core project formatter.
+    /// </summary>
     public sealed class DotNetCoreFormater : DotNetCoreTool<DotNetCoreFormatSettings>
     {
         private readonly ICakeEnvironment _environment;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DotNetCoreFormater" /> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The environment.</param>
+        /// <param name="processRunner">The process runner.</param>
+        /// <param name="tools">The tool locator.</param>
         public DotNetCoreFormater(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -26,6 +33,11 @@ namespace Cake.Common.Tools.DotNetCore.Format
             _environment = environment;
         }
 
+        /// <summary>
+        /// Format the project or solution code to match editorconfig settings using the specified path and settings.
+        /// </summary>
+        /// <param name="project">The target project path.</param>
+        /// <param name="settings">The settings.</param>
         public void Format(string project, DotNetCoreFormatSettings settings)
         {
             if (settings == null)
@@ -36,6 +48,11 @@ namespace Cake.Common.Tools.DotNetCore.Format
             RunCommand(settings, GetFormatArguments(project, settings));
         }
 
+        /// <summary>
+        /// Format the project or solution code to match editorconfig settings for whitespace using the specified path and settings.
+        /// </summary>
+        /// <param name="project">The target project path.</param>
+        /// <param name="settings">The settings.</param>
         public void Whitespace(string project, DotNetCoreFormatSettings settings)
         {
             if (settings == null)
@@ -46,6 +63,11 @@ namespace Cake.Common.Tools.DotNetCore.Format
             RunCommand(settings, GetWhitespaceArguments(project, settings));
         }
 
+        /// <summary>
+        /// Format the project or solution code to match editorconfig settings for code style using the specified path and settings.
+        /// </summary>
+        /// <param name="project">The target project path.</param>
+        /// <param name="settings">The settings.</param>
         public void Style(string project, DotNetCoreFormatSettings settings)
         {
             if (settings == null)
@@ -56,6 +78,11 @@ namespace Cake.Common.Tools.DotNetCore.Format
             RunCommand(settings, GetStyleArguments(project, settings));
         }
 
+        /// <summary>
+        /// Format the project or solution code to match editorconfig settings for analyzers using the specified path and settings.
+        /// </summary>
+        /// <param name="project">The target project path.</param>
+        /// <param name="settings">The settings.</param>
         public void Analyzers(string project, DotNetCoreFormatSettings settings)
         {
             if (settings == null)
@@ -81,11 +108,7 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Diagnostics
             if (settings.Diagnostics != null)
             {
-                foreach (var diagnostic in settings.Diagnostics)
-                {
-                    builder.Append("--diagnostics");
-                    builder.AppendSwitch(" ", diagnostic); ///////
-                }
+                builder.AppendSwitch("--diagnostics", ":", string.Join(" ", settings.Diagnostics));
             }
 
             // Severity
@@ -110,21 +133,13 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Include
             if (settings.Include != null)
             {
-                foreach (var include in settings.Include)
-                {
-                    builder.Append("--include");
-                    builder.AppendSwitch(" ", include); ///////
-                }
+                builder.AppendSwitch("--include", ":", string.Join(" ", settings.Include));
             }
 
             // Exclude
             if (settings.Exclude != null)
             {
-                foreach (var exclude in settings.Exclude)
-                {
-                    builder.Append("--exclude");
-                    builder.AppendSwitch(" ", exclude); ///////
-                }
+                builder.AppendSwitch("--exclude", ":", string.Join(" ", settings.Exclude));
             }
 
             // Include Generated
@@ -136,18 +151,13 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Binary Log
             if (settings.BinaryLog != null)
             {
-                foreach (var binaryLog in settings.BinaryLog)
-                {
-                    builder.Append("--binarylog");
-                    builder.AppendSwitch(" ", binaryLog); ///////
-                }
+                builder.AppendSwitch("--binarylog", ":", string.Join(" ", settings.BinaryLog));
             }
 
             // Report
-            if (!string.IsNullOrWhiteSpace(settings.Report))
+            if (settings.Report != null)
             {
-                builder.Append("--report");
-                builder.AppendQuoted(settings.Report);
+                builder.AppendSwitchQuoted($"--report", "=", settings.Report.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;
@@ -167,7 +177,6 @@ namespace Cake.Common.Tools.DotNetCore.Format
 
             builder.Append("whitespace");
 
-
             // No Restore
             if (settings.NoRestore)
             {
@@ -183,21 +192,13 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Include
             if (settings.Include != null)
             {
-                foreach (var source in settings.Include)
-                {
-                    builder.Append("--include");
-                    builder.AppendQuoted(source); ///////
-                }
+                builder.AppendSwitch("--include", ":", string.Join(" ", settings.Include));
             }
 
             // Exclude
             if (settings.Exclude != null)
             {
-                foreach (var source in settings.Exclude)
-                {
-                    builder.Append("--exclude");
-                    builder.AppendQuoted(source); ///////
-                }
+                builder.AppendSwitch("--exclude", ":", string.Join(" ", settings.Exclude));
             }
 
             // Include Generated
@@ -209,18 +210,13 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Binary Log
             if (settings.BinaryLog != null)
             {
-                foreach (var source in settings.BinaryLog)
-                {
-                    builder.Append("--binarylog");
-                    builder.AppendQuoted(source); ///////
-                }
+                builder.AppendSwitch("--binarylog", ":", string.Join(" ", settings.BinaryLog));
             }
 
             // Report
-            if (!string.IsNullOrWhiteSpace(settings.Report))
+            if (settings.Report != null)
             {
-                builder.Append("--report");
-                builder.AppendQuoted(settings.Report);
+                builder.AppendSwitchQuoted($"--report", "=", settings.Report.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;
@@ -239,16 +235,6 @@ namespace Cake.Common.Tools.DotNetCore.Format
             }
 
             builder.Append("style");
-
-            // Diagnostics
-            //if (settings.Diagnostics != null)
-            //{
-            //    foreach (var source in settings.Diagnostics)
-            //    {
-            //        builder.Append("--diagnostics");
-            //        builder.AppendQuoted(source); ///////
-            //    }
-            //}
 
             // Severity
             if (settings.Severity.HasValue)
@@ -272,21 +258,13 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Include
             if (settings.Include != null)
             {
-                foreach (var source in settings.Include)
-                {
-                    builder.Append("--include");
-                    builder.AppendQuoted(source); ///////
-                }
+                builder.AppendSwitch("--include", ":", string.Join(" ", settings.Include));
             }
 
             // Exclude
             if (settings.Exclude != null)
             {
-                foreach (var source in settings.Exclude)
-                {
-                    builder.Append("--exclude");
-                    builder.AppendQuoted(source); ///////
-                }
+                builder.AppendSwitch("--exclude", ":", string.Join(" ", settings.Exclude));
             }
 
             // Include Generated
@@ -298,18 +276,13 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Binary Log
             if (settings.BinaryLog != null)
             {
-                foreach (var source in settings.BinaryLog)
-                {
-                    builder.Append("--binarylog");
-                    builder.AppendQuoted(source); ///////
-                }
+                builder.AppendSwitch("--binarylog", ":", string.Join(" ", settings.BinaryLog));
             }
 
             // Report
-            if (!string.IsNullOrWhiteSpace(settings.Report))
+            if (settings.Report != null)
             {
-                builder.Append("--report");
-                builder.AppendQuoted(settings.Report);
+                builder.AppendSwitchQuoted($"--report", "=", settings.Report.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;
@@ -332,11 +305,7 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Diagnostics
             if (settings.Diagnostics != null)
             {
-                foreach (var source in settings.Diagnostics)
-                {
-                    builder.Append("--diagnostics");
-                    builder.AppendQuoted(source); ///////
-                }
+                builder.AppendSwitch("--diagnostics", ":", string.Join(" ", settings.Diagnostics));
             }
 
             // Severity
@@ -361,21 +330,13 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Include
             if (settings.Include != null)
             {
-                foreach (var source in settings.Include)
-                {
-                    builder.Append("--include");
-                    builder.AppendQuoted(source); ///////
-                }
+                builder.AppendSwitch("--include", ":", string.Join(" ", settings.Include));
             }
 
             // Exclude
             if (settings.Exclude != null)
             {
-                foreach (var source in settings.Exclude)
-                {
-                    builder.Append("--exclude");
-                    builder.AppendQuoted(source); ///////
-                }
+                builder.AppendSwitch("--exclude", ":", string.Join(" ", settings.Exclude));
             }
 
             // Include Generated
@@ -387,18 +348,13 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Binary Log
             if (settings.BinaryLog != null)
             {
-                foreach (var source in settings.BinaryLog)
-                {
-                    builder.Append("--binarylog");
-                    builder.AppendQuoted(source); ///////
-                }
+                builder.AppendSwitch("--binarylog", ":", string.Join(" ", settings.BinaryLog));
             }
 
             // Report
-            if (!string.IsNullOrWhiteSpace(settings.Report))
+            if (settings.Report != null)
             {
-                builder.Append("--report");
-                builder.AppendQuoted(settings.Report);
+                builder.AppendSwitchQuoted($"--report", "=", settings.Report.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;

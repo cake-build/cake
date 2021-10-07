@@ -1583,12 +1583,16 @@ namespace Cake.Common.Tools.DotNetCore
             buildServer.Shutdown(settings ?? new DotNetCoreBuildServerSettings());
         }
 
-
-
-
-
-
-
+        /// <summary>
+        /// Format code to match editorconfig settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetCoreFormat("./src/*");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
@@ -1597,6 +1601,24 @@ namespace Cake.Common.Tools.DotNetCore
             context.DotNetCoreFormat(project, null);
         }
 
+        /// <summary>
+        /// Format code to match editorconfig settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreFormatSettings
+        /// {
+        ///     NoRestore = true,
+        ///     Include = "Program.cs Utility\Logging.cs",
+        ///     Severity = DotNetCoreSeverity.Error
+        /// };
+        ///
+        /// DotNetCoreFormat("./src/*", settings);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
@@ -1616,6 +1638,16 @@ namespace Cake.Common.Tools.DotNetCore
             formater.Format(project, settings);
         }
 
+        /// <summary>
+        /// Format code to match editorconfig settings for whitespace.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetCoreFormatWhitespace("./src/*");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
@@ -1624,6 +1656,23 @@ namespace Cake.Common.Tools.DotNetCore
             context.DotNetCoreFormatWhitespace(project, null);
         }
 
+        /// <summary>
+        /// Format code to match editorconfig settings for whitespace.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreFormatSettings
+        /// {
+        ///     NoRestore = true,
+        ///     Include = "Program.cs Utility\Logging.cs"
+        /// };
+        ///
+        /// DotNetCoreFormatWhitespace("./src/*", settings);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
@@ -1643,6 +1692,16 @@ namespace Cake.Common.Tools.DotNetCore
             formater.Whitespace(project, settings);
         }
 
+        /// <summary>
+        /// Format code to match editorconfig settings for code style.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetCoreFormatStyle("./src/*");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
@@ -1651,6 +1710,23 @@ namespace Cake.Common.Tools.DotNetCore
             context.DotNetCoreFormatStyle(project, null);
         }
 
+        /// <summary>
+        /// Format code to match editorconfig settings for code style.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreFormatSettings
+        /// {
+        ///     NoRestore = true,
+        ///     Include = "Program.cs Utility\Logging.cs"
+        /// };
+        ///
+        /// DotNetCoreFormatStyle("./src/*", settings);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
@@ -1670,6 +1746,16 @@ namespace Cake.Common.Tools.DotNetCore
             formater.Style(project, settings);
         }
 
+        /// <summary>
+        /// Format code to match editorconfig settings for analyzers.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetCoreFormatAnalyzers("./src/*");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
@@ -1678,6 +1764,23 @@ namespace Cake.Common.Tools.DotNetCore
             context.DotNetCoreFormatAnalyzers(project, null);
         }
 
+        /// <summary>
+        /// Format code to match editorconfig settings for analyzers.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCoreFormatSettings
+        /// {
+        ///     NoRestore = true,
+        ///     Include = "Program.cs Utility\Logging.cs"
+        /// };
+        ///
+        /// DotNetCoreFormatAnalyzers("./src/*", settings);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
