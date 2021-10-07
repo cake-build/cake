@@ -5,10 +5,12 @@
 using System;
 using System.Collections.Generic;
 using Cake.Common.IO;
+using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Tool;
+using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.DotNetCore.Run;
@@ -106,6 +108,61 @@ namespace Cake.Common.Tools.DotNet
 
             var executor = new DotNetCoreExecutor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             executor.Execute(assemblyPath, arguments, settings);
+        }
+
+        /// <summary>
+        /// Cleans a project's output.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project's path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetClean("./src/project");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Clean")]
+        public static void DotNetClean(this ICakeContext context, string project)
+        {
+            context.DotNetClean(project, null);
+        }
+
+        /// <summary>
+        /// Cleans a project's output.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The projects path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetCleanSettings
+        /// {
+        ///     Framework = "netcoreapp2.0",
+        ///     Configuration = "Debug",
+        ///     OutputDirectory = "./artifacts/"
+        /// };
+        ///
+        /// DotNetClean("./src/project", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Clean")]
+        public static void DotNetClean(this ICakeContext context, string project, DotNetCleanSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetCleanSettings();
+            }
+
+            var cleaner = new DotNetCoreCleaner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            cleaner.Clean(project, settings);
         }
 
         /// <summary>

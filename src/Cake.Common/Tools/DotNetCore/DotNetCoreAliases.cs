@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.Run;
@@ -660,6 +661,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreClean is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetClean(ICakeContext, string)" /> instead.
         /// Cleans a project's output.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -672,12 +674,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Clean")]
+        [Obsolete("DotNetCoreClean is obsolete and will be removed in a future release. Use DotNetClean instead.")]
         public static void DotNetCoreClean(this ICakeContext context, string project)
         {
-            context.DotNetCoreClean(project, null);
+            context.DotNetClean(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreClean is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetClean(ICakeContext, string, DotNetCleanSettings)" /> instead.
         /// Cleans a project's output.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -698,20 +702,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Clean")]
+        [Obsolete("DotNetCoreClean is obsolete and will be removed in a future release. Use DotNetClean instead.")]
         public static void DotNetCoreClean(this ICakeContext context, string project, DotNetCoreCleanSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreCleanSettings();
-            }
-
-            var cleaner = new DotNetCoreCleaner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            cleaner.Clean(project, settings);
+            context.DotNetClean(project, settings);
         }
 
         /// <summary>
