@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Execute;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -12,7 +14,7 @@ namespace Cake.Common.Tools.DotNetCore.Execute
     /// <summary>
     /// .NET Core assembly executor.
     /// </summary>
-    public sealed class DotNetCoreExecutor : DotNetCoreTool<DotNetCoreSettings>
+    public sealed class DotNetCoreExecutor : DotNetTool<DotNetSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -38,7 +40,7 @@ namespace Cake.Common.Tools.DotNetCore.Execute
         /// <param name="assemblyPath">The assembly path.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="settings">The settings.</param>
-        public void Execute(FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetCoreExecuteSettings settings)
+        public void Execute(FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetExecuteSettings settings)
         {
             if (assemblyPath == null)
             {
@@ -52,7 +54,7 @@ namespace Cake.Common.Tools.DotNetCore.Execute
             RunCommand(settings, GetArguments(assemblyPath, arguments, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetCoreExecuteSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetExecuteSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
