@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8615F41E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{DD6045D3-D869-48FE-9BB1-9F61EF73F192}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake", "Cake\Cake.csproj", "{CE174FEE-35AB-4B01-A88A-EFCC9147C220}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Core", "Cake.Core\Cake.Core.csproj", "{979E80D3-9A69-4CDA-A87E-5C696C60FA16}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Testing", "Cake.Testing\Cake.Testing.csproj", "{162561BD-77D2-4465-81B3-31D202932D64}"
@@ -44,8 +46,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.NuGet", "Cake.NuGet\Cake.NuGet.csproj", "{B6792A96-C798-496A-85D4-8DE581C6867A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.NuGet.Tests", "Cake.NuGet.Tests\Cake.NuGet.Tests.csproj", "{2502455D-AEAC-4AD7-B29C-B1D3AFFF9E84}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake", "Cake\Cake.csproj", "{CE174FEE-35AB-4B01-A88A-EFCC9147C220}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Tests", "Cake.Tests\Cake.Tests.csproj", "{15A49638-46DE-4361-B86E-4873BA5EF136}"
 EndProject
@@ -78,6 +78,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE174FEE-35AB-4B01-A88A-EFCC9147C220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE174FEE-35AB-4B01-A88A-EFCC9147C220}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE174FEE-35AB-4B01-A88A-EFCC9147C220}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE174FEE-35AB-4B01-A88A-EFCC9147C220}.Release|Any CPU.Build.0 = Release|Any CPU
 		{979E80D3-9A69-4CDA-A87E-5C696C60FA16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{979E80D3-9A69-4CDA-A87E-5C696C60FA16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{979E80D3-9A69-4CDA-A87E-5C696C60FA16}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -110,10 +114,6 @@ Global
 		{2502455D-AEAC-4AD7-B29C-B1D3AFFF9E84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2502455D-AEAC-4AD7-B29C-B1D3AFFF9E84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2502455D-AEAC-4AD7-B29C-B1D3AFFF9E84}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE174FEE-35AB-4B01-A88A-EFCC9147C220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE174FEE-35AB-4B01-A88A-EFCC9147C220}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE174FEE-35AB-4B01-A88A-EFCC9147C220}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE174FEE-35AB-4B01-A88A-EFCC9147C220}.Release|Any CPU.Build.0 = Release|Any CPU
 		{15A49638-46DE-4361-B86E-4873BA5EF136}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{15A49638-46DE-4361-B86E-4873BA5EF136}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15A49638-46DE-4361-B86E-4873BA5EF136}.Release|Any CPU.ActiveCfg = Release|Any CPU
