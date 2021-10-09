@@ -19,6 +19,12 @@ namespace Cake.Common
         /// Gets the version.
         /// </summary>
         /// <value>The version.</value>
+        public SemVersion SemVersion { get; }
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        /// <value>The version.</value>
         public Version Version { get; }
 
         /// <summary>
@@ -36,16 +42,37 @@ namespace Cake.Common
         /// <summary>
         /// Initializes a new instance of the <see cref="ReleaseNotes"/> class.
         /// </summary>
+        /// <param name="semVersion">The semantic version.</param>
+        /// <param name="notes">The notes.</param>
+        /// <param name="rawVersionLine">The raw text of the version line.</param>
+        public ReleaseNotes(SemVersion semVersion, IEnumerable<string> notes, string rawVersionLine)
+            : this(
+                  semVersion?.AssemblyVersion ?? throw new ArgumentNullException(nameof(semVersion)),
+                  semVersion,
+                  notes,
+                  rawVersionLine)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReleaseNotes"/> class.
+        /// </summary>
         /// <param name="version">The version.</param>
         /// <param name="notes">The notes.</param>
         /// <param name="rawVersionLine">The raw text of the version line.</param>
         public ReleaseNotes(Version version, IEnumerable<string> notes, string rawVersionLine)
+            : this(
+                  version ?? throw new ArgumentNullException(nameof(version)),
+                  new SemVersion(version.Major, version.Minor, version.Build),
+                  notes,
+                  rawVersionLine)
         {
-            if (version == null)
-            {
-                throw new ArgumentNullException(nameof(version));
-            }
-            Version = version;
+        }
+
+        private ReleaseNotes(Version version, SemVersion semVersion, IEnumerable<string> notes, string rawVersionLine)
+        {
+            Version = version ?? throw new ArgumentNullException(nameof(version));
+            SemVersion = semVersion ?? throw new ArgumentNullException(nameof(semVersion));
             RawVersionLine = rawVersionLine;
             _notes = new List<string>(notes ?? Enumerable.Empty<string>());
         }
