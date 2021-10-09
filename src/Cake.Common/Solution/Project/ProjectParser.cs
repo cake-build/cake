@@ -183,6 +183,7 @@ namespace Cake.Common.Solution.Project
                  let nameElement = element.Element(ProjectXElement.Name)
                  let projectElement = element.Element(ProjectXElement.Project)
                  let packageElement = element.Element(ProjectXElement.Package)
+                 let privateElement = element.Element(ProjectXElement.Private)
                  select new ProjectReference
                  {
                      FilePath = filePath,
@@ -190,7 +191,8 @@ namespace Cake.Common.Solution.Project
                      Name = nameElement?.Value,
                      Project = projectElement?.Value,
                      Package = string.IsNullOrEmpty(packageElement?.Value)
-                        ? null : rootPath.CombineWithFilePath(packageElement.Value)
+                        ? null : rootPath.CombineWithFilePath(packageElement.Value),
+                     Private = privateElement == null ? (bool?)null : bool.Parse(privateElement.Value),
                  }).ToArray();
 
             return new ProjectParserResult(

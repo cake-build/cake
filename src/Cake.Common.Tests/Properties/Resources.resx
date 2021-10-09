@@ -798,6 +798,11 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
       &lt;Project&gt;{ABC3F1CB-F84E-43ED-A120-0CCFE344D250}&lt;/Project&gt;
       &lt;Name&gt;Cake.Common&lt;/Name&gt;
     &lt;/ProjectReference&gt;
+    &lt;ProjectReference Include="..\Cake.Common\Cake.Core.csproj"&gt;
+      &lt;Project&gt;{6C54B9D8-A47D-45D8-82EF-3ADAF7FDD530}&lt;/Project&gt;
+      &lt;Name&gt;Cake.Core&lt;/Name&gt;
+      &lt;Private&gt;True&lt;/Private&gt;
+    &lt;/ProjectReference&gt;
   &lt;/ItemGroup&gt;
   &lt;Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" /&gt;
 &lt;/Project&gt;</value>
