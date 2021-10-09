@@ -148,7 +148,7 @@ Task("Run-Unit-Tests")
         () => GetFiles("./src/**/*.Tests.csproj"),
         (parameters, project, context) =>
 {
-    foreach(var framework in new[] { "netcoreapp2.0", "netcoreapp3.0", "net461", "net5.0", "net6.0" })
+    foreach(var framework in new[] { "netcoreapp2.1", "netcoreapp3.1", "net461", "net5.0", "net6.0" })
     {
         FilePath testResultsPath = MakeAbsolute(parameters.Paths.Directories.TestResults
                                     .CombineWithFilePath($"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.xml"));
@@ -182,7 +182,7 @@ Task("Copy-Files")
     // .NET Core
     DotNetCorePublish("./src/Cake/Cake.csproj", new DotNetCorePublishSettings
     {
-        Framework = "netcoreapp2.0",
+        Framework = "netcoreapp2.1",
         NoRestore = true,
         Configuration = parameters.Configuration,
         OutputDirectory = parameters.Paths.Directories.ArtifactsBinNetCore,
@@ -655,7 +655,7 @@ Task("Run-Integration-Tests")
     .DoesForEach<BuildParameters, FilePath>(
         parameters => new[] {
             GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp2.1/**/Cake.dll").Single(),
-            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp3.0/**/Cake.dll").Single(),
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp3.1/**/Cake.dll").Single(),
             GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net5.0/**/Cake.dll").Single(),
             GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net6.0/**/Cake.dll").Single(),
             parameters.Paths.Directories.IntegrationTestsBinFullFx.CombineWithFilePath("Cake.exe"),

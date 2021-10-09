@@ -246,7 +246,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         /// var settings = new DotNetCoreBuildSettings
         /// {
-        ///     Framework = "netcoreapp2.0",
+        ///     Framework = "netcoreapp3.1",
         ///     Configuration = "Debug",
         ///     OutputDirectory = "./artifacts/"
         /// };
@@ -392,7 +392,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         /// var settings = new DotNetCoreRunSettings
         /// {
-        ///     Framework = "netcoreapp2.0",
+        ///     Framework = "netcoreapp3.1",
         ///     Configuration = "Release"
         /// };
         ///
@@ -471,7 +471,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         /// var settings = new DotNetCorePublishSettings
         /// {
-        ///     Framework = "netcoreapp2.0",
+        ///     Framework = "netcoreapp3.1",
         ///     Configuration = "Release",
         ///     OutputDirectory = "./artifacts/"
         /// };
@@ -693,7 +693,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// <code>
         /// var settings = new DotNetCoreCleanSettings
         /// {
-        ///     Framework = "netcoreapp2.0",
+        ///     Framework = "netcoreapp3.1",
         ///     Configuration = "Debug",
         ///     OutputDirectory = "./artifacts/"
         /// };
