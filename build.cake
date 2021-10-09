@@ -556,6 +556,12 @@ Task("Publish-GitHub-Release")
 {
     GitReleaseManagerAddAssets(parameters.GitHub.Token, "cake-build", "cake", parameters.Version.Milestone, parameters.Paths.Files.ZipArtifactPathDesktop.ToString());
     GitReleaseManagerAddAssets(parameters.GitHub.Token, "cake-build", "cake", parameters.Version.Milestone, parameters.Paths.Files.ZipArtifactPathCoreClr.ToString());
+
+    foreach(var package in GetFiles(parameters.Paths.Directories.NuGetRoot + "/*"))
+    {
+        GitReleaseManagerAddAssets(parameters.GitHub.Token, "cake-build", "cake", parameters.Version.Milestone, package.FullPath);
+    }
+
     GitReleaseManagerClose(parameters.GitHub.Token, "cake-build", "cake", parameters.Version.Milestone);
 })
 .OnError<BuildParameters>((exception, parameters) =>
