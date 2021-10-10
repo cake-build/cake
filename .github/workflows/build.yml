@@ -21,11 +21,6 @@ jobs:
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Install .NET Core SDK 2.1.x
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '2.1.x'
-
       - name: Install .NET Core SDK 3.1.x
         uses: actions/setup-dotnet@v1
         with:
@@ -42,9 +37,7 @@ jobs:
             include-prerelease: 'true'
 
       - name: Run Cake script
-        uses: cake-build/cake-action@v1
-        env:
-          DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX: 2
+        uses: cake-build/cake-action@master
         with:
           target: Run-Integration-Tests
-          cake-bootstrap: true
+          cake-version: tool-manifest

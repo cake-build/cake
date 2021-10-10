@@ -7,7 +7,6 @@ init:
 build_script:
   - ps: Invoke-RestMethod -Uri 'https://dot.net/v1/dotnet-install.ps1' -OutFile '.\dotnet-install.ps1'
   - ps: New-Item -Path .\.dotnet -ItemType Directory -Force | Out-Null
-  - ps: .\dotnet-install.ps1 -Channel 2.1 -InstallDir .\.dotnet
   - ps: .\dotnet-install.ps1 -Channel 3.1 -InstallDir .\.dotnet
   - ps: .\dotnet-install.ps1 -Channel 5.0 -InstallDir .\.dotnet
   - ps: .\build.ps1 --target="AppVeyor"

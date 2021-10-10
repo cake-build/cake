@@ -9,7 +9,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if NETCORE
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -58,4 +57,3 @@ namespace Cake.Core.Polyfill
         }
     }
 }
-#endif
