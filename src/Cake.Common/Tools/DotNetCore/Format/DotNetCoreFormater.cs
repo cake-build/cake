@@ -113,7 +113,7 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Binary Log
             if (settings.BinaryLog != null)
             {
-                builder.AppendSwitchQuoted($"--binarylog", settings.Report.MakeAbsolute(_environment).FullPath);
+                builder.AppendSwitchQuoted($"--binarylog", settings.BinaryLog.MakeAbsolute(_environment).FullPath);
             }
 
             // Report

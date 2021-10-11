@@ -71,8 +71,8 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Format
                 fixture.Settings.Include = new[] { "Program.cs", "Utility\\Logging.cs" };
                 fixture.Settings.Exclude = new[] { "Program.cs", "Utility\\Logging.cs" };
                 fixture.Settings.IncludeGenerated = true;
-                fixture.Settings.BinaryLog = "./src/";
-                fixture.Settings.Report = "./src/";
+                fixture.Settings.BinaryLog = "./src/log";
+                fixture.Settings.Report = "./src/report.json";
                 fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
@@ -87,8 +87,80 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Format
                     " --include Program.cs Utility\\Logging.cs" +
                     " --exclude Program.cs Utility\\Logging.cs" +
                     " --include-generated" +
-                    " --binarylog \"/Working/src\"" +
-                    " --report \"/Working/src\"" +
+                    " --binarylog \"/Working/src/log\"" +
+                    " --report \"/Working/src/report.json\"" +
+                    " --verbosity minimal", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Style_Settings()
+            {
+                // Given
+                var fixture = new DotNetCoreFormatterFixture();
+                fixture.Subcommand = "style";
+                fixture.Settings.Diagnostics = new[] { "ID0001" };
+                fixture.Settings.Severity = DotNetCoreSeverity.Info;
+                fixture.Settings.NoRestore = true;
+                fixture.Settings.VerifyNoChanges = true;
+                fixture.Settings.Include = new[] { "Program.cs", "Utility\\Logging.cs" };
+                fixture.Settings.Exclude = new[] { "Program.cs", "Utility\\Logging.cs" };
+                fixture.Settings.IncludeGenerated = true;
+                fixture.Settings.BinaryLog = "./src/log";
+                fixture.Settings.Report = "./src/report.json";
+                fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("format" +
+                    " style" +
+                    " --diagnostics ID0001" +
+                    " --severity info" +
+                    " --no-restore" +
+                    " --verify-no-changes" +
+                    " --include Program.cs Utility\\Logging.cs" +
+                    " --exclude Program.cs Utility\\Logging.cs" +
+                    " --include-generated" +
+                    " --binarylog \"/Working/src/log\"" +
+                    " --report \"/Working/src/report.json\"" +
+                    " --verbosity minimal", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Whithspace_Settings()
+            {
+                // Given
+                var fixture = new DotNetCoreFormatterFixture();
+                fixture.Root = "./src";
+                fixture.Subcommand = "whithspace";
+                fixture.Settings.Diagnostics = new[] { "ID0001" };
+                fixture.Settings.Severity = DotNetCoreSeverity.Info;
+                fixture.Settings.NoRestore = true;
+                fixture.Settings.VerifyNoChanges = true;
+                fixture.Settings.Include = new[] { "Program.cs", "Utility\\Logging.cs" };
+                fixture.Settings.Exclude = new[] { "Program.cs", "Utility\\Logging.cs" };
+                fixture.Settings.IncludeGenerated = true;
+                fixture.Settings.BinaryLog = "./src/log";
+                fixture.Settings.Report = "./src/report.json";
+                fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("format" +
+                    " whithspace" +
+                    " \"./src\"" +
+                    " --diagnostics ID0001" +
+                    " --severity info" +
+                    " --no-restore" +
+                    " --verify-no-changes" +
+                    " --include Program.cs Utility\\Logging.cs" +
+                    " --exclude Program.cs Utility\\Logging.cs" +
+                    " --include-generated" +
+                    " --binarylog \"/Working/src/log\"" +
+                    " --report \"/Working/src/report.json\"" +
                     " --verbosity minimal", result.Args);
             }
         }
