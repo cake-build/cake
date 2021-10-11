@@ -5,6 +5,8 @@
 using System;
 using System.Collections.Generic;
 using Cake.Common.IO;
+using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
@@ -1177,6 +1179,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreMSBuild is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetMSBuild(ICakeContext)" /> instead.
         /// Builds the specified targets in a project file found in the current working directory.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1188,12 +1191,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("MSBuild")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.MSBuild")]
+        [Obsolete("DotNetCoreMSBuild is obsolete and will be removed in a future release. Use DotNetMSBuild instead.")]
         public static void DotNetCoreMSBuild(this ICakeContext context)
         {
-            context.DotNetCoreMSBuild(null, null);
+            context.DotNetMSBuild();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreMSBuild is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetMSBuild(ICakeContext, string)" /> instead.
         /// Builds the specified targets in the project file.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1209,17 +1214,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("MSBuild")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.MSBuild")]
+        [Obsolete("DotNetCoreMSBuild is obsolete and will be removed in a future release. Use DotNetMSBuild instead.")]
         public static void DotNetCoreMSBuild(this ICakeContext context, string projectOrDirectory)
         {
-            if (string.IsNullOrWhiteSpace(projectOrDirectory))
-            {
-                throw new ArgumentNullException(nameof(projectOrDirectory));
-            }
-
-            context.DotNetCoreMSBuild(projectOrDirectory, null);
+            context.DotNetMSBuild(projectOrDirectory);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreMSBuild is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetMSBuild(ICakeContext, DotNetMSBuildSettings)" /> instead.
         /// Builds the specified targets in a project file found in the current working directory.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1238,12 +1240,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("MSBuild")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.MSBuild")]
+        [Obsolete("DotNetCoreMSBuild is obsolete and will be removed in a future release. Use DotNetMSBuild instead.")]
         public static void DotNetCoreMSBuild(this ICakeContext context, DotNetCoreMSBuildSettings settings)
         {
-            context.DotNetCoreMSBuild(null, settings);
+            context.DotNetMSBuild(settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreMSBuild is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetMSBuild(ICakeContext, string, DotNetMSBuildSettings)" /> instead.
         /// Builds the specified targets in the project file.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1267,20 +1271,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("MSBuild")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.MSBuild")]
+        [Obsolete("DotNetCoreMSBuild is obsolete and will be removed in a future release. Use DotNetMSBuild instead.")]
         public static void DotNetCoreMSBuild(this ICakeContext context, string projectOrDirectory, DotNetCoreMSBuildSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreMSBuildSettings();
-            }
-
-            var builder = new DotNetCoreMSBuildBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            builder.Build(projectOrDirectory, settings);
+            context.DotNetMSBuild(projectOrDirectory, settings);
         }
 
         /// <summary>
