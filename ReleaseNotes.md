@@ -1,3 +1,30 @@
+### New in 1.3.0 (Released 2021/10/07)
+
+* 3469 Add support for .NET 6
+* 3493 .NET CLI Build Binary log filenames aren't quoted correctly
+* 3477 parsing of solution files with absolute paths to  projects throws exception
+* 3455 NuGet Resolver native dependencies fails on latest macOS
+* 3352 Cake Frosting Parent DirectoryPath Fails To Combine with Slash
+* 3291 Unable to retrieve target argument with Frosting
+* 2048 DotNetCoreToolSettings.WorkingDirectory is not respected when running DotNetCoreTool
+* 3521 Update Microsoft.NETCore.Platforms to 6.0.0-rc.1.21451.13
+* 3519 Update Spectre.Console to 0.42.0
+* 3503 Add NuGet Sources argument to DotNetCoreTestSettings
+* 3502 Add NuGet Sources argument to DotNetCoreRunSettings
+* 3501 Add NuGet Sources argument to DotNetCorePackSettings
+* 3464 Support MSBuild version 17
+* 3452 Missing option in InspectCodeSettings: `--build` and `--no-build` flags
+* 3449 Add Version, AssemblyVersion, FileVersion, and AssemblyInformationalVersion properties to DotNetCoreMSBuildSettings
+* 3447 Add ContinuousIntegrationBuild to DotNetCoreMSBuildSettings
+* 3445 Highlight failed tasks on summary when Error handler is defined
+* 3237 Allow setting MSBuildToolVersion using custom string - Part 1
+* 3065 Add DOTNET_ROLL_FORWARD setting to DotNetCoreSettings
+* 2165 DotNetCore Build misses Sources settings
+* 2104 Make possibility to set Process Exit Code
+* 1882 DeleteDirectory throws exception if directory doesn't exist
+* 3515 Add a simple README to the packages to be shown on NuGet.org
+* 3466 Fix two typos in GitReleaseManagerAliases documentation
+
 ### New in 1.2.0 (Released 2021/08/29)
 
 * 2690 Consider adding some kind of "GetArguments()" alias, similar to the EnvironmentVariables() one.

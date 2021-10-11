@@ -54,5 +54,13 @@ namespace Cake.Common.Solution.Project
         /// The path of the project file that is being referenced.
         /// </value>
         public FilePath Package { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the reference should be copied to the output folder.
+        /// </summary>
+        /// <value>
+        /// Whether the reference should be copied to the output folder.
+        /// </value>
+        public bool? Private { get; set; }
     }
 }
