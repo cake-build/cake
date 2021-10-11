@@ -1587,7 +1587,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// Format code to match editorconfig settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="project">The project or solution path.</param>
+        /// <param name="root">The project or solution path.</param>
         /// <example>
         /// <code>
         /// DotNetCoreFormat("./src/*");
@@ -1596,16 +1596,16 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
-        public static void DotNetCoreFormat(this ICakeContext context, string project)
+        public static void DotNetCoreFormat(this ICakeContext context, string root)
         {
-            context.DotNetCoreFormat(project, null);
+            context.DotNetCoreFormat(root, null);
         }
 
         /// <summary>
         /// Format code to match editorconfig settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="project">The project or solution path.</param>
+        /// <param name="root">The project or solution path.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -1622,7 +1622,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
-        public static void DotNetCoreFormat(this ICakeContext context, string project, DotNetCoreFormatSettings settings)
+        public static void DotNetCoreFormat(this ICakeContext context, string root, DotNetCoreFormatSettings settings)
         {
             if (context == null)
             {
@@ -1635,14 +1635,14 @@ namespace Cake.Common.Tools.DotNetCore
             }
 
             var formater = new DotNetCoreFormater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            formater.Format(project, settings);
+            formater.Format(root, null, settings);
         }
 
         /// <summary>
         /// Format code to match editorconfig settings for whitespace.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="project">The project or solution path.</param>
+        /// <param name="root">The project or solution path.</param>
         /// <example>
         /// <code>
         /// DotNetCoreFormatWhitespace("./src/*");
@@ -1651,16 +1651,16 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
-        public static void DotNetCoreFormatWhitespace(this ICakeContext context, string project)
+        public static void DotNetCoreFormatWhitespace(this ICakeContext context, string root)
         {
-            context.DotNetCoreFormatWhitespace(project, null);
+            context.DotNetCoreFormatWhitespace(root, null);
         }
 
         /// <summary>
         /// Format code to match editorconfig settings for whitespace.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="project">The project or solution path.</param>
+        /// <param name="root">The project or solution path.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -1676,7 +1676,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
-        public static void DotNetCoreFormatWhitespace(this ICakeContext context, string project, DotNetCoreFormatSettings settings)
+        public static void DotNetCoreFormatWhitespace(this ICakeContext context, string root, DotNetCoreFormatSettings settings)
         {
             if (context == null)
             {
@@ -1689,14 +1689,14 @@ namespace Cake.Common.Tools.DotNetCore
             }
 
             var formater = new DotNetCoreFormater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            formater.Whitespace(project, settings);
+            formater.Format(root, "whitespace", settings);
         }
 
         /// <summary>
         /// Format code to match editorconfig settings for code style.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="project">The project or solution path.</param>
+        /// <param name="root">The project or solution path.</param>
         /// <example>
         /// <code>
         /// DotNetCoreFormatStyle("./src/*");
@@ -1705,16 +1705,16 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
-        public static void DotNetCoreFormatStyle(this ICakeContext context, string project)
+        public static void DotNetCoreFormatStyle(this ICakeContext context, string root)
         {
-            context.DotNetCoreFormatStyle(project, null);
+            context.DotNetCoreFormatStyle(root, null);
         }
 
         /// <summary>
         /// Format code to match editorconfig settings for code style.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="project">The project or solution path.</param>
+        /// <param name="root">The project or solution path.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -1730,7 +1730,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
-        public static void DotNetCoreFormatStyle(this ICakeContext context, string project, DotNetCoreFormatSettings settings)
+        public static void DotNetCoreFormatStyle(this ICakeContext context, string root, DotNetCoreFormatSettings settings)
         {
             if (context == null)
             {
@@ -1743,7 +1743,7 @@ namespace Cake.Common.Tools.DotNetCore
             }
 
             var formater = new DotNetCoreFormater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            formater.Style(project, settings);
+            formater.Format(root, "style", settings);
         }
 
         /// <summary>
@@ -1768,7 +1768,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// Format code to match editorconfig settings for analyzers.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="project">The project or solution path.</param>
+        /// <param name="root">The project or solution path.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -1784,7 +1784,7 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Format")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Format")]
-        public static void DotNetCoreFormatAnalyzers(this ICakeContext context, string project, DotNetCoreFormatSettings settings)
+        public static void DotNetCoreFormatAnalyzers(this ICakeContext context, string root, DotNetCoreFormatSettings settings)
         {
             if (context == null)
             {
@@ -1797,7 +1797,7 @@ namespace Cake.Common.Tools.DotNetCore
             }
 
             var formater = new DotNetCoreFormater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            formater.Analyzers(project, settings);
+            formater.Format(root, "analzers", settings);
         }
     }
 }

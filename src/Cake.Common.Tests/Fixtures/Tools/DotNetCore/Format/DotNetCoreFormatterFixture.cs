@@ -8,12 +8,13 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Format
 {
     internal sealed class DotNetCoreFormatterFixture : DotNetCoreFixture<DotNetCoreFormatSettings>
     {
-        public string Project { get; set; }
+        public string Root { get; set; }
+        public string Subcommand { get; set; }
 
         protected override void RunTool()
         {
             var tool = new DotNetCoreFormater(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Format(Project, Settings);
+            tool.Format(Root, Subcommand, Settings);
         }
     }
 }

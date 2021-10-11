@@ -58,7 +58,7 @@ namespace Cake.Common.Tools.DotNetCore.Format
         /// <summary>
         /// Gets or sets a value indicating whether to log all project or solution load information to a binary log file.
         /// </summary>
-        public ICollection<string> BinaryLog { get; set; } = new List<string>();
+        public FilePath BinaryLog { get; set; }
 
         /// <summary>
         /// Gets or sets a path to a JSON report.

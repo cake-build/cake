@@ -36,79 +36,41 @@ namespace Cake.Common.Tools.DotNetCore.Format
         /// <summary>
         /// Format the project or solution code to match editorconfig settings using the specified path and settings.
         /// </summary>
-        /// <param name="project">The target project path.</param>
+        /// <param name="root">The target project path.</param>
+        /// <param name="subcommand">The subcommand.</param>
         /// <param name="settings">The settings.</param>
-        public void Format(string project, DotNetCoreFormatSettings settings)
+        public void Format(string root, string subcommand, DotNetCoreFormatSettings settings)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            RunCommand(settings, GetFormatArguments(project, settings));
+            RunCommand(settings, GetFormatArguments(root, subcommand, settings));
         }
 
-        /// <summary>
-        /// Format the project or solution code to match editorconfig settings for whitespace using the specified path and settings.
-        /// </summary>
-        /// <param name="project">The target project path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Whitespace(string project, DotNetCoreFormatSettings settings)
-        {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            RunCommand(settings, GetWhitespaceArguments(project, settings));
-        }
-
-        /// <summary>
-        /// Format the project or solution code to match editorconfig settings for code style using the specified path and settings.
-        /// </summary>
-        /// <param name="project">The target project path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Style(string project, DotNetCoreFormatSettings settings)
-        {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            RunCommand(settings, GetStyleArguments(project, settings));
-        }
-
-        /// <summary>
-        /// Format the project or solution code to match editorconfig settings for analyzers using the specified path and settings.
-        /// </summary>
-        /// <param name="project">The target project path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Analyzers(string project, DotNetCoreFormatSettings settings)
-        {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            RunCommand(settings, GetAnalyzersArguments(project, settings));
-        }
-
-        private ProcessArgumentBuilder GetFormatArguments(string path, DotNetCoreFormatSettings settings)
+        private ProcessArgumentBuilder GetFormatArguments(string root, string subcommand, DotNetCoreFormatSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
             builder.Append("format");
 
-            // Specific path?
-            if (path != null)
+            // Subcommand
+            if (!string.IsNullOrWhiteSpace(subcommand))
             {
-                builder.AppendQuoted(path);
+                builder.Append(subcommand);
+            }
+
+            // Specific path?
+            if (root != null)
+            {
+                builder.AppendQuoted(root);
             }
 
             // Diagnostics
-            if (settings.Diagnostics != null)
+            if (settings.Diagnostics != null && settings.Diagnostics.Any())
             {
-                builder.AppendSwitch("--diagnostics", ":", string.Join(" ", settings.Diagnostics));
+                builder.AppendSwitch("--diagnostics", string.Join(" ", settings.Diagnostics));
             }
 
             // Severity
@@ -131,15 +93,15 @@ namespace Cake.Common.Tools.DotNetCore.Format
             }
 
             // Include
-            if (settings.Include != null)
+            if (settings.Include != null && settings.Include.Any())
             {
-                builder.AppendSwitch("--include", ":", string.Join(" ", settings.Include));
+                builder.AppendSwitch("--include", string.Join(" ", settings.Include));
             }
 
             // Exclude
-            if (settings.Exclude != null)
+            if (settings.Exclude != null && settings.Exclude.Any())
             {
-                builder.AppendSwitch("--exclude", ":", string.Join(" ", settings.Exclude));
+                builder.AppendSwitch("--exclude", string.Join(" ", settings.Exclude));
             }
 
             // Include Generated
@@ -151,210 +113,13 @@ namespace Cake.Common.Tools.DotNetCore.Format
             // Binary Log
             if (settings.BinaryLog != null)
             {
-                builder.AppendSwitch("--binarylog", ":", string.Join(" ", settings.BinaryLog));
+                builder.AppendSwitchQuoted($"--binarylog", settings.Report.MakeAbsolute(_environment).FullPath);
             }
 
             // Report
             if (settings.Report != null)
             {
-                builder.AppendSwitchQuoted($"--report", "=", settings.Report.MakeAbsolute(_environment).FullPath);
-            }
-
-            return builder;
-        }
-
-        private ProcessArgumentBuilder GetWhitespaceArguments(string path, DotNetCoreFormatSettings settings)
-        {
-            var builder = CreateArgumentBuilder(settings);
-
-            builder.Append("format");
-
-            // Specific path?
-            if (path != null)
-            {
-                builder.AppendQuoted(path);
-            }
-
-            builder.Append("whitespace");
-
-            // No Restore
-            if (settings.NoRestore)
-            {
-                builder.Append("--no-restore");
-            }
-
-            // Verify No Changes
-            if (settings.VerifyNoChanges)
-            {
-                builder.Append("--verify-no-changes");
-            }
-
-            // Include
-            if (settings.Include != null)
-            {
-                builder.AppendSwitch("--include", ":", string.Join(" ", settings.Include));
-            }
-
-            // Exclude
-            if (settings.Exclude != null)
-            {
-                builder.AppendSwitch("--exclude", ":", string.Join(" ", settings.Exclude));
-            }
-
-            // Include Generated
-            if (settings.IncludeGenerated)
-            {
-                builder.Append("--include-generated");
-            }
-
-            // Binary Log
-            if (settings.BinaryLog != null)
-            {
-                builder.AppendSwitch("--binarylog", ":", string.Join(" ", settings.BinaryLog));
-            }
-
-            // Report
-            if (settings.Report != null)
-            {
-                builder.AppendSwitchQuoted($"--report", "=", settings.Report.MakeAbsolute(_environment).FullPath);
-            }
-
-            return builder;
-        }
-
-        private ProcessArgumentBuilder GetStyleArguments(string path, DotNetCoreFormatSettings settings)
-        {
-            var builder = CreateArgumentBuilder(settings);
-
-            builder.Append("format");
-
-            // Specific path?
-            if (path != null)
-            {
-                builder.AppendQuoted(path);
-            }
-
-            builder.Append("style");
-
-            // Severity
-            if (settings.Severity.HasValue)
-            {
-                builder.Append("--severity");
-                builder.Append(settings.Severity.ToString().ToLower());
-            }
-
-            // No Restore
-            if (settings.NoRestore)
-            {
-                builder.Append("--no-restore");
-            }
-
-            // Verify No Changes
-            if (settings.VerifyNoChanges)
-            {
-                builder.Append("--verify-no-changes");
-            }
-
-            // Include
-            if (settings.Include != null)
-            {
-                builder.AppendSwitch("--include", ":", string.Join(" ", settings.Include));
-            }
-
-            // Exclude
-            if (settings.Exclude != null)
-            {
-                builder.AppendSwitch("--exclude", ":", string.Join(" ", settings.Exclude));
-            }
-
-            // Include Generated
-            if (settings.IncludeGenerated)
-            {
-                builder.Append("--include-generated");
-            }
-
-            // Binary Log
-            if (settings.BinaryLog != null)
-            {
-                builder.AppendSwitch("--binarylog", ":", string.Join(" ", settings.BinaryLog));
-            }
-
-            // Report
-            if (settings.Report != null)
-            {
-                builder.AppendSwitchQuoted($"--report", "=", settings.Report.MakeAbsolute(_environment).FullPath);
-            }
-
-            return builder;
-        }
-
-        private ProcessArgumentBuilder GetAnalyzersArguments(string path, DotNetCoreFormatSettings settings)
-        {
-            var builder = CreateArgumentBuilder(settings);
-
-            builder.Append("format");
-
-            // Specific path?
-            if (path != null)
-            {
-                builder.AppendQuoted(path);
-            }
-
-            builder.Append("analzers");
-
-            // Diagnostics
-            if (settings.Diagnostics != null)
-            {
-                builder.AppendSwitch("--diagnostics", ":", string.Join(" ", settings.Diagnostics));
-            }
-
-            // Severity
-            if (settings.Severity.HasValue)
-            {
-                builder.Append("--severity");
-                builder.Append(settings.Severity.ToString().ToLower());
-            }
-
-            // No Restore
-            if (settings.NoRestore)
-            {
-                builder.Append("--no-restore");
-            }
-
-            // Verify No Changes
-            if (settings.VerifyNoChanges)
-            {
-                builder.Append("--verify-no-changes");
-            }
-
-            // Include
-            if (settings.Include != null)
-            {
-                builder.AppendSwitch("--include", ":", string.Join(" ", settings.Include));
-            }
-
-            // Exclude
-            if (settings.Exclude != null)
-            {
-                builder.AppendSwitch("--exclude", ":", string.Join(" ", settings.Exclude));
-            }
-
-            // Include Generated
-            if (settings.IncludeGenerated)
-            {
-                builder.Append("--include-generated");
-            }
-
-            // Binary Log
-            if (settings.BinaryLog != null)
-            {
-                builder.AppendSwitch("--binarylog", ":", string.Join(" ", settings.BinaryLog));
-            }
-
-            // Report
-            if (settings.Report != null)
-            {
-                builder.AppendSwitchQuoted($"--report", "=", settings.Report.MakeAbsolute(_environment).FullPath);
+                builder.AppendSwitchQuoted($"--report", settings.Report.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;
