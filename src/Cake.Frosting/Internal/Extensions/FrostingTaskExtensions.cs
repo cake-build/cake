@@ -35,7 +35,6 @@ namespace Cake.Frosting.Internal
         public static IEnumerable<ITaskDependency> GetDependencies(this IFrostingTask task)
         {
             var result = new List<ITaskDependency>();
-            result.AddRange(task.GetType().GetCustomAttributes<DependencyAttribute>());
             result.AddRange(task.GetType().GetCustomAttributes<IsDependentOnAttribute>());
             return result;
         }
@@ -43,7 +42,6 @@ namespace Cake.Frosting.Internal
         public static IEnumerable<IReverseTaskDependency> GetReverseDependencies(this IFrostingTask task)
         {
             var result = new List<IReverseTaskDependency>();
-            result.AddRange(task.GetType().GetCustomAttributes<ReverseDependencyAttribute>());
             result.AddRange(task.GetType().GetCustomAttributes<IsDependeeOfAttribute>());
             return result;
         }
