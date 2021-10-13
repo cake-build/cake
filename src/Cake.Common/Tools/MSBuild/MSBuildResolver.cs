@@ -59,7 +59,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             var versions = new[]
             {
-                // MSBuildVersion.MSBuild17, /*Since it's still in preview, do not search unless specified. Uncomment after stable version released*/
+                MSBuildVersion.MSBuild17,
                 MSBuildVersion.MSBuild16,
                 MSBuildVersion.MSBuild15,
                 MSBuildVersion.MSBuild14,
@@ -212,8 +212,7 @@ namespace Cake.Common.Tools.MSBuild
                 "Enterprise",
                 "Professional",
                 "Community",
-                "BuildTools",
-                "Preview" // Remove after stable version released
+                "BuildTools"
             };
 
             var visualStudio2022Path = environment.GetSpecialPath(SpecialPath.ProgramFiles);
