@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
@@ -1391,6 +1392,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTool is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTool(ICakeContext, string)" /> instead.
         /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1403,20 +1405,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Tool")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        [Obsolete("DotNetCoreTool is obsolete and will be removed in a future release. Use DotNetTool instead.")]
         public static void DotNetCoreTool(this ICakeContext context, string command)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var arguments = new ProcessArgumentBuilder();
-            var settings = new DotNetCoreToolSettings();
-
-            context.DotNetCoreTool(null, command, arguments, settings);
+            context.DotNetTool(command);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTool is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTool(ICakeContext, string, DotNetToolSettings)" /> instead.
         /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1435,19 +1431,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Tool")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        [Obsolete("DotNetCoreTool is obsolete and will be removed in a future release. Use DotNetTool instead.")]
         public static void DotNetCoreTool(this ICakeContext context, string command, DotNetCoreToolSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var arguments = new ProcessArgumentBuilder();
-
-            context.DotNetCoreTool(null, command, arguments, settings);
+            context.DotNetTool(command, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTool is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTool(ICakeContext, FilePath, string)" /> instead.
         /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1461,20 +1452,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Tool")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        [Obsolete("DotNetCoreTool is obsolete and will be removed in a future release. Use DotNetTool instead.")]
         public static void DotNetCoreTool(this ICakeContext context, FilePath projectPath, string command)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var arguments = new ProcessArgumentBuilder();
-            var settings = new DotNetCoreToolSettings();
-
-            context.DotNetCoreTool(projectPath, command, arguments, settings);
+            context.DotNetTool(projectPath, command);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTool is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTool(ICakeContext, FilePath, string, ProcessArgumentBuilder)" /> instead.
         /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1489,19 +1474,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Tool")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        [Obsolete("DotNetCoreTool is obsolete and will be removed in a future release. Use DotNetTool instead.")]
         public static void DotNetCoreTool(this ICakeContext context, FilePath projectPath, string command, ProcessArgumentBuilder arguments)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var settings = new DotNetCoreToolSettings();
-
-            context.DotNetCoreTool(projectPath, command, arguments, settings);
+            context.DotNetTool(projectPath, command, arguments);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTool is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTool(ICakeContext, FilePath, string, ProcessArgumentBuilder, DotNetToolSettings)" /> instead.
         /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1517,16 +1497,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Tool")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        [Obsolete("DotNetCoreTool is obsolete and will be removed in a future release. Use DotNetTool instead.")]
         public static void DotNetCoreTool(this ICakeContext context, FilePath projectPath, string command, ProcessArgumentBuilder arguments, DotNetCoreToolSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var runner = new DotNetCoreToolRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-
-            runner.Execute(projectPath, command, arguments, settings);
+            context.DotNetTool(projectPath, command, arguments, settings);
         }
 
         /// <summary>
