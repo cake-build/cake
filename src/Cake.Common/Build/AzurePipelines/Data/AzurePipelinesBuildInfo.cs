@@ -45,7 +45,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         /// The path of the staging directory.
         /// </value>
-        public FilePath ArtifactStagingDirectory => GetEnvironmentString("BUILD_ARTIFACTSTAGINGDIRECTORY");
+        public DirectoryPath ArtifactStagingDirectory => GetEnvironmentString("BUILD_ARTIFACTSTAGINGDIRECTORY");
 
         /// <summary>
         /// Gets the local path on the agent you can use as an output folder for compiled binaries.
@@ -53,7 +53,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         /// The path to the binaries directory.
         /// </value>
-        public FilePath BinariesDirectory => GetEnvironmentString("BUILD_BINARIESDIRECTORY");
+        public DirectoryPath BinariesDirectory => GetEnvironmentString("BUILD_BINARIESDIRECTORY");
 
         /// <summary>
         /// Gets the ID of the record for the completed build.
@@ -119,7 +119,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         /// The source code directory.
         /// </value>
-        public FilePath SourcesDirectory => GetEnvironmentString("BUILD_SOURCESDIRECTORY");
+        public DirectoryPath SourcesDirectory => GetEnvironmentString("BUILD_SOURCESDIRECTORY");
 
         /// <summary>
         /// Gets the local path on the agent where any artifacts are copied to before being pushed to their destination.
@@ -127,7 +127,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         /// The staging directory.
         /// </value>
-        public FilePath StagingDirectory => GetEnvironmentString("BUILD_STAGINGDIRECTORY");
+        public DirectoryPath StagingDirectory => GetEnvironmentString("BUILD_STAGINGDIRECTORY");
 
         /// <summary>
         /// Gets local path on the agent where the test results are created.
@@ -135,7 +135,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         /// The test result directory.
         /// </value>
-        public FilePath TestResultsDirectory => GetEnvironmentString("COMMON_TESTRESULTSDIRECTORY");
+        public DirectoryPath TestResultsDirectory => GetEnvironmentString("COMMON_TESTRESULTSDIRECTORY");
 
         /// <summary>
         /// Gets Azure Pipelines Build TriggeredBy information.
