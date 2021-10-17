@@ -182,25 +182,6 @@ namespace Cake.Common.Tests.Unit.XML
                 Assert.Equal(htm, result, ignoreLineEndingDifferences: true);
             }
 
-            // this feels wrong to be CLR only
-            [RuntimeFact(TestRuntime.Clr)]
-            public void Should_Transform_Xml_String_And_Xsl_String_To_Result_String_With_Utf32Xml_Declaration()
-            {
-                // Given
-                var xml = Resources.XmlTransformation_Xml;
-                var xsl = Resources.XmlTransformation_Xsl;
-                var settings = new XmlTransformationSettings
-                {
-                    Encoding = new UTF32Encoding(false, false, true)
-                };
-
-                // When
-                var result = string.Concat(XmlTransformation.Transform(xsl, xml, settings).Take(39));
-
-                // Then
-                Assert.Equal("<?xml version=\"1.0\" encoding=\"utf-32\"?>", result);
-            }
-
             [Fact]
             public void Should_Throw_If_Xml_Was_Null()
             {

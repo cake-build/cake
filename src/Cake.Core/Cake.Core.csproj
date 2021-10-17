@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Cake.Core</AssemblyName>
-    <TargetFrameworks>net461;netstandard2.0;net5.0;net6.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -12,17 +11,9 @@
   </PropertyGroup>
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
-  <!-- .NET Core packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net461' ">
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-  </ItemGroup>
-  <!-- .NET Framework packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 </Project>

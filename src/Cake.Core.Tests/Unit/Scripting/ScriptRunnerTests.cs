@@ -165,29 +165,6 @@ namespace Cake.Core.Tests.Unit.Scripting
                 Assert.Equal("/build", fixture.Environment.WorkingDirectory.FullPath);
             }
 
-#if !NETCORE
-            [Theory]
-            [InlineData("mscorlib")]
-            [InlineData("System")]
-            [InlineData("System.Core")]
-            [InlineData("System.Data")]
-            [InlineData("System.Xml")]
-            [InlineData("System.Xml.Linq")]
-            public void Should_Add_References_To_Session(string assemblyName)
-            {
-                // Given
-                var fixture = new ScriptRunnerFixture();
-                var runner = fixture.CreateScriptRunner();
-
-                // When
-                runner.Run(fixture.Host, fixture.Script);
-
-                // Then
-                fixture.Session.Received(1).AddReference(
-                    Arg.Is<Assembly>(a => a.FullName.StartsWith(assemblyName + ", ", StringComparison.OrdinalIgnoreCase)));
-            }
-#endif
-
             [Theory]
             [InlineData("System")]
             [InlineData("System.Collections.Generic")]

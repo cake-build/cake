@@ -65,7 +65,6 @@ namespace Cake.Core.Scripting
             var cakeAssemblies = LoadCakeAssemblies(root);
             result.AddRange(cakeAssemblies);
 
-#if NETCORE
             // Load all referenced assemblies.
             foreach (var cakeAssembly in cakeAssemblies)
             {
@@ -74,30 +73,6 @@ namespace Cake.Core.Scripting
                     result.Add(_loader.Load(reference));
                 }
             }
-#else
-            result.Add(typeof(Uri).GetTypeInfo().Assembly); // System
-            result.Add(typeof(System.Xml.XmlReader).GetTypeInfo().Assembly); // System.Xml
-            result.Add(typeof(System.Xml.Linq.XDocument).GetTypeInfo().Assembly); // System.Xml.Linq
-            result.Add(typeof(System.Data.DataTable).GetTypeInfo().Assembly); // System.Data
-
-            // This is just to please Roslyn when running under Mono. See issue https://github.com/dotnet/roslyn/issues/19364
-            result.Add(_loader.Load(new AssemblyName("System.Runtime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"))); // System.Runtime
-            result.Add(_loader.Load(new AssemblyName("System.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"))); // System.Collections
-            result.Add(_loader.Load(new AssemblyName("System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"))); // System.Net.Http
-
-            try
-            {
-                result.Add(_loader.Load(new AssemblyName("netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51"))); // NETStandard.Library
-            }
-            catch
-            {
-                /*
-                 * Silently continue instead and let it blow up during runtime if netstandard assembly was not found.
-                 * TODO: Log that netstandard assembly was not found.
-                 * Unfortunately, logger is not available in this class, and that would be too big of a change for the 0.26.1 hotfix release.
-                 */
-            }
-#endif
 
             // Return the assemblies.
             return result.ToArray();
@@ -167,12 +142,6 @@ namespace Cake.Core.Scripting
 
         // ReSharper disable once ReturnTypeCanBeEnumerable.Local
         private static string[] GetCakeAssemblyNames()
-        {
-#if NETCORE
-            return new[] { "Cake.Core.dll", "Cake.Common.dll", "Spectre.Console.dll" };
-#else
-            return new[] { "Cake.Core.dll", "Cake.Common.dll", "Cake.exe", "Spectre.Console.dll" };
-#endif
-        }
+            => new[] { "Cake.Core.dll", "Cake.Common.dll", "Spectre.Console.dll" };
     }
 }

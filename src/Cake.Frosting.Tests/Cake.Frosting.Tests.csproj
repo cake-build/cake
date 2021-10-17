@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.0;net5.0;net6.0</TargetFrameworks>
-  </PropertyGroup>
-
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
 
   <ItemGroup>
@@ -21,14 +17,6 @@
     </PackageReference>
     <PackageReference Include="NSubstitute" Version="4.2.2" />
     <PackageReference Include="Castle.Core" Version="4.4.1" />
-  </ItemGroup>
-
-  <!-- .NET Framework packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-      <Reference Include="System" />
-      <Reference Include="System.Threading.Tasks" />
-      <Reference Include="Microsoft.CSharp" />
-      <Reference Include="System.IO.Compression" />
   </ItemGroup>
 
   <ItemGroup>

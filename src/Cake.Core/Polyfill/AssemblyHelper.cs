@@ -6,9 +6,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Cake.Core.IO;
-#if NETCORE
 using Cake.Core.Reflection;
-#endif
 
 namespace Cake.Core.Polyfill
 {

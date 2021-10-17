@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Cake.NuGet.Tests</AssemblyName>
-    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <IsCakeTestProject>true</IsCakeTestProject>
   </PropertyGroup>
@@ -24,12 +23,6 @@
     </PackageReference>
     <PackageReference Include="NSubstitute" Version="4.2.2" />
     <PackageReference Include="Castle.Core" Version="4.4.1" />
-  </ItemGroup>
-  <!-- .NET Framework packages -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System" />
-    <Reference Include="System.Threading.Tasks" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
