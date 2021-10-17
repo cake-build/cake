@@ -243,6 +243,19 @@ namespace Cake.Common.Tools.DotNetCore.Publish
                 }
             }
 
+            // Enable compression on the embedded assemblies
+            if (settings.EnableCompressionInSingleFile.HasValue)
+            {
+                if (settings.EnableCompressionInSingleFile.Value)
+                {
+                    builder.Append("-p:EnableCompressionInSingleFile=true");
+                }
+                else
+                {
+                    builder.Append("-p:EnableCompressionInSingleFile=false");
+                }
+            }
+
             // Sources
             if (settings.Sources != null)
             {
