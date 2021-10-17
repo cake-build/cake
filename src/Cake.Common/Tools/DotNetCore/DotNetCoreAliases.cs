@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
@@ -331,6 +332,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRun is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRun(ICakeContext)" /> instead.
         /// Run all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -342,12 +344,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        [Obsolete("DotNetCoreRun is obsolete and will be removed in a future release. Use DotNetRun instead.")]
         public static void DotNetCoreRun(this ICakeContext context)
         {
-            context.DotNetCoreRun(null, null, null);
+            context.DotNetRun();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRun is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRun(ICakeContext, string)" /> instead.
         /// Run project.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -360,12 +364,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        [Obsolete("DotNetCoreRun is obsolete and will be removed in a future release. Use DotNetRun instead.")]
         public static void DotNetCoreRun(this ICakeContext context, string project)
         {
-            context.DotNetCoreRun(project, null, null);
+            context.DotNetRun(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRun is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRun(ICakeContext, string, ProcessArgumentBuilder)" /> instead.
         /// Run project with path and arguments.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -379,12 +385,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        [Obsolete("DotNetCoreRun is obsolete and will be removed in a future release. Use DotNetRun instead.")]
         public static void DotNetCoreRun(this ICakeContext context, string project, ProcessArgumentBuilder arguments)
         {
-            context.DotNetCoreRun(project, arguments, null);
+            context.DotNetRun(project, arguments);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRun is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRun(ICakeContext, string, ProcessArgumentBuilder, DotNetRunSettings)" /> instead.
         /// Run project with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -405,23 +413,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        [Obsolete("DotNetCoreRun is obsolete and will be removed in a future release. Use DotNetRun instead.")]
         public static void DotNetCoreRun(this ICakeContext context, string project, ProcessArgumentBuilder arguments, DotNetCoreRunSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreRunSettings();
-            }
-
-            var runner = new DotNetCoreRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            runner.Run(project, arguments, settings);
+            context.DotNetRun(project, arguments, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRun is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRun(ICakeContext, string, DotNetRunSettings)" /> instead.
         /// Run project with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -441,9 +440,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        [Obsolete("DotNetCoreRun is obsolete and will be removed in a future release. Use DotNetRun instead.")]
         public static void DotNetCoreRun(this ICakeContext context, string project, DotNetCoreRunSettings settings)
         {
-            context.DotNetCoreRun(project, null, settings);
+            context.DotNetRun(project, settings);
         }
 
         /// <summary>
