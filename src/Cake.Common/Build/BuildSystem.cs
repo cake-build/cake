@@ -15,7 +15,6 @@ using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
-using Cake.Common.Build.TFBuild;
 using Cake.Common.Build.TravisCI;
 
 namespace Cake.Common.Build
@@ -40,7 +39,6 @@ namespace Cake.Common.Build
         /// <param name="bitbucketPipelinesProvider">The Bitbucket Pipelines provider.</param>
         /// <param name="goCDProvider">The Go.CD provider.</param>
         /// <param name="gitLabCIProvider">The GitLab CI provider.</param>
-        /// <param name="tfBuildProvider">The TF Build provider.</param>
         /// <param name="gitHubActionsProvider">The GitHub Actions provider.</param>
         /// <param name="azurePipelinesProvider">The Azure Pipelines provider.</param>
         public BuildSystem(
@@ -55,7 +53,6 @@ namespace Cake.Common.Build
             IBitbucketPipelinesProvider bitbucketPipelinesProvider,
             IGoCDProvider goCDProvider,
             IGitLabCIProvider gitLabCIProvider,
-            ITFBuildProvider tfBuildProvider,
             IGitHubActionsProvider gitHubActionsProvider,
             IAzurePipelinesProvider azurePipelinesProvider)
         {
@@ -102,10 +99,6 @@ namespace Cake.Common.Build
             if (gitLabCIProvider == null)
             {
                 throw new ArgumentNullException(nameof(gitLabCIProvider));
-            }
-            if (tfBuildProvider == null)
-            {
-                throw new ArgumentNullException(nameof(tfBuildProvider));
             }
             if (gitHubActionsProvider == null)
             {
