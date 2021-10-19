@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +21,7 @@ namespace Cake.Common
         /// </summary>
         public ReleaseNotesParser()
         {
-            _versionRegex = new Regex(@"([0-9]+\.)+[0-9]+");
+            _versionRegex = new Regex(@"(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[a-z][0-9a-z-]*)?");
         }
 
         /// <summary>
@@ -68,15 +67,14 @@ namespace Cake.Common
                     break;
                 }
 
-                // Parse header.
-                var versionResult = _versionRegex.Match(lines[lineIndex]);
-                if (!versionResult.Success)
+                // Create release notes.
+                var semVer = SemVersion.Zero;
+                var version = SemVersion.TryParse(lines[lineIndex], out semVer);
+                if (!version)
                 {
                     throw new CakeException("Could not parse version from release notes header.");
                 }
 
-                // Create release notes.
-                var version = Version.Parse(versionResult.Value);
                 var rawVersionLine = lines[lineIndex];
 
                 // Increase the line index.
@@ -106,10 +104,10 @@ namespace Cake.Common
                     lineIndex++;
                 }
 
-                result.Add(new ReleaseNotes(version, notes, rawVersionLine));
+                result.Add(new ReleaseNotes(semVer, notes, rawVersionLine));
             }
 
-            return result.OrderByDescending(x => x.Version).ToArray();
+            return result.OrderByDescending(x => x.SemVersion).ToArray();
         }
 
         private IReadOnlyList<ReleaseNotes> ParseSimpleFormat(string[] lines)
@@ -133,24 +131,22 @@ namespace Cake.Common
                 }
 
                 // Parse header.
-                var versionResult = _versionRegex.Match(line);
-                if (!versionResult.Success)
+                var semVer = SemVersion.Zero;
+                var version = SemVersion.TryParse(lines[lineIndex], out semVer);
+                if (!version)
                 {
                     throw new CakeException("Could not parse version from release notes header.");
                 }
-
-                var version = Version.Parse(versionResult.Value);
-
                 // Parse the description.
-                line = line.Substring(versionResult.Length).Trim('-', ' ');
+                line = line.Substring(semVer.ToString().Length).Trim('-', ' ');
 
                 // Add the release notes to the result.
-                result.Add(new ReleaseNotes(version, new[] { line }, line));
+                result.Add(new ReleaseNotes(semVer, new[] { line }, line));
 
                 lineIndex++;
             }
 
-            return result.OrderByDescending(x => x.Version).ToArray();
+            return result.OrderByDescending(x => x.SemVersion).ToArray();
         }
     }
 }
