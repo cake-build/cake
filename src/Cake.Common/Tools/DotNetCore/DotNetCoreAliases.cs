@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Tool;
@@ -42,6 +43,7 @@ namespace Cake.Common.Tools.DotNetCore
     public static class DotNetCoreAliases
     {
         /// <summary>
+        /// [deprecated] DotNetCoreExecute is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetExecute(ICakeContext, FilePath)" /> instead.
         /// Execute an assembly.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -54,12 +56,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Execute")]
+        [Obsolete("DotNetCoreExecute is obsolete and will be removed in a future release. Use DotNetExecute instead.")]
         public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath)
         {
-            context.DotNetCoreExecute(assemblyPath, null);
+            context.DotNetExecute(assemblyPath);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreExecute is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetExecute(ICakeContext, FilePath, ProcessArgumentBuilder)" /> instead.
         /// Execute an assembly with arguments in the specific path.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -73,12 +77,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Execute")]
+        [Obsolete("DotNetCoreExecute is obsolete and will be removed in a future release. Use DotNetExecute instead.")]
         public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments)
         {
-            context.DotNetCoreExecute(assemblyPath, arguments, null);
+            context.DotNetExecute(assemblyPath, arguments);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreExecute is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetExecute(ICakeContext, FilePath, ProcessArgumentBuilder, DotNetExecuteSettings)" /> instead.
         /// Execute an assembly with arguments in the specific path with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -98,25 +104,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Execute")]
+        [Obsolete("DotNetCoreExecute is obsolete and will be removed in a future release. Use DotNetExecute instead.")]
         public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetCoreExecuteSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (assemblyPath == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPath));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreExecuteSettings();
-            }
-
-            var executor = new DotNetCoreExecutor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            executor.Execute(assemblyPath, arguments, settings);
+            context.DotNetExecute(assemblyPath, arguments, settings);
         }
 
         /// <summary>

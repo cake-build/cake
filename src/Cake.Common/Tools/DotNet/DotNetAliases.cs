@@ -5,9 +5,11 @@
 using System;
 using System.Collections.Generic;
 using Cake.Common.IO;
+using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Tool;
+using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.DotNetCore.Run;
 using Cake.Common.Tools.DotNetCore.Tool;
@@ -28,6 +30,84 @@ namespace Cake.Common.Tools.DotNet
     [CakeAliasCategory("DotNet")]
     public static class DotNetAliases
     {
+        /// <summary>
+        /// Execute an assembly.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="assemblyPath">The assembly path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetExecute("./bin/Debug/app.dll");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Execute")]
+        public static void DotNetExecute(this ICakeContext context, FilePath assemblyPath)
+        {
+            context.DotNetExecute(assemblyPath, null);
+        }
+
+        /// <summary>
+        /// Execute an assembly with arguments in the specific path.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="assemblyPath">The assembly path.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <example>
+        /// <code>
+        /// DotNetExecute("./bin/Debug/app.dll", "--arg");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Execute")]
+        public static void DotNetExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments)
+        {
+            context.DotNetExecute(assemblyPath, arguments, null);
+        }
+
+        /// <summary>
+        /// Execute an assembly with arguments in the specific path with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="assemblyPath">The assembly path.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetExecuteSettings
+        /// {
+        ///     FrameworkVersion = "1.0.3"
+        /// };
+        ///
+        /// DotNetExecute("./bin/Debug/app.dll", "--arg", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Execute")]
+        public static void DotNetExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetExecuteSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (assemblyPath is null)
+            {
+                throw new ArgumentNullException(nameof(assemblyPath));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetExecuteSettings();
+            }
+
+            var executor = new DotNetCoreExecutor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            executor.Execute(assemblyPath, arguments, settings);
+        }
+
         /// <summary>
         /// Run all projects.
         /// </summary>
