@@ -155,6 +155,14 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         public bool? IncludeAllContentForSelfExtract { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to enable compression on the embedded assemblies when publishing a single-file executable.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET 6 or newer.
+        /// </remarks>
+        public bool? EnableCompressionInSingleFile { get; set; }
+
+        /// <summary>
         /// Gets or sets the specified NuGet package sources to use during the restore.
         /// </summary>
         /// <remarks>
