@@ -9,6 +9,7 @@ using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNetCore.Build;
@@ -112,6 +113,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRestore is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRestore(ICakeContext)" /> instead.
         /// Restore all NuGet Packages.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -123,12 +125,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        [Obsolete("DotNetCoreRestore is obsolete and will be removed in a future release. Use DotNetRestore instead.")]
         public static void DotNetCoreRestore(this ICakeContext context)
         {
-            context.DotNetCoreRestore(null, null);
+            context.DotNetRestore();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRestore is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRestore(ICakeContext, string)" /> instead.
         /// Restore all NuGet Packages in the specified path.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -141,12 +145,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        [Obsolete("DotNetCoreRestore is obsolete and will be removed in a future release. Use DotNetRestore instead.")]
         public static void DotNetCoreRestore(this ICakeContext context, string root)
         {
-            context.DotNetCoreRestore(root, null);
+            context.DotNetRestore(root);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRestore is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRestore(ICakeContext, DotNetRestoreSettings)" /> instead.
         /// Restore all NuGet Packages with the settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -169,12 +175,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        [Obsolete("DotNetCoreRestore is obsolete and will be removed in a future release. Use DotNetRestore instead.")]
         public static void DotNetCoreRestore(this ICakeContext context, DotNetCoreRestoreSettings settings)
         {
-            context.DotNetCoreRestore(null, settings);
+            context.DotNetRestore(settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRestore is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRestore(ICakeContext, string, DotNetRestoreSettings)" /> instead.
         /// Restore all NuGet Packages in the specified path with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -198,20 +206,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        [Obsolete("DotNetCoreRestore is obsolete and will be removed in a future release. Use DotNetRestore instead.")]
         public static void DotNetCoreRestore(this ICakeContext context, string root, DotNetCoreRestoreSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreRestoreSettings();
-            }
-
-            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
-            restorer.Restore(root, settings);
+            context.DotNetRestore(root, settings);
         }
 
         /// <summary>
