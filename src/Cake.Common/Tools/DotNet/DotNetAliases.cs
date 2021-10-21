@@ -12,6 +12,7 @@ using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
+using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
@@ -20,6 +21,7 @@ using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Common.Tools.DotNetCore.Run;
+using Cake.Common.Tools.DotNetCore.Test;
 using Cake.Common.Tools.DotNetCore.Tool;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -272,6 +274,173 @@ namespace Cake.Common.Tools.DotNet
 
             var builder = new DotNetCoreBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             builder.Build(project, settings);
+        }
+
+        /// <summary>
+        /// Test project.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// DotNetTest();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Test")]
+        public static void DotNetTest(this ICakeContext context)
+        {
+            context.DotNetTest(null, null, null);
+        }
+
+        /// <summary>
+        /// Test project with path.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project path.</param>
+        /// <example>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
+        /// <code>
+        /// DotNetTest("./test/Project.Tests/Project.Tests.csproj");
+        /// </code>
+        /// <para>You could also specify a task that runs multiple test projects.</para>
+        /// <para>Cake task:</para>
+        /// <code>
+        /// Task("Test")
+        ///     .Does(() =>
+        /// {
+        ///     var projectFiles = GetFiles("./test/**/*.csproj");
+        ///     foreach(var file in projectFiles)
+        ///     {
+        ///         DotNetTest(file.FullPath);
+        ///     }
+        /// });
+        /// </code>
+        /// <para>If your test project is using project.json, the project parameter should just be the directory path.</para>
+        /// <code>
+        /// DotNetTest("./test/Project.Tests/");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Test")]
+        public static void DotNetTest(this ICakeContext context, string project)
+        {
+            context.DotNetTest(project, null, null);
+        }
+
+        /// <summary>
+        /// Test project with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetTestSettings
+        /// {
+        ///     Configuration = "Release"
+        /// };
+        ///
+        /// DotNetTest("./test/Project.Tests/Project.Tests.csproj", settings);
+        /// </code>
+        /// <para>You could also specify a task that runs multiple test projects.</para>
+        /// <para>Cake task:</para>
+        /// <code>
+        /// Task("Test")
+        ///     .Does(() =>
+        /// {
+        ///     var settings = new DotNetTestSettings
+        ///     {
+        ///         Configuration = "Release"
+        ///     };
+        ///
+        ///     var projectFiles = GetFiles("./test/**/*.csproj");
+        ///     foreach(var file in projectFiles)
+        ///     {
+        ///         DotNetTest(file.FullPath, settings);
+        ///     }
+        /// });
+        /// </code>
+        /// <para>If your test project is using project.json, the project parameter should just be the directory path.</para>
+        /// <code>
+        /// var settings = new DotNetTestSettings
+        /// {
+        ///     Configuration = "Release"
+        /// };
+        ///
+        /// DotNetTest("./test/Project.Tests/", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Test")]
+        public static void DotNetTest(this ICakeContext context, string project, DotNetTestSettings settings)
+        {
+            context.DotNetTest(project, null, settings);
+        }
+
+        /// <summary>
+        /// Test project with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project path.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetTestSettings
+        /// {
+        ///     Configuration = "Release"
+        /// };
+        ///
+        /// DotNetTest("./test/Project.Tests/Project.Tests.csproj", settings);
+        /// </code>
+        /// <para>You could also specify a task that runs multiple test projects.</para>
+        /// <para>Cake task:</para>
+        /// <code>
+        /// Task("Test")
+        ///     .Does(() =>
+        /// {
+        ///     var settings = new DotNetTestSettings
+        ///     {
+        ///         Configuration = "Release"
+        ///     };
+        ///
+        ///     var projectFiles = GetFiles("./test/**/*.csproj");
+        ///     foreach(var file in projectFiles)
+        ///     {
+        ///         DotNetTest(file.FullPath, "MSTest.MapInconclusiveToFailed=true", settings);
+        ///     }
+        /// });
+        /// </code>
+        /// <para>If your test project is using project.json, the project parameter should just be the directory path.</para>
+        /// <code>
+        /// var settings = new DotNetTestSettings
+        /// {
+        ///     Configuration = "Release"
+        /// };
+        ///
+        /// DotNetTest("./test/Project.Tests/", "MSTest.MapInconclusiveToFailed=true", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Test")]
+        public static void DotNetTest(this ICakeContext context, string project, ProcessArgumentBuilder arguments, DotNetTestSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetTestSettings();
+            }
+
+            var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            tester.Test(project, arguments, settings);
         }
 
         /// <summary>
