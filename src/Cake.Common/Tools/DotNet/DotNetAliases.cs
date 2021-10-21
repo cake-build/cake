@@ -8,11 +8,13 @@ using Cake.Common.IO;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
+using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Common.Tools.DotNetCore.Run;
 using Cake.Common.Tools.DotNetCore.Tool;
 using Cake.Core;
@@ -108,6 +110,109 @@ namespace Cake.Common.Tools.DotNet
 
             var executor = new DotNetCoreExecutor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             executor.Execute(assemblyPath, arguments, settings);
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// DotNetRestore();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Restore")]
+        public static void DotNetRestore(this ICakeContext context)
+        {
+            context.DotNetRestore(null, null);
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages in the specified path.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="root">List of projects and project folders to restore. Each value can be: a path to a project.json or global.json file, or a folder to recursively search for project.json files.</param>
+        /// <example>
+        /// <code>
+        /// DotNetRestore("./src/*");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Restore")]
+        public static void DotNetRestore(this ICakeContext context, string root)
+        {
+            context.DotNetRestore(root, null);
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages with the settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetRestoreSettings
+        /// {
+        ///     Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
+        ///     FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
+        ///     PackagesDirectory = "./packages",
+        ///     Verbosity = Information,
+        ///     DisableParallel = true,
+        ///     InferRuntimes = new[] {"runtime1", "runtime2"}
+        /// };
+        ///
+        /// DotNetRestore(settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Restore")]
+        public static void DotNetRestore(this ICakeContext context, DotNetRestoreSettings settings)
+        {
+            context.DotNetRestore(null, settings);
+        }
+
+        /// <summary>
+        /// Restore all NuGet Packages in the specified path with settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="root">List of projects and project folders to restore. Each value can be: a path to a project.json or global.json file, or a folder to recursively search for project.json files.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetRestoreSettings
+        /// {
+        ///     Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
+        ///     FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
+        ///     PackagesDirectory = "./packages",
+        ///     Verbosity = Information,
+        ///     DisableParallel = true,
+        ///     InferRuntimes = new[] {"runtime1", "runtime2"}
+        /// };
+        ///
+        /// DotNetRestore("./src/*", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Restore")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Restore")]
+        public static void DotNetRestore(this ICakeContext context, string root, DotNetRestoreSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetRestoreSettings();
+            }
+
+            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
+            restorer.Restore(root, settings);
         }
 
         /// <summary>
