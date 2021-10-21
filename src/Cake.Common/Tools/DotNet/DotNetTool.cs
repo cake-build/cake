@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
@@ -75,6 +76,21 @@ namespace Cake.Common.Tools.DotNet
             AppendCommonArguments(arguments, settings);
 
             Run(settings, arguments, processSettings, null);
+        }
+
+        /// <summary>
+        /// Runs the dotnet cli command using the specified settings and arguments.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="processSettings">The processSettings.</param>
+        /// <param name="postAction">If specified called after process exit.</param>
+        protected void RunCommand(TSettings settings, ProcessArgumentBuilder arguments, ProcessSettings processSettings, Action<IProcess> postAction)
+        {
+            // add arguments common to all commands last
+            AppendCommonArguments(arguments, settings);
+
+            Run(settings, arguments, processSettings, postAction);
         }
 
         /// <summary>
