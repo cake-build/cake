@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Build;
+using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
@@ -1488,6 +1489,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreBuildServerShutdown is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetBuildServerShutdown(ICakeContext)" /> instead.
         /// Shuts down build servers that are started from dotnet.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1499,12 +1501,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Build Server")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.BuildServer")]
+        [Obsolete("DotNetCoreBuildServerShutdown is obsolete and will be removed in a future release. Use DotNetBuildServerShutdown instead.")]
         public static void DotNetCoreBuildServerShutdown(this ICakeContext context)
         {
-            context.DotNetCoreBuildServerShutdown(null);
+            context.DotNetBuildServerShutdown();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreBuildServerShutdown is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetBuildServerShutdown(ICakeContext, DotNetBuildServerShutdownSettings)" /> instead.
         /// Shuts down build servers that are started from dotnet.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1522,16 +1526,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Build Server")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.BuildServer")]
+        [Obsolete("DotNetCoreBuildServerShutdown is obsolete and will be removed in a future release. Use DotNetBuildServerShutdown instead.")]
         public static void DotNetCoreBuildServerShutdown(this ICakeContext context, DotNetCoreBuildServerSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var buildServer = new DotNetCoreBuildServer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-
-            buildServer.Shutdown(settings ?? new DotNetCoreBuildServerSettings());
+            context.DotNetBuildServerShutdown(settings);
         }
     }
 }
