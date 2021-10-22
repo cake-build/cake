@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNet.Build;
+using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
@@ -13,6 +14,7 @@ using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNetCore.Build;
+using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
@@ -687,6 +689,53 @@ namespace Cake.Common.Tools.DotNet
             var runner = new DotNetCoreToolRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
 
             runner.Execute(projectPath, command, arguments, settings);
+        }
+
+        /// <summary>
+        /// Shuts down build servers that are started from dotnet.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// DotNetBuildServerShutdown();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build Server")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.BuildServer")]
+        public static void DotNetBuildServerShutdown(this ICakeContext context)
+        {
+            context.DotNetBuildServerShutdown(null);
+        }
+
+        /// <summary>
+        /// Shuts down build servers that are started from dotnet.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetBuildServerShutdownSettings
+        /// {
+        ///     MSBuild = true
+        /// };
+        ///
+        /// DotNetBuildServerShutdown(settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build Server")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.BuildServer")]
+        public static void DotNetBuildServerShutdown(this ICakeContext context, DotNetBuildServerShutdownSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var buildServer = new DotNetCoreBuildServer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+
+            buildServer.Shutdown(settings ?? new DotNetBuildServerShutdownSettings());
         }
     }
 }
