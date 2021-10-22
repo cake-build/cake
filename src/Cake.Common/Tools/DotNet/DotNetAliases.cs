@@ -5,12 +5,14 @@
 using System;
 using System.Collections.Generic;
 using Cake.Common.IO;
+using Cake.Common.Tools.DotNet.Build;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Tool;
+using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
@@ -213,6 +215,61 @@ namespace Cake.Common.Tools.DotNet
 
             var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             restorer.Restore(root, settings);
+        }
+
+        /// <summary>
+        /// Build all projects.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The projects path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetBuild("./src/*");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Build")]
+        public static void DotNetBuild(this ICakeContext context, string project)
+        {
+            context.DotNetBuild(project, null);
+        }
+
+        /// <summary>
+        /// Build all projects.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The projects path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetBuildSettings
+        /// {
+        ///     Framework = "netcoreapp2.0",
+        ///     Configuration = "Debug",
+        ///     OutputDirectory = "./artifacts/"
+        /// };
+        ///
+        /// DotNetBuild("./src/*", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Build")]
+        public static void DotNetBuild(this ICakeContext context, string project, DotNetBuildSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetBuildSettings();
+            }
+
+            var builder = new DotNetCoreBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            builder.Build(project, settings);
         }
 
         /// <summary>

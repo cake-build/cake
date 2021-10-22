@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Build;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
@@ -213,6 +214,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreBuild is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetBuild(ICakeContext, string)" /> instead.
         /// Build all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -225,12 +227,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Build")]
+        [Obsolete("DotNetCoreBuild is obsolete and will be removed in a future release. Use DotNetBuild instead.")]
         public static void DotNetCoreBuild(this ICakeContext context, string project)
         {
-            context.DotNetCoreBuild(project, null);
+            context.DotNetBuild(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreBuild is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetBuild(ICakeContext, string, DotNetBuildSettings)" /> instead.
         /// Build all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -251,20 +255,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Build")]
+        [Obsolete("DotNetCoreBuild is obsolete and will be removed in a future release. Use DotNetBuild instead.")]
         public static void DotNetCoreBuild(this ICakeContext context, string project, DotNetCoreBuildSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreBuildSettings();
-            }
-
-            var builder = new DotNetCoreBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            builder.Build(project, settings);
+            context.DotNetBuild(project, settings);
         }
 
         /// <summary>

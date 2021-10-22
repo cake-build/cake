@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.Build;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -13,7 +14,7 @@ namespace Cake.Common.Tools.DotNetCore.Build
     /// <summary>
     /// .NET Core project builder.
     /// </summary>
-    public sealed class DotNetCoreBuilder : DotNetCoreTool<DotNetCoreBuildSettings>
+    public sealed class DotNetCoreBuilder : DotNetCoreTool<DotNetBuildSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -38,7 +39,7 @@ namespace Cake.Common.Tools.DotNetCore.Build
         /// </summary>
         /// <param name="project">The target project path.</param>
         /// <param name="settings">The settings.</param>
-        public void Build(string project, DotNetCoreBuildSettings settings)
+        public void Build(string project, DotNetBuildSettings settings)
         {
             if (project == null)
             {
@@ -52,7 +53,7 @@ namespace Cake.Common.Tools.DotNetCore.Build
             RunCommand(settings, GetArguments(project, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, DotNetCoreBuildSettings settings)
+        private ProcessArgumentBuilder GetArguments(string project, DotNetBuildSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
