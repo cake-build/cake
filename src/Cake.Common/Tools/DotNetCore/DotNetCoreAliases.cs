@@ -13,6 +13,7 @@ using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
+using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
@@ -487,6 +488,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTest(ICakeContext)" /> instead.
         /// Test project.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -498,12 +500,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        [Obsolete("DotNetCoreTest is obsolete and will be removed in a future release. Use DotNetTest instead.")]
         public static void DotNetCoreTest(this ICakeContext context)
         {
-            context.DotNetCoreTest(null, null, null);
+            context.DotNetTest();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTest(ICakeContext, string)" /> instead.
         /// Test project with path.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -534,12 +538,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        [Obsolete("DotNetCoreTest is obsolete and will be removed in a future release. Use DotNetTest instead.")]
         public static void DotNetCoreTest(this ICakeContext context, string project)
         {
-            context.DotNetCoreTest(project, null, null);
+            context.DotNetTest(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTest(ICakeContext, string, DotNetTestSettings)" /> instead.
         /// Test project with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -585,12 +591,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        [Obsolete("DotNetCoreTest is obsolete and will be removed in a future release. Use DotNetTest instead.")]
         public static void DotNetCoreTest(this ICakeContext context, string project, DotNetCoreTestSettings settings)
         {
-            context.DotNetCoreTest(project, null, settings);
+            context.DotNetTest(project, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTest(ICakeContext, string, ProcessArgumentBuilder, DotNetTestSettings)" /> instead.
         /// Test project with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -637,20 +645,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        [Obsolete("DotNetCoreTest is obsolete and will be removed in a future release. Use DotNetTest instead.")]
         public static void DotNetCoreTest(this ICakeContext context, string project, ProcessArgumentBuilder arguments, DotNetCoreTestSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreTestSettings();
-            }
-
-            var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            tester.Test(project, arguments, settings);
+            context.DotNetTest(project, arguments, settings);
         }
 
         /// <summary>
