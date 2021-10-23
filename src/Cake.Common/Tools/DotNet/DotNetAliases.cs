@@ -14,6 +14,7 @@ using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
+using Cake.Common.Tools.DotNet.VSTest;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
@@ -23,6 +24,7 @@ using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Common.Tools.DotNetCore.Run;
 using Cake.Common.Tools.DotNetCore.Test;
 using Cake.Common.Tools.DotNetCore.Tool;
+using Cake.Common.Tools.DotNetCore.VSTest;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -719,6 +721,119 @@ namespace Cake.Common.Tools.DotNet
 
             var builder = new DotNetCoreMSBuildBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             builder.Build(projectOrDirectory, settings);
+        }
+
+        /// <summary>
+        /// Test one or more projects specified by a path or glob pattern using the VS Test host runner.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="testFile">A path to the test file or glob for one or more test files.</param>
+        /// <example>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
+        /// <code>
+        /// DotNetVSTest("./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll");
+        /// </code>
+        /// <para>You could also specify a glob pattern to run multiple test projects.</para>
+        /// <code>
+        /// DotNetVSTest("./**/bin/Release/netcoreapp2.1/*.Tests.dll");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.VSTest")]
+        public static void DotNetVSTest(this ICakeContext context, GlobPattern testFile) => context.DotNetVSTest(testFile, null);
+
+        /// <summary>
+        /// Test one or more projects specified by a path or glob pattern with settings using the VS Test host runner.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="testFile">A path to the test file or glob for one or more test files.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <para>Specify the path to the .csproj file in the test project.</para>
+        /// <code>
+        /// var settings = new DotNetVSTestSettings
+        /// {
+        ///     Framework = "FrameworkCore10",
+        ///     Platform = "x64"
+        /// };
+        ///
+        /// DotNetTest("./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll", settings);
+        /// </code>
+        /// <para>You could also specify a glob pattern to run multiple test projects.</para>
+        /// <code>
+        /// var settings = new DotNetVSTestSettings
+        /// {
+        ///     Framework = "FrameworkCore10",
+        ///     Platform = "x64",
+        ///     Parallel = true
+        /// };
+        ///
+        /// DotNetVSTest("./**/bin/Release/netcoreapp2.1/*.Tests.dll", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.VSTest")]
+        public static void DotNetVSTest(this ICakeContext context, GlobPattern testFile, DotNetVSTestSettings settings)
+        {
+            var testFiles = context.GetFiles(testFile);
+
+            context.DotNetVSTest(testFiles, settings);
+        }
+
+        /// <summary>
+        /// Test one or more specified projects with settings using the VS Test host runner.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="testFiles">The project paths to test.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetVSTestSettings
+        /// {
+        ///     Framework = "FrameworkCore10",
+        ///     Platform = "x64"
+        /// };
+        ///
+        /// DotNetVSTest(new[] { (FilePath)"./test/Project.Tests/bin/Release/netcoreapp2.1/Project.Tests.dll" }, settings);
+        /// </code>
+        /// <para>You could also specify a task that runs multiple test projects.</para>
+        /// <para>Cake task:</para>
+        /// <code>
+        /// Task("Test")
+        ///     .Does(() =>
+        /// {
+        ///     var settings = new DotNetVSTestSettings
+        ///     {
+        ///         Framework = "FrameworkCore10",
+        ///         Platform = "x64",
+        ///         Parallel = true
+        ///     };
+        ///
+        ///     var testFiles = GetFiles("./test/**/bin/Release/netcoreapp2.1/*.Test.dll");
+        ///
+        ///     DotNetVSTest(testFiles, settings);
+        /// });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Test")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.VSTest")]
+        public static void DotNetVSTest(this ICakeContext context, IEnumerable<FilePath> testFiles, DotNetVSTestSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetVSTestSettings();
+            }
+
+            var tester = new DotNetCoreVSTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            tester.Test(testFiles, settings);
         }
 
         /// <summary>
