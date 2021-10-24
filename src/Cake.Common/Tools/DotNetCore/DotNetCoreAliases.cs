@@ -11,6 +11,7 @@ using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Test;
@@ -434,6 +435,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCorePublish is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetPublish(ICakeContext, string)" /> instead.
         /// Publish all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -446,12 +448,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Publish")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Publish")]
+        [Obsolete("DotNetCorePublish is obsolete and will be removed in a future release. Use DotNetPublish instead.")]
         public static void DotNetCorePublish(this ICakeContext context, string project)
         {
-            context.DotNetCorePublish(project, null);
+            context.DotNetPublish(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCorePublish is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetPublish(ICakeContext, string, DotNetPublishSettings)" /> instead.
         /// Publish all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -472,20 +476,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Publish")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Publish")]
+        [Obsolete("DotNetCorePublish is obsolete and will be removed in a future release. Use DotNetPublish instead.")]
         public static void DotNetCorePublish(this ICakeContext context, string project, DotNetCorePublishSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCorePublishSettings();
-            }
-
-            var publisher = new DotNetCorePublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            publisher.Publish(project, settings);
+            context.DotNetPublish(project, settings);
         }
 
         /// <summary>
