@@ -15,6 +15,7 @@ using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
+using Cake.Common.Tools.DotNet.VSTest;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
@@ -1262,6 +1263,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreVSTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetVSTest(ICakeContext, GlobPattern)" /> instead.
         /// Test one or more projects specified by a path or glob pattern using the VS Test host runner.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1279,9 +1281,11 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.VSTest")]
-        public static void DotNetCoreVSTest(this ICakeContext context, GlobPattern testFile) => context.DotNetCoreVSTest(testFile, null);
+        [Obsolete("DotNetCoreVSTest is obsolete and will be removed in a future release. Use DotNetVSTest instead.")]
+        public static void DotNetCoreVSTest(this ICakeContext context, GlobPattern testFile) => context.DotNetVSTest(testFile);
 
         /// <summary>
+        /// [deprecated] DotNetCoreVSTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetVSTest(ICakeContext, GlobPattern, DotNetVSTestSettings)" /> instead.
         /// Test one or more projects specified by a path or glob pattern with settings using the VS Test host runner.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1313,14 +1317,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.VSTest")]
+        [Obsolete("DotNetCoreVSTest is obsolete and will be removed in a future release. Use DotNetVSTest instead.")]
         public static void DotNetCoreVSTest(this ICakeContext context, GlobPattern testFile, DotNetCoreVSTestSettings settings)
         {
-            var testFiles = context.GetFiles(testFile);
-
-            context.DotNetCoreVSTest(testFiles, settings);
+            context.DotNetVSTest(testFile, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreVSTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetVSTest(ICakeContext, IEnumerable{FilePath}, DotNetVSTestSettings)" /> instead.
         /// Test one or more specified projects with settings using the VS Test host runner.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1358,20 +1362,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.VSTest")]
+        [Obsolete("DotNetCoreVSTest is obsolete and will be removed in a future release. Use DotNetVSTest instead.")]
         public static void DotNetCoreVSTest(this ICakeContext context, IEnumerable<FilePath> testFiles, DotNetCoreVSTestSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreVSTestSettings();
-            }
-
-            var tester = new DotNetCoreVSTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            tester.Test(testFiles, settings);
+            context.DotNetVSTest(testFiles, settings);
         }
 
         /// <summary>
