@@ -11,6 +11,7 @@ using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
@@ -266,6 +267,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCorePack is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetPack(ICakeContext, string)" /> instead.
         /// Package all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -278,12 +280,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Pack")]
+        [Obsolete("DotNetCorePack is obsolete and will be removed in a future release. Use DotNetPack instead.")]
         public static void DotNetCorePack(this ICakeContext context, string project)
         {
-            context.DotNetCorePack(project, null);
+            context.DotNetPack(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCorePack is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetPack(ICakeContext, string, DotNetPackSettings)" /> instead.
         /// Package all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -303,20 +307,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Pack")]
+        [Obsolete("DotNetCorePack is obsolete and will be removed in a future release. Use DotNetPack instead.")]
         public static void DotNetCorePack(this ICakeContext context, string project, DotNetCorePackSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCorePackSettings();
-            }
-
-            var packer = new DotNetCorePacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            packer.Pack(project, settings);
+            context.DotNetPack(project, settings);
         }
 
         /// <summary>
