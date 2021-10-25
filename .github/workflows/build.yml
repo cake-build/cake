@@ -37,7 +37,7 @@ jobs:
             include-prerelease: 'true'
 
       - name: Run Cake script
-        uses: cake-build/cake-action@master
+        uses: cake-build/cake-action@v1
         with:
           target: Run-Integration-Tests
           cake-version: tool-manifest
