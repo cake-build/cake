@@ -10,6 +10,7 @@ using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.Test;
@@ -20,6 +21,7 @@ using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
+using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Common.Tools.DotNetCore.Run;
 using Cake.Common.Tools.DotNetCore.Test;
@@ -276,6 +278,61 @@ namespace Cake.Common.Tools.DotNet
 
             var builder = new DotNetCoreBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             builder.Build(project, settings);
+        }
+
+        /// <summary>
+        /// Publish all projects.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The projects path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetPublish("./src/*");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Publish")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Publish")]
+        public static void DotNetPublish(this ICakeContext context, string project)
+        {
+            context.DotNetPublish(project, null);
+        }
+
+        /// <summary>
+        /// Publish all projects.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The projects path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetPublishSettings
+        /// {
+        ///     Framework = "netcoreapp2.0",
+        ///     Configuration = "Release",
+        ///     OutputDirectory = "./artifacts/"
+        /// };
+        ///
+        /// DotNetPublish("./src/*", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Publish")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Publish")]
+        public static void DotNetPublish(this ICakeContext context, string project, DotNetPublishSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetPublishSettings();
+            }
+
+            var publisher = new DotNetCorePublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            publisher.Publish(project, settings);
         }
 
         /// <summary>

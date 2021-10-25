@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -13,7 +14,7 @@ namespace Cake.Common.Tools.DotNetCore.Publish
     /// <summary>
     /// .NET Core project runner.
     /// </summary>
-    public sealed class DotNetCorePublisher : DotNetCoreTool<DotNetCorePublishSettings>
+    public sealed class DotNetCorePublisher : DotNetCoreTool<DotNetPublishSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -38,7 +39,7 @@ namespace Cake.Common.Tools.DotNetCore.Publish
         /// </summary>
         /// <param name="path">The target file path.</param>
         /// <param name="settings">The settings.</param>
-        public void Publish(string path, DotNetCorePublishSettings settings)
+        public void Publish(string path, DotNetPublishSettings settings)
         {
             if (settings == null)
             {
@@ -48,7 +49,7 @@ namespace Cake.Common.Tools.DotNetCore.Publish
             RunCommand(settings, GetArguments(path, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string path, DotNetCorePublishSettings settings)
+        private ProcessArgumentBuilder GetArguments(string path, DotNetPublishSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
