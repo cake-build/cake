@@ -10,6 +10,7 @@ using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
@@ -21,6 +22,7 @@ using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
+using Cake.Common.Tools.DotNetCore.Pack;
 using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Common.Tools.DotNetCore.Run;
@@ -555,6 +557,60 @@ namespace Cake.Common.Tools.DotNet
 
             var cleaner = new DotNetCoreCleaner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             cleaner.Clean(project, settings);
+        }
+
+        /// <summary>
+        /// Package all projects.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The projects path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetPack("./src/*");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Pack")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Pack")]
+        public static void DotNetPack(this ICakeContext context, string project)
+        {
+            context.DotNetPack(project, null);
+        }
+
+        /// <summary>
+        /// Package all projects.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The projects path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetPackSettings
+        /// {
+        ///     Configuration = "Release",
+        ///     OutputDirectory = "./artifacts/"
+        /// };
+        ///
+        /// DotNetPack("./src/*", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Pack")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Pack")]
+        public static void DotNetPack(this ICakeContext context, string project, DotNetPackSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetPackSettings();
+            }
+
+            var packer = new DotNetCorePacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            packer.Pack(project, settings);
         }
 
         /// <summary>
