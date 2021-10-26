@@ -10,6 +10,7 @@ using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.NuGet.Push;
 using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
@@ -22,6 +23,7 @@ using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
+using Cake.Common.Tools.DotNetCore.NuGet.Push;
 using Cake.Common.Tools.DotNetCore.Pack;
 using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Common.Tools.DotNetCore.Restore;
@@ -557,6 +559,67 @@ namespace Cake.Common.Tools.DotNet
 
             var cleaner = new DotNetCoreCleaner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             cleaner.Clean(project, settings);
+        }
+
+        /// <summary>
+        /// Pushes one or more packages to a server.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageFilePath"><see cref="FilePath"/> of the package to push.</param>
+        /// <example>
+        /// <code>
+        /// // With FilePath instance
+        /// var packageFilePath = GetFiles("*.nupkg").Single();
+        /// DotNetNuGetPush(packageFilePath);
+        /// // With string parameter
+        /// DotNetNuGetPush("foo*.nupkg");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Push")]
+        public static void DotNetNuGetPush(this ICakeContext context, FilePath packageFilePath)
+        {
+            context.DotNetNuGetPush(packageFilePath, null);
+        }
+
+        /// <summary>
+        /// Pushes one or more packages to a server using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageFilePath"><see cref="FilePath"/> of the package to push.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetNuGetPushSettings
+        /// {
+        ///     Source = "https://www.example.com/nugetfeed",
+        ///     ApiKey = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
+        /// };
+        /// // With FilePath instance
+        /// var packageFilePath = GetFiles("foo*.nupkg").Single();
+        /// DotNetNuGetPush(packageFilePath);
+        /// // With string parameter
+        /// DotNetNuGetPush("foo*.nupkg", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Push")]
+        public static void DotNetNuGetPush(this ICakeContext context, FilePath packageFilePath, DotNetNuGetPushSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetNuGetPushSettings();
+            }
+
+            var restorer = new DotNetCoreNuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            restorer.Push(packageFilePath?.FullPath, settings);
         }
 
         /// <summary>

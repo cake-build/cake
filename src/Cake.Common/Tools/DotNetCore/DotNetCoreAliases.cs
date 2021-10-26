@@ -11,6 +11,7 @@ using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.NuGet.Push;
 using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
@@ -829,6 +830,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetPush is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetPush(ICakeContext, FilePath)" /> instead.
         /// Pushes one or more packages to a server.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -845,12 +847,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Push")]
+        [Obsolete("DotNetCoreNuGetPush is obsolete and will be removed in a future release. Use DotNetNuGetPush instead.")]
         public static void DotNetCoreNuGetPush(this ICakeContext context, FilePath packageFilePath)
         {
-            context.DotNetCoreNuGetPush(packageFilePath, null);
+            context.DotNetNuGetPush(packageFilePath);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetPush is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetPush(ICakeContext, FilePath, DotNetNuGetPushSettings)" /> instead.
         /// Pushes one or more packages to a server using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -873,20 +877,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Push")]
+        [Obsolete("DotNetCoreNuGetPush is obsolete and will be removed in a future release. Use DotNetNuGetPush instead.")]
         public static void DotNetCoreNuGetPush(this ICakeContext context, FilePath packageFilePath, DotNetCoreNuGetPushSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreNuGetPushSettings();
-            }
-
-            var restorer = new DotNetCoreNuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            restorer.Push(packageFilePath?.FullPath, settings);
+            context.DotNetNuGetPush(packageFilePath, settings);
         }
 
         /// <summary>

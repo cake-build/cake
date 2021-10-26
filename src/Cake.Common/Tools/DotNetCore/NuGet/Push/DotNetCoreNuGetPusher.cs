@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.NuGet.Push;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -12,7 +13,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
     /// <summary>
     /// .NET Core nuget pusher. Pushes a package and its symbols to the server.
     /// </summary>
-    public sealed class DotNetCoreNuGetPusher : DotNetCoreTool<DotNetCoreNuGetPushSettings>
+    public sealed class DotNetCoreNuGetPusher : DotNetCoreTool<DotNetNuGetPushSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetCoreNuGetPusher" /> class.
@@ -34,7 +35,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
         /// </summary>
         /// <param name="packageName">The name of the target package.</param>
         /// <param name="settings">The settings.</param>
-        public void Push(string packageName, DotNetCoreNuGetPushSettings settings)
+        public void Push(string packageName, DotNetNuGetPushSettings settings)
         {
             if (settings == null)
             {
@@ -44,7 +45,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Push
             RunCommand(settings, GetArguments(packageName, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string packageName, DotNetCoreNuGetPushSettings settings)
+        private ProcessArgumentBuilder GetArguments(string packageName, DotNetNuGetPushSettings settings)
         {
             if (string.IsNullOrWhiteSpace(packageName))
             {
