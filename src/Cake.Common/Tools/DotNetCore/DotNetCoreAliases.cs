@@ -11,6 +11,7 @@ using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.NuGet.Delete;
 using Cake.Common.Tools.DotNet.NuGet.Push;
 using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Publish;
@@ -690,6 +691,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext)" /> instead.
         /// Delete a NuGet Package from a server.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -701,12 +703,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context)
         {
-            context.DotNetCoreNuGetDelete(null, null, null);
+            context.DotNetNuGetDelete();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext, string)" /> instead.
         /// Deletes a package from nuget.org.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -719,12 +723,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName)
         {
-            context.DotNetCoreNuGetDelete(packageName, null, null);
+            context.DotNetNuGetDelete(packageName);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext, string, string)" /> instead.
         /// Deletes a specific version of a package from nuget.org.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -738,12 +744,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, string packageVersion)
         {
-            context.DotNetCoreNuGetDelete(packageName, packageVersion, null);
+            context.DotNetNuGetDelete(packageName, packageVersion);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext, string, DotNetNuGetDeleteSettings)" /> instead.
         /// Deletes a package from a server.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -763,12 +771,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, DotNetCoreNuGetDeleteSettings settings)
         {
-            context.DotNetCoreNuGetDelete(packageName, null, settings);
+            context.DotNetNuGetDelete(packageName, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext, DotNetNuGetDeleteSettings)" /> instead.
         /// Deletes a package from a server using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -787,12 +797,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, DotNetCoreNuGetDeleteSettings settings)
         {
-            context.DotNetCoreNuGetDelete(null, null, settings);
+            context.DotNetNuGetDelete(settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext, string, string, DotNetNuGetDeleteSettings)" /> instead.
         /// Deletes a package from a server using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -813,20 +825,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, string packageVersion, DotNetCoreNuGetDeleteSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreNuGetDeleteSettings();
-            }
-
-            var nugetDeleter = new DotNetCoreNuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            nugetDeleter.Delete(packageName, packageVersion, settings);
+            context.DotNetNuGetDelete(packageName, packageVersion, settings);
         }
 
         /// <summary>
