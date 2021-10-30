@@ -253,8 +253,10 @@ namespace Cake.Core
                 {
                     // It's not OK to skip the target task.
                     // See issue #106 (https://github.com/cake-build/cake/issues/106)
-                    const string format = "Could not reach target '{0}' since it was skipped due to a criteria.";
-                    var message = string.Format(CultureInfo.InvariantCulture, format, task.Name);
+                    var message = string.IsNullOrWhiteSpace(criteria.Message) ?
+                        $"Could not reach target '{task.Name}' since it was skipped due to a criteria." :
+                        $"Could not reach target '{task.Name}' since it was skipped due to a criteria: {criteria.Message}.";
+
                     throw new CakeException(message);
                 }
 
