@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Cake.Common.Tools.DotNet.NuGet.Source;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -14,7 +15,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
     /// <summary>
     /// .NET Core NuGet sourcer.
     /// </summary>
-    public sealed class DotNetCoreNuGetSourcer : DotNetCoreTool<DotNetCoreNuGetSourceSettings>
+    public sealed class DotNetCoreNuGetSourcer : DotNetCoreTool<DotNetNuGetSourceSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -39,7 +40,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// </summary>
         /// <param name="name">The name of the source.</param>
         /// <param name="settings">The settings.</param>
-        public void AddSource(string name, DotNetCoreNuGetSourceSettings settings)
+        public void AddSource(string name, DotNetNuGetSourceSettings settings)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -183,7 +184,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             RunCommand(settings, GetUpdateSourceArguments(name, settings));
         }
 
-        private ProcessArgumentBuilder GetAddSourceArguments(string name, DotNetCoreNuGetSourceSettings settings)
+        private ProcessArgumentBuilder GetAddSourceArguments(string name, DotNetNuGetSourceSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -312,7 +313,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             return builder;
         }
 
-        private void AddCommonArguments(DotNetCoreNuGetSourceSettings settings, ProcessArgumentBuilder builder)
+        private void AddCommonArguments(DotNetNuGetSourceSettings settings, ProcessArgumentBuilder builder)
         {
             if (settings.ConfigFile != null)
             {

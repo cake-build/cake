@@ -12,6 +12,7 @@ using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.NuGet.Delete;
 using Cake.Common.Tools.DotNet.NuGet.Push;
+using Cake.Common.Tools.DotNet.NuGet.Source;
 using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
@@ -26,6 +27,7 @@ using Cake.Common.Tools.DotNetCore.Execute;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.DotNetCore.NuGet.Delete;
 using Cake.Common.Tools.DotNetCore.NuGet.Push;
+using Cake.Common.Tools.DotNetCore.NuGet.Source;
 using Cake.Common.Tools.DotNetCore.Pack;
 using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Common.Tools.DotNetCore.Restore;
@@ -762,6 +764,40 @@ namespace Cake.Common.Tools.DotNet
 
             var restorer = new DotNetCoreNuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             restorer.Push(packageFilePath?.FullPath, settings);
+        }
+
+        /// <summary>
+        /// Add the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetNuGetSourceSettings
+        /// {
+        ///     Source = "https://www.example.com/nugetfeed",
+        ///     UserName = "username",
+        ///     Password = "password",
+        ///     StorePasswordInClearText = true,
+        ///     ValidAuthenticationTypes = "basic,negotiate"
+        /// };
+        ///
+        /// DotNetNuGetAddSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static void DotNetNuGetAddSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            sourcer.AddSource(name, settings);
         }
 
         /// <summary>
