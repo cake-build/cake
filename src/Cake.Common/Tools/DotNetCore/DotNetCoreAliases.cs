@@ -13,6 +13,7 @@ using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.NuGet.Delete;
 using Cake.Common.Tools.DotNet.NuGet.Push;
+using Cake.Common.Tools.DotNet.NuGet.Source;
 using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
@@ -886,6 +887,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetAddSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetAddSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Add the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -908,15 +910,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetAddSource is obsolete and will be removed in a future release. Use DotNetNuGetAddSource instead.")]
         public static void DotNetCoreNuGetAddSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.AddSource(name, settings);
+            context.DotNetNuGetAddSource(name, settings);
         }
 
         /// <summary>
