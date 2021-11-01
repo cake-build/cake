@@ -20,14 +20,6 @@ namespace Cake.Common.Build.AzurePipelines
         bool IsRunningOnAzurePipelines { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the current build is running on hosted Azure Pipelines.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on hosted Azure Pipelines; otherwise, <c>false</c>.
-        /// </value>
-        bool IsRunningOnAzurePipelinesHosted { get; }
-
-        /// <summary>
         /// Gets the Azure Pipelines environment.
         /// </summary>
         /// <value>

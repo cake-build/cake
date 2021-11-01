@@ -22,7 +22,7 @@ public record BuildVersion(
             // Temp Workaround GitVersion Azure Pipelines
             var azurePipelines = context.AzurePipelines();
             string sourceBranch = string.Empty;
-            if ((azurePipelines.IsRunningOnAzurePipelinesHosted || azurePipelines.IsRunningOnAzurePipelines) && azurePipelines.Environment.PullRequest.Number > 0)
+            if (azurePipelines.IsRunningOnAzurePipelines && azurePipelines.Environment.PullRequest.Number > 0)
             {
                  sourceBranch = $"PullRequest{azurePipelines.Environment.PullRequest.Number}";
                  context.Information("Overriding Azure Pipelines branch name with: {0}", sourceBranch);

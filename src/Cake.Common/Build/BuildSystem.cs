@@ -135,8 +135,7 @@ namespace Cake.Common.Build
                 | (GoCD.IsRunningOnGoCD ? BuildProvider.GoCD : BuildProvider.Local)
                 | (GitLabCI.IsRunningOnGitLabCI ? BuildProvider.GitLabCI : BuildProvider.Local)
                 | (GitHubActions.IsRunningOnGitHubActions ? BuildProvider.GitHubActions : BuildProvider.Local)
-                | (AzurePipelines.IsRunningOnAzurePipelines ? BuildProvider.AzurePipelines : BuildProvider.Local)
-                | (AzurePipelines.IsRunningOnAzurePipelinesHosted ? BuildProvider.AzurePipelinesHosted : BuildProvider.Local);
+                | (AzurePipelines.IsRunningOnAzurePipelines ? BuildProvider.AzurePipelines : BuildProvider.Local);
 
             IsLocalBuild = Provider == BuildProvider.Local;
 
@@ -146,7 +145,7 @@ namespace Cake.Common.Build
                 || ((Provider & BuildProvider.TravisCI) != 0 && TravisCI.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.BitbucketPipelines) != 0 && BitbucketPipelines.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.GitLabCI) != 0 && GitLabCI.Environment.PullRequest.IsPullRequest)
-                || ((Provider & (BuildProvider.AzurePipelines | BuildProvider.AzurePipelinesHosted)) != 0 && AzurePipelines.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.AzurePipelines) != 0 && AzurePipelines.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.GitHubActions) != 0 && GitHubActions.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.Jenkins) != 0 && Jenkins.Environment.Change.IsPullRequest);
         }
@@ -514,23 +513,6 @@ namespace Cake.Common.Build
         /// <c>true</c> if this instance is running on Azure Pipelines; otherwise, <c>false</c>.
         /// </value>
         public bool IsRunningOnAzurePipelines => AzurePipelines.IsRunningOnAzurePipelines;
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is running on hosted Azure Pipelines.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// if (BuildSystem.IsRunningOnAzurePipelinesHosted)
-        /// {
-        ///     // Get the build commit hash.
-        ///     var commitHash = BuildSystem.AzurePipelines.Environment.Repository.SourceVersion;
-        /// }
-        /// </code>
-        /// </example>
-        /// <value>
-        /// <c>true</c> if this instance is running on hosted Azure Pipelines; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsRunningOnAzurePipelinesHosted => AzurePipelines.IsRunningOnAzurePipelinesHosted;
 
         /// <summary>
         /// Gets the Azure Pipelines Provider.
