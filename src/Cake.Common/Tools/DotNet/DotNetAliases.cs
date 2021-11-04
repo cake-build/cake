@@ -995,6 +995,40 @@ namespace Cake.Common.Tools.DotNet
         }
 
         /// <summary>
+        /// Update the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetNuGetSourceSettings
+        /// {
+        ///     Source = "https://www.example.com/nugetfeed",
+        ///     UserName = "username",
+        ///     Password = "password",
+        ///     StorePasswordInClearText = true,
+        ///     ValidAuthenticationTypes = "basic,negotiate"
+        /// };
+        ///
+        /// DotNetNuGetUpdateSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static void DotNetNuGetUpdateSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            sourcer.UpdateSource(name, settings);
+        }
+
+        /// <summary>
         /// Package all projects.
         /// </summary>
         /// <param name="context">The context.</param>

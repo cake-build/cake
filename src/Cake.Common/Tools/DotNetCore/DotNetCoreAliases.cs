@@ -1103,6 +1103,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetUpdateSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetUpdateSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Update the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1125,15 +1126,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetUpdateSource is obsolete and will be removed in a future release. Use DotNetNuGetUpdateSource instead.")]
         public static void DotNetCoreNuGetUpdateSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.UpdateSource(name, settings);
+            context.DotNetNuGetUpdateSource(name, settings);
         }
 
         /// <summary>
