@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Build.GitHubActions.Data
 {
@@ -21,6 +22,14 @@ namespace Cake.Common.Build.GitHubActions.Data
         }
 
         /// <summary>
+        /// Gets the name of the runner executing the job.
+        /// </summary>
+        /// <value>
+        /// The name of the runner executing the job.
+        /// </value>
+        public string Name => GetEnvironmentString("RUNNER_NAME");
+
+        /// <summary>
         /// Gets the operating system of the runner executing the job.
         /// </summary>
         /// <value>
@@ -36,7 +45,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// The path of the temporary directory for the runner.
         /// This directory is guaranteed to be empty at the start of each job, even on self-hosted runners.
         /// </value>
-        public string Temp => GetEnvironmentString("RUNNER_TEMP");
+        public DirectoryPath Temp => GetEnvironmentDirectoryPath("RUNNER_TEMP");
 
         /// <summary>
         /// Gets the path of the directory containing some of the pre-installed tools for GitHub-hosted runners.
@@ -44,7 +53,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The path of the directory containing some of the pre-installed tools for GitHub-hosted runners.
         /// </value>
-        public string ToolCache => GetEnvironmentString("RUNNER_TOOL_CACHE");
+        public DirectoryPath ToolCache => GetEnvironmentDirectoryPath("RUNNER_TOOL_CACHE");
 
         /// <summary>
         /// Gets the runner workspace directory path.
@@ -52,6 +61,6 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The runner workspace directory path.
         /// </value>
-        public string Workspace => GetEnvironmentString("RUNNER_WORKSPACE");
+        public DirectoryPath Workspace => GetEnvironmentDirectoryPath("RUNNER_WORKSPACE");
     }
 }

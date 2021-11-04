@@ -41,3 +41,10 @@ jobs:
         with:
           target: Run-Integration-Tests
           cake-version: tool-manifest
+
+      - name: Validate Integration Tests
+        uses: cake-build/cake-action@master
+        with:
+          script-path: tests/integration/Cake.Common/Build/GitHubActions/ValidateGitHubActionsProvider.cake
+          cake-version: tool-manifest
+
