@@ -106,7 +106,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// <param name="name">The name of the source.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>Whether the specified NuGet source exists.</returns>
-        public bool HasSource(string name, DotNetCoreNuGetSourceSettings settings)
+        public bool HasSource(string name, DotNetNuGetSourceSettings settings)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -130,7 +130,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// <param name="format">The output format. Accepts two values: detailed (the default) and short.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>The NuGet sources.</returns>
-        public string ListSource(string format, DotNetCoreNuGetSourceSettings settings)
+        public string ListSource(string format, DotNetNuGetSourceSettings settings)
         {
             if (settings == null)
             {
@@ -245,7 +245,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             return builder;
         }
 
-        private ProcessArgumentBuilder GetListSourceArguments(string format, DotNetCoreNuGetSourceSettings settings)
+        private ProcessArgumentBuilder GetListSourceArguments(string format, DotNetNuGetSourceSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

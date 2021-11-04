@@ -897,6 +897,56 @@ namespace Cake.Common.Tools.DotNet
         }
 
         /// <summary>
+        /// Determines whether the specified NuGet source exists.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <returns>Whether the specified NuGet source exists.</returns>
+        /// <example>
+        /// <code>
+        /// var exists = DotNetNuGetHasSource("example");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static bool DotNetNuGetHasSource(this ICakeContext context, string name)
+        {
+            return context.DotNetNuGetHasSource(name, null);
+        }
+
+        /// <summary>
+        /// Determines whether the specified NuGet source exists.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>Whether the specified NuGet source exists.</returns>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetNuGetSourceSettings
+        /// {
+        ///     ConfigFile = "NuGet.config"
+        /// };
+        ///
+        /// var exists = DotNetNuGetHasSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static bool DotNetNuGetHasSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return sourcer.HasSource(name, settings ?? new DotNetNuGetSourceSettings());
+        }
+
+        /// <summary>
         /// Package all projects.
         /// </summary>
         /// <param name="context">The context.</param>
