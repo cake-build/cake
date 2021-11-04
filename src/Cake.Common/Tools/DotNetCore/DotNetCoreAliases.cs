@@ -917,6 +917,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDisableSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDisableSource(ICakeContext, string)" /> instead.
         /// Disable the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -929,12 +930,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetDisableSource is obsolete and will be removed in a future release. Use DotNetNuGetDisableSource instead.")]
         public static void DotNetCoreNuGetDisableSource(this ICakeContext context, string name)
         {
-            context.DotNetCoreNuGetDisableSource(name, null);
+            context.DotNetNuGetDisableSource(name);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDisableSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDisableSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Disable the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -953,15 +956,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetDisableSource is obsolete and will be removed in a future release. Use DotNetNuGetDisableSource instead.")]
         public static void DotNetCoreNuGetDisableSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.DisableSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+            context.DotNetNuGetDisableSource(name, settings);
         }
 
         /// <summary>

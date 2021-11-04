@@ -801,6 +801,54 @@ namespace Cake.Common.Tools.DotNet
         }
 
         /// <summary>
+        /// Disable the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <example>
+        /// <code>
+        /// DotNetNuGetDisableSource("example");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static void DotNetNuGetDisableSource(this ICakeContext context, string name)
+        {
+            context.DotNetNuGetDisableSource(name, null);
+        }
+
+        /// <summary>
+        /// Disable the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetNuGetSourceSettings
+        /// {
+        ///     ConfigFile = "NuGet.config"
+        /// };
+        ///
+        /// DotNetNuGetDisableSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static void DotNetNuGetDisableSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            sourcer.DisableSource(name, settings ?? new DotNetNuGetSourceSettings());
+        }
+
+        /// <summary>
         /// Package all projects.
         /// </summary>
         /// <param name="context">The context.</param>
