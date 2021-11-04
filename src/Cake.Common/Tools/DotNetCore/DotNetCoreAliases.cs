@@ -963,6 +963,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetEnableSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetEnableSource(ICakeContext, string)" /> instead.
         /// Enable the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -975,12 +976,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetEnableSource is obsolete and will be removed in a future release. Use DotNetNuGetEnableSource instead.")]
         public static void DotNetCoreNuGetEnableSource(this ICakeContext context, string name)
         {
-            context.DotNetCoreNuGetEnableSource(name, null);
+            context.DotNetNuGetEnableSource(name);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetEnableSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetEnableSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Enable the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -999,15 +1002,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetEnableSource is obsolete and will be removed in a future release. Use DotNetNuGetEnableSource instead.")]
         public static void DotNetCoreNuGetEnableSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.EnableSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+            context.DotNetNuGetEnableSource(name, settings);
         }
 
         /// <summary>
