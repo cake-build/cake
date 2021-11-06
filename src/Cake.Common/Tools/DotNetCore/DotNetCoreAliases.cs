@@ -145,10 +145,10 @@ namespace Cake.Common.Tools.DotNetCore
         /// Restore all NuGet Packages in the specified path.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="root">List of projects and project folders to restore. Each value can be: a path to a project.json or global.json file, or a folder to recursively search for project.json files.</param>
+        /// <param name="root">Path to the project file to restore.</param>
         /// <example>
         /// <code>
-        /// DotNetCoreRestore("./src/*");
+        /// DotNetCoreRestore("./src/MyProject/MyProject.csproj");
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -195,7 +195,7 @@ namespace Cake.Common.Tools.DotNetCore
         /// Restore all NuGet Packages in the specified path with settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="root">List of projects and project folders to restore. Each value can be: a path to a project.json or global.json file, or a folder to recursively search for project.json files.</param>
+        /// <param name="root">Path to the project file to restore.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -209,7 +209,7 @@ namespace Cake.Common.Tools.DotNetCore
         ///     InferRuntimes = new[] {"runtime1", "runtime2"}
         /// };
         ///
-        /// DotNetCoreRestore("./src/*", settings);
+        /// DotNetCoreRestore("./src/MyProject/MyProject.csproj", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
