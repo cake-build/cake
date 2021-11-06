@@ -149,7 +149,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// </summary>
         /// <param name="name">The name of the source.</param>
         /// <param name="settings">The settings.</param>
-        public void RemoveSource(string name, DotNetCoreNuGetSourceSettings settings)
+        public void RemoveSource(string name, DotNetNuGetSourceSettings settings)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -260,7 +260,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             return builder;
         }
 
-        private ProcessArgumentBuilder GetRemoveSourceArguments(string name, DotNetCoreNuGetSourceSettings settings)
+        private ProcessArgumentBuilder GetRemoveSourceArguments(string name, DotNetNuGetSourceSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

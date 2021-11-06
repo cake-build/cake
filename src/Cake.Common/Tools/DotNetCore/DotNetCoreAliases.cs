@@ -1057,6 +1057,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetRemoveSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetRemoveSource(ICakeContext, string)" /> instead.
         /// Remove the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1069,12 +1070,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetRemoveSource is obsolete and will be removed in a future release. Use DotNetNuGetRemoveSource instead.")]
         public static void DotNetCoreNuGetRemoveSource(this ICakeContext context, string name)
         {
-            context.DotNetCoreNuGetRemoveSource(name, null);
+            context.DotNetNuGetRemoveSource(name);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetRemoveSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetRemoveSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Remove the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1093,15 +1096,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetRemoveSource is obsolete and will be removed in a future release. Use DotNetNuGetRemoveSource instead.")]
         public static void DotNetCoreNuGetRemoveSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.RemoveSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+            context.DotNetNuGetRemoveSource(name, settings);
         }
 
         /// <summary>

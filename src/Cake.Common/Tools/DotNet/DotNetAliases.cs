@@ -947,6 +947,54 @@ namespace Cake.Common.Tools.DotNet
         }
 
         /// <summary>
+        /// Remove the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <example>
+        /// <code>
+        /// DotNetNuGetRemoveSource("example");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static void DotNetNuGetRemoveSource(this ICakeContext context, string name)
+        {
+            context.DotNetNuGetRemoveSource(name, null);
+        }
+
+        /// <summary>
+        /// Remove the specified NuGet source.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the source.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetNuGetSourceSettings
+        /// {
+        ///     ConfigFile = "NuGet.config"
+        /// };
+        ///
+        /// DotNetNuGetRemoveSource("example", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("NuGet")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+        public static void DotNetNuGetRemoveSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            sourcer.RemoveSource(name, settings ?? new DotNetNuGetSourceSettings());
+        }
+
+        /// <summary>
         /// Package all projects.
         /// </summary>
         /// <param name="context">The context.</param>
