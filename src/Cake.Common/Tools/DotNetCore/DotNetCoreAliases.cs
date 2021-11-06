@@ -1009,6 +1009,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetHasSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetHasSource(ICakeContext, string)" /> instead.
         /// Determines whether the specified NuGet source exists.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1022,12 +1023,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetHasSource is obsolete and will be removed in a future release. Use DotNetNuGetHasSource instead.")]
         public static bool DotNetCoreNuGetHasSource(this ICakeContext context, string name)
         {
-            return context.DotNetCoreNuGetHasSource(name, null);
+            return context.DotNetNuGetHasSource(name);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetHasSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetHasSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Determines whether the specified NuGet source exists.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1047,15 +1050,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetHasSource is obsolete and will be removed in a future release. Use DotNetNuGetHasSource instead.")]
         public static bool DotNetCoreNuGetHasSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            return sourcer.HasSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+            return context.DotNetNuGetHasSource(name, settings);
         }
 
         /// <summary>
