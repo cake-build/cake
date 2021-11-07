@@ -4,6 +4,7 @@
 * 3628 Add GitHub Actions SetEnvironmentVariable Command
 * 3629 Add GitHub Actions UploadArtifact Command
 * 3630 Add GitHub Actions Environment properties
+* 3631 Refactor GitHub Actions Paths
 * 3654 IsRunningOnAzurePipelines should ignore agent type
 * 3610 Remove TFBuildProvider
 * 3590 Directories in AzurePipelinesBuildInfo are FilePaths - FilePath.GetDirectory then inconsistent
