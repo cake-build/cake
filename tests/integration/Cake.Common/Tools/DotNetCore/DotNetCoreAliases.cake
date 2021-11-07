@@ -10,8 +10,8 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.Setup")
         Context.Tools.RegisterFile(dotnetExePath);
     }
 
-    var sourcePath = Paths.Resources.Combine("./Cake.Common/Tools/DotNetCore");
-    var targetPath = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var sourcePath = Paths.Resources.Combine("./Cake.Common/Tools/DotNet");
+    var targetPath = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     EnsureDirectoryExist(targetPath.Combine("../").Collapse());
     CopyDirectory(sourcePath, targetPath);
 });
@@ -21,7 +21,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRestore")
     .Does(() =>
 {
     // Given
-    var root = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var root = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
 
     // When
     DotNetCoreRestore(root.FullPath, new DotNetCoreRestoreSettings { Verbosity = DotNetCoreVerbosity.Minimal });
@@ -32,7 +32,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
     var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
 
@@ -48,7 +48,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
 
     // When
@@ -60,7 +60,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreVSTest")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var assembly = path.CombineWithFilePath("hwapp.tests/bin/Debug/netcoreapp3.1/hwapp.tests.dll");
 
     // When
@@ -81,7 +81,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRun")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
 
     // When
@@ -93,7 +93,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePack")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
     var outputPath = path.Combine("DotNetCorePack");
     var nuget = outputPath.CombineWithFilePath("hwapp.1.0.0.nupkg");
@@ -113,7 +113,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetPush")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var outputPath = path.Combine("DotNetCorePack");
     var nugetServerPath = path.Combine("DotNetCorePush");
     var nugetSource = outputPath.CombineWithFilePath("hwapp.1.0.0.nupkg");
@@ -135,7 +135,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetDelete")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var nugetServerPath = path.Combine("DotNetCorePush");
     var nugetDestination = nugetServerPath.CombineWithFilePath("hwapp.1.0.0.nupkg");
 
@@ -154,7 +154,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePublish")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
     var outputPath = path.Combine("DotNetCorePublish");
     var publishFiles = new [] {
@@ -183,7 +183,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreExecute")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
 
     // When
@@ -195,7 +195,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreClean")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
     var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
     Assert.True(System.IO.File.Exists(assembly.FullPath));
@@ -212,7 +212,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreMSBuild")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
     var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
 
@@ -228,7 +228,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest.Fail")
     .Does(() =>
 {
     // Given
-    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNetCore");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
 
     // When
