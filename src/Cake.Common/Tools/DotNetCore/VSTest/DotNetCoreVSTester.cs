@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Common.Tools.DotNet.VSTest;
 using Cake.Common.Tools.VSTest;
 using Cake.Core;
 using Cake.Core.IO;
@@ -15,7 +16,7 @@ namespace Cake.Common.Tools.DotNetCore.VSTest
     /// <summary>
     /// .NET Core VSTest tester.
     /// </summary>
-    public sealed class DotNetCoreVSTester : DotNetCoreTool<DotNetCoreVSTestSettings>
+    public sealed class DotNetCoreVSTester : DotNetCoreTool<DotNetVSTestSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -40,7 +41,7 @@ namespace Cake.Common.Tools.DotNetCore.VSTest
         /// </summary>
         /// <param name="testFiles">A list of test files to run.</param>
         /// <param name="settings">The settings.</param>
-        public void Test(IEnumerable<FilePath> testFiles, DotNetCoreVSTestSettings settings)
+        public void Test(IEnumerable<FilePath> testFiles, DotNetVSTestSettings settings)
         {
             if (settings == null)
             {
@@ -55,7 +56,7 @@ namespace Cake.Common.Tools.DotNetCore.VSTest
             RunCommand(settings, GetArguments(testFiles, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> testFiles, DotNetCoreVSTestSettings settings)
+        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> testFiles, DotNetVSTestSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

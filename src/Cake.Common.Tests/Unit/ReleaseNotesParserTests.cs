@@ -1,10 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
 using Cake.Core;
 using Xunit;
-
 namespace Cake.Common.Tests.Unit
 {
     public sealed class ReleaseNotesParserTests
@@ -67,6 +65,7 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.Equal("0.1.9", result[0].Version.ToString());
+                    Assert.Equal("0.1.9", result[0].SemVersion.ToString());
                 }
 
                 [Fact]
@@ -129,6 +128,8 @@ namespace Cake.Common.Tests.Unit
                     Assert.Equal(2, result.Count);
                     Assert.Equal("0.1.10", result[0].Version.ToString());
                     Assert.Equal("0.1.9", result[1].Version.ToString());
+                    Assert.Equal("0.1.10", result[0].SemVersion.ToString());
+                    Assert.Equal("0.1.9", result[1].SemVersion.ToString());
                 }
 
                 [Fact]
@@ -158,6 +159,40 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.Equal("### New in 0.1.9-beta1 (Releases 2014/06/28)", result[0].RawVersionLine);
+                }
+
+                [Fact]
+                public void Should_Parse_Release_Note_Version_With_Prerelease()
+                {
+                    // Given
+                    var parser = new ReleaseNotesParser();
+                    const string content = "### New in 0.1.9-beta1 (Releases 2014/06/28)\nLine 1\n  \n\t\n";
+
+                    // When
+                    var result = parser.Parse(content);
+
+                    // Then
+                    Assert.Equal("0.1.9", result[0].Version.ToString());
+                    Assert.Equal("0.1.9-beta1", result[0].SemVersion.ToString());
+                }
+
+                [Fact]
+                public void Should_Return_Multiple_Release_Notes_With_Prerelease()
+                {
+                    // Given
+                    var parser = new ReleaseNotesParser();
+                    const string content = "### New in 0.1.9-alpha1 (Releases 2014/06/28)\n* Line 1\n" +
+                        "###New in 0.1.10-gamma3\n* Line 2\n Line 3";
+
+                    // When
+                    var result = parser.Parse(content);
+
+                    // Then
+                    Assert.Equal(2, result.Count);
+                    Assert.Equal("0.1.10", result[0].Version.ToString());
+                    Assert.Equal("0.1.9", result[1].Version.ToString());
+                    Assert.Equal("0.1.10-gamma3", result[0].SemVersion.ToString());
+                    Assert.Equal("0.1.9-alpha1", result[1].SemVersion.ToString());
                 }
             }
 
@@ -190,6 +225,7 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.Equal("0.1.9", result[0].Version.ToString());
+                    Assert.Equal("0.1.9", result[0].SemVersion.ToString());
                 }
 
                 [Fact]
@@ -249,6 +285,8 @@ namespace Cake.Common.Tests.Unit
                     Assert.Equal(2, result.Count);
                     Assert.Equal("0.1.10", result[0].Version.ToString());
                     Assert.Equal("0.1.9", result[1].Version.ToString());
+                    Assert.Equal("0.1.10", result[0].SemVersion.ToString());
+                    Assert.Equal("0.1.9", result[1].SemVersion.ToString());
                 }
             }
         }

@@ -63,6 +63,11 @@ namespace Cake.Common.Tools.OctopusDeploy
         public string DeployTo { get; set; }
 
         /// <summary>
+        /// Gets or sets multiple environments to automatically deploy to, e.g., Production, Staging, etc.
+        /// </summary>
+        public string[] DeployToMultiple { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether progress of the deployment should be followed. (Sets --waitfordeployment and --norawlog to true.)
         /// </summary>
         public bool ShowProgress { get; set; }
@@ -157,5 +162,10 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// Gets or sets a value indicating whether progress of the deployment will be shown.
         /// </summary>
         public bool DeploymentProgress { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the comma-separated list of machine names to exclude in the deployed environment.If not specified all machines in the environment will be considered.
+        /// </summary>
+        public string ExcludeMachines { get; set; }
     }
 }

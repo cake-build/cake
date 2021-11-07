@@ -235,11 +235,13 @@ namespace Cake.Common.Tests.Unit.Solution.Project
                 var result = fixture.Parse();
 
                 // Then
-                Assert.Equal(1, result.ProjectReferences.Count);
+                Assert.Equal(2, result.ProjectReferences.Count);
                 Assert.Equal("/Working/../Cake.Common/Cake.Common.csproj", result.ProjectReferences.First().FilePath.FullPath);
                 Assert.Equal("..\\Cake.Common\\Cake.Common.csproj", result.ProjectReferences.First().RelativePath);
                 Assert.Equal("{ABC3F1CB-F84E-43ED-A120-0CCFE344D250}", result.ProjectReferences.First().Project);
                 Assert.Equal("Cake.Common", result.ProjectReferences.First().Name);
+                Assert.Equal(null, result.ProjectReferences.First().Private);
+                Assert.Equal(true, result.ProjectReferences.ElementAt(1).Private);
             }
         }
     }

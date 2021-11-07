@@ -61,6 +61,7 @@ namespace Cake.Common.Tests.Unit
 
                 // Then
                 Assert.Equal("1.2.3", result[0].Version.ToString());
+                Assert.Equal("1.2.3", result[0].SemVersion.ToString());
             }
         }
 
@@ -82,6 +83,7 @@ namespace Cake.Common.Tests.Unit
 
                 // Then
                 Assert.Equal("1.2.5", result.Version.ToString());
+                Assert.Equal("1.2.5", result.SemVersion.ToString());
             }
         }
     }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -13,7 +14,7 @@ namespace Cake.Common.Tools.DotNetCore.Clean
     /// <summary>
     /// .NET Core project cleaner.
     /// </summary>
-    public sealed class DotNetCoreCleaner : DotNetCoreTool<DotNetCoreCleanSettings>
+    public sealed class DotNetCoreCleaner : DotNetCoreTool<DotNetCleanSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -38,7 +39,7 @@ namespace Cake.Common.Tools.DotNetCore.Clean
         /// </summary>
         /// <param name="project">The target project path.</param>
         /// <param name="settings">The settings.</param>
-        public void Clean(string project, DotNetCoreCleanSettings settings)
+        public void Clean(string project, DotNetCleanSettings settings)
         {
             if (project == null)
             {
@@ -52,7 +53,7 @@ namespace Cake.Common.Tools.DotNetCore.Clean
             RunCommand(settings, GetArguments(project, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, DotNetCoreCleanSettings settings)
+        private ProcessArgumentBuilder GetArguments(string project, DotNetCleanSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

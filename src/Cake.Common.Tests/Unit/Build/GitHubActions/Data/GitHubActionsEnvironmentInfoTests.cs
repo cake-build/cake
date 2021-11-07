@@ -18,7 +18,7 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
                 var info = new GitHubActionsInfoFixture().CreateEnvironmentInfo();
 
                 // When
-                var result = info.Home;
+                var result = info.Home.FullPath;
 
                 // Then
                 Assert.Equal("/home/runner", result);

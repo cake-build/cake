@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -13,7 +14,7 @@ namespace Cake.Common.Tools.DotNetCore.Pack
     /// <summary>
     /// .NET Core project packer.
     /// </summary>
-    public sealed class DotNetCorePacker : DotNetCoreTool<DotNetCorePackSettings>
+    public sealed class DotNetCorePacker : DotNetCoreTool<DotNetPackSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -38,7 +39,7 @@ namespace Cake.Common.Tools.DotNetCore.Pack
         /// </summary>
         /// <param name="project">The target file path.</param>
         /// <param name="settings">The settings.</param>
-        public void Pack(string project, DotNetCorePackSettings settings)
+        public void Pack(string project, DotNetPackSettings settings)
         {
             if (settings == null)
             {
@@ -48,7 +49,7 @@ namespace Cake.Common.Tools.DotNetCore.Pack
             RunCommand(settings, GetArguments(project, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, DotNetCorePackSettings settings)
+        private ProcessArgumentBuilder GetArguments(string project, DotNetPackSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

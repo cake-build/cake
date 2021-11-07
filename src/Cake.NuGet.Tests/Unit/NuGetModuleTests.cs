@@ -32,24 +32,7 @@ namespace Cake.NuGet.Tests.Unit
                 fixture.Builder.Received(1).Singleton();
             }
 
-            [RuntimeFact(TestRuntime.Clr)]
             public void Should_Register_The_NuGet_Load_Directive_Provider()
-            {
-                // Given
-                var fixture = new NuGetModuleFixture<NuGetLoadDirectiveProvider>();
-                var module = fixture.CreateModule();
-
-                // When
-                module.Register(fixture.Registrar);
-
-                // Then
-                fixture.Registrar.Received(1).RegisterType<NuGetLoadDirectiveProvider>();
-                fixture.Builder.Received(1).As<ILoadDirectiveProvider>();
-                fixture.Builder.Received(1).Singleton();
-            }
-
-            [RuntimeFact(TestRuntime.CoreClr)]
-            public void Should_Register_The_NuGet_Load_Directive_Provider_When_Using_In_Process_Client()
             {
                 // Given
                 var fixture = new NuGetModuleFixture<NuGetLoadDirectiveProvider>();

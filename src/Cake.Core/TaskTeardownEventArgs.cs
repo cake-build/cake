@@ -7,8 +7,10 @@ using System;
 namespace Cake.Core
 {
     /// <summary>
+    /// [deprecated] TaskTeardownEventArgs is obsolete and will be removed in a future release. Use <see cref="BeforeTaskTeardownEventArgs" /> instead.
     /// Event data for the <see cref="ICakeEngine.TaskTeardown"/> event.
     /// </summary>
+    [Obsolete("TaskTeardownEventArgs is obsolete and will be removed in a future release. Use BeforeTaskTeardownEventArgs instead.")]
     public sealed class TaskTeardownEventArgs : EventArgs
     {
         /// <summary>

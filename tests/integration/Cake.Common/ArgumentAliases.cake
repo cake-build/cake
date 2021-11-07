@@ -7,7 +7,7 @@ Task("Cake.Common.ArgumentAliases.HasArgument")
 {
     // Given, When
     var arg = HasArgument("customarg");
-    
+
     // Then
     Assert.True(arg);
 });
@@ -17,7 +17,7 @@ Task("Cake.Common.ArgumentAliases.HasArgument.ThatDoNotExist")
 {
     // Given, When
     var arg = HasArgument("nonexisting");
-    
+
     // Then
     Assert.False(arg);
 });
@@ -45,7 +45,7 @@ Task("Cake.Common.ArgumentAliases.Argument.WithDefaultValue")
 Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments")
     .Does(() =>
 {
-    
+
     // Given, When
     var arg = Arguments<string>("multipleargs");
 
@@ -70,13 +70,7 @@ Task("Cake.Common.ArgumentAliases.Argument.FilePathArgument")
     var testAssemblyPath = Context
                             .Environment
                             .ApplicationRoot
-                            .CombineWithFilePath(
-#if NETCOREAPP
-                                "Cake.dll"
-#else
-                                "Cake.exe"
-#endif
-                            );
+                            .CombineWithFilePath("Cake.dll");
 
     // When
     var arg = Argument<FilePath>("testAssemblyFilePath");

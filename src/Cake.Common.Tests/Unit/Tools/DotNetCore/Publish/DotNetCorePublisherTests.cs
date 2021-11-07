@@ -275,6 +275,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Publish
                 // Then
                 Assert.Equal("publish -p:IncludeAllContentForSelfExtract=true", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_EnableCompressionInSingleFile()
+            {
+                // Given
+                var fixture = new DotNetCorePublisherFixture();
+                fixture.Settings.EnableCompressionInSingleFile = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish -p:EnableCompressionInSingleFile=true", result.Args);
+            }
         }
     }
 }

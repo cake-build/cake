@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -24,7 +25,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="settings">MSBuild settings to add.</param>
         /// <param name="environment">The environment.</param>
         /// <exception cref="InvalidOperationException">Throws if 10 or more file loggers specified.</exception>
-        public static void AppendMSBuildSettings(this ProcessArgumentBuilder builder, DotNetCoreMSBuildSettings settings, ICakeEnvironment environment)
+        public static void AppendMSBuildSettings(this ProcessArgumentBuilder builder, DotNetMSBuildSettings settings, ICakeEnvironment environment)
         {
             // Got any targets?
             if (settings.Targets.Any())
