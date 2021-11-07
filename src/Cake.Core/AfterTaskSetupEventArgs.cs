@@ -7,11 +7,9 @@ using System;
 namespace Cake.Core
 {
     /// <summary>
-    /// [deprecated] TaskSetupEventArgs is obsolete and will be removed in a future release. Use <see cref="BeforeTaskSetupEventArgs" /> instead.
-    /// Event data for the <see cref="ICakeEngine.TaskSetup"/> event.
+    /// Event data for the <see cref="ICakeEngine.AfterTaskSetup"/> event.
     /// </summary>
-    [Obsolete("TaskSetupEventArgs is obsolete and will be removed in a future release. Use BeforeTaskSetupEventArgs instead.")]
-    public sealed class TaskSetupEventArgs : EventArgs
+    public sealed class AfterTaskSetupEventArgs : EventArgs
     {
         /// <summary>
         /// Gets the task setup context.
@@ -19,10 +17,10 @@ namespace Cake.Core
         public ITaskSetupContext TaskSetupContext { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskSetupEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="AfterTaskSetupEventArgs"/> class.
         /// </summary>
         /// <param name="taskSetupContext">The task setup context.</param>
-        public TaskSetupEventArgs(ITaskSetupContext taskSetupContext)
+        public AfterTaskSetupEventArgs(ITaskSetupContext taskSetupContext)
         {
             TaskSetupContext = taskSetupContext;
         }
