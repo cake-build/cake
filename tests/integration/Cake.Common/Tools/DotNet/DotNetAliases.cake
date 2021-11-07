@@ -1,7 +1,7 @@
 #load "./../../../utilities/xunit.cake"
 #load "./../../../utilities/paths.cake"
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.Setup")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
     .Does(() =>
 {
     var dotnetExePath = Paths.TestRoot.CombineWithFilePath(Context.IsRunningOnUnix() ? ".dotnet/dotnet" : ".dotnet/dotnet.exe");
@@ -16,19 +16,19 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.Setup")
     CopyDirectory(sourcePath, targetPath);
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRestore")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.Setup")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
     .Does(() =>
 {
     // Given
     var root = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
 
     // When
-    DotNetCoreRestore(root.FullPath, new DotNetCoreRestoreSettings { Verbosity = DotNetCoreVerbosity.Minimal });
+    DotNetRestore(root.FullPath, new DotNetRestoreSettings { Verbosity = DotNetVerbosity.Minimal });
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRestore")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .Does(() =>
 {
     // Given
@@ -37,14 +37,14 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
     var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
 
     // When
-    DotNetCoreBuild(project.FullPath);
+    DotNetBuild(project.FullPath);
 
     // Then
     Assert.True(System.IO.File.Exists(assembly.FullPath));
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
     .Does(() =>
 {
     // Given
@@ -52,11 +52,11 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
     var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
 
     // When
-    DotNetCoreTest(project.FullPath);
+    DotNetTest(project.FullPath);
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreVSTest")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetVSTest")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
     .Does(() =>
 {
     // Given
@@ -64,20 +64,20 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreVSTest")
     var assembly = path.CombineWithFilePath("hwapp.tests/bin/Debug/netcoreapp3.1/hwapp.tests.dll");
 
     // When
-    DotNetCoreVSTest(assembly.FullPath);
+    DotNetVSTest(assembly.FullPath);
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTool")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTool")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
     .Does(() =>
 {
     // When
-    DotNetCoreTool("--info");
+    DotNetTool("--info");
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRun")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreVSTest")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRun")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetVSTest")
     .Does(() =>
 {
     // Given
@@ -85,37 +85,37 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRun")
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
 
     // When
-    DotNetCoreRun(project.FullPath);
+    DotNetRun(project.FullPath);
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePack")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPack")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
     .Does(() =>
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var outputPath = path.Combine("DotNetCorePack");
+    var outputPath = path.Combine("DotNetPack");
     var nuget = outputPath.CombineWithFilePath("hwapp.1.0.0.nupkg");
     var nugetSymbols = outputPath.CombineWithFilePath("hwapp.1.0.0.symbols.nupkg");
     EnsureDirectoryExist(outputPath);
 
     // When
-    DotNetCorePack(project.FullPath, new DotNetCorePackSettings { OutputDirectory = outputPath, IncludeSymbols = true });
+    DotNetPack(project.FullPath, new DotNetPackSettings { OutputDirectory = outputPath, IncludeSymbols = true });
 
     // Then
     Assert.True(System.IO.File.Exists(nuget.FullPath), "Path:" + nuget.FullPath);
     Assert.True(System.IO.File.Exists(nugetSymbols.FullPath), "Path:" + nugetSymbols.FullPath);
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetPush")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePack")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetPush")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPack")
     .Does(() =>
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
-    var outputPath = path.Combine("DotNetCorePack");
-    var nugetServerPath = path.Combine("DotNetCorePush");
+    var outputPath = path.Combine("DotNetPack");
+    var nugetServerPath = path.Combine("DotNetPush");
     var nugetSource = outputPath.CombineWithFilePath("hwapp.1.0.0.nupkg");
     var nugetDestination = nugetServerPath.CombineWithFilePath("hwapp.1.0.0.nupkg");
 
@@ -124,39 +124,39 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetPush")
     Assert.True(System.IO.File.Exists(nugetSource.FullPath), "Path:" + nugetSource.FullPath);
 
     // When
-    DotNetCoreNuGetPush(nugetSource.FullPath, new DotNetCoreNuGetPushSettings { Source = nugetServerPath.FullPath });
+    DotNetNuGetPush(nugetSource.FullPath, new DotNetNuGetPushSettings { Source = nugetServerPath.FullPath });
 
     // Then
     Assert.True(System.IO.File.Exists(nugetDestination.FullPath), "Path:" + nugetDestination.FullPath);
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetDelete")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetPush")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetDelete")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetPush")
     .Does(() =>
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
-    var nugetServerPath = path.Combine("DotNetCorePush");
+    var nugetServerPath = path.Combine("DotNetPush");
     var nugetDestination = nugetServerPath.CombineWithFilePath("hwapp.1.0.0.nupkg");
 
     EnsureDirectoryExist(nugetServerPath);
     Assert.True(System.IO.File.Exists(nugetDestination.FullPath), "Path:" + nugetDestination.FullPath);
 
     // When
-    DotNetCoreNuGetDelete("hwapp", "1.0.0", new DotNetCoreNuGetDeleteSettings { Source = nugetServerPath.FullPath, NonInteractive = true });
+    DotNetNuGetDelete("hwapp", "1.0.0", new DotNetNuGetDeleteSettings { Source = nugetServerPath.FullPath, NonInteractive = true });
 
     // Then
     Assert.False(System.IO.File.Exists(nugetDestination.FullPath), "Path:" + nugetDestination.FullPath);
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePublish")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublish")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
     .Does(() =>
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var outputPath = path.Combine("DotNetCorePublish");
+    var outputPath = path.Combine("DotNetPublish");
     var publishFiles = new [] {
         outputPath.CombineWithFilePath("hwapp.common.dll"),
         outputPath.CombineWithFilePath("hwapp.common.pdb"),
@@ -169,7 +169,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePublish")
     EnsureDirectoryExist(outputPath);
 
     // When
-    DotNetCorePublish(project.FullPath, new DotNetCorePublishSettings { OutputDirectory = outputPath });
+    DotNetPublish(project.FullPath, new DotNetPublishSettings { OutputDirectory = outputPath });
 
     // Then
     foreach(var file in publishFiles)
@@ -178,8 +178,8 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePublish")
     }
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreExecute")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetExecute")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
     .Does(() =>
 {
     // Given
@@ -187,11 +187,11 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreExecute")
     var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
 
     // When
-    DotNetCoreExecute(assembly);
+    DotNetExecute(assembly);
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreClean")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetClean")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
     .Does(() =>
 {
     // Given
@@ -201,14 +201,14 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreClean")
     Assert.True(System.IO.File.Exists(assembly.FullPath));
 
     // When
-    DotNetCoreClean(project.FullPath);
+    DotNetClean(project.FullPath);
 
     // Then
     Assert.False(System.IO.File.Exists(assembly.FullPath));
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreMSBuild")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreClean")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetClean")
     .Does(() =>
 {
     // Given
@@ -217,14 +217,14 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreMSBuild")
     var assembly = path.CombineWithFilePath("hwapp/bin/Debug/netcoreapp3.1/hwapp.dll");
 
     // When
-    DotNetCoreMSBuild(project.FullPath);
+    DotNetMSBuild(project.FullPath);
 
     // Then
     Assert.True(System.IO.File.Exists(assembly.FullPath));
 });
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest.Fail")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
     .Does(() =>
 {
     // Given
@@ -232,8 +232,8 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest.Fail")
     var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
 
     // When
-    var exception = Record.Exception(()=>DotNetCoreTest(project.FullPath,
-        new DotNetCoreTestSettings { EnvironmentVariables = new Dictionary<string, string> {{ "hwapp_fail_test", "true" }}
+    var exception = Record.Exception(()=>DotNetTest(project.FullPath,
+        new DotNetTestSettings { EnvironmentVariables = new Dictionary<string, string> {{ "hwapp_fail_test", "true" }}
         }));
 
     // Then
@@ -243,26 +243,26 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest.Fail")
 });
 
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuildServerShutdown")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRestore")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuild")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreVSTest")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTool")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreRun")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePack")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetPush")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreNuGetDelete")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCorePublish")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreExecute")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreClean")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreMSBuild")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest.Fail")
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetVSTest")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTool")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRun")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPack")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetPush")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetDelete")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublish")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetExecute")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetClean")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     .Does(() =>
 {
     // When
-    DotNetCoreBuildServerShutdown();
+    DotNetBuildServerShutdown();
 });;
 
-Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases")
-    .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreBuildServerShutdown");
+Task("Cake.Common.Tools.DotNet.DotNetAliases")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown");
