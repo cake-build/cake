@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Core.IO;
 
@@ -175,6 +175,6 @@ namespace Cake.Common.Tools.DotNet.Publish
         /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
-        public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }
+        public DotNetMSBuildSettings MSBuildSettings { get; set; }
     }
 }
