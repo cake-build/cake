@@ -101,10 +101,10 @@ namespace Cake.Common.Build.AzurePipelines.Data
         public FilePath ToolsDirectory => GetEnvironmentString("AGENT_TOOLSDIRECTORY");
 
         /// <summary>
-        /// Gets a value indicating whether the current agent is a hosted agent.
+        /// Gets a value indicating whether the current agent is a Microsoft hosted agent.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the current agent is a hosted agent; otherwise, <c>false</c>.
+        /// <c>true</c> if the current agent is a Microsoft hosted agent. <c>false</c> if the current agent is a self hosted agent.
         /// </value>
         public bool IsHosted => Name != null && (Name.StartsWith("Hosted") || Name.StartsWith("Azure Pipelines"));
     }

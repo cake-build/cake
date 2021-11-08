@@ -37,11 +37,7 @@ namespace Cake.Common.Tools.Cake
             var executingAssemblyToolPath = ((FilePath)entryAssembly.Location).GetDirectory();
             _executingAssemblyToolPaths = new[]
             {
-#if NETCORE
                 executingAssemblyToolPath.CombineWithFilePath("Cake.dll")
-#else
-                executingAssemblyToolPath.CombineWithFilePath("Cake.exe")
-#endif
             };
         }
 
@@ -181,17 +177,10 @@ namespace Cake.Common.Tools.Cake
         {
             return new[]
             {
-#if NETCORE
                 "Cake.dll",
                 "cake",
                 "Cake",
                 "Cake.exe"
-#else
-                "Cake.exe",
-                "cake",
-                "Cake",
-                "Cake.dll"
-#endif
             };
         }
 

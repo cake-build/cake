@@ -41,6 +41,24 @@ namespace Cake.Common.Tools.MSBuild
         /// Platform target: <c>ARM64</c>
         /// </summary>
         // ReSharper disable once InconsistentNaming
-        ARM64 = 5
+        ARM64 = 5,
+
+        /// <summary>
+        /// Platform target: <c>ARMv6</c>
+        /// </summary>
+        // ReSharper disable once InconsistentNaming
+        ARMv6 = 6,
+
+        /// <summary>
+        /// Platform target: <c>ARMv7</c>
+        /// </summary>
+        // ReSharper disable once InconsistentNaming
+        ARMv7 = 7,
+
+        /// <summary>
+        /// Platform target: <c>ARMv7s</c>
+        /// </summary>
+        // ReSharper disable once InconsistentNaming
+        ARMv7s = 8,
     }
 }

@@ -12,13 +12,8 @@ namespace Cake.Core.Polyfill
     {
         public static void SetEnvironmentVariable(ProcessStartInfo info, string key, string value)
         {
-#if NETCORE
-            var envKey = info.Environment.Keys.FirstOrDefault(exisitingKey => StringComparer.OrdinalIgnoreCase.Equals(exisitingKey, key)) ?? key;
+            var envKey = info.Environment.Keys.FirstOrDefault(existingKey => StringComparer.OrdinalIgnoreCase.Equals(existingKey, key)) ?? key;
             info.Environment[envKey] = value;
-#else
-            var envKey = info.EnvironmentVariables.Keys.Cast<string>().FirstOrDefault(existingKey => StringComparer.OrdinalIgnoreCase.Equals(existingKey, key)) ?? key;
-            info.EnvironmentVariables[envKey] = value;
-#endif
         }
     }
 }

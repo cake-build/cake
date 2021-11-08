@@ -68,11 +68,7 @@ namespace Cake.Infrastructure.Scripting
             }
 
             _log.Debug("Adding reference to {0}...", path.GetFilename().FullPath);
-#if NETCORE
             References.Add(_loader.Load(path, true));
-#else
-            ReferencePaths.Add(path);
-#endif
         }
 
         public void ImportNamespace(string @namespace)

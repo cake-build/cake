@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -12,7 +13,7 @@ namespace Cake.Common.Tools.DotNetCore.BuildServer
     /// <summary>
     /// .NET Core project builder.
     /// </summary>
-    public sealed class DotNetCoreBuildServer : DotNetCoreTool<DotNetCoreBuildServerSettings>
+    public sealed class DotNetCoreBuildServer : DotNetCoreTool<DotNetBuildServerShutdownSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -36,7 +37,7 @@ namespace Cake.Common.Tools.DotNetCore.BuildServer
         /// Build the project using the specified path and settings.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        public void Shutdown(DotNetCoreBuildServerSettings settings)
+        public void Shutdown(DotNetBuildServerShutdownSettings settings)
         {
             if (settings == null)
             {
@@ -46,7 +47,7 @@ namespace Cake.Common.Tools.DotNetCore.BuildServer
             RunCommand(settings, GetArguments(settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(DotNetCoreBuildServerSettings settings)
+        private ProcessArgumentBuilder GetArguments(DotNetBuildServerShutdownSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

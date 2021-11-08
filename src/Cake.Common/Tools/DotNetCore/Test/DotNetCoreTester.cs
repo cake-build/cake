@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.Test;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -12,7 +13,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
     /// <summary>
     /// .NET Core project tester.
     /// </summary>
-    public sealed class DotNetCoreTester : DotNetCoreTool<DotNetCoreTestSettings>
+    public sealed class DotNetCoreTester : DotNetCoreTool<DotNetTestSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -38,7 +39,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// <param name="project">The target project path.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="settings">The settings.</param>
-        public void Test(string project, ProcessArgumentBuilder arguments, DotNetCoreTestSettings settings)
+        public void Test(string project, ProcessArgumentBuilder arguments, DotNetTestSettings settings)
         {
             if (settings == null)
             {
@@ -48,7 +49,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
             RunCommand(settings, GetArguments(project, arguments, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetCoreTestSettings settings)
+        private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetTestSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

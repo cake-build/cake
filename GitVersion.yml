@@ -1,4 +1,4 @@
-next-version: 1.0.0
+next-version: 2.0.0
 branches:
   master:
     regex: main

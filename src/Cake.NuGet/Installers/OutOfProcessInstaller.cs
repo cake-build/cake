@@ -11,12 +11,7 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Packaging;
-
-#if NETCORE
 using NuGet.Versioning;
-#else
-using NuGet;
-#endif
 
 using IFileSystem = Cake.Core.IO.IFileSystem;
 using PackageReference = Cake.Core.Packaging.PackageReference;

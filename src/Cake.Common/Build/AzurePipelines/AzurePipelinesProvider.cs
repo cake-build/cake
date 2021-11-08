@@ -30,11 +30,7 @@ namespace Cake.Common.Build.AzurePipelines
 
         /// <inheritdoc/>
         public bool IsRunningOnAzurePipelines
-            => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TF_BUILD")) && !IsHostedAgent;
-
-        /// <inheritdoc/>
-        public bool IsRunningOnAzurePipelinesHosted
-            => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TF_BUILD")) && IsHostedAgent;
+            => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TF_BUILD"));
 
         /// <inheritdoc/>
         public AzurePipelinesEnvironmentInfo Environment { get; }

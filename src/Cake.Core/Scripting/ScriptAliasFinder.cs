@@ -67,13 +67,6 @@ namespace Cake.Core.Scripting
                                 {
                                     notFound.Add(fileNotFoundException.FileName);
                                 }
-#if !NETCORE
-                                if (!string.IsNullOrEmpty(fileNotFoundException.FusionLog))
-                                {
-                                    _log.Debug("Fusion Log:");
-                                    _log.Debug(fileNotFoundException.FusionLog);
-                                }
-#endif
                             }
                             _log.Debug(string.Empty);
                         }

@@ -24,7 +24,6 @@ namespace Cake.Core.Tests.Unit
                 TestOutputHelper = testOutputHelper;
             }
 
-            [RuntimeFact(TestRuntime.CoreClr)]
             public void Should_Return_Correct_Result_For_CoreClr()
             {
                 // Given
@@ -136,22 +135,6 @@ namespace Cake.Core.Tests.Unit
                 }
                 Assert.Equal(expect, framework.FullName);
 #endif
-            }
-        }
-
-        public sealed class TheExecutingFrameworkProperty
-        {
-            [RuntimeFact(TestRuntime.Clr)]
-            public void Should_Return_Correct_Result_For_Clr()
-            {
-                // Given
-                var runtime = new CakeRuntime();
-
-                // When
-                var framework = runtime.BuiltFramework;
-
-                // Then
-                Assert.Equal(".NETFramework,Version=v4.6.1", framework.FullName);
             }
         }
     }
