@@ -28,7 +28,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.0.0-6.final" />
     <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
-    <PackageReference Include="System.Reflection.Metadata" Version="5.0.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="6.0.0" />
     <PackageReference Include="Autofac" Version="6.3.0" />
   </ItemGroup>
 </Project>
