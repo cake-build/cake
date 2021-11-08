@@ -300,7 +300,7 @@ namespace Cake.Common.Tools.MSBuild
             {
                 if (properties[propertyKey].Count > 1)
                 {
-                    var commaSeparatedValues = string.Join(",", properties[propertyKey].Select(x => x.EscapeMSBuildPropertySpecialCharacters()));
+                    var commaSeparatedValues = string.Join(';', properties[propertyKey].Select(x => x.EscapeMSBuildPropertySpecialCharacters()));
                     yield return string.Concat("/p:", propertyKey, "=", '"', commaSeparatedValues, '"');
                 }
                 else if (properties[propertyKey].Count == 1)
