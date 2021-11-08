@@ -1,11 +1,7 @@
 ### New in 2.0.0-rc0001 (Released 2021/11/07)
 
-* 3627 Add GitHub Actions AddPath Command
-* 3628 Add GitHub Actions SetEnvironmentVariable Command
-* 3629 Add GitHub Actions UploadArtifact Command
-* 3630 Add GitHub Actions Environment properties
-* 3631 Refactor GitHub Actions Paths
 * 3654 IsRunningOnAzurePipelines should ignore agent type
+* 3631 Refactor GitHub Actions Paths
 * 3610 Remove TFBuildProvider
 * 3590 Directories in AzurePipelinesBuildInfo are FilePaths - FilePath.GetDirectory then inconsistent
 * 3581 Stop shipping Cake.Portable Chocolatey package and Cake Homebrew formulae
@@ -19,7 +15,11 @@
 * 2872 Bump eol target frameworks
 * 2788 Tool:OpenCover - the register-setting should be an option, rather than a string
 * 1111 DotNetCoreRestore: dotnet restore no longer supports globbing
-* 3341 Epic: Introduce DotNet aliases (synonyms to DotNetCore aliases)
+* 3341 Introduce DotNet aliases (synonyms to DotNetCore aliases
+* 3627 Add GitHub Actions AddPath Command
+* 3628 Add GitHub Actions SetEnvironmentVariable Command
+* 3629 Add GitHub Actions UploadArtifact Command
+* 3630 Add GitHub Actions Environment properties
 * 3662 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.0.0-6.final
 * 3647 Display message of criteria when task fails to run due to criteria not being met
 * 3644 Add DotNetNuGetUpdateSource aliases (synonym to DotNetCoreNuGetUpdateSource)
@@ -28,6 +28,7 @@
 * 3641 Add DotNetNuGetHasSource aliases (synonym to DotNetCoreNuGetHasSource)
 * 3640 Add DotNetNuGetEnableSource aliases (synonym to DotNetCoreNuGetEnableSource)
 * 3639 Add DotNetNuGetDisableSource aliases (synonym to DotNetCoreNuGetDisableSource)
+* 3607 Add EnableCompressionInSingleFile to DotNetCorePublishSettings
 * 3599 Add VS2022 to default MSBuild Resolver
 * 3598 Remove Preview from VS2022 MSBuild Resolver
 * 3595 Update Autofac to 6.3.0
@@ -53,7 +54,9 @@
 * 2571 OctopusDeploy DeployTo property to take collection of string to specify multiple environments
 * 2075 Add overloads for DotNetCore*() methods taking FilePath instead of string
 * 1794 Private is missing from ProjectReference
+* 1616 Error message on circular references leads to poor developer experience
 * 1669 Release notes does not tolerate prerelease versions
+* 2443 Erroneous "Target path must be an absolute path" when preserveFolderStructure is used with CopyFiles
 * 3602 Switch to Cake.Tool as primary package in REAME.md
 
 ### New in 1.3.0 (Released 2021/10/07)
