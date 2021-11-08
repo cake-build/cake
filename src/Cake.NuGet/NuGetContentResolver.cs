@@ -25,15 +25,11 @@ namespace Cake.NuGet
 
         private static readonly Lazy<RuntimeGraph> RuntimeGraph = new Lazy<RuntimeGraph>(() =>
         {
-#if NETCORE
             var assembly = typeof(NuGetContentResolver).Assembly;
             using (var stream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.runtime.json"))
             {
                 return JsonRuntimeFormat.ReadRuntimeGraph(stream);
             }
-#else
-            return global::NuGet.RuntimeModel.RuntimeGraph.Empty;
-#endif
         });
 
         public NuGetContentResolver(

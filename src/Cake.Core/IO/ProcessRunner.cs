@@ -101,7 +101,6 @@ namespace Cake.Core.IO
             var arguments = settings.Arguments ?? new ProcessArgumentBuilder();
             filterUnsafe = arguments.FilterUnsafe;
 
-#if NETCORE
             if (!_noMonoCoersion &&
                 _environment.Platform.IsUnix() &&
                 _environment.Runtime.IsCoreClr &&
@@ -126,7 +125,6 @@ namespace Cake.Core.IO
                     }
                 }
             }
-#endif
 
             if (!settings.Silent)
             {

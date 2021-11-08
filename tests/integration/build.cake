@@ -7,6 +7,7 @@
 #load "setup.cake"
 #load "teardown.cake"
 #load "./Cake.Common/ArgumentAliases.cake"
+#load "./Cake.Common/Build/BuildSystemAliases.cake"
 #load "./Cake.Common/EnvironmentAliases.cake"
 #load "./Cake.Common/Diagnostics/LoggingAliases.cake"
 #load "./Cake.Common/IO/DirectoryAliases.cake"
@@ -23,10 +24,12 @@
 #load "./Cake.Common/Solution/Project/XmlDoc/XmlDocAliases.cake"
 #load "./Cake.Common/Text/TextTransformationAliases.cake"
 #load "./Cake.Common/Tools/Cake/CakeAliases.cake"
+#load "./Cake.Common/Tools/DotNet/DotNetAliases.cake"
 #load "./Cake.Common/Tools/DotNetCore/DotNetCoreAliases.cake"
 #load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
 #load "./Cake.Common/Tools/TextTransform/TextTransformAliases.cake"
 #load "./Cake.Core/Diagnostics/ICakeLog.cake"
+#load "./Cake.Core/IO/Path.cake"
 #load "./Cake.Core/Scripting/AddinDirective.cake"
 #load "./Cake.Core/Scripting/DefineDirective.cake"
 #load "./Cake.Core/Scripting/Dynamic.cake"
@@ -52,6 +55,7 @@ var target = Argument<string>("target", "Run-All-Tests");
 
 Task("Cake.Core")
     .IsDependentOn("Cake.Core.Diagnostics")
+    .IsDependentOn("Cake.Core.IO.Path")
     .IsDependentOn("Cake.Core.Scripting.AddinDirective")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective")
     .IsDependentOn("Cake.Core.Scripting.Dynamic")
@@ -65,6 +69,7 @@ Task("Cake.Core")
 
 Task("Cake.Common")
     .IsDependentOn("Cake.Common.ArgumentAliases")
+    .IsDependentOn("Cake.Common.Build.BuildSystemAliases")
     .IsDependentOn("Cake.Common.EnvironmentAliases")
     .IsDependentOn("Cake.Common.Diagnostics.LoggingAliases")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases")
@@ -81,6 +86,7 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Solution.Project.XmlDoc.XmlDocAliases")
     .IsDependentOn("Cake.Common.Text.TextTransformationAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases")
     .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases")
     .IsDependentOn("Cake.Common.Tools.TextTransform.TextTransformAliases");

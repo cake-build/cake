@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -14,7 +15,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
     /// <summary>
     /// .NET Core project restorer.
     /// </summary>
-    public sealed class DotNetCoreRestorer : DotNetCoreTool<DotNetCoreRestoreSettings>
+    public sealed class DotNetCoreRestorer : DotNetCoreTool<DotNetRestoreSettings>
     {
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
@@ -43,7 +44,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
         /// </summary>
         /// <param name="root">List of projects and project folders to restore. Each value can be: a path to a project.json or global.json file, or a folder to recursively search for project.json files.</param>
         /// <param name="settings">The settings.</param>
-        public void Restore(string root, DotNetCoreRestoreSettings settings)
+        public void Restore(string root, DotNetRestoreSettings settings)
         {
             if (settings == null)
             {
@@ -53,7 +54,7 @@ namespace Cake.Common.Tools.DotNetCore.Restore
             RunCommand(settings, GetArguments(root, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string root, DotNetCoreRestoreSettings settings)
+        private ProcessArgumentBuilder GetArguments(string root, DotNetRestoreSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

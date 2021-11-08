@@ -7,8 +7,10 @@ using System;
 namespace Cake.Core
 {
     /// <summary>
+    /// [deprecated] TaskSetupEventArgs is obsolete and will be removed in a future release. Use <see cref="BeforeTaskSetupEventArgs" /> instead.
     /// Event data for the <see cref="ICakeEngine.TaskSetup"/> event.
     /// </summary>
+    [Obsolete("TaskSetupEventArgs is obsolete and will be removed in a future release. Use BeforeTaskSetupEventArgs instead.")]
     public sealed class TaskSetupEventArgs : EventArgs
     {
         /// <summary>

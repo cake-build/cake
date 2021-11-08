@@ -10,10 +10,6 @@ using Cake.Common.Polyfill;
 using Cake.Core;
 using Cake.Core.IO;
 
-#if !NETCORE
-
-#endif
-
 namespace Cake.Common.Xml
 {
     /// <summary>

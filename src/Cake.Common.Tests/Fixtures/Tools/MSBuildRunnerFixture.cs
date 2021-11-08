@@ -36,8 +36,8 @@ namespace Cake.Common.Tests.Fixtures.Tools
                 "/Program86/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/amd64/MSBuild.exe",
                 "/Program86/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/MSBuild.exe",
                 "/Program86/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/amd64/MSBuild.exe",
-                "/Program/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe",
-                "/Program/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/amd64/MSBuild.exe",
+                "/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe",
+                "/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/amd64/MSBuild.exe",
                 "/usr/bin/msbuild",
                 "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild"
             };
@@ -77,6 +77,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
             }
             FileSystem.GetDirectory("/Windows").Delete(true);
             FileSystem.GetDirectory("/Program86").Delete(true);
+            FileSystem.GetDirectory("/Program").Delete(true);
         }
 
         protected override void RunTool()

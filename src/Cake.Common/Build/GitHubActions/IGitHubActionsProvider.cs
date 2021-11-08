@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Build.GitHubActions.Commands;
 using Cake.Common.Build.GitHubActions.Data;
 
 namespace Cake.Common.Build.GitHubActions
@@ -26,5 +27,13 @@ namespace Cake.Common.Build.GitHubActions
         /// The GitHub Actions environment.
         /// </value>
         GitHubActionsEnvironmentInfo Environment { get; }
+
+        /// <summary>
+        /// Gets the GitHub Actions commands.
+        /// </summary>
+        /// <value>
+        /// The GitHub Actions commands.
+        /// </value>
+        public GitHubActionsCommands Commands { get; }
     }
 }

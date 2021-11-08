@@ -35,6 +35,7 @@ namespace Cake.Common.Tools.OctopusDeploy
             AppendArgumentIfNotNull("releasenotes", _settings.ReleaseNotes);
             AppendArgumentIfNotNull("releasenotesfile", _settings.ReleaseNotesFile);
             AppendArgumentIfNotNull("channel", _settings.Channel);
+            AppendArgumentIfNotNull("excludemachines", _settings.ExcludeMachines);
 
             if (_settings.IgnoreChannelRules)
             {
@@ -58,10 +59,19 @@ namespace Cake.Common.Tools.OctopusDeploy
 
         private void AppendDeploymnetArguments()
         {
-            AppendArgumentIfNotNull("deployto", _settings.DeployTo);
             AppendConditionalFlag(_settings.ShowProgress, "--progress");
             AppendConditionalFlag(_settings.ForcePackageDownload, "--forcepackagedownload");
             AppendConditionalFlag(_settings.WaitForDeployment, "--waitfordeployment");
+
+            AppendArgumentIfNotNull("deployto", _settings.DeployTo);
+
+            if (_settings.DeployToMultiple != null)
+            {
+                foreach (var target in _settings.DeployToMultiple)
+                {
+                    AppendArgumentIfNotNull("deployto", target);
+                }
+            }
 
             if (_settings.DeploymentTimeout.HasValue)
             {

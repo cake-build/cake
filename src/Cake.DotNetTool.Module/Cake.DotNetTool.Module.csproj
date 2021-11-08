@@ -1,7 +1,6 @@
 ﻿ <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Cake.DotNetTool.Module</AssemblyName>
-    <TargetFrameworks>net461;netstandard2.0;net5.0;net6.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -19,8 +18,8 @@
 
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
-  
-  <!-- 
+
+  <!--
   Cake.DotNetTool.Module ships a snupkg and hence can not currently
   add  PackageReadmeFile - see https://github.com/NuGet/Home/issues/10791
   This block can be removed when building is done soely using
@@ -29,7 +28,7 @@
   <PropertyGroup>
     <PackageReadmeFile></PackageReadmeFile>
   </PropertyGroup>
-   
+
   <!-- Project references -->
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />

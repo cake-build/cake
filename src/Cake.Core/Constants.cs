@@ -11,7 +11,7 @@ namespace Cake.Core
         public const ConsoleColor DefaultConsoleColor = (ConsoleColor)(-1);
 
         public static readonly Version LatestBreakingChange = new Version(0, 26, 0);
-        public static readonly Version LatestPotentialBreakingChange = new Version(1, 0, 0);
+        public static readonly Version LatestPotentialBreakingChange = new Version(2, 0, 0);
 
         public static class Settings
         {

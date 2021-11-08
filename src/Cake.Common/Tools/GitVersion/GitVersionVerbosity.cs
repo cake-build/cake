@@ -5,33 +5,33 @@
 namespace Cake.Common.Tools.GitVersion
 {
     /// <summary>
-    /// The GitVersion verbosity.
+    /// The GitVersion verbosity. Default is <see cref="Normal"/>.
     /// </summary>
     public enum GitVersionVerbosity
     {
         /// <summary>
-        /// No messages will be logged.
+        /// Quiet verbosity.
         /// </summary>
-        None,
+        Quiet = 0,
 
         /// <summary>
-        /// Log error messages.
+        /// Minimal verbosity.
         /// </summary>
-        Error,
+        Minimal = 1,
 
         /// <summary>
-        /// Log error and warning messages.
+        /// Normal verbosity (Default).
         /// </summary>
-        Warn,
+        Normal = 2,
 
         /// <summary>
-        /// Log error, warning and info messages.
+        /// Verbose verbosity.
         /// </summary>
-        Info,
+        Verbose = 3,
 
         /// <summary>
-        /// Log error, warning, info and debug messages (log all).
+        /// Diagnostic verbosity.
         /// </summary>
-        Debug
+        Diagnostic = 4,
     }
 }

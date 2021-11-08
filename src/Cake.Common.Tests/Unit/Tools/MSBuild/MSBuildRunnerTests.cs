@@ -156,8 +156,8 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
-            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Windows, false, "/Program/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/amd64/MSBuild.exe")]
-            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x86, PlatformFamily.Windows, false, "/Program/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Windows, false, "/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x86, PlatformFamily.Windows, false, "/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Linux, false, "/usr/bin/msbuild")]
             [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.OSX, false, "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild")]
             public void Should_Get_Correct_Path_To_MSBuild_Version_17(MSBuildToolVersion version, PlatformTarget target, PlatformFamily family, bool is64BitOperativeSystem, string expected)
@@ -166,6 +166,28 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, family);
                 fixture.Settings.ToolVersion = version;
                 fixture.Settings.PlatformTarget = target;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Path.FullPath);
+            }
+
+            [Theory]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Windows, false, "/Program86/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x86, PlatformFamily.Windows, false, "/Program86/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe")]
+            public void Should_Get_Correct_Path_To_MSBuild_Version_17_When_Only_Build_Tools_Are_Installed(MSBuildToolVersion version, PlatformTarget target, PlatformFamily family, bool is64BitOperativeSystem, string expected)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, family);
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
+
+                fixture.GivenDefaultToolDoNotExist();
+                fixture.GivenMSBuildIsNotInstalled();
+                fixture.FileSystem.CreateFile("/Program86/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/amd64/MSBuild.exe");
+                fixture.FileSystem.CreateFile("/Program86/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe");
 
                 // When
                 var result = fixture.Run();

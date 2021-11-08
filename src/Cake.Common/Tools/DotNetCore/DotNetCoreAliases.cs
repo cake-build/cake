@@ -6,7 +6,21 @@ using System;
 using System.Collections.Generic;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Build;
+using Cake.Common.Tools.DotNet.BuildServer;
+using Cake.Common.Tools.DotNet.Clean;
+using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.NuGet.Delete;
+using Cake.Common.Tools.DotNet.NuGet.Push;
+using Cake.Common.Tools.DotNet.NuGet.Source;
+using Cake.Common.Tools.DotNet.Pack;
+using Cake.Common.Tools.DotNet.Publish;
+using Cake.Common.Tools.DotNet.Restore;
+using Cake.Common.Tools.DotNet.Run;
+using Cake.Common.Tools.DotNet.Test;
+using Cake.Common.Tools.DotNet.Tool;
+using Cake.Common.Tools.DotNet.VSTest;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
@@ -41,6 +55,7 @@ namespace Cake.Common.Tools.DotNetCore
     public static class DotNetCoreAliases
     {
         /// <summary>
+        /// [deprecated] DotNetCoreExecute is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetExecute(ICakeContext, FilePath)" /> instead.
         /// Execute an assembly.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -53,12 +68,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Execute")]
+        [Obsolete("DotNetCoreExecute is obsolete and will be removed in a future release. Use DotNetExecute instead.")]
         public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath)
         {
-            context.DotNetCoreExecute(assemblyPath, null);
+            context.DotNetExecute(assemblyPath);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreExecute is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetExecute(ICakeContext, FilePath, ProcessArgumentBuilder)" /> instead.
         /// Execute an assembly with arguments in the specific path.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -72,12 +89,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Execute")]
+        [Obsolete("DotNetCoreExecute is obsolete and will be removed in a future release. Use DotNetExecute instead.")]
         public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments)
         {
-            context.DotNetCoreExecute(assemblyPath, arguments, null);
+            context.DotNetExecute(assemblyPath, arguments);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreExecute is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetExecute(ICakeContext, FilePath, ProcessArgumentBuilder, DotNetExecuteSettings)" /> instead.
         /// Execute an assembly with arguments in the specific path with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -97,28 +116,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Execute")]
+        [Obsolete("DotNetCoreExecute is obsolete and will be removed in a future release. Use DotNetExecute instead.")]
         public static void DotNetCoreExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetCoreExecuteSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (assemblyPath == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPath));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreExecuteSettings();
-            }
-
-            var executor = new DotNetCoreExecutor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            executor.Execute(assemblyPath, arguments, settings);
+            context.DotNetExecute(assemblyPath, arguments, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRestore is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRestore(ICakeContext)" /> instead.
         /// Restore all NuGet Packages.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -130,30 +135,34 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        [Obsolete("DotNetCoreRestore is obsolete and will be removed in a future release. Use DotNetRestore instead.")]
         public static void DotNetCoreRestore(this ICakeContext context)
         {
-            context.DotNetCoreRestore(null, null);
+            context.DotNetRestore();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRestore is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRestore(ICakeContext, string)" /> instead.
         /// Restore all NuGet Packages in the specified path.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="root">List of projects and project folders to restore. Each value can be: a path to a project.json or global.json file, or a folder to recursively search for project.json files.</param>
+        /// <param name="root">Path to the project file to restore.</param>
         /// <example>
         /// <code>
-        /// DotNetCoreRestore("./src/*");
+        /// DotNetCoreRestore("./src/MyProject/MyProject.csproj");
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        [Obsolete("DotNetCoreRestore is obsolete and will be removed in a future release. Use DotNetRestore instead.")]
         public static void DotNetCoreRestore(this ICakeContext context, string root)
         {
-            context.DotNetCoreRestore(root, null);
+            context.DotNetRestore(root);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRestore is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRestore(ICakeContext, DotNetRestoreSettings)" /> instead.
         /// Restore all NuGet Packages with the settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -176,16 +185,18 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        [Obsolete("DotNetCoreRestore is obsolete and will be removed in a future release. Use DotNetRestore instead.")]
         public static void DotNetCoreRestore(this ICakeContext context, DotNetCoreRestoreSettings settings)
         {
-            context.DotNetCoreRestore(null, settings);
+            context.DotNetRestore(settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRestore is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRestore(ICakeContext, string, DotNetRestoreSettings)" /> instead.
         /// Restore all NuGet Packages in the specified path with settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="root">List of projects and project folders to restore. Each value can be: a path to a project.json or global.json file, or a folder to recursively search for project.json files.</param>
+        /// <param name="root">Path to the project file to restore.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -199,29 +210,20 @@ namespace Cake.Common.Tools.DotNetCore
         ///     InferRuntimes = new[] {"runtime1", "runtime2"}
         /// };
         ///
-        /// DotNetCoreRestore("./src/*", settings);
+        /// DotNetCoreRestore("./src/MyProject/MyProject.csproj", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Restore")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Restore")]
+        [Obsolete("DotNetCoreRestore is obsolete and will be removed in a future release. Use DotNetRestore instead.")]
         public static void DotNetCoreRestore(this ICakeContext context, string root, DotNetCoreRestoreSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreRestoreSettings();
-            }
-
-            var restorer = new DotNetCoreRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
-            restorer.Restore(root, settings);
+            context.DotNetRestore(root, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreBuild is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetBuild(ICakeContext, string)" /> instead.
         /// Build all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -234,12 +236,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Build")]
+        [Obsolete("DotNetCoreBuild is obsolete and will be removed in a future release. Use DotNetBuild instead.")]
         public static void DotNetCoreBuild(this ICakeContext context, string project)
         {
-            context.DotNetCoreBuild(project, null);
+            context.DotNetBuild(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreBuild is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetBuild(ICakeContext, string, DotNetBuildSettings)" /> instead.
         /// Build all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -260,23 +264,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Build")]
+        [Obsolete("DotNetCoreBuild is obsolete and will be removed in a future release. Use DotNetBuild instead.")]
         public static void DotNetCoreBuild(this ICakeContext context, string project, DotNetCoreBuildSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreBuildSettings();
-            }
-
-            var builder = new DotNetCoreBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            builder.Build(project, settings);
+            context.DotNetBuild(project, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCorePack is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetPack(ICakeContext, string)" /> instead.
         /// Package all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -289,12 +284,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Pack")]
+        [Obsolete("DotNetCorePack is obsolete and will be removed in a future release. Use DotNetPack instead.")]
         public static void DotNetCorePack(this ICakeContext context, string project)
         {
-            context.DotNetCorePack(project, null);
+            context.DotNetPack(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCorePack is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetPack(ICakeContext, string, DotNetPackSettings)" /> instead.
         /// Package all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -314,23 +311,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Pack")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Pack")]
+        [Obsolete("DotNetCorePack is obsolete and will be removed in a future release. Use DotNetPack instead.")]
         public static void DotNetCorePack(this ICakeContext context, string project, DotNetCorePackSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCorePackSettings();
-            }
-
-            var packer = new DotNetCorePacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            packer.Pack(project, settings);
+            context.DotNetPack(project, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRun is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRun(ICakeContext)" /> instead.
         /// Run all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -342,12 +330,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        [Obsolete("DotNetCoreRun is obsolete and will be removed in a future release. Use DotNetRun instead.")]
         public static void DotNetCoreRun(this ICakeContext context)
         {
-            context.DotNetCoreRun(null, null, null);
+            context.DotNetRun();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRun is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRun(ICakeContext, string)" /> instead.
         /// Run project.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -360,12 +350,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        [Obsolete("DotNetCoreRun is obsolete and will be removed in a future release. Use DotNetRun instead.")]
         public static void DotNetCoreRun(this ICakeContext context, string project)
         {
-            context.DotNetCoreRun(project, null, null);
+            context.DotNetRun(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRun is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRun(ICakeContext, string, ProcessArgumentBuilder)" /> instead.
         /// Run project with path and arguments.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -379,12 +371,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        [Obsolete("DotNetCoreRun is obsolete and will be removed in a future release. Use DotNetRun instead.")]
         public static void DotNetCoreRun(this ICakeContext context, string project, ProcessArgumentBuilder arguments)
         {
-            context.DotNetCoreRun(project, arguments, null);
+            context.DotNetRun(project, arguments);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRun is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRun(ICakeContext, string, ProcessArgumentBuilder, DotNetRunSettings)" /> instead.
         /// Run project with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -405,23 +399,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        [Obsolete("DotNetCoreRun is obsolete and will be removed in a future release. Use DotNetRun instead.")]
         public static void DotNetCoreRun(this ICakeContext context, string project, ProcessArgumentBuilder arguments, DotNetCoreRunSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreRunSettings();
-            }
-
-            var runner = new DotNetCoreRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            runner.Run(project, arguments, settings);
+            context.DotNetRun(project, arguments, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreRun is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetRun(ICakeContext, string, DotNetRunSettings)" /> instead.
         /// Run project with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -441,12 +426,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Run")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Run")]
+        [Obsolete("DotNetCoreRun is obsolete and will be removed in a future release. Use DotNetRun instead.")]
         public static void DotNetCoreRun(this ICakeContext context, string project, DotNetCoreRunSettings settings)
         {
-            context.DotNetCoreRun(project, null, settings);
+            context.DotNetRun(project, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCorePublish is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetPublish(ICakeContext, string)" /> instead.
         /// Publish all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -459,12 +446,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Publish")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Publish")]
+        [Obsolete("DotNetCorePublish is obsolete and will be removed in a future release. Use DotNetPublish instead.")]
         public static void DotNetCorePublish(this ICakeContext context, string project)
         {
-            context.DotNetCorePublish(project, null);
+            context.DotNetPublish(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCorePublish is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetPublish(ICakeContext, string, DotNetPublishSettings)" /> instead.
         /// Publish all projects.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -485,23 +474,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Publish")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Publish")]
+        [Obsolete("DotNetCorePublish is obsolete and will be removed in a future release. Use DotNetPublish instead.")]
         public static void DotNetCorePublish(this ICakeContext context, string project, DotNetCorePublishSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCorePublishSettings();
-            }
-
-            var publisher = new DotNetCorePublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            publisher.Publish(project, settings);
+            context.DotNetPublish(project, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTest(ICakeContext)" /> instead.
         /// Test project.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -513,12 +493,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        [Obsolete("DotNetCoreTest is obsolete and will be removed in a future release. Use DotNetTest instead.")]
         public static void DotNetCoreTest(this ICakeContext context)
         {
-            context.DotNetCoreTest(null, null, null);
+            context.DotNetTest();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTest(ICakeContext, string)" /> instead.
         /// Test project with path.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -549,12 +531,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        [Obsolete("DotNetCoreTest is obsolete and will be removed in a future release. Use DotNetTest instead.")]
         public static void DotNetCoreTest(this ICakeContext context, string project)
         {
-            context.DotNetCoreTest(project, null, null);
+            context.DotNetTest(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTest(ICakeContext, string, DotNetTestSettings)" /> instead.
         /// Test project with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -600,12 +584,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        [Obsolete("DotNetCoreTest is obsolete and will be removed in a future release. Use DotNetTest instead.")]
         public static void DotNetCoreTest(this ICakeContext context, string project, DotNetCoreTestSettings settings)
         {
-            context.DotNetCoreTest(project, null, settings);
+            context.DotNetTest(project, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTest(ICakeContext, string, ProcessArgumentBuilder, DotNetTestSettings)" /> instead.
         /// Test project with settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -652,23 +638,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Test")]
+        [Obsolete("DotNetCoreTest is obsolete and will be removed in a future release. Use DotNetTest instead.")]
         public static void DotNetCoreTest(this ICakeContext context, string project, ProcessArgumentBuilder arguments, DotNetCoreTestSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreTestSettings();
-            }
-
-            var tester = new DotNetCoreTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            tester.Test(project, arguments, settings);
+            context.DotNetTest(project, arguments, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreClean is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetClean(ICakeContext, string)" /> instead.
         /// Cleans a project's output.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -681,12 +658,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Clean")]
+        [Obsolete("DotNetCoreClean is obsolete and will be removed in a future release. Use DotNetClean instead.")]
         public static void DotNetCoreClean(this ICakeContext context, string project)
         {
-            context.DotNetCoreClean(project, null);
+            context.DotNetClean(project);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreClean is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetClean(ICakeContext, string, DotNetCleanSettings)" /> instead.
         /// Cleans a project's output.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -707,23 +686,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Clean")]
+        [Obsolete("DotNetCoreClean is obsolete and will be removed in a future release. Use DotNetClean instead.")]
         public static void DotNetCoreClean(this ICakeContext context, string project, DotNetCoreCleanSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreCleanSettings();
-            }
-
-            var cleaner = new DotNetCoreCleaner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            cleaner.Clean(project, settings);
+            context.DotNetClean(project, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext)" /> instead.
         /// Delete a NuGet Package from a server.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -735,12 +705,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context)
         {
-            context.DotNetCoreNuGetDelete(null, null, null);
+            context.DotNetNuGetDelete();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext, string)" /> instead.
         /// Deletes a package from nuget.org.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -753,12 +725,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName)
         {
-            context.DotNetCoreNuGetDelete(packageName, null, null);
+            context.DotNetNuGetDelete(packageName);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext, string, string)" /> instead.
         /// Deletes a specific version of a package from nuget.org.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -772,12 +746,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, string packageVersion)
         {
-            context.DotNetCoreNuGetDelete(packageName, packageVersion, null);
+            context.DotNetNuGetDelete(packageName, packageVersion);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext, string, DotNetNuGetDeleteSettings)" /> instead.
         /// Deletes a package from a server.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -797,12 +773,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, DotNetCoreNuGetDeleteSettings settings)
         {
-            context.DotNetCoreNuGetDelete(packageName, null, settings);
+            context.DotNetNuGetDelete(packageName, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext, DotNetNuGetDeleteSettings)" /> instead.
         /// Deletes a package from a server using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -821,12 +799,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, DotNetCoreNuGetDeleteSettings settings)
         {
-            context.DotNetCoreNuGetDelete(null, null, settings);
+            context.DotNetNuGetDelete(settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDelete(ICakeContext, string, string, DotNetNuGetDeleteSettings)" /> instead.
         /// Deletes a package from a server using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -847,45 +827,42 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Delete")]
+        [Obsolete("DotNetCoreNuGetDelete is obsolete and will be removed in a future release. Use DotNetNuGetDelete instead.")]
         public static void DotNetCoreNuGetDelete(this ICakeContext context, string packageName, string packageVersion, DotNetCoreNuGetDeleteSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreNuGetDeleteSettings();
-            }
-
-            var nugetDeleter = new DotNetCoreNuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            nugetDeleter.Delete(packageName, packageVersion, settings);
+            context.DotNetNuGetDelete(packageName, packageVersion, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetPush is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetPush(ICakeContext, FilePath)" /> instead.
         /// Pushes one or more packages to a server.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="packageName">Name of package to push.</param>
+        /// <param name="packageFilePath"><see cref="FilePath"/> of the package to push.</param>
         /// <example>
         /// <code>
-        /// DotNetCoreNuGetPush("*.nupkg");
+        /// // With FilePath instance
+        /// var packageFilePath = GetFiles("*.nupkg").Single();
+        /// DotNetCoreNuGetPush(packageFilePath);
+        /// // With string parameter
+        /// DotNetCoreNuGetPush("foo*.nupkg");
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Push")]
-        public static void DotNetCoreNuGetPush(this ICakeContext context, string packageName)
+        [Obsolete("DotNetCoreNuGetPush is obsolete and will be removed in a future release. Use DotNetNuGetPush instead.")]
+        public static void DotNetCoreNuGetPush(this ICakeContext context, FilePath packageFilePath)
         {
-            context.DotNetCoreNuGetPush(packageName, null);
+            context.DotNetNuGetPush(packageFilePath);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetPush is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetPush(ICakeContext, FilePath, DotNetNuGetPushSettings)" /> instead.
         /// Pushes one or more packages to a server using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="packageName">Name of package to push.</param>
+        /// <param name="packageFilePath"><see cref="FilePath"/> of the package to push.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -894,30 +871,24 @@ namespace Cake.Common.Tools.DotNetCore
         ///     Source = "https://www.example.com/nugetfeed",
         ///     ApiKey = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
         /// };
-        ///
+        /// // With FilePath instance
+        /// var packageFilePath = GetFiles("foo*.nupkg").Single();
+        /// DotNetCoreNuGetPush(packageFilePath);
+        /// // With string parameter
         /// DotNetCoreNuGetPush("foo*.nupkg", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Push")]
-        public static void DotNetCoreNuGetPush(this ICakeContext context, string packageName, DotNetCoreNuGetPushSettings settings)
+        [Obsolete("DotNetCoreNuGetPush is obsolete and will be removed in a future release. Use DotNetNuGetPush instead.")]
+        public static void DotNetCoreNuGetPush(this ICakeContext context, FilePath packageFilePath, DotNetCoreNuGetPushSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreNuGetPushSettings();
-            }
-
-            var restorer = new DotNetCoreNuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            restorer.Push(packageName, settings);
+            context.DotNetNuGetPush(packageFilePath, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetAddSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetAddSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Add the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -940,18 +911,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetAddSource is obsolete and will be removed in a future release. Use DotNetNuGetAddSource instead.")]
         public static void DotNetCoreNuGetAddSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.AddSource(name, settings);
+            context.DotNetNuGetAddSource(name, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDisableSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDisableSource(ICakeContext, string)" /> instead.
         /// Disable the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -964,12 +931,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetDisableSource is obsolete and will be removed in a future release. Use DotNetNuGetDisableSource instead.")]
         public static void DotNetCoreNuGetDisableSource(this ICakeContext context, string name)
         {
-            context.DotNetCoreNuGetDisableSource(name, null);
+            context.DotNetNuGetDisableSource(name);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetDisableSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetDisableSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Disable the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -988,18 +957,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetDisableSource is obsolete and will be removed in a future release. Use DotNetNuGetDisableSource instead.")]
         public static void DotNetCoreNuGetDisableSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.DisableSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+            context.DotNetNuGetDisableSource(name, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetEnableSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetEnableSource(ICakeContext, string)" /> instead.
         /// Enable the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1012,12 +977,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetEnableSource is obsolete and will be removed in a future release. Use DotNetNuGetEnableSource instead.")]
         public static void DotNetCoreNuGetEnableSource(this ICakeContext context, string name)
         {
-            context.DotNetCoreNuGetEnableSource(name, null);
+            context.DotNetNuGetEnableSource(name);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetEnableSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetEnableSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Enable the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1036,18 +1003,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetEnableSource is obsolete and will be removed in a future release. Use DotNetNuGetEnableSource instead.")]
         public static void DotNetCoreNuGetEnableSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.EnableSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+            context.DotNetNuGetEnableSource(name, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetHasSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetHasSource(ICakeContext, string)" /> instead.
         /// Determines whether the specified NuGet source exists.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1061,12 +1024,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetHasSource is obsolete and will be removed in a future release. Use DotNetNuGetHasSource instead.")]
         public static bool DotNetCoreNuGetHasSource(this ICakeContext context, string name)
         {
-            return context.DotNetCoreNuGetHasSource(name, null);
+            return context.DotNetNuGetHasSource(name);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetHasSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetHasSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Determines whether the specified NuGet source exists.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1086,18 +1051,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetHasSource is obsolete and will be removed in a future release. Use DotNetNuGetHasSource instead.")]
         public static bool DotNetCoreNuGetHasSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            return sourcer.HasSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+            return context.DotNetNuGetHasSource(name, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetRemoveSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetRemoveSource(ICakeContext, string)" /> instead.
         /// Remove the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1110,12 +1071,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetRemoveSource is obsolete and will be removed in a future release. Use DotNetNuGetRemoveSource instead.")]
         public static void DotNetCoreNuGetRemoveSource(this ICakeContext context, string name)
         {
-            context.DotNetCoreNuGetRemoveSource(name, null);
+            context.DotNetNuGetRemoveSource(name);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetRemoveSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetRemoveSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Remove the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1134,18 +1097,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetRemoveSource is obsolete and will be removed in a future release. Use DotNetNuGetRemoveSource instead.")]
         public static void DotNetCoreNuGetRemoveSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.RemoveSource(name, settings ?? new DotNetCoreNuGetSourceSettings());
+            context.DotNetNuGetRemoveSource(name, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreNuGetUpdateSource is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetNuGetUpdateSource(ICakeContext, string, DotNetNuGetSourceSettings)" /> instead.
         /// Update the specified NuGet source.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1168,15 +1127,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("NuGet")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.NuGet.Source")]
+        [Obsolete("DotNetCoreNuGetUpdateSource is obsolete and will be removed in a future release. Use DotNetNuGetUpdateSource instead.")]
         public static void DotNetCoreNuGetUpdateSource(this ICakeContext context, string name, DotNetCoreNuGetSourceSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var sourcer = new DotNetCoreNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.UpdateSource(name, settings);
+            context.DotNetNuGetUpdateSource(name, settings);
         }
 
         /// <summary>
@@ -1279,6 +1233,7 @@ namespace Cake.Common.Tools.DotNetCore
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreVSTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetVSTest(ICakeContext, GlobPattern)" /> instead.
         /// Test one or more projects specified by a path or glob pattern using the VS Test host runner.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1296,9 +1251,11 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.VSTest")]
-        public static void DotNetCoreVSTest(this ICakeContext context, GlobPattern testFile) => context.DotNetCoreVSTest(testFile, null);
+        [Obsolete("DotNetCoreVSTest is obsolete and will be removed in a future release. Use DotNetVSTest instead.")]
+        public static void DotNetCoreVSTest(this ICakeContext context, GlobPattern testFile) => context.DotNetVSTest(testFile);
 
         /// <summary>
+        /// [deprecated] DotNetCoreVSTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetVSTest(ICakeContext, GlobPattern, DotNetVSTestSettings)" /> instead.
         /// Test one or more projects specified by a path or glob pattern with settings using the VS Test host runner.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1330,14 +1287,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.VSTest")]
+        [Obsolete("DotNetCoreVSTest is obsolete and will be removed in a future release. Use DotNetVSTest instead.")]
         public static void DotNetCoreVSTest(this ICakeContext context, GlobPattern testFile, DotNetCoreVSTestSettings settings)
         {
-            var testFiles = context.GetFiles(testFile);
-
-            context.DotNetCoreVSTest(testFiles, settings);
+            context.DotNetVSTest(testFile, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreVSTest is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetVSTest(ICakeContext, IEnumerable{FilePath}, DotNetVSTestSettings)" /> instead.
         /// Test one or more specified projects with settings using the VS Test host runner.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1375,23 +1332,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Test")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.VSTest")]
+        [Obsolete("DotNetCoreVSTest is obsolete and will be removed in a future release. Use DotNetVSTest instead.")]
         public static void DotNetCoreVSTest(this ICakeContext context, IEnumerable<FilePath> testFiles, DotNetCoreVSTestSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (settings == null)
-            {
-                settings = new DotNetCoreVSTestSettings();
-            }
-
-            var tester = new DotNetCoreVSTester(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            tester.Test(testFiles, settings);
+            context.DotNetVSTest(testFiles, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTool is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTool(ICakeContext, string)" /> instead.
         /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1404,20 +1352,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Tool")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        [Obsolete("DotNetCoreTool is obsolete and will be removed in a future release. Use DotNetTool instead.")]
         public static void DotNetCoreTool(this ICakeContext context, string command)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var arguments = new ProcessArgumentBuilder();
-            var settings = new DotNetCoreToolSettings();
-
-            context.DotNetCoreTool(null, command, arguments, settings);
+            context.DotNetTool(command);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTool is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTool(ICakeContext, string, DotNetToolSettings)" /> instead.
         /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1436,19 +1378,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Tool")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        [Obsolete("DotNetCoreTool is obsolete and will be removed in a future release. Use DotNetTool instead.")]
         public static void DotNetCoreTool(this ICakeContext context, string command, DotNetCoreToolSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var arguments = new ProcessArgumentBuilder();
-
-            context.DotNetCoreTool(null, command, arguments, settings);
+            context.DotNetTool(command, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTool is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTool(ICakeContext, FilePath, string)" /> instead.
         /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1462,20 +1399,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Tool")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        [Obsolete("DotNetCoreTool is obsolete and will be removed in a future release. Use DotNetTool instead.")]
         public static void DotNetCoreTool(this ICakeContext context, FilePath projectPath, string command)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var arguments = new ProcessArgumentBuilder();
-            var settings = new DotNetCoreToolSettings();
-
-            context.DotNetCoreTool(projectPath, command, arguments, settings);
+            context.DotNetTool(projectPath, command);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTool is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTool(ICakeContext, FilePath, string, ProcessArgumentBuilder)" /> instead.
         /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1490,19 +1421,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Tool")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        [Obsolete("DotNetCoreTool is obsolete and will be removed in a future release. Use DotNetTool instead.")]
         public static void DotNetCoreTool(this ICakeContext context, FilePath projectPath, string command, ProcessArgumentBuilder arguments)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var settings = new DotNetCoreToolSettings();
-
-            context.DotNetCoreTool(projectPath, command, arguments, settings);
+            context.DotNetTool(projectPath, command, arguments);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreTool is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetTool(ICakeContext, FilePath, string, ProcessArgumentBuilder, DotNetToolSettings)" /> instead.
         /// Execute an .NET Core Extensibility Tool.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1518,19 +1444,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Tool")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.Tool")]
+        [Obsolete("DotNetCoreTool is obsolete and will be removed in a future release. Use DotNetTool instead.")]
         public static void DotNetCoreTool(this ICakeContext context, FilePath projectPath, string command, ProcessArgumentBuilder arguments, DotNetCoreToolSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var runner = new DotNetCoreToolRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-
-            runner.Execute(projectPath, command, arguments, settings);
+            context.DotNetTool(projectPath, command, arguments, settings);
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreBuildServerShutdown is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetBuildServerShutdown(ICakeContext)" /> instead.
         /// Shuts down build servers that are started from dotnet.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1542,12 +1463,14 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Build Server")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.BuildServer")]
+        [Obsolete("DotNetCoreBuildServerShutdown is obsolete and will be removed in a future release. Use DotNetBuildServerShutdown instead.")]
         public static void DotNetCoreBuildServerShutdown(this ICakeContext context)
         {
-            context.DotNetCoreBuildServerShutdown(null);
+            context.DotNetBuildServerShutdown();
         }
 
         /// <summary>
+        /// [deprecated] DotNetCoreBuildServerShutdown is obsolete and will be removed in a future release. Use <see cref="DotNetAliases.DotNetBuildServerShutdown(ICakeContext, DotNetBuildServerShutdownSettings)" /> instead.
         /// Shuts down build servers that are started from dotnet.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -1565,16 +1488,10 @@ namespace Cake.Common.Tools.DotNetCore
         [CakeMethodAlias]
         [CakeAliasCategory("Build Server")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNetCore.BuildServer")]
+        [Obsolete("DotNetCoreBuildServerShutdown is obsolete and will be removed in a future release. Use DotNetBuildServerShutdown instead.")]
         public static void DotNetCoreBuildServerShutdown(this ICakeContext context, DotNetCoreBuildServerSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var buildServer = new DotNetCoreBuildServer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-
-            buildServer.Shutdown(settings ?? new DotNetCoreBuildServerSettings());
+            context.DotNetBuildServerShutdown(settings);
         }
 
         /// <summary>

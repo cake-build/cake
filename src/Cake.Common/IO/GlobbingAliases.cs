@@ -140,7 +140,7 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// var paths = GetPaths("./src/**/obj/*");
-        /// foreach(var paths in paths)
+        /// foreach(var path in paths)
         /// {
         ///     Information("Path: {0}", path);
         /// }
@@ -171,7 +171,7 @@ namespace Cake.Common.IO
         ///         "node_modules", StringComparison.OrdinalIgnoreCase);
         ///
         /// var paths = GetPaths("./src/**/obj/*", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach(var paths in paths)
+        /// foreach(var path in paths)
         /// {
         ///     Information("Path: {0}", path);
         /// }

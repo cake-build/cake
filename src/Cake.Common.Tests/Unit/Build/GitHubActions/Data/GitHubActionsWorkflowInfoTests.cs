@@ -25,6 +25,22 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
             }
         }
 
+        public sealed class TheActionPathProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.ActionPath.FullPath;
+
+                // Then
+                Assert.Equal("/path/to/action", result);
+            }
+        }
+
         public sealed class TheActorProperty
         {
             [Fact]
@@ -98,7 +114,7 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
                 var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
 
                 // When
-                var result = info.EventPath;
+                var result = info.EventPath.FullPath;
 
                 // Then
                 Assert.Equal("/home/runner/work/_temp/_github_workflow/event.json", result);
@@ -290,7 +306,7 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
                 var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
 
                 // When
-                var result = info.Workspace;
+                var result = info.Workspace.FullPath;
 
                 // Then
                 Assert.Equal("/home/runner/work/cake/cake", result);

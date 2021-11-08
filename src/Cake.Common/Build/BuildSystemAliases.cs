@@ -15,7 +15,6 @@ using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
-using Cake.Common.Build.TFBuild;
 using Cake.Common.Build.TravisCI;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -58,11 +57,10 @@ namespace Cake.Common.Build
             var bitbucketPipelinesProvider = new BitbucketPipelinesProvider(context.Environment);
             var goCDProvider = new GoCDProvider(context.Environment, context.Log);
             var gitLabCIProvider = new GitLabCIProvider(context.Environment);
-            var tfBuildProvider = new TFBuildProvider(context.Environment, new BuildSystemServiceMessageWriter());
-            var gitHubActionsProvider = new GitHubActionsProvider(context.Environment);
+            var gitHubActionsProvider = new GitHubActionsProvider(context.Environment, context.FileSystem);
             var azurePipelinesProvider = new AzurePipelinesProvider(context.Environment, new BuildSystemServiceMessageWriter());
 
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider, azurePipelinesProvider);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider);
         }
 
         /// <summary>

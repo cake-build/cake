@@ -7,8 +7,10 @@ using System;
 namespace Cake.Core
 {
     /// <summary>
+    /// [deprecated] SetupEventArgs is obsolete and will be removed in a future release. Use <see cref="BeforeSetupEventArgs" /> instead.
     /// Event data for the <see cref="ICakeEngine.Setup"/> event.
     /// </summary>
+    [Obsolete("SetupEventArgs is obsolete and will be removed in a future release. Use BeforeSetupEventArgs instead.")]
     public sealed class SetupEventArgs : EventArgs
     {
         /// <summary>

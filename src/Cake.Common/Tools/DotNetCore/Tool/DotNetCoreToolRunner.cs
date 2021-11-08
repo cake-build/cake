@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.Tool;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -39,7 +40,7 @@ namespace Cake.Common.Tools.DotNetCore.Tool
         /// <param name="command">The command to execute.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="settings">The settings.</param>
-        public void Execute(FilePath projectPath, string command, ProcessArgumentBuilder arguments, DotNetCoreToolSettings settings)
+        public void Execute(FilePath projectPath, string command, ProcessArgumentBuilder arguments, DotNetToolSettings settings)
         {
             if (string.IsNullOrWhiteSpace(command))
             {
@@ -59,7 +60,7 @@ namespace Cake.Common.Tools.DotNetCore.Tool
             RunCommand(settings, GetArguments(command, arguments, settings), processSettings);
         }
 
-        private ProcessArgumentBuilder GetArguments(string command, ProcessArgumentBuilder arguments, DotNetCoreToolSettings settings)
+        private ProcessArgumentBuilder GetArguments(string command, ProcessArgumentBuilder arguments, DotNetToolSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

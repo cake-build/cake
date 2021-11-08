@@ -163,7 +163,6 @@ namespace Cake.Core.Tests.Unit.IO
                     .Verbose(Verbosity.Diagnostic, "Executing: {0}", "\"/Program Files/Cake.exe\" [REDACTED]");
             }
 
-            [RuntimeFact(TestRuntime.CoreClr)]
             public void Should_Coerse_Mono_On_Unix_And_CoreClr()
             {
                 // Given
@@ -181,7 +180,6 @@ namespace Cake.Core.Tests.Unit.IO
                     .Write(Verbosity.Diagnostic, LogLevel.Verbose, "{0} is a .NET Framework executable, will try execute using Mono.", "/Program Files/Cake.exe");
             }
 
-            [RuntimeFact(TestRuntime.CoreClr)]
             public void Should_Not_Coerse_Mono_On_Windows_And_CoreClr()
             {
                 // Given
@@ -195,7 +193,6 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.Equal("\"/Program Files/Cake.exe\"", result.FileName);
             }
 
-            [RuntimeFact(TestRuntime.CoreClr)]
             public void Should_Not_Coerse_Mono_On_Unix_And_CoreClr_With_Config_NoMonoCoersion()
             {
                 // Given
@@ -210,7 +207,6 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.Equal("/Program Files/Cake.exe", result.FileName);
             }
 
-            [RuntimeFact(TestRuntime.CoreClr)]
             public void Should_Not_Coerse_Mono_On_Unix_And_CoreClr_If_Mono_Not_Resolved()
             {
                 // Given

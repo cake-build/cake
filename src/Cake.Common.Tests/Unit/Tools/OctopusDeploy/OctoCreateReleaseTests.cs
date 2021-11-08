@@ -442,12 +442,12 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 // Then
                 Assert.Equal("create-release --project \"testProject\" " +
                              "--server http://octopus --apiKey API-12345 " +
-                             "--deployto \"SomeEnvironment\" " +
-                             "--progress", result.Args);
+                             "--progress " +
+                             "--deployto \"SomeEnvironment\"", result.Args);
             }
 
             [Fact]
-            public void Should_Add_FocePackageDownload_To_Arguments_If_Specified()
+            public void Should_Add_ForcePackageDownload_To_Arguments_If_Specified()
             {
                 // Given
                 var fixture = new OctopusDeployReleaseCreatorFixture();
@@ -460,8 +460,8 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 // Then
                 Assert.Equal("create-release --project \"testProject\" " +
                              "--server http://octopus --apiKey API-12345 " +
-                             "--deployto \"SomeEnvironment\" " +
-                             "--forcepackagedownload", result.Args);
+                             "--forcepackagedownload " +
+                             "--deployto \"SomeEnvironment\"", result.Args);
             }
 
             [Fact]
@@ -478,8 +478,8 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 // Then
                 Assert.Equal("create-release --project \"testProject\" " +
                              "--server http://octopus --apiKey API-12345 " +
-                             "--deployto \"SomeEnvironment\" " +
-                             "--waitfordeployment", result.Args);
+                             "--waitfordeployment " +
+                             "--deployto \"SomeEnvironment\"", result.Args);
             }
 
             [Fact]
@@ -769,10 +769,10 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 // Then
                 Assert.Equal("create-release --project \"testProject\" " +
                              "--server http://octopus --apiKey API-12345 " +
-                             "--deployto \"SomeEnvironment\" " +
                              "--progress " +
                              "--forcepackagedownload " +
                              "--waitfordeployment " +
+                             "--deployto \"SomeEnvironment\" " +
                              "--deploymenttimeout=\"00:01:00\" " +
                              "--cancelontimeout " +
                              "--deploymentchecksleepcycle=\"01:17:00\" " +
@@ -870,6 +870,58 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 Assert.Equal("create-release --project \"testProject\" " +
                              "--server http://octopus --apiKey API-12345 " +
                              "--space \"spacename\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Multiple_Deployment_Environments_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.Settings.DeployToMultiple = new string[] { @"someenvironment", @"someotherenvironment" };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--deployto \"someenvironment\" " +
+                             "--deployto \"someotherenvironment\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Deployment_Environments_From_Both_Properties_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.Settings.DeployTo = @"someenvironment";
+                fixture.Settings.DeployToMultiple = new string[] { @"someotherenvironment", @"someadditionalenvironment" };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--deployto \"someenvironment\" " +
+                             "--deployto \"someotherenvironment\" " +
+                             "--deployto \"someadditionalenvironment\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Exclude_Machines_To_Arguments_If_Not_Null()
+            {
+                // Given
+                var fixture = new OctopusDeployReleaseCreatorFixture();
+                fixture.Settings.ExcludeMachines = @"somemachine";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("create-release --project \"testProject\" " +
+                             "--server http://octopus --apiKey API-12345 " +
+                             "--excludemachines \"somemachine\"", result.Args);
             }
         }
     }
