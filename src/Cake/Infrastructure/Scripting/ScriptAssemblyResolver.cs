@@ -55,7 +55,7 @@ namespace Cake.Infrastructure.Scripting
                 return null;
             }
 
-            _log.Verbose($"Resolving assembly '{fullName}' using runtime installed at '{RuntimeEnvironment.GetRuntimeDirectory()}'...");
+            _log.Debug($"Resolving assembly '{fullName}' using runtime installed at '{RuntimeEnvironment.GetRuntimeDirectory()}'...");
             return AssemblyResolve(assemblyName);
         }
 
@@ -76,12 +76,12 @@ namespace Cake.Infrastructure.Scripting
             }
             catch (Exception ex)
             {
-                _log.Verbose($"Exception occurred while resolving assembly {shortName}: {ex.Message}");
+                _log.Debug($"Exception occurred while resolving assembly {shortName}: {ex.Message}");
             }
 
             if (assembly != null)
             {
-                _log.Verbose($"Assembly {shortName} resolved as '{assembly.FullName}' (file location: '{assembly.Location}')");
+                _log.Debug($"Assembly {shortName} resolved as '{assembly.FullName}' (file location: '{assembly.Location}')");
                 return assembly;
             }
 
@@ -92,12 +92,12 @@ namespace Cake.Infrastructure.Scripting
                 {
                     assemblyName.Name = shortName.Remove(shortName.Length - AssemblyResourcesExtension.Length);
 
-                    _log.Verbose($"Trying to resolve assembly {shortName} as '{assemblyName.FullName}'...");
+                    _log.Debug($"Trying to resolve assembly {shortName} as '{assemblyName.FullName}'...");
                     return AssemblyResolve(assemblyName);
                 }
             }
 
-            _log.Verbose($"Assembly '{fullName}' not resolved");
+            _log.Debug($"Assembly '{fullName}' not resolved");
             return null;
         }
 
