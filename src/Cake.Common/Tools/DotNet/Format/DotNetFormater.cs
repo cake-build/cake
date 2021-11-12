@@ -8,23 +8,23 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotNetCore.Format
+namespace Cake.Common.Tools.DotNet.Format
 {
     /// <summary>
     /// .NET Core project formatter.
     /// </summary>
-    public sealed class DotNetCoreFormater : DotNetCoreTool<DotNetCoreFormatSettings>
+    public sealed class DotNetFormater : DotNetTool<DotNetFormatSettings>
     {
         private readonly ICakeEnvironment _environment;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetCoreFormater" /> class.
+        /// Initializes a new instance of the <see cref="DotNetFormater" /> class.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The environment.</param>
         /// <param name="processRunner">The process runner.</param>
         /// <param name="tools">The tool locator.</param>
-        public DotNetCoreFormater(
+        public DotNetFormater(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
             IProcessRunner processRunner,
@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.DotNetCore.Format
         /// <param name="root">The target project path.</param>
         /// <param name="subcommand">The subcommand.</param>
         /// <param name="settings">The settings.</param>
-        public void Format(string root, string subcommand, DotNetCoreFormatSettings settings)
+        public void Format(string root, string subcommand, DotNetFormatSettings settings)
         {
             if (settings == null)
             {
@@ -49,7 +49,7 @@ namespace Cake.Common.Tools.DotNetCore.Format
             RunCommand(settings, GetFormatArguments(root, subcommand, settings));
         }
 
-        private ProcessArgumentBuilder GetFormatArguments(string root, string subcommand, DotNetCoreFormatSettings settings)
+        private ProcessArgumentBuilder GetFormatArguments(string root, string subcommand, DotNetFormatSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

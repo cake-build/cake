@@ -5,12 +5,12 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.DotNetCore.Format
+namespace Cake.Common.Tools.DotNet.Format
 {
     /// <summary>
-    /// Contains settings used by <see cref="DotNetCoreFormater" />.
+    /// Contains settings used by <see cref="DotNetFormater" />.
     /// </summary>
-    public sealed class DotNetCoreFormatSettings : DotNetCoreSettings
+    public sealed class DotNetFormatSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets a space-separated list of diagnostic IDs to use as a filter when fixing code style or third party issues.
@@ -22,7 +22,7 @@ namespace Cake.Common.Tools.DotNetCore.Format
         /// <summary>
         /// Gets or sets the minumum severity of diagnostics to fix.
         /// </summary>
-        public DotNetCoreSeverity? Severity { get; set; } = DotNetCoreSeverity.Warn;
+        public DotNetSeverity? Severity { get; set; } = DotNetSeverity.Warn;
 
         /// <summary>
         /// Gets or sets a value indicating whether to not do implicit NuGet package restore.

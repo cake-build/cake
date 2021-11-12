@@ -2,19 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.DotNetCore.Format;
+using Cake.Common.Tools.DotNet.Format;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Format
 {
-    internal sealed class DotNetCoreFormatterFixture : DotNetCoreFixture<DotNetCoreFormatSettings>
-    {
-        public string Root { get; set; }
-        public string Subcommand { get; set; }
+    //internal sealed class DotNetCoreFormatterFixture : DotNetCoreFixture<DotNetFormatSettings>
+    //{
+    //    public string Root { get; set; }
+    //    public string Subcommand { get; set; }
 
-        protected override void RunTool()
-        {
-            var tool = new DotNetCoreFormater(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Format(Root, Subcommand, Settings);
-        }
-    }
+    //    protected override void RunTool()
+    //    {
+    //        var tool = new DotNetFormater(FileSystem, Environment, ProcessRunner, Tools);
+    //        tool.Format(Root, Subcommand, Settings);
+    //    }
+    //}
 }
