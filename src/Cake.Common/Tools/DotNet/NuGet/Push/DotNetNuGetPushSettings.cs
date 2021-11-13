@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.NuGet.Push;
 
 namespace Cake.Common.Tools.DotNet.NuGet.Push
@@ -10,7 +9,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Push
     /// <summary>
     /// Contains settings used by <see cref="DotNetCoreNuGetPusher" />.
     /// </summary>
-    public class DotNetNuGetPushSettings : DotNetCoreSettings
+    public class DotNetNuGetPushSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets a value indicating the server URL.

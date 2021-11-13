@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.MSBuild;
+using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.MSBuild;
@@ -64,7 +65,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
             }
 
             [Fact]
@@ -81,7 +82,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -1013,12 +1014,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Theory]
-            [InlineData(DotNetCoreVerbosity.Quiet)]
-            [InlineData(DotNetCoreVerbosity.Minimal)]
-            [InlineData(DotNetCoreVerbosity.Normal)]
-            [InlineData(DotNetCoreVerbosity.Detailed)]
-            [InlineData(DotNetCoreVerbosity.Diagnostic)]
-            public void Should_Append_Verbosity_If_Specified(DotNetCoreVerbosity verbosity)
+            [InlineData(DotNetVerbosity.Quiet)]
+            [InlineData(DotNetVerbosity.Minimal)]
+            [InlineData(DotNetVerbosity.Normal)]
+            [InlineData(DotNetVerbosity.Detailed)]
+            [InlineData(DotNetVerbosity.Diagnostic)]
+            public void Should_Append_Verbosity_If_Specified(DotNetVerbosity verbosity)
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
@@ -1270,12 +1271,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Theory]
-            [InlineData(DotNetCoreVerbosity.Quiet)]
-            [InlineData(DotNetCoreVerbosity.Minimal)]
-            [InlineData(DotNetCoreVerbosity.Normal)]
-            [InlineData(DotNetCoreVerbosity.Detailed)]
-            [InlineData(DotNetCoreVerbosity.Diagnostic)]
-            public void Should_Append_Verbosity_If_Specified(DotNetCoreVerbosity verbosity)
+            [InlineData(DotNetVerbosity.Quiet)]
+            [InlineData(DotNetVerbosity.Minimal)]
+            [InlineData(DotNetVerbosity.Normal)]
+            [InlineData(DotNetVerbosity.Detailed)]
+            [InlineData(DotNetVerbosity.Diagnostic)]
+            public void Should_Append_Verbosity_If_Specified(DotNetVerbosity verbosity)
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();

@@ -2,11 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNetCore.Clean;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Clean
 {
-    internal sealed class DotNetCoreCleanerFixture : DotNetCoreFixture<DotNetCoreCleanSettings>
+    internal sealed class DotNetCoreCleanerFixture : DotNetCoreFixture<DotNetCleanSettings>
     {
         public string Project { get; set; }
 

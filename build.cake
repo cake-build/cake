@@ -415,6 +415,8 @@ Task("Run-Integration-Tests")
                     .AppendSwitchQuoted("--multipleargs", "=", "b")
                     .AppendSwitchQuoted("--testAssemblyDirectoryPath", "=", cakeAssembly.GetDirectory().FullPath)
                     .AppendSwitchQuoted("--testAssemblyFilePath", "=", cakeAssembly.FullPath)
+                    .AppendSwitchQuoted("--testDotNetCoreVerbosity", "=", "Diagnostic")
+                    .AppendSwitchQuoted("--testDotNetRollForward", "=", "LatestMajor")
             });
     }
     catch(Exception ex)

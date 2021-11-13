@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core.IO;
@@ -14,7 +13,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
     /// <summary>
     /// Contains settings used by <see cref="DotNetCoreMSBuildBuilder" />.
     /// </summary>
-    public class DotNetMSBuildSettings : DotNetCoreSettings
+    public class DotNetMSBuildSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets a value indicating whether to show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes.
