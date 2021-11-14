@@ -2,14 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNet;
 using Cake.Core.IO;
 using Cake.Testing.Fixtures;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore
 {
     internal abstract class DotNetCoreFixture<TSettings> : ToolFixture<TSettings, ToolFixtureResult>
-        where TSettings : DotNetCoreSettings, new()
+        where TSettings : DotNetSettings, new()
     {
         protected DotNetCoreFixture()
             : base("dotnet.exe")

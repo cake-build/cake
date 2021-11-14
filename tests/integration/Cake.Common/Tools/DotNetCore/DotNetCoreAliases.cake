@@ -239,7 +239,7 @@ Task("Cake.Common.Tools.DotNetCore.DotNetCoreAliases.DotNetCoreTest.Fail")
     // Then
     Assert.NotNull(exception);
     Assert.IsType<CakeException>(exception);
-    Assert.Equal(exception.Message, ".NET Core CLI: Process returned an error (exit code 1).");
+    Assert.Equal(exception.Message, ".NET CLI: Process returned an error (exit code 1).");
 });
 
 

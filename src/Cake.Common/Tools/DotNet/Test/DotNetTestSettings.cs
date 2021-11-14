@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Test;
 using Cake.Core.IO;
 
@@ -13,7 +12,7 @@ namespace Cake.Common.Tools.DotNet.Test
     /// <summary>
     /// Contains settings used by <see cref="DotNetCoreTester" />.
     /// </summary>
-    public class DotNetTestSettings : DotNetCoreSettings
+    public class DotNetTestSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets the settings file to use when running tests.
