@@ -19,7 +19,12 @@ namespace Cake.Infrastructure.Composition
 
         public object Resolve(Type type)
         {
-            return _scope.Resolve(type);
+            if (type == null)
+            {
+                return null;
+            }
+
+            return _scope.ResolveOptional(type);
         }
     }
 }
