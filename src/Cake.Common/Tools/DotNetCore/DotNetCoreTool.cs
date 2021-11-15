@@ -14,7 +14,7 @@ namespace Cake.Common.Tools.DotNetCore
     /// </summary>
     /// <typeparam name="TSettings">The settings type.</typeparam>
     public abstract class DotNetCoreTool<TSettings> : DotNetTool<TSettings>
-        where TSettings : DotNetCoreSettings
+        where TSettings : DotNetSettings
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetCoreTool{TSettings}" /> class.

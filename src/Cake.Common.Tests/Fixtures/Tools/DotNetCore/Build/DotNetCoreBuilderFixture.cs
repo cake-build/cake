@@ -2,11 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Tools.DotNet.Build;
 using Cake.Common.Tools.DotNetCore.Build;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Build
 {
-    internal sealed class DotNetCoreBuilderFixture : DotNetCoreFixture<DotNetCoreBuildSettings>
+    internal sealed class DotNetCoreBuilderFixture : DotNetCoreFixture<DotNetBuildSettings>
     {
         public string Project { get; set; }
 

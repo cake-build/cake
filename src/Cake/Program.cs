@@ -71,6 +71,9 @@ namespace Cake
         {
             var builder = new ContainerBuilder();
 
+            // Commands
+            builder.RegisterType<DefaultCommandSettings>();
+
             // Converters
             builder.RegisterType<Cli.FilePathConverter>();
             builder.RegisterType<VerbosityConverter>();

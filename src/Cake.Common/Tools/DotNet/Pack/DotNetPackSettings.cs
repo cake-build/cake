@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.MSBuild;
-using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Pack;
 using Cake.Core.IO;
 
@@ -13,7 +12,7 @@ namespace Cake.Common.Tools.DotNet.Pack
     /// <summary>
     /// Contains settings used by <see cref="DotNetCorePacker" />.
     /// </summary>
-    public class DotNetPackSettings : DotNetCoreSettings
+    public class DotNetPackSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets the output directory.

@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.MSBuild;
-using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Core.IO;
 
@@ -13,7 +12,7 @@ namespace Cake.Common.Tools.DotNet.Publish
     /// <summary>
     /// Contains settings used by <see cref="DotNetCorePublisher" />.
     /// </summary>
-    public class DotNetPublishSettings : DotNetCoreSettings
+    public class DotNetPublishSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets the output directory.

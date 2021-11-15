@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.MSBuild;
-using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Core.IO;
 
@@ -13,7 +12,7 @@ namespace Cake.Common.Tools.DotNet.Restore
     /// <summary>
     /// Contains settings used by <see cref="DotNetCoreRestoreSettings" />.
     /// </summary>
-    public class DotNetRestoreSettings : DotNetCoreSettings
+    public class DotNetRestoreSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets the specified NuGet package sources to use during the restore.
