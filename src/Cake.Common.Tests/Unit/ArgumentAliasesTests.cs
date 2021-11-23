@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
@@ -72,6 +73,57 @@ namespace Cake.Common.Tests.Unit
                 Assert.Equal(2, vValues.Count);
                 Assert.Equal(VerboseArgumentValueOne, vValues.ElementAt(0));
                 Assert.Equal(VerboseArgumentValueTwo, vValues.ElementAt(1));
+            }
+
+            [Fact]
+            public void Should_Return_An_Arguments_With_Single_DefaultValue()
+            {
+                var context = Substitute.For<ICakeContext>();
+                context.Arguments.GetArguments(Arg.Any<string>())
+                    .Returns(Array.Empty<string>());
+
+                // Given
+                var expect = new[] { "a" };
+
+                // When
+                var arg = context.Arguments<string>("nonexistingmultipleargs", expect[0]);
+
+                // Then
+                Assert.Equal(expect, arg);
+            }
+
+            [Fact]
+            public void Should_Return_An_Arguments_With_Multiple_DefaultValue()
+            {
+                var context = Substitute.For<ICakeContext>();
+                context.Arguments.GetArguments(Arg.Any<string>())
+                    .Returns(Array.Empty<string>());
+
+                // Given
+                var expect = new[] { "a", "b" };
+
+                // When
+                var arg = context.Arguments<string>("nonexistingmultipleargs", expect);
+
+                // Then
+                Assert.Equal(expect, arg);
+            }
+
+            [Fact]
+            public void Should_Return_An_Arguments_With_Lazy_DefaultValue()
+            {
+                var context = Substitute.For<ICakeContext>();
+                context.Arguments.GetArguments(Arg.Any<string>())
+                    .Returns(Array.Empty<string>());
+
+                // Given
+                var expect = new[] { "a", "b" };
+
+                // When
+                var arg = context.Arguments<string>("nonexistingmultipleargs", _ => expect);
+
+                // Then
+                Assert.Equal(expect, arg);
             }
         }
     }
