@@ -20,6 +20,7 @@ namespace Cake.Core.Scripting
         private readonly IFileSystem _fileSystem;
         private readonly IAssemblyLoader _loader;
         private readonly ICakeRuntime _runtime;
+        private readonly IReferenceAssemblyResolver _referenceAssemblyResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptConventions"/> class.
@@ -27,11 +28,13 @@ namespace Cake.Core.Scripting
         /// <param name="fileSystem">The file system.</param>
         /// <param name="loader">The assembly loader.</param>
         /// <param name="runtime">The Cake runtime.</param>
-        public ScriptConventions(IFileSystem fileSystem, IAssemblyLoader loader, ICakeRuntime runtime)
+        /// <param name="referenceAssemblyResolver">The reference assembly resolver.</param>
+        public ScriptConventions(IFileSystem fileSystem, IAssemblyLoader loader, ICakeRuntime runtime, IReferenceAssemblyResolver referenceAssemblyResolver)
         {
             _fileSystem = fileSystem;
             _loader = loader;
             _runtime = runtime;
+            _referenceAssemblyResolver = referenceAssemblyResolver;
         }
 
         /// <inheritdoc/>
@@ -60,6 +63,8 @@ namespace Cake.Core.Scripting
             result.Add(typeof(Action).GetTypeInfo().Assembly); // mscorlib or System.Private.Core
             result.Add(typeof(IQueryable).GetTypeInfo().Assembly); // System.Core or System.Linq.Expressions
             result.Add(typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Assembly); // Dynamic support
+
+            result.AddRange(_referenceAssemblyResolver.GetReferenceAssemblies());
 
             // Load other Cake-related assemblies that we need.
             var cakeAssemblies = LoadCakeAssemblies(root);

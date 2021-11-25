@@ -33,6 +33,7 @@ namespace Cake.Infrastructure
             registrar.RegisterType<DryRunScriptHost>().Singleton();
             registrar.RegisterType<TreeScriptHost>().Singleton();
             registrar.RegisterType<DescriptionScriptHost>().Singleton();
+            registrar.RegisterType<ReferenceAssemblyResolver>().As<IReferenceAssemblyResolver>().Singleton();
 
             // Diagnostics
             registrar.RegisterType<CakeBuildLog>().As<ICakeLog>().Singleton();

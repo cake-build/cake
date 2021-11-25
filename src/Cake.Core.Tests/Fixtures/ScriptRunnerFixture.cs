@@ -58,9 +58,11 @@ namespace Cake.Core.Tests.Fixtures
             Engine.CreateSession(Arg.Any<IScriptHost>()).Returns(Session);
 
             var runtime = new CakeRuntime();
+            var referenceAssemblyResolver = Substitute.For<IReferenceAssemblyResolver>();
+            referenceAssemblyResolver.GetReferenceAssemblies().Returns(Array.Empty<System.Reflection.Assembly>());
             ScriptAnalyzer = new ScriptAnalyzer(FileSystem, Environment, Log, new[] { new FileLoadDirectiveProvider(Globber, Log) });
             ScriptProcessor = Substitute.For<IScriptProcessor>();
-            ScriptConventions = new ScriptConventions(FileSystem, AssemblyLoader, runtime);
+            ScriptConventions = new ScriptConventions(FileSystem, AssemblyLoader, runtime, referenceAssemblyResolver);
 
             var context = Substitute.For<ICakeContext>();
             context.Environment.Returns(c => Environment);
