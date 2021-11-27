@@ -95,9 +95,9 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does<BuildParameters>((context, parameters) =>
 {
-    DotNetCoreRestore("./src/Cake.sln", new DotNetCoreRestoreSettings
+    DotNetRestore("./src/Cake.sln", new DotNetRestoreSettings
     {
-        Verbosity = DotNetCoreVerbosity.Minimal,
+        Verbosity = DotNetVerbosity.Minimal,
         Sources = new [] { "https://api.nuget.org/v3/index.json" },
         MSBuildSettings = parameters.MSBuildSettings
     });
@@ -109,7 +109,7 @@ Task("Build")
 {
     // Build the solution.
     var path = MakeAbsolute(new DirectoryPath("./src/Cake.sln"));
-    DotNetCoreBuild(path.FullPath, new DotNetCoreBuildSettings()
+    DotNetBuild(path.FullPath, new DotNetBuildSettings
     {
         Configuration = parameters.Configuration,
         NoRestore = true,
@@ -128,7 +128,7 @@ Task("Run-Unit-Tests")
         FilePath testResultsPath = MakeAbsolute(parameters.Paths.Directories.TestResults
                                     .CombineWithFilePath($"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.xml"));
 
-        DotNetCoreTest(project.FullPath, new DotNetCoreTestSettings
+        DotNetTest(project.FullPath, new DotNetTestSettings
         {
             Framework = framework,
             NoBuild = true,
@@ -153,7 +153,7 @@ Task("Create-NuGet-Packages")
             continue;
         }
 
-        DotNetCorePack(project.FullPath, new DotNetCorePackSettings {
+        DotNetPack(project.FullPath, new DotNetPackSettings {
             Configuration = parameters.Configuration,
             OutputDirectory = parameters.Paths.Directories.NuGetRoot,
             NoBuild = true,
@@ -245,12 +245,12 @@ Task("Publish-MyGet")
     foreach(var package in parameters.Packages.NuGet)
     {
         // Push the package.
-        var settings = new DotNetCoreNuGetPushSettings {
+        var settings = new DotNetNuGetPushSettings {
             ApiKey = apiKey,
             Source = apiUrl
         };
 
-        DotNetCoreNuGetPush(package.PackagePath.FullPath, settings);
+        DotNetNuGetPush(package.PackagePath.FullPath, settings);
     }
 })
 .OnError<BuildParameters>((exception, parameters) =>
@@ -280,12 +280,12 @@ Task("Publish-NuGet")
     foreach(var package in parameters.Packages.NuGet)
     {
         // Push the package.
-        var settings = new DotNetCoreNuGetPushSettings {
+        var settings = new DotNetNuGetPushSettings {
             ApiKey = apiKey,
             Source = apiUrl
         };
 
-        DotNetCoreNuGetPush(package.PackagePath.FullPath, settings);
+        DotNetNuGetPush(package.PackagePath.FullPath, settings);
     }
 })
 .OnError<BuildParameters>((exception, parameters) =>
@@ -338,10 +338,10 @@ Task("Frosting-Integration-Tests")
                 new FilePath("tests/integration/Cake.Frosting/build/Build.csproj")
             );
 
-            DotNetCoreBuild(project.FullPath,
-                new DotNetCoreBuildSettings
+            DotNetBuild(project.FullPath,
+                new DotNetBuildSettings
                 {
-                    Verbosity = DotNetCoreVerbosity.Quiet,
+                    Verbosity = DotNetVerbosity.Quiet,
                     Configuration = parameters.Configuration,
                     MSBuildSettings = parameters.MSBuildSettings
                 });
@@ -363,10 +363,10 @@ Task("Frosting-Integration-Tests")
     {
         Information("Testing: {0}", test.Framework);
 
-        DotNetCoreRun(test.Project.FullPath,
+        DotNetRun(test.Project.FullPath,
             new ProcessArgumentBuilder()
                 .AppendSwitchQuoted("--verbosity", "=", "quiet"),
-            new DotNetCoreRunSettings
+            new DotNetRunSettings
             {
                 Configuration = parameters.Configuration,
                 Framework = test.Framework,
