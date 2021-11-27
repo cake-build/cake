@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Run;
+using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Testing;
 using Xunit;
@@ -41,7 +42,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
             }
 
             [Fact]
@@ -56,7 +57,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -119,13 +120,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Run
             }
 
             [Theory]
-            [InlineData(DotNetCoreRollForward.Minor, "run --roll-forward Minor")]
-            [InlineData(DotNetCoreRollForward.LatestPatch, "run --roll-forward LatestPatch")]
-            [InlineData(DotNetCoreRollForward.Major, "run --roll-forward Major")]
-            [InlineData(DotNetCoreRollForward.LatestMinor, "run --roll-forward LatestMinor")]
-            [InlineData(DotNetCoreRollForward.LatestMajor, "run --roll-forward LatestMajor")]
-            [InlineData(DotNetCoreRollForward.Disable, "run --roll-forward Disable")]
-            public void Should_Add_RollForward_Arguments(DotNetCoreRollForward rollForward, string expected)
+            [InlineData(DotNetRollForward.Minor, "run --roll-forward Minor")]
+            [InlineData(DotNetRollForward.LatestPatch, "run --roll-forward LatestPatch")]
+            [InlineData(DotNetRollForward.Major, "run --roll-forward Major")]
+            [InlineData(DotNetRollForward.LatestMinor, "run --roll-forward LatestMinor")]
+            [InlineData(DotNetRollForward.LatestMajor, "run --roll-forward LatestMajor")]
+            [InlineData(DotNetRollForward.Disable, "run --roll-forward Disable")]
+            public void Should_Add_RollForward_Arguments(DotNetRollForward rollForward, string expected)
             {
                 // Given
                 var fixture = new DotNetCoreRunnerFixture();

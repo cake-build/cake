@@ -39,7 +39,7 @@ namespace Cake.Common.Tools.DotNet
         /// <returns>The name of the tool.</returns>
         protected override string GetToolName()
         {
-            return ".NET Core CLI";
+            return ".NET CLI";
         }
 
         /// <summary>

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Core;
 using Cake.Core.IO;
@@ -13,7 +14,7 @@ namespace Cake.Common.Tools.DotNetCore.Tool
     /// <summary>
     /// .NET Core Extensibility Commands Runner.
     /// </summary>
-    public sealed class DotNetCoreToolRunner : DotNetCoreTool<DotNetCoreSettings>
+    public sealed class DotNetCoreToolRunner : DotNetCoreTool<DotNetSettings>
     {
         private readonly ICakeEnvironment _environment;
 

@@ -3,8 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.MSBuild;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Core.IO;
 
@@ -13,7 +12,7 @@ namespace Cake.Common.Tools.DotNet.Restore
     /// <summary>
     /// Contains settings used by <see cref="DotNetCoreRestoreSettings" />.
     /// </summary>
-    public class DotNetRestoreSettings : DotNetCoreSettings
+    public class DotNetRestoreSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets the specified NuGet package sources to use during the restore.
@@ -113,6 +112,6 @@ namespace Cake.Common.Tools.DotNet.Restore
         /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
-        public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }
+        public DotNetMSBuildSettings MSBuildSettings { get; set; }
     }
 }

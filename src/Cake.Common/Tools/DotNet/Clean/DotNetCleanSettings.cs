@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNetCore.Clean;
-using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.Clean
@@ -12,7 +11,7 @@ namespace Cake.Common.Tools.DotNet.Clean
     /// <summary>
     /// Contains settings used by <see cref="DotNetCoreCleaner" />.
     /// </summary>
-    public class DotNetCleanSettings : DotNetCoreSettings
+    public class DotNetCleanSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets the output directory.
@@ -45,6 +44,6 @@ namespace Cake.Common.Tools.DotNet.Clean
         /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
-        public DotNetCoreMSBuildSettings MSBuildSettings { get; set; }
+        public DotNetMSBuildSettings MSBuildSettings { get; set; }
     }
 }

@@ -18,6 +18,11 @@ namespace Cake.Frosting.Internal
 
         public object Resolve(Type type)
         {
+            if (type == null)
+            {
+                return null;
+            }
+
             return _provider.GetService(type);
         }
     }

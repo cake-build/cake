@@ -156,6 +156,72 @@ namespace Cake.Common
         }
 
         /// <summary>
+        /// Gets all arguments with the specific name and returns the
+        /// provided <paramref name="defaultValues"/> if the argument is missing.
+        /// </summary>
+        /// <typeparam name="T">The argument type.</typeparam>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The argument name.</param>
+        /// <param name="defaultValues">The values to return if the argument is missing.</param>
+        /// <returns>The argument values.</returns>
+        /// <example>
+        /// <code>
+        /// // Cake.exe .\argument.cake --foo="foo" --foo="bar"
+        /// var arguments = Arguments&lt;string&gt;("foo", new [] { "default" });
+        /// Information("Arguments: {0}", string.Join(", ", arguments));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static ICollection<T> Arguments<T>(this ICakeContext context, string name, ICollection<T> defaultValues)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var values = context.Arguments.GetArguments(name);
+            if (values == null || values.Count == 0)
+            {
+                return defaultValues;
+            }
+
+            return values.Select(value => Convert<T>(value)).ToArray();
+        }
+
+        /// <summary>
+        /// Gets all arguments with the specific name, evaluates and returns the
+        /// provided <paramref name="defaultValues"/> if the argument is missing.
+        /// </summary>
+        /// <typeparam name="T">The argument type.</typeparam>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The argument name.</param>
+        /// <param name="defaultValues">The values to return if the argument is missing.</param>
+        /// <returns>The argument values.</returns>
+        /// <example>
+        /// <code>
+        /// // Cake.exe .\argument.cake --foo="foo" --foo="bar"
+        /// var arguments = Arguments&lt;string&gt;("foo", ctx => new [] { "default" });
+        /// Information("Arguments: {0}", string.Join(", ", arguments));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static ICollection<T> Arguments<T>(this ICakeContext context, string name, Func<ICakeContext, ICollection<T>> defaultValues)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var values = context.Arguments.GetArguments(name);
+            if (values == null || values.Count == 0)
+            {
+                return defaultValues?.Invoke(context);
+            }
+
+            return values.Select(value => Convert<T>(value)).ToArray();
+        }
+
+        /// <summary>
         /// Gets an argument and returns the provided <paramref name="defaultValue"/> if the argument is missing.
         /// </summary>
         /// <typeparam name="T">The argument type.</typeparam>

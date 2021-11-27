@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.Run;
 
 namespace Cake.Common.Tools.DotNet.Run
@@ -11,7 +10,7 @@ namespace Cake.Common.Tools.DotNet.Run
     /// <summary>
     /// Contains settings used by <see cref="DotNetCoreRunner" />.
     /// </summary>
-    public class DotNetRunSettings : DotNetCoreSettings
+    public class DotNetRunSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets a specific framework to compile.

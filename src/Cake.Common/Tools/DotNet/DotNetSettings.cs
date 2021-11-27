@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.DotNetCore;
 using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.DotNet
@@ -15,7 +14,7 @@ namespace Cake.Common.Tools.DotNet
         /// <summary>
         /// Gets or sets the verbosity of logging to use.
         /// </summary>
-        public DotNetCoreVerbosity? Verbosity { get; set; }
+        public DotNetVerbosity? Verbosity { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to not enable diagnostic output.
@@ -25,6 +24,6 @@ namespace Cake.Common.Tools.DotNet
         /// <summary>
         /// Gets or sets the dotnet roll forward policy.
         /// </summary>
-        public DotNetCoreRollForward? RollForward { get; set; }
+        public DotNetRollForward? RollForward { get; set; }
     }
 }

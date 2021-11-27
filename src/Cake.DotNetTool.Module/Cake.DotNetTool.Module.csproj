@@ -4,6 +4,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageTags>$(PackageTags);dotnettool;module;cake-build;cake-module</PackageTags>
   </PropertyGroup>
   <PropertyGroup>
     <CodeAnalysisRuleSet>Cake.DotNetTool.Module.ruleset</CodeAnalysisRuleSet>

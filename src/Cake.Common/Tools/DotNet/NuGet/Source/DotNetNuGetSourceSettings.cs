@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.NuGet.Source;
 using Cake.Core.IO;
 
@@ -11,7 +10,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Source
     /// <summary>
     /// Contains settings used by <see cref="DotNetCoreNuGetSourcer" />.
     /// </summary>
-    public class DotNetNuGetSourceSettings : DotNetCoreSettings
+    public class DotNetNuGetSourceSettings : DotNetSettings
     {
         /// <summary>
         /// Gets or sets the path to the package(s) source.

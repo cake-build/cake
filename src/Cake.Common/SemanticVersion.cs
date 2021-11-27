@@ -201,6 +201,11 @@ namespace Cake.Common
         /// <returns>Return 0 if the objects are identical, 1 if the version is newer and -1 if the version is older.</returns>
         public int CompareTo(SemVersion other)
         {
+            if (other is null)
+            {
+                return 1;
+            }
+
             if (Equals(other))
             {
                 return 0;
@@ -236,6 +241,11 @@ namespace Cake.Common
                 return -1;
             }
 
+            if (IsPreRelease != other.IsPreRelease)
+            {
+                return other.IsPreRelease ? 1 : -1;
+            }
+
             switch (StringComparer.InvariantCultureIgnoreCase.Compare(PreRelease, other.PreRelease))
             {
                 case 1:
@@ -245,7 +255,11 @@ namespace Cake.Common
                     return -1;
 
                 default:
-                    return StringComparer.InvariantCultureIgnoreCase.Compare(Meta, other.Meta);
+                    {
+                        return (string.IsNullOrEmpty(Meta) != string.IsNullOrEmpty(other.Meta))
+                            ? string.IsNullOrEmpty(Meta) ? 1 : -1
+                            : StringComparer.InvariantCultureIgnoreCase.Compare(Meta, other.Meta);
+                    }
             }
         }
 
@@ -335,5 +349,23 @@ namespace Cake.Common
         /// <returns>A value indicating if the operand1 was lesser than or equal to operand2.</returns>
         public static bool operator <=(SemVersion operand1, SemVersion operand2)
             => operand1.CompareTo(operand2) <= 0;
+
+        /// <summary>
+        /// The equal to-operator for the SemVersion class.
+        /// </summary>
+        /// <param name="operand1">first SemVersion.</param>
+        /// <param name="operand2">second. SemVersion.</param>
+        /// <returns>A value indicating if the operand1 was equal to operand2.</returns>
+        public static bool operator ==(SemVersion operand1, SemVersion operand2)
+            => operand1.Equals(operand2);
+
+        /// <summary>
+        /// The not equal to-operator for the SemVersion class.
+        /// </summary>
+        /// <param name="operand1">first SemVersion.</param>
+        /// <param name="operand2">second. SemVersion.</param>
+        /// <returns>A value indicating if the operand1 was not equal to operand2.</returns>
+        public static bool operator !=(SemVersion operand1, SemVersion operand2)
+            => !operand1.Equals(operand2);
     }
 }
