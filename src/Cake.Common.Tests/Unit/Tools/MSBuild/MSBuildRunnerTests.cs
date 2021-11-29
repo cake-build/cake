@@ -745,15 +745,85 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             public void Should_Append_Targets_To_Process_Arguments()
             {
                 // Given
-                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
-                fixture.Settings.WithTarget("A");
-                fixture.Settings.WithTarget("B");
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows)
+                {
+                    Settings = new MSBuildSettings
+                    {
+                        Target = "A;B"
+                    }
+                };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
                 Assert.Equal("/v:normal /target:A;B " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Single_Target_With_Initializer()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows)
+                {
+                    Settings = new MSBuildSettings
+                    {
+                        Target = "A",
+                        ToolVersion = MSBuildToolVersion.VS2019,
+                    }
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Multiple_Targets_With_Initializer()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows)
+                {
+                    Settings = new MSBuildSettings
+                    {
+                        Target = "A;B",
+                        ToolVersion = MSBuildToolVersion.VS2019,
+                    }
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A;B " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Multiple_Targets_With_Initializer_And_AddTarget()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows)
+                {
+                    Settings = new MSBuildSettings
+                    {
+                        Target = "A;B",
+                        ToolVersion = MSBuildToolVersion.VS2019,
+                    }
+                };
+
+                fixture.Settings.WithTarget("C");
+                fixture.Settings.WithTarget("D");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A;B;C;D " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 

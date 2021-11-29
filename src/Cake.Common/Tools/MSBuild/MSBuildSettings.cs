@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.Tooling;
 
@@ -46,6 +47,16 @@ namespace Cake.Common.Tools.MSBuild
         /// </summary>
         /// <value>The MSBuild platform.</value>
         public MSBuildPlatform MSBuildPlatform { get; set; }
+
+        /// <summary>
+        /// Gets or sets the MSBuild target.
+        /// </summary>
+        /// <value>The MSBuild target.</value>
+        public string Target
+        {
+            get => string.Join(";", Targets);
+            set => SetTargets(value);
+        }
 
         /// <summary>
         /// Gets or sets the tool version.
@@ -269,6 +280,7 @@ namespace Cake.Common.Tools.MSBuild
             Configuration = string.Empty;
             Verbosity = Verbosity.Normal;
             MSBuildPlatform = MSBuildPlatform.Automatic;
+            Target = string.Empty;
         }
 
         private string GetPropertyValueOrDefault(string propertyName, string @default = null)
@@ -280,6 +292,14 @@ namespace Cake.Common.Tools.MSBuild
 
             var propertyValue = string.Join(";", propertyValues);
             return propertyValue;
+        }
+
+        private void SetTargets(string value)
+        {
+            foreach (var target in value.Split(";").Where(p => !string.IsNullOrEmpty(p)))
+            {
+                Targets.Add(target);
+            }
         }
     }
 }

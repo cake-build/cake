@@ -23,7 +23,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithTarget(this MSBuildSettings settings, string target)
         {
-            if (settings == null)
+            if (settings is null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
