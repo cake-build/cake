@@ -28,7 +28,7 @@ public class BuildParameters
     public BuildPaths Paths { get; }
     public BuildPackages Packages { get; }
     public bool PublishingError { get; set; }
-    public DotNetCoreMSBuildSettings MSBuildSettings { get; }
+    public DotNetMSBuildSettings MSBuildSettings { get; }
 
     public bool ShouldPublish
     {
@@ -118,7 +118,7 @@ public class BuildParameters
                                 ReleaseNotes.Notes.ToArray()
                             );
 
-        MSBuildSettings = new DotNetCoreMSBuildSettings {
+        MSBuildSettings = new DotNetMSBuildSettings {
                                 Version = Version.SemVersion,
                                 AssemblyVersion = Version.Version,
                                 FileVersion = Version.Version,

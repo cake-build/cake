@@ -30,9 +30,19 @@ namespace Cake.Core.Scripting.Processors
                 return false;
             }
 
-            // Using block?
+            // Using disposable block?
             var @namespace = tokens[1].TrimEnd(';');
             if (@namespace.StartsWith("("))
+            {
+                return false;
+            }
+
+            // Using disposable statement?
+            const int usingLength = 5;
+            int openParentheses = line.IndexOf('(', usingLength),
+                closeParentheses = openParentheses < usingLength ? -1 : line.IndexOf(')', openParentheses);
+
+            if (closeParentheses > openParentheses)
             {
                 return false;
             }
