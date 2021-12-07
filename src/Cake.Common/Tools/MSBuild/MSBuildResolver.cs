@@ -226,7 +226,7 @@ namespace Cake.Common.Tools.MSBuild
                 foreach (var edition in vsEditions)
                 {
                     // Get the bin path.
-                    var binPath = visualStudio2022Path.Combine(string.Concat("Microsoft Visual Studio/2022/", edition, "/MSBuild/Current/Bin"));
+                    var binPath = visualStudio2022Path.Combine(string.Concat("Microsoft Visual Studio/2022/", edition, "/Msbuild/Current/Bin"));
                     if (fileSystem.Exist(binPath))
                     {
                         if (buildPlatform == MSBuildPlatform.Automatic)
@@ -247,7 +247,7 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
-            return visualStudio2022Paths[0].Combine("Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin");
+            return visualStudio2022Paths[0].Combine("Microsoft Visual Studio/2022/Professional/Msbuild/Current/Bin");
         }
 
         private static DirectoryPath GetFrameworkPath(ICakeEnvironment environment, MSBuildPlatform buildPlatform, string version)
