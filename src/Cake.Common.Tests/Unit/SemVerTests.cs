@@ -102,6 +102,66 @@ namespace Cake.Common.Tests.Unit
                 // Then
                 Assert.Equal(expect, result);
             }
+
+            [Fact]
+            public void Should_Be_Able_To_Compare_Equals_Null()
+            {
+                // Given
+                SemVersion semVersion = null;
+
+                // When / Then
+                Assert.True(semVersion == null);
+            }
+
+            [Fact]
+            public void Should_Be_Able_To_Compare_Not_Equals_Null()
+            {
+                // Given
+                SemVersion semVersion = null;
+
+                // When / Then
+                Assert.False(semVersion != null);
+            }
+
+            [Fact]
+            public void Should_Be_Able_To_Compare_GreaterThan_Null()
+            {
+                // Given
+                SemVersion semVersion = null;
+
+                // When / Then
+                Assert.False(semVersion > null);
+            }
+
+            [Fact]
+            public void Should_Be_Able_To_Compare_LessThan_Null()
+            {
+                // Given
+                SemVersion semVersion = null;
+
+                // When / Then
+                Assert.False(semVersion < null);
+            }
+
+            [Fact]
+            public void Should_Be_Able_To_Compare_GreaterEqualThan_Null()
+            {
+                // Given
+                SemVersion semVersion = null;
+
+                // When / Then
+                Assert.True(semVersion >= null);
+            }
+
+            [Fact]
+            public void Should_Be_Able_To_Compare_LessEqualThan_Null()
+            {
+                // Given
+                SemVersion semVersion = null;
+
+                // When / Then
+                Assert.True(semVersion <= null);
+            }
         }
     }
 }
