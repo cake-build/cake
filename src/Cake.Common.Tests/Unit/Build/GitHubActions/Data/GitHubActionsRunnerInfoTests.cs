@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Build.GitHubActions.Data;
 using Cake.Common.Tests.Fixtures.Build;
 using Xunit;
 
@@ -87,6 +88,75 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
 
                 // Then
                 Assert.Equal("/home/runner/work/cake", result);
+            }
+        }
+
+        public sealed class TheImageOSProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+
+                // When
+                var result = info.ImageOS;
+
+                // Then
+                Assert.Equal("ubuntu20", result);
+            }
+        }
+
+        public sealed class TheImageVersionProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+
+                // When
+                var result = info.ImageVersion;
+
+                // Then
+                Assert.Equal("20211209.3", result);
+            }
+        }
+
+        public sealed class TheUserProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+
+                // When
+                var result = info.User;
+
+                // Then
+                Assert.Equal("runner", result);
+            }
+        }
+
+        public sealed class TheArchitectureProperty
+        {
+            [Theory]
+            [InlineData("X86", GitHubActionsArchitecture.X86)]
+            [InlineData("X64", GitHubActionsArchitecture.X64)]
+            [InlineData("ARM", GitHubActionsArchitecture.ARM)]
+            [InlineData("ARM64", GitHubActionsArchitecture.ARM64)]
+            [InlineData("", GitHubActionsArchitecture.Unknown)]
+            public void Should_Return_Correct_Value(string value, GitHubActionsArchitecture expected)
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateRunnerInfo(architecture: value);
+
+                // When
+                var result = info.Architecture;
+
+                // Then
+                Assert.Equal(expected, result);
             }
         }
     }

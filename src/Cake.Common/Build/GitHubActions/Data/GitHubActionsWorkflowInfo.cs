@@ -172,5 +172,43 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// The GitHub workspace directory path.
         /// </value>
         public DirectoryPath Workspace => GetEnvironmentDirectoryPath("GITHUB_WORKSPACE");
+
+        /// <summary>
+        /// Gets the number of attempts for current run.
+        /// </summary>
+        /// <value>
+        /// The attempt number  for current run.
+        /// </value>
+        public int Attempt => GetEnvironmentInteger("GITHUB_RUN_ATTEMPT");
+
+        /// <summary>
+        /// Gets a value indicating whether if branch protections are configured for the ref that triggered the workflow run.
+        /// </summary>
+        /// <value>
+        /// Value whether if branch protections are configured for the ref that triggered the workflow run.
+        /// </value>
+        public bool RefProtected => GetEnvironmentBoolean("GITHUB_REF_PROTECTED");
+
+        /// <summary>
+        /// Gets the branch or tag name that triggered the workflow run.
+        /// </summary>
+        /// <value>
+        /// The branch or tag name that triggered the workflow run.
+        /// </value>
+        public string RefName => GetEnvironmentString("GITHUB_REF_NAME");
+
+        /// <summary>
+        /// Gets the type of ref that triggered the workflow run.
+        /// </summary>
+        /// <value>
+        /// The type of ref that triggered the workflow run. Valid values are branch or tag.
+        /// </value>
+        public GitHubActionsRefType RefType => GetEnvironmentString("GITHUB_REF_TYPE")
+                                                    ?.ToLowerInvariant() switch
+                                                    {
+                                                        "branch" => GitHubActionsRefType.Branch,
+                                                        "tag" => GitHubActionsRefType.Tag,
+                                                        _ => GitHubActionsRefType.Unknown
+                                                    };
     }
 }

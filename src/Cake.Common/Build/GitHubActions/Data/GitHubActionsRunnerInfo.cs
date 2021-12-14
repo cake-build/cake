@@ -62,5 +62,45 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// The runner workspace directory path.
         /// </value>
         public DirectoryPath Workspace => GetEnvironmentDirectoryPath("RUNNER_WORKSPACE");
+
+        /// <summary>
+        /// Gets the runner image OS on hosted agents.
+        /// </summary>
+        /// <value>
+        /// The runner image OS on hosted agents.
+        /// </value>
+        public string ImageOS => GetEnvironmentString("ImageOS");
+
+        /// <summary>
+        /// Gets the runner image version on hosted agents.
+        /// </summary>
+        /// <value>
+        /// The runner image version on hosted agents.
+        /// </value>
+        public string ImageVersion => GetEnvironmentString("ImageVersion");
+
+        /// <summary>
+        /// Gets the runner user name.
+        /// </summary>
+        /// <value>
+        /// The runner user name.
+        /// </value>
+        public string User => GetEnvironmentString("RUNNER_USER");
+
+        /// <summary>
+        /// Gets the runner architecture of the runner executing the job.
+        /// </summary>
+        /// <value>
+        /// The runner architecture of the runner executing the job. Possible values are X86, X64, ARM, and ARM64.
+        /// </value>
+        public GitHubActionsArchitecture Architecture => GetEnvironmentString("RUNNER_ARCH")
+                                                            ?.ToUpperInvariant() switch
+                                                            {
+                                                                "X86" => GitHubActionsArchitecture.X86,
+                                                                "X64" => GitHubActionsArchitecture.X64,
+                                                                "ARM" => GitHubActionsArchitecture.ARM,
+                                                                "ARM64" => GitHubActionsArchitecture.ARM64,
+                                                                _ => GitHubActionsArchitecture.Unknown
+                                                            };
     }
 }
