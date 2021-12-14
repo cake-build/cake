@@ -1,6 +1,6 @@
 // Install addins.
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=2.0.0"
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=1.0.1"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=2.0.0"
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.8.1"
