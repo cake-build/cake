@@ -1710,8 +1710,8 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetFormatSettings();
             }
 
-            var formater = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            formater.Format(root, "whitespace", settings);
+            var formatter = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formatter.Format(root, "whitespace", settings);
         }
 
         /// <summary>
@@ -1764,8 +1764,8 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetFormatSettings();
             }
 
-            var formater = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            formater.Format(root, "style", settings);
+            var formatter = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formatter.Format(root, "style", settings);
         }
 
         /// <summary>
@@ -1818,8 +1818,8 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetFormatSettings();
             }
 
-            var formater = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            formater.Format(root, "analzers", settings);
+            var formatter = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formatter.Format(root, "analyzers", settings);
         }
     }
 }
