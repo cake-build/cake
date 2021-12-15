@@ -42,13 +42,40 @@ Task("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.Directory"
     .Does(async () => {
         // Given
         FilePath path = typeof(ICakeContext).GetTypeInfo().Assembly.Location;
-        string artifactName = $"Directory_{GitHubActions.Environment.Runner.OS}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}";
+        string artifactName = $"Directory_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}";
 
         // When
         await GitHubActions.Commands.UploadArtifact(path.GetDirectory(), artifactName);
 });
 
-var gitHubActionsProviderTask = Task("Cake.Common.Build.GitHubActionsProvider");
+Task("Cake.Common.Build.GitHubActionsProvider.Environment.Runner.Architecture")
+    .Does(() => {
+        // Given / When
+        var result = GitHubActions.Environment.Runner.Architecture switch {
+            GitHubActionsArchitecture.Unknown => !GitHubActions.IsRunningOnGitHubActions,
+            _=> GitHubActions.IsRunningOnGitHubActions
+        };
+
+        // Then
+        Assert.True(result);
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Environment.Workflow.RefType")
+    .Does(() => {
+        // Given / When
+        var result = GitHubActions.Environment.Workflow.RefType switch {
+            GitHubActionsRefType.Unknown => !GitHubActions.IsRunningOnGitHubActions,
+            _=> GitHubActions.IsRunningOnGitHubActions
+        };
+
+        // Then
+        Assert.True(result);
+});
+
+
+var gitHubActionsProviderTask = Task("Cake.Common.Build.GitHubActionsProvider")
+                                    .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Environment.Runner.Architecture")
+                                    .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Environment.Workflow.RefType");
 
 if (GitHubActions.IsRunningOnGitHubActions)
 {
