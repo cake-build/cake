@@ -242,6 +242,17 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     Assert.Equal(exception.Message, ".NET CLI: Process returned an error (exit code 1).");
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+   // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+
+    // When
+    DotNetFormat(project.FullPath); 
+});
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
@@ -258,6 +269,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetClean")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
     .Does(() =>
 {
     // When
