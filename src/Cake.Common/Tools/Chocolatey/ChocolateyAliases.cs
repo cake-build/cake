@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Cake.Common.Tools.Chocolatey.ApiKey;
 using Cake.Common.Tools.Chocolatey.Config;
 using Cake.Common.Tools.Chocolatey.Download;
+using Cake.Common.Tools.Chocolatey.Export;
 using Cake.Common.Tools.Chocolatey.Features;
 using Cake.Common.Tools.Chocolatey.Install;
 using Cake.Common.Tools.Chocolatey.New;
@@ -1204,6 +1205,53 @@ namespace Cake.Common.Tools.Chocolatey
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyDownloader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             runner.Download(packageId, settings);
+        }
+
+        /// <summary>
+        /// Exports the currently installed Chocolatey packages to a packages.config file in the current working directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// ChocolateyExport();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Export")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Export")]
+        public static void ChocolateyExport(this ICakeContext context)
+        {
+            var settings = new ChocolateyExportSettings();
+            ChocolateyExport(context, settings);
+        }
+
+        /// <summary>
+        /// Exports the currently installed Chocolatey packages using the specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <para>Exported information should contain the package version numbers:</para>
+        /// <code>
+        /// ChocolateyExport(
+        ///     new ChocolateyExportSettings {
+        ///         IncludeVersionNumbers = true
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Export")]
+        [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Export")]
+        public static void ChocolateyExport(this ICakeContext context, ChocolateyExportSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
+            var runner = new ChocolateyExporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
+            runner.Export(settings);
         }
     }
 }
