@@ -88,5 +88,11 @@ namespace Cake.Common.Tools.VSTest
         /// - any custom value: the name of your custom logger.
         /// </summary>
         public string Logger { get; set; }
+
+        /// <summary>
+        /// If set to <c>true</c>, MSBuildTools from a Preview installation
+        /// (e.g. Visual Studio 2022 Preview) will be considered to be used.
+        /// </summary>
+        public bool AllowPreviewVersion { get; set; } = false;
     }
 }

@@ -98,9 +98,15 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2017/Enterprise/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2017/Professional/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2017/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2017/BuildTools/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2019/Enterprise/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2019/Professional/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
         [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2019/BuildTools/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2022/Enterprise/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2022/Professional/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
         public void Should_Use_Available_Tool_Path(string existingToolPath)
         {
             // Given
@@ -113,6 +119,30 @@ namespace Cake.Common.Tests.Unit.Tools.VSTest
 
             // Then
             Assert.Equal(existingToolPath, result.Path.FullPath);
+        }
+
+        [Theory]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2022/Preview/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe", true)]
+        [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2022/Preview/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe", false)]
+        public void Should_Use_Available_Preview_Tool_Path_Only_If_Preview_Is_Set(string previewToolPath, bool allowPreview)
+        {
+            // Given
+            var fixture = new VSTestRunnerFixture();
+            fixture.FileSystem.CreateFile(previewToolPath);
+            fixture.Settings.AllowPreviewVersion = allowPreview;
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            if (allowPreview)
+            {
+                Assert.Equal(previewToolPath, result.Path.FullPath);
+            }
+            else
+            {
+                Assert.NotEqual(previewToolPath, result.Path.FullPath);
+            }
         }
 
         [Fact]
