@@ -46,5 +46,11 @@ namespace Cake.Common.Tools.MSTest
         {
             NoIsolation = true;
         }
+
+        /// <summary>
+        /// If set to <c>true</c>, MSBuildTools from a Preview installation
+        /// (e.g. Visual Studio 2022 Preview) will be considered to be used.
+        /// </summary>
+        public bool AllowPreviewVersion { get; set; } = false;
     }
 }

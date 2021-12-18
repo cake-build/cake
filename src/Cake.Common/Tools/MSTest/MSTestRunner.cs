@@ -114,12 +114,31 @@ namespace Cake.Common.Tools.MSTest
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(MSTestSettings settings)
         {
-            foreach (var yearAndEdition in new[] { "2019/Enterprise", "2019/Professional", "2019/Community", "2017/Enterprise", "2017/Professional", "2017/Community" })
+            foreach (var year in new[] { "2022", "2019", "2017" })
             {
-                var path = GetYearAndEditionToolPath(yearAndEdition);
-                if (_fileSystem.Exist(path))
+                var editions = new List<string>(
+                    new[]
+                    {
+                        "Enterprise",
+                        "Professional",
+                        "Community",
+                        "BuildTools",
+                    });
+
+                if (settings.AllowPreviewVersion)
                 {
-                    yield return path;
+                    editions.Insert(0, "Preview");
+                }
+
+                foreach (var edition in editions)
+                {
+                    var yearAndEdition = $"{year}/{edition}";
+
+                    var path = GetYearAndEditionToolPath(yearAndEdition);
+                    if (_fileSystem.Exist(path))
+                    {
+                        yield return path;
+                    }
                 }
             }
 
