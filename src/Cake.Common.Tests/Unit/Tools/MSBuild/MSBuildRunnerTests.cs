@@ -197,6 +197,41 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Windows, true)]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x86, PlatformFamily.Windows, true)]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Windows, false)]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x86, PlatformFamily.Windows, false)]
+            public void Should_Get_Correct_Path_To_MSBuild_Version_17Preview_When_Preview_Is_Set(MSBuildToolVersion version, PlatformTarget target, PlatformFamily family, bool allowPreview)
+            {
+                // Given
+                var is64BitOperativeSystem = target == PlatformTarget.x64;
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, family);
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
+                fixture.Settings.AllowPreviewVersion = allowPreview;
+
+                fixture.GivenDefaultToolDoNotExist();
+                fixture.GivenMSBuildIsNotInstalled();
+                fixture.FileSystem.CreateFile("/Program86/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/amd64/MSBuild.exe");
+                fixture.FileSystem.CreateFile("/Program86/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe");
+                fixture.FileSystem.CreateFile("/Program86/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/amd64/MSBuild.exe");
+                fixture.FileSystem.CreateFile("/Program86/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                if (allowPreview)
+                {
+                    Assert.Contains("2022/Preview", result.Path.FullPath);
+                }
+                else
+                {
+                    Assert.False(result.Path.FullPath.Contains("2022/Preview"));
+                }
+            }
+
+            [Theory]
             [InlineData(MSBuildToolVersion.NET40, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET40, PlatformTarget.MSIL, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET45, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]

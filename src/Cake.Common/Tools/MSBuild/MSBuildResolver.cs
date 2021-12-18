@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -10,7 +11,7 @@ namespace Cake.Common.Tools.MSBuild
 {
     internal static class MSBuildResolver
     {
-        public static FilePath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildToolVersion version, MSBuildPlatform buildPlatform, string customVersion)
+        public static FilePath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildPlatform buildPlatform, MSBuildSettings settings)
         {
             if (environment.Platform.Family == PlatformFamily.OSX)
             {
@@ -42,9 +43,9 @@ namespace Cake.Common.Tools.MSBuild
                 throw new CakeException("Could not resolve MSBuild.");
             }
 
-            var binPath = version == MSBuildToolVersion.Default
-                ? GetHighestAvailableMSBuildVersion(fileSystem, environment, buildPlatform)
-                : GetMSBuildPath(fileSystem, environment, (MSBuildVersion)version, buildPlatform, customVersion);
+            var binPath = settings.ToolVersion == MSBuildToolVersion.Default
+                ? GetHighestAvailableMSBuildVersion(fileSystem, environment, buildPlatform, settings.AllowPreviewVersion)
+                : GetMSBuildPath(fileSystem, environment, (MSBuildVersion)settings.ToolVersion, buildPlatform, settings.CustomVersion, settings.AllowPreviewVersion);
 
             if (binPath == null)
             {
@@ -55,7 +56,7 @@ namespace Cake.Common.Tools.MSBuild
             return binPath.CombineWithFilePath("MSBuild.exe");
         }
 
-        private static DirectoryPath GetHighestAvailableMSBuildVersion(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildPlatform buildPlatform)
+        private static DirectoryPath GetHighestAvailableMSBuildVersion(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildPlatform buildPlatform, bool allowPreview)
         {
             var versions = new[]
             {
@@ -71,7 +72,7 @@ namespace Cake.Common.Tools.MSBuild
 
             foreach (var version in versions)
             {
-                var path = GetMSBuildPath(fileSystem, environment, version, buildPlatform, null);
+                var path = GetMSBuildPath(fileSystem, environment, version, buildPlatform, null, allowPreview);
                 if (fileSystem.Exist(path))
                 {
                     return path;
@@ -80,16 +81,22 @@ namespace Cake.Common.Tools.MSBuild
             return null;
         }
 
-        private static DirectoryPath GetMSBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, MSBuildVersion version, MSBuildPlatform buildPlatform, string customVersion)
+        private static DirectoryPath GetMSBuildPath(
+            IFileSystem fileSystem,
+            ICakeEnvironment environment,
+            MSBuildVersion version,
+            MSBuildPlatform buildPlatform,
+            string customVersion,
+            bool allowPreview)
         {
             switch (version)
             {
                 case MSBuildVersion.MSBuild17:
-                    return GetVisualStudio2022Path(fileSystem, environment, buildPlatform);
+                    return GetVisualStudio2022Path(fileSystem, environment, buildPlatform, allowPreview);
                 case MSBuildVersion.MSBuild16:
-                    return GetVisualStudio2019Path(fileSystem, environment, buildPlatform);
+                    return GetVisualStudio2019Path(fileSystem, environment, buildPlatform, allowPreview);
                 case MSBuildVersion.MSBuild15:
-                    return GetVisualStudio2017Path(fileSystem, environment, buildPlatform);
+                    return GetVisualStudio2017Path(fileSystem, environment, buildPlatform, allowPreview);
                 case MSBuildVersion.MSBuild14:
                     return GetVisualStudioPath(environment, buildPlatform, "14.0");
                 case MSBuildVersion.MSBuild12:
@@ -133,15 +140,20 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         private static DirectoryPath GetVisualStudio2017Path(IFileSystem fileSystem, ICakeEnvironment environment,
-            MSBuildPlatform buildPlatform)
+            MSBuildPlatform buildPlatform, bool allowPreviewVersion)
         {
-            var vsEditions = new[]
+            var vsEditions = new List<string>
             {
-                "Enterprise",
-                "Professional",
-                "Community",
-                "BuildTools"
+                    "Enterprise",
+                    "Professional",
+                    "Community",
+                    "BuildTools"
             };
+
+            if (allowPreviewVersion)
+            {
+                vsEditions.Insert(0, "Preview");
+            }
 
             var visualStudio2017Path = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
 
@@ -169,15 +181,20 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         private static DirectoryPath GetVisualStudio2019Path(IFileSystem fileSystem, ICakeEnvironment environment,
-            MSBuildPlatform buildPlatform)
+            MSBuildPlatform buildPlatform, bool allowPreviewVersion)
         {
-            var vsEditions = new[]
+            var vsEditions = new List<string>
             {
                 "Enterprise",
                 "Professional",
                 "Community",
                 "BuildTools"
             };
+
+            if (allowPreviewVersion)
+            {
+                vsEditions.Insert(0, "Preview");
+            }
 
             var visualStudio2019Path = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
 
@@ -205,15 +222,20 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         private static DirectoryPath GetVisualStudio2022Path(IFileSystem fileSystem, ICakeEnvironment environment,
-            MSBuildPlatform buildPlatform)
+            MSBuildPlatform buildPlatform, bool allowPreviewVersion)
         {
-            var vsEditions = new[]
+            var vsEditions = new List<string>
             {
                 "Enterprise",
                 "Professional",
                 "Community",
                 "BuildTools",
             };
+
+            if (allowPreviewVersion)
+            {
+                vsEditions.Insert(0, "Preview");
+            }
 
             var visualStudio2022Paths = new[]
             {

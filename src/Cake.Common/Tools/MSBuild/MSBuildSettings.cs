@@ -253,6 +253,12 @@ namespace Cake.Common.Tools.MSBuild
         public ISet<string> ConsoleLoggerParameters => _consoleLoggerParameters;
 
         /// <summary>
+        /// If set to <c>true</c>, MSBuildTools from a Preview installation
+        /// (e.g. Visual Studio 2022 Preview) will be considered to be used.
+        /// </summary>
+        public bool AllowPreviewVersion { get; set; } = false;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
         /// </summary>
         public MSBuildSettings()
