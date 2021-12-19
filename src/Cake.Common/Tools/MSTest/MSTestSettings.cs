@@ -48,8 +48,11 @@ namespace Cake.Common.Tools.MSTest
         }
 
         /// <summary>
-        /// If set to <c>true</c>, MSBuildTools from a Preview installation
+        /// Gets or sets a value indicating whether tools from a preview edition of Visual Studio should be used.
+        /// <para>
+        /// If set to <c>true</c>, MSTest from a Preview edition
         /// (e.g. Visual Studio 2022 Preview) will be considered to be used.
+        /// </para>
         /// </summary>
         public bool AllowPreviewVersion { get; set; } = false;
     }

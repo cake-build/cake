@@ -227,7 +227,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 }
                 else
                 {
-                    Assert.False(result.Path.FullPath.Contains("2022/Preview"));
+                    Assert.DoesNotContain("2022/Preview", result.Path.FullPath);
                 }
             }
 
