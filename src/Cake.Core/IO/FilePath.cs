@@ -13,7 +13,7 @@ namespace Cake.Core.IO
     /// Represents a file path.
     /// </summary>
     [TypeConverter(typeof(FilePathConverter))]
-    public sealed class FilePath : Path, IEquatable<FilePath>, IComparer<FilePath>
+    public sealed class FilePath : Path, IEquatable<FilePath>, IComparer<FilePath>, IPath<FilePath>
     {
         /// <summary>
         /// Gets a value indicating whether this path has a file extension.
