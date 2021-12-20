@@ -17,6 +17,8 @@ namespace Cake.Common.Tests.Fixtures.Build
     {
         private const string ApiVersion = "6.0-preview";
         private const string AcceptHeader = "application/json; api-version=" + ApiVersion;
+        private const string AcceptGzip = "application/octet-stream; api-version=" + ApiVersion;
+        private const string AcceptEncodingGzip = "gzip";
         private const string CreateArtifactUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
                                                  "_apis/pipelines/workflows/34058136/artifacts?api-version=" + ApiVersion + "&artifactName=artifact";
         private const string CreateArtifactsUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
@@ -54,6 +56,54 @@ namespace Cake.Common.Tests.Fixtures.Build
                                           "_apis/resources/Containers/942031?itemPath=artifacts%2Ffolder_b%2Fartifact.txt";
         private const string PutDirectoryFolderBFolderCUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
                                           "_apis/resources/Containers/942031?itemPath=artifacts%2Ffolder_b%2Ffolder_c%2Fartifact.txt";
+
+        private const string GetArtifactResourceUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
+            "_apis/pipelines/workflows/34058136/artifacts?api-version=6.0-preview&artifactName=artifact";
+        private const string FileContainerResourceUrl = GitHubActionsInfoFixture.ActionRuntimeUrl + @"_apis/resources/Containers/4794789";
+        private const string GetArtifactResourceResponse = @"{
+    ""count"": 1,
+    ""value"": [
+        {
+            ""containerId"": 4794789,
+            ""size"": 4,
+            ""signedContent"": null,
+            ""fileContainerResourceUrl"": """ + FileContainerResourceUrl + @""",
+            ""type"": ""actions_storage"",
+            ""name"": ""artifact"",
+            ""url"": """ + GitHubActionsInfoFixture.ActionRuntimeUrl + @"_apis/pipelines/1/runs/7/artifacts?artifactName=artifact"",
+            ""expiresOn"": ""2022-03-16T08:22:01.5699067Z"",
+            ""items"": null
+        }
+    ]
+}";
+
+        private const string GetContainerItemResourcesUrl = FileContainerResourceUrl + "?itemPath=artifact";
+        private const string GetContainerItemResourcesResponse = @"{
+    ""count"": 1,
+    ""value"": [
+        {
+            ""containerId"": 4794789,
+            ""scopeIdentifier"": ""00000000-0000-0000-0000-000000000000"",
+            ""path"": ""artifact/test.txt"",
+            ""itemType"": ""file"",
+            ""status"": ""created"",
+            ""fileLength"": 4,
+            ""fileEncoding"": 1,
+            ""fileType"": 1,
+            ""dateCreated"": ""2021-12-16T09:05:18.803Z"",
+            ""dateLastModified"": ""2021-12-16T09:05:18.907Z"",
+            ""createdBy"": ""2daeb16b-86ae-4e46-ba89-92a8aa076e52"",
+            ""lastModifiedBy"": ""2daeb16b-86ae-4e46-ba89-92a8aa076e52"",
+            ""itemLocation"": """ + GetContainerItemResourcesUrl + @"%2Ftest.txt&metadata=True"",
+            ""contentLocation"": """ + GetContainerItemResourcesUrl + @"%2Ftest.txt"",
+            ""fileId"": 1407,
+            ""contentId"": """"
+        }
+    ]
+}";
+
+        private const string DownloadItemResourceUrl = GetContainerItemResourcesUrl + "%2Ftest.txt";
+        private const string DownloadItemResourceResponse = "Cake";
 
         private GitHubActionsInfoFixture GitHubActionsInfoFixture { get; }
         private ICakeEnvironment Environment { get; }
@@ -102,18 +152,26 @@ namespace Cake.Common.Tests.Fixtures.Build
                 };
             }
 
-            if (!request.Headers.TryGetValues("Accept", out var values) || !values.Contains(AcceptHeader))
+            if (
+                !request.Headers.TryGetValues("Accept", out var values)
+                || !values.Contains(AcceptHeader))
             {
-                return new HttpResponseMessage
+                if (request.RequestUri.AbsoluteUri != DownloadItemResourceUrl
+                    || !values.Contains(AcceptGzip)
+                    || !request.Headers.TryGetValues("Accept-Encoding", out var encodingValues)
+                    || !encodingValues.Contains(AcceptEncodingGzip))
                 {
-                    StatusCode = HttpStatusCode.BadRequest
-                };
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.BadRequest
+                    };
+                }
             }
 
             switch (request)
             {
 #pragma warning disable SA1013
-                // FilePath
+                // Create Artifact FilePath
                 case
                 {
                     RequestUri: { AbsoluteUri: CreateArtifactUrl },
@@ -123,7 +181,7 @@ namespace Cake.Common.Tests.Fixtures.Build
                         return Ok(new StringContent(CreateArtifactResponse));
                     }
 
-                // DirectoryPath
+                // Create Artifact DirectoryPath
                 case
                 {
                     RequestUri: { AbsoluteUri: CreateArtifactsUrl },
@@ -133,7 +191,37 @@ namespace Cake.Common.Tests.Fixtures.Build
                         return Ok(new StringContent(CreateArtifactsResponse));
                     }
 
-                // FilePath
+                // Download Artifact - Get Artifact Container Resource
+                case
+                {
+                    RequestUri: { AbsoluteUri: GetArtifactResourceUrl },
+                    Method: { Method: "GET" }
+                }:
+                    {
+                        return Ok(new StringContent(GetArtifactResourceResponse));
+                    }
+
+                // Download Artifact - Get Artifact Container Item Resource
+                case
+                {
+                    RequestUri: { AbsoluteUri: GetContainerItemResourcesUrl },
+                    Method: { Method: "GET" }
+                }:
+                    {
+                        return Ok(new StringContent(GetContainerItemResourcesResponse));
+                    }
+
+                // Download Artifact - DownloadItemResource
+                case
+                {
+                    RequestUri: { AbsoluteUri: DownloadItemResourceUrl },
+                    Method: { Method: "GET" }
+                }:
+                    {
+                        return Ok(new StringContent(DownloadItemResourceResponse));
+                    }
+
+                // Put FilePath
                 case
                 {
                     RequestUri: { AbsoluteUri: PutFileUrl },
@@ -145,7 +233,7 @@ namespace Cake.Common.Tests.Fixtures.Build
                     Method: { Method: "PATCH" },
                 }:
 
-                // DirectoryPath
+                // Put DirectoryPath
                 case
                 {
                     RequestUri: { AbsoluteUri: PutDirectoryRootUrl },

@@ -23,6 +23,8 @@ namespace Cake.Common.Build.GitHubActions.Commands
         private const string ApiVersion = "6.0-preview";
         private const string AcceptHeader = "application/json; api-version=" + ApiVersion;
         private const string ContentTypeHeader = "application/json";
+        private const string AcceptGzip = "application/octet-stream; api-version=" + ApiVersion;
+        private const string AcceptEncodingGzip = "gzip";
 
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
@@ -141,6 +143,144 @@ namespace Cake.Common.Build.GitHubActions.Commands
             await CreateAndUploadArtifactFiles(artifactName, directory.Path, files);
         }
 
+        /// <summary>
+        /// Download remote artifact container into local directory.
+        /// </summary>
+        /// <param name="artifactName">The artifact name.</param>
+        /// <param name="path">Path to the local directory.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public async Task DownloadArtifact(string artifactName, DirectoryPath path)
+        {
+            var directory = _fileSystem.GetDirectory(ValidateArtifactParameters(path, artifactName));
+
+            if (!directory.Exists)
+            {
+                throw new DirectoryNotFoundException(FormattableString.Invariant($"Local directory {directory.Path.FullPath} not found."));
+            }
+
+            var client = GetRuntimeHttpClient();
+
+            var artifactResourceUrl = await GetArtifactResourceUrl(client, artifactName);
+
+            var containerItemResources = await GetContainerItemResources(
+                client,
+                directory.Path,
+                artifactName,
+                artifactResourceUrl);
+
+            await DownloadItemResources(client, containerItemResources);
+        }
+
+        private async Task DownloadItemResources(HttpClient client, (FilePath FilePath, string ContentLocation, long FileLength)[] containerItemResourceContent)
+        {
+            foreach (var (filePath, contentLocation, fileLength) in containerItemResourceContent)
+            {
+                await DownloadItemResource(client, filePath, contentLocation, fileLength);
+            }
+        }
+
+        private async Task DownloadItemResource(
+            HttpClient client,
+            FilePath filePath,
+            string contentLocation,
+            long fileLength)
+        {
+            var contentDirectory = _fileSystem.GetDirectory(filePath.GetDirectory());
+
+            if (!contentDirectory.Exists)
+            {
+                contentDirectory.Create();
+            }
+
+            var contentFile = _fileSystem.GetFile(filePath);
+
+            using var contentFileStream = contentFile.OpenWrite();
+
+            if (fileLength == 0)
+            {
+                return;
+            }
+
+            using var contentResponse = await client.SendAsync(
+                new HttpRequestMessage(
+                HttpMethod.Get,
+                contentLocation)
+                {
+                    Headers =
+                    {
+                        Accept = { MediaTypeWithQualityHeaderValue.Parse(AcceptGzip) },
+                        AcceptEncoding = { StringWithQualityHeaderValue.Parse(AcceptEncodingGzip) }
+                    }
+                });
+
+            contentResponse.EnsureSuccessStatusCode();
+
+            using var contentResponseStream = await contentResponse.Content.ReadAsStreamAsync();
+
+            await contentResponseStream.CopyToAsync(contentFileStream);
+        }
+
+        private async Task<(FilePath LocalPath, string ContentLocation, long FileLength)[]> GetContainerItemResources(
+            HttpClient client,
+            DirectoryPath path,
+            string artifactName,
+            string artifactResourceUrl)
+        {
+            using var resourceResponse = await client.GetAsync(artifactResourceUrl);
+
+            resourceResponse.EnsureSuccessStatusCode();
+
+            using var resourceResponseStream = await resourceResponse.Content.ReadAsStreamAsync();
+
+            var containerItemResource = await JsonSerializer.DeserializeAsync<Values<ContainerItemResource>>(resourceResponseStream);
+
+            int artifactNameLength = artifactName.Length;
+            int relativePathStart = artifactNameLength + 1;
+            var containerItemResourceContent =
+                    containerItemResource
+                        ?.Value
+                        .Where(content => content?.Path is string path
+                        && path.Length > relativePathStart
+                        && path[artifactNameLength] is char separator
+                        && (separator == '/' || separator == '\\')
+                        && path.StartsWith(artifactName)
+                        && content.ItemType?.ToLowerInvariant() == "file")
+                        .Select(content => (path.CombineWithFilePath(content.Path[relativePathStart..]),
+                                    content.ContentLocation,
+                                    content.FileLength ?? 0))
+                        .ToArray();
+
+            if (containerItemResourceContent == null || containerItemResourceContent.Length == 0)
+            {
+                throw new Exception($"Artifact \"{artifactName}\" content not found.");
+            }
+
+            return containerItemResourceContent;
+        }
+
+        private async Task<string> GetArtifactResourceUrl(HttpClient client, string artifactName)
+        {
+            var artifactUrl = GetArtifactUrl(artifactName);
+
+            using var containerResponse = await client.GetAsync(artifactUrl);
+
+            containerResponse.EnsureSuccessStatusCode();
+
+            using var containerResponseStream = await containerResponse.Content.ReadAsStreamAsync();
+
+            var containerItems = await JsonSerializer.DeserializeAsync<Values<ContainerItem>>(containerResponseStream);
+
+            var artifactsLookup = (containerItems?.Value ?? Array.Empty<ContainerItem>())
+                                    .Where(item => !string.IsNullOrWhiteSpace(item.FileContainerResourceUrl)
+                                                    && !string.IsNullOrWhiteSpace(item.Name))
+                                    .ToLookup(
+                                        key => key.Name,
+                                        item => string.Concat(item.FileContainerResourceUrl, "?itemPath=", Uri.EscapeDataString(item.Name)));
+
+            return artifactsLookup[artifactName].FirstOrDefault()
+                                ?? throw new Exception($"Artifact \"{artifactName}\" not found.");
+        }
+
         private T ValidateArtifactParameters<T>(T path, string artifactName) where T : IPath<T>
         {
             if (path is null)
@@ -176,14 +316,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
             DirectoryPath rootPath,
             params IFile[] files)
         {
-            var artifactUrl = string.Concat(
-                _actionsEnvironment.Runtime.Url,
-                "_apis/pipelines/workflows/",
-                _actionsEnvironment.Workflow.RunId,
-                "/artifacts?api-version=",
-                ApiVersion,
-                "&artifactName=",
-                Uri.EscapeDataString(artifactName));
+            var artifactUrl = GetArtifactUrl(artifactName);
 
             var client = GetRuntimeHttpClient();
 
@@ -198,6 +331,18 @@ namespace Cake.Common.Build.GitHubActions.Commands
             }
 
             await FinalizeArtifact(client, artifactUrl, totalFileSize);
+        }
+
+        private string GetArtifactUrl(string artifactName)
+        {
+            return string.Concat(
+                            _actionsEnvironment.Runtime.Url,
+                            "_apis/pipelines/workflows/",
+                            _actionsEnvironment.Workflow.RunId,
+                            "/artifacts?api-version=",
+                            ApiVersion,
+                            "&artifactName=",
+                            Uri.EscapeDataString(artifactName));
         }
 
         private HttpClient GetRuntimeHttpClient([System.Runtime.CompilerServices.CallerMemberName] string memberName = null)

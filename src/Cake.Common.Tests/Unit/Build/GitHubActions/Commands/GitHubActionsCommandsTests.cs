@@ -338,5 +338,81 @@ CAKEEOF
                 }
             }
         }
+
+        public sealed class TheDownloadArtifactMethod
+        {
+            [Fact]
+            public async Task Should_Throw_If_ArtifactName_Is_Null()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture().CreateGitHubActionsCommands();
+                var path = DirectoryPath.FromString("/artifacts");
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.DownloadArtifact(null, path));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "artifactName");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture().CreateGitHubActionsCommands();
+                var artifactName = "artifactName";
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.DownloadArtifact(artifactName, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Directory_Missing()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture().CreateGitHubActionsCommands();
+                var path = DirectoryPath.FromString("/artifacts");
+                var artifactName = "artifact";
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.DownloadArtifact(artifactName, path));
+
+                // Then
+                AssertEx.IsExceptionWithMessage<DirectoryNotFoundException>(result, "Local directory /artifacts not found.");
+            }
+
+            [Theory]
+            [InlineData("/", "/src/artifacts")]
+            [InlineData("/src", "artifacts")]
+            public async Task Should_Download(string workingDirectory, string testPath)
+            {
+                // Given
+                var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture()
+                                                    .WithWorkingDirectory(workingDirectory);
+                var testDirectoryPath = DirectoryPath.FromString(testPath);
+                var artifactName = "artifact";
+                var directory = DirectoryPath.FromString("/src/artifacts");
+                var filePath = directory.CombineWithFilePath("test.txt");
+
+                gitHubActionsCommandsFixture
+                    .FileSystem
+                    .CreateDirectory(directory);
+
+                var commands = gitHubActionsCommandsFixture.CreateGitHubActionsCommands();
+
+                // When
+                await commands.DownloadArtifact(artifactName, testDirectoryPath);
+                var file = gitHubActionsCommandsFixture
+                    .FileSystem
+                    .GetFile(filePath);
+
+                // Then
+                Assert.True(file.Exists, $"{filePath.FullPath} doesn't exist.");
+                Assert.Equal("Cake", file.GetTextContent());
+            }
+        }
     }
 }
