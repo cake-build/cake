@@ -1,4 +1,6 @@
 #load "./../../../utilities/xunit.cake"
+#load "./../../../utilities/paths.cake"
+#load "./../../../utilities/io.cake"
 
 Task("Cake.Common.Build.GitHubActionsProvider.Provider")
     .Does(() => {
@@ -6,12 +8,9 @@ Task("Cake.Common.Build.GitHubActionsProvider.Provider")
 });
 
 Task("Cake.Common.Build.GitHubActionsProvider.Commands.AddPath")
-    .Does(() => {
-        // Given
-        FilePath path = typeof(ICakeContext).GetTypeInfo().Assembly.Location;
-
+    .Does<GitHubActionsData>(async data => {
         // When
-        GitHubActions.Commands.AddPath(path.GetDirectory());
+        GitHubActions.Commands.AddPath(data.AssemblyPath.GetDirectory());
 });
 
 
@@ -29,23 +28,32 @@ Task("Cake.Common.Build.GitHubActionsProvider.Commands.SetEnvironmentVariable")
 });
 
 Task("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.File")
-    .Does(async () => {
-        // Given
-        FilePath path = typeof(ICakeContext).GetTypeInfo().Assembly.Location;
-        string artifactName = $"File_{GitHubActions.Environment.Runner.OS}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}";
-
+    .Does<GitHubActionsData>(async data => {
         // When
-        await GitHubActions.Commands.UploadArtifact(path, artifactName);
+        await GitHubActions.Commands.UploadArtifact(data.AssemblyPath, data.FileArtifactName);
 });
 
 Task("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.Directory")
-    .Does(async () => {
+    .Does<GitHubActionsData>(async data => {
+        // When
+        await GitHubActions.Commands.UploadArtifact(data.AssemblyPath.GetDirectory(), data.DirectoryArtifactName);
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact")
+    .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.File")
+    .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.Directory")
+    .Does<GitHubActionsData>(async data => {
         // Given
-        FilePath path = typeof(ICakeContext).GetTypeInfo().Assembly.Location;
-        string artifactName = $"Directory_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}";
+        var targetPath = Paths.Temp.Combine("./Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact");
+        EnsureDirectoryExists(targetPath);
+        var targetArtifactPath = targetPath.CombineWithFilePath(data.AssemblyPath.GetFilename());
 
         // When
-        await GitHubActions.Commands.UploadArtifact(path.GetDirectory(), artifactName);
+        await GitHubActions.Commands.DownloadArtifact(data.FileArtifactName, targetPath);
+
+        // Then
+        Assert.True(System.IO.File.Exists(targetArtifactPath.FullPath), $"{targetArtifactPath.FullPath} Missing");
+        Assert.True(FileHashEquals(data.AssemblyPath, targetArtifactPath), $"{data.AssemblyPath.FullPath}=={targetArtifactPath.FullPath}");
 });
 
 Task("Cake.Common.Build.GitHubActionsProvider.Environment.Runner.Architecture")
@@ -88,8 +96,21 @@ if (GitHubActions.IsRunningOnGitHubActions)
 
 if (GitHubActions.Environment.Runtime.IsRuntimeAvailable)
 {
+    Setup(context => new GitHubActionsData {
+        AssemblyPath = typeof(ICakeContext).GetTypeInfo().Assembly.Location,
+        FileArtifactName = $"File_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}",
+        DirectoryArtifactName = $"Directory_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}"
+    });
+
     gitHubActionsProviderTask
-        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.File");
-    gitHubActionsProviderTask
-        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.Directory");
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.File")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.Directory")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact");
+}
+
+public class GitHubActionsData
+{
+    public FilePath AssemblyPath { get; set; }
+    public string FileArtifactName { get; set; }
+    public string DirectoryArtifactName { get; set; }
 }
