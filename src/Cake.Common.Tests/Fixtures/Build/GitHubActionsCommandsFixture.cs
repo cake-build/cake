@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Cake.Common.Build.GitHubActions.Commands;
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Core;
+using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
 
@@ -69,6 +70,12 @@ namespace Cake.Common.Tests.Fixtures.Build
         public GitHubActionsCommands CreateGitHubActionsCommands()
         {
             return new GitHubActionsCommands(Environment, FileSystem, GitHubActionsInfoFixture.CreateEnvironmentInfo(), CreateClient);
+        }
+
+        public GitHubActionsCommandsFixture WithWorkingDirectory(DirectoryPath workingDirectory)
+        {
+            Environment.WorkingDirectory = workingDirectory;
+            return this;
         }
 
         public GitHubActionsCommandsFixture WithNoGitHubEnv()

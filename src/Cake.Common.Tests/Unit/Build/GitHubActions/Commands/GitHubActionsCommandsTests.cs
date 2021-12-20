@@ -233,20 +233,24 @@ CAKEEOF
                     AssertEx.IsExceptionWithMessage<FileNotFoundException>(result, "Artifact file not found.");
                 }
 
-                [Fact]
-                public async Task Should_Upload()
+                [Theory]
+                [InlineData("/", "/artifacts/artifact.txt")]
+                [InlineData("/artifacts", "artifact.txt")]
+                public async Task Should_Upload(string workingDirectory, string testPath)
                 {
                     // Given
-                    var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture();
+                    var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture()
+                                                        .WithWorkingDirectory(workingDirectory);
+                    var testFilePath = FilePath.FromString(testPath);
                     var artifactName = "artifact";
-                    var file = gitHubActionsCommandsFixture
+                    gitHubActionsCommandsFixture
                         .FileSystem
                         .CreateFile("/artifacts/artifact.txt")
                         .SetContent(artifactName);
                     var commands = gitHubActionsCommandsFixture.CreateGitHubActionsCommands();
 
                     // When
-                    await commands.UploadArtifact(file.Path, artifactName);
+                    await commands.UploadArtifact(testFilePath, artifactName);
                 }
             }
 
@@ -295,13 +299,17 @@ CAKEEOF
                     AssertEx.IsExceptionWithMessage<DirectoryNotFoundException>(result, "Artifact directory /artifacts not found.");
                 }
 
-                [Fact]
-                public async Task Should_Upload()
+                [Theory]
+                [InlineData("/", "/src/artifacts")]
+                [InlineData("/src", "artifacts")]
+                public async Task Should_Upload(string workingDirectory, string testPath)
                 {
                     // Given
-                    var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture();
+                    var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture()
+                                                        .WithWorkingDirectory(workingDirectory);
+                    var testDirectoryPath = DirectoryPath.FromString(testPath);
                     var artifactName = "artifacts";
-                    var directory = DirectoryPath.FromString("/artifacts");
+                    var directory = DirectoryPath.FromString("/src/artifacts");
 
                     gitHubActionsCommandsFixture
                         .FileSystem
@@ -326,7 +334,7 @@ CAKEEOF
                     var commands = gitHubActionsCommandsFixture.CreateGitHubActionsCommands();
 
                     // When
-                    await commands.UploadArtifact(directory, artifactName);
+                    await commands.UploadArtifact(testDirectoryPath, artifactName);
                 }
             }
         }

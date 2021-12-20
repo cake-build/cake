@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Core;
 using Cake.Core.IO;
-using Path = Cake.Core.IO.Path;
 
 namespace Cake.Common.Build.GitHubActions.Commands
 {
@@ -22,7 +21,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
     public sealed class GitHubActionsCommands
     {
         private const string ApiVersion = "6.0-preview";
-        private const string AcceptHeader = "application/json;api-version=" + ApiVersion;
+        private const string AcceptHeader = "application/json; api-version=" + ApiVersion;
         private const string ContentTypeHeader = "application/json";
 
         private readonly ICakeEnvironment _environment;
@@ -110,16 +109,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task UploadArtifact(FilePath path, string artifactName)
         {
-            ValidateUploadArtifactParameters(path, artifactName);
-
-            var file = _fileSystem.GetFile(path);
+            var file = _fileSystem.GetFile(ValidateArtifactParameters(path, artifactName));
 
             if (!file.Exists)
             {
-                throw new FileNotFoundException("Artifact file not found.", path.FullPath);
+                throw new FileNotFoundException("Artifact file not found.", file.Path.FullPath);
             }
 
-            await CreateAndUploadArtifactFiles(artifactName, path.GetDirectory(), file);
+            await CreateAndUploadArtifactFiles(artifactName, file.Path.GetDirectory(), file);
         }
 
         /// <summary>
@@ -130,23 +127,21 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task UploadArtifact(DirectoryPath path, string artifactName)
         {
-            ValidateUploadArtifactParameters(path, artifactName);
-
-            var directory = _fileSystem.GetDirectory(path);
+            var directory = _fileSystem.GetDirectory(ValidateArtifactParameters(path, artifactName));
 
             if (!directory.Exists)
             {
-                throw new DirectoryNotFoundException(FormattableString.Invariant($"Artifact directory {path.FullPath} not found."));
+                throw new DirectoryNotFoundException(FormattableString.Invariant($"Artifact directory {directory.Path.FullPath} not found."));
             }
 
             var files = directory
                             .GetFiles("*", SearchScope.Recursive)
                             .ToArray();
 
-            await CreateAndUploadArtifactFiles(artifactName, path, files);
+            await CreateAndUploadArtifactFiles(artifactName, directory.Path, files);
         }
 
-        private void ValidateUploadArtifactParameters(Path path, string artifactName)
+        private T ValidateArtifactParameters<T>(T path, string artifactName) where T : IPath<T>
         {
             if (path is null)
             {
@@ -172,6 +167,8 @@ namespace Cake.Common.Build.GitHubActions.Commands
             {
                 throw new CakeException("GitHub Actions Workflow RunId missing.");
             }
+
+            return path.MakeAbsolute(_environment);
         }
 
         private async Task CreateAndUploadArtifactFiles(
