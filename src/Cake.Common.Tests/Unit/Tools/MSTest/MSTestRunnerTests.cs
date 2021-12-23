@@ -293,21 +293,21 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         }
 
         [Theory]
-        [InlineData("2017", "Enterprise")]
-        [InlineData("2017", "Professional")]
-        [InlineData("2017", "Community")]
-        [InlineData("2019", "Enterprise")]
-        [InlineData("2019", "Professional")]
-        [InlineData("2019", "Community")]
-        [InlineData("2022", "Enterprise")]
-        [InlineData("2022", "Professional")]
-        [InlineData("2022", "Community")]
-        public void Should_Use_Tool_Path_For_YearAndEdition_Versions(string year, string edition)
+        [InlineData(SpecialPath.ProgramFilesX86, "2017", "Enterprise")]
+        [InlineData(SpecialPath.ProgramFilesX86, "2017", "Professional")]
+        [InlineData(SpecialPath.ProgramFilesX86, "2017", "Community")]
+        [InlineData(SpecialPath.ProgramFilesX86, "2019", "Enterprise")]
+        [InlineData(SpecialPath.ProgramFilesX86, "2019", "Professional")]
+        [InlineData(SpecialPath.ProgramFilesX86, "2019", "Community")]
+        [InlineData(SpecialPath.ProgramFiles, "2022", "Enterprise")]
+        [InlineData(SpecialPath.ProgramFiles, "2022", "Professional")]
+        [InlineData(SpecialPath.ProgramFiles, "2022", "Community")]
+        public void Should_Use_Tool_Path_For_YearAndEdition_Versions(SpecialPath programFiles, string year, string edition)
         {
             // Given
             var fixture = new MSTestRunnerFixture();
             fixture.GivenDefaultToolDoNotExist();
-            var toolPath = fixture.Environment.GetSpecialPath(SpecialPath.ProgramFilesX86)
+            var toolPath = fixture.Environment.GetSpecialPath(programFiles)
                 .CombineWithFilePath($"Microsoft Visual Studio/{year}/{edition}/Common7/IDE/mstest.exe");
             fixture.FileSystem.CreateFile(toolPath);
 
@@ -325,7 +325,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
         {
             // Given
             var fixture = new MSTestRunnerFixture();
-            var previewToolPath = fixture.Environment.GetSpecialPath(SpecialPath.ProgramFilesX86)
+            var previewToolPath = fixture.Environment.GetSpecialPath(SpecialPath.ProgramFiles)
                 .CombineWithFilePath($"Microsoft Visual Studio/{year}/Preview/Common7/IDE/mstest.exe");
             fixture.FileSystem.CreateFile(previewToolPath);
             fixture.Settings.AllowPreviewVersion = allowPreview;

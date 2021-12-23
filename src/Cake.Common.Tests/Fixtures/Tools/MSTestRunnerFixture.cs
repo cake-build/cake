@@ -18,6 +18,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         {
             AssemblyPaths = new[] { new FilePath("./Test1.dll") };
             Environment.SetSpecialPath(SpecialPath.ProgramFilesX86, "/ProgramFilesX86");
+            Environment.SetSpecialPath(SpecialPath.ProgramFiles, "/ProgramFiles");
         }
 
         protected override FilePath GetDefaultToolPath(string toolFilename)

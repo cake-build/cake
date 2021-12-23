@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -142,25 +141,12 @@ namespace Cake.Common.Tools.MSBuild
         private static DirectoryPath GetVisualStudio2017Path(IFileSystem fileSystem, ICakeEnvironment environment,
             MSBuildPlatform buildPlatform, bool allowPreviewVersion)
         {
-            var vsEditions = new List<string>
-            {
-                    "Enterprise",
-                    "Professional",
-                    "Community",
-                    "BuildTools"
-            };
-
-            if (allowPreviewVersion)
-            {
-                vsEditions.Insert(0, "Preview");
-            }
-
-            var visualStudio2017Path = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
-
-            foreach (var edition in vsEditions)
+            foreach (var edition in allowPreviewVersion
+                         ? VisualStudio.Editions.All
+                         : VisualStudio.Editions.Stable)
             {
                 // Get the bin path.
-                var binPath = visualStudio2017Path.Combine(string.Concat("Microsoft Visual Studio/2017/", edition, "/MSBuild/15.0/Bin"));
+                var binPath = VisualStudio.GetYearAndEditionRootPath(environment, "2017", edition).Combine("MSBuild/15.0/Bin");
                 if (fileSystem.Exist(binPath))
                 {
                     if (buildPlatform == MSBuildPlatform.Automatic)
@@ -177,31 +163,18 @@ namespace Cake.Common.Tools.MSBuild
                     return binPath;
                 }
             }
-            return visualStudio2017Path.Combine("Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin");
+            return VisualStudio.GetYearAndEditionRootPath(environment, "2017", "Professional").Combine("MSBuild/15.0/Bin");
         }
 
         private static DirectoryPath GetVisualStudio2019Path(IFileSystem fileSystem, ICakeEnvironment environment,
             MSBuildPlatform buildPlatform, bool allowPreviewVersion)
         {
-            var vsEditions = new List<string>
-            {
-                "Enterprise",
-                "Professional",
-                "Community",
-                "BuildTools"
-            };
-
-            if (allowPreviewVersion)
-            {
-                vsEditions.Insert(0, "Preview");
-            }
-
-            var visualStudio2019Path = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
-
-            foreach (var edition in vsEditions)
+            foreach (var edition in allowPreviewVersion
+                         ? VisualStudio.Editions.All
+                         : VisualStudio.Editions.Stable)
             {
                 // Get the bin path.
-                var binPath = visualStudio2019Path.Combine(string.Concat("Microsoft Visual Studio/2019/", edition, "/MSBuild/Current/Bin")); // Change from Current to 16.0 after stable version released
+                var binPath = VisualStudio.GetYearAndEditionRootPath(environment, "2019", edition).Combine("MSBuild/Current/Bin");
                 if (fileSystem.Exist(binPath))
                 {
                     if (buildPlatform == MSBuildPlatform.Automatic)
@@ -218,58 +191,38 @@ namespace Cake.Common.Tools.MSBuild
                     return binPath;
                 }
             }
-            return visualStudio2019Path.Combine("Microsoft Visual Studio/2019/Professional/MSBuild/16.0/Bin");
+            return VisualStudio.GetYearAndEditionRootPath(environment, "2019", "Professional").Combine("MSBuild/Current/Bin");
         }
 
         private static DirectoryPath GetVisualStudio2022Path(IFileSystem fileSystem, ICakeEnvironment environment,
             MSBuildPlatform buildPlatform, bool allowPreviewVersion)
         {
-            var vsEditions = new List<string>
+            foreach (var edition in allowPreviewVersion
+                         ? VisualStudio.Editions.All
+                         : VisualStudio.Editions.Stable)
             {
-                "Enterprise",
-                "Professional",
-                "Community",
-                "BuildTools",
-            };
-
-            if (allowPreviewVersion)
-            {
-                vsEditions.Insert(0, "Preview");
-            }
-
-            var visualStudio2022Paths = new[]
-            {
-                environment.GetSpecialPath(SpecialPath.ProgramFiles),
-                environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
-            };
-
-            foreach (var visualStudio2022Path in visualStudio2022Paths)
-            {
-                foreach (var edition in vsEditions)
+                // Get the bin path.
+                var binPath = VisualStudio.GetYearAndEditionRootPath(environment, "2022", edition).Combine("MSBuild/Current/Bin");
+                if (fileSystem.Exist(binPath))
                 {
-                    // Get the bin path.
-                    var binPath = visualStudio2022Path.Combine(string.Concat("Microsoft Visual Studio/2022/", edition, "/MSBuild/Current/Bin"));
-                    if (fileSystem.Exist(binPath))
+                    if (buildPlatform == MSBuildPlatform.Automatic)
                     {
-                        if (buildPlatform == MSBuildPlatform.Automatic)
-                        {
-                            if (environment.Platform.Is64Bit)
-                            {
-                                binPath = binPath.Combine("amd64");
-                            }
-                        }
-
-                        if (buildPlatform == MSBuildPlatform.x64)
+                        if (environment.Platform.Is64Bit)
                         {
                             binPath = binPath.Combine("amd64");
                         }
-
-                        return binPath;
                     }
+
+                    if (buildPlatform == MSBuildPlatform.x64)
+                    {
+                        binPath = binPath.Combine("amd64");
+                    }
+
+                    return binPath;
                 }
             }
 
-            return visualStudio2022Paths[0].Combine("Microsoft Visual Studio/2022/Professional/MSBuild/Current/Bin");
+            return VisualStudio.GetYearAndEditionRootPath(environment, "2022", "Professional").Combine("MSBuild/Current/Bin");
         }
 
         private static DirectoryPath GetFrameworkPath(ICakeEnvironment environment, MSBuildPlatform buildPlatform, string version)

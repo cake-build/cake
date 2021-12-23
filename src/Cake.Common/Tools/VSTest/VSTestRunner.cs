@@ -152,27 +152,14 @@ namespace Cake.Common.Tools.VSTest
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(VSTestSettings settings)
         {
-            foreach (var year in new[] { "2022", "2019", "2017" })
+            var vsRootRelativeToolPath = FilePath.FromString($"Common7/IDE/CommonExtensions/Microsoft/TestWindow/{VSTestConsoleExecutableName}");
+            foreach (var year in VisualStudio.Versions.TwentySeventeenAndLater)
             {
-                var editions = new List<string>(
-                    new[]
-                    {
-                        "Enterprise",
-                        "Professional",
-                        "Community",
-                        "BuildTools",
-                    });
-
-                if (settings.AllowPreviewVersion)
+                foreach (var edition in settings.AllowPreviewVersion
+                             ? VisualStudio.Editions.All
+                             : VisualStudio.Editions.Stable)
                 {
-                    editions.Insert(0, "Preview");
-                }
-
-                foreach (var edition in editions)
-                {
-                    var yearAndEdition = $"{year}/{edition}";
-
-                    var path = GetYearAndEditionToolPath(yearAndEdition);
+                    var path = VisualStudio.GetYearAndEditionToolPath(_environment, year, edition, vsRootRelativeToolPath);
                     if (_fileSystem.Exist(path))
                     {
                         yield return path;
@@ -180,28 +167,14 @@ namespace Cake.Common.Tools.VSTest
                 }
             }
 
-            foreach (var version in new[] { "15.0", "14.0", "12.0", "11.0" })
+            foreach (var version in VisualStudio.Versions.TenToFourteen)
             {
-                var path = GetVersionNumberToolPath(version);
+                var path = VisualStudio.GetVersionNumberToolPath(_environment, version, vsRootRelativeToolPath);
                 if (_fileSystem.Exist(path))
                 {
                     yield return path;
                 }
             }
-        }
-
-        private FilePath GetYearAndEditionToolPath(string yearAndEdition)
-        {
-            var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
-            var root = programFiles.Combine(string.Concat("Microsoft Visual Studio/", yearAndEdition, "/Common7/IDE/CommonExtensions/Microsoft/TestWindow"));
-            return root.CombineWithFilePath(VSTestConsoleExecutableName);
-        }
-
-        private FilePath GetVersionNumberToolPath(string version)
-        {
-            var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
-            var root = programFiles.Combine(string.Concat("Microsoft Visual Studio ", version, "/Common7/IDE/CommonExtensions/Microsoft/TestWindow"));
-            return root.CombineWithFilePath(VSTestConsoleExecutableName);
         }
     }
 }
