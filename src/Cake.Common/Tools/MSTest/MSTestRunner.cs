@@ -114,18 +114,24 @@ namespace Cake.Common.Tools.MSTest
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(MSTestSettings settings)
         {
-            foreach (var yearAndEdition in new[] { "2019/Enterprise", "2019/Professional", "2019/Community", "2017/Enterprise", "2017/Professional", "2017/Community" })
+            var vsRootRelativeToolPath = FilePath.FromString("Common7/IDE/mstest.exe");
+            foreach (var year in VisualStudio.Versions.TwentySeventeenAndLater)
             {
-                var path = GetYearAndEditionToolPath(yearAndEdition);
-                if (_fileSystem.Exist(path))
+                foreach (var edition in settings.AllowPreviewVersion
+                             ? VisualStudio.Editions.All
+                             : VisualStudio.Editions.Stable)
                 {
-                    yield return path;
+                    var path = VisualStudio.GetYearAndEditionToolPath(_environment, year, edition, vsRootRelativeToolPath);
+                    if (_fileSystem.Exist(path))
+                    {
+                        yield return path;
+                    }
                 }
             }
 
-            foreach (var version in new[] { "14.0", "12.0", "11.0", "10.0" })
+            foreach (var version in VisualStudio.Versions.TenToFourteen)
             {
-                var path = GetVersionNumberToolPath(version);
+                var path = VisualStudio.GetVersionNumberToolPath(_environment, version, vsRootRelativeToolPath);
                 if (_fileSystem.Exist(path))
                 {
                     yield return path;
@@ -140,20 +146,6 @@ namespace Cake.Common.Tools.MSTest
                     yield return path;
                 }
             }
-        }
-
-        private FilePath GetVersionNumberToolPath(string version)
-        {
-            var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
-            var root = programFiles.Combine(string.Concat("Microsoft Visual Studio ", version, "/Common7/IDE"));
-            return root.CombineWithFilePath("mstest.exe");
-        }
-
-        private FilePath GetYearAndEditionToolPath(string yearAndEdition)
-        {
-            var programFiles = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
-            var root = programFiles.Combine(string.Concat("Microsoft Visual Studio/", yearAndEdition, "/Common7/IDE"));
-            return root.CombineWithFilePath("mstest.exe");
         }
 
         private FilePath GetCommonToolPath(string environmentVariable)

@@ -351,7 +351,7 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
-            var path = MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, settings.ToolVersion, buildPlatform, settings.CustomVersion);
+            var path = MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, buildPlatform, settings);
             if (path != null)
             {
                 return new[] { path };
