@@ -13,8 +13,6 @@ namespace Cake.Common.Tools.DotNet.SDKCheck
     /// </summary>
     public sealed class DotNetSDKChecker : DotNetTool<DotNetSDKCheckSettings>
     {
-        private readonly ICakeEnvironment _environment;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetSDKChecker" /> class.
         /// </summary>
@@ -28,7 +26,6 @@ namespace Cake.Common.Tools.DotNet.SDKCheck
             IProcessRunner processRunner,
             IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
-            _environment = environment;
         }
 
         /// <summary>
