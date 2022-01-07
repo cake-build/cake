@@ -254,6 +254,14 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
     DotNetFormat(project.FullPath); 
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSDKCheck")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // When
+    DotNetSDKCheck(); 
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
@@ -270,6 +278,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSDKCheck")
     .Does(() =>
 {
     // When

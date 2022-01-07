@@ -18,6 +18,7 @@ using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
+using Cake.Common.Tools.DotNet.SDKCheck;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNet.VSTest;
@@ -1820,6 +1821,29 @@ namespace Cake.Common.Tools.DotNet
 
             var formatter = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             formatter.Format(root, "analyzers", settings);
+        }
+
+        /// <summary>
+        /// Lists the latest available version of the .NET SDK and .NET Runtime.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// DotNetSDKCheck();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("SDK")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.SDKCheck")]
+        public static void DotNetSDKCheck(this ICakeContext context)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var checker = new DotNetSDKChecker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            checker.Check();
         }
     }
 }
