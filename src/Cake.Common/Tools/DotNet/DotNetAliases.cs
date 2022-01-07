@@ -19,6 +19,7 @@ using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.SDKCheck;
+using Cake.Common.Tools.DotNet.Store;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNet.VSTest;
@@ -1844,6 +1845,118 @@ namespace Cake.Common.Tools.DotNet
 
             var checker = new DotNetSDKChecker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             checker.Check();
+        }
+
+        /// <summary>
+        /// Stores the specified assemblies in the runtime package store.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="manifest">The package store manifest file path.</param>
+        /// <param name="framework">The specific framework.</param>
+        /// <param name="runtime">The target runtime.</param>
+        /// <example>
+        /// <code>
+        /// DotNetStore("packages.csproj", "net6.0", "win-x64");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Store")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Store")]
+        public static void DotNetStore(this ICakeContext context, GlobPattern manifest, string framework, string runtime)
+        {
+            var manifests = context.GetFiles(manifest);
+            context.DotNetStore(manifests, framework, runtime, null);
+        }
+
+        /// <summary>
+        /// Stores the specified assemblies in the runtime package store.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="manifests">The manifest file paths to store.</param>
+        /// <param name="framework">The specific framework.</param>
+        /// <param name="runtime">The target runtime.</param>
+        /// <example>
+        /// <code>
+        /// DotNetStore(new[] { (FilePath)"./test/Project.Tests/packages.csproj" }, "net6.0", "win-x64");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Store")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Store")]
+        public static void DotNetStore(this ICakeContext context, IEnumerable<FilePath> manifests, string framework, string runtime)
+        {
+            context.DotNetStore(manifests, framework, runtime, null);
+        }
+
+        /// <summary>
+        /// Stores the specified assemblies in the runtime package store.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="manifest">The package store manifest file path.</param>
+        /// <param name="framework">The specific framework.</param>
+        /// <param name="runtime">The target runtime.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetStoreSettings
+        /// {
+        ///     OutputDirectory = "./artifacts/"
+        /// };
+        ///
+        /// DotNetStore("packages.csproj", "net6.0", "win-x64", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Store")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Store")]
+        public static void DotNetStore(this ICakeContext context, GlobPattern manifest, string framework, string runtime, DotNetStoreSettings settings)
+        {
+            var manifests = context.GetFiles(manifest);
+            context.DotNetStore(manifests, framework, runtime, settings);
+        }
+
+        /// <summary>
+        /// Stores the specified assemblies in the runtime package store.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="manifests">The manifest file paths to store.</param>
+        /// <param name="framework">The specific framework.</param>
+        /// <param name="runtime">The target runtime.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetStoreSettings
+        /// {
+        ///     OutputDirectory = "./artifacts/"
+        /// };
+        ///
+        /// var manifestFiles = GetFiles("./**/*.csproj");
+        ///
+        /// DotNetStore(manifestFiles, "net6.0", "win-x64", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Store")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Store")]
+        public static void DotNetStore(
+            this ICakeContext context,
+            IEnumerable<FilePath> manifests,
+            string framework,
+            string runtime,
+            DotNetStoreSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetStoreSettings();
+            }
+
+            var storer = new DotNetStorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            storer.Store(manifests, framework, runtime, settings);
         }
     }
 }
