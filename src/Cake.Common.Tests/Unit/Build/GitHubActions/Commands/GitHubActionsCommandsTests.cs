@@ -233,20 +233,24 @@ CAKEEOF
                     AssertEx.IsExceptionWithMessage<FileNotFoundException>(result, "Artifact file not found.");
                 }
 
-                [Fact]
-                public async Task Should_Upload()
+                [Theory]
+                [InlineData("/", "/artifacts/artifact.txt")]
+                [InlineData("/artifacts", "artifact.txt")]
+                public async Task Should_Upload(string workingDirectory, string testPath)
                 {
                     // Given
-                    var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture();
+                    var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture()
+                                                        .WithWorkingDirectory(workingDirectory);
+                    var testFilePath = FilePath.FromString(testPath);
                     var artifactName = "artifact";
-                    var file = gitHubActionsCommandsFixture
+                    gitHubActionsCommandsFixture
                         .FileSystem
                         .CreateFile("/artifacts/artifact.txt")
                         .SetContent(artifactName);
                     var commands = gitHubActionsCommandsFixture.CreateGitHubActionsCommands();
 
                     // When
-                    await commands.UploadArtifact(file.Path, artifactName);
+                    await commands.UploadArtifact(testFilePath, artifactName);
                 }
             }
 
@@ -295,13 +299,17 @@ CAKEEOF
                     AssertEx.IsExceptionWithMessage<DirectoryNotFoundException>(result, "Artifact directory /artifacts not found.");
                 }
 
-                [Fact]
-                public async Task Should_Upload()
+                [Theory]
+                [InlineData("/", "/src/artifacts")]
+                [InlineData("/src", "artifacts")]
+                public async Task Should_Upload(string workingDirectory, string testPath)
                 {
                     // Given
-                    var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture();
+                    var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture()
+                                                        .WithWorkingDirectory(workingDirectory);
+                    var testDirectoryPath = DirectoryPath.FromString(testPath);
                     var artifactName = "artifacts";
-                    var directory = DirectoryPath.FromString("/artifacts");
+                    var directory = DirectoryPath.FromString("/src/artifacts");
 
                     gitHubActionsCommandsFixture
                         .FileSystem
@@ -326,8 +334,84 @@ CAKEEOF
                     var commands = gitHubActionsCommandsFixture.CreateGitHubActionsCommands();
 
                     // When
-                    await commands.UploadArtifact(directory, artifactName);
+                    await commands.UploadArtifact(testDirectoryPath, artifactName);
                 }
+            }
+        }
+
+        public sealed class TheDownloadArtifactMethod
+        {
+            [Fact]
+            public async Task Should_Throw_If_ArtifactName_Is_Null()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture().CreateGitHubActionsCommands();
+                var path = DirectoryPath.FromString("/artifacts");
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.DownloadArtifact(null, path));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "artifactName");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Path_Is_Null()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture().CreateGitHubActionsCommands();
+                var artifactName = "artifactName";
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.DownloadArtifact(artifactName, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Directory_Missing()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture().CreateGitHubActionsCommands();
+                var path = DirectoryPath.FromString("/artifacts");
+                var artifactName = "artifact";
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.DownloadArtifact(artifactName, path));
+
+                // Then
+                AssertEx.IsExceptionWithMessage<DirectoryNotFoundException>(result, "Local directory /artifacts not found.");
+            }
+
+            [Theory]
+            [InlineData("/", "/src/artifacts")]
+            [InlineData("/src", "artifacts")]
+            public async Task Should_Download(string workingDirectory, string testPath)
+            {
+                // Given
+                var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture()
+                                                    .WithWorkingDirectory(workingDirectory);
+                var testDirectoryPath = DirectoryPath.FromString(testPath);
+                var artifactName = "artifact";
+                var directory = DirectoryPath.FromString("/src/artifacts");
+                var filePath = directory.CombineWithFilePath("test.txt");
+
+                gitHubActionsCommandsFixture
+                    .FileSystem
+                    .CreateDirectory(directory);
+
+                var commands = gitHubActionsCommandsFixture.CreateGitHubActionsCommands();
+
+                // When
+                await commands.DownloadArtifact(artifactName, testDirectoryPath);
+                var file = gitHubActionsCommandsFixture
+                    .FileSystem
+                    .GetFile(filePath);
+
+                // Then
+                Assert.True(file.Exists, $"{filePath.FullPath} doesn't exist.");
+                Assert.Equal("Cake", file.GetTextContent());
             }
         }
     }
