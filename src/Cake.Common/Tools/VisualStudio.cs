@@ -47,9 +47,13 @@ namespace Cake.Common.Tools
 
         internal static DirectoryPath GetYearAndEditionRootPath(ICakeEnvironment environment, string year, string edition)
         {
-            var programFiles = year == "2017" || year == "2019"
-                ? environment.GetSpecialPath(SpecialPath.ProgramFilesX86)
-                : environment.GetSpecialPath(SpecialPath.ProgramFiles);
+            var programFiles = (year, edition) switch
+            {
+                ("2022", "BuildTools") => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
+                ("2022", _) => environment.GetSpecialPath(SpecialPath.ProgramFiles),
+                (_, _) => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
+            };
+
             return programFiles.Combine($"Microsoft Visual Studio/{year}/{edition}");
         }
 
