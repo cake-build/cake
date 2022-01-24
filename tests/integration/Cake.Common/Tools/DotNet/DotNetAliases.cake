@@ -246,7 +246,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
     .Does(() =>
 {
-   // Given
+    // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
 
@@ -259,7 +259,18 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSDKCheck")
     .Does(() =>
 {
     // When
-    DotNetSDKCheck(); 
+    DotNetSDKCheck();
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadSearch")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var searchString = "maui";
+
+    // When
+    DotNetWorkloadSearch(searchString);
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
@@ -279,6 +290,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSDKCheck")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadSearch")
     .Does(() =>
 {
     // When

@@ -22,6 +22,7 @@ using Cake.Common.Tools.DotNet.SDKCheck;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNet.VSTest;
+using Cake.Common.Tools.DotNet.Workload.Search;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
@@ -1844,6 +1845,47 @@ namespace Cake.Common.Tools.DotNet
 
             var checker = new DotNetSDKChecker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             checker.Check();
+        }
+
+        /// <summary>
+        /// Lists available workloads.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadSearch();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Search")]
+        public static void DotNetWorkloadSearch(this ICakeContext context)
+        {
+            context.DotNetWorkloadSearch(null);
+        }
+
+        /// <summary>
+        /// Lists available workloads by specifying all or part of the workload ID.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="searchString">The workload ID to search for, or part of it.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadSearch("maui");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Search")]
+        public static void DotNetWorkloadSearch(this ICakeContext context, string searchString)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var searcher = new DotNetWorkloadSearcher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            searcher.Search(searchString);
         }
     }
 }
