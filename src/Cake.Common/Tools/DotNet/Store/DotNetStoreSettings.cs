@@ -33,5 +33,10 @@ namespace Cake.Common.Tools.DotNet.Store
         /// Currently, you can only generate symbols on Windows and Linux.
         /// </remarks>
         public bool SkipSymbols { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use the SDK runtime identifier (RID).
+        /// </summary>
+        public bool UseCurrentRuntime { get; set; }
     }
 }

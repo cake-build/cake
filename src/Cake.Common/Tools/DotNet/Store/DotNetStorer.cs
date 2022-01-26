@@ -113,6 +113,12 @@ namespace Cake.Common.Tools.DotNet.Store
                 builder.Append("--skip-symbols");
             }
 
+            // Use Current Runtime Identifier
+            if (settings.UseCurrentRuntime)
+            {
+                builder.Append("--use-current-runtime");
+            }
+
             return builder;
         }
     }

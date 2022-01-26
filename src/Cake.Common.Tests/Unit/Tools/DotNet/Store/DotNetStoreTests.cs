@@ -146,13 +146,14 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Store
                 fixture.Settings.OutputDirectory = "./artifacts/";
                 fixture.Settings.SkipOptimization = true;
                 fixture.Settings.SkipSymbols = true;
+                fixture.Settings.UseCurrentRuntime = true;
                 fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("store --manifest \"/Working/packages.csproj\" --framework dnxcore50 --runtime runtime1 --framework-version 2.0.0 --output \"/Working/artifacts\" --skip-optimization --skip-symbols --verbosity minimal", result.Args);
+                Assert.Equal("store --manifest \"/Working/packages.csproj\" --framework dnxcore50 --runtime runtime1 --framework-version 2.0.0 --output \"/Working/artifacts\" --skip-optimization --skip-symbols --use-current-runtime --verbosity minimal", result.Args);
             }
         }
     }
