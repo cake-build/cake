@@ -89,7 +89,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Transform());
 
                 // Then
-                AssertEx.IsExceptionWithMessage<FileNotFoundException>(result, "XML File not found.");
+                AssertEx.IsExceptionWithMessage<FileNotFoundException>(result, "XML file not found.");
             }
 
             [Fact]
@@ -105,7 +105,7 @@ namespace Cake.Common.Tests.Unit.XML
                 var result = Record.Exception(() => fixture.Transform());
 
                 // Then
-                AssertEx.IsExceptionWithMessage<FileNotFoundException>(result, "Xsl File not found.");
+                AssertEx.IsExceptionWithMessage<FileNotFoundException>(result, "XSL file not found.");
             }
 
             [Fact]
@@ -210,7 +210,7 @@ namespace Cake.Common.Tests.Unit.XML
             }
 
             [Fact]
-            public void Should_Throw_If_String_Settings_Was_Null()
+            public void Should_Throw_If_Xml_Transformation_Settings_Was_Null()
             {
                 // Given
                 var xml = Resources.XmlTransformation_Xml;
@@ -224,17 +224,21 @@ namespace Cake.Common.Tests.Unit.XML
             }
 
             [Fact]
-            public void Should_Throw_If_XslArguments_Was_Null()
+            public void Should_Not_Throw_If_Xsl_Argument_List_Was_Null()
             {
                 // Given
                 var xml = Resources.XmlTransformation_Xml;
                 var xsl = Resources.XmlTransformation_Xsl;
+                XmlTransformationSettings xmlTransformationSettings = new XmlTransformationSettings
+                {
+                    XsltArgumentList = null
+                };
 
                 // When
-                var result = Record.Exception(() => XmlTransformation.Transform(xsl, null, xml));
+                var result = Record.Exception(() => XmlTransformation.Transform(xsl, xml, xmlTransformationSettings));
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "arguments");
+                Assert.Null(result);
             }
 
             [Fact]
@@ -244,12 +248,17 @@ namespace Cake.Common.Tests.Unit.XML
                 var xml = Resources.XmlTransformation_Xml;
                 var xsl = Resources.XmlTransformationWithArguments_Xsl;
                 var htm = Resources.XmlTransformation_Htm_NoXmlDeclaration;
-                var arguments = new XsltArgumentList();
-                arguments.AddParam("BackgroundColor", string.Empty, "teal");
-                arguments.AddParam("Color", string.Empty, "white");
+                XmlTransformationSettings xmlTransformationSettings = new XmlTransformationSettings
+                {
+                    OmitXmlDeclaration = true,
+                    Encoding = new UTF8Encoding(false),
+                    XsltArgumentList = new XsltArgumentList()
+                };
+                xmlTransformationSettings.XsltArgumentList.AddParam("BackgroundColor", string.Empty, "teal");
+                xmlTransformationSettings.XsltArgumentList.AddParam("Color", string.Empty, "white");
 
                 // When
-                var result = XmlTransformation.Transform(xsl, arguments, xml);
+                var result = XmlTransformation.Transform(xsl, xml, xmlTransformationSettings);
 
                 // Then
                 Assert.Equal(htm, result, ignoreLineEndingDifferences: true);
@@ -262,12 +271,17 @@ namespace Cake.Common.Tests.Unit.XML
                 var xml = Resources.XmlTransformation_Xml;
                 var xsl = Resources.XmlTransformationWithArgumentsAndNamespace_Xsl;
                 var htm = Resources.XmlTransformation_Htm_NoXmlDeclaration;
-                var arguments = new XsltArgumentList();
-                arguments.AddParam("BackgroundColor", "http://example.com", "teal");
-                arguments.AddParam("Color", "http://example.com", "white");
+                XmlTransformationSettings xmlTransformationSettings = new XmlTransformationSettings
+                {
+                    OmitXmlDeclaration = true,
+                    Encoding = new UTF8Encoding(false),
+                    XsltArgumentList = new XsltArgumentList()
+                };
+                xmlTransformationSettings.XsltArgumentList.AddParam("BackgroundColor", "http://example.com", "teal");
+                xmlTransformationSettings.XsltArgumentList.AddParam("Color", "http://example.com", "white");
 
                 // When
-                var result = XmlTransformation.Transform(xsl, arguments, xml);
+                var result = XmlTransformation.Transform(xsl, xml, xmlTransformationSettings);
 
                 // Then
                 Assert.Equal(htm, result, ignoreLineEndingDifferences: true);
