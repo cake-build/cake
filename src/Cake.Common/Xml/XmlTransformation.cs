@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Xml;
+using System.Xml.Xsl;
 using Cake.Common.Polyfill;
 using Cake.Core;
 using Cake.Core.IO;
@@ -39,7 +40,7 @@ namespace Cake.Common.Xml
         /// </summary>
         /// <param name="xsl">XML style sheet.</param>
         /// <param name="xml">XML data.</param>
-        /// <param name="settings">Settings for result file xml transformation.</param>
+        /// <param name="settings">Settings for result file XML transformation.</param>
         /// <returns>Transformed XML string.</returns>
         public static string Transform(string xsl, string xml, XmlTransformationSettings settings)
         {
@@ -64,7 +65,7 @@ namespace Cake.Common.Xml
             {
                 using (var result = new MemoryStream())
                 {
-                    Transform(xslReader, xmlReader, result, settings.XmlWriterSettings);
+                    Transform(xslReader, settings.XsltArgumentList, xmlReader, result, settings.XmlWriterSettings);
                     result.Position = 0;
                     return settings.Encoding.GetString(result.ToArray());
                 }
@@ -75,8 +76,8 @@ namespace Cake.Common.Xml
         /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
-        /// <param name="xslPath">Path to xml style sheet.</param>
-        /// <param name="xmlPath">Path xml data.</param>
+        /// <param name="xslPath">Path to XML style sheet.</param>
+        /// <param name="xmlPath">Path XML data.</param>
         /// <param name="resultPath">Transformation result path.</param>
         public static void Transform(IFileSystem fileSystem, FilePath xslPath, FilePath xmlPath, FilePath resultPath)
         {
@@ -88,10 +89,10 @@ namespace Cake.Common.Xml
         /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
-        /// <param name="xslPath">Path to xml style sheet.</param>
-        /// <param name="xmlPath">Path xml data.</param>
+        /// <param name="xslPath">Path to XML style sheet.</param>
+        /// <param name="xmlPath">Path XML data.</param>
         /// <param name="resultPath">Transformation result path.</param>
-        /// <param name="settings">Settings for result file xml transformation.</param>
+        /// <param name="settings">Settings for result file XML transformation.</param>
         public static void Transform(IFileSystem fileSystem, FilePath xslPath, FilePath xmlPath, FilePath resultPath, XmlTransformationSettings settings)
         {
             if (fileSystem == null)
@@ -126,12 +127,12 @@ namespace Cake.Common.Xml
 
             if (!xslFile.Exists)
             {
-                throw new FileNotFoundException("Xsl File not found.", xslFile.Path.FullPath);
+                throw new FileNotFoundException("XSL file not found.", xslFile.Path.FullPath);
             }
 
             if (!xmlFile.Exists)
             {
-                throw new FileNotFoundException("XML File not found.", xmlFile.Path.FullPath);
+                throw new FileNotFoundException("XML file not found.", xmlFile.Path.FullPath);
             }
 
             if (!settings.Overwrite && resultFile.Exists)
@@ -149,8 +150,7 @@ namespace Cake.Common.Xml
                     xmlReader = XmlReader.Create(xmlStream);
 
                 var resultWriter = XmlWriter.Create(resultStream, settings.XmlWriterSettings);
-
-                Transform(xslReader, xmlReader, resultWriter);
+                Transform(xslReader, settings.XsltArgumentList, xmlReader, resultWriter);
             }
         }
 
@@ -158,10 +158,11 @@ namespace Cake.Common.Xml
         /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="xsl">XML style sheet.</param>
+        /// <param name="arguments">XSLT argument list.</param>
         /// <param name="xml">XML data.</param>
         /// <param name="result">Transformation result.</param>
-        /// <param name="settings">Optional settings for result file xml writer.</param>
-        private static void Transform(TextReader xsl, TextReader xml, Stream result, XmlWriterSettings settings = null)
+        /// <param name="settings">Optional settings for result file XML writer.</param>
+        private static void Transform(TextReader xsl, XsltArgumentList arguments, TextReader xml, Stream result, XmlWriterSettings settings = null)
         {
             if (xsl == null)
             {
@@ -186,16 +187,17 @@ namespace Cake.Common.Xml
             var xslXmlReader = XmlReader.Create(xsl);
             var xmlXmlReader = XmlReader.Create(xml);
             var resultXmlTextWriter = XmlWriter.Create(result, settings);
-            Transform(xslXmlReader, xmlXmlReader, resultXmlTextWriter);
+            Transform(xslXmlReader, arguments, xmlXmlReader, resultXmlTextWriter);
         }
 
         /// <summary>
         /// Performs XML XSL transformation.
         /// </summary>
         /// <param name="xsl">XML style sheet.</param>
+        /// <param name="arguments">XSLT argument list.</param>
         /// <param name="xml">XML data.</param>
         /// <param name="result">Transformation result.</param>
-        private static void Transform(XmlReader xsl, XmlReader xml, XmlWriter result)
+        private static void Transform(XmlReader xsl, XsltArgumentList arguments, XmlReader xml, XmlWriter result)
         {
             if (xsl == null)
             {
@@ -212,7 +214,7 @@ namespace Cake.Common.Xml
                 throw new ArgumentNullException(nameof(result), "Null result supplied.");
             }
 
-            XmlTransformationHelper.Transform(xsl, xml, result);
+            XmlTransformationHelper.Transform(xsl, arguments, xml, result);
         }
     }
 }
