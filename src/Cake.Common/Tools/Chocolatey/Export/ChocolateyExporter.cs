@@ -106,10 +106,10 @@ namespace Cake.Common.Tools.Chocolatey.Export
             }
 
             // Output File Path
-            if (!string.IsNullOrWhiteSpace(settings.OutputFilePath))
+            if (settings.OutputFilePath != null)
             {
                 builder.Append("--output-file-path");
-                builder.AppendQuoted(settings.OutputFilePath);
+                builder.AppendQuoted(settings.OutputFilePath.FullPath);
             }
 
             // Include Version Numbers

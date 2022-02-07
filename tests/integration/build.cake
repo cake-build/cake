@@ -27,6 +27,7 @@
 #load "./Cake.Common/Tools/DotNet/DotNetAliases.cake"
 #load "./Cake.Common/Tools/DotNetCore/DotNetCoreAliases.cake"
 #load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
+#load "./Cake.Common/Tools/Chocolatey/ChocolateyAliases.cake"
 #load "./Cake.Common/Tools/TextTransform/TextTransformAliases.cake"
 #load "./Cake.Core/Diagnostics/ICakeLog.cake"
 #load "./Cake.Core/IO/Path.cake"

@@ -257,8 +257,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Export
             }
 
             [Theory]
-            [InlineData(@"c:\temp", "export -y --output-file-path \"c:\\temp\"")]
-            [InlineData("", "export -y")]
+            [InlineData(@"c:\temp", "export -y --output-file-path \"c:/temp\"")]
+            [InlineData(null, "export -y")]
             public void Should_Add_OutputFilePath_To_Arguments_If_Set(string outputFilePath, string expected)
             {
                 // Given

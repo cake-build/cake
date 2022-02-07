@@ -62,10 +62,10 @@ namespace Cake.Common.Tools.Chocolatey.Export
         public bool AllowUnofficial { get; set; }
 
         /// <summary>
-        /// Gets or sets teh path to the file that will be generated.
+        /// Gets or sets the path to the file that will be generated.
         /// </summary>
         /// <value>The path to the file that is generated.</value>
-        public string OutputFilePath { get; set; }
+        public FilePath OutputFilePath { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to include version numbers for installed packages.
