@@ -95,6 +95,9 @@ Task("Cake.Common")
 Task("Cake.NuGet")
     .IsDependentOn("Cake.NuGet.InProcessInstaller");
 
+Task("Cake.Chocolatey")
+    .IsDependentOn("Cake.Common.Tools.Chocolatey.ChocolateyAliases");
+
 Task("Run-All-Tests")
     .IsDependentOn("Setup-Tests")
     .IsDependentOn("Cake.Core")
