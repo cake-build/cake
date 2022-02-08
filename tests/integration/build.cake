@@ -103,7 +103,8 @@ Task("Run-All-Tests")
     .IsDependentOn("Cake.Core")
     .IsDependentOn("Cake.Common")
     .IsDependentOn("Cake.DotNetTool.Module")
-    .IsDependentOn("Cake.NuGet");
+    .IsDependentOn("Cake.NuGet")
+    .IsDependentOn("Cake.Chocolatey");
 
 //////////////////////////////////////////////////
 
