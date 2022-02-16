@@ -57,7 +57,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
             }
 
             [Fact]
@@ -72,7 +72,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -101,12 +101,13 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Build
                 fixture.Settings.NoLogo = true;
                 fixture.Project = "./src/*";
                 fixture.Settings.Verbosity = DotNetCoreVerbosity.Minimal;
+                fixture.Settings.Sources = new[] { "https://api.nuget.org/v3/index.json" };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("build \"./src/*\" --runtime runtime1 --framework net451 --configuration Release --version-suffix rc1 --nologo --verbosity minimal", result.Args);
+                Assert.Equal("build \"./src/*\" --runtime runtime1 --framework net451 --configuration Release --version-suffix rc1 --nologo --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
             }
 
             [Fact]

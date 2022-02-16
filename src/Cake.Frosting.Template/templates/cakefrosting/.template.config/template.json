@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio, C. Augusto Proiete, Nils Andresen, and contributors",
+  "classifications": [ "Cake", "Frosting" ],
+  "name": "Cake Frosting Build Script",
+  "identity": "Cake.Frosting",
+  "shortName": "cakefrosting",
+  "sourceName": "temp",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "groupIdentity": "Cake",
+  "description": "Create a Cake.Frosting build project."
+}

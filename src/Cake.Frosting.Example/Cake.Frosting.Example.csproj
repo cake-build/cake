@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Cake.Frosting.Example</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)..</RunWorkingDirectory>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Frosting\Cake.Frosting.csproj" />
+  </ItemGroup>
+
+</Project>

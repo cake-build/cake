@@ -15,7 +15,6 @@ using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
-using Cake.Common.Build.TFBuild;
 using Cake.Common.Build.TravisCI;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -48,7 +47,7 @@ namespace Cake.Common.Build
             }
 
             var appVeyorProvider = new AppVeyorProvider(context.Environment, context.ProcessRunner, context.Log);
-            var teamCityProvider = new TeamCityProvider(context.Environment, new BuildSystemServiceMessageWriter());
+            var teamCityProvider = new TeamCityProvider(context.Environment, context.FileSystem, new BuildSystemServiceMessageWriter());
             var myGetProvider = new MyGetProvider(context.Environment, new BuildSystemServiceMessageWriter());
             var bambooProvider = new BambooProvider(context.Environment);
             var continuaCIProvider = new ContinuaCIProvider(context.Environment, new BuildSystemServiceMessageWriter());
@@ -58,11 +57,10 @@ namespace Cake.Common.Build
             var bitbucketPipelinesProvider = new BitbucketPipelinesProvider(context.Environment);
             var goCDProvider = new GoCDProvider(context.Environment, context.Log);
             var gitLabCIProvider = new GitLabCIProvider(context.Environment);
-            var tfBuildProvider = new TFBuildProvider(context.Environment, new BuildSystemServiceMessageWriter());
-            var gitHubActionsProvider = new GitHubActionsProvider(context.Environment);
+            var gitHubActionsProvider = new GitHubActionsProvider(context.Environment, context.FileSystem);
             var azurePipelinesProvider = new AzurePipelinesProvider(context.Environment, new BuildSystemServiceMessageWriter());
 
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, tfBuildProvider, gitHubActionsProvider, azurePipelinesProvider);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider);
         }
 
         /// <summary>
@@ -336,32 +334,6 @@ namespace Cake.Common.Build
 
             var buildSystem = context.BuildSystem();
             return buildSystem.GitLabCI;
-        }
-
-        /// <summary>
-        /// Gets a <see cref="TFBuildProvider"/> instance that can be used to
-        /// obtain information from the Team Foundation Build environment.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var isTFSBuild = TFBuild.IsRunningOnTFS;
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <returns>A <see cref="Build.TFBuild"/> instance.</returns>
-        [CakePropertyAlias(Cache = true)]
-        [CakeNamespaceImport("Cake.Common.Build.TFBuild")]
-        [CakeNamespaceImport("Cake.Common.Build.TFBuild.Data")]
-        [Obsolete("Use AzurePipelines instead.")]
-        public static ITFBuildProvider TFBuild(this ICakeContext context)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var buildSystem = context.BuildSystem();
-            return buildSystem.TFBuild;
         }
 
         /// <summary>

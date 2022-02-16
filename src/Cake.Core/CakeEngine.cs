@@ -23,31 +23,52 @@ namespace Cake.Core
         private readonly List<CakeTask> _tasks;
         private readonly CakeEngineActions _actions;
 
-        /// <summary>
-        /// Gets all registered tasks.
-        /// </summary>
-        /// <value>The registered tasks.</value>
+        /// <inheritdoc/>
         public IReadOnlyList<ICakeTaskInfo> Tasks => _tasks;
 
-        /// <summary>
-        /// Raised during setup before any tasks are run.
-        /// </summary>
+        /// <inheritdoc/>
+#pragma warning disable 618
         public event EventHandler<SetupEventArgs> Setup;
+#pragma warning restore 618
 
-        /// <summary>
-        /// Raised during teardown after all other tasks have been run.
-        /// </summary>
+        /// <inheritdoc/>
+        public event EventHandler<BeforeSetupEventArgs> BeforeSetup;
+
+        /// <inheritdoc/>
+        public event EventHandler<AfterSetupEventArgs> AfterSetup;
+
+        /// <inheritdoc/>
+#pragma warning disable 618
         public event EventHandler<TeardownEventArgs> Teardown;
+#pragma warning restore 618
 
-        /// <summary>
-        /// Raised before each task is run.
-        /// </summary>
+        /// <inheritdoc/>
+        public event EventHandler<BeforeTeardownEventArgs> BeforeTeardown;
+
+        /// <inheritdoc/>
+        public event EventHandler<AfterTeardownEventArgs> AfterTeardown;
+
+        /// <inheritdoc/>
+#pragma warning disable 618
         public event EventHandler<TaskSetupEventArgs> TaskSetup;
+#pragma warning restore 618
 
-        /// <summary>
-        /// Raised after each task has been run.
-        /// </summary>
+        /// <inheritdoc/>
+        public event EventHandler<BeforeTaskSetupEventArgs> BeforeTaskSetup;
+
+        /// <inheritdoc/>
+        public event EventHandler<AfterTaskSetupEventArgs> AfterTaskSetup;
+
+        /// <inheritdoc/>
+#pragma warning disable 618
         public event EventHandler<TaskTeardownEventArgs> TaskTeardown;
+#pragma warning restore 618
+
+        /// <inheritdoc/>
+        public event EventHandler<BeforeTaskTeardownEventArgs> BeforeTaskTeardown;
+
+        /// <inheritdoc/>
+        public event EventHandler<AfterTaskTeardownEventArgs> AfterTaskTeardown;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeEngine"/> class.
@@ -66,13 +87,7 @@ namespace Cake.Core
             _actions = new CakeEngineActions(data);
         }
 
-        /// <summary>
-        /// Creates and registers a new Cake task.
-        /// </summary>
-        /// <param name="name">The name of the task.</param>
-        /// <returns>
-        /// A <see cref="CakeTaskBuilder"/> used to configure the task.
-        /// </returns>
+        /// <inheritdoc/>
         public CakeTaskBuilder RegisterTask(string name)
         {
             if (_tasks.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
@@ -86,43 +101,26 @@ namespace Cake.Core
             return new CakeTaskBuilder(task);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterSetupAction(Action<ISetupContext> action)
         {
             _actions.RegisterSetup(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterSetupAction<TData>(Func<ISetupContext, TData> action)
             where TData : class
         {
             _actions.RegisterSetup(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after all other tasks have been run.
-        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterTeardownAction(Action<ITeardownContext> action)
         {
             _actions.RegisterTeardown(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after all other tasks have been run.
-        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
+        /// <inheritdoc/>
         /// <param name="action">The action to be executed.</param>
         public void RegisterTeardownAction<TData>(Action<ITeardownContext, TData> action)
             where TData : class
@@ -130,57 +128,33 @@ namespace Cake.Core
             _actions.RegisterTeardown(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before each task is run.
-        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterTaskSetupAction(Action<ITaskSetupContext> action)
         {
             _actions.RegisterTaskSetup(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed before each task is run.
-        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterTaskSetupAction<TData>(Action<ITaskSetupContext, TData> action)
             where TData : class
         {
             _actions.RegisterTaskSetup(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after each task has been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterTaskTeardownAction(Action<ITaskTeardownContext> action)
         {
             _actions.RegisterTaskTeardown(action);
         }
 
-        /// <summary>
-        /// Allows registration of an action that's executed after each task has been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
+        /// <inheritdoc/>
         public void RegisterTaskTeardownAction<TData>(Action<ITaskTeardownContext, TData> action)
             where TData : class
         {
             _actions.RegisterTaskTeardown(action);
         }
 
-        /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="strategy">The execution strategy.</param>
-        /// <param name="settings">The execution settings.</param>
-        /// <returns>The resulting report.</returns>
+        /// <inheritdoc/>
         public async Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, ExecutionSettings settings)
         {
             if (settings == null)
@@ -290,16 +264,26 @@ namespace Cake.Core
         {
             stopWatch.Restart();
 
+            PublishEvent(BeforeSetup, new BeforeSetupEventArgs(context));
+#pragma warning disable 618
             PublishEvent(Setup, new SetupEventArgs(context));
+#pragma warning restore 618
 
-            if (_actions.Setups.Count > 0)
+            try
             {
-                foreach (var setup in _actions.Setups)
+                if (_actions.Setups.Count > 0)
                 {
-                    strategy.PerformSetup(setup, new SetupContext(context, targetTask, tasks));
-                }
+                    foreach (var setup in _actions.Setups)
+                    {
+                        strategy.PerformSetup(setup, new SetupContext(context, targetTask, tasks));
+                    }
 
-                report.Add("Setup", CakeReportEntryCategory.Setup, stopWatch.Elapsed);
+                    report.Add("Setup", CakeReportEntryCategory.Setup, stopWatch.Elapsed);
+                }
+            }
+            finally
+            {
+                PublishEvent(AfterSetup, new AfterSetupEventArgs(context));
             }
         }
 
@@ -311,8 +295,10 @@ namespace Cake.Core
                 {
                     // It's not OK to skip the target task.
                     // See issue #106 (https://github.com/cake-build/cake/issues/106)
-                    const string format = "Could not reach target '{0}' since it was skipped due to a criteria.";
-                    var message = string.Format(CultureInfo.InvariantCulture, format, task.Name);
+                    var message = string.IsNullOrWhiteSpace(criteria.Message) ?
+                        $"Could not reach target '{task.Name}' since it was skipped due to a criteria." :
+                        $"Could not reach target '{task.Name}' since it was skipped due to a criteria: {criteria.Message}.";
+
                     throw new CakeException(message);
                 }
 
@@ -367,6 +353,8 @@ namespace Cake.Core
                 }
 
                 PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, taskException);
+
+                _log.Verbose($"Completed in {stopWatch.Elapsed}");
             }
 
             // Add the task results to the report
@@ -374,9 +362,13 @@ namespace Cake.Core
             {
                 report.AddDelegated(task.Name, stopWatch.Elapsed);
             }
-            else
+            else if (taskException is null)
             {
                 report.Add(task.Name, CakeReportEntryCategory.Task, stopWatch.Elapsed);
+            }
+            else
+            {
+                report.AddFailed(task.Name, stopWatch.Elapsed);
             }
         }
 
@@ -384,19 +376,29 @@ namespace Cake.Core
             bool skipped)
         {
             var taskSetupContext = new TaskSetupContext(context, task);
+            PublishEvent(BeforeTaskSetup, new BeforeTaskSetupEventArgs(taskSetupContext));
+#pragma warning disable 618
             PublishEvent(TaskSetup, new TaskSetupEventArgs(taskSetupContext));
+#pragma warning restore 618
             // Trying to stay consistent with the behavior of script-level Setup & Teardown (if setup fails, don't run the task, but still run the teardown)
-            if (_actions.TaskSetup != null)
+            try
             {
-                try
+                if (_actions.TaskSetup != null)
                 {
-                    strategy.PerformTaskSetup(_actions.TaskSetup, taskSetupContext);
+                    try
+                    {
+                        strategy.PerformTaskSetup(_actions.TaskSetup, taskSetupContext);
+                    }
+                    catch (Exception exception)
+                    {
+                        PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, skipped, exception);
+                        throw;
+                    }
                 }
-                catch (Exception exception)
-                {
-                    PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, skipped, exception);
-                    throw;
-                }
+            }
+            finally
+            {
+                PublishEvent(AfterTaskSetup, new AfterTaskSetupEventArgs(taskSetupContext));
             }
         }
 
@@ -405,24 +407,35 @@ namespace Cake.Core
             var exceptionWasThrown = taskException != null;
 
             var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped, taskException);
+            PublishEvent(BeforeTaskTeardown, new BeforeTaskTeardownEventArgs(taskTeardownContext));
+#pragma warning disable 618
             PublishEvent(TaskTeardown, new TaskTeardownEventArgs(taskTeardownContext));
-            if (_actions.TaskTeardown != null)
-            {
-                try
-                {
-                    strategy.PerformTaskTeardown(_actions.TaskTeardown, taskTeardownContext);
-                }
-                catch (Exception ex)
-                {
-                    _log.Error("An error occurred in the custom task teardown action ({0}).", task.Name);
-                    if (!exceptionWasThrown)
-                    {
-                        // If no other exception was thrown, we throw this one.
-                        throw;
-                    }
+#pragma warning restore 618
 
-                    _log.Error("Task Teardown error ({0}): {1}", task.Name, ex.ToString());
+            try
+            {
+                if (_actions.TaskTeardown != null)
+                {
+                    try
+                    {
+                        strategy.PerformTaskTeardown(_actions.TaskTeardown, taskTeardownContext);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.Error("An error occurred in the custom task teardown action ({0}).", task.Name);
+                        if (!exceptionWasThrown)
+                        {
+                            // If no other exception was thrown, we throw this one.
+                            throw;
+                        }
+
+                        _log.Error("Task Teardown error ({0}): {1}", task.Name, ex.ToString());
+                    }
                 }
+            }
+            finally
+            {
+                PublishEvent(AfterTaskTeardown, new AfterTaskTeardownEventArgs(taskTeardownContext));
             }
         }
 
@@ -479,46 +492,56 @@ namespace Cake.Core
             stopWatch.Restart();
 
             var teardownContext = new TeardownContext(context, thrownException);
+            PublishEvent(BeforeTeardown, new BeforeTeardownEventArgs(teardownContext));
+#pragma warning disable 618
             PublishEvent(Teardown, new TeardownEventArgs(teardownContext));
+#pragma warning restore 618
 
-            if (_actions.Teardowns.Count > 0)
+            try
             {
-                var exceptions = new List<Exception>();
-
-                try
+                if (_actions.Teardowns.Count > 0)
                 {
-                    foreach (var teardown in _actions.Teardowns)
-                    {
-                        try
-                        {
-                            strategy.PerformTeardown(teardown, teardownContext);
-                        }
-                        catch (Exception ex)
-                        {
-                            // No other exceptions were thrown and this is the only teardown?
-                            if (!exceptionWasThrown && _actions.Teardowns.Count == 1)
-                            {
-                                // If no other exception was thrown, we throw this one.
-                                // By doing this we preserve the original stack trace which is always nice.
-                                _log.Error("An error occurred in a custom teardown action.");
-                                throw;
-                            }
+                    var exceptions = new List<Exception>();
 
-                            // Add this exception to the list.
-                            exceptions.Add(ex);
+                    try
+                    {
+                        foreach (var teardown in _actions.Teardowns)
+                        {
+                            try
+                            {
+                                strategy.PerformTeardown(teardown, teardownContext);
+                            }
+                            catch (Exception ex)
+                            {
+                                // No other exceptions were thrown and this is the only teardown?
+                                if (!exceptionWasThrown && _actions.Teardowns.Count == 1)
+                                {
+                                    // If no other exception was thrown, we throw this one.
+                                    // By doing this we preserve the original stack trace which is always nice.
+                                    _log.Error("An error occurred in a custom teardown action.");
+                                    throw;
+                                }
+
+                                // Add this exception to the list.
+                                exceptions.Add(ex);
+                            }
                         }
                     }
-                }
-                finally
-                {
-                    report.Add("Teardown", CakeReportEntryCategory.Teardown, stopWatch.Elapsed);
-                }
+                    finally
+                    {
+                        report.Add("Teardown", CakeReportEntryCategory.Teardown, stopWatch.Elapsed);
+                    }
 
-                // If, any exceptions occurred, process them now.
-                if (exceptions.Count > 0)
-                {
-                    ProcessTeardownExceptions(exceptions, exceptionWasThrown);
+                    // If, any exceptions occurred, process them now.
+                    if (exceptions.Count > 0)
+                    {
+                        ProcessTeardownExceptions(exceptions, exceptionWasThrown);
+                    }
                 }
+            }
+            finally
+            {
+                PublishEvent(AfterTeardown, new AfterTeardownEventArgs(teardownContext));
             }
         }
 

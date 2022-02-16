@@ -38,10 +38,6 @@ namespace Cake.Testing
             {
                 writer.Write(content);
                 file.LastWriteTime = DateTime.Now;
-#if !NETCORE
-                writer.Close();
-                stream.Close();
-#endif
                 return file;
             }
         }

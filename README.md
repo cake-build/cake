@@ -1,12 +1,12 @@
 ﻿# Cake
 
-[![NuGet](https://img.shields.io/nuget/v/Cake.svg)](https://www.nuget.org/packages/Cake) [![Azure Artifacts](https://azpkgsshield.azurevoodoo.net/cake-build/Cake/cake/cake)](https://dev.azure.com/cake-build/Cake/_packaging?_a=package&feed=cake&package=Cake&protocolType=NuGet) [![Chocolatey](https://img.shields.io/chocolatey/v/Cake.portable.svg)](https://chocolatey.org/packages/cake.portable)
-[![homebrew](https://img.shields.io/homebrew/v/cake.svg)](http://braumeister.org/formula/cake)
-[![Help Contribute to Open Source](https://www.codetriage.com/cake-build/cake/badges/users.svg)](https://www.codetriage.com/cake-build/cake)
-
-[![Source Browser](https://img.shields.io/badge/Browse-Source-green.svg)](http://sourcebrowser.io/Browse/cake-build/cake)
-
 Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
+
+| Runner         | Latest Released | Latest Develop |
+|----------------|-----------------|----------------|
+| Cake .NET Tool | [![NuGet](https://img.shields.io/nuget/v/Cake.Tool.svg)](https://www.nuget.org/packages/Cake.Tool) | [![Azure Artifacts](https://azpkgsshield.azurevoodoo.net/cake-build/Cake/cake/cake.tool)](https://dev.azure.com/cake-build/Cake/_packaging?_a=package&feed=cake&package=Cake.Tool&protocolType=NuGet) |
+| Cake Frosting | [![NuGet](https://img.shields.io/nuget/v/Cake.Frosting.svg)](https://www.nuget.org/packages/Cake.Frosting) | [![Azure Artifacts](https://azpkgsshield.azurevoodoo.net/cake-build/Cake/cake/Cake.Frosting)](https://dev.azure.com/cake-build/Cake/_packaging?_a=package&feed=cake&package=Cake.Frosting&protocolType=NuGet) |
+
 
 ## Continuous integration
 
@@ -19,7 +19,6 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 | Azure Pipelines             | Centos        | [![Azure Pipelines Cake Centos status](https://dev.azure.com/cake-build/Cake/_apis/build/status/Azure%20Pipelines%20-%20Build%20Cake%20Centos%207?&branchName=develop)](https://dev.azure.com/cake-build/Cake/_build/latest?definitionId=5) | |
 | Azure Pipelines             | Ubuntu        | [![Azure Pipelines Ubuntu Build status](https://dev.azure.com/cake-build/Cake/_apis/build/status/Azure%20Pipelines%20-%20Build%20Cake%20Ubuntu?&branchName=develop)](https://dev.azure.com/cake-build/Cake/_build/latest?definitionId=3) | |
 | AppVeyor                    | Windows       | [![AppVeyor branch](https://img.shields.io/appveyor/ci/cakebuild/cake/develop.svg)](https://ci.appveyor.com/project/cakebuild/cake/branch/develop)                  | [![AppVeyor branch](https://img.shields.io/appveyor/ci/cakebuild/cake-eijwj/develop.svg)](https://ci.appveyor.com/project/cakebuild/cake-eijwj)  |
-| Travis                      | Ubuntu / MacOS | [![Travis build status](https://travis-ci.org/cake-build/cake.svg?branch=develop)](https://travis-ci.org/cake-build/cake)                                           |                                                                                                                                                                     |
 | TeamCity                    | Windows       | [![TeamCity Build Status](http://img.shields.io/teamcity/codebetter/Cake_CakeMaster.svg)](http://teamcity.codebetter.com/viewType.html?buildTypeId=Cake_CakeMaster) |                                                                                                                                                                     |
 | Bitrise                     | MacOS         | [![Build Status](https://app.bitrise.io/app/42eaef77e8db4a5c/status.svg?token=EDjHGK5njNJ-MrhSbvKM1w&branch=develop)](https://app.bitrise.io/app/42eaef77e8db4a5c)  | ![Build Status](https://app.bitrise.io/app/804b431c1f27e0a0/status.svg?token=qKosHEaJAJEqzZcq4s5WRg&branch=develop)                                                        |
 | Bitrise                     | Debian         | [![Build Status](https://app.bitrise.io/app/ea0c6b3c61eb1e79/status.svg?token=KJqOWXllYXz3WYqcB861Uw&branch=develop)](https://app.bitrise.io/app/ea0c6b3c61eb1e79)  | ![Build Status](https://app.bitrise.io/app/5a406f34f22113c6/status.svg?token=TQPbsmA9yP-iJOhzunIP4w&branch=develop)                                                        |
@@ -34,86 +33,15 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 ## Table of Contents
 
 1. [Documentation](https://github.com/cake-build/cake#documentation)
-2. [Example](https://github.com/cake-build/cake#example)
-    - [Install the Cake bootstrapper](https://github.com/cake-build/cake#1-install-the-cake-bootstrapper)
-    - [Create a Cake script](https://github.com/cake-build/cake#2-create-a-cake-script)
-    - [Run it!](https://github.com/cake-build/cake#3-run-it)
-3. [Contributing](https://github.com/cake-build/cake#contributing)
-4. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
-5. [License](https://github.com/cake-build/cake#license)
+2. [Contributing](https://github.com/cake-build/cake#contributing)
+3. [Get in touch](https://github.com/cake-build/cake#get-in-touch)
+4. [License](https://github.com/cake-build/cake#license)
 
 ## Documentation
 
 You can read the latest documentation at [https://cakebuild.net/](https://cakebuild.net/).
 
-## Example
-
-This example downloads the Cake bootstrapper and executes a simple build script.
-The bootstrapper is used to bootstrap Cake in a simple way and is not in
-required in any way to execute build scripts. If you prefer to invoke the Cake
-executable yourself, [take a look at the command line usage](https://cakebuild.net/docs/cli/usage).
-
-This example is also available on our homepage:
-[https://cakebuild.net/docs/tutorials/setting-up-a-new-project](https://cakebuild.net/docs/tutorials/setting-up-a-new-project)
-
-### 1. Install the Cake bootstrapper
-
-The bootstrapper is used to download Cake and the tools required by the
-build script.
-
-##### Windows
-
-```powershell
-Invoke-WebRequest https://cakebuild.net/download/bootstrapper/windows -OutFile build.ps1
-```
-
-##### Linux
-
-```console
-curl -Lsfo build.sh https://cakebuild.net/download/bootstrapper/linux
-```
-
-##### OS X
-
-```console
-curl -Lsfo build.sh https://cakebuild.net/download/bootstrapper/osx
-```
-
-### 2. Create a Cake script
-
-Add a cake script called `build.cake` to the same location as the
-bootstrapper script that you downloaded.
-
-```cake
-var target = Argument("target", "Default");
-
-Task("Default")
-  .Does(() =>
-{
-  Information("Hello World!");
-});
-
-RunTarget(target);
-```
-
-### 3. Run it!
-
-##### Windows
-
-```powershell
-# Execute the bootstrapper script.
-./build.ps1
-```
-
-##### Linux / OS X
-
-```console
-# Adjust the permissions for the bootstrapper script.
-chmod +x build.sh
-
-# Execute the bootstrapper script.
-./build.sh
-```
+For a simple example to get started see [Setting up a new project](https://cakebuild.net/docs/getting-started/setting-up-a-new-project).
 
 ## Contributing
 
@@ -131,11 +59,11 @@ Make sure you've read the [contribution guidelines](https://cakebuild.net/docs/c
 
 [![Follow @cakebuildnet](https://img.shields.io/badge/Twitter-Follow%20%40cakebuildnet-blue.svg)](https://twitter.com/intent/follow?screen_name=cakebuildnet)
 
-[![Join the chat at https://gitter.im/cake-build/cake](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cake-build/cake?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://github.com/cake-build/cake/discussions](https://img.shields.io/badge/discussions-join%20chat-brightgreen)](https://github.com/cake-build/cake/discussions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## License
 
-Copyright © .NET Foundation, Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio and contributors.
+Copyright © .NET Foundation, Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio, C. Augusto Proiete, Nils Andresen, and contributors.
 
 Cake is provided as-is under the MIT license. For more information see [LICENSE](https://github.com/cake-build/cake/blob/develop/LICENSE).
 
@@ -145,7 +73,19 @@ Cake is provided as-is under the MIT license. For more information see [LICENSE]
 
 ## Thanks
 
-A big thank you has to go to [JetBrains](https://www.jetbrains.com) who provide each of the Cake Developers with an [Open Source License](https://www.jetbrains.com/support/community/#section=open-source) for [ReSharper](https://www.jetbrains.com/resharper/) that helps with the development of Cake.
+A big thank you has to go to [JetBrains](https://www.jetbrains.com) who provide each of the Cake Developers with an [Open Source License](https://www.jetbrains.com/community/opensource/#support) for [ReSharper](https://www.jetbrains.com/resharper/) that helps with the development of Cake.
+
+### Sponsors
+
+Our wonderful sponsors:
+
+[![Sponsors](https://opencollective.com/cake/sponsors.svg)](https://opencollective.com/cake)
+
+### Backers
+
+Our wonderful backers:
+
+[![Backers](https://opencollective.com/cake/backers.svg)](https://opencollective.com/cake)
 
 ## Code of Conduct
 

@@ -5,13 +5,15 @@ on:
     branches:
       - main
       - develop
+      - hotfix/*
 jobs:
   build:
     name: Build
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [windows-latest, ubuntu-18.04, macos-latest]
     steps:
       - name: Get the sources
         uses: actions/checkout@v2
@@ -19,15 +21,30 @@ jobs:
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Install .NET Core SDK 3.1.301
+      - name: Install .NET Core SDK 3.1.x
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.301'
+          dotnet-version: '3.1.x'
+
+      - name: Install .NET Core SDK 5.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+
+      - name: Install .NET Core SDK (global.json)
+        uses: actions/setup-dotnet@v1
+        with:
+            include-prerelease: 'true'
 
       - name: Run Cake script
-        uses: ecampidoglio/cake-action@v1.1.1
-        env:
-          DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX: 2
+        uses: cake-build/cake-action@v1
         with:
           target: Run-Integration-Tests
-          cake-bootstrap: true
+          cake-version: tool-manifest
+
+      - name: Validate Integration Tests
+        uses: cake-build/cake-action@master
+        with:
+          script-path: tests/integration/Cake.Common/Build/GitHubActions/ValidateGitHubActionsProvider.cake
+          cake-version: tool-manifest
+

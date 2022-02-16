@@ -11,8 +11,12 @@ namespace Cake.Common.Build.TeamCity.Data
     /// </summary>
     public class TeamCityPullRequestInfo : TeamCityInfo
     {
-        private static bool InferIsPullRequest(string gitReferenceName)
+        private readonly TeamCityBuildInfo _buildInfo;
+
+        private bool InferIsPullRequest()
         {
+            var gitReferenceName = GetBranchRef();
+
             if (string.IsNullOrEmpty(gitReferenceName))
             {
                 return false;
@@ -37,8 +41,10 @@ namespace Cake.Common.Build.TeamCity.Data
             return false;
         }
 
-        private static int? GetPullRequestNumber(string gitReferenceName)
+        private int? GetPullRequestNumber()
         {
+            var gitReferenceName = GetBranchRef();
+
             if (string.IsNullOrEmpty(gitReferenceName))
             {
                 return null;
@@ -54,6 +60,18 @@ namespace Cake.Common.Build.TeamCity.Data
             return null;
         }
 
+        private string GetBranchRef()
+        {
+            var gitBranch = GetEnvironmentString("Git_Branch");
+
+            if (string.IsNullOrWhiteSpace(gitBranch))
+            {
+                gitBranch = _buildInfo.VcsBranchName;
+            }
+
+            return gitBranch;
+        }
+
         /// <summary>
         /// Gets a value indicating whether the current build was started by a pull request.
         /// </summary>
@@ -63,7 +81,7 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <remarks>
         /// <c>env.Git_Branch</c> is a required parameter in TeamCity for this to work.
         /// </remarks>
-        public bool IsPullRequest => InferIsPullRequest(GetEnvironmentString("Git_Branch"));
+        public bool IsPullRequest => InferIsPullRequest();
 
         /// <summary>
         /// Gets the pull request number.
@@ -74,15 +92,17 @@ namespace Cake.Common.Build.TeamCity.Data
         /// <remarks>
         /// <c>env.Git_Branch</c> is a required parameter in TeamCity for this to work.
         /// </remarks>
-        public int? Number => IsPullRequest ? GetPullRequestNumber(GetEnvironmentString("Git_Branch")) : null;
+        public int? Number => IsPullRequest ? GetPullRequestNumber() : null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TeamCityPullRequestInfo"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public TeamCityPullRequestInfo(ICakeEnvironment environment)
+        /// <param name="buildInfo">The TeamCity build info.</param>
+        public TeamCityPullRequestInfo(ICakeEnvironment environment, TeamCityBuildInfo buildInfo)
             : base(environment)
         {
+            _buildInfo = buildInfo;
         }
     }
 }

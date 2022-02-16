@@ -3,6 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Cake.Core.IO
@@ -10,7 +13,8 @@ namespace Cake.Core.IO
     /// <summary>
     /// Represents a directory path.
     /// </summary>
-    public sealed class DirectoryPath : Path
+    [TypeConverter(typeof(DirectoryPathConverter))]
+    public sealed class DirectoryPath : Path, IEquatable<DirectoryPath>, IComparer<DirectoryPath>, IPath<DirectoryPath>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectoryPath"/> class.
@@ -180,5 +184,74 @@ namespace Cake.Core.IO
 
             return GetRelativePath(to.GetDirectory()).GetFilePath(to.GetFilename());
         }
+
+        /// <summary>
+        /// Determines wheter two <see cref="DirectoryPath"/> instances are equal.
+        /// </summary>
+        /// <param name="other">the <see cref="DirectoryPath"/> to compare.</param>
+        /// <returns>True if other is equal to current object, False otherwise.</returns>
+        public bool Equals(DirectoryPath other)
+            => PathComparer.Default.Equals(this, other);
+
+        /// <summary>
+        /// Determines wheter two <see cref="DirectoryPath"/> instances are equal.
+        /// </summary>
+        /// <param name="other">the <see cref="DirectoryPath"/> to compare.</param>
+        /// <returns>True if other is equal to current object, False otherwise.</returns>
+        public override bool Equals(object other)
+            => Equals(other as DirectoryPath);
+
+        /// <summary>
+        /// Determines wheter two <see cref="DirectoryPath"/> instances are equal.
+        /// </summary>
+        /// <param name="directoryPath">left side <see cref="DirectoryPath"/>.</param>
+        /// <param name="otherDirectoryPath">right side <see cref="DirectoryPath"/>.</param>
+        /// <returns>True if other is equal to current object, False otherwise.</returns>
+        public static bool operator ==(DirectoryPath directoryPath, DirectoryPath otherDirectoryPath)
+            => ReferenceEquals(directoryPath, otherDirectoryPath)
+                || directoryPath?.Equals(otherDirectoryPath) == true;
+
+        /// <summary>
+        /// Determines wheter two <see cref="DirectoryPath"/> instances are different.
+        /// </summary>
+        /// <param name="directoryPath">left side <see cref="DirectoryPath"/>.</param>
+        /// <param name="otherDirectoryPath">right side <see cref="DirectoryPath"/>.</param>
+        /// <returns>True if other is equal to current object, False otherwise.</returns>
+        public static bool operator !=(DirectoryPath directoryPath, DirectoryPath otherDirectoryPath) => !(directoryPath == otherDirectoryPath);
+
+        /// <summary>
+        /// Returns the hash code for the <see cref="FilePath"/>.
+        /// </summary>
+        /// <returns>
+        /// A 32-bit signed integer hash code.
+        /// </returns>
+        public override int GetHashCode()
+            => PathComparer.Default.GetHashCode(this);
+
+        /// <summary>
+        /// Compares two DirectoryPath and returns an indication of their relative sort order.
+        /// </summary>
+        /// <param name="x">The first <see cref="Path"/> to compare.</param>
+        /// <param name="y">The second <see cref="Path"/> to compare.</param>
+        /// <returns>A signed integer that indicates the relative values of x and y.
+        /// <list type="table">
+        /// <item>
+        /// <term>Less than zero</term>
+        /// <description>x precedes y in the sort order, or x is null and y is not null.</description>
+        /// </item>
+        /// <item>
+        /// <term>Zero</term>
+        /// <description>x is equal to y, or x and y are both null.</description>
+        /// </item>
+        /// <item>
+        /// <term>Greater than zero</term>
+        /// <description>
+        /// x follows y in the sort order, or y is null and x is not null.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </returns>
+        public int Compare([AllowNull] DirectoryPath x, [AllowNull] DirectoryPath y)
+            => PathComparer.Default.Compare(x, y);
     }
 }

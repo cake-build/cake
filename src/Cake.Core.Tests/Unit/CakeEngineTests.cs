@@ -1540,6 +1540,24 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.Equal(CakeTaskExecutionStatus.Delegated, report.First(e => e.TaskName == "B").ExecutionStatus);
             }
+
+            [Fact]
+            public async Task Should_Return_Report_That_Marks_Failed_Tasks_As_Failed()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").IsDependentOn("B");
+                engine.RegisterTask("B").ContinueOnError().Does(() => throw new Exception("error"));
+
+                // When
+                var report = await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
+
+                // Then
+                Assert.Equal(CakeTaskExecutionStatus.Delegated, report.First(e => e.TaskName == "A").ExecutionStatus);
+                Assert.Equal(CakeTaskExecutionStatus.Failed, report.First(e => e.TaskName == "B").ExecutionStatus);
+            }
         }
 
         public sealed class TheSetupEvent
@@ -1554,9 +1572,30 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A");
 
                 // When
-                var result = Assert.Raises<SetupEventArgs>(
-                    handler => engine.Setup += handler,
-                    handler => engine.Setup -= handler,
+                var result = Assert.Raises<BeforeSetupEventArgs>(
+                    handler => engine.BeforeSetup += handler,
+                    handler => engine.BeforeSetup -= handler,
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal(engine, result.Sender);
+                Assert.Equal(fixture.Context, result.Arguments.Context);
+            }
+
+            [Fact]
+            public void Should_Raise_AfterSetup_Event()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+
+                // When
+                var result = Assert.Raises<AfterSetupEventArgs>(
+                    handler => engine.AfterSetup += handler,
+                    handler => engine.AfterSetup -= handler,
                     async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
@@ -1632,9 +1671,29 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A");
 
                 // When
-                var result = Assert.Raises<TaskSetupEventArgs>(
-                    handler => engine.TaskSetup += handler,
-                    handler => engine.TaskSetup -= handler,
+                var result = Assert.Raises<BeforeTaskSetupEventArgs>(
+                    handler => engine.BeforeTaskSetup += handler,
+                    handler => engine.BeforeTaskSetup -= handler,
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal(engine, result.Sender);
+            }
+
+            [Fact]
+            public void Should_Raise_Task_AfterSetup_Event()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+
+                // When
+                var result = Assert.Raises<AfterTaskSetupEventArgs>(
+                    handler => engine.AfterTaskSetup += handler,
+                    handler => engine.AfterTaskSetup -= handler,
                     async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
@@ -1652,13 +1711,13 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A");
 
                 // When
-                var result = Assert.Raises<TaskSetupEventArgs>(
-                    handler => engine.TaskSetup += handler,
-                    handler => engine.TaskSetup -= handler,
+                var result = Assert.Raises<BeforeTaskSetupEventArgs>(
+                    handler => engine.BeforeTaskSetup += handler,
+                    handler => engine.BeforeTaskSetup -= handler,
                     async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
-                Assert.IsType<TaskSetupEventArgs>(result.Arguments);
+                Assert.IsType<BeforeTaskSetupEventArgs>(result.Arguments);
                 Assert.NotNull(result.Arguments.TaskSetupContext.Task);
                 Assert.Equal("A", result.Arguments.TaskSetupContext.Task.Name);
             }
@@ -1738,9 +1797,29 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A");
 
                 // When
-                var result = Assert.Raises<TaskTeardownEventArgs>(
-                    handler => engine.TaskTeardown += handler,
-                    handler => engine.TaskTeardown -= handler,
+                var result = Assert.Raises<BeforeTaskTeardownEventArgs>(
+                    handler => engine.BeforeTaskTeardown += handler,
+                    handler => engine.BeforeTaskTeardown -= handler,
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal(engine, result.Sender);
+            }
+
+            [Fact]
+            public void Should_Raise_Task_AfterTeardown_Event()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+
+                // When
+                var result = Assert.Raises<AfterTaskTeardownEventArgs>(
+                    handler => engine.AfterTaskTeardown += handler,
+                    handler => engine.AfterTaskTeardown -= handler,
                     async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
@@ -1758,13 +1837,13 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A");
 
                 // When
-                var result = Assert.Raises<TaskTeardownEventArgs>(
-                    handler => engine.TaskTeardown += handler,
-                    handler => engine.TaskTeardown -= handler,
+                var result = Assert.Raises<BeforeTaskTeardownEventArgs>(
+                    handler => engine.BeforeTaskTeardown += handler,
+                    handler => engine.BeforeTaskTeardown -= handler,
                     async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
-                Assert.IsType<TaskTeardownEventArgs>(result.Arguments);
+                Assert.IsType<BeforeTaskTeardownEventArgs>(result.Arguments);
                 Assert.NotNull(result.Arguments.TaskTeardownContext.Task);
                 Assert.Equal("A", result.Arguments.TaskTeardownContext.Task.Name);
             }
@@ -1782,7 +1861,7 @@ namespace Cake.Core.Tests.Unit
                 {
                     list.Add("TASK_SETUP_EVENT");
                 };
-                engine.TaskTeardown += (sender, args) =>
+                engine.BeforeTaskTeardown += (sender, args) =>
                 {
                     list.Add("TASK_TEARDOWN_EVENT");
                 };
@@ -1809,7 +1888,7 @@ namespace Cake.Core.Tests.Unit
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.RegisterTask("B").IsDependentOn("A");
-                engine.TaskTeardown += (sender, args) =>
+                engine.BeforeTaskTeardown += (sender, args) =>
                 {
                     list.Add("TASK_TEARDOWN_EVENT_" + args.TaskTeardownContext.Task.Name);
                 };
@@ -1839,9 +1918,29 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A");
 
                 // When
-                var result = Assert.Raises<TeardownEventArgs>(
-                    handler => engine.Teardown += handler,
-                    handler => engine.Teardown -= handler,
+                var result = Assert.Raises<BeforeTeardownEventArgs>(
+                    handler => engine.BeforeTeardown += handler,
+                    handler => engine.BeforeTeardown -= handler,
+                    async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.NotNull(result);
+                Assert.Equal(engine, result.Sender);
+            }
+
+            [Fact]
+            public void Should_Raise_AfterTeardown_Event()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("A");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+
+                // When
+                var result = Assert.Raises<AfterTeardownEventArgs>(
+                    handler => engine.AfterTeardown += handler,
+                    handler => engine.AfterTeardown -= handler,
                     async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
@@ -1858,9 +1957,9 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A");
 
                 // When
-                var result = Assert.Raises<TeardownEventArgs>(
-                    handler => engine.Teardown += handler,
-                    handler => engine.Teardown -= handler,
+                var result = Assert.Raises<BeforeTeardownEventArgs>(
+                    handler => engine.BeforeTeardown += handler,
+                    handler => engine.BeforeTeardown -= handler,
                     async () => await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
@@ -1878,11 +1977,11 @@ namespace Cake.Core.Tests.Unit
                 var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
-                engine.Teardown += (sender, args) =>
+                engine.BeforeTeardown += (sender, args) =>
                 {
                     list.Add("HANDLER_1");
                 };
-                engine.Teardown += (sender, args) =>
+                engine.BeforeTeardown += (sender, args) =>
                 {
                     list.Add("HANDLER_2");
                 };
@@ -1907,7 +2006,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A");
                 engine.RegisterTask("B").IsDependentOn("A");
                 engine.RegisterTask("C").IsDependentOn("B");
-                engine.Teardown += (sender, args) =>
+                engine.BeforeTeardown += (sender, args) =>
                 {
                     list.Add("TEARDOWN_EVENT");
                 };
@@ -1932,11 +2031,11 @@ namespace Cake.Core.Tests.Unit
                 var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
-                engine.TaskTeardown += (sender, args) =>
+                engine.BeforeTaskTeardown += (sender, args) =>
                 {
                     list.Add("TASK_TEARDOWN_EVENT");
                 };
-                engine.Teardown += (sender, args) =>
+                engine.BeforeTeardown += (sender, args) =>
                 {
                     list.Add("TEARDOWN_EVENT");
                 };

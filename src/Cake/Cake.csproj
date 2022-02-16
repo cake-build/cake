@@ -1,33 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <AssemblyName>Cake</AssemblyName>
     <OutputType>Exe</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(PackAsTool)' != 'true'">
-    <TargetFrameworks>net461;netcoreapp2.0;$(TargetFrameworks);</TargetFrameworks>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
 
-  <PropertyGroup Condition=" '$(PackAsTool)' == 'true'">
+  <PropertyGroup>
+    <PackAsTool>true</PackAsTool>
     <PackageId>Cake.Tool</PackageId>
     <ToolCommandName>dotnet-cake</ToolCommandName>
-    <PackageDescription>The Cake .NET Core Global Tool.</PackageDescription>
+    <PackageDescription>The Cake .NET Tool.</PackageDescription>
   </PropertyGroup>
 
   <!-- Project references -->
   <ItemGroup>
+    <ProjectReference Include="..\Cake.Cli\Cake.Cli.csproj" />
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
     <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />
+    <ProjectReference Include="..\Cake.DotNetTool.Module\Cake.DotNetTool.Module.csproj" />
   </ItemGroup>
+
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.6.0" />
-    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.0.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="6.0.0" />
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net60" Version="1.2.4" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net50" Version="1.2.4" Condition="'$(TargetFramework)' == 'net5.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.NetCoreApp31" Version="1.2.4" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
   </ItemGroup>
 </Project>

@@ -62,13 +62,27 @@ namespace Cake.Core.Diagnostics
         {
             if (colorize && token is PropertyToken)
             {
-                _console.BackgroundColor = palette.ArgumentBackground;
-                _console.ForegroundColor = palette.ArgumentForeground;
+                if (palette.ArgumentBackground != Constants.DefaultConsoleColor)
+                {
+                    _console.BackgroundColor = palette.ArgumentBackground;
+                }
+
+                if (palette.ArgumentForeground != Constants.DefaultConsoleColor)
+                {
+                    _console.ForegroundColor = palette.ArgumentForeground;
+                }
             }
             else
             {
-                _console.BackgroundColor = palette.Background;
-                _console.ForegroundColor = palette.Foreground;
+                if (palette.Background != Constants.DefaultConsoleColor)
+                {
+                    _console.BackgroundColor = palette.Background;
+                }
+
+                if (palette.Foreground != Constants.DefaultConsoleColor)
+                {
+                    _console.ForegroundColor = palette.Foreground;
+                }
             }
         }
     }

@@ -660,6 +660,91 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Solution_WithProjectsAndFolders", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft Visual Studio Solution File, Format Version 12.00
+        ///# Visual Studio 14
+        ///VisualStudioVersion = 14.0.25123.0
+        ///MinimumVisualStudioVersion = 10.0.40219.1
+        ///Project(&quot;{2150E333-8FDC-42A3-9474-1A3956D46DE8}&quot;) = &quot;src&quot;, &quot;src&quot;, &quot;{2400A22B-695E-4BDF-93CB-8757F5FB3FB7}&quot;
+        ///EndProject
+        ///Project(&quot;{2150E333-8FDC-42A3-9474-1A3956D46DE8}&quot;) = &quot;test&quot;, &quot;test&quot;, &quot;{69930DD1-1688-4407-B4AB-B9E2C0BFB284}&quot;
+        ///EndProject
+        ///Project(&quot;{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}&quot;) = &quot;dummy&quot;, &quot;src\dummy\dummy.csproj&quot;, &quot;{ADCB37DA-2469-462F-99 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Solution_WithProjectsAndFoldersAndMissingLine {
+            get {
+                return ResourceManager.GetString("Solution_WithProjectsAndFoldersAndMissingLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft Visual Studio Solution File, Format Version 12.00
+        ///# Visual Studio Version 16
+        ///VisualStudioVersion = 16.0.31702.278
+        ///MinimumVisualStudioVersion = 10.0.40219.1
+        ///Project(&quot;{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}&quot;) = &quot;dummy&quot;, &quot;C:\project\dummy\src\dummy\dummy.csproj&quot;, &quot;{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}&quot;
+        ///EndProject
+        ///Global
+        ///	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+        ///		Debug|Any CPU = Debug|Any CPU
+        ///		Release|Any CPU = Release|Any CPU
+        ///	EndGlobalSection
+        ///	GlobalSection(ProjectCon [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Solution_WithProjectUsingAbsolutePath {
+            get {
+                return ResourceManager.GetString("Solution_WithProjectUsingAbsolutePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
+        ///&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;
+        ///&lt;properties&gt;
+        ///&lt;comment&gt;TeamCity build properties without &apos;system.&apos; prefix&lt;/comment&gt;
+        ///&lt;entry key=&quot;teamcity.build.properties.file&quot;&gt;/Working/teamcity.build.configuration&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.configuration.properties.file&quot;&gt;/Working/teamcity.config.configuration&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.runner.properties.file&quot;&gt;/Working/teamcity.runner.configuration&lt;/entry&gt;
+        ///&lt;/properties&gt;.
+        /// </summary>
+        public static string TeamCity_Build_Properties_Xml {
+            get {
+                return ResourceManager.GetString("TeamCity_Build_Properties_Xml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
+        ///&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;
+        ///&lt;properties&gt;
+        ///&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+        ///&lt;entry key=&quot;build.counter&quot;&gt;414&lt;/entry&gt;
+        ///&lt;entry key=&quot;build.number&quot;&gt;3246&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.build.branch&quot;&gt;pull/5&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.build.branch.is_default&quot;&gt;true&lt;/entry&gt;
+        ///&lt;entry key=&quot;teamcity.build.vcs.branch.MyVcsRootName&quot;&gt;refs/pull/5/merge&lt;/entry&gt;
+        ///&lt;/properties&gt;.
+        /// </summary>
+        public static string TeamCity_Config_Properties_Xml {
+            get {
+                return ResourceManager.GetString("TeamCity_Config_Properties_Xml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
+        ///&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;
+        ///&lt;properties&gt;
+        ///&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+        ///&lt;entry key=&quot;command.executable&quot;&gt;run.cmd&lt;/entry&gt;
+        ///&lt;/properties&gt;.
+        /// </summary>
+        public static string TeamCity_Runner_Properties_Xml {
+            get {
+                return ResourceManager.GetString("TeamCity_Runner_Properties_Xml", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to using System.Reflection;
@@ -886,6 +971,45 @@ namespace Cake.Common.Tests.Properties {
         public static string XmlTransformation_Xsl {
             get {
                 return ResourceManager.GetString("XmlTransformation_Xsl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; version=&quot;1.0&quot;&gt;
+        ///&lt;xsl:output method=&quot;html&quot; encoding=&quot;utf-8&quot;/&gt;
+        ///&lt;xsl:param name=&quot;BackgroundColor&quot;&gt;&lt;/xsl:param&gt;
+        ///&lt;xsl:param name=&quot;Color&quot;&gt;&lt;/xsl:param&gt;
+        ///
+        ///&lt;xsl:template match=&quot;/&quot;&gt;
+        ///&lt;html&gt;
+        ///    &lt;body style=&quot;font-family:Arial;font-size:12pt;background-color:#EEEEEE&quot;&gt;
+        ///        &lt;xsl:for-each select=&quot;breakfast_menu/food&quot;&gt;
+        ///            &lt;div style=&quot;background-color:{$BackgroundColor};color:{$Color};padding:4px&quot;&gt;
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string XmlTransformationWithArguments_Xsl {
+            get {
+                return ResourceManager.GetString("XmlTransformationWithArguments_Xsl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:input=&quot;http://example.com&quot; exclude-result-prefixes=&quot;input&quot; version=&quot;1.0&quot;&gt;
+        ///&lt;xsl:output method=&quot;html&quot; encoding=&quot;utf-8&quot;/&gt;
+        ///&lt;xsl:param name=&quot;input:BackgroundColor&quot;&gt;&lt;/xsl:param&gt;
+        ///&lt;xsl:param name=&quot;input:Color&quot;&gt;&lt;/xsl:param&gt;
+        ///
+        ///&lt;xsl:template match=&quot;/&quot;&gt;
+        ///&lt;html&gt;
+        ///    &lt;body style=&quot;font-family:Arial;font-size:12pt;background-color:#EEEEEE&quot;&gt;
+        ///        &lt;xsl:for-each select=&quot;breakfast_menu/food&quot;&gt;
+        ///            &lt;di [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string XmlTransformationWithArgumentsAndNamespace_Xsl {
+            get {
+                return ResourceManager.GetString("XmlTransformationWithArgumentsAndNamespace_Xsl", resourceCulture);
             }
         }
     }

@@ -18,8 +18,8 @@ namespace Cake.Common.Tools.InspectCode
         Not (yet) supported options:
         - /toolset                  MsBuild toolset version. Highest available is used by default. Example: /toolset=12.0.
         - /dumpIssuesTypes (/it)    Dump issues types (default: False).
-        - /targets-for-references   MSBuild targets. These targets will be executed to get referenced assemblies of projects..
-        - /targets-for-items        MSBuild targets. These targets will be executed to get other items (e.g. Compile item) of projects..
+        - /targets-for-references   MSBuild targets. These targets will be executed to get referenced assemblies of projects.
+        - /targets-for-items        MSBuild targets. These targets will be executed to get other items (e.g. Compile item) of projects.
          */
 
         /// <summary>
@@ -120,5 +120,32 @@ namespace Cake.Common.Tools.InspectCode
         /// that was output by the command line tool or not.
         /// </summary>
         public bool SkipOutputAnalysis { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to build or not-build the
+        /// sources before running the tool. Setting this value is only valid
+        /// for InspectCode version 2021.2.0 and later.
+        /// <para>
+        /// <list type="bullet">
+        /// <item><description>
+        /// Setting this property to <c>true</c> will result in passing the '--build' option.
+        /// </description></item>
+        /// <item><description>
+        /// Setting this property to <c>false</c> will result in passing the '--no-build' option.
+        /// </description></item>
+        /// <item><description>
+        /// Setting this property to <c>null</c> will result in no changes to the options. This is the default
+        /// and the only valid setting for versions before 2021.2.
+        /// </description></item>
+        /// </list>
+        /// </para>
+        /// </summary>
+        /// <remarks>
+        /// Starting from version 2021.2, InspectCode builds the target solution before starting the analysis
+        /// to make sure it only finds relevant code issues.
+        /// To explicitly accept the new behavior and suppress this warning, use the '--build' option.
+        /// To match the behavior in previous versions and skip the build, use '--no-build'.
+        /// </remarks>
+        public bool? Build { get; set; }
     }
 }

@@ -4,18 +4,23 @@
 
 using Cake.Common.Build.GitHubActions;
 using Cake.Core;
+using Cake.Core.IO;
+using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Build
 {
     internal sealed class GitHubActionsFixture
     {
-        public ICakeEnvironment Environment { get; set; }
+        public ICakeEnvironment Environment { get; }
+        public IFileSystem FileSystem { get; }
 
         public GitHubActionsFixture()
         {
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.GetEnvironmentVariable("GITHUB_ACTIONS").Returns((string)null);
+            Environment.WorkingDirectory.Returns("/home/cake");
+            FileSystem = new FakeFileSystem(Environment);
         }
 
         public void IsRunningOnGitHubActions()
@@ -25,7 +30,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public GitHubActionsProvider CreateGitHubActionsService()
         {
-            return new GitHubActionsProvider(Environment);
+            return new GitHubActionsProvider(Environment, FileSystem);
         }
     }
 }

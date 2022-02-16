@@ -74,6 +74,13 @@ namespace Cake.Common.Tools.VSTest
         public FilePath Diag { get; set; }
 
         /// <summary>
+        /// Gets or sets the result directory.
+        /// Test results directory will be created in specified path if not exists.
+        /// VSTest.Console.exe flag <see href="https://docs.microsoft.com/en-us/visualstudio/test/vstest-console-options#ResultDirectory">/ResultsDirectory</see>.
+        /// </summary>
+        public DirectoryPath ResultsDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of your logger. Possible values:
         /// - A blank string (or null): no logger
         /// - "trx": Visual Studio's built-in logger
@@ -81,5 +88,14 @@ namespace Cake.Common.Tools.VSTest
         /// - any custom value: the name of your custom logger.
         /// </summary>
         public string Logger { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether tools from a preview edition of Visual Studio should be used.
+        /// <para>
+        /// If set to <c>true</c>, VSTest from a Preview edition
+        /// (e.g. Visual Studio 2022 Preview) will be considered to be used.
+        /// </para>
+        /// </summary>
+        public bool AllowPreviewVersion { get; set; } = false;
     }
 }

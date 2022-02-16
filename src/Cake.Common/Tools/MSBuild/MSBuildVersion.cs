@@ -28,6 +28,19 @@ namespace Cake.Common.Tools.MSBuild
         MSBuild15 = 6,
 
         /// <summary>Version 16.0</summary>
-        MSBuild16 = 7
+        MSBuild16 = 7,
+
+        /// <summary>
+        /// Custom VS Version
+        /// </summary>
+        MSBuildCustomVS = 8,
+
+        /// <summary>
+        /// Custom .NET Version
+        /// </summary>
+        MSBuildNETCustom = 9,
+
+        /// <summary>Version 17.0</summary>
+        MSBuild17 = 10
     }
 }

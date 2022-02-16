@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.Test;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -12,7 +13,7 @@ namespace Cake.Common.Tools.DotNetCore.Test
     /// <summary>
     /// .NET Core project tester.
     /// </summary>
-    public sealed class DotNetCoreTester : DotNetCoreTool<DotNetCoreTestSettings>
+    public sealed class DotNetCoreTester : DotNetCoreTool<DotNetTestSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -36,18 +37,19 @@ namespace Cake.Common.Tools.DotNetCore.Test
         /// Tests the project using the specified path with arguments and settings.
         /// </summary>
         /// <param name="project">The target project path.</param>
+        /// <param name="arguments">The arguments.</param>
         /// <param name="settings">The settings.</param>
-        public void Test(string project, DotNetCoreTestSettings settings)
+        public void Test(string project, ProcessArgumentBuilder arguments, DotNetTestSettings settings)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            RunCommand(settings, GetArguments(project, settings));
+            RunCommand(settings, GetArguments(project, arguments, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, DotNetCoreTestSettings settings)
+        private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetTestSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -80,11 +82,23 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.AppendQuoted(settings.TestAdapterPath.MakeAbsolute(_environment).FullPath);
             }
 
-            // Filter
+            // Logger
+#pragma warning disable CS0618
             if (!string.IsNullOrWhiteSpace(settings.Logger))
             {
                 builder.Append("--logger");
                 builder.AppendQuoted(settings.Logger);
+            }
+#pragma warning restore CS0618
+
+            // Loggers
+            if (settings.Loggers != null)
+            {
+                foreach (var logger in settings.Loggers)
+                {
+                    builder.Append("--logger");
+                    builder.AppendQuoted(logger);
+                }
             }
 
             // Output directory
@@ -108,7 +122,17 @@ namespace Cake.Common.Tools.DotNetCore.Test
                 builder.Append(settings.Configuration);
             }
 
-            // Output directory
+            // Collectors
+            if (settings.Collectors != null)
+            {
+                foreach (var collector in settings.Collectors)
+                {
+                    builder.Append("--collect");
+                    builder.AppendQuoted(collector);
+                }
+            }
+
+            // Diagnostic file
             if (settings.DiagnosticFile != null)
             {
                 builder.Append("--diag");
@@ -148,6 +172,28 @@ namespace Cake.Common.Tools.DotNetCore.Test
             {
                 builder.Append("--runtime");
                 builder.Append(settings.Runtime);
+            }
+
+            // Sources
+            if (settings.Sources != null)
+            {
+                foreach (var source in settings.Sources)
+                {
+                    builder.Append("--source");
+                    builder.AppendQuoted(source);
+                }
+            }
+
+            // Blame
+            if (settings.Blame)
+            {
+                builder.Append("--blame");
+            }
+
+            if (!arguments.IsNullOrEmpty())
+            {
+                builder.Append("--");
+                arguments.CopyTo(builder);
             }
 
             return builder;

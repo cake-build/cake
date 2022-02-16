@@ -52,78 +52,34 @@ namespace Cake.Core
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        /// <summary>
-        /// Gets the file system.
-        /// </summary>
-        /// <value>
-        /// The file system.
-        /// </value>
+        /// <inheritdoc/>
         public IFileSystem FileSystem { get; }
 
-        /// <summary>
-        /// Gets the environment.
-        /// </summary>
-        /// <value>
-        /// The environment.
-        /// </value>
+        /// <inheritdoc/>
         public ICakeEnvironment Environment { get; }
 
-        /// <summary>
-        /// Gets the globber.
-        /// </summary>
-        /// <value>
-        /// The globber.
-        /// </value>
+        /// <inheritdoc/>
         public IGlobber Globber { get; }
 
-        /// <summary>
-        /// Gets the log.
-        /// </summary>
-        /// <value>
-        /// The log.
-        /// </value>
+        /// <inheritdoc/>
         public ICakeLog Log { get; }
 
-        /// <summary>
-        /// Gets the arguments.
-        /// </summary>
-        /// <value>
-        /// The arguments.
-        /// </value>
+        /// <inheritdoc/>
         public ICakeArguments Arguments { get; }
 
-        /// <summary>
-        /// Gets the process runner.
-        /// </summary>
-        /// <value>
-        /// The process runner.
-        /// </value>
+        /// <inheritdoc/>
         public IProcessRunner ProcessRunner { get; }
 
-        /// <summary>
-        /// Gets the registry.
-        /// </summary>
-        /// <value>
-        /// The registry.
-        /// </value>
+        /// <inheritdoc/>
         public IRegistry Registry { get; }
 
-        /// <summary>
-        /// Gets the tool locator.
-        /// </summary>
-        /// <value>
-        /// The tool locator.
-        /// </value>
+        /// <inheritdoc/>
         public IToolLocator Tools { get; }
 
-        /// <summary>
-        /// Gets the data context resolver.
-        /// </summary>
+        /// <inheritdoc/>
         public ICakeDataResolver Data { get; }
 
-        /// <summary>
-        /// Gets the cake configuration.
-        /// </summary>
+        /// <inheritdoc/>
         public ICakeConfiguration Configuration { get; }
     }
 }

@@ -29,7 +29,7 @@ namespace Cake.Common.Tools.VSTest
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         [CakeMethodAlias]
-        public static void VSTest(this ICakeContext context, string pattern)
+        public static void VSTest(this ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {
@@ -51,14 +51,14 @@ namespace Cake.Common.Tools.VSTest
         /// </summary>
         /// <example>
         /// <code>
-        /// VSTest("./Tests/*.UnitTests.dll", new VSTestSettings() { Logger = VSTestLogger.Trx });
+        /// VSTest("./Tests/*.UnitTests.dll", new VSTestSettings() { Logger = "trx" });
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
-        public static void VSTest(this ICakeContext context, string pattern, VSTestSettings settings)
+        public static void VSTest(this ICakeContext context, GlobPattern pattern, VSTestSettings settings)
         {
             if (context == null)
             {

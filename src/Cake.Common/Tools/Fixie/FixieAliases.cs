@@ -36,7 +36,7 @@ namespace Cake.Common.Tools.Fixie
         /// <param name="context">The context.</param>
         /// <param name="pattern">The pattern.</param>
         [CakeMethodAlias]
-        public static void Fixie(this ICakeContext context, string pattern)
+        public static void Fixie(this ICakeContext context, GlobPattern pattern)
         {
             if (context == null)
             {
@@ -68,7 +68,7 @@ namespace Cake.Common.Tools.Fixie
         /// <param name="pattern">The pattern.</param>
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
-        public static void Fixie(this ICakeContext context, string pattern, FixieSettings settings)
+        public static void Fixie(this ICakeContext context, GlobPattern pattern, FixieSettings settings)
         {
             if (context == null)
             {

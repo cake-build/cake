@@ -8,33 +8,19 @@ using Cake.Core.Polyfill;
 
 namespace Cake.Core
 {
-    /// <summary>
-    /// Represents the runtime that Cake is running in.
-    /// </summary>
+    /// <inheritdoc/>
     public sealed class CakeRuntime : ICakeRuntime
     {
-        /// <summary>
-        /// Gets the build-time .NET framework version that is being used.
-        /// </summary>
+        /// <inheritdoc/>
         public FrameworkName BuiltFramework { get; }
 
-        /// <summary>
-        /// Gets the current executing .NET Runtime.
-        /// </summary>
-        /// <returns>The target framework.</returns>
+        /// <inheritdoc/>
         public Runtime Runtime { get; }
 
-        /// <summary>
-        /// Gets the version of Cake executing the script.
-        /// </summary>
+        /// <inheritdoc/>
         public Version CakeVersion { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether we're running on CoreClr.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if we're running on CoreClr; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsCoreClr { get; }
 
         /// <summary>

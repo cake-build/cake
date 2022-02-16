@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -24,7 +25,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="settings">MSBuild settings to add.</param>
         /// <param name="environment">The environment.</param>
         /// <exception cref="InvalidOperationException">Throws if 10 or more file loggers specified.</exception>
-        public static void AppendMSBuildSettings(this ProcessArgumentBuilder builder, DotNetCoreMSBuildSettings settings, ICakeEnvironment environment)
+        public static void AppendMSBuildSettings(this ProcessArgumentBuilder builder, DotNetMSBuildSettings settings, ICakeEnvironment environment)
         {
             // Got any targets?
             if (settings.Targets.Any())
@@ -110,7 +111,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                 string binaryOptions = null;
                 if (!string.IsNullOrEmpty(settings.BinaryLogger.FileName))
                 {
-                    binaryOptions = settings.BinaryLogger.FileName;
+                    binaryOptions = settings.BinaryLogger.FileName.Quote();
                 }
 
                 if (settings.BinaryLogger.Imports != MSBuildBinaryLoggerImports.Unspecified)
@@ -188,6 +189,13 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
             {
                 builder.AppendMSBuildSwitch("nologo");
             }
+
+            // Set Continuous Integration Build?
+            if (settings.ContinuousIntegrationBuild.HasValue)
+            {
+                var continuousIntegrationBuild = settings.ContinuousIntegrationBuild.Value ? "true" : "false";
+                builder.AppendMSBuildSwitch("property", $"ContinuousIntegrationBuild={continuousIntegrationBuild}");
+            }
         }
 
         private static string GetLoggerValue(MSBuildLogger logger)
@@ -248,6 +256,8 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                     return "15.0";
                 case MSBuildVersion.MSBuild16:
                     return "16.0";
+                case MSBuildVersion.MSBuild17:
+                    return "17.0";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(toolVersion), toolVersion, "Invalid value");
             }

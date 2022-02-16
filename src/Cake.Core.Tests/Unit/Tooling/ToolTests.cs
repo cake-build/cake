@@ -144,6 +144,21 @@ namespace Cake.Core.Tests.Unit.Tooling
                 // Then
                 AssertEx.IsCakeException(result, "UnitTest");
             }
+
+            [Fact]
+            public void Should_Not_Throw_On_Invalid_ExitCode_When_HandleExitCode_Returns_True()
+            {
+                // Given
+                var fixture = new DummyToolFixture();
+                fixture.Settings.HandleExitCode = _ => true;
+                fixture.GivenProcessExitsWithCode(10);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.IsNotType<Exception>(result);
+            }
         }
     }
 }

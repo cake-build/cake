@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.MSBuild;
+using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNetCore;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.MSBuild;
@@ -64,7 +65,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
             }
 
             [Fact]
@@ -81,7 +82,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -608,6 +609,159 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Fact]
+            public void Should_Add_Version_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.Version = "1.0.0-test";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:Version=1.0.0-test", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_VersionPrefix_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.VersionPrefix = "1.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:VersionPrefix=1.0.0", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_VersionSuffix_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.VersionSuffix = "test";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:VersionSuffix=test", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_FileVersion_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.FileVersion = "1.0.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:FileVersion=1.0.0.0", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_AssemblyVersion_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.AssemblyVersion = "1.0.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:AssemblyVersion=1.0.0.0", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_InformationalVersion_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.InformationalVersion = "1.0.0-test+7ad03d0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:InformationalVersion=1.0.0-test+7ad03d0", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PackageVersion_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.PackageVersion = "1.0.0-test";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:PackageVersion=1.0.0-test", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PackageReleaseNotes_If_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.PackageReleaseNotes = "https://";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:PackageReleaseNotes=https://", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ContinuousIntegrationBuild_If_Set_To_True()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.ContinuousIntegrationBuild = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:ContinuousIntegrationBuild=true", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ContinuousIntegrationBuild_If_Set_To_False()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+                fixture.Settings.ContinuousIntegrationBuild = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /property:ContinuousIntegrationBuild=false", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Add_ContinuousIntegrationBuild_If_Not_Set()
+            {
+                // Given
+                var fixture = new DotNetCoreMSBuildBuilderFixture();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.DoesNotContain("/property:ContinuousIntegrationBuild=", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_ResponseFile_Argument()
             {
                 // Given
@@ -860,12 +1014,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Theory]
-            [InlineData(DotNetCoreVerbosity.Quiet)]
-            [InlineData(DotNetCoreVerbosity.Minimal)]
-            [InlineData(DotNetCoreVerbosity.Normal)]
-            [InlineData(DotNetCoreVerbosity.Detailed)]
-            [InlineData(DotNetCoreVerbosity.Diagnostic)]
-            public void Should_Append_Verbosity_If_Specified(DotNetCoreVerbosity verbosity)
+            [InlineData(DotNetVerbosity.Quiet)]
+            [InlineData(DotNetVerbosity.Minimal)]
+            [InlineData(DotNetVerbosity.Normal)]
+            [InlineData(DotNetVerbosity.Detailed)]
+            [InlineData(DotNetVerbosity.Diagnostic)]
+            public void Should_Append_Verbosity_If_Specified(DotNetVerbosity verbosity)
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
@@ -1117,12 +1271,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             }
 
             [Theory]
-            [InlineData(DotNetCoreVerbosity.Quiet)]
-            [InlineData(DotNetCoreVerbosity.Minimal)]
-            [InlineData(DotNetCoreVerbosity.Normal)]
-            [InlineData(DotNetCoreVerbosity.Detailed)]
-            [InlineData(DotNetCoreVerbosity.Diagnostic)]
-            public void Should_Append_Verbosity_If_Specified(DotNetCoreVerbosity verbosity)
+            [InlineData(DotNetVerbosity.Quiet)]
+            [InlineData(DotNetVerbosity.Minimal)]
+            [InlineData(DotNetVerbosity.Normal)]
+            [InlineData(DotNetVerbosity.Detailed)]
+            [InlineData(DotNetVerbosity.Diagnostic)]
+            public void Should_Append_Verbosity_If_Specified(DotNetVerbosity verbosity)
             {
                 // Given
                 var fixture = new DotNetCoreMSBuildBuilderFixture();
@@ -1142,8 +1296,8 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             [InlineData(false, null, MSBuildBinaryLoggerImports.Unspecified, "msbuild")]
             [InlineData(true, null, MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger")]
             [InlineData(true, null, MSBuildBinaryLoggerImports.None, "msbuild /binarylogger:ProjectImports=None")]
-            [InlineData(true, "mylog.binlog", MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger:mylog.binlog")]
-            [InlineData(true, "mylog.binlog", MSBuildBinaryLoggerImports.Embed, "msbuild /binarylogger:mylog.binlog;ProjectImports=Embed")]
+            [InlineData(true, "mylog.binlog", MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger:\"mylog.binlog\"")]
+            [InlineData(true, "mylog.binlog", MSBuildBinaryLoggerImports.Embed, "msbuild /binarylogger:\"mylog.binlog\";ProjectImports=Embed")]
             public void Should_Append_Binary_Logging_If_Specified(bool enabled, string fileName, MSBuildBinaryLoggerImports imports, string args)
             {
                 // Given
@@ -1165,8 +1319,8 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
             [Theory]
             [InlineData(null, MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger")]
             [InlineData(null, MSBuildBinaryLoggerImports.None, "msbuild /binarylogger:ProjectImports=None")]
-            [InlineData("mylog.binlog", MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger:mylog.binlog")]
-            [InlineData("mylog.binlog", MSBuildBinaryLoggerImports.Embed, "msbuild /binarylogger:mylog.binlog;ProjectImports=Embed")]
+            [InlineData("mylog.binlog", MSBuildBinaryLoggerImports.Unspecified, "msbuild /binarylogger:\"mylog.binlog\"")]
+            [InlineData("mylog.binlog", MSBuildBinaryLoggerImports.Embed, "msbuild /binarylogger:\"mylog.binlog\";ProjectImports=Embed")]
             public void Should_Append_Binary_Logging_If_Enabled(string fileName, MSBuildBinaryLoggerImports imports, string args)
             {
                 // Given

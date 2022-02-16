@@ -25,28 +25,12 @@ namespace Cake.Core.Tooling
         /// <param name="strategy">The tool resolution strategy.</param>
         public ToolLocator(ICakeEnvironment environment, IToolRepository repository, IToolResolutionStrategy strategy)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (repository == null)
-            {
-                throw new ArgumentNullException(nameof(repository));
-            }
-            if (strategy == null)
-            {
-                throw new ArgumentNullException(nameof(strategy));
-            }
-
-            _environment = environment;
-            _repository = repository;
-            _strategy = strategy;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
         }
 
-        /// <summary>
-        /// Registers the specified tool file path.
-        /// </summary>
-        /// <param name="path">The tool path.</param>
+        /// <inheritdoc/>
         public void RegisterFile(FilePath path)
         {
             if (path == null)
@@ -57,11 +41,7 @@ namespace Cake.Core.Tooling
             _repository.Register(path.MakeAbsolute(_environment));
         }
 
-        /// <summary>
-        /// Resolves the path to the specified tool.
-        /// </summary>
-        /// <param name="tool">The tool.</param>
-        /// <returns>A path if the tool was found; otherwise <c>null</c>.</returns>
+        /// <inheritdoc/>
         public FilePath Resolve(string tool)
         {
             if (tool == null)
@@ -76,11 +56,7 @@ namespace Cake.Core.Tooling
             return _strategy.Resolve(_repository, tool);
         }
 
-        /// <summary>
-        /// Resolves the path to the specified tool.
-        /// </summary>
-        /// <param name="toolExeNames">The possible names of the tool executable.</param>
-        /// <returns>A path if the tool was found; otherwise <c>null</c>.</returns>
+        /// <inheritdoc/>
         public FilePath Resolve(IEnumerable<string> toolExeNames)
         {
             if (toolExeNames == null)

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNetCore.Test;
+using Cake.Core;
 using Cake.Testing;
 using Xunit;
 
@@ -40,7 +41,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, ".NET Core CLI: Process was not started.");
+                AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
             }
 
             [Fact]
@@ -55,7 +56,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, ".NET Core CLI: Process returned an error (exit code 1).");
+                AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
             }
 
             [Fact]
@@ -103,6 +104,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
             }
 
             [Fact]
+            public void Should_Add_RunSettings_Arguments()
+            {
+                // Given
+                var fixture = new DotNetCoreTesterFixture();
+                fixture.Arguments = new[] { "MSTest.DeploymentEnabled=false", "MSTest.MapInconclusiveToFailed=true" }.ToProcessArguments();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("test -- MSTest.DeploymentEnabled=false MSTest.MapInconclusiveToFailed=true", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Additional_Settings()
             {
                 // Given
@@ -112,21 +127,27 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Test
                 fixture.Settings.NoLogo = true;
                 fixture.Settings.Framework = "dnxcore50";
                 fixture.Settings.Configuration = "Release";
+                fixture.Settings.Collectors = new[] { "XPlat Code Coverage" };
                 fixture.Settings.OutputDirectory = "./artifacts/";
                 fixture.Settings.Settings = "./demo.runsettings";
                 fixture.Settings.Filter = "Priority = 1";
                 fixture.Settings.TestAdapterPath = @"/Working/custom-test-adapter";
-                fixture.Settings.Logger = @"trx;LogFileName=/Working/logfile.trx";
+#pragma warning disable CS0618
+                fixture.Settings.Logger = "trx;LogFileName=/Working/logfile.trx";
+#pragma warning restore CS0618
+                fixture.Settings.Loggers = new[] { "html;LogFileName=/Working/logfile.html" };
                 fixture.Settings.DiagnosticFile = "./artifacts/logging/diagnostics.txt";
                 fixture.Settings.ResultsDirectory = "./tests/";
                 fixture.Settings.VSTestReportPath = "./tests/TestResults.xml";
                 fixture.Settings.Runtime = "win-x64";
+                fixture.Settings.Blame = true;
+                fixture.Settings.Sources = new[] { "https://api.nuget.org/v3/index.json" };
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --nologo --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64", result.Args);
+                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --logger \"html;LogFileName=/Working/logfile.html\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --collect \"XPlat Code Coverage\" --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --nologo --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64 --source \"https://api.nuget.org/v3/index.json\" --blame", result.Args);
             }
 
             [Fact]

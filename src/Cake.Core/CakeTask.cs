@@ -14,16 +14,10 @@ namespace Cake.Core
     /// </summary>
     public sealed class CakeTask : ICakeTaskInfo
     {
-        /// <summary>
-        /// Gets the name of the task.
-        /// </summary>
-        /// <value>The name of the task.</value>
+        /// <inheritdoc/>
         public string Name { get; }
 
-        /// <summary>
-        /// Gets or sets the description of the task.
-        /// </summary>
-        /// <value>The description of the task.</value>
+        /// <inheritdoc/>
         public string Description { get; set; }
 
         /// <summary>

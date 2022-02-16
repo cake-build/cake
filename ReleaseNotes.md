@@ -1,3 +1,464 @@
+### New in 2.0.0 (Released 2021/11/30)
+
+* 3714 Use Basic.Reference.Assemblies.* to ensure all standard reference assemblies are available for Roslyn.
+* 3654 IsRunningOnAzurePipelines should ignore agent type.
+* 3631 Refactor GitHub Actions Paths.
+* 3610 Remove TFBuildProvider.
+* 3590 Directories in AzurePipelinesBuildInfo are FilePaths - FilePath.GetDirectory then inconsistent.
+* 3581 Stop shipping Cake.Portable Chocolatey package and Cake Homebrew formulae.
+* 3579 Stop shipping Cake runner for .NET Framework and Cake runner for .NET Core.
+* 3577 Remove ReverseDependencyAttribute.
+* 3572 Only build for TargetFrameworks netcoreapp3.1, net5.0 and net6.0.
+* 3282 GitVersion Tool: Rename verbosity values to match GitVersion values.
+* 3222 Add Xamarin.iOS platform targets to MSBuildSettings PlatformTarget enumeration.
+* 3151 Add support for Engine event hooks after execution as well as before.
+* 3003 Remove DependencyAttribute.
+* 2872 Bump eol target frameworks.
+* 2788 Tool:OpenCover - the register-setting should be an option, rather than a string.
+* 1111 DotNetCoreRestore: dotnet restore no longer supports globbing.
+* 3630 Add GitHub Actions Environment properties.
+* 3629 Add GitHub Actions UploadArtifact Command.
+* 3628 Add GitHub Actions SetEnvironmentVariable Command.
+* 3627 Add GitHub Actions AddPath Command.
+* 3341 Epic: Introduce DotNet aliases (synonyms to DotNetCore aliases).
+* 3709 Arguments alias should support ICollection as default value.
+* 3691 Update Microsoft.NETCore.Platforms to 6.0.0.
+* 3690 Update Microsoft.Extensions.DependencyInjection to 6.0.0.
+* 3689 Update System.Reflection.Metadata to 6.0.0.
+* 3688 Update System.Collections.Immutable to 6.0.0.
+* 3681 ScriptAssemblyResolver logging should be at debug/diagnostic level.
+* 3662 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.0.0-6.final.
+* 3647 Display message of criteria when task fails to run due to criteria not being met.
+* 3644 Add DotNetNuGetUpdateSource aliases (synonym to DotNetCoreNuGetUpdateSource).
+* 3643 Add DotNetNuGetRemoveSource aliases (synonym to DotNetCoreNuGetRemoveSource).
+* 3642 Add DotNetNuGetListSourceSettings (derived from to DotNetNuGetSource).
+* 3641 Add DotNetNuGetHasSource aliases (synonym to DotNetCoreNuGetHasSource).
+* 3640 Add DotNetNuGetEnableSource aliases (synonym to DotNetCoreNuGetEnableSource).
+* 3639 Add DotNetNuGetDisableSource aliases (synonym to DotNetCoreNuGetDisableSource).
+* 3607 Add EnableCompressionInSingleFile to DotNetCorePublishSettings.
+* 3599 Add VS2022 to default MSBuild Resolver.
+* 3598 Remove Preview from VS2022 MSBuild Resolver.
+* 3595 Update Autofac to 6.3.0.
+* 3593 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.0.0-5.final.
+* 3591 Update Microsoft.NETCore.Platforms to 6.0.0-rc.2.21480.5.
+* 3555 Add DotNetNuGetAddSource aliases (synonym to DotNetCoreNuGetAddSource).
+* 3554 Add DotNetNuGetDelete aliases (synonym to DotNetCoreNuGetDelete).
+* 3553 Add DotNetNuGetPush aliases (synonym to DotNetCoreNuGetPush).
+* 3552 Add DotNetPack alias (synonym to DotNetCorePack).
+* 3551 Add DotNetPublish alias (synonym to DotNetCorePublish).
+* 3550 Add DotNetVSTest alias (synonym to DotNetCoreVSTest).
+* 3549 Add DotNetTest alias (synonym to DotNetCoreTest).
+* 3548 Add DotNetBuildServer alias (synonym to DotNetCoreBuildServer).
+* 3547 Add DotNetBuild alias (synonym to DotNetCoreBuild).
+* 3546 Add DotNetRestore alias (synonym to DotNetCoreRestore).
+* 3545 Add DotNetClean alias (synonym to DotNetCoreClean).
+* 3544 Add DotNetExecute alias (synonym to DotNetCoreExecute).
+* 3543 Add DotNetRun alias (synonym to DotNetCoreRun).
+* 3542 Add DotNetTool alias (synonym to DotNetCoreTool).
+* 3523 Add DotNetMSBuild alias (synonym to DotNetCoreMSBuild).
+* 3215 Add RunCommand with postAction parameter to DotNetCoreTool.
+* 3075 Make FilePath and DirectoryPath comparable by value.
+* 2571 OctopusDeploy DeployTo property to take collection of string to specify multiple environments.
+* 2075 Add overloads for DotNetCore*() methods taking FilePath instead of string.
+* 1794 Private is missing from ProjectReference.
+* 1616 Error message on circular references leads to poor developer experience.
+* 3701 Add cake-module tag to Cake.DotNetTool.Module NuGet package.
+* 3602 Switch to Cake.Tool as primary package in REAME.md.
+* 3711 SemanticVersion missing equals/not equals operator, prerelease sorted wrong.
+* 3697 Error: The requested service 'Cake.Commands.DefaultCommandSettings' has not been registered.
+* 3693 Core suffix is still used in some settings classes.
+* 3683 Use DotNetMSBuildSettings instead of DotNetCoreMSBuildSettings on new dotnet aliases settings.
+* 3671 VS2022: msbuild can not be located, only Build Tools are installed.
+* 2665 C*  8 Using Statement produces compile error.
+* 2443 Erroneous "Target path must be an absolute path" when preserveFolderStructure is used with CopyFiles.
+* 1669 Release notes does not tolerate prerelease versions.
+
+### New in 2.0.0-rc0002 (Released 2021/11/26)
+
+* 3714 Use Basic.Reference.Assemblies.* to ensure all standard reference assemblies are available for Roslyn
+* 3654 IsRunningOnAzurePipelines should ignore agent type
+* 3631 Refactor GitHub Actions Paths
+* 3610 Remove TFBuildProvider
+* 3590 Directories in AzurePipelinesBuildInfo are FilePaths - FilePath.GetDirectory then inconsistent
+* 3581 Stop shipping Cake.Portable Chocolatey package and Cake Homebrew formulae
+* 3579 Stop shipping Cake runner for .NET Framework and Cake runner for .NET Core
+* 3577 Remove ReverseDependencyAttribute
+* 3572 Only build for TargetFrameworks netcoreapp3.1, net5.0 and net6.0
+* 3282 GitVersion Tool: Rename verbosity values to match GitVersion values
+* 3222 Add Xamarin.iOS platform targets to MSBuildSettings PlatformTarget enumeration
+* 3151 Add support for Engine event hooks after execution as well as before
+* 3003 Remove DependencyAttribute
+* 2872 Bump eol target frameworks
+* 2788 Tool:OpenCover - the register-setting should be an option, rather than a string
+* 1111 DotNetCoreRestore: dotnet restore no longer supports globbing
+* 3630 Add GitHub Actions Environment properties
+* 3629 Add GitHub Actions UploadArtifact Command
+* 3628 Add GitHub Actions SetEnvironmentVariable Command
+* 3627 Add GitHub Actions AddPath Command
+* 3341 Epic: Introduce DotNet aliases (synonyms to DotNetCore aliases)
+* 3711 SemanticVersion missing equals/not equals operator, prerelease sorted wrong
+* 3697 Error: The requested service 'Cake.Commands.DefaultCommandSettings' has not been registered
+* 3693 `Core` suffix is still used in some settings classes
+* 3683 Use DotNetMSBuildSettings instead of DotNetCoreMSBuildSettings on new dotnet aliases settings
+* 3671 VS2022: msbuild can not be located, only Build Tools are installed
+* 2443 Erroneous "Target path must be an absolute path" when preserveFolderStructure is used with CopyFiles
+* 1669 Release notes does not tolerate prerelease versions
+* 3709 Arguments alias should support ICollection<T> as default value
+* 3691 Update Microsoft.NETCore.Platforms to 6.0.0
+* 3690 Update Microsoft.Extensions.DependencyInjection to 6.0.0
+* 3689 Update System.Reflection.Metadata to 6.0.0
+* 3688 Update System.Collections.Immutable to 6.0.0
+* 3681 `ScriptAssemblyResolver` logging should be at debug/diagnostic level
+* 3662 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.0.0-6.final
+* 3647 Display message of criteria when task fails to run due to criteria not being met
+* 3644 Add DotNetNuGetUpdateSource aliases (synonym to DotNetCoreNuGetUpdateSource)
+* 3643 Add DotNetNuGetRemoveSource aliases (synonym to DotNetCoreNuGetRemoveSource)
+* 3642 Add DotNetNuGetListSourceSettings (derived from to DotNetNuGetSource)
+* 3641 Add DotNetNuGetHasSource aliases (synonym to DotNetCoreNuGetHasSource)
+* 3640 Add DotNetNuGetEnableSource aliases (synonym to DotNetCoreNuGetEnableSource)
+* 3639 Add DotNetNuGetDisableSource aliases (synonym to DotNetCoreNuGetDisableSource)
+* 3607 Add `EnableCompressionInSingleFile` to `DotNetCorePublishSettings`
+* 3599 Add VS2022 to default MSBuild Resolver
+* 3598 Remove Preview from VS2022 MSBuild Resolver
+* 3595 Update Autofac to 6.3.0
+* 3593 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.0.0-5.final
+* 3591 Update Microsoft.NETCore.Platforms to 6.0.0-rc.2.21480.5
+* 3555 Add DotNetNuGetAddSource aliases (synonym to DotNetCoreNuGetAddSource)
+* 3554 Add DotNetNuGetDelete aliases (synonym to DotNetCoreNuGetDelete)
+* 3553 Add DotNetNuGetPush aliases (synonym to DotNetCoreNuGetPush)
+* 3552 Add DotNetPack alias (synonym to DotNetCorePack)
+* 3551 Add DotNetPublish alias (synonym to DotNetCorePublish)
+* 3550 Add DotNetVSTest alias (synonym to DotNetCoreVSTest)
+* 3549 Add DotNetTest alias (synonym to DotNetCoreTest)
+* 3548 Add DotNetBuildServer alias (synonym to DotNetCoreBuildServer)
+* 3547 Add DotNetBuild alias (synonym to DotNetCoreBuild)
+* 3546 Add DotNetRestore alias (synonym to DotNetCoreRestore)
+* 3545 Add DotNetClean alias (synonym to DotNetCoreClean)
+* 3544 Add DotNetExecute alias (synonym to DotNetCoreExecute)
+* 3543 Add DotNetRun alias (synonym to DotNetCoreRun)
+* 3542 Add DotNetTool alias (synonym to DotNetCoreTool)
+* 3523 Add DotNetMSBuild alias (synonym to DotNetCoreMSBuild)
+* 3215 Add RunCommand with postAction parameter to DotNetCoreTool
+* 3075 Make FilePath and DirectoryPath comparable by value
+* 2571 OctopusDeploy DeployTo property to take collection of string to specify multiple environments
+* 2075 Add overloads for DotNetCore*() methods taking FilePath instead of string
+* 1794 Private is missing from ProjectReference
+* 1616 Error message on circular references leads to poor developer experience
+* 3701 Add cake-module tag to Cake.DotNetTool.Module NuGet package
+* 3602 Switch to Cake.Tool as primary package in REAME.md
+
+### New in 2.0.0-rc0001 (Released 2021/11/07)
+
+* 3654 IsRunningOnAzurePipelines should ignore agent type
+* 3631 Refactor GitHub Actions Paths
+* 3610 Remove TFBuildProvider
+* 3590 Directories in AzurePipelinesBuildInfo are FilePaths - FilePath.GetDirectory then inconsistent
+* 3581 Stop shipping Cake.Portable Chocolatey package and Cake Homebrew formulae
+* 3579 Stop shipping Cake runner for .NET Framework and Cake runner for .NET Core
+* 3577 Remove ReverseDependencyAttribute
+* 3572 Only build for TargetFrameworks netcoreapp3.1, net5.0 and net6.0
+* 3282 GitVersion Tool: Rename verbosity values to match GitVersion values
+* 3222 Add Xamarin.iOS platform targets to MSBuildSettings PlatformTarget enumeration
+* 3151 Add support for Engine event hooks after execution as well as before
+* 3003 Remove DependencyAttribute
+* 2872 Bump eol target frameworks
+* 2788 Tool:OpenCover - the register-setting should be an option, rather than a string
+* 1111 DotNetCoreRestore: dotnet restore no longer supports globbing
+* 3341 Introduce DotNet aliases (synonyms to DotNetCore aliases
+* 3627 Add GitHub Actions AddPath Command
+* 3628 Add GitHub Actions SetEnvironmentVariable Command
+* 3629 Add GitHub Actions UploadArtifact Command
+* 3630 Add GitHub Actions Environment properties
+* 3662 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.0.0-6.final
+* 3647 Display message of criteria when task fails to run due to criteria not being met
+* 3644 Add DotNetNuGetUpdateSource aliases (synonym to DotNetCoreNuGetUpdateSource)
+* 3643 Add DotNetNuGetRemoveSource aliases (synonym to DotNetCoreNuGetRemoveSource)
+* 3642 Add DotNetNuGetListSourceSettings (derived from to DotNetNuGetSource)
+* 3641 Add DotNetNuGetHasSource aliases (synonym to DotNetCoreNuGetHasSource)
+* 3640 Add DotNetNuGetEnableSource aliases (synonym to DotNetCoreNuGetEnableSource)
+* 3639 Add DotNetNuGetDisableSource aliases (synonym to DotNetCoreNuGetDisableSource)
+* 3607 Add EnableCompressionInSingleFile to DotNetCorePublishSettings
+* 3599 Add VS2022 to default MSBuild Resolver
+* 3598 Remove Preview from VS2022 MSBuild Resolver
+* 3595 Update Autofac to 6.3.0
+* 3593 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.0.0-5.final
+* 3591 Update Microsoft.NETCore.Platforms to 6.0.0-rc.2.21480.5
+* 3555 Add DotNetNuGetAddSource aliases (synonym to DotNetCoreNuGetAddSource)
+* 3554 Add DotNetNuGetDelete aliases (synonym to DotNetCoreNuGetDelete)
+* 3553 Add DotNetNuGetPush aliases (synonym to DotNetCoreNuGetPush)
+* 3552 Add DotNetPack alias (synonym to DotNetCorePack)
+* 3551 Add DotNetPublish alias (synonym to DotNetCorePublish)
+* 3550 Add DotNetVSTest alias (synonym to DotNetCoreVSTest)
+* 3549 Add DotNetTest alias (synonym to DotNetCoreTest)
+* 3548 Add DotNetBuildServer alias (synonym to DotNetCoreBuildServer)
+* 3547 Add DotNetBuild alias (synonym to DotNetCoreBuild)
+* 3546 Add DotNetRestore alias (synonym to DotNetCoreRestore)
+* 3545 Add DotNetClean alias (synonym to DotNetCoreClean)
+* 3544 Add DotNetExecute alias (synonym to DotNetCoreExecute)
+* 3543 Add DotNetRun alias (synonym to DotNetCoreRun)
+* 3542 Add DotNetTool alias (synonym to DotNetCoreTool)
+* 3523 Add DotNetMSBuild alias (synonym to DotNetCoreMSBuild)
+* 3215 Add RunCommand with postAction parameter to DotNetCoreTool
+* 3075 Make FilePath and DirectoryPath comparable by value
+* 2571 OctopusDeploy DeployTo property to take collection of string to specify multiple environments
+* 2075 Add overloads for DotNetCore*() methods taking FilePath instead of string
+* 1794 Private is missing from ProjectReference
+* 1616 Error message on circular references leads to poor developer experience
+* 1669 Release notes does not tolerate prerelease versions
+* 2443 Erroneous "Target path must be an absolute path" when preserveFolderStructure is used with CopyFiles
+* 3602 Switch to Cake.Tool as primary package in REAME.md
+
+### New in 1.3.0 (Released 2021/10/07)
+
+* 3469 Add support for .NET 6
+* 3493 .NET CLI Build Binary log filenames aren't quoted correctly
+* 3477 parsing of solution files with absolute paths to  projects throws exception
+* 3455 NuGet Resolver native dependencies fails on latest macOS
+* 3352 Cake Frosting Parent DirectoryPath Fails To Combine with Slash
+* 3291 Unable to retrieve target argument with Frosting
+* 2048 DotNetCoreToolSettings.WorkingDirectory is not respected when running DotNetCoreTool
+* 3521 Update Microsoft.NETCore.Platforms to 6.0.0-rc.1.21451.13
+* 3519 Update Spectre.Console to 0.42.0
+* 3503 Add NuGet Sources argument to DotNetCoreTestSettings
+* 3502 Add NuGet Sources argument to DotNetCoreRunSettings
+* 3501 Add NuGet Sources argument to DotNetCorePackSettings
+* 3464 Support MSBuild version 17
+* 3452 Missing option in InspectCodeSettings: `--build` and `--no-build` flags
+* 3449 Add Version, AssemblyVersion, FileVersion, and AssemblyInformationalVersion properties to DotNetCoreMSBuildSettings
+* 3447 Add ContinuousIntegrationBuild to DotNetCoreMSBuildSettings
+* 3445 Highlight failed tasks on summary when Error handler is defined
+* 3237 Allow setting MSBuildToolVersion using custom string - Part 1
+* 3065 Add DOTNET_ROLL_FORWARD setting to DotNetCoreSettings
+* 2165 DotNetCore Build misses Sources settings
+* 2104 Make possibility to set Process Exit Code
+* 1882 DeleteDirectory throws exception if directory doesn't exist
+* 3515 Add a simple README to the packages to be shown on NuGet.org
+* 3466 Fix two typos in GitReleaseManagerAliases documentation
+
+### New in 1.2.0 (Released 2021/08/29)
+
+* 2690 Consider adding some kind of "GetArguments()" alias, similar to the EnvironmentVariables() one.
+* 2578 Feature request: nuget version ranges support.
+* 2362 Add Support for New snupkg Symbol Packages.
+* 3429 Microsoft.Extensions.DependencyInjection to 5.0.2.
+* 3427 Update Microsoft.CodeAnalysis.CSharp.Scripting to 3.11.0.
+* 3425 Update NuGet Client libraries to 5.11.0.
+* 3423 Update Spectre.Console to 0.41.0.
+* 3337 Suppress compilation warnings CS1701, CS1702, and CS1705.
+* 3316 Bump NuGet client libraries to 5.9.1.
+* 3314 Bump .NET SDK to 5.0.202.
+* 3294 Clean up task builder extensions.
+* 3281 GitVersion Tool: Remap existing verbosity values to valid GitVersion values.
+* 3255 Update NuGet client libraries to 5.9.0.
+* 3253 Update Microsoft.CodeAnalysis.CSharp.Scripting to 3.9.0 stable.
+* 3246 Update Spectre.Console to 0.38.0.
+* 3223 Feature request: Environment variable substitution in cake.config.
+* 2654 NUnit3Settings should support TestParam.
+* 2168 TypeConverter to enable Argument(...).
+* 2030 NuGetHasSource is case sensitive.
+* 3365 Typo in documentation of NuGetAdd alias.
+* 3355 VSTest alias documentation contains holdover from <v0.17.0.
+* 3283 Update GitVersion alias reference page with dotnet tool usage example.
+* 3259 TypeLoadException: Missing implementation of RegisterLazy.
+* 3431 Update Microsoft.NET.Test.Sdk to 16.11.0.
+* 3421 Update .NET SDK to 5.0.400.
+* 3372 Update Microsoft.NET.Test.Sdk to 16.9.4.
+* 3370 Update Spectre.Console to 0.39.0.
+* 3368 Update .NET SDK to 5.0.203 and .NET Core 3.1.409 and 2.1.816.
+* 3250 Update .NET SDK to 5.0.200.
+* 3248 Remove Cake.DotNetTool.Module from build.cake.
+* 3360 using Spectre.Console; makes error CS0246.
+* 3352 Cake Frosting Parent DirectoryPath Fails To Combine with Slash.
+* 3243 Error messages logged via Error(...) are displayed in random places in the build log.
+* 3226 Still can't resolve resource assemblies after GH2734.
+* 1663 CopyFiles alias throws exception if empty enumeration is passed.
+
+### New in 1.1.0 (Released 2021/03/06)
+
+* 2983 No possibility of adding variable with isOutput=true in Azure Pipelines
+* 2903 Integrate Cake.DotNetTool.Module
+* 2685 Better dotnet tool integration
+* 3190 Working directory is not respected in BuildContext constructor
+* 3143 ParseSolution throws IndexOutOfRangeException on empty lines
+* 3058 Regression: Tools are no longer not restored in working directory
+* 2852 Terminal output colours
+* 3219 Update nuspec iconUrl in packages to use CDN URL
+* 3216 Remap NuGetLogger Verbose/Verbose to ICakeLog Debug/Diagnostic
+* 3213 Add iconUrl fallback to Cake and Cake.CoreCLR packages
+* 3193 Update Cake unit MS Test SDK dependencies to 16.9.1
+* 3191 Update Roslyn (Microsoft.CodeAnalysis.CSharp.Scripting) to 3.9.0-4.final
+* 3188 Update Cake.NuGet dependencies to latest stable
+* 3144 TeamCity pull request info requires "GIT_BRANCH" environment variable
+* 3133 Add IncludeNativeLibrariesForSelfExtract and IncludeAllContentForSelfExtract to DotNetCorePublishSettings
+* 3127 Add ResultsDirectory to VSTestSettings
+* 3125 ReportGenerator missing report types
+* 3081 Add netcoreapp3.1 target to Cake
+* 3066 Prefer tools with platform affinity
+* 3040 Package ID Prefix Reservation for Cake.* on nuget.org for cake-build organization
+* 3024 WindowsRegistry: Expose other root registry keys to Cake scripts (e.g. HKEY_CURRENT_USER)
+* 2975 Add support for opting out of ANSI coloring via NO_COLOR env. variable
+* 2967 Expose TeamCity build properties dictionary via TeamCityBuildInfo
+* 2966 Enable AnsiConsoleRenderer in TeamCity and Azure Pipelines
+* 2955 Add Build Start Date & Time to TeamCity build information
+* 2941 ProcessArgumentBuilder helpers should return empty builder when values is null
+* 2932 Add dotnet test --blame Flag to DotNetCoreTestSettings
+* 2314 There's no way to set platform like Debug|iPhone
+* 1633 Some command line output ignores system foreground color configuration
+* 2904 (Frosting) Tool installer should respect configuration
+
+### New in 1.0.0 (Released 2021/02/07)
+
+* 3050 Frosting: Rename CakeHost extension from UseTool to InstallTool.
+* 2930 Increase potential breaking change property.
+* 2333 RFC-0001: Rewrite Cake CLI.
+* 2292 Remove obsolete methods and properties.
+* 3020 Migrate to Spectre.Console.
+* 2933 Enable NuGet provider in Frosting.
+* 2874 Merge frosting into main Cake repo.
+* 2883 (Frosting) Add support for .NET 5.
+* 2857 Add support for .NET 5.
+* 2776 Checklist for 1.0.
+* 2755 Add DirectoryHashCalculator.
+* 2199 Add GlobPattern class.
+* 741 Add IsRunningOnMacOs() alias.
+* 3083 Update --tree usage example to match option in the help info.
+* 3069 Don't promote UseWorkingDirectory in Frosting default template.
+* 3029 Add ICakeArguments.GetArgument extension.
+* 3018 Cake displays raw ANSI output after running specific executables.
+* 3009 Make Cake Core CakeDataService Public.
+* 2913 Add overload for DotNetCoreRun.
+* 2908 Future proof .NET [Core] detection.
+* 2897 Add tests for MyGetProvider.
+* 2895 Custom contexts should inherit from CakeContextAdapter.
+* 2877 Add NuGet's Icon setting to NuGetPackSettings.
+* 2870 Add helpers for adding multiple strings to ProcessArgumentBuilder.
+* 2866 Support multiple dotnet test options.
+* 2847 Add new GitHub Actions URL environment variables.
+* 2844 Add missing dotnet test options.
+* 2839 Add support for PublishReadyToRunShowWarnings property in DotNetCorePublish.
+* 2838 Add MakeRelative alias to DirectoryPath and FilePath.
+* 2833 Implicit bootstrapping of modules.
+* 2831 ParseAssemblyInfo does not detect lines with extra spaces.
+* 2886 (Frosting) Support all commands that Cake does.
+* 2825 Add option to ignore tool exit code.
+* 2822 Add support of ReportGenerator global tool.
+* 2820 Add DebuggerStepThroughAttribute to generated code.
+* 2817 Bump dependencies.
+* 2801 Inconsistent NuGet file name case.
+* 2792 Add dotnet nologo options.
+* 2743 Tool resolution for multiple names should be breadth first.
+* 2703 OpenCover is missing hideskipped setting.
+* 2623 DotNetCoreTestSettings Can Have Multiple Logger's.
+* 2595 Misleading output message when trying to install prerelease package with the in-process nuget installer.
+* 2892 (Frosting) Add ANSI console.
+* 2893 (Frosting) Align command line parsing with Cake.
+* 2962 Document breaking changes in 1.0 CLI.
+* 2925 Fix sentences which end with double full stop.
+* 2918 Incorrect link for ReSharper's Open Source webpage in Cake readme.
+* 2894 Remove unnecessary documentation and replace it with .
+* 2879 Update links pointing to cakebuild.net to new URL structure.
+* 2836 Update README with more up-to-date "getting started" information.
+* 2811 Identity of BuildProblem in TeamCityProvider should be optional.
+* 1690 Casing causes 'More than one build script specified.' message.
+* 3077 Regression: rc0003 outputs extra characters on OSX.
+* 3072 Attribute [IsDependeeOf] doesn't work.
+* 3038 Tool resolving in Frosting tasks.
+* 3032 Frosting project fails on Linux.
+* 3007 Different arguments between script runner and Frosting.
+* 2963 EndOfStreamException thrown when using loaddependencies=true.
+* 2961 Update dotnet cake usage instructions (dotnet cake --help).
+* 2956 Wrong Cake version in build.config.
+* 2911 C*  syntax errors in exceptions causes Specre.CLI internal error.
+* 2861 Fix error output in 1.0 preview.
+* 2853 Custom argument names are not case insensitive in 1.0 preview.
+* 2887 (Frosting) Fix line endings in build.sh within template package.
+* 2734 Can't resolve resource assemblies.
+* 2066 cake.coreclr help information error.
+
+### New in 1.0.0-rc0003 (Released 2021/01/29)
+
+* 3029 Add ICakeArguments.GetArgument extension
+* 3007 Different arguments between script runner and Frosting
+* 3018 Cake displays raw ANSI output after running specific executables
+* 3009 Make Cake Core CakeDataService Public
+* 2961 Update dotnet cake usage instructions (dotnet cake --help)
+* 2066 cake.coreclr help information error
+* 3032 Frosting project fails on Linux
+* 3050 Frosting: Rename CakeHost extension from UseTool to InstallTool
+* 3020 Migrate to Spectre.Console
+
+### New in 1.0.0-rc0002 (Released 2020/12/20)
+
+* 2930 Increase potential breaking change property.
+* 2904 (Frosting) Tool installer should respect configuration.
+* 2933 Enable NuGet provider in Frosting.
+* 2838 Add MakeRelative alias to DirectoryPath and FilePath.
+* 2886 (Frosting) Support all commands that Cake does.
+* 2893 (Frosting) Align command line parsing with Cake.
+* 2892 (Frosting) Add ANSI console.
+* 2962 Document breaking changes in 1.0 CLI.
+* 2980 Update to .NET 5 SDK 5.0.101.
+* 2929 GitReleaseManager milestone should use SemVersion.
+* 2928 Cake.Frosting and Cake.Frosting.Template not pushed to NuGet.
+* 2900 Update to .NET 5 SDK "RTM".
+* 2963 EndOfStreamException thrown when using loaddependencies=true.
+* 2956 Wrong Cake version in build.config.
+
+### New in 1.0.0-rc0001 (Released 2020/11/05)
+
+* 2292 Remove obsolete methods and properties.
+* 2874 Merge frosting into main Cake repo.
+* 2883 (Frosting) Add support for .NET 5.
+* 2857 Add support for .NET 5.
+* 2776 Checklist for 1.0.
+* 2755 Add DirectoryHashCalculator.
+* 2333 RFC-0001: Rewrite Cake CLI.
+* 2199 Add GlobPattern class.
+* 741 Add IsRunningOnMacOs() alias.
+* 2913 Add overload for DotNetCoreRun.
+* 2908 Future proof .NET [Core] detection.
+* 2897 Add tests for MyGetProvider.
+* 2895 Custom contexts should inherit from CakeContextAdapter.
+* 2877 Add NuGet's Icon setting to NuGetPackSettings.
+* 2870 Add helpers for adding multiple strings to ProcessArgumentBuilder.
+* 2866 Support multiple dotnet test options.
+* 2847 Add new GitHub Actions URL environment variables.
+* 2844 Add missing dotnet test options.
+* 2839 Add support for PublishReadyToRunShowWarnings property in DotNetCorePublish.
+* 2833 Implicit bootstrapping of modules.
+* 2831 ParseAssemblyInfo does not detect lines with extra spaces.
+* 2825 Add option to ignore tool exit code.
+* 2822 Add support of ReportGenerator global tool.
+* 2820 Add DebuggerStepThroughAttribute to generated code.
+* 2817 Bump dependencies.
+* 2801 Inconsistent NuGet file name case.
+* 2792 Add dotnet nologo options.
+* 2743 Tool resolution for multiple names should be breadth first.
+* 2703 OpenCover is missing hideskipped setting.
+* 2623 DotNetCoreTestSettings Can Have Multiple Logger's.
+* 2595 Misleading output message when trying to install prerelease package with the in-process nuget installer.
+* 2925 Fix sentences which end with double full stop.
+* 2918 Incorrect link for ReSharper's Open Source webpage in Cake readme.
+* 2894 Remove unnecessary documentation and replace it with .
+* 2879 Update links pointing to cakebuild.net to new URL structure.
+* 2836 Update README with more up-to-date "getting started" information.
+* 2811 Identity of BuildProblem in TeamCityProvider should be optional.
+* 2920 Bump Cake script dependencies.
+* 2899 Update to .NET 5 SDK RC 2.
+* 2850 Bump .NET Core SDK to 3.1.402.
+* 2818 Start producing 1.0.0-rc0001 NuGet Packages.
+* 2814 Switch GRM to not mark GitHub release as a pre-release.
+* 2781 Bump StyleCop to latest version.
+* 2911 C# syntax errors in exceptions causes Specre.CLI internal error.
+* 2861 Fix error output in 1.0 preview.
+* 2853 Custom argument names are not case insensitive in 1.0 preview.
+* 2887 (Frosting) Fix line endings in build.sh within template package.
+* 2734 Can't resolve resource assemblies.
+
+### New in 0.38.5 (Released 2020/09/20)
+
+* 2859 .NET 5 shouldn't be identified as Full Framework or Mono.
+
 ### New in 0.38.4 (Released 2020/06/26)
 
 * 2813 Actually ship  0.38.3

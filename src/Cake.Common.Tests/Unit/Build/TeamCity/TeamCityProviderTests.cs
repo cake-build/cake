@@ -6,7 +6,6 @@ using System;
 using Cake.Common.Build.TeamCity;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core.IO;
-using Cake.Testing.Extensions;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.TeamCity
@@ -19,10 +18,23 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new TeamCityProvider(null, null));
+                var result = Record.Exception(() => new TeamCityProvider(null, null, null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
+            }
+
+            [Fact]
+            public void Should_Throw_If_FileSystem_Is_Null()
+            {
+                // Given
+                var fixture = new TeamCityFixture();
+
+                // When
+                var result = Record.Exception(() => new TeamCityProvider(fixture.Environment, null, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
 
             [Fact]
@@ -32,7 +44,7 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity
                 var fixture = new TeamCityFixture();
 
                 // When
-                var result = Record.Exception(() => new TeamCityProvider(fixture.Environment, null));
+                var result = Record.Exception(() => new TeamCityProvider(fixture.Environment, fixture.FileSystem, null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "writer");

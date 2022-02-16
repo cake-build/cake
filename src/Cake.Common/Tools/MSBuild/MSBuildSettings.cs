@@ -21,6 +21,7 @@ namespace Cake.Common.Tools.MSBuild
         private readonly HashSet<string> _warningsAsErrorCodes;
         private readonly HashSet<string> _warningsAsMessageCodes;
         private readonly HashSet<string> _consoleLoggerParameters;
+        internal string CustomVersion { get; set; }
 
         /// <summary>
         /// Gets the targets.
@@ -95,6 +96,86 @@ namespace Cake.Common.Tools.MSBuild
         public bool? NoLogo { get; set; }
 
         /// <summary>
+        /// Gets or sets the default value of all the version numbers embedded in the build output.
+        /// </summary>
+        public string Version
+        {
+            get => GetPropertyValueOrDefault("Version");
+            set => this.WithProperty("Version", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the base version number embedded in the build output.
+        /// </summary>
+        public string VersionPrefix
+        {
+            get => GetPropertyValueOrDefault("VersionPrefix");
+            set => this.WithProperty("VersionPrefix", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the pre-release label of the version number embedded in the build output.
+        /// </summary>
+        public string VersionSuffix
+        {
+            get => GetPropertyValueOrDefault("VersionSuffix");
+            set => this.WithProperty("VersionSuffix", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the file version number embedded in the build output.
+        /// </summary>
+        public string FileVersion
+        {
+            get => GetPropertyValueOrDefault("FileVersion");
+            set => this.WithProperty("FileVersion", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the assembly version number embedded in the build output.
+        /// </summary>
+        public string AssemblyVersion
+        {
+            get => GetPropertyValueOrDefault("AssemblyVersion");
+            set => this.WithProperty("AssemblyVersion", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the assembly informational version number embedded in the build output.
+        /// </summary>
+        public string InformationalVersion
+        {
+            get => GetPropertyValueOrDefault("InformationalVersion");
+            set => this.WithProperty("InformationalVersion", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the version number of the NuGet package generated.
+        /// </summary>
+        public string PackageVersion
+        {
+            get => GetPropertyValueOrDefault("PackageVersion");
+            set => this.WithProperty("PackageVersion", value);
+        }
+
+        /// <summary>
+        /// Gets or sets the release notes of the NuGet package generated.
+        /// </summary>
+        public string PackageReleaseNotes
+        {
+            get => GetPropertyValueOrDefault("PackageReleaseNotes");
+            set => this.WithProperty("PackageReleaseNotes", value);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
+        /// </summary>
+        /// <remarks>
+        /// For more information see https://devblogs.microsoft.com/dotnet/producing-packages-with-source-link/#deterministic-builds.
+        /// </remarks>
+        public bool? ContinuousIntegrationBuild { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether implicit target should be passed to MSBuild.
         /// If set to true, no targets will be specified.
         /// If set to false, and no targets specified, Build target will be passed by default.
@@ -107,6 +188,17 @@ namespace Cake.Common.Tools.MSBuild
         /// </summary>
         /// <value>The build log verbosity.</value>
         public Verbosity Verbosity { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a symbol package should be created.
+        /// </summary>
+        public bool? IncludeSymbols { get; set; }
+
+        /// <summary>
+        /// Gets or sets the symbol package format.
+        /// </summary>
+        /// <value>The symbol package format.</value>
+        public string SymbolPackageFormat { get; set; }
 
         /// <summary>
         /// Gets the loggers.
@@ -151,7 +243,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// Gets or sets a value indicating whether or not to lock the package dependency graph while
         /// restoring, using the packages.lock.json file.
-        /// This setting is available with atleast Visual Studio 2017 version 15.9 and above or NET SDK version 2.1.500 and above.
+        /// This setting is available with at least Visual Studio 2017 version 15.9 and above or NET SDK version 2.1.500 and above.
         /// </summary>
         public bool? RestoreLockedMode { get; set; }
 
@@ -159,6 +251,15 @@ namespace Cake.Common.Tools.MSBuild
         /// Gets the console logger parameters.
         /// </summary>
         public ISet<string> ConsoleLoggerParameters => _consoleLoggerParameters;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether tools from a preview edition of Visual Studio should be used.
+        /// <para>
+        /// If set to <c>true</c>, MSBuildTools from a Preview edition
+        /// (e.g. Visual Studio 2022 Preview) will be considered to be used.
+        /// </para>
+        /// </summary>
+        public bool AllowPreviewVersion { get; set; } = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MSBuildSettings"/> class.
@@ -177,6 +278,17 @@ namespace Cake.Common.Tools.MSBuild
             Configuration = string.Empty;
             Verbosity = Verbosity.Normal;
             MSBuildPlatform = MSBuildPlatform.Automatic;
+        }
+
+        private string GetPropertyValueOrDefault(string propertyName, string @default = null)
+        {
+            if (!Properties.TryGetValue(propertyName, out var propertyValues))
+            {
+                return @default;
+            }
+
+            var propertyValue = string.Join(";", propertyValues);
+            return propertyValue;
         }
     }
 }

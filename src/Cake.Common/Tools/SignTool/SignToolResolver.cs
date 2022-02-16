@@ -37,6 +37,7 @@ namespace Cake.Common.Tools.SignTool
             }
         }
 
+        /// <inheritdoc/>
         public FilePath GetPath()
         {
             if (_signToolPath != null)

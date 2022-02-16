@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
@@ -19,11 +18,14 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
             [InlineData("refs/pull/1/merge", true)]
             [InlineData("refs/changes/1/head", true)]
             [InlineData("refs/heads/master", false)]
+            [InlineData("", true)]
             public void Should_Return_Correct_Value(string value, bool expected)
             {
                 // Given
                 var fixture = new TeamCityInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("Git_Branch").Returns(value);
+                fixture.SetGitBranch(value);
+                fixture.SetBuildPropertiesContent(Properties.Resources.TeamCity_Build_Properties_Xml);
+                fixture.SetConfigPropertiesContent(Properties.Resources.TeamCity_Config_Properties_Xml);
                 var info = fixture.CreatePullRequestInfo();
 
                 // When
@@ -42,11 +44,14 @@ namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
             [InlineData("refs/changes/3/merge", 3)]
             [InlineData("refs/merge-requests/4/merge", 4)]
             [InlineData("refs/heads/master", null)]
+            [InlineData("", 5)]
             public void Should_Return_Correct_Value(string value, int? expected)
             {
                 // Given
                 var fixture = new TeamCityInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("Git_Branch").Returns(value);
+                fixture.SetGitBranch(value);
+                fixture.SetBuildPropertiesContent(Properties.Resources.TeamCity_Build_Properties_Xml);
+                fixture.SetConfigPropertiesContent(Properties.Resources.TeamCity_Config_Properties_Xml);
                 var info = fixture.CreatePullRequestInfo();
 
                 // When

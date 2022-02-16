@@ -1,11 +1,11 @@
-public class BuildVersion
+public record BuildVersion(
+    string Version,
+    string SemVersion,
+    string DotNetAsterix,
+    string Milestone,
+    string CakeVersion
+)
 {
-    public string Version { get; private set; }
-    public string SemVersion { get; private set; }
-    public string DotNetAsterix { get; private set; }
-    public string Milestone { get; private set; }
-    public string CakeVersion { get; private set; }
-
     public static BuildVersion Calculate(ICakeContext context, BuildParameters parameters)
     {
         if (context == null)
@@ -22,7 +22,7 @@ public class BuildVersion
             // Temp Workaround GitVersion Azure Pipelines
             var azurePipelines = context.AzurePipelines();
             string sourceBranch = string.Empty;
-            if ((azurePipelines.IsRunningOnAzurePipelinesHosted || azurePipelines.IsRunningOnAzurePipelines) && azurePipelines.Environment.PullRequest.Number > 0)
+            if (azurePipelines.IsRunningOnAzurePipelines && azurePipelines.Environment.PullRequest.Number > 0)
             {
                  sourceBranch = $"PullRequest{azurePipelines.Environment.PullRequest.Number}";
                  context.Information("Overriding Azure Pipelines branch name with: {0}", sourceBranch);
@@ -59,7 +59,7 @@ public class BuildVersion
             semVersion = assertedVersions.LegacySemVerPadded;
             milestone = string.Concat("v", version);
 
-            context.Information("Calculated Semantic Version: {0}", semVersion);
+            context.Information("Calculated Semantic Version: {0} (Version: {1}, Milestone: {2})", semVersion, version, milestone);
         }
 
         if (string.IsNullOrEmpty(version) || string.IsNullOrEmpty(semVersion))
@@ -68,18 +68,19 @@ public class BuildVersion
             version = ReadSolutionInfoVersion(context);
             semVersion = version;
             milestone = string.Concat("v", version);
+
+            context.Information("Fetched Semantic Version: {0} (Version: {1}, Milestone: {2})", semVersion, version, milestone);
         }
 
         var cakeVersion = typeof(ICakeContext).Assembly.GetName().Version.ToString();
 
-        return new BuildVersion
-        {
-            Version = version,
-            SemVersion = semVersion,
-            DotNetAsterix = semVersion.Substring(version.Length).TrimStart('-'),
-            Milestone = milestone,
-            CakeVersion = cakeVersion
-        };
+        return new BuildVersion(
+            Version: version,
+            SemVersion: semVersion,
+            DotNetAsterix: semVersion.Substring(version.Length).TrimStart('-'),
+            Milestone: milestone,
+            CakeVersion: cakeVersion
+        );
     }
 
     public static string ReadSolutionInfoVersion(ICakeContext context)

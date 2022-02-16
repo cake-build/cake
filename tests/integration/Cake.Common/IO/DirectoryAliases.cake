@@ -44,7 +44,7 @@ Task("Cake.Common.IO.DirectoryAliases.CleanDirectory.Filter")
     var file2 = path.CombineWithFilePath("bar.qux");
     EnsureDirectoryExist(path);
     EnsureFilesExist(new FilePath[] { file1, file2 });
-    
+
     // When
     CleanDirectory(path, f => f.Path.FullPath.EndsWith("baz"));
 
@@ -95,10 +95,13 @@ Task("Cake.Common.IO.DirectoryAliases.DeleteDirectory")
     // Given
     var path = Paths.Temp.Combine("./hello");
     EnsureDirectoryExist(path);
-    
+
     // When
-    DeleteDirectory(path, false);
-    
+    DeleteDirectory(path,
+        new DeleteDirectorySettings {
+            Force = true
+        });
+
     // Then
     Assert.False(System.IO.Directory.Exists(path.FullPath));
 });
@@ -108,12 +111,16 @@ Task("Cake.Common.IO.DirectoryAliases.DeleteDirectory.Recurse")
 {
     // Given
     var root = Paths.Temp.Combine("./hello");
-    var path = root.Combine("world"); 
+    var path = root.Combine("world");
     EnsureDirectoryExist(path);
-    
+
     // When
-    DeleteDirectory(root, true);
-    
+    DeleteDirectory(root,
+        new DeleteDirectorySettings {
+            Force = true,
+            Recursive = true
+        });
+
     // Then
     Assert.False(System.IO.Directory.Exists(path.FullPath));
 });
@@ -125,10 +132,13 @@ Task("Cake.Common.IO.DirectoryAliases.DeleteDirectories")
     var path1 = Paths.Temp.Combine("./hello");
     var path2 = Paths.Temp.Combine("./world");
     EnsureDirectoriesExist(new DirectoryPath[] { path1, path2 });
-    
+
     // When
-    DeleteDirectories(new DirectoryPath[] { path1, path2 }, false);
-    
+    DeleteDirectories(new DirectoryPath[] { path1, path2 },
+        new DeleteDirectorySettings {
+            Force = true
+        });
+
     // Then
     Assert.False(System.IO.Directory.Exists(path1.FullPath));
     Assert.False(System.IO.Directory.Exists(path2.FullPath));
@@ -143,13 +153,92 @@ Task("Cake.Common.IO.DirectoryAliases.DeleteDirectories.Recurse")
     var root2 = Paths.Temp.Combine("./baz");
     var path2 = root2.Combine("qux");
     EnsureDirectoriesExist(new DirectoryPath[] { root1, path1, root2, path2 });
-    
+
     // When
-    DeleteDirectories(new DirectoryPath[] { root1, root2 }, true);
-    
+    DeleteDirectories(new DirectoryPath[] { root1, root2 },
+        new DeleteDirectorySettings {
+            Force = true,
+            Recursive = true
+        });
+
     // Then
     Assert.False(System.IO.Directory.Exists(path1.FullPath));
     Assert.False(System.IO.Directory.Exists(path2.FullPath));
+});
+
+Task("Cake.Common.IO.DirectoryAliases.MakeRelative.DefinedRootPath")
+    .Does(() =>
+{
+    // Given
+    var directoryPath = Paths.Temp.Combine("./hello/world");
+    var filePath = Paths.Temp.Combine("./hello/world/test.cake");
+    var rootPath1 = Paths.Temp;
+    var rootPath2 = Paths.Temp.Combine("./cake/world");
+
+    // When
+    var relativeDirectoryPath1 = MakeRelative(directoryPath, rootPath1);
+    var relativeDirectoryPath2 = MakeRelative(directoryPath, rootPath2);
+    var relativeFilePath = MakeRelative(filePath, rootPath2);
+    
+    // Then
+    Assert.Equal("hello/world", relativeDirectoryPath1.ToString());
+    Assert.Equal("../../hello/world", relativeDirectoryPath2.ToString());
+    Assert.Equal("../../hello/world/test.cake", relativeFilePath.ToString());
+});
+
+Task("Cake.Common.IO.DirectoryAliases.MakeRelative.WorkingDirectory")
+    .Does(() =>
+{
+    // Given
+    var directoryPath = Paths.Temp.Combine("./hello/world");
+    var filePath = Paths.Temp.Combine("./hello/world/test.cake");
+
+    // When
+    var relativeDirectoryPath = MakeRelative(directoryPath);
+    var relativeFilePath = MakeRelative(filePath);
+
+    // Then
+    Assert.Equal("temp/hello/world", relativeDirectoryPath.ToString());
+    Assert.Equal("temp/hello/world/test.cake", relativeFilePath.ToString());
+});
+
+Task("Cake.Common.IO.Paths.ConvertableDirectoryPath.DirectoryPathPlusConvertableDirectoryPath")
+    .Does(context =>
+{
+    // Given
+    var directoryPath = new DirectoryPath("./root");
+
+    // When
+    var result = directoryPath + context.Directory("other");
+
+    // Then
+    Assert.Equal("root/other", result.ToString());
+});
+
+Task("Cake.Common.IO.Paths.ConvertableDirectoryPath.ConvertableDirectoryPathPlusDirectoryPath")
+    .Does(context =>
+{
+    // Given
+    var convertableDirectoryPath = context.Directory("./root");
+
+    // When
+    var result = convertableDirectoryPath + new DirectoryPath("other");
+
+    // Then
+    Assert.Equal("root/other", result.ToString());
+});
+
+Task("Cake.Common.IO.Paths.ConvertableDirectoryPath.ConvertableDirectoryPathPlusConvertableDirectoryPath")
+    .Does(context =>
+{
+    // Given
+    var convertableDirectoryPath = context.Directory("./root");
+
+    // When
+    var result = convertableDirectoryPath + context.Directory("other");
+
+    // Then
+    Assert.Equal("root/other", result.ToString());
 });
 
 //////////////////////////////////////////////////////////////////////////////
@@ -163,4 +252,10 @@ Task("Cake.Common.IO.DirectoryAliases")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectory")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectory.Recurse")
     .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectories")
-    .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectories.Recurse");
+    .IsDependentOn("Cake.Common.IO.DirectoryAliases.DeleteDirectories.Recurse")
+    .IsDependentOn("Cake.Common.IO.DirectoryAliases.MakeRelative.DefinedRootPath")
+    .IsDependentOn("Cake.Common.IO.DirectoryAliases.MakeRelative.WorkingDirectory")
+    .IsDependentOn("Cake.Common.IO.Paths.ConvertableDirectoryPath.DirectoryPathPlusConvertableDirectoryPath")
+    .IsDependentOn("Cake.Common.IO.Paths.ConvertableDirectoryPath.ConvertableDirectoryPathPlusDirectoryPath")
+    .IsDependentOn("Cake.Common.IO.Paths.ConvertableDirectoryPath.ConvertableDirectoryPathPlusConvertableDirectoryPath")
+;

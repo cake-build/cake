@@ -12,6 +12,7 @@ using Cake.Common.Tests.Fixtures.IO;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
+using Cake.Testing.Xunit;
 using NSubstitute;
 using Xunit;
 
@@ -598,15 +599,17 @@ namespace Cake.Common.Tests.Unit.IO
             }
         }
 
-        public sealed class TheDeleteDirectoryMethod
+        public sealed class TheEnsureDoNotExistsMethod
         {
             [Fact]
             public void Should_Throw_If_Context_Is_Null()
             {
-                // Given, When
-#pragma warning disable CS0618
-                var result = Record.Exception(() => DirectoryAliases.DeleteDirectory(null, "/Temp/DoNotExist"));
-#pragma warning restore CS0618
+                // Given
+                var path = new DirectoryPath("/Temp");
+
+                // When
+                var result = Record.Exception(() =>
+                     DirectoryAliases.EnsureDirectoryDoesNotExist(null, path));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "context");
@@ -616,90 +619,55 @@ namespace Cake.Common.Tests.Unit.IO
             public void Should_Throw_If_Directory_Is_Null()
             {
                 // Given
-                var fixture = new FileSystemFixture();
                 var context = Substitute.For<ICakeContext>();
-                context.FileSystem.Returns(fixture.FileSystem);
 
                 // When
-#pragma warning disable CS0618
-                var result = Record.Exception(() => context.DeleteDirectory(null));
-#pragma warning restore CS0618
+                var result = Record.Exception(() =>
+                     DirectoryAliases.EnsureDirectoryDoesNotExist(context, null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "path");
             }
 
             [Fact]
-            public void Should_Throw_If_Directory_Do_Not_Exist()
+            public void Should_Not_Throw_Exception_Or_Fail_For_Non_Existing_Directory()
             {
                 // Given
-                var fixture = new FileSystemFixture();
+                var fileSystem = Substitute.For<IFileSystem>();
+
                 var context = Substitute.For<ICakeContext>();
-                context.FileSystem.Returns(fixture.FileSystem);
+                context.FileSystem.Returns(fileSystem);
 
                 // When
-#pragma warning disable CS0618
-                var result = Record.Exception(() => context.DeleteDirectory("/Temp/DoNotExist"));
-#pragma warning restore CS0618
+                var result = Record.Exception(() =>
+                DirectoryAliases.EnsureDirectoryDoesNotExist(context, "/Temp"));
 
                 // Then
-                Assert.IsType<IOException>(result);
-                Assert.Equal("The directory '/Temp/DoNotExist' does not exist.", result?.Message);
+                Assert.Null(result);
             }
 
             [Fact]
-            public void Should_Throw_When_Deleting_Directory_With_Sub_Directories_If_Non_Recursive()
+            public void Should_Delete_Directory_If_It_Exists()
             {
                 // Given
-                var fixture = new FileSystemFixture();
+                var fileSystem = Substitute.For<IFileSystem>();
+                var directory = Substitute.For<IDirectory>();
+                directory.Exists.Returns(true);
+                fileSystem.GetDirectory(Arg.Is<DirectoryPath>(p => p.FullPath == "/Temp")).Returns(directory);
+
                 var context = Substitute.For<ICakeContext>();
-                context.FileSystem.Returns(fixture.FileSystem);
+                context.FileSystem.Returns(fileSystem);
 
                 // When
-#pragma warning disable CS0618
-                var result = Record.Exception(() => context.DeleteDirectory("/Temp/HasDirectories"));
-#pragma warning restore CS0618
+                DirectoryAliases.EnsureDirectoryDoesNotExist(context, "/Temp");
 
                 // Then
-                Assert.IsType<IOException>(result);
-                Assert.Equal("Cannot delete directory '/Temp/HasDirectories' without recursion since it's not empty.", result?.Message);
+                directory.Received(1).Delete(true);
             }
+        }
 
-            [Fact]
-            public void Should_Throw_When_Deleting_Directory_With_Files_If_Non_Recursive()
-            {
-                // Given
-                var fixture = new FileSystemFixture();
-                var context = Substitute.For<ICakeContext>();
-                context.FileSystem.Returns(fixture.FileSystem);
-
-                // When
-#pragma warning disable CS0618
-                var result = Record.Exception(() => context.DeleteDirectory("/Temp/HasFiles"));
-#pragma warning restore CS0618
-
-                // Then
-                Assert.IsType<IOException>(result);
-                Assert.Equal("Cannot delete directory '/Temp/HasFiles' without recursion since it's not empty.", result?.Message);
-            }
-
-            [Fact]
-            public void Should_Delete_Empty_Directory_If_Non_Recursive()
-            {
-                // Given
-                var fixture = new FileSystemFixture();
-                var context = Substitute.For<ICakeContext>();
-                context.FileSystem.Returns(fixture.FileSystem);
-
-                // When
-#pragma warning disable CS0618
-                context.DeleteDirectory("/Temp/Hello/Empty");
-#pragma warning restore CS0618
-
-                // Then
-                Assert.False(fixture.FileSystem.GetDirectory("/Temp/Hello/Empty").Exists);
-            }
-
+        public sealed class TheDeleteDirectoryMethod
+        {
             [Fact]
             public void Should_Delete_Directory_With_Content_If_Recursive()
             {
@@ -751,120 +719,6 @@ namespace Cake.Common.Tests.Unit.IO
         {
             public sealed class WithPaths
             {
-                [Fact]
-                public void Should_Throw_If_Context_Is_Null()
-                {
-                    // Given
-                    var paths = new DirectoryPath[] { "/Temp/DoNotExist" };
-
-                    // When
-                    var result = Record.Exception(() =>
-#pragma warning disable CS0618
-                        DirectoryAliases.DeleteDirectories(null, paths));
-#pragma warning restore CS0618
-
-                    // Then
-                    AssertEx.IsArgumentNullException(result, "context");
-                }
-
-                [Fact]
-                public void Should_Throw_If_Directories_Are_Null()
-                {
-                    // Given
-                    var context = Substitute.For<ICakeContext>();
-
-                    // When
-                    var result = Record.Exception(() =>
-#pragma warning disable CS0618
-                        context.DeleteDirectories((IEnumerable<DirectoryPath>)null));
-#pragma warning restore CS0618
-
-                    // Then
-                    AssertEx.IsArgumentNullException(result, "directories");
-                }
-
-                [Fact]
-                public void Should_Throw_If_Any_Directory_Do_Not_Exist()
-                {
-                    // Given
-                    var fixture = new FileSystemFixture();
-                    var context = Substitute.For<ICakeContext>();
-                    context.FileSystem.Returns(fixture.FileSystem);
-
-                    var paths = new DirectoryPath[] { "/Temp/DoNotExist" };
-
-                    // When
-#pragma warning disable CS0618
-                    var result = Record.Exception(() => context.DeleteDirectories(paths));
-#pragma warning restore CS0618
-
-                    // Then
-                    Assert.IsType<IOException>(result);
-                    Assert.Equal("The directory '/Temp/DoNotExist' does not exist.", result?.Message);
-                }
-
-                [Fact]
-                public void Should_Throw_When_Deleting_Directory_With_Sub_Directories_If_Non_Recursive()
-                {
-                    // Given
-                    var fixture = new FileSystemFixture();
-                    var context = Substitute.For<ICakeContext>();
-                    context.FileSystem.Returns(fixture.FileSystem);
-
-                    var paths = new DirectoryPath[] { "/Temp/HasDirectories" };
-
-                    // When
-                    var result = Record.Exception(() =>
-#pragma warning disable CS0618
-                        context.DeleteDirectories(paths));
-#pragma warning restore CS0618
-
-                    // Then
-                    Assert.IsType<IOException>(result);
-                    Assert.Equal("Cannot delete directory '/Temp/HasDirectories' without recursion since it's not empty.", result?.Message);
-                }
-
-                [Fact]
-                public void Should_Throw_When_Deleting_Directory_With_Files_If_Non_Recursive()
-                {
-                    // Given
-                    var fixture = new FileSystemFixture();
-                    var context = Substitute.For<ICakeContext>();
-                    context.FileSystem.Returns(fixture.FileSystem);
-
-                    var paths = new DirectoryPath[] { "/Temp/HasFiles" };
-
-                    // When
-                    var result = Record.Exception(() =>
-#pragma warning disable CS0618
-                        context.DeleteDirectories(paths));
-#pragma warning restore CS0618
-
-                    // Then
-                    Assert.IsType<IOException>(result);
-                    Assert.Equal("Cannot delete directory '/Temp/HasFiles' without recursion since it's not empty.", result?.Message);
-                }
-
-                [Fact]
-                public void Should_Delete_Empty_Directory_If_Non_Recursive()
-                {
-                    // Given
-                    var fixture = new FileSystemFixture();
-                    var context = Substitute.For<ICakeContext>();
-                    context.FileSystem.Returns(fixture.FileSystem);
-
-                    var paths = new DirectoryPath[] { "/Temp/Hello/Empty", "/Temp/Hello/More/Empty" };
-
-                    // When
-#pragma warning disable CS0618
-                    context.DeleteDirectories(paths);
-#pragma warning restore CS0618
-
-                    // Then
-                    Assert.False(fixture.FileSystem.GetDirectory("/Temp/Hello/Empty").Exists);
-                    Assert.False(fixture.FileSystem.GetDirectory("/Temp/Hello/More/Empty").Exists);
-                }
-
                 [Fact]
                 public void Should_Delete_Directory_With_Content_If_Recursive()
                 {
@@ -921,121 +775,6 @@ namespace Cake.Common.Tests.Unit.IO
 
             public sealed class WithStrings
             {
-                [Fact]
-                public void Should_Throw_If_Context_Is_Null()
-                {
-                    // Given
-                    var paths = new[] { "/Temp/DoNotExist" };
-
-                    // When
-                    var result = Record.Exception(() =>
-#pragma warning disable CS0618
-                        DirectoryAliases.DeleteDirectories(null, paths));
-#pragma warning restore CS0618
-
-                    // Then
-                    AssertEx.IsArgumentNullException(result, "context");
-                }
-
-                [Fact]
-                public void Should_Throw_If_Directories_Are_Null()
-                {
-                    // Given
-                    var context = Substitute.For<ICakeContext>();
-
-                    // When
-                    var result = Record.Exception(() =>
-#pragma warning disable CS0618
-                        context.DeleteDirectories((IEnumerable<string>)null));
-#pragma warning restore CS0618
-
-                    // Then
-                    AssertEx.IsArgumentNullException(result, "directories");
-                }
-
-                [Fact]
-                public void Should_Throw_If_Any_Directory_Do_Not_Exist()
-                {
-                    // Given
-                    var fixture = new FileSystemFixture();
-                    var context = Substitute.For<ICakeContext>();
-                    context.FileSystem.Returns(fixture.FileSystem);
-
-                    var paths = new[] { "/Temp/DoNotExist" };
-
-                    // When
-                    var result = Record.Exception(() =>
-#pragma warning disable CS0618
-                        context.DeleteDirectories(paths));
-#pragma warning restore CS0618
-
-                    // Then
-                    Assert.IsType<IOException>(result);
-                    Assert.Equal("The directory '/Temp/DoNotExist' does not exist.", result?.Message);
-                }
-
-                [Fact]
-                public void Should_Throw_When_Deleting_Directory_With_Sub_Directories_If_Non_Recursive()
-                {
-                    // Given
-                    var fixture = new FileSystemFixture();
-                    var context = Substitute.For<ICakeContext>();
-                    context.FileSystem.Returns(fixture.FileSystem);
-
-                    var paths = new[] { "/Temp/HasDirectories" };
-
-                    // When
-                    var result = Record.Exception(() =>
-#pragma warning disable CS0618
-                        context.DeleteDirectories(paths));
-#pragma warning restore CS0618
-
-                    // Then
-                    Assert.IsType<IOException>(result);
-                    Assert.Equal("Cannot delete directory '/Temp/HasDirectories' without recursion since it's not empty.", result?.Message);
-                }
-
-                [Fact]
-                public void Should_Throw_When_Deleting_Directory_With_Files_If_Non_Recursive()
-                {
-                    // Given
-                    var fixture = new FileSystemFixture();
-                    var context = Substitute.For<ICakeContext>();
-                    context.FileSystem.Returns(fixture.FileSystem);
-
-                    var paths = new[] { "/Temp/HasFiles" };
-
-                    // When
-                    var result = Record.Exception(() =>
-#pragma warning disable CS0618
-                        context.DeleteDirectories(paths));
-#pragma warning restore CS0618
-
-                    // Then
-                    Assert.IsType<IOException>(result);
-                    Assert.Equal("Cannot delete directory '/Temp/HasFiles' without recursion since it's not empty.", result?.Message);
-                }
-
-                [Fact]
-                public void Should_Delete_Empty_Directory_If_Non_Recursive()
-                {
-                    // Given
-                    var fixture = new FileSystemFixture();
-                    var context = Substitute.For<ICakeContext>();
-                    context.FileSystem.Returns(fixture.FileSystem);
-
-                    var paths = new[] { "/Temp/Hello/Empty", "/Temp/Hello/More/Empty" };
-
-                    // When
-#pragma warning disable CS0618
-                    context.DeleteDirectories(paths);
-#pragma warning restore CS0618
-
-                    // Then
-                    Assert.False(fixture.FileSystem.GetDirectory("/Temp/Hello/Empty").Exists);
-                    Assert.False(fixture.FileSystem.GetDirectory("/Temp/Hello/More/Empty").Exists);
-                }
-
                 [Fact]
                 public void Should_Delete_Directory_With_Content_If_Recursive()
                 {
@@ -1342,6 +1081,127 @@ namespace Cake.Common.Tests.Unit.IO
 
                 // Then
                 Assert.Equal("/Working/build", result.FullPath);
+            }
+        }
+
+        public sealed class TheMakeRelativeMethod
+        {
+            [Fact]
+            public void Should_Throw_For_DirectoryPath_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => DirectoryAliases.MakeRelative(null, new DirectoryPath("./build")));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_For_FilePath_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => DirectoryAliases.MakeRelative(null, new FilePath("./build")));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_DirectoryPath_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                DirectoryPath path = null;
+
+                // When
+                var result = Record.Exception(() => DirectoryAliases.MakeRelative(context, path));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "path");
+            }
+
+            [Fact]
+            public void Should_Throw_If_FilePath_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                FilePath path = null;
+
+                // When
+                var result = Record.Exception(() => DirectoryAliases.MakeRelative(context, path));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "path");
+            }
+
+            [WindowsTheory]
+            [InlineData(@"\Working", @"\Working\build", "build")]
+            [InlineData(@"\Working", @"\Working", ".")]
+            [InlineData("C:/Working/build/core", "C:/Working/stage/core", "../../stage/core")]
+            [InlineData("C:/Working/build/core", "C:/Working", "../..")]
+            public void Should_Return_Relative_Directory_Path_For_Working_Directory(string rootPath, string path, string expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.WorkingDirectory.Returns(d => rootPath);
+
+                // When
+                var result = DirectoryAliases.MakeRelative(context, new DirectoryPath(path));
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData(@"\Working", @"\Working\build", "build")]
+            [InlineData(@"\Working", @"\Working", ".")]
+            [InlineData("C:/Working/build/core", "C:/Working/stage/core", "../../stage/core")]
+            [InlineData("C:/Working/build/core", "C:/Working", "../..")]
+            public void Should_Return_Relative_Directory_Path_For_Defined_Root_Directory(string rootPath, string path, string expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = DirectoryAliases.MakeRelative(context, new DirectoryPath(path), new DirectoryPath(rootPath));
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData(@"\Working", @"\Working\build\file.cake", "build/file.cake")]
+            [InlineData(@"\Working", @"\Working\file.cake", "file.cake")]
+            [InlineData("C:/Working/build/core", "C:/Working/stage/core/file.cake", "../../stage/core/file.cake")]
+            [InlineData("C:/Working/build/core", "C:/Working/file.cake", "../../file.cake")]
+            public void Should_Return_Relative_File_Path_For_Working_Directory(string rootPath, string path, string expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.WorkingDirectory.Returns(d => rootPath);
+
+                // When
+                var result = DirectoryAliases.MakeRelative(context, new FilePath(path));
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData(@"\Working", @"\Working\build\file.cake", "build/file.cake")]
+            [InlineData(@"\Working", @"\Working\file.cake", "file.cake")]
+            [InlineData("C:/Working/build/core", "C:/Working/stage/core/file.cake", "../../stage/core/file.cake")]
+            [InlineData("C:/Working/build/core", "C:/Working/file.cake", "../../file.cake")]
+            public void Should_Return_Relative_File_Path_For_Defined_Root_Directory(string rootPath, string path, string expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = DirectoryAliases.MakeRelative(context, new FilePath(path), new DirectoryPath(rootPath));
+
+                // Then
+                Assert.Equal(expected, result.FullPath);
             }
         }
 

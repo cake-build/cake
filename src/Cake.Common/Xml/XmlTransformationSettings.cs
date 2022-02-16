@@ -4,6 +4,7 @@
 
 using System.Text;
 using System.Xml;
+using System.Xml.Xsl;
 using Cake.Common.Polyfill;
 
 namespace Cake.Common.Xml
@@ -127,6 +128,11 @@ namespace Cake.Common.Xml
             get { return XmlWriterSettings.WriteEndDocumentOnClose; }
             set { XmlWriterSettings.WriteEndDocumentOnClose = value; }
         }
+
+        /// <summary>
+        /// Gets or sets an argument list for XSL transformation.
+        /// </summary>
+        public XsltArgumentList XsltArgumentList { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlTransformationSettings"/> class.

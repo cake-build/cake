@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 
 // Make internals visible to other Cake assemblies.
 [assembly: InternalsVisibleTo("Cake")]
+[assembly: InternalsVisibleTo("Cake.Tool")]
 [assembly: InternalsVisibleTo("Cake.Common")]
 [assembly: InternalsVisibleTo("Cake.Core.Tests")]
 [assembly: InternalsVisibleTo("Cake.Testing.Xunit")]

@@ -1,6 +1,7 @@
 ﻿private System.Boolean? _Cached_Value_Type;
 public System.Boolean Cached_Value_Type
 {
+    [System.Diagnostics.DebuggerStepThrough]
     get
     {
         if (_Cached_Value_Type==null)

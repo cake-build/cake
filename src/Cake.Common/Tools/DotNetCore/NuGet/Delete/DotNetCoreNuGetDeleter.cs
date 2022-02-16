@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.NuGet.Delete;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -12,7 +13,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Delete
     /// <summary>
     /// .NET Core NuGet deleter. Deletes or unlists a package from the server.
     /// </summary>
-    public sealed class DotNetCoreNuGetDeleter : DotNetCoreTool<DotNetCoreNuGetDeleteSettings>
+    public sealed class DotNetCoreNuGetDeleter : DotNetCoreTool<DotNetNuGetDeleteSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetCoreNuGetDeleter" /> class.
@@ -35,7 +36,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Delete
         /// <param name="packageName">The name of the target package.</param>
         /// <param name="version">Version of the package.</param>
         /// <param name="settings">The settings.</param>
-        public void Delete(string packageName, string version, DotNetCoreNuGetDeleteSettings settings)
+        public void Delete(string packageName, string version, DotNetNuGetDeleteSettings settings)
         {
             if (settings == null)
             {
@@ -45,7 +46,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Delete
             RunCommand(settings, GetArguments(packageName, version, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string packageName, string packageVersion, DotNetCoreNuGetDeleteSettings settings)
+        private ProcessArgumentBuilder GetArguments(string packageName, string packageVersion, DotNetNuGetDeleteSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 

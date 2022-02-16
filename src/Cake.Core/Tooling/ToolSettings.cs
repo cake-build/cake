@@ -73,5 +73,41 @@ namespace Cake.Core.Tooling
         /// </code>
         /// </example>
         public IDictionary<string, string> EnvironmentVariables { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Gets or sets whether the exit code from the tool process causes an exception to be thrown.
+        /// <para>
+        /// If the delegate is null (the default) or returns false, then an exception is thrown upon a non-zero exit code.
+        /// </para>
+        /// <para>
+        /// If the delegate returns true then no exception is thrown.
+        /// </para>
+        /// <para>
+        /// This can be useful when the exit code should be ignored, or if there is a desire to apply logic that is conditional
+        /// on the exit code value.
+        /// </para>
+        /// </summary>
+        /// <example>
+        /// Don't throw exceptions if DotNetCoreTest returns non-zero:
+        /// <code>
+        /// DotNetCoreTest("MyProject.csproj", new DotNetCoreTestSettings {
+        ///     HandleExitCode = _=&gt; true
+        /// });
+        /// </code>
+        /// </example>
+        /// <example>
+        /// Use custom logic for exit code:
+        /// <code>
+        /// DotNetCoreTest("MyProject.csproj", new DotNetCoreTestSettings {
+        ///     HandleExitCode = exitCode =&gt; exitCode switch {
+        ///         0 =&gt; throw new CakeException("ZERO"),
+        ///         1 =&gt; true, // treat 1 and 2 as handled "ok".
+        ///         2 =&gt; true,
+        ///         _ =&gt; false // everything else will throw via default implementation
+        ///     };
+        /// });
+        /// </code>
+        /// </example>
+        public Func<int, bool> HandleExitCode { get; set; }
     }
 }

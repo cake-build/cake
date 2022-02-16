@@ -60,7 +60,7 @@ namespace Cake.Common.IO
             CopyFileCore(context, filePath, targetFilePath, null);
         }
 
-        public static void CopyFiles(ICakeContext context, string pattern, DirectoryPath targetDirectoryPath, bool preserverFolderStructure)
+        public static void CopyFiles(ICakeContext context, GlobPattern pattern, DirectoryPath targetDirectoryPath, bool preserverFolderStructure)
         {
             if (context == null)
             {
@@ -85,18 +85,21 @@ namespace Cake.Common.IO
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (filePaths == null)
             {
-                throw new ArgumentNullException("filePaths");
+                throw new ArgumentNullException(nameof(filePaths));
             }
             if (targetDirectoryPath == null)
             {
-                throw new ArgumentNullException("targetDirectoryPath");
+                throw new ArgumentNullException(nameof(targetDirectoryPath));
             }
 
+            // Make all path absolute
             var absoluteTargetDirectoryPath = targetDirectoryPath.MakeAbsolute(context.Environment);
+
+            var absoluteFilePaths = filePaths.Select(x => x.MakeAbsolute(context.Environment)).ToList();
 
             // Make sure the target directory exist.
             if (!context.FileSystem.Exist(absoluteTargetDirectoryPath))
@@ -109,18 +112,18 @@ namespace Cake.Common.IO
             if (preserverFolderStructure)
             {
                 var commonPath = string.Empty;
-                var separatedPath = filePaths
-                    .First(str => str.ToString().Length == filePaths.Max(st2 => st2.ToString().Length)).ToString()
-                    .Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)
+                var separatedPath = absoluteFilePaths
+                    .First(str => str.ToString().Length == absoluteFilePaths.Max(st2 => st2.ToString().Length)).ToString()
+                    .Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries)
                     .ToList();
 
                 foreach (string pathSegment in separatedPath)
                 {
-                    if (commonPath.Length == 0 && filePaths.All(str => str.ToString().StartsWith(pathSegment)))
+                    if (commonPath.Length == 0 && absoluteFilePaths.All(str => str.ToString().StartsWith(pathSegment)))
                     {
                         commonPath = pathSegment;
                     }
-                    else if (filePaths.All(str => str.ToString().StartsWith(commonPath + "/" + pathSegment)))
+                    else if (absoluteFilePaths.All(str => str.ToString().StartsWith(commonPath + "/" + pathSegment)))
                     {
                         commonPath += "/" + pathSegment;
                     }
@@ -130,16 +133,39 @@ namespace Cake.Common.IO
                     }
                 }
 
+                if (absoluteFilePaths.Count == 1 && absoluteFilePaths.First().FullPath.Contains(context.Environment.WorkingDirectory.FullPath))
+                {
+                    var relativePath = absoluteFilePaths.First().FullPath.Remove(0, context.Environment.WorkingDirectory.FullPath.Length + 1);
+                    var relativePathParts = relativePath.Split('/').ToList();
+
+                    if (relativePathParts.Count > 2)
+                    {
+                        relativePathParts.RemoveAt(0);
+                        var workdirRelativeStructurePath = string.Join("/", relativePathParts.ToArray());
+
+                        var index = commonPath.IndexOf(workdirRelativeStructurePath, StringComparison.Ordinal);
+                        commonPath = index < 0
+                            ? commonPath
+                            : commonPath.Remove(index, workdirRelativeStructurePath.Length);
+                    }
+                }
+
                 // Iterate all files and copy them.
-                foreach (var filePath in filePaths)
+                foreach (var filePath in absoluteFilePaths)
                 {
                     CopyFileCore(context, filePath, absoluteTargetDirectoryPath.GetFilePath(filePath), context.DirectoryExists(commonPath) ? commonPath : null);
                 }
             }
             else
             {
+                // #1663: For empty enumerations, just return.
+                if (!absoluteFilePaths.Any())
+                {
+                    return;
+                }
+
                 // Iterate all files and copy them.
-                foreach (var filePath in filePaths)
+                foreach (var filePath in absoluteFilePaths)
                 {
                     CopyFileCore(context, filePath, absoluteTargetDirectoryPath.GetFilePath(filePath), null);
                 }

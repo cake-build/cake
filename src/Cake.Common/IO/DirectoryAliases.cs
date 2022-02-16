@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Common.IO;
 using Cake.Common.IO.Paths;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -59,34 +60,6 @@ namespace Cake.Common.IO
         ///     Directory("be"),
         ///     Directory("gone")
         /// };
-        /// DeleteDirectories(directoriesToDelete, recursive:true);
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="directories">The directory paths.</param>
-        /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
-        [Obsolete("Use the overload that accepts DeleteDirectorySettings instead.")]
-        [CakeMethodAlias]
-        [CakeAliasCategory("Delete")]
-        public static void DeleteDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, bool recursive = false)
-        {
-            if (directories == null)
-            {
-                throw new ArgumentNullException(nameof(directories));
-            }
-
-            DeleteDirectories(context, directories, new DeleteDirectorySettings { Recursive = recursive });
-        }
-
-        /// <summary>
-        /// Deletes the specified directories.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var directoriesToDelete = new DirectoryPath[]{
-        ///     Directory("be"),
-        ///     Directory("gone")
-        /// };
         /// DeleteDirectories(directoriesToDelete, new DeleteDirectorySettings {
         ///     Recursive = true,
         ///     Force = true
@@ -109,29 +82,6 @@ namespace Cake.Common.IO
             {
                 DeleteDirectory(context, directory, settings);
             }
-        }
-
-        /// <summary>
-        /// Deletes the specified directories.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var directoriesToDelete = new []{
-        ///     "be",
-        ///     "gone"
-        /// };
-        /// DeleteDirectories(directoriesToDelete, recursive:true);
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="directories">The directory paths.</param>
-        /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
-        [Obsolete("Use the overload that accepts DeleteDirectorySettings instead.")]
-        [CakeMethodAlias]
-        [CakeAliasCategory("Delete")]
-        public static void DeleteDirectories(this ICakeContext context, IEnumerable<string> directories, bool recursive = false)
-        {
-            DeleteDirectories(context, directories, new DeleteDirectorySettings { Recursive = recursive });
         }
 
         /// <summary>
@@ -173,25 +123,6 @@ namespace Cake.Common.IO
         /// </summary>
         /// <example>
         /// <code>
-        /// DeleteDirectory("./be/gone", recursive:true);
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="path">The directory path.</param>
-        /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
-        [Obsolete("Use the overload that accepts DeleteDirectorySettings instead.")]
-        [CakeMethodAlias]
-        [CakeAliasCategory("Delete")]
-        public static void DeleteDirectory(this ICakeContext context, DirectoryPath path, bool recursive = false)
-        {
-            DeleteDirectory(context, path, new DeleteDirectorySettings { Recursive = recursive });
-        }
-
-        /// <summary>
-        /// Deletes the specified directory.
-        /// </summary>
-        /// <example>
-        /// <code>
         /// DeleteDirectory("./be/gone", new DeleteDirectorySettings {
         ///     Recursive = true,
         ///     Force = true
@@ -221,7 +152,7 @@ namespace Cake.Common.IO
         /// <param name="pattern">The pattern to match.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
-        public static void CleanDirectories(this ICakeContext context, string pattern)
+        public static void CleanDirectories(this ICakeContext context, GlobPattern pattern)
         {
             var directories = context.GetDirectories(pattern);
             if (directories.Count == 0)
@@ -250,7 +181,7 @@ namespace Cake.Common.IO
         /// <param name="predicate">The predicate used to filter directories based on file system information.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Clean")]
-        public static void CleanDirectories(this ICakeContext context, string pattern, Func<IFileSystemInfo, bool> predicate)
+        public static void CleanDirectories(this ICakeContext context, GlobPattern pattern, Func<IFileSystemInfo, bool> predicate)
         {
             var directories = context.GetDirectories(pattern, new GlobberSettings { Predicate = predicate });
             if (directories.Count == 0)
@@ -390,6 +321,68 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
+        /// Deletes the specified directory and its contents if it exists.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// EnsureDirectoryDoesNotExist("./be/gone");
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("DoesNotExist")]
+        public static void EnsureDirectoryDoesNotExist(this ICakeContext context, DirectoryPath path)
+        {
+            context.EnsureDirectoryDoesNotExist(path, new DeleteDirectorySettings { Recursive = true, Force = true });
+        }
+
+        /// <summary>
+        /// Deletes the specified directory if it exists.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// EnsureDirectoryDoesNotExist("./be/gone", new DeleteDirectorySettings {
+        ///     Recursive = true,
+        ///     Force = true
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        /// <param name="settings">The delete settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("DoesNotExist")]
+        public static void EnsureDirectoryDoesNotExist(this ICakeContext context, DirectoryPath path, DeleteDirectorySettings settings)
+        {
+            if (context.DirectoryExists(path))
+            {
+                context.DeleteDirectory(path, settings);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the specified directory if it exists.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// EnsureDirectoryDoesNotExist("./be/gone", new EnsureDirectoryDoesNotExistSettings {
+        ///     Recursive = true,
+        ///     Force = true
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        /// <param name="settings">The delete settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("DoesNotExist")]
+        public static void EnsureDirectoryDoesNotExist(this ICakeContext context, DirectoryPath path, EnsureDirectoryDoesNotExistSettings settings)
+        {
+            context.EnsureDirectoryDoesNotExist(path, settings as DeleteDirectorySettings);
+        }
+
+        /// <summary>
         /// Copies the contents of a directory, including subdirectories to the specified location.
         /// </summary>
         /// <example>
@@ -518,6 +511,68 @@ namespace Cake.Common.IO
             }
 
             return path.MakeAbsolute(context.Environment);
+        }
+
+        /// <summary>
+        /// Makes the directory path relative (if absolute) to a specified root directory. If no root directory is defined
+        /// the current working directory is used as default root.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var path = MakeRelative(Directory("C:\Cake\Tests\Integration"));
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="rootPath">The root path.</param>
+        /// <returns>A relative directory path.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Path")]
+        public static DirectoryPath MakeRelative(this ICakeContext context, DirectoryPath path, DirectoryPath rootPath = null)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (path == null)
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+
+            var root = rootPath ?? context.Environment.WorkingDirectory;
+            return root.GetRelativePath(path);
+        }
+
+        /// <summary>
+        /// Makes the file path relative (if absolute) to a specified root directory. If no root directory is defined
+        /// the current working directory is used as default root.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var path = MakeRelative(Directory("C:\Cake\Tests\Integration\file.cake"));
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="rootPath">The root path.</param>
+        /// <returns>A relative file path.</returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Path")]
+        public static FilePath MakeRelative(this ICakeContext context, FilePath path, DirectoryPath rootPath = null)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (path == null)
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+
+            var root = rootPath ?? context.Environment.WorkingDirectory;
+            return root.GetRelativePath(path);
         }
 
         /// <summary>

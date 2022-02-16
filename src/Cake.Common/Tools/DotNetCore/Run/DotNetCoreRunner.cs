@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.Run;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -12,7 +13,7 @@ namespace Cake.Common.Tools.DotNetCore.Run
     /// <summary>
     /// .NET Core project runner.
     /// </summary>
-    public sealed class DotNetCoreRunner : DotNetCoreTool<DotNetCoreRunSettings>
+    public sealed class DotNetCoreRunner : DotNetCoreTool<DotNetRunSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetCoreRunner" /> class.
@@ -35,7 +36,7 @@ namespace Cake.Common.Tools.DotNetCore.Run
         /// <param name="project">The target project path.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(string project, ProcessArgumentBuilder arguments, DotNetCoreRunSettings settings)
+        public void Run(string project, ProcessArgumentBuilder arguments, DotNetRunSettings settings)
         {
             if (settings == null)
             {
@@ -45,7 +46,7 @@ namespace Cake.Common.Tools.DotNetCore.Run
             RunCommand(settings, GetArguments(project, arguments, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetCoreRunSettings settings)
+        private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetRunSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -89,6 +90,23 @@ namespace Cake.Common.Tools.DotNetCore.Run
             {
                 builder.Append("--runtime");
                 builder.Append(settings.Runtime);
+            }
+
+            // Sources
+            if (settings.Sources != null)
+            {
+                foreach (var source in settings.Sources)
+                {
+                    builder.Append("--source");
+                    builder.AppendQuoted(source);
+                }
+            }
+
+            // Roll Forward Policy
+            if (!(settings.RollForward is null))
+            {
+                builder.Append("--roll-forward");
+                builder.Append(settings.RollForward.Value.ToString("F"));
             }
 
             // Arguments

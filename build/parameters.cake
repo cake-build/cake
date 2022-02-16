@@ -19,10 +19,8 @@ public class BuildParameters
     public bool IsPublishBuild { get; }
     public bool IsReleaseBuild { get; }
     public bool SkipGitVersion { get; }
-    public bool SkipOpenCover { get; }
     public bool SkipSigning { get; }
     public BuildCredentials GitHub { get; }
-    public CoverallsCredentials Coveralls { get; }
     public TwitterCredentials Twitter { get; }
     public GitterCredentials Gitter { get; }
     public ReleaseNotes ReleaseNotes { get; }
@@ -30,7 +28,7 @@ public class BuildParameters
     public BuildPaths Paths { get; }
     public BuildPackages Packages { get; }
     public bool PublishingError { get; set; }
-    public DotNetCoreMSBuildSettings MSBuildSettings { get; }
+    public DotNetMSBuildSettings MSBuildSettings { get; }
 
     public bool ShouldPublish
     {
@@ -90,7 +88,6 @@ public class BuildParameters
         IsDevelopCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch);
         IsTagged = IsBuildTagged(buildSystem);
         GitHub = BuildCredentials.GetGitHubCredentials(context);
-        Coveralls = CoverallsCredentials.GetCoverallsCredentials(context);
         Twitter = TwitterCredentials.GetTwitterCredentials(context);
         Gitter = GitterCredentials.GetGitterCredentials(context);
         ReleaseNotes = context.ParseReleaseNotes("./ReleaseNotes.md");
@@ -98,21 +95,40 @@ public class BuildParameters
         IsReleaseBuild = IsReleasing(context.TargetTask.Name);
         SkipSigning = StringComparer.OrdinalIgnoreCase.Equals("True", context.Argument("skipsigning", "False"));
         SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION"));
-        SkipOpenCover = true; //StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_OPENCOVER"));
         Version = BuildVersion.Calculate(context, this);
         Paths = BuildPaths.GetPaths(context, Configuration, Version.SemVersion);
         Packages = BuildPackages.GetPackages(
             Paths.Directories.NuGetRoot,
             Version.SemVersion,
-            new [] { "Cake", "Cake.Core", "Cake.Common", "Cake.Testing", "Cake.Testing.Xunit", "Cake.CoreCLR", "Cake.NuGet", "Cake.Tool" },
-            new [] { "cake.portable" });
+            new [] {
+                "Cake.Core",
+                "Cake.Common",
+                "Cake.Testing",
+                "Cake.Testing.Xunit",
+                "Cake.NuGet",
+                "Cake.Tool",
+                "Cake.Frosting",
+                "Cake.Frosting.Template",
+                "Cake.Cli",
+                "Cake.DotNetTool.Module"
+                });
 
-        var releaseNotes = string.Join("\n", ReleaseNotes.Notes.ToArray()).Replace("\"", "\"\"");
-        MSBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", Version.SemVersion)
-                            .WithProperty("AssemblyVersion", Version.Version)
-                            .WithProperty("FileVersion", Version.Version)
-                            .WithProperty("PackageReleaseNotes", string.Concat("\"", releaseNotes, "\""));
+        var releaseNotes = string.Join(
+                                System.Environment.NewLine,
+                                ReleaseNotes.Notes.ToArray()
+                            );
+
+        MSBuildSettings = new DotNetMSBuildSettings {
+                                Version = Version.SemVersion,
+                                AssemblyVersion = Version.Version,
+                                FileVersion = Version.Version,
+                                PackageReleaseNotes =  releaseNotes
+                            };
+
+        if (!IsLocalBuild)
+        {
+            MSBuildSettings.WithProperty("TemplateVersion", Version.SemVersion);
+        }
     }
 
     private static bool IsBuildTagged(BuildSystem buildSystem)
@@ -123,7 +139,7 @@ public class BuildParameters
 
     private static bool IsReleasing(string target)
     {
-        var targets = new [] { "Publish", "Publish-NuGet", "Publish-Chocolatey", "Publish-HomeBrew", "Publish-GitHub-Release" };
+        var targets = new [] { "Publish", "Publish-NuGet", "Publish-GitHub-Release" };
         return targets.Any(t => StringComparer.OrdinalIgnoreCase.Equals(t, target));
     }
 

@@ -26,20 +26,9 @@ namespace Cake.Common.Tests.Fixtures.Build
             Writer = new FakeBuildSystemServiceMessageWriter();
         }
 
-        public void IsRunningOnTFS() => IsRunningOnAzurePipelines();
-
-        public void IsRunningOnVSTS() => IsRunningOnAzurePipelinesHosted();
-
         public void IsRunningOnAzurePipelines()
         {
             Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
-            Environment.GetEnvironmentVariable("AGENT_NAME").Returns("On Premises");
-        }
-
-        public void IsRunningOnAzurePipelinesHosted(string agentHostName = "Hosted Agent")
-        {
-            Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
-            Environment.GetEnvironmentVariable("AGENT_NAME").Returns(agentHostName);
         }
 
         public AzurePipelinesProvider CreateAzurePipelinesService() => new AzurePipelinesProvider(Environment, Writer);

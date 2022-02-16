@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Cake.NuGet</AssemblyName>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -19,18 +18,18 @@
   </ItemGroup>
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="NuGet.Frameworks" Version="5.5.1" />
-    <PackageReference Include="NuGet.Versioning" Version="5.5.1" />
-    <PackageReference Include="NuGet.Protocol" Version="5.5.1" />
-    <PackageReference Include="NuGet.Packaging" Version="5.5.1" />
-    <PackageReference Include="NuGet.Resolver" Version="5.5.1" />
-    <PackageReference Include="NuGet.Common" Version="5.5.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.4" />
+    <PackageReference Include="NuGet.Frameworks" Version="6.0.0" />
+    <PackageReference Include="NuGet.Versioning" Version="6.0.0" />
+    <PackageReference Include="NuGet.Protocol" Version="6.0.0" />
+    <PackageReference Include="NuGet.Packaging" Version="6.0.0" />
+    <PackageReference Include="NuGet.Resolver" Version="6.0.0" />
+    <PackageReference Include="NuGet.Common" Version="6.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.1.1" GeneratePathProperty="true">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.1" GeneratePathProperty="true">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <EmbeddedResource Include="$(PkgMicrosoft_NETCore_Platforms)\runtime.json">

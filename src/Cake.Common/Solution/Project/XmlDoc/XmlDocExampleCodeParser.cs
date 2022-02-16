@@ -90,9 +90,9 @@ namespace Cake.Common.Solution.Project.XmlDoc
         /// </summary>
         /// <param name="pattern">The globber file pattern.</param>
         /// <returns>Parsed Example Code.</returns>
-        public IEnumerable<XmlDocExampleCode> ParseFiles(string pattern)
+        public IEnumerable<XmlDocExampleCode> ParseFiles(GlobPattern pattern)
         {
-            if (string.IsNullOrWhiteSpace(pattern))
+            if (string.IsNullOrWhiteSpace(pattern?.Pattern))
             {
                 throw new ArgumentNullException(nameof(pattern), "Invalid pattern supplied.");
             }

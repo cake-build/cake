@@ -1,21 +1,11 @@
-// Install modules
-#module nuget:?package=Cake.DotNetTool.Module&version=0.4.0
-
 // Install addins.
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Coveralls&version=0.10.1"
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=0.10.1"
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=0.11.1"
-
-// Install tools.
-#tool "nuget:https://api.nuget.org/v3/index.json?package=coveralls.io&version=1.4.2"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=OpenCover&version=4.7.922"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=ReportGenerator&version=4.5.8"
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.5.1"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=2.0.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=2.0.0"
 
 // Install .NET Core Global tools.
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.1.2"
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=SignClient&version=1.2.109"
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.11.0"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.8.1"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=SignClient&version=1.3.155"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.12.1"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -47,24 +37,6 @@ Setup<BuildParameters>(context =>
             new AssemblyInfoSettings { Description = parameters.Version.SemVersion });
     }
 
-    if(!parameters.IsRunningOnWindows)
-    {
-        var frameworkPathOverride = context.Environment.Runtime.IsCoreClr
-                                        ?   new []{
-                                                new DirectoryPath("/Library/Frameworks/Mono.framework/Versions/Current/lib/mono"),
-                                                new DirectoryPath("/usr/lib/mono"),
-                                                new DirectoryPath("/usr/local/lib/mono")
-                                            }
-                                            .Select(directory =>directory.Combine("4.5"))
-                                            .FirstOrDefault(directory => context.DirectoryExists(directory))
-                                            ?.FullPath + "/"
-                                        : new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-
-        // Use FrameworkPathOverride when not running on Windows.
-        Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
-        parameters.MSBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
-    }
-
     return parameters;
 });
 
@@ -76,25 +48,25 @@ Teardown<BuildParameters>((context, parameters) =>
     {
         if(parameters.ShouldPublish)
         {
+            var message = $"Version {parameters.Version.SemVersion} of Cake has just been released, https://www.nuget.org/packages/Cake.Tool/{parameters.Version.SemVersion} 🎉";
+
             if(parameters.CanPostToTwitter)
             {
-                var message = "Version " + parameters.Version.SemVersion + " of Cake has just been released, https://www.nuget.org/packages/Cake.";
-
                 TwitterSendTweet(parameters.Twitter.ConsumerKey, parameters.Twitter.ConsumerSecret, parameters.Twitter.AccessToken, parameters.Twitter.AccessTokenSecret, message);
             }
 
             if(parameters.CanPostToGitter)
             {
-                var message = "@/all Version " + parameters.Version.SemVersion + " of the Cake has just been released, https://www.nuget.org/packages/Cake.";
+                var gitterMessage = $"@/all {message}";
 
                 var postMessageResult = Gitter.Chat.PostMessage(
-                    message: message,
+                    message: gitterMessage,
                     messageSettings: new GitterChatMessageSettings { Token = parameters.Gitter.Token, RoomId = parameters.Gitter.RoomId}
                 );
 
                 if (postMessageResult.Ok)
                 {
-                    Information("Message {0} succcessfully sent", postMessageResult.TimeStamp);
+                    Information("Message {0} successfully sent", postMessageResult.TimeStamp);
                 }
                 else
                 {
@@ -123,9 +95,9 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does<BuildParameters>((context, parameters) =>
 {
-    DotNetCoreRestore("./src/Cake.sln", new DotNetCoreRestoreSettings
+    DotNetRestore("./src/Cake.sln", new DotNetRestoreSettings
     {
-        Verbosity = DotNetCoreVerbosity.Minimal,
+        Verbosity = DotNetVerbosity.Minimal,
         Sources = new [] { "https://api.nuget.org/v3/index.json" },
         MSBuildSettings = parameters.MSBuildSettings
     });
@@ -137,7 +109,7 @@ Task("Build")
 {
     // Build the solution.
     var path = MakeAbsolute(new DirectoryPath("./src/Cake.sln"));
-    DotNetCoreBuild(path.FullPath, new DotNetCoreBuildSettings()
+    DotNetBuild(path.FullPath, new DotNetBuildSettings
     {
         Configuration = parameters.Configuration,
         NoRestore = true,
@@ -151,12 +123,12 @@ Task("Run-Unit-Tests")
         () => GetFiles("./src/**/*.Tests.csproj"),
         (parameters, project, context) =>
 {
-    foreach(var framework in new[] { "netcoreapp2.0", "netcoreapp3.0", "net461" })
+    foreach(var framework in new[] { "netcoreapp3.1", "net5.0", "net6.0" })
     {
         FilePath testResultsPath = MakeAbsolute(parameters.Paths.Directories.TestResults
                                     .CombineWithFilePath($"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.xml"));
 
-        DotNetCoreTest(project.FullPath, new DotNetCoreTestSettings
+        DotNetTest(project.FullPath, new DotNetTestSettings
         {
             Framework = framework,
             NoBuild = true,
@@ -167,146 +139,21 @@ Task("Run-Unit-Tests")
     }
 });
 
-Task("Copy-Files")
+Task("Create-NuGet-Packages")
     .IsDependentOn("Run-Unit-Tests")
     .Does<BuildParameters>((context, parameters) =>
 {
-    // .NET 4.6
-    DotNetCorePublish("./src/Cake/Cake.csproj", new DotNetCorePublishSettings
-    {
-        Framework = "net461",
-        NoRestore = true,
-        VersionSuffix = parameters.Version.DotNetAsterix,
-        Configuration = parameters.Configuration,
-        OutputDirectory = parameters.Paths.Directories.ArtifactsBinFullFx,
-        MSBuildSettings = parameters.MSBuildSettings
-    });
-
-    // .NET Core
-    DotNetCorePublish("./src/Cake/Cake.csproj", new DotNetCorePublishSettings
-    {
-        Framework = "netcoreapp2.0",
-        NoRestore = true,
-        Configuration = parameters.Configuration,
-        OutputDirectory = parameters.Paths.Directories.ArtifactsBinNetCore,
-        MSBuildSettings = parameters.MSBuildSettings
-    });
-
-    // Copy license
-    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinFullFx);
-    CopyFileToDirectory("./LICENSE", parameters.Paths.Directories.ArtifactsBinNetCore);
-
-    // Copy icon
-    CopyFileToDirectory("./nuspec/cake-medium.png", parameters.Paths.Directories.ArtifactsBinFullFx);
-    CopyFileToDirectory("./nuspec/cake-medium.png", parameters.Paths.Directories.ArtifactsBinNetCore);
-
-    // Copy Cake.XML (since publish does not do this anymore)
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/net461/Cake.xml", parameters.Paths.Directories.ArtifactsBinFullFx);
-    CopyFileToDirectory("./src/Cake/bin/" + parameters.Configuration + "/netcoreapp2.0/Cake.xml", parameters.Paths.Directories.ArtifactsBinNetCore);
-});
-
-Task("Validate-Version")
-    .IsDependentOn("Copy-Files")
-    .Does<BuildParameters>((context, parameters) =>
-{
-    var fullFxExe = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx.CombineWithFilePath("Cake.exe"));
-    var coreFxExe = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCore.CombineWithFilePath("Cake.dll"));
-
-    IEnumerable<string> fullFxOutput;
-    var fullFxResult = StartProcess(
-         fullFxExe,
-         new ProcessSettings {
-             Arguments = "--version",
-             RedirectStandardOutput = true,
-             WorkingDirectory = parameters.Paths.Directories.ArtifactsBinFullFx
-         },
-         out fullFxOutput
-     );
-    var fullFxVersion = string.Concat(fullFxOutput);
-
-    IEnumerable<string> coreFxOutput;
-    var coreFxResult = StartProcess(
-         "dotnet",
-         new ProcessSettings {
-             Arguments = $"\"{coreFxExe}\" --version",
-             RedirectStandardOutput = true,
-             WorkingDirectory = parameters.Paths.Directories.ArtifactsBinNetCore
-         },
-         out coreFxOutput
-     );
-    var coreFxVersion = string.Concat(coreFxOutput);
-
-    Information("{0}, ExitCode: {1}, Version: {2}",
-        fullFxExe,
-        fullFxResult,
-        string.Concat(fullFxVersion)
-        );
-
-    Information("{0}, ExitCode: {1}, Version: {2}",
-        coreFxExe,
-        coreFxResult,
-        string.Concat(coreFxVersion)
-        );
-
-    if (parameters.Version.SemVersion != fullFxVersion || parameters.Version.SemVersion != coreFxVersion)
-    {
-        throw new Exception(
-            $"Invalid version, expected \"{parameters.Version.SemVersion}\", got .NET \"{fullFxVersion}\" and .NET Core \"{coreFxVersion}\"");
-    }
-});
-
-Task("Zip-Files")
-    .IsDependentOn("Validate-Version")
-    .Does<BuildParameters>((context, parameters) =>
-{
-    // .NET 4.6
-    var homebrewFiles = GetFiles( parameters.Paths.Directories.ArtifactsBinFullFx.FullPath + "/**/*");
-    Zip(parameters.Paths.Directories.ArtifactsBinFullFx, parameters.Paths.Files.ZipArtifactPathDesktop, homebrewFiles);
-
-    // .NET Core
-    var coreclrFiles = GetFiles( parameters.Paths.Directories.ArtifactsBinNetCore.FullPath + "/**/*");
-    Zip(parameters.Paths.Directories.ArtifactsBinNetCore, parameters.Paths.Files.ZipArtifactPathCoreClr, coreclrFiles);
-});
-
-Task("Create-Chocolatey-Packages")
-    .IsDependentOn("Validate-Version")
-    .IsDependentOn("Package")
-    .WithCriteria<BuildParameters>((context, parameters) => parameters.IsRunningOnWindows)
-    .Does<BuildParameters>((context, parameters) =>
-{
-    foreach(var package in parameters.Packages.Chocolatey)
-    {
-        var netFxFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx).FullPath;
-        var curDirLength =  MakeAbsolute(Directory("./")).FullPath.Length + 1;
-
-        // Create package.
-        ChocolateyPack(package.NuspecPath, new ChocolateyPackSettings {
-            Version = parameters.Version.SemVersion,
-            ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-            OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-            Files = (GetFiles(netFxFullArtifactPath + "/*.*") + GetFiles("./nuspec/*.txt") + GetFiles("./LICENSE"))
-                                    .Select(file=>"../" + file.FullPath.Substring(curDirLength))
-                                    .Select(file=> new ChocolateyNuSpecContent { Source = file })
-                                    .ToArray()
-        });
-    }
-});
-
-Task("Create-NuGet-Packages")
-    .IsDependentOn("Validate-Version")
-    .Does<BuildParameters>((context, parameters) =>
-{
     // Build libraries
-    var projects = GetFiles("./src/**/*.csproj");
+    var projects = GetFiles("./src/*/*.csproj");
     foreach(var project in projects)
     {
         var name = project.GetDirectory().FullPath;
-        if(name.EndsWith("Cake") || name.EndsWith("Tests"))
+        if(name.EndsWith("Tests") || name.EndsWith("Example"))
         {
             continue;
         }
 
-        DotNetCorePack(project.FullPath, new DotNetCorePackSettings {
+        DotNetPack(project.FullPath, new DotNetPackSettings {
             Configuration = parameters.Configuration,
             OutputDirectory = parameters.Paths.Directories.NuGetRoot,
             NoBuild = true,
@@ -314,50 +161,9 @@ Task("Create-NuGet-Packages")
             MSBuildSettings = parameters.MSBuildSettings
         });
     }
-
-    var netFxFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinFullFx).FullPath;
-    var netFxFullArtifactPathLength = netFxFullArtifactPath.Length+1;
-
-    // Cake - .NET 4.6.1
-    NuGetPack("./nuspec/Cake.nuspec", new NuGetPackSettings {
-        Version = parameters.Version.SemVersion,
-        ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = netFxFullArtifactPath,
-        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        NoPackageAnalysis = true,
-        Files = GetFiles(netFxFullArtifactPath + "/*")
-                                .Select(file=>file.FullPath.Substring(netFxFullArtifactPathLength))
-                                .Select(file=> new NuSpecContent { Source = file, Target = file })
-                                .ToArray()
-    });
-
-    var netCoreFullArtifactPath = MakeAbsolute(parameters.Paths.Directories.ArtifactsBinNetCore).FullPath;
-    var netCoreFullArtifactPathLength = netCoreFullArtifactPath.Length+1;
-
-    // Cake - .NET Core
-    NuGetPack("./nuspec/Cake.CoreCLR.nuspec", new NuGetPackSettings {
-        Version = parameters.Version.SemVersion,
-        ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
-        BasePath = netCoreFullArtifactPath,
-        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        NoPackageAnalysis = true,
-        Files = GetFiles(netCoreFullArtifactPath + "/**/*")
-                                .Select(file=>file.FullPath.Substring(netCoreFullArtifactPathLength))
-                                .Select(file=> new NuSpecContent { Source = file, Target = file })
-                                .ToArray()
-    });
-
-    DotNetCorePack("./src/Cake/Cake.csproj", new DotNetCorePackSettings {
-        Configuration = parameters.Configuration,
-        OutputDirectory = parameters.Paths.Directories.NuGetRoot,
-        MSBuildSettings = parameters.MSBuildSettings,
-        ArgumentCustomization = arg => arg.Append("/p:PackAsTool=true")
-    });
 });
 
 Task("Sign-Binaries")
-    .IsDependentOn("Zip-Files")
-    .IsDependentOn("Create-Chocolatey-Packages")
     .IsDependentOn("Create-NuGet-Packages")
     .WithCriteria<BuildParameters>((context, parameters) =>
         (parameters.ShouldPublish && !parameters.SkipSigning) ||
@@ -379,9 +185,7 @@ Task("Sign-Binaries")
     var filter = File("./signclient.filter");
 
     // Get the files to sign.
-    var files = GetFiles(string.Concat(parameters.Paths.Directories.NuGetRoot, "/", "*.nupkg"))
-        + parameters.Paths.Files.ZipArtifactPathDesktop
-        + parameters.Paths.Files.ZipArtifactPathCoreClr;
+    var files = GetFiles(string.Concat(parameters.Paths.Directories.NuGetRoot, "/", "*.nupkg"));
 
     foreach(var file in files)
     {
@@ -411,30 +215,13 @@ Task("Sign-Binaries")
 
 Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Sign-Binaries")
-    .IsDependentOn("Create-Chocolatey-Packages")
     .WithCriteria<BuildParameters>((context, parameters) => parameters.IsRunningOnAppVeyor)
     .Does<BuildParameters>((context, parameters) =>
 {
-    AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPathDesktop);
-    AppVeyor.UploadArtifact(parameters.Paths.Files.ZipArtifactPathCoreClr);
     foreach(var package in GetFiles(parameters.Paths.Directories.NuGetRoot + "/*"))
     {
         AppVeyor.UploadArtifact(package);
     }
-});
-
-Task("Upload-Coverage-Report")
-    .WithCriteria<BuildParameters>((context, parameters) => FileExists(parameters.Paths.Files.TestCoverageOutputFilePath))
-    .WithCriteria<BuildParameters>((context, parameters) => !parameters.IsLocalBuild)
-    .WithCriteria<BuildParameters>((context, parameters) => !parameters.IsPullRequest)
-    .WithCriteria<BuildParameters>((context, parameters) => parameters.IsMainCakeRepo)
-    .IsDependentOn("Run-Unit-Tests")
-    .Does<BuildParameters>((context, parameters) =>
-{
-    CoverallsIo(parameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
-    {
-        RepoToken = parameters.Coveralls.RepoToken
-    });
 });
 
 Task("Publish-MyGet")
@@ -455,13 +242,15 @@ Task("Publish-MyGet")
         throw new InvalidOperationException("Could not resolve MyGet API url.");
     }
 
-    foreach(var package in parameters.Packages.All)
+    foreach(var package in parameters.Packages.NuGet)
     {
         // Push the package.
-        NuGetPush(package.PackagePath, new NuGetPushSettings {
-            Source = apiUrl,
-            ApiKey = apiKey
-        });
+        var settings = new DotNetNuGetPushSettings {
+            ApiKey = apiKey,
+            Source = apiUrl
+        };
+
+        DotNetNuGetPush(package.PackagePath.FullPath, settings);
     }
 })
 .OnError<BuildParameters>((exception, parameters) =>
@@ -491,10 +280,12 @@ Task("Publish-NuGet")
     foreach(var package in parameters.Packages.NuGet)
     {
         // Push the package.
-        NuGetPush(package.PackagePath, new NuGetPushSettings {
-          ApiKey = apiKey,
-          Source = apiUrl
-        });
+        var settings = new DotNetNuGetPushSettings {
+            ApiKey = apiKey,
+            Source = apiUrl
+        };
+
+        DotNetNuGetPush(package.PackagePath.FullPath, settings);
     }
 })
 .OnError<BuildParameters>((exception, parameters) =>
@@ -503,60 +294,15 @@ Task("Publish-NuGet")
     parameters.PublishingError = true;
 });
 
-Task("Publish-Chocolatey")
-    .IsDependentOn("Sign-Binaries")
-    .IsDependentOn("Create-Chocolatey-Packages")
-    .WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublish)
-    .Does<BuildParameters>((context, parameters) =>
-{
-    // Resolve the API key.
-    var apiKey = EnvironmentVariable("CHOCOLATEY_API_KEY");
-    if(string.IsNullOrEmpty(apiKey)) {
-        throw new InvalidOperationException("Could not resolve Chocolatey API key.");
-    }
-
-    // Resolve the API url.
-    var apiUrl = EnvironmentVariable("CHOCOLATEY_API_URL");
-    if(string.IsNullOrEmpty(apiUrl)) {
-        throw new InvalidOperationException("Could not resolve Chocolatey API url.");
-    }
-
-    foreach(var package in parameters.Packages.Chocolatey)
-    {
-        // Push the package.
-        ChocolateyPush(package.PackagePath, new ChocolateyPushSettings {
-          ApiKey = apiKey,
-          Source = apiUrl
-        });
-    }
-})
-.OnError<BuildParameters>((exception, parameters) =>
-{
-    Information("Publish-Chocolatey Task failed, but continuing with next Task...");
-    parameters.PublishingError = true;
-});
-
-Task("Publish-HomeBrew")
-    .IsDependentOn("Sign-Binaries")
-    .IsDependentOn("Zip-Files")
-    .WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublish)
-    .Does<BuildParameters>((context, parameters) =>
-{
-    var hash = CalculateFileHash(parameters.Paths.Files.ZipArtifactPathDesktop).ToHex();
-    Information("Hash for creating HomeBrew PullRequest: {0}", hash);
-})
-.OnError<BuildParameters>((exception, parameters) =>
-{
-    Information("Publish-HomeBrew Task failed, but continuing with next Task...");
-    parameters.PublishingError = true;
-});
-
 Task("Publish-GitHub-Release")
     .WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublish)
     .Does<BuildParameters>((context, parameters) =>
 {
-    GitReleaseManagerAddAssets(parameters.GitHub.Token, "cake-build", "cake", parameters.Version.Milestone, parameters.Paths.Files.ZipArtifactPathDesktop.ToString());
-    GitReleaseManagerAddAssets(parameters.GitHub.Token, "cake-build", "cake", parameters.Version.Milestone, parameters.Paths.Files.ZipArtifactPathCoreClr.ToString());
+    foreach(var package in GetFiles(parameters.Paths.Directories.NuGetRoot + "/*"))
+    {
+        GitReleaseManagerAddAssets(parameters.GitHub.Token, "cake-build", "cake", parameters.Version.Milestone, package.FullPath);
+    }
+
     GitReleaseManagerClose(parameters.GitHub.Token, "cake-build", "cake", parameters.Version.Milestone);
 })
 .OnError<BuildParameters>((exception, parameters) =>
@@ -582,38 +328,106 @@ Task("Prepare-Integration-Tests")
 {
    Unzip(parameters.Paths.Directories.NuGetRoot.CombineWithFilePath($"Cake.Tool.{parameters.Version.SemVersion}.nupkg"),
         parameters.Paths.Directories.IntegrationTestsBinTool);
-
-   CopyDirectory(parameters.Paths.Directories.ArtifactsBinFullFx, parameters.Paths.Directories.IntegrationTestsBinFullFx);
-   CopyDirectory(parameters.Paths.Directories.ArtifactsBinNetCore, parameters.Paths.Directories.IntegrationTestsBinNetCore);
 });
 
+Task("Frosting-Integration-Tests")
+    .DeferOnError()
+    .DoesForEach<BuildParameters, (string Framework, FilePath Project)>(
+        (parameters, context) => {
+            var project = context.MakeAbsolute(
+                new FilePath("tests/integration/Cake.Frosting/build/Build.csproj")
+            );
+
+            DotNetBuild(project.FullPath,
+                new DotNetBuildSettings
+                {
+                    Verbosity = DotNetVerbosity.Quiet,
+                    Configuration = parameters.Configuration,
+                    MSBuildSettings = parameters.MSBuildSettings
+                });
+
+            context.Verbose("Peeking into {0}...", project);
+
+            var targetFrameworks = context.XmlPeek(
+                project,
+                "/Project/PropertyGroup/TargetFrameworks"
+            );
+
+            return targetFrameworks?.Split(';')
+                    .Select(targetFramework => (targetFramework, project))
+                    .ToArray();
+        },
+        (parameters, test, context) =>
+{
+    try
+    {
+        Information("Testing: {0}", test.Framework);
+
+        DotNetRun(test.Project.FullPath,
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--verbosity", "=", "quiet"),
+            new DotNetRunSettings
+            {
+                Configuration = parameters.Configuration,
+                Framework = test.Framework,
+                NoRestore = true,
+                NoBuild = true
+            });
+    }
+    catch(Exception ex)
+    {
+        Error("While testing: {0}\r\n{1}", test.Framework, ex);
+        throw new Exception($"Exception while testing: {test.Framework}", ex);
+    }
+    finally
+    {
+        Information("Done testing: {0}", test.Framework);
+    }
+});
 Task("Run-Integration-Tests")
     .IsDependentOn("Prepare-Integration-Tests")
+    .IsDependentOn("Frosting-Integration-Tests")
     .DeferOnError()
     .DoesForEach<BuildParameters, FilePath>(
         parameters => new[] {
-            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp2.1/**/Cake.dll").Single(),
-            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp3.0/**/Cake.dll").Single(),
-            parameters.Paths.Directories.IntegrationTestsBinFullFx.CombineWithFilePath("Cake.exe"),
-            parameters.Paths.Directories.IntegrationTestsBinNetCore.CombineWithFilePath("Cake.dll")
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/netcoreapp3.1/**/Cake.dll").Single(),
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net5.0/**/Cake.dll").Single(),
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net6.0/**/Cake.dll").Single()
         },
         (parameters, cakeAssembly, context) =>
 {
-    Information("Testing: {0}", cakeAssembly);
-    CakeExecuteScript("./tests/integration/build.cake",
-        new CakeSettings {
-            ToolPath = cakeAssembly,
-            EnvironmentVariables = {
-                ["MyEnvironmentVariable"] = "Hello World",
-                ["CAKE_INTEGRATION_TEST_ROOT"] = "../.."
-            },
-            Arguments = {
-                ["target"] = Argument("integration-tests-target", "Run-All-Tests"),
-                ["verbosity"] = "quiet",
-                ["platform"] = parameters.IsRunningOnWindows ? "windows" : "posix",
-                ["customarg"] = "hello"
-            }
-    });
+    try
+    {
+        Information("Testing: {0}", cakeAssembly);
+        CakeExecuteScript("./tests/integration/build.cake",
+            new CakeSettings {
+                ToolPath = cakeAssembly,
+                EnvironmentVariables = {
+                    ["MyEnvironmentVariable"] = "Hello World",
+                    ["CAKE_INTEGRATION_TEST_ROOT"] = "../.."
+                },
+                ArgumentCustomization = args => args
+                    .AppendSwitchQuoted("--target", " ", Argument("integration-tests-target", "Run-All-Tests"))
+                    .AppendSwitchQuoted("--verbosity", " ", "quiet")
+                    .AppendSwitchQuoted("--platform", " ", parameters.IsRunningOnWindows ? "windows" : "posix")
+                    .AppendSwitchQuoted("--customarg", " ", "hello")
+                    .AppendSwitchQuoted("--multipleargs", "=", "a")
+                    .AppendSwitchQuoted("--multipleargs", "=", "b")
+                    .AppendSwitchQuoted("--testAssemblyDirectoryPath", "=", cakeAssembly.GetDirectory().FullPath)
+                    .AppendSwitchQuoted("--testAssemblyFilePath", "=", cakeAssembly.FullPath)
+                    .AppendSwitchQuoted("--testDotNetCoreVerbosity", "=", "Diagnostic")
+                    .AppendSwitchQuoted("--testDotNetRollForward", "=", "LatestMajor")
+            });
+    }
+    catch(Exception ex)
+    {
+        Error("While testing: {0}\r\n{1}", cakeAssembly, ex);
+        throw new Exception($"Exception while testing: {cakeAssembly}", ex);
+    }
+    finally
+    {
+        Information("Done testing: {0}", cakeAssembly);
+    }
 });
 
 
@@ -622,7 +436,6 @@ Task("Run-Integration-Tests")
 //////////////////////////////////////////////////////////////////////
 
 Task("Package")
-  .IsDependentOn("Zip-Files")
   .IsDependentOn("Create-NuGet-Packages");
 
 Task("Default")
@@ -630,11 +443,8 @@ Task("Default")
 
 Task("AppVeyor")
   .IsDependentOn("Upload-AppVeyor-Artifacts")
-  .IsDependentOn("Upload-Coverage-Report")
   .IsDependentOn("Publish-MyGet")
   .IsDependentOn("Publish-NuGet")
-  .IsDependentOn("Publish-Chocolatey")
-  .IsDependentOn("Publish-HomeBrew")
   .IsDependentOn("Publish-GitHub-Release")
   .Does<BuildParameters>((context, parameters) =>
 {
@@ -651,7 +461,7 @@ Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");
 
 Task("AzureDevOps")
-  .IsDependentOn(IsRunningOnWindows() ? "Create-Chocolatey-Packages" : "Package");
+  .IsDependentOn("Package");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

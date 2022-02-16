@@ -49,12 +49,7 @@ namespace Cake.Common.Build.ContinuaCI
             Environment = new ContinuaCIEnvironmentInfo(environment);
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on Continua CI.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on Continua CI; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnContinuaCI
         {
             get
@@ -64,19 +59,10 @@ namespace Cake.Common.Build.ContinuaCI
             }
         }
 
-        /// <summary>
-        /// Gets the Continua CI environment.
-        /// </summary>
-        /// <value>
-        /// The Continua CI environment.
-        /// </value>
+        /// <inheritdoc/>
         public ContinuaCIEnvironmentInfo Environment { get; }
 
-        /// <summary>
-        /// Write a status message to the Continua CI build log.
-        /// </summary>
-        /// <param name="message">Message contents.</param>
-        /// <param name="status">Build status.</param>
+        /// <inheritdoc/>
         public void WriteMessage(string message, ContinuaCIMessageType status)
         {
             var name = Enum.GetName(typeof(ContinuaCIMessageType), status);
@@ -92,30 +78,19 @@ namespace Cake.Common.Build.ContinuaCI
             }
         }
 
-        /// <summary>
-        /// Write the start of a message group to the Continua CI build log.
-        /// </summary>
-        /// <param name="groupName">Group name.</param>
+        /// <inheritdoc/>
         public void WriteStartGroup(string groupName)
         {
             WriteServiceMessage("startGroup ", "name", groupName);
         }
 
-        /// <summary>
-        /// Write the end of a message block to the Continua CI build log.
-        /// </summary>
-        /// <param name="groupName">Group name.</param>
+        /// <inheritdoc/>
         public void WriteEndBlock(string groupName)
         {
             WriteServiceMessage("endGroup", "name", groupName);
         }
 
-        /// <summary>
-        /// Set a Continua CI build variable.
-        /// </summary>
-        /// <param name="name">Name of the variable to set.</param>
-        /// <param name="value">Value to assign to the variable.</param>
-        /// <param name="skipIfNotDefined">Set to 'true' to prevent the build failing if the variable has not been defined for the configuration..</param>
+        /// <inheritdoc/>
         public void SetVariable(string name, string value, bool skipIfNotDefined = true)
         {
             WriteServiceMessage("setParameter", new Dictionary<string, string>
@@ -126,19 +101,13 @@ namespace Cake.Common.Build.ContinuaCI
             });
         }
 
-        /// <summary>
-        /// Set a Continua CI build version.
-        /// </summary>
-        /// <param name="version">The new build version.</param>
+        /// <inheritdoc/>
         public void SetBuildVersion(string version)
         {
             WriteServiceMessage("setBuildVersion", "value", version);
         }
 
-        /// <summary>
-        /// Set a Continua CI build status message, which is shown on the build details page when a build is running.
-        /// </summary>
-        /// <param name="text">The new build status text.</param>
+        /// <inheritdoc/>
         public void SetBuildStatus(string text)
         {
             WriteServiceMessage("setBuildStatus", "value", text);

@@ -10,13 +10,13 @@ namespace Cake.Core.IO.Globbing
 {
     internal static class GlobNodeRewriter
     {
-        public static GlobNode Rewrite(string pattern, IEnumerable<GlobNode> nodes)
+        public static GlobNode Rewrite(GlobPattern pattern, IEnumerable<GlobNode> nodes)
         {
             return RewriteUncRoot(pattern, CreateLinkedList(
                     RewriteSingleWildcards(nodes)));
         }
 
-        private static GlobNode RewriteUncRoot(string pattern, GlobNode root)
+        private static GlobNode RewriteUncRoot(GlobPattern pattern, GlobNode root)
         {
             if (root is UncRootNode unc && unc.Server == null)
             {

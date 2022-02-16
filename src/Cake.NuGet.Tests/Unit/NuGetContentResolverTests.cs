@@ -8,7 +8,6 @@ using Cake.Core.Polyfill;
 using Cake.NuGet.Tests.Fixtures;
 using Cake.Testing;
 using Cake.Testing.Xunit;
-using NSubstitute;
 using Xunit;
 
 namespace Cake.NuGet.Tests.Unit
@@ -334,7 +333,6 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Equal(0, result.Count);
             }
 
-            [RuntimeFact(TestRuntime.CoreClr)]
             public void Should_Return_Runtimes_Assemblies_If_CoreCLR()
             {
                 // Given
@@ -354,7 +352,6 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Equal(1, result.Count);
             }
 
-            [RuntimeFact(TestRuntime.CoreClr)]
             public void Should_Return_Native_Runtimes_Assemblies_If_CoreCLR()
             {
                 // Given
@@ -371,26 +368,6 @@ namespace Cake.NuGet.Tests.Unit
 
                 // Then
                 Assert.Equal(1, result.Count);
-            }
-
-            [RuntimeFact(TestRuntime.Clr)]
-            public void Should_Not_Return_Runtimes_Assemblies_If_Clr()
-            {
-                // Given
-                var framework = ".NETFramework,Version=v4.6.1";
-                var runtime = Runtime.Clr;
-                var fixture = new NuGetAddinContentResolverFixture(framework, runtime);
-
-                fixture.CreateCLRAssembly("/Working/runtimes/win/lib/netstandard1.6/file.dll");
-                fixture.CreateCLRAssembly("/Working/runtimes/unix/lib/netstandard1.6/file.dll");
-                fixture.FileSystem.CreateFile("/Working/lib/netstandard1.6/_._");
-                fixture.FileSystem.CreateFile("/Working/lib/net46/_._");
-
-                // When
-                var result = fixture.GetFiles();
-
-                // Then
-                Assert.Equal(0, result.Count);
             }
         }
     }

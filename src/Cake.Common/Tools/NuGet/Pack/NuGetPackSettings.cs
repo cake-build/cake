@@ -54,6 +54,12 @@ namespace Cake.Common.Tools.NuGet.Pack
         public bool Symbols { get; set; }
 
         /// <summary>
+        /// Gets or sets the symbol package format.
+        /// </summary>
+        /// <value>The symbol package format.</value>
+        public string SymbolPackageFormat { get; set; }
+
+        /// <summary>
         /// Gets or sets the package ID.
         /// </summary>
         /// <value>The package ID.</value>
@@ -106,6 +112,12 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// </summary>
         /// <value>The package project URL.</value>
         public Uri ProjectUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Icon path.
+        /// </summary>
+        /// <value>The path to the icon file contained within the NuGet package.</value>
+        public string Icon { get; set; }
 
         /// <summary>
         /// Gets or sets the package icon URL.

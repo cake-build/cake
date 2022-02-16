@@ -43,7 +43,7 @@ namespace Cake.Common.Tools.WiX
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Candle")]
-        public static void WiXCandle(this ICakeContext context, string pattern, CandleSettings settings = null)
+        public static void WiXCandle(this ICakeContext context, GlobPattern pattern, CandleSettings settings = null)
         {
             if (context == null)
             {
@@ -105,7 +105,7 @@ namespace Cake.Common.Tools.WiX
         /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Light")]
-        public static void WiXLight(this ICakeContext context, string pattern, LightSettings settings = null)
+        public static void WiXLight(this ICakeContext context, GlobPattern pattern, LightSettings settings = null)
         {
             if (context == null)
             {

@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
-using System.Runtime.Versioning;
 using Cake.Core.IO;
 
 namespace Cake.Core
@@ -43,7 +41,7 @@ namespace Cake.Core
         /// <summary>
         /// Gets all environment variables.
         /// </summary>
-        /// <returns>The environment variables as IDictionary&lt;string, string&gt;. </returns>
+        /// <returns>The environment variables as IDictionary&lt;string, string&gt;.</returns>
         IDictionary<string, string> GetEnvironmentVariables();
 
         /// <summary>
@@ -57,26 +55,5 @@ namespace Cake.Core
         /// </summary>
         /// <value>The runtime Cake is running in.</value>
         ICakeRuntime Runtime { get; }
-
-        /// <summary>
-        /// Gets whether or not the current operative system is 64 bit.
-        /// </summary>
-        /// <returns>Whether or not the current operative system is 64 bit.</returns>
-        [Obsolete("Please use ICakeEnvironment.Platform.Is64Bit instead.")]
-        bool Is64BitOperativeSystem();
-
-        /// <summary>
-        /// Determines whether the current machine is running Unix.
-        /// </summary>
-        /// <returns>Whether or not the current machine is running Unix.</returns>
-        [Obsolete("Please use ICakeEnvironment.Platform.IsUnix instead.")]
-        bool IsUnix();
-
-        /// <summary>
-        /// Gets the application root path.
-        /// </summary>
-        /// <returns>The application root path.</returns>
-        [Obsolete("Please use ICakeEnvironment.ApplicationRoot instead.")]
-        DirectoryPath GetApplicationRoot();
     }
 }

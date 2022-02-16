@@ -226,5 +226,65 @@ namespace Cake.Common.Tests.Unit
                 Assert.Equal(expected, result);
             }
         }
+
+        public sealed class TheIsRunningOnLinuxMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => EnvironmentAliases.IsRunningOnLinux(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Theory]
+            [InlineData(PlatformFamily.Linux, true)]
+            [InlineData(PlatformFamily.OSX, false)]
+            [InlineData(PlatformFamily.Windows, false)]
+            public void Should_Return_Correct_Value(PlatformFamily family, bool expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.Returns(new FakeEnvironment(family));
+
+                // When
+                var result = EnvironmentAliases.IsRunningOnLinux(context);
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+        }
+
+        public sealed class TheIsRunningOnMacMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => EnvironmentAliases.IsRunningOnMacOs(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Theory]
+            [InlineData(PlatformFamily.Linux, false)]
+            [InlineData(PlatformFamily.OSX, true)]
+            [InlineData(PlatformFamily.Windows, false)]
+            public void Should_Return_Correct_Value(PlatformFamily family, bool expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.Returns(new FakeEnvironment(family));
+
+                // When
+                var result = EnvironmentAliases.IsRunningOnMacOs(context);
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+        }
     }
 }

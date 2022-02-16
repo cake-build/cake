@@ -70,7 +70,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Action<Exception> errorHandler)
         {
-            return OnError(builder, (exception, context) => errorHandler(exception));
+            return OnError(builder, (exception, _) => errorHandler(exception));
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Cake.Core
                 throw new ArgumentNullException(nameof(errorHandler));
             }
 
-            return OnError(builder, async (exception, context) => await errorHandler(exception));
+            return OnError(builder, async (exception, _) => await errorHandler(exception));
         }
 
         /// <summary>
@@ -130,8 +130,7 @@ namespace Cake.Core
         /// <param name="errorHandler">The error handler.</param>
         /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<TData> errorHandler)
-            where TData : class
+        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<TData> errorHandler) where TData : class
         {
             return OnError<TData>(builder, (exception, data) => errorHandler(data));
         }
@@ -143,8 +142,7 @@ namespace Cake.Core
         /// <param name="errorHandler">The error handler.</param>
         /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<TData, Task> errorHandler)
-            where TData : class
+        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<TData, Task> errorHandler) where TData : class
         {
             return OnError<TData>(builder, async (exception, data) => await errorHandler(data));
         }
@@ -156,10 +154,9 @@ namespace Cake.Core
         /// <param name="errorHandler">The error handler.</param>
         /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<Exception, TData> errorHandler)
-            where TData : class
+        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<Exception, TData> errorHandler) where TData : class
         {
-            return OnError<TData>(builder, (exception, context, data) => errorHandler(exception, data));
+            return OnError<TData>(builder, (exception, _, data) => errorHandler(exception, data));
         }
 
         /// <summary>
@@ -169,10 +166,9 @@ namespace Cake.Core
         /// <param name="errorHandler">The error handler.</param>
         /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<Exception, TData, Task> errorHandler)
-            where TData : class
+        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<Exception, TData, Task> errorHandler) where TData : class
         {
-            return OnError<TData>(builder, async (exception, context, data) => await errorHandler(exception, data));
+            return OnError<TData>(builder, async (exception, _, data) => await errorHandler(exception, data));
         }
 
         /// <summary>
@@ -182,14 +178,9 @@ namespace Cake.Core
         /// <param name="errorHandler">The error handler.</param>
         /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<Exception, ICakeContext, TData> errorHandler)
-            where TData : class
+        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<Exception, ICakeContext, TData> errorHandler) where TData : class
         {
-            return OnError(builder, (exception, context) =>
-            {
-                var data = context.Data.Get<TData>();
-                errorHandler(exception, context, data);
-            });
+            return OnError(builder, (exception, context) => errorHandler(exception, context, context.Data.Get<TData>()));
         }
 
         /// <summary>
@@ -199,14 +190,9 @@ namespace Cake.Core
         /// <param name="errorHandler">The error handler.</param>
         /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<Exception, ICakeContext, TData, Task> errorHandler)
-            where TData : class
+        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<Exception, ICakeContext, TData, Task> errorHandler) where TData : class
         {
-            return OnError(builder, async (exception, context) =>
-            {
-                var data = context.Data.Get<TData>();
-                await errorHandler(exception, context, data);
-            });
+            return OnError(builder, async (exception, context) => await errorHandler(exception, context, context.Data.Get<TData>()));
         }
 
         /// <summary>
@@ -221,6 +207,7 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException(nameof(builder));
             }
+
             builder.Target.SetFinallyHandler(finallyHandler);
             return builder;
         }
@@ -237,6 +224,7 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException(nameof(builder));
             }
+
             builder.Target.SetFinallyHandler(finallyHandler);
             return builder;
         }
@@ -254,6 +242,7 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException(nameof(builder));
             }
+
             builder.Target.SetErrorReporter(errorReporter);
             return builder;
         }
@@ -271,6 +260,7 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException(nameof(builder));
             }
+
             builder.Target.SetErrorReporter(errorReporter);
             return builder;
         }

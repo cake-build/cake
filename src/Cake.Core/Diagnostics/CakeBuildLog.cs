@@ -13,10 +13,7 @@ namespace Cake.Core.Diagnostics
         private readonly object _lock;
         private readonly IConsoleRenderer _renderer;
 
-        /// <summary>
-        /// Gets or sets the verbosity.
-        /// </summary>
-        /// <value>The verbosity.</value>
+        /// <inheritdoc/>
         public Verbosity Verbosity { get; set; }
 
         /// <summary>
@@ -43,14 +40,7 @@ namespace Cake.Core.Diagnostics
             Verbosity = verbosity;
         }
 
-        /// <summary>
-        /// Writes the text representation of the specified array of objects to the
-        /// log using the specified verbosity, log level and format information.
-        /// </summary>
-        /// <param name="verbosity">The verbosity.</param>
-        /// <param name="level">The log level.</param>
-        /// <param name="format">A composite format string.</param>
-        /// <param name="args">An array of objects to write using format.</param>
+        /// <inheritdoc/>
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
             if (verbosity > Verbosity)

@@ -28,11 +28,7 @@ namespace Cake.Core.Scripting
             _log = log;
         }
 
-        /// <summary>
-        /// Finds script aliases in the provided assemblies.
-        /// </summary>
-        /// <param name="assemblies">The assemblies to find script aliases in.</param>
-        /// <returns>The script aliases that were found.</returns>
+        /// <inheritdoc/>
         public IReadOnlyList<ScriptAlias> FindAliases(IEnumerable<Assembly> assemblies)
         {
             var result = new List<ScriptAlias>();
@@ -71,13 +67,6 @@ namespace Cake.Core.Scripting
                                 {
                                     notFound.Add(fileNotFoundException.FileName);
                                 }
-#if !NETCORE
-                                if (!string.IsNullOrEmpty(fileNotFoundException.FusionLog))
-                                {
-                                    _log.Debug("Fusion Log:");
-                                    _log.Debug(fileNotFoundException.FusionLog);
-                                }
-#endif
                             }
                             _log.Debug(string.Empty);
                         }

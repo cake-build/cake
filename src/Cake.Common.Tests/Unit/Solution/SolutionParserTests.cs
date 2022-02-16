@@ -111,6 +111,44 @@ namespace Cake.Common.Tests.Unit.Solution
                 Assert.Contains(dummyProject, srcFolder.Items);
                 Assert.Equal(srcFolder, dummyProject.Parent);
             }
+
+            [Fact]
+            public void Should_Properly_Parse_Projects_With_Empty_Lines()
+            {
+                // Given
+                var fixture = new SolutionParserFixture();
+                var slnFilePath = fixture.WithSolutionFile(Resources.Solution_WithProjectsAndFoldersAndMissingLine);
+                var solutionParser = new SolutionParser(fixture.FileSystem, fixture.Environment);
+
+                // When
+                var result = solutionParser.Parse(slnFilePath);
+
+                // Then
+                Assert.NotNull(result);
+                Assert.NotNull(result.Projects);
+                Assert.Equal(5, result.Projects.Count);
+                var onlyProjects = result.Projects.Where(x => !(x is SolutionFolder)).ToList();
+                Assert.Equal(3, onlyProjects.Count);
+            }
+
+            [Fact]
+            public void Should_Properly_Parse_Projects_With_Absolute_Path()
+            {
+                // Given
+                var fixture = new SolutionParserFixture();
+                var slnFilePath = fixture.WithSolutionFile(Resources.Solution_WithProjectUsingAbsolutePath);
+                var solutionParser = new SolutionParser(fixture.FileSystem, fixture.Environment);
+
+                // When
+                var result = solutionParser.Parse(slnFilePath);
+
+                // Then
+                Assert.NotNull(result);
+                Assert.NotNull(result.Projects);
+                Assert.Single(result.Projects);
+                var onlyProjects = result.Projects.Where(x => !(x is SolutionFolder)).ToList();
+                Assert.Single(onlyProjects);
+            }
         }
     }
 }

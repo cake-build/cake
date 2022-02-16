@@ -299,6 +299,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -331,6 +332,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -367,6 +369,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -399,6 +402,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -794,6 +798,11 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
       &lt;Project&gt;{ABC3F1CB-F84E-43ED-A120-0CCFE344D250}&lt;/Project&gt;
       &lt;Name&gt;Cake.Common&lt;/Name&gt;
     &lt;/ProjectReference&gt;
+    &lt;ProjectReference Include="..\Cake.Common\Cake.Core.csproj"&gt;
+      &lt;Project&gt;{6C54B9D8-A47D-45D8-82EF-3ADAF7FDD530}&lt;/Project&gt;
+      &lt;Name&gt;Cake.Core&lt;/Name&gt;
+      &lt;Private&gt;True&lt;/Private&gt;
+    &lt;/ProjectReference&gt;
   &lt;/ItemGroup&gt;
   &lt;Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" /&gt;
 &lt;/Project&gt;</value>
@@ -897,6 +906,50 @@ Global
 	EndGlobalSection
 EndGlobal</value>
   </data>
+  <data name="Solution_WithProjectsAndFoldersAndMissingLine" xml:space="preserve">
+    <value>Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2400A22B-695E-4BDF-93CB-8757F5FB3FB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{69930DD1-1688-4407-B4AB-B9E2C0BFB284}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dummy", "src\dummy\dummy.csproj", "{ADCB37DA-2469-462F-99F6-9D4FB7691A3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dummy.Tests", "test\dummy.Tests\dummy.Tests.csproj", "{5D553DC6-36AB-4823-85BD-A33F57C81381}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "executable", "executable\executable.csproj", "{CF305C72-F3E0-44AA-9474-6F12C5276F9F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ADCB37DA-2469-462F-99F6-9D4FB7691A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADCB37DA-2469-462F-99F6-9D4FB7691A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADCB37DA-2469-462F-99F6-9D4FB7691A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADCB37DA-2469-462F-99F6-9D4FB7691A3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D553DC6-36AB-4823-85BD-A33F57C81381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D553DC6-36AB-4823-85BD-A33F57C81381}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D553DC6-36AB-4823-85BD-A33F57C81381}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D553DC6-36AB-4823-85BD-A33F57C81381}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF305C72-F3E0-44AA-9474-6F12C5276F9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF305C72-F3E0-44AA-9474-6F12C5276F9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF305C72-F3E0-44AA-9474-6F12C5276F9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF305C72-F3E0-44AA-9474-6F12C5276F9F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+
+		{ADCB37DA-2469-462F-99F6-9D4FB7691A3B} = {2400A22B-695E-4BDF-93CB-8757F5FB3FB7}
+		{5D553DC6-36AB-4823-85BD-A33F57C81381} = {69930DD1-1688-4407-B4AB-B9E2C0BFB284}
+	EndGlobalSection
+EndGlobal</value>
+  </data>
   <data name="Nuspec_Metadata_PackWithTargetFrameworkDependencies" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
@@ -929,6 +982,7 @@ EndGlobal</value>
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -968,6 +1022,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -1059,6 +1114,7 @@ Imports System.Runtime.CompilerServices;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -1115,6 +1171,7 @@ using System.Reflection;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -1150,6 +1207,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -1182,6 +1240,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -1217,6 +1276,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -1252,6 +1312,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -1287,6 +1348,7 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
     &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
     &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+    &lt;icon&gt;images\icon.png&lt;/icon&gt;
     &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
     &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
     &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
@@ -1314,5 +1376,129 @@ Line #3]]&gt;&lt;/releaseNotes&gt;
     &lt;file src="LICENSE" /&gt;
   &lt;/files&gt;
 &lt;/package&gt;</value>
+  </data>
+  <data name="TeamCity_Config_Properties_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;
+&lt;properties&gt;
+&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+&lt;entry key="build.counter"&gt;414&lt;/entry&gt;
+&lt;entry key="build.number"&gt;3246&lt;/entry&gt;
+&lt;entry key="teamcity.build.branch"&gt;pull/5&lt;/entry&gt;
+&lt;entry key="teamcity.build.branch.is_default"&gt;true&lt;/entry&gt;
+&lt;entry key="teamcity.build.vcs.branch.MyVcsRootName"&gt;refs/pull/5/merge&lt;/entry&gt;
+&lt;/properties&gt;</value>
+  </data>
+  <data name="TeamCity_Build_Properties_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;
+&lt;properties&gt;
+&lt;comment&gt;TeamCity build properties without 'system.' prefix&lt;/comment&gt;
+&lt;entry key="teamcity.build.properties.file"&gt;/Working/teamcity.build.configuration&lt;/entry&gt;
+&lt;entry key="teamcity.configuration.properties.file"&gt;/Working/teamcity.config.configuration&lt;/entry&gt;
+&lt;entry key="teamcity.runner.properties.file"&gt;/Working/teamcity.runner.configuration&lt;/entry&gt;
+&lt;/properties&gt;</value>
+  </data>
+  <data name="TeamCity_Runner_Properties_Xml" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;
+&lt;properties&gt;
+&lt;comment&gt;TeamCity configuration parameters for build with id 812869&lt;/comment&gt;
+&lt;entry key="command.executable"&gt;run.cmd&lt;/entry&gt;
+&lt;/properties&gt;</value>
+  </data>
+  <data name="Solution_WithProjectUsingAbsolutePath" xml:space="preserve">
+    <value>Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dummy", "C:\project\dummy\src\dummy\dummy.csproj", "{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A651D04F-DF2B-44C4-A1A2-2ED31CC3F128}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E70E9E11-7FE4-43FA-8552-347EDAF69F86}
+	EndGlobalSection
+EndGlobal</value>
+  </data>
+  <data name="XmlTransformationWithArguments_Xsl" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"&gt;
+&lt;xsl:output method="html" encoding="utf-8"/&gt;
+&lt;xsl:param name="BackgroundColor"&gt;&lt;/xsl:param&gt;
+&lt;xsl:param name="Color"&gt;&lt;/xsl:param&gt;
+
+&lt;xsl:template match="/"&gt;
+&lt;html&gt;
+    &lt;body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE"&gt;
+        &lt;xsl:for-each select="breakfast_menu/food"&gt;
+            &lt;div style="background-color:{$BackgroundColor};color:{$Color};padding:4px"&gt;
+                &lt;span style="font-weight:bold"&gt;
+                    &lt;xsl:value-of select="name" /&gt;
+                    -
+                &lt;/span&gt;
+                &lt;xsl:value-of select="price" /&gt;
+            &lt;/div&gt;
+            &lt;div style="margin-left:20px;margin-bottom:1em;font-size:10pt"&gt;
+                &lt;p&gt;
+                    &lt;xsl:value-of select="description" /&gt;
+                    &lt;span style="font-style:italic"&gt;
+                        (
+                        &lt;xsl:value-of select="calories" /&gt;
+                        calories per serving)
+                    &lt;/span&gt;
+                &lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/xsl:for-each&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+&lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</value>
+  </data>
+  <data name="XmlTransformationWithArgumentsAndNamespace_Xsl" xml:space="preserve">
+    <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:input="http://example.com" exclude-result-prefixes="input" version="1.0"&gt;
+&lt;xsl:output method="html" encoding="utf-8"/&gt;
+&lt;xsl:param name="input:BackgroundColor"&gt;&lt;/xsl:param&gt;
+&lt;xsl:param name="input:Color"&gt;&lt;/xsl:param&gt;
+
+&lt;xsl:template match="/"&gt;
+&lt;html&gt;
+    &lt;body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE"&gt;
+        &lt;xsl:for-each select="breakfast_menu/food"&gt;
+            &lt;div style="background-color:{$input:BackgroundColor};color:{$input:Color};padding:4px"&gt;
+                &lt;span style="font-weight:bold"&gt;
+                    &lt;xsl:value-of select="name" /&gt;
+                    -
+                &lt;/span&gt;
+                &lt;xsl:value-of select="price" /&gt;
+            &lt;/div&gt;
+            &lt;div style="margin-left:20px;margin-bottom:1em;font-size:10pt"&gt;
+                &lt;p&gt;
+                    &lt;xsl:value-of select="description" /&gt;
+                    &lt;span style="font-style:italic"&gt;
+                        (
+                        &lt;xsl:value-of select="calories" /&gt;
+                        calories per serving)
+                    &lt;/span&gt;
+                &lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/xsl:for-each&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+&lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</value>
   </data>
 </root>

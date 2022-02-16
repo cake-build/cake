@@ -94,6 +94,16 @@ namespace Cake.Common.Build.AzurePipelines
         void SetVariable(string name, string value);
 
         /// <summary>
+        /// Sets a output variable in the variable service of the task context.
+        /// </summary>
+        /// <remarks>
+        /// The variable is exposed to following tasks as an environment variable.
+        /// </remarks>
+        /// <param name="name">The variable name.</param>
+        /// <param name="value">The variable value.</param>
+        void SetOutputVariable(string name, string value);
+
+        /// <summary>
         /// Sets a secret variable in the variable service of the task context.
         /// </summary>
         /// <remarks>
@@ -129,7 +139,7 @@ namespace Cake.Common.Build.AzurePipelines
         /// <summary>
         /// Create an artifact link, such as a file or folder path or a version control path.
         /// </summary>
-        /// <param name="name">The artifact name..</param>
+        /// <param name="name">The artifact name.</param>
         /// <param name="type">The artifact type.</param>
         /// <param name="location">The link path or value.</param>
         void LinkArtifact(string name, AzurePipelinesArtifactType type, string location);

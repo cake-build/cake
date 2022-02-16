@@ -3,8 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Build.GitHubActions.Commands;
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Build.GitHubActions
 {
@@ -19,26 +21,21 @@ namespace Cake.Common.Build.GitHubActions
         /// Initializes a new instance of the <see cref="GitHubActionsProvider"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public GitHubActionsProvider(ICakeEnvironment environment)
+        /// <param name="fileSystem">The file system.</param>
+        public GitHubActionsProvider(ICakeEnvironment environment, IFileSystem fileSystem)
         {
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment = new GitHubActionsEnvironmentInfo(environment);
+            Commands = new GitHubActionsCommands(environment, fileSystem, Environment, _ => new System.Net.Http.HttpClient());
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on GitHub Actions.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on GitHub Actions; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsRunningOnGitHubActions => _environment.GetEnvironmentVariable("GITHUB_ACTIONS")?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
 
-        /// <summary>
-        /// Gets the GitHub Actions environment.
-        /// </summary>
-        /// <value>
-        /// The GitHub Actions environment.
-        /// </value>
+        /// <inheritdoc/>
         public GitHubActionsEnvironmentInfo Environment { get; }
+
+        /// <inheritdoc/>
+        public GitHubActionsCommands Commands { get; }
     }
 }

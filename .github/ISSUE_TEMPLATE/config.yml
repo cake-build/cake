@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask for help or share ideas
+    url: https://github.com/cake-build/cake/discussions/category_choices
+    about: Ask the community for help or share ideas for new features.

@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Cake.Common.Tools.DotNet.NuGet.Source;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -14,7 +15,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
     /// <summary>
     /// .NET Core NuGet sourcer.
     /// </summary>
-    public sealed class DotNetCoreNuGetSourcer : DotNetCoreTool<DotNetCoreNuGetSourceSettings>
+    public sealed class DotNetCoreNuGetSourcer : DotNetCoreTool<DotNetNuGetSourceSettings>
     {
         private readonly ICakeEnvironment _environment;
 
@@ -39,7 +40,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// </summary>
         /// <param name="name">The name of the source.</param>
         /// <param name="settings">The settings.</param>
-        public void AddSource(string name, DotNetCoreNuGetSourceSettings settings)
+        public void AddSource(string name, DotNetNuGetSourceSettings settings)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -64,7 +65,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// </summary>
         /// <param name="name">The name of the source.</param>
         /// <param name="settings">The settings.</param>
-        public void DisableSource(string name, DotNetCoreNuGetSourceSettings settings)
+        public void DisableSource(string name, DotNetNuGetSourceSettings settings)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -84,7 +85,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// </summary>
         /// <param name="name">The name of the source.</param>
         /// <param name="settings">The settings.</param>
-        public void EnableSource(string name, DotNetCoreNuGetSourceSettings settings)
+        public void EnableSource(string name, DotNetNuGetSourceSettings settings)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -105,7 +106,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// <param name="name">The name of the source.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>Whether the specified NuGet source exists.</returns>
-        public bool HasSource(string name, DotNetCoreNuGetSourceSettings settings)
+        public bool HasSource(string name, DotNetNuGetSourceSettings settings)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -129,7 +130,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// <param name="format">The output format. Accepts two values: detailed (the default) and short.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>The NuGet sources.</returns>
-        public string ListSource(string format, DotNetCoreNuGetSourceSettings settings)
+        public string ListSource(string format, DotNetNuGetSourceSettings settings)
         {
             if (settings == null)
             {
@@ -148,7 +149,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// </summary>
         /// <param name="name">The name of the source.</param>
         /// <param name="settings">The settings.</param>
-        public void RemoveSource(string name, DotNetCoreNuGetSourceSettings settings)
+        public void RemoveSource(string name, DotNetNuGetSourceSettings settings)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -168,7 +169,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
         /// </summary>
         /// <param name="name">The name of the source.</param>
         /// <param name="settings">The settings.</param>
-        public void UpdateSource(string name, DotNetCoreNuGetSourceSettings settings)
+        public void UpdateSource(string name, DotNetNuGetSourceSettings settings)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -183,7 +184,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             RunCommand(settings, GetUpdateSourceArguments(name, settings));
         }
 
-        private ProcessArgumentBuilder GetAddSourceArguments(string name, DotNetCoreNuGetSourceSettings settings)
+        private ProcessArgumentBuilder GetAddSourceArguments(string name, DotNetNuGetSourceSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -222,7 +223,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             return builder;
         }
 
-        private ProcessArgumentBuilder GetDisableSourceArguments(string name, DotNetCoreNuGetSourceSettings settings)
+        private ProcessArgumentBuilder GetDisableSourceArguments(string name, DotNetNuGetSourceSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -233,7 +234,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             return builder;
         }
 
-        private ProcessArgumentBuilder GetEnableSourceArguments(string name, DotNetCoreNuGetSourceSettings settings)
+        private ProcessArgumentBuilder GetEnableSourceArguments(string name, DotNetNuGetSourceSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -244,7 +245,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             return builder;
         }
 
-        private ProcessArgumentBuilder GetListSourceArguments(string format, DotNetCoreNuGetSourceSettings settings)
+        private ProcessArgumentBuilder GetListSourceArguments(string format, DotNetNuGetSourceSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -259,7 +260,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             return builder;
         }
 
-        private ProcessArgumentBuilder GetRemoveSourceArguments(string name, DotNetCoreNuGetSourceSettings settings)
+        private ProcessArgumentBuilder GetRemoveSourceArguments(string name, DotNetNuGetSourceSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -270,7 +271,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             return builder;
         }
 
-        private ProcessArgumentBuilder GetUpdateSourceArguments(string name, DotNetCoreNuGetSourceSettings settings)
+        private ProcessArgumentBuilder GetUpdateSourceArguments(string name, DotNetNuGetSourceSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
@@ -312,7 +313,7 @@ namespace Cake.Common.Tools.DotNetCore.NuGet.Source
             return builder;
         }
 
-        private void AddCommonArguments(DotNetCoreNuGetSourceSettings settings, ProcessArgumentBuilder builder)
+        private void AddCommonArguments(DotNetNuGetSourceSettings settings, ProcessArgumentBuilder builder)
         {
             if (settings.ConfigFile != null)
             {

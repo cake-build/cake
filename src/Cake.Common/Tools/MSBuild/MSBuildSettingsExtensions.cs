@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Common.Tools.MSBuild
@@ -47,6 +48,86 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets the tool version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="version">The string version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings UseToolVersion(this MSBuildSettings settings, string version)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            // check to see if the version is null/empty or is not a num
+            if (string.IsNullOrEmpty(version))
+            {
+                throw new ArgumentException(nameof(version));
+            }
+            var sanitizeVersion = version.Replace(" ", string.Empty);
+            var mSBuildToolVersion = GetMSBuildToolVersionFromString(sanitizeVersion.ToUpper());
+            if (mSBuildToolVersion == MSBuildToolVersion.NETCustom || mSBuildToolVersion == MSBuildToolVersion.VSCustom)
+            {
+                settings.CustomVersion = version;
+            }
+            settings.ToolVersion = mSBuildToolVersion;
+            return settings;
+        }
+
+        /// <summary>
+        /// Helper that gets the MSBuildToolVersion from the version string.
+        /// </summary>
+        /// <param name="version">The string version.</param>
+        /// <returns>The matched MSBuildToolVersion enum <see cref="MSBuildToolVersion"/>.</returns>
+        private static MSBuildToolVersion GetMSBuildToolVersionFromString(string version)
+        {
+            switch (version)
+            {
+                case "2":
+                case "2.0":
+                case "NET20": return MSBuildToolVersion.NET20;
+                case "3":
+                case "3.0":
+                case "NET30": return MSBuildToolVersion.NET30;
+                case "3.5":
+                case "NET35": return MSBuildToolVersion.NET35;
+                case "4":
+                case "4.0":
+                case "NET40": return MSBuildToolVersion.NET40;
+                case "4.5":
+                case "NET45": return MSBuildToolVersion.NET45;
+                case "4.5.1":
+                case "NET451": return MSBuildToolVersion.NET451;
+                case "4.6":
+                case "NET46": return MSBuildToolVersion.NET46;
+                case "4.5.2":
+                case "NET452": return MSBuildToolVersion.NET452;
+                case "2005":
+                case "VS2005": return MSBuildToolVersion.VS2005;
+                case "2008":
+                case "VS2008": return MSBuildToolVersion.VS2008;
+                case "2010":
+                case "VS2010": return MSBuildToolVersion.VS2010;
+                case "2011":
+                case "VS2011": return MSBuildToolVersion.VS2011;
+                case "2012":
+                case "VS2012": return MSBuildToolVersion.VS2011;
+                case "2013":
+                case "VS2013": return MSBuildToolVersion.VS2013;
+                case "2015":
+                case "VS2015": return MSBuildToolVersion.VS2015;
+                case "2017":
+                case "VS2017": return MSBuildToolVersion.VS2017;
+                case "2019":
+                case "VS2019": return MSBuildToolVersion.VS2019;
+                case string vs when vs.Contains("VS") || Regex.Match(vs, @"\d{4}").Success: return MSBuildToolVersion.VSCustom;
+                case string dotNet when Regex.Match(dotNet, @"^[0-9,.]*$").Success: return MSBuildToolVersion.NETCustom;
+                default: return MSBuildToolVersion.Default;
+            }
+        }
+
+        /// <summary>
         /// Sets the platform target.
         /// </summary>
         /// <param name="settings">The settings.</param>
@@ -59,6 +140,23 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException(nameof(settings));
             }
             settings.PlatformTarget = target;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets the platform target.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetPlatformTarget(this MSBuildSettings settings, string target)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.WithProperty("Platform", target);
             return settings;
         }
 
@@ -207,6 +305,102 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Sets the version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="version">The version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <remarks>
+        /// Version will override VersionPrefix and VersionSuffix if set.
+        /// This may also override version settings during packaging.
+        /// </remarks>
+        public static MSBuildSettings SetVersion(this MSBuildSettings settings, string version)
+            => settings.WithProperty("Version", version);
+
+        /// <summary>
+        /// Sets the version prefix.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="versionPrefix">The version prefix.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetVersionPrefix(this MSBuildSettings settings, string versionPrefix)
+            => settings.WithProperty("VersionPrefix", versionPrefix);
+
+        /// <summary>
+        /// Sets the version suffix.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="versionSuffix">The version suffix.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetVersionSuffix(this MSBuildSettings settings, string versionSuffix)
+            => settings.WithProperty("VersionSuffix", versionSuffix);
+
+        /// <summary>
+        /// Sets the file version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="fileVersion">The file version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetFileVersion(this MSBuildSettings settings, string fileVersion)
+            => settings.WithProperty("FileVersion", fileVersion);
+
+        /// <summary>
+        /// Sets the assembly version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="assemblyVersion">The assembly version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetAssemblyVersion(this MSBuildSettings settings, string assemblyVersion)
+            => settings.WithProperty("AssemblyVersion", assemblyVersion);
+
+        /// <summary>
+        /// Sets the informational version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="informationalVersion">The informational version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetInformationalVersion(this MSBuildSettings settings, string informationalVersion)
+            => settings.WithProperty("InformationalVersion", informationalVersion);
+
+        /// <summary>
+        /// Sets the package version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageVersion">The package version.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetPackageVersion(this MSBuildSettings settings, string packageVersion)
+            => settings.WithProperty("PackageVersion", packageVersion);
+
+        /// <summary>
+        /// Sets the package release notes.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageReleaseNotes">The package release notes.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetPackageReleaseNotes(this MSBuildSettings settings, string packageReleaseNotes)
+            => settings.WithProperty("PackageReleaseNotes", packageReleaseNotes);
+
+        /// <summary>
+        /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
+        /// </summary>
+        /// <remarks>
+        /// For more information see https://devblogs.microsoft.com/dotnet/producing-packages-with-source-link/#deterministic-builds.
+        /// </remarks>
+        /// <param name="settings">The settings.</param>
+        /// <param name="continuousIntegrationBuild">A value indicating whether to normalize stored file paths used when producing deterministic builds.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetContinuousIntegrationBuild(this MSBuildSettings settings, bool? continuousIntegrationBuild = true)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            settings.ContinuousIntegrationBuild = continuousIntegrationBuild;
+            return settings;
+        }
+
+        /// <summary>
         /// Sets whether or not any targets should be passed to MSBuild.
         /// </summary>
         /// <param name="settings">The settings.</param>
@@ -219,6 +413,38 @@ namespace Cake.Common.Tools.MSBuild
                 throw new ArgumentNullException(nameof(settings));
             }
             settings.NoImplicitTarget = noImplicitTarget;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets whether or not a symbol package should be created.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="includeSymbols"><c>true</c> if a symbol package should be created; otherwise <c>false</c>.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetIncludeSymbols(this MSBuildSettings settings, bool includeSymbols)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.IncludeSymbols = includeSymbols;
+            return settings;
+        }
+
+        /// <summary>
+        /// Sets the symbol package format.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="symbolPackageFormat">The symbol package format.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings SetSymbolPackageFormat(this MSBuildSettings settings, string symbolPackageFormat)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            settings.SymbolPackageFormat = symbolPackageFormat;
             return settings;
         }
 

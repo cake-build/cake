@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>The .NET Core host for Cake.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>Cake.Frosting</AssemblyName>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
+
+  <ItemGroup>
+    <Compile Include="..\Cake.Core\Constants.cs" Link="Internal\Imported\Constants.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Cli\Cake.Cli.csproj" />
+    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+    <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
+    <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />
+    <ProjectReference Include="..\Cake.DotNetTool.Module\Cake.DotNetTool.Module.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Internal\Imported\" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

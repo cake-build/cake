@@ -37,7 +37,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Create
         public string Assets { get; set; }
 
         /// <summary>
-        /// Gets or sets the commit to tag. Can be a branch or SHA. Defaults to repository's default branch..
+        /// Gets or sets the commit to tag. Can be a branch or SHA. Defaults to repository's default branch.
         /// </summary>
         public string TargetCommitish { get; set; }
     }

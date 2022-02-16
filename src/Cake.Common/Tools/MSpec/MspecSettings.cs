@@ -98,23 +98,9 @@ namespace Cake.Common.Tools.MSpec
         public bool AppVeyor { get; set; }
 
         /// <summary>
-        ///     Gets or sets a value indicating whether to enable reporting for AppVeyor CI integration (also auto-detected).
-        /// </summary>
-        [Obsolete("Please use the AppVeyor property instead (note the capitalization). This property will be removed in a future version.")]
-        [CLSCompliant(false)] // Identifier differs only in case
-        public bool Appveyor { get => AppVeyor; set => AppVeyor = value; }
-
-        /// <summary>
         ///     Gets or sets a value indicating whether to disable AppVeyor autodetection.
         /// </summary>
         public bool NoAppVeyor { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether to disable AppVeyor autodetection.
-        /// </summary>
-        [Obsolete("Please use the NoAppVeyor property instead (note the capitalization). This property will be removed in a future version.")]
-        [CLSCompliant(false)] // Identifier differs only in case
-        public bool NoAppveyor { get => NoAppVeyor; set => NoAppVeyor = value; }
 
         /// <summary>
         ///     Gets or sets output directory for reports.

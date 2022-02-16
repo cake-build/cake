@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -16,6 +17,8 @@ namespace Cake.Core.Tooling
     /// </summary>
     public sealed class ToolResolutionStrategy : IToolResolutionStrategy
     {
+        private static readonly Regex _windowsExtRegex = new Regex(@"\.(?:bat|cmd|exe)$", RegexOptions.IgnoreCase);
+
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IGlobber _globber;
@@ -60,14 +63,7 @@ namespace Cake.Core.Tooling
             _lock = new object();
         }
 
-        /// <summary>
-        /// Resolves the specified tool using the specified tool repository.
-        /// </summary>
-        /// <param name="repository">The tool repository.</param>
-        /// <param name="tool">The tool.</param>
-        /// <returns>
-        /// The path to the tool; otherwise <c>null</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public FilePath Resolve(IToolRepository repository, string tool)
         {
             if (repository == null)
@@ -99,12 +95,7 @@ namespace Cake.Core.Tooling
             return resolve;
         }
 
-        /// <summary>
-        /// Resolves the specified tool using the specified tool repository.
-        /// </summary>
-        /// <param name="repository">The tool repository.</param>
-        /// <param name="toolExeNames">The possible names of the tool executable.</param>
-        /// <returns>The path to the tool; otherwise <c>null</c>.</returns>
+        /// <inheritdoc/>
         public FilePath Resolve(IToolRepository repository, IEnumerable<string> toolExeNames)
         {
             if (repository == null)
@@ -116,7 +107,8 @@ namespace Cake.Core.Tooling
                 throw new ArgumentNullException(nameof(toolExeNames));
             }
 
-            var toolNames = toolExeNames.ToArray();
+            // Prefer tools with platform affinity
+            var toolNames = toolExeNames.OrderByDescending(HasPlatformAffinity).ToArray();
             if (toolNames.Any(string.IsNullOrWhiteSpace))
             {
                 throw new ArgumentException("Tool names cannot be empty.", nameof(toolExeNames));
@@ -136,6 +128,12 @@ namespace Cake.Core.Tooling
             }
 
             return resolve;
+        }
+
+        private bool HasPlatformAffinity(string tool)
+        {
+            // Platform affinity matches runtime platform with tool platform determined by file extension.
+            return _environment.Platform.IsWindows() == _windowsExtRegex.IsMatch(tool);
         }
 
         private static FilePath LookInRegistrations(IToolRepository repository, string tool)

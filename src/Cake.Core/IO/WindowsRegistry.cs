@@ -9,9 +9,24 @@ namespace Cake.Core.IO
     /// </summary>
     public sealed class WindowsRegistry : IRegistry
     {
-        /// <summary>
-        /// Gets the LocalMachine <see cref="IRegistryKey"/>.
-        /// </summary>
+#pragma warning disable CA1416
+        /// <inheritdoc/>
+        public IRegistryKey CurrentUser => new WindowsRegistryKey(Microsoft.Win32.Registry.CurrentUser);
+
+        /// <inheritdoc/>
         public IRegistryKey LocalMachine => new WindowsRegistryKey(Microsoft.Win32.Registry.LocalMachine);
+
+        /// <inheritdoc/>
+        public IRegistryKey ClassesRoot => new WindowsRegistryKey(Microsoft.Win32.Registry.ClassesRoot);
+
+        /// <inheritdoc/>
+        public IRegistryKey Users => new WindowsRegistryKey(Microsoft.Win32.Registry.Users);
+
+        /// <inheritdoc/>
+        public IRegistryKey PerformanceData => new WindowsRegistryKey(Microsoft.Win32.Registry.PerformanceData);
+
+        /// <inheritdoc/>
+        public IRegistryKey CurrentConfig => new WindowsRegistryKey(Microsoft.Win32.Registry.CurrentConfig);
+#pragma warning restore CA1416
     }
 }

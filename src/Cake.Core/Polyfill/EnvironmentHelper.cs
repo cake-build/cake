@@ -3,38 +3,27 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-#if NETCORE
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-#endif
 using System.Runtime.Versioning;
 
 namespace Cake.Core.Polyfill
 {
     internal static class EnvironmentHelper
     {
-#if !NETCORE
-        private static bool? _isRunningOnMac;
-#else
         private static readonly FrameworkName NetStandardFramework = new FrameworkName(".NETStandard,Version=v2.0");
         private static bool? _isCoreClr;
         private static FrameworkName netCoreAppFramwork;
-#endif
 
         public static bool Is64BitOperativeSystem()
         {
-#if NETCORE
             return RuntimeInformation.OSArchitecture == Architecture.X64
                    || RuntimeInformation.OSArchitecture == Architecture.Arm64;
-#else
-            return Environment.Is64BitOperatingSystem;
-#endif
         }
 
         public static PlatformFamily GetPlatformFamily()
         {
-#if NETCORE
             try
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -65,39 +54,23 @@ namespace Cake.Core.Polyfill
             catch (PlatformNotSupportedException)
             {
             }
-#else
-            var platform = (int)Environment.OSVersion.Platform;
-            if (platform <= 3 || platform == 5)
-            {
-                return PlatformFamily.Windows;
-            }
-            if (!_isRunningOnMac.HasValue)
-            {
-                _isRunningOnMac = Native.MacOSX.IsRunningOnMac();
-            }
-            if (_isRunningOnMac ?? false || platform == (int)PlatformID.MacOSX)
-            {
-                return PlatformFamily.OSX;
-            }
-            if (platform == 4 || platform == 6 || platform == 128)
-            {
-                return PlatformFamily.Linux;
-            }
-#endif
+
             return PlatformFamily.Unknown;
         }
 
         public static bool IsCoreClr()
         {
-#if NETCORE
             if (_isCoreClr == null)
             {
-                _isCoreClr = RuntimeInformation.FrameworkDescription.StartsWith(".NET Core");
+                _isCoreClr = Environment.Version.Major >= 5
+                             || RuntimeInformation.FrameworkDescription.StartsWith(".NET Core");
             }
             return _isCoreClr.Value;
-#else
-            return false;
-#endif
+        }
+
+        public static bool IsWindows(PlatformFamily family)
+        {
+            return family == PlatformFamily.Windows;
         }
 
         public static bool IsUnix()
@@ -111,6 +84,16 @@ namespace Cake.Core.Polyfill
                    || family == PlatformFamily.OSX;
         }
 
+        public static bool IsOSX(PlatformFamily family)
+        {
+            return family == PlatformFamily.OSX;
+        }
+
+        public static bool IsLinux(PlatformFamily family)
+        {
+            return family == PlatformFamily.Linux;
+        }
+
         public static Runtime GetRuntime()
         {
             if (IsCoreClr())
@@ -122,13 +105,20 @@ namespace Cake.Core.Polyfill
 
         public static FrameworkName GetBuiltFramework()
         {
-#if NETCORE
             if (netCoreAppFramwork != null)
             {
                 return netCoreAppFramwork;
             }
 
-            var assemblyPath = typeof(System.Runtime.GCSettings)?.GetTypeInfo()?.Assembly?.CodeBase;
+            var assemblyPath = typeof(System.Runtime.GCSettings)?.GetTypeInfo()
+                ?.Assembly
+#if NETCOREAPP3_1
+                ?.CodeBase;
+#else
+#pragma warning disable 0618
+                ?.Location;
+#pragma warning restore 0618
+#endif
             if (string.IsNullOrEmpty(assemblyPath))
             {
                 return NetStandardFramework;
@@ -145,9 +135,6 @@ namespace Cake.Core.Polyfill
             return netCoreAppFramwork = Version.TryParse(netCoreAppVersion, out var version)
                                             ? new FrameworkName(".NETCoreApp", version)
                                             : NetStandardFramework;
-#else
-            return new FrameworkName(".NETFramework,Version=v4.6.1");
-#endif
         }
     }
 }

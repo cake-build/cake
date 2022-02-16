@@ -1,0 +1,38 @@
+﻿ <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Cake.DotNetTool.Module</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageTags>$(PackageTags);dotnettool;module;cake-build;cake-module</PackageTags>
+  </PropertyGroup>
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>Cake.DotNetTool.Module.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup>
+      <Description>Cake Module that extends Cake with ability to install tools using dotnet cli.</Description>
+  </PropertyGroup>
+
+  <!-- Import shared functionality -->
+  <Import Project="..\Shared.msbuild" />
+
+  <!--
+  Cake.DotNetTool.Module ships a snupkg and hence can not currently
+  add  PackageReadmeFile - see https://github.com/NuGet/Home/issues/10791
+  This block can be removed when building is done soely using
+  .NET 6 RC2 or later.
+  -->
+  <PropertyGroup>
+    <PackageReadmeFile></PackageReadmeFile>
+  </PropertyGroup>
+
+  <!-- Project references -->
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+  </ItemGroup>
+
+</Project>

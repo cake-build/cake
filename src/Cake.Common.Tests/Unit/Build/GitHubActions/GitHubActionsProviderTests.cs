@@ -4,6 +4,8 @@
 
 using Cake.Common.Build.GitHubActions;
 using Cake.Common.Tests.Fixtures.Build;
+using Cake.Core;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.GitHubActions
@@ -16,10 +18,23 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new GitHubActionsProvider(null));
+                var result = Record.Exception(() => new GitHubActionsProvider(null, null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
+            }
+
+            [Fact]
+            public void Should_Throw_If_FileSystem_Is_Null()
+            {
+                // Given
+                var environment = Substitute.For<ICakeEnvironment>();
+
+                // When
+                var result = Record.Exception(() => new GitHubActionsProvider(environment, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
         }
 

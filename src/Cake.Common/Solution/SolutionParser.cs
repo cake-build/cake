@@ -73,6 +73,12 @@ namespace Cake.Common.Solution
             foreach (var line in file.ReadLines(Encoding.UTF8))
             {
                 var trimmed = line.Trim();
+
+                if (trimmed == string.Empty)
+                {
+                    continue;
+                }
+
                 if (line.StartsWith("Project(\"{"))
                 {
                     var project = ParseSolutionProjectLine(file, line);
@@ -151,10 +157,17 @@ namespace Cake.Common.Solution
                 }
                 result[position].Append(c);
             }
+
+            var projectPath = new FilePath(pathBuilder.ToString());
+
+            var projectFullPath = projectPath.IsRelative ?
+                file.Path.GetDirectory().CombineWithFilePath(projectPath) :
+                projectPath;
+
             return new SolutionProject(
                 idBuilder.ToString(),
                 nameBuilder.ToString(),
-                file.Path.GetDirectory().CombineWithFilePath(pathBuilder.ToString()),
+                projectFullPath,
                 projectTypeBuilder.ToString());
         }
 

@@ -3,13 +3,17 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Cake.Core.IO
 {
     /// <summary>
     /// Represents a file path.
     /// </summary>
-    public sealed class FilePath : Path
+    [TypeConverter(typeof(FilePathConverter))]
+    public sealed class FilePath : Path, IEquatable<FilePath>, IComparer<FilePath>, IPath<FilePath>
     {
         /// <summary>
         /// Gets a value indicating whether this path has a file extension.
@@ -202,5 +206,74 @@ namespace Cake.Core.IO
         {
             return GetDirectory().GetRelativePath(to);
         }
+
+        /// <summary>
+        /// Determines wheter two <see cref="FilePath"/> instances are equal.
+        /// </summary>
+        /// <param name="other">the <see cref="FilePath"/> to compare.</param>
+        /// <returns>True if other is equal to current object, False otherwise.</returns>
+        public bool Equals(FilePath other)
+            => PathComparer.Default.Equals(this, other);
+
+        /// <summary>
+        /// Determines wheter two <see cref="FilePath"/> instances are equal.
+        /// </summary>
+        /// <param name="other">the <see cref="FilePath"/> to compare.</param>
+        /// <returns>True if other is equal to current object, False otherwise.</returns>
+        public override bool Equals(object other)
+            => Equals(other as FilePath);
+
+        /// <summary>
+        /// Determines wheter two <see cref="FilePath"/> instances are equal.
+        /// </summary>
+        /// <param name="filePath">left side <see cref="FilePath"/>.</param>
+        /// <param name="otherFilePath">right side <see cref="FilePath"/>.</param>
+        /// <returns>True if other is equal to current object, False otherwise.</returns>
+        public static bool operator ==(FilePath filePath, FilePath otherFilePath)
+            => ReferenceEquals(filePath, otherFilePath)
+                || filePath?.Equals(otherFilePath) == true;
+
+        /// <summary>
+        /// Determines wheter two <see cref="FilePath"/> instances are different.
+        /// </summary>
+        /// <param name="filePath">left side <see cref="FilePath"/>.</param>
+        /// <param name="otherFilePath">right side <see cref="FilePath"/>.</param>
+        /// <returns>True if other is equal to current object, False otherwise.</returns>
+        public static bool operator !=(FilePath filePath, FilePath otherFilePath) => !(filePath == otherFilePath);
+
+        /// <summary>
+        /// Returns the hash code for the <see cref="FilePath"/>.
+        /// </summary>
+        /// <returns>
+        /// A 32-bit signed integer hash code.
+        /// </returns>
+        public override int GetHashCode()
+            => PathComparer.Default.GetHashCode(this);
+
+        /// <summary>
+        /// Compares two FilePath and returns an indication of their relative sort order.
+        /// </summary>
+        /// <param name="x">The first <see cref="Path"/> to compare.</param>
+        /// <param name="y">The second <see cref="Path"/> to compare.</param>
+        /// <returns>A signed integer that indicates the relative values of x and y.
+        /// <list type="table">
+        /// <item>
+        /// <term>Less than zero</term>
+        /// <description>x precedes y in the sort order, or x is null and y is not null.</description>
+        /// </item>
+        /// <item>
+        /// <term>Zero</term>
+        /// <description>x is equal to y, or x and y are both null.</description>
+        /// </item>
+        /// <item>
+        /// <term>Greater than zero</term>
+        /// <description>
+        /// x follows y in the sort order, or y is null and x is not null.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </returns>
+        public int Compare([AllowNull] FilePath x, [AllowNull] FilePath y)
+            => PathComparer.Default.Compare(x, y);
     }
 }

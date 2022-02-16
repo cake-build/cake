@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Build.GitHubActions.Data
 {
@@ -29,12 +30,28 @@ namespace Cake.Common.Build.GitHubActions.Data
         public string Action => GetEnvironmentString("GITHUB_ACTION");
 
         /// <summary>
+        /// Gets the path where your action is located. You can use this path to access files located in the same repository as your action. This variable is only supported in composite run steps actions.
+        /// </summary>
+        /// <value>
+        /// The path where your action is located. You can use this path to access files located in the same repository as your action. This variable is only supported in composite run steps actions.
+        /// </value>
+        public DirectoryPath ActionPath => GetEnvironmentDirectoryPath("GITHUB_ACTION_PATH");
+
+        /// <summary>
         /// Gets the name of the person or app that initiated the workflow.
         /// </summary>
         /// <value>
         /// The name of the person or app that initiated the workflow.
         /// </value>
         public string Actor => GetEnvironmentString("GITHUB_ACTOR");
+
+        /// <summary>
+        /// Gets the API URL.
+        /// </summary>
+        /// <value>
+        /// The API URL. For example: https://api.github.com.
+        /// </value>
+        public string ApiUrl => GetEnvironmentString("GITHUB_API_URL");
 
         /// <summary>
         /// Gets the branch of the base repository.
@@ -58,7 +75,15 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The path of the file with the complete webhook event payload.
         /// </value>
-        public string EventPath => GetEnvironmentString("GITHUB_EVENT_PATH");
+        public FilePath EventPath => GetEnvironmentFilePath("GITHUB_EVENT_PATH");
+
+        /// <summary>
+        /// Gets the GraphQL API URL.
+        /// </summary>
+        /// <value>
+        /// The GraphQL API URL. For example: https://api.github.com/graphql.
+        /// </value>
+        public string GraphQLUrl => GetEnvironmentString("GITHUB_GRAPHQL_URL");
 
         /// <summary>
         /// Gets the branch of the head repository.
@@ -117,6 +142,14 @@ namespace Cake.Common.Build.GitHubActions.Data
         public int RunNumber => GetEnvironmentInteger("GITHUB_RUN_NUMBER");
 
         /// <summary>
+        /// Gets the URL of the GitHub server.
+        /// </summary>
+        /// <value>
+        /// The URL of the GitHub server. For example: https://github.com.
+        /// </value>
+        public string ServerUrl => GetEnvironmentString("GITHUB_SERVER_URL");
+
+        /// <summary>
         /// Gets the commit SHA that triggered the workflow.
         /// </summary>
         /// <value>
@@ -138,6 +171,44 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The GitHub workspace directory path.
         /// </value>
-        public string Workspace => GetEnvironmentString("GITHUB_WORKSPACE");
+        public DirectoryPath Workspace => GetEnvironmentDirectoryPath("GITHUB_WORKSPACE");
+
+        /// <summary>
+        /// Gets the number of attempts for current run.
+        /// </summary>
+        /// <value>
+        /// The attempt number  for current run.
+        /// </value>
+        public int Attempt => GetEnvironmentInteger("GITHUB_RUN_ATTEMPT");
+
+        /// <summary>
+        /// Gets a value indicating whether if branch protections are configured for the ref that triggered the workflow run.
+        /// </summary>
+        /// <value>
+        /// Value whether if branch protections are configured for the ref that triggered the workflow run.
+        /// </value>
+        public bool RefProtected => GetEnvironmentBoolean("GITHUB_REF_PROTECTED");
+
+        /// <summary>
+        /// Gets the branch or tag name that triggered the workflow run.
+        /// </summary>
+        /// <value>
+        /// The branch or tag name that triggered the workflow run.
+        /// </value>
+        public string RefName => GetEnvironmentString("GITHUB_REF_NAME");
+
+        /// <summary>
+        /// Gets the type of ref that triggered the workflow run.
+        /// </summary>
+        /// <value>
+        /// The type of ref that triggered the workflow run. Valid values are branch or tag.
+        /// </value>
+        public GitHubActionsRefType RefType => GetEnvironmentString("GITHUB_REF_TYPE")
+                                                    ?.ToLowerInvariant() switch
+                                                    {
+                                                        "branch" => GitHubActionsRefType.Branch,
+                                                        "tag" => GitHubActionsRefType.Tag,
+                                                        _ => GitHubActionsRefType.Unknown
+                                                    };
     }
 }

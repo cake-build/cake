@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageType>Template</PackageType>
+    <AssemblyName>Cake.Frosting.Template</AssemblyName>
+    <Title>Cake.Frosting templates for the .NET SDK.</Title>
+    <Description>Cake.Frosting templates for the .NET SDK.</Description>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoWarn>$(NoWarn);NU5110;NU5111;NU5128</NoWarn>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)../../nuspec/cake-medium.png" Pack="true" PackagePath="content\templates\cakefrosting\.template.config\image.png" />
+    <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
+    <Compile Remove="**\*" />
+  </ItemGroup>
+
+  <Target Name="VersionBuild" BeforeTargets="PrepareForBuild" Condition="'$(TemplateVersion)'!=''">
+   <XmlPoke XmlInputPath="templates\cakefrosting\build\Build.csproj" Query="Project/ItemGroup/PackageReference/@Version" Value="$(TemplateVersion)" />
+  </Target>
+
+</Project>

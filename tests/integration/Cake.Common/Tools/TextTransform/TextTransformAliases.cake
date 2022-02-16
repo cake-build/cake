@@ -7,7 +7,7 @@ Task("Cake.Common.Tools.TextTransform.TextTransformAliases.TransformTemplate.Set
     var t4Path = Context.Tools.Resolve("t4") ?? Context.Tools.Resolve("t4.exe");
     if (t4Path == null)
     {
-        DotNetCoreTool(null, "tool", "install --tool-path ./tools dotnet-t4 --version 2.0.5");
+        DotNetCoreTool(null, "tool", "install --tool-path ./tools dotnet-t4 --version \"2.2.0-preview-0020-g990c44075e\" --add-source \"https://pkgs.dev.azure.com/cake-build/Cake/_packaging/cake/nuget/v3/index.json\"");
     }
 });
 

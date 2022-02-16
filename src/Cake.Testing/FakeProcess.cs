@@ -23,53 +23,36 @@ namespace Cake.Testing
         {
         }
 
-        /// <summary>
-        /// Waits for the process to exit.
-        /// </summary>
+        /// <inheritdoc/>
         public void WaitForExit()
         {
         }
 
-        /// <summary>
-        /// Waits for the process to exit with possible timeout for command.
-        /// </summary>
-        /// <param name="milliseconds">The amount of time, in milliseconds, to wait for the associated process to exit. The maximum is the largest possible value of a 32-bit integer, which represents infinity to the operating system.</param>
-        /// <returns>true if the associated process has exited; otherwise, false.</returns>
+        /// <inheritdoc/>
         public bool WaitForExit(int milliseconds)
         {
             return true;
         }
 
-        /// <summary>
-        /// Gets the exit code.
-        /// </summary>
-        /// <returns>The process exit code.</returns>
+        /// <inheritdoc/>
         public int GetExitCode()
         {
             return _exitCode;
         }
 
-        /// <summary>
-        /// Get the standard error of process.
-        /// </summary>
-        /// <returns>Returns process error output <see cref="ProcessSettings.RedirectStandardError">RedirectStandardError</see> is true.</returns>
+        /// <inheritdoc/>
         public IEnumerable<string> GetStandardError()
         {
             return _standardError;
         }
 
-        /// <summary>
-        /// Get the standard output of process.
-        /// </summary>
-        /// <returns>Returns process output <see cref="ProcessSettings.RedirectStandardOutput">RedirectStandardOutput</see> is true.</returns>
+        /// <inheritdoc/>
         public IEnumerable<string> GetStandardOutput()
         {
             return _standardOutput;
         }
 
-        /// <summary>
-        /// Immediately stops the associated process.
-        /// </summary>
+        /// <inheritdoc/>
         public void Kill()
         {
         }

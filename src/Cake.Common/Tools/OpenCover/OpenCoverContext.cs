@@ -10,38 +10,20 @@ using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.OpenCover
 {
-    internal sealed class OpenCoverContext : ICakeContext
+    internal sealed class OpenCoverContext : CakeContextAdapter
     {
-        private readonly ICakeContext _context;
         private readonly OpenCoverProcessRunner _runner;
 
-        public IFileSystem FileSystem => _context.FileSystem;
+        public override ICakeLog Log { get; }
 
-        public ICakeEnvironment Environment => _context.Environment;
-
-        public IGlobber Globber => _context.Globber;
-
-        public ICakeLog Log { get; }
-
-        public ICakeArguments Arguments => _context.Arguments;
-
-        public IProcessRunner ProcessRunner => _runner;
-
-        public IRegistry Registry => _context.Registry;
-
-        public IToolLocator Tools => _context.Tools;
-
-        public ICakeDataResolver Data => _context.Data;
+        public override IProcessRunner ProcessRunner => _runner;
 
         public FilePath FilePath => _runner.FilePath;
 
         public ProcessSettings Settings => _runner.ProcessSettings;
 
-        public ICakeConfiguration Configuration => _context.Configuration;
-
-        public OpenCoverContext(ICakeContext context)
+        public OpenCoverContext(ICakeContext context) : base(context)
         {
-            _context = context;
             Log = new NullLog();
             _runner = new OpenCoverProcessRunner();
         }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.DotNetCore.Test;
+using Cake.Core.IO;
 
 namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Test
 {
@@ -10,10 +11,12 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Test
     {
         public string Project { get; set; }
 
+        public ProcessArgumentBuilder Arguments { get; set; }
+
         protected override void RunTool()
         {
             var tool = new DotNetCoreTester(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Test(Project, Settings);
+            tool.Test(Project, Arguments, Settings);
         }
     }
 }

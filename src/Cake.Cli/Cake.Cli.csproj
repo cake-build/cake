@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Cake.Cli</AssemblyName>
+    <OutputType>Library</OutputType>
+    <PlatformTarget>AnyCpu</PlatformTarget>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!-- Package specific metadata -->
+  <PropertyGroup>
+    <Description>The Cake CLI library.</Description>
+  </PropertyGroup>
+
+  <!-- Import shared functionality -->
+  <Import Project="..\Shared.msbuild" />
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+  </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="6.3.0" />
+      <PackageReference Include="Spectre.Console" Version="0.43.0" />
+  </ItemGroup>
+</Project>

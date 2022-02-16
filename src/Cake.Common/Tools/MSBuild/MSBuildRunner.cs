@@ -99,6 +99,25 @@ namespace Cake.Common.Tools.MSBuild
                 builder.Append(string.Concat("/p:Platform=", GetPlatformName(platform, isSolution)));
             }
 
+            // Set include symbols?
+            if (settings.IncludeSymbols.HasValue)
+            {
+                builder.Append(string.Concat("/p:IncludeSymbols=", settings.IncludeSymbols.Value ? "true" : "false"));
+            }
+
+            // Set symbol package format?
+            if (!string.IsNullOrWhiteSpace(settings.SymbolPackageFormat))
+            {
+                builder.Append(string.Concat("/p:SymbolPackageFormat=", settings.SymbolPackageFormat));
+            }
+
+            // Set Continuous Integration Build?
+            if (settings.ContinuousIntegrationBuild.HasValue)
+            {
+                var continuousIntegrationBuild = settings.ContinuousIntegrationBuild.Value ? "true" : "false";
+                builder.Append(string.Concat("/p:ContinuousIntegrationBuild=", continuousIntegrationBuild));
+            }
+
             // Got any properties?
             if (settings.Properties.Count > 0)
             {
@@ -150,7 +169,7 @@ namespace Cake.Common.Tools.MSBuild
                 string binaryOptions = null;
                 if (!string.IsNullOrEmpty(settings.BinaryLogger.FileName))
                 {
-                    binaryOptions = settings.BinaryLogger.FileName;
+                    binaryOptions = settings.BinaryLogger.FileName.Quote();
                 }
 
                 if (settings.BinaryLogger.Imports != MSBuildBinaryLogImports.Unspecified)
@@ -332,7 +351,7 @@ namespace Cake.Common.Tools.MSBuild
                 }
             }
 
-            var path = MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, settings.ToolVersion, buildPlatform);
+            var path = MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, buildPlatform, settings);
             if (path != null)
             {
                 return new[] { path };

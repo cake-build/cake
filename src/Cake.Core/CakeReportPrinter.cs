@@ -29,10 +29,7 @@ namespace Cake.Core
             _console = console;
         }
 
-        /// <summary>
-        /// Writes the specified report to a target.
-        /// </summary>
-        /// <param name="report">The report to write.</param>
+        /// <inheritdoc/>
         public void Write(CakeReport report)
         {
             if (report == null)
@@ -107,7 +104,18 @@ namespace Cake.Core
             {
                 return ConsoleColor.Cyan;
             }
-            return item.ExecutionStatus == CakeTaskExecutionStatus.Executed ? ConsoleColor.Green : ConsoleColor.Gray;
+
+            if (item.ExecutionStatus == CakeTaskExecutionStatus.Failed)
+            {
+                return ConsoleColor.Red;
+            }
+
+            if (item.ExecutionStatus == CakeTaskExecutionStatus.Executed)
+            {
+                return ConsoleColor.Green;
+            }
+
+            return ConsoleColor.Gray;
         }
 
         private static string FormatTime(TimeSpan time)

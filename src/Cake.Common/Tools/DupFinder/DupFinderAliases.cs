@@ -145,7 +145,7 @@ namespace Cake.Common.Tools.DupFinder
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
-        public static void DupFinder(this ICakeContext context, string pattern)
+        public static void DupFinder(this ICakeContext context, GlobPattern pattern)
         {
             DupFinder(context, pattern, new DupFinderSettings());
         }
@@ -169,7 +169,7 @@ namespace Cake.Common.Tools.DupFinder
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("DupFinder")]
-        public static void DupFinder(this ICakeContext context, string pattern, DupFinderSettings settings)
+        public static void DupFinder(this ICakeContext context, GlobPattern pattern, DupFinderSettings settings)
         {
             if (context == null)
             {

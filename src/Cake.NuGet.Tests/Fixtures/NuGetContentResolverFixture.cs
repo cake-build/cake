@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Runtime.Versioning;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Cake.Core.Polyfill;

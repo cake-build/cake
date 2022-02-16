@@ -1,0 +1,77 @@
+name: Bug report
+description: Create a report to help us improve
+body:
+- type: checkboxes
+  attributes:
+    label: Prerequisites
+    options:
+    - label: I have written a descriptive issue title
+      required: true
+    - label: I have searched [issues](https://github.com/cake-build/cake/issues) to ensure it has not already been reported
+      required: true
+- type: dropdown
+  attributes:
+    label: Cake runner
+    options:
+      - Cake .NET Tool
+      - Cake Frosting
+      - Cake runner for .NET Framework
+      - Cake runner for .NET Core
+    multiple: true
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Cake version
+  validations:
+    required: true
+- type: dropdown
+  attributes:
+    label: Operating system
+    options:
+      - Linux
+      - Windows
+      - macOS
+      - N/A
+    multiple: true
+  validations:
+    required: true
+- type: dropdown
+  attributes:
+    label: Operating system architecture
+    options:
+      - 32-Bit
+      - 64-Bit
+      - N/A
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: CI Server
+    description: If you're running on a build server (GitHub Actions, Azure DevOps, etc)
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: What are you seeing?
+    description: Describe the issue you are seeing
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: What is expected?
+    description: Describe what you would expect
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Steps to Reproduce
+    description: List of steps or sample project to reproduce the issue
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Output log
+    description: Log messages you receive when running with --verbosity=diagnostic. Make sure there is no sensitive data shared and that you place a stack trace inside a code (```) block to avoid formatting issues.
+  validations:
+    required: false

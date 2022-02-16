@@ -1,20 +1,23 @@
 <Project>
   <!-- General package metadata -->
   <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <PackageId>$(AssemblyName)</PackageId>
     <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
-    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio and contributors</Authors>
-    <Company>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio and contributors</Company>
+    <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio, C. Augusto Proiete, Nils Andresen, and contributors</Authors>
+    <Company>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio, C. Augusto Proiete, Nils Andresen, and contributors</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>cake-medium.png</PackageIcon>
     <RepositoryUrl>https://github.com/cake-build/cake</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Cake;Script;Build</PackageTags>
     <PackageProjectUrl>https://cakebuild.net</PackageProjectUrl>
+    <LangVersion>8.0</LangVersion>
+    <PackageReadmeFile>NuGet.org.md</PackageReadmeFile>
   </PropertyGroup>
 
   <!-- Define .NET Core constants -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netcoreapp2.0' OR '$(TargetFramework)' == 'netcoreapp2.1' OR '$(TargetFramework)' == 'netcoreapp3.0' ">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'net6.0' ">
     <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     <DebugType>portable</DebugType>
@@ -25,6 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)SolutionInfo.cs" />
     <None Include="../../LICENSE" Pack="true" PackagePath="$(PackageLicenseFile)"/>
     <None Include="../../nuspec/cake-medium.png" Pack="true" PackagePath=""/>
+    <None Include="../../nuspec/NuGet.org.md" Pack="true" PackagePath=""/>
   </ItemGroup>
 
   <!-- Warnings as errors -->

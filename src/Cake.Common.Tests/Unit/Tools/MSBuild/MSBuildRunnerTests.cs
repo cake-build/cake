@@ -156,6 +156,82 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Theory]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Windows, false, "/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x86, PlatformFamily.Windows, false, "/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Linux, false, "/usr/bin/msbuild")]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.OSX, false, "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild")]
+            public void Should_Get_Correct_Path_To_MSBuild_Version_17(MSBuildToolVersion version, PlatformTarget target, PlatformFamily family, bool is64BitOperativeSystem, string expected)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, family);
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Path.FullPath);
+            }
+
+            [Theory]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Windows, false, "/Program86/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe")]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x86, PlatformFamily.Windows, false, "/Program86/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/MSBuild.exe")]
+            public void Should_Get_Correct_Path_To_MSBuild_Version_17_When_Only_Build_Tools_Are_Installed(MSBuildToolVersion version, PlatformTarget target, PlatformFamily family, bool is64BitOperativeSystem, string expected)
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, family);
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
+
+                fixture.GivenDefaultToolDoNotExist();
+                fixture.GivenMSBuildIsNotInstalled();
+                fixture.FileSystem.CreateFile("/Program86/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe");
+                fixture.FileSystem.CreateFile("/Program86/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/MSBuild.exe");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Path.FullPath);
+            }
+
+            [Theory]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Windows, true)]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x86, PlatformFamily.Windows, true)]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x64, PlatformFamily.Windows, false)]
+            [InlineData(MSBuildToolVersion.VS2022, PlatformTarget.x86, PlatformFamily.Windows, false)]
+            public void Should_Get_Correct_Path_To_MSBuild_Version_17Preview_When_Preview_Is_Set(MSBuildToolVersion version, PlatformTarget target, PlatformFamily family, bool allowPreview)
+            {
+                // Given
+                var is64BitOperativeSystem = target == PlatformTarget.x64;
+                var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, family);
+                fixture.Settings.ToolVersion = version;
+                fixture.Settings.PlatformTarget = target;
+                fixture.Settings.AllowPreviewVersion = allowPreview;
+
+                fixture.GivenDefaultToolDoNotExist();
+                fixture.GivenMSBuildIsNotInstalled();
+                fixture.FileSystem.CreateFile("/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/amd64/MSBuild.exe");
+                fixture.FileSystem.CreateFile("/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe");
+                fixture.FileSystem.CreateFile("/Program/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/amd64/MSBuild.exe");
+                fixture.FileSystem.CreateFile("/Program/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                if (allowPreview)
+                {
+                    Assert.Contains("2022/Preview", result.Path.FullPath);
+                }
+                else
+                {
+                    Assert.DoesNotContain("2022/Preview", result.Path.FullPath);
+                }
+            }
+
+            [Theory]
             [InlineData(MSBuildToolVersion.NET40, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET40, PlatformTarget.MSIL, false, "/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe")]
             [InlineData(MSBuildToolVersion.NET45, PlatformTarget.MSIL, true, "/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe")]
@@ -904,6 +980,200 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
+            public void Should_Use_IncludeSymbols_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.IncludeSymbols = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:IncludeSymbols=true /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_SymbolPackageFormat_If_Specified()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.IncludeSymbols = true;
+                fixture.Settings.SymbolPackageFormat = "snupkg";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Version_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.Version = "1.0.0-test";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:Version=1.0.0-test /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_VersionPrefix_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.VersionPrefix = "1.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:VersionPrefix=1.0.0 /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_VersionSuffix_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.VersionSuffix = "test";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:VersionSuffix=test /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_FileVersion_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.FileVersion = "1.0.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:FileVersion=1.0.0.0 /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_AssemblyVersion_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.AssemblyVersion = "1.0.0.0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:AssemblyVersion=1.0.0.0 /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_InformationalVersion_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.InformationalVersion = "1.0.0-test+7ad03d0";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:InformationalVersion=1.0.0-test+7ad03d0 /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PackageVersion_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.PackageVersion = "1.0.0-test";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:PackageVersion=1.0.0-test /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_PackageReleaseNotes_If_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.PackageReleaseNotes = "https://";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:PackageReleaseNotes=https:// /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ContinuousIntegrationBuild_If_Set_To_True()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ContinuousIntegrationBuild = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:ContinuousIntegrationBuild=true /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ContinuousIntegrationBuild_If_Set_To_False()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.ContinuousIntegrationBuild = false;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:ContinuousIntegrationBuild=false /target:Build " +
+                    "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Add_ContinuousIntegrationBuild_If_Not_Set()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.DoesNotContain("/p:ContinuousIntegrationBuild=", result.Args);
+            }
+
+            [Fact]
             public void Should_Append_Logger_To_Process_Arguments()
             {
                 // Given
@@ -993,7 +1263,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
+                Assert.Equal("/v:normal /target:Build /bl:\"mylog.binlog\";ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
             }
 
             [Fact]
@@ -1007,7 +1277,25 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /target:Build /bl:mylog.binlog;ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
+                Assert.Equal("/v:normal /target:Build /bl:\"mylog.binlog\";ProjectImports=ZipFile \"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Quote_Binary_Logging_FilePath()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.BinaryLogger = new MSBuildBinaryLogSettings()
+                {
+                    Enabled = true,
+                    FileName = "C:/Working Directory/src folder/mylog.binlog"
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:Build /bl:\"C:/Working Directory/src folder/mylog.binlog\" \"C:/Working/src/Solution.sln\"", result.Args);
             }
 
             [Theory]

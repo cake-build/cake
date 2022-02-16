@@ -291,5 +291,57 @@ namespace Cake.Common.Tests.Unit.Tools.MSTest
             // Then
             Assert.Equal(existingToolPath, result.Path.FullPath);
         }
+
+        [Theory]
+        [InlineData(SpecialPath.ProgramFilesX86, "2017", "Enterprise")]
+        [InlineData(SpecialPath.ProgramFilesX86, "2017", "Professional")]
+        [InlineData(SpecialPath.ProgramFilesX86, "2017", "Community")]
+        [InlineData(SpecialPath.ProgramFilesX86, "2019", "Enterprise")]
+        [InlineData(SpecialPath.ProgramFilesX86, "2019", "Professional")]
+        [InlineData(SpecialPath.ProgramFilesX86, "2019", "Community")]
+        [InlineData(SpecialPath.ProgramFiles, "2022", "Enterprise")]
+        [InlineData(SpecialPath.ProgramFiles, "2022", "Professional")]
+        [InlineData(SpecialPath.ProgramFiles, "2022", "Community")]
+        public void Should_Use_Tool_Path_For_YearAndEdition_Versions(SpecialPath programFiles, string year, string edition)
+        {
+            // Given
+            var fixture = new MSTestRunnerFixture();
+            fixture.GivenDefaultToolDoNotExist();
+            var toolPath = fixture.Environment.GetSpecialPath(programFiles)
+                .CombineWithFilePath($"Microsoft Visual Studio/{year}/{edition}/Common7/IDE/mstest.exe");
+            fixture.FileSystem.CreateFile(toolPath);
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal(toolPath, result.Path.FullPath);
+        }
+
+        [Theory]
+        [InlineData("2022", true)]
+        [InlineData("2022", false)]
+        public void Should_Use_Tool_Path_For_Preview_Version_Only_If_PreviewIsSet(string year, bool allowPreview)
+        {
+            // Given
+            var fixture = new MSTestRunnerFixture();
+            var previewToolPath = fixture.Environment.GetSpecialPath(SpecialPath.ProgramFiles)
+                .CombineWithFilePath($"Microsoft Visual Studio/{year}/Preview/Common7/IDE/mstest.exe");
+            fixture.FileSystem.CreateFile(previewToolPath);
+            fixture.Settings.AllowPreviewVersion = allowPreview;
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            if (allowPreview)
+            {
+                Assert.Equal(previewToolPath, result.Path.FullPath);
+            }
+            else
+            {
+                Assert.NotEqual(previewToolPath, result.Path.FullPath);
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -16,6 +17,7 @@ namespace Cake.Common.Tools.OpenCover
     /// </summary>
     public sealed class OpenCoverRunner : Tool<OpenCoverSettings>
     {
+        private const string HideSkippedConstant = "-hideskipped";
         private readonly ICakeEnvironment _environment;
 
         /// <summary>
@@ -141,7 +143,12 @@ namespace Cake.Common.Tools.OpenCover
                 builder.Append("-mergeoutput");
             }
 
-            builder.AppendSwitch("-register", ":", settings.Register);
+            if (settings.Register != null)
+            {
+                // due to the fact that register sometimes needs a colon-separator and sometimes it does not
+                // there is no separator here but instead it's added in OpenCoverRegisterOption.ToString()
+                builder.AppendSwitch("-register", string.Empty, settings.Register.ToString());
+            }
 
             if (settings.ReturnTargetCodeOffset != null)
             {
@@ -163,6 +170,20 @@ namespace Cake.Common.Tools.OpenCover
             if (settings.LogLevel != OpenCoverLogLevel.Info)
             {
                 builder.AppendSwitch("-log", ":", settings.LogLevel.ToString());
+            }
+
+            // HideSkipped Option
+            if (settings.HideSkippedOption != OpenCoverHideSkippedOption.None)
+            {
+                if (settings.HideSkippedOption == OpenCoverHideSkippedOption.All)
+                {
+                    builder.AppendSwitch(HideSkippedConstant, ":", "All");
+                }
+                else
+                {
+                    var hideSkippedOptions = string.Join(";", settings.HideSkippedOption.GetFlags());
+                    builder.AppendSwitch(HideSkippedConstant, ":", hideSkippedOptions);
+                }
             }
 
             // Merge by hash

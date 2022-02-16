@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core.IO;
 
@@ -24,14 +21,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <remarks>Ignores a target if already added.</remarks>
         public static DotNetCoreMSBuildSettings WithTarget(this DotNetCoreMSBuildSettings settings, string target)
         {
-            EnsureSettings(settings);
-
-            if (!settings.Targets.Contains(target))
-            {
-                settings.Targets.Add(target);
-            }
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.WithTarget(settings, target);
         }
 
         /// <summary>
@@ -43,18 +33,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings WithProperty(this DotNetCoreMSBuildSettings settings, string name, params string[] values)
         {
-            EnsureSettings(settings);
-
-            ICollection<string> currentValue;
-
-            // try to get existing values of properties and add new property values
-            currentValue = settings.Properties.TryGetValue(name, out currentValue) && currentValue != null
-                ? currentValue.Concat(values).ToList()
-                : new List<string>(values);
-
-            settings.Properties[name] = currentValue;
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.WithProperty(settings, name, values);
         }
 
         /// <summary>
@@ -64,10 +43,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings ShowDetailedSummary(this DotNetCoreMSBuildSettings settings)
         {
-            EnsureSettings(settings);
-
-            settings.DetailedSummary = true;
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.ShowDetailedSummary(settings);
         }
 
         /// <summary>
@@ -78,10 +54,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings WithIgnoredProjectExtension(this DotNetCoreMSBuildSettings settings, string extension)
         {
-            EnsureSettings(settings);
-
-            settings.IgnoreProjectExtensions.Add(extension);
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.WithIgnoredProjectExtension(settings, extension);
         }
 
         /// <summary>
@@ -92,12 +65,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetMaxCpuCount(this DotNetCoreMSBuildSettings settings, int? maxCpuCount)
         {
-            EnsureSettings(settings);
-
-            settings.MaxCpuCount = maxCpuCount.HasValue
-                                    ? Math.Max(0, maxCpuCount.Value)
-                                    : 0;
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetMaxCpuCount(settings, maxCpuCount);
         }
 
         /// <summary>
@@ -107,10 +75,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings ExcludeAutoResponseFiles(this DotNetCoreMSBuildSettings settings)
         {
-            EnsureSettings(settings);
-
-            settings.ExcludeAutoResponseFiles = true;
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.ExcludeAutoResponseFiles(settings);
         }
 
         /// <summary>
@@ -120,10 +85,21 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings HideLogo(this DotNetCoreMSBuildSettings settings)
         {
-            EnsureSettings(settings);
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.HideLogo(settings);
+        }
 
-            settings.NoLogo = true;
-            return settings;
+        /// <summary>
+        /// Sets a value indicating whether to normalize stored file paths used when producing deterministic builds.
+        /// </summary>
+        /// <remarks>
+        /// For more information see https://devblogs.microsoft.com/dotnet/producing-packages-with-source-link/#deterministic-builds.
+        /// </remarks>
+        /// <param name="settings">The settings.</param>
+        /// <param name="continuousIntegrationBuild">A value indicating whether to normalize stored file paths used when producing deterministic builds.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetContinuousIntegrationBuild(this DotNetCoreMSBuildSettings settings, bool? continuousIntegrationBuild = true)
+        {
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetContinuousIntegrationBuild(settings, continuousIntegrationBuild);
         }
 
         /// <summary>
@@ -134,10 +110,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings UseToolVersion(this DotNetCoreMSBuildSettings settings, MSBuildVersion version)
         {
-            EnsureSettings(settings);
-
-            settings.ToolVersion = version;
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.UseToolVersion(settings, version);
         }
 
         /// <summary>
@@ -147,10 +120,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings ValidateProjectFile(this DotNetCoreMSBuildSettings settings)
         {
-            EnsureSettings(settings);
-
-            settings.ValidateProjectFile = true;
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.ValidateProjectFile(settings);
         }
 
         /// <summary>
@@ -164,10 +134,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </remarks>
         public static DotNetCoreMSBuildSettings WithResponseFile(this DotNetCoreMSBuildSettings settings, FilePath responseFile)
         {
-            EnsureSettings(settings);
-
-            settings.ResponseFiles.Add(responseFile);
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.WithResponseFile(settings, responseFile);
         }
 
         /// <summary>
@@ -177,10 +144,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings UseDistributedFileLogger(this DotNetCoreMSBuildSettings settings)
         {
-            EnsureSettings(settings);
-
-            settings.DistributedFileLogger = true;
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.UseDistributedFileLogger(settings);
         }
 
         /// <summary>
@@ -195,10 +159,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </remarks>
         public static DotNetCoreMSBuildSettings WithDistributedLogger(this DotNetCoreMSBuildSettings settings, MSBuildDistributedLogger logger)
         {
-            EnsureSettings(settings);
-
-            settings.DistributedLoggers.Add(logger);
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.WithDistributedLogger(settings, logger);
         }
 
         /// <summary>
@@ -209,11 +170,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetConsoleLoggerSettings(this DotNetCoreMSBuildSettings settings, MSBuildLoggerSettings consoleLoggerParameters)
         {
-            EnsureSettings(settings);
-
-            settings.ConsoleLoggerSettings = consoleLoggerParameters ?? throw new ArgumentNullException(nameof(consoleLoggerParameters));
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetConsoleLoggerSettings(settings, consoleLoggerParameters);
         }
 
         /// <summary>
@@ -228,7 +185,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </remarks>
         public static DotNetCoreMSBuildSettings AddFileLogger(this DotNetCoreMSBuildSettings settings)
         {
-            return AddFileLogger(settings, new MSBuildFileLoggerSettings());
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.AddFileLogger(settings);
         }
 
         /// <summary>
@@ -244,16 +201,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </remarks>
         public static DotNetCoreMSBuildSettings AddFileLogger(this DotNetCoreMSBuildSettings settings, MSBuildFileLoggerSettings fileLoggerParameters)
         {
-            EnsureSettings(settings);
-
-            if (fileLoggerParameters == null)
-            {
-                throw new ArgumentNullException(nameof(fileLoggerParameters));
-            }
-
-            settings.FileLoggers.Add(fileLoggerParameters);
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.AddFileLogger(settings, fileLoggerParameters);
         }
 
         /// <summary>
@@ -263,7 +211,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings)
         {
-            return EnableBinaryLogger(settings, MSBuildBinaryLoggerImports.Unspecified);
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.EnableBinaryLogger(settings);
         }
 
         /// <summary>
@@ -274,18 +222,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings, MSBuildBinaryLoggerImports imports)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            settings.BinaryLogger = new MSBuildBinaryLoggerSettings
-            {
-                Enabled = true,
-                Imports = imports,
-            };
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.EnableBinaryLogger(settings, imports);
         }
 
         /// <summary>
@@ -296,7 +233,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings, string fileName)
         {
-            return EnableBinaryLogger(settings, fileName, MSBuildBinaryLoggerImports.Unspecified);
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.EnableBinaryLogger(settings, fileName);
         }
 
         /// <summary>
@@ -308,19 +245,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings EnableBinaryLogger(this DotNetCoreMSBuildSettings settings, string fileName, MSBuildBinaryLoggerImports imports)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            settings.BinaryLogger = new MSBuildBinaryLoggerSettings
-            {
-                Enabled = true,
-                FileName = fileName,
-                Imports = imports,
-            };
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.EnableBinaryLogger(settings, fileName, imports);
         }
 
         /// <summary>
@@ -333,21 +258,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings WithLogger(this DotNetCoreMSBuildSettings settings, string loggerAssembly, string loggerClass = null, string loggerParameters = null)
         {
-            EnsureSettings(settings);
-
-            if (string.IsNullOrWhiteSpace(loggerAssembly))
-            {
-                throw new ArgumentException(nameof(loggerAssembly));
-            }
-
-            settings.Loggers.Add(new MSBuildLogger
-            {
-                Assembly = loggerAssembly,
-                Class = loggerClass,
-                Parameters = loggerParameters
-            });
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.WithLogger(settings, loggerAssembly, loggerClass, loggerParameters);
         }
 
         /// <summary>
@@ -357,11 +268,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings DisableConsoleLogger(this DotNetCoreMSBuildSettings settings)
         {
-            EnsureSettings(settings);
-
-            settings.DisableConsoleLogger = true;
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.DisableConsoleLogger(settings);
         }
 
         /// <summary>
@@ -375,16 +282,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// </remarks>
         public static DotNetCoreMSBuildSettings SetWarningCodeAsError(this DotNetCoreMSBuildSettings settings, string warningCode)
         {
-            EnsureSettings(settings);
-
-            if (string.IsNullOrWhiteSpace(warningCode))
-            {
-                throw new ArgumentException("Warning code cannot be null or empty", nameof(warningCode));
-            }
-
-            settings.WarningCodesAsError.Add(warningCode);
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetWarningCodeAsError(settings, warningCode);
         }
 
         /// <summary>
@@ -395,16 +293,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetWarningCodeAsMessage(this DotNetCoreMSBuildSettings settings, string warningCode)
         {
-            EnsureSettings(settings);
-
-            if (string.IsNullOrWhiteSpace(warningCode))
-            {
-                throw new ArgumentException("Warning code cannot be null or empty", nameof(warningCode));
-            }
-
-            settings.WarningCodesAsMessage.Add(warningCode);
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetWarningCodeAsMessage(settings, warningCode);
         }
 
         /// <summary>
@@ -415,11 +304,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings TreatAllWarningsAs(this DotNetCoreMSBuildSettings settings, MSBuildTreatAllWarningsAs behaviour)
         {
-            EnsureSettings(settings);
-
-            settings.TreatAllWarningsAs = behaviour;
-
-            return settings;
+            return (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.TreatAllWarningsAs(settings, behaviour);
         }
 
         /// <summary>
@@ -429,7 +314,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="configuration">The configuration.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetConfiguration(this DotNetCoreMSBuildSettings settings, string configuration)
-            => settings.WithProperty("configuration", configuration);
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetConfiguration(settings, configuration);
 
         /// <summary>
         /// Sets the version.
@@ -442,7 +327,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// This may also override version settings during packaging.
         /// </remarks>
         public static DotNetCoreMSBuildSettings SetVersion(this DotNetCoreMSBuildSettings settings, string version)
-            => settings.WithProperty("Version", version);
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetVersion(settings, version);
 
         /// <summary>
         /// Sets the file version.
@@ -451,7 +336,16 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="fileVersion">The file version.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetFileVersion(this DotNetCoreMSBuildSettings settings, string fileVersion)
-            => settings.WithProperty("FileVersion", fileVersion);
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetFileVersion(settings, fileVersion);
+
+        /// <summary>
+        /// Sets the assembly version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="assemblyVersion">The assembly version.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetAssemblyVersion(this DotNetCoreMSBuildSettings settings, string assemblyVersion)
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetAssemblyVersion(settings, assemblyVersion);
 
         /// <summary>
         /// Sets the informational version.
@@ -460,7 +354,25 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="informationalVersion">The informational version.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetInformationalVersion(this DotNetCoreMSBuildSettings settings, string informationalVersion)
-            => settings.WithProperty("InformationalVersion", informationalVersion);
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetInformationalVersion(settings, informationalVersion);
+
+        /// <summary>
+        /// Sets the package version.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageVersion">The package version.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetPackageVersion(this DotNetCoreMSBuildSettings settings, string packageVersion)
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetPackageVersion(settings, packageVersion);
+
+        /// <summary>
+        /// Sets the package release notes.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="packageReleaseNotes">The package release notes.</param>
+        /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetCoreMSBuildSettings SetPackageReleaseNotes(this DotNetCoreMSBuildSettings settings, string packageReleaseNotes)
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetPackageReleaseNotes(settings, packageReleaseNotes);
 
         /// <summary>
         /// Suppress warning CS7035.
@@ -472,7 +384,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="settings">The settings.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SuppressVersionRecommendedFormatWarning(this DotNetCoreMSBuildSettings settings)
-            => settings.WithProperty("nowarn", "7035");
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SuppressVersionRecommendedFormatWarning(settings);
 
         /// <summary>
         /// Sets the version prefix.
@@ -481,7 +393,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="versionPrefix">The version prefix.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetVersionPrefix(this DotNetCoreMSBuildSettings settings, string versionPrefix)
-            => settings.WithProperty("VersionPrefix", versionPrefix);
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetVersionPrefix(settings, versionPrefix);
 
         /// <summary>
         /// Sets the version Suffix.
@@ -490,7 +402,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// <param name="versionSuffix">The version prefix.</param>
         /// <returns>The same <see cref="DotNetCoreMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetCoreMSBuildSettings SetVersionSuffix(this DotNetCoreMSBuildSettings settings, string versionSuffix)
-            => settings.WithProperty("VersionSuffix", versionSuffix);
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetVersionSuffix(settings, versionSuffix);
 
         /// <summary>
         /// Adds a framework to target.
@@ -502,7 +414,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// For list of target frameworks see https://docs.microsoft.com/en-us/dotnet/standard/frameworks.
         /// </remarks>
         public static DotNetCoreMSBuildSettings SetTargetFramework(this DotNetCoreMSBuildSettings settings, string targetFramework)
-            => settings.WithProperty("TargetFrameworks", targetFramework);
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetTargetFramework(settings, targetFramework);
 
         /// <summary>
         /// Sets a target operating systems where the application or assembly will run.
@@ -514,14 +426,6 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
         /// For list of runtime ids see https://docs.microsoft.com/en-us/dotnet/core/rid-catalog.
         /// </remarks>
         public static DotNetCoreMSBuildSettings SetRuntime(this DotNetCoreMSBuildSettings settings, string runtimeId)
-            => settings.WithProperty("RuntimeIdentifiers", runtimeId);
-
-        private static void EnsureSettings(DotNetCoreMSBuildSettings settings)
-        {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-        }
+            => (DotNetCoreMSBuildSettings)DotNet.MSBuild.DotNetMSBuildSettingsExtensions.SetRuntime(settings, runtimeId);
     }
 }

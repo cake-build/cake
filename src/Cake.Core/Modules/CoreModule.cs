@@ -21,10 +21,7 @@ namespace Cake.Core.Modules
     /// </summary>
     public sealed class CoreModule : ICakeModule
     {
-        /// <summary>
-        /// Performs custom registrations in the provided registrar.
-        /// </summary>
-        /// <param name="registrar">The container registrar.</param>
+        /// <inheritdoc/>
         public void Register(ICakeContainerRegistrar registrar)
         {
             if (registrar == null)
@@ -36,6 +33,7 @@ namespace Cake.Core.Modules
             registrar.RegisterType<CakeEngine>().As<ICakeEngine>().Singleton();
             registrar.RegisterType<CakeContext>().As<ICakeContext>().Singleton();
             registrar.RegisterType<CakeDataService>().As<ICakeDataResolver>().As<ICakeDataService>().Singleton();
+            registrar.RegisterType<DefaultExecutionStrategy>().As<IExecutionStrategy>().Singleton();
 
             // Environment
             registrar.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();
