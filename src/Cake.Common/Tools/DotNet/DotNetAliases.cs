@@ -10,6 +10,7 @@ using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Common.Tools.DotNet.Format;
+using Cake.Common.Tools.DotNet.List;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.NuGet.Delete;
 using Cake.Common.Tools.DotNet.NuGet.Push;
@@ -26,6 +27,7 @@ using Cake.Common.Tools.DotNet.Reference.Remove;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.SDKCheck;
+using Cake.Common.Tools.DotNet.Sln;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNet.VSTest;
@@ -1306,6 +1308,145 @@ namespace Cake.Common.Tools.DotNet
             builder.Build(projectOrDirectory, settings);
         }
 
+        /// <summary>
+        /// Adds a project to a solution
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="solution">Solution file to add to.  Uses working directory if null.</param>
+        /// <param name="project">Project file to add.</param>
+        /// <param name="solutionFolder">Solution folder name to add the reference to. Created if it doesn't exist.  Adds project to solution root if null.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// DotNetSlnAdd("MySolution.sln", "MyProject.csproj", null, settings);
+        /// 
+        /// DotNetSlnAdd("MySolution.sln", "MyProject.csproj", "MySolutionFolder", settings);
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// If a solution file is not specified, dotnet searches the current working directory for a solution file and uses that file.
+        /// </remarks>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Sln")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln")]
+        public static void DotNetSlnAdd(this ICakeContext context, string solution, string project,
+            string solutionFolder, DotNetSlnSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetSlnSettings();
+            }
+
+            var executor = new DotNetSln(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            executor.Add(solution, project, solutionFolder, settings);
+        }
+
+        /// <summary>
+        /// Removes a project to a solution
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="solution">Solution file to remove from.  Searches working directory if null.</param>
+        /// <param name="project">Project file to remove.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// DotNetSlnRemove("MySolution.sln", "MyProject.csproj", settings);
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// If a solution file is not specified, dotnet searches the current working directory for a solution file and uses that file.
+        /// </remarks>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Sln")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln")]
+        public static void DotNetSlnRemove(this ICakeContext context, string solution, string project,
+            DotNetSlnSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetSlnSettings();
+            }
+
+            var executor = new DotNetSln(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            executor.Remove(solution, project, settings);
+        }
+
+        /// <summary>
+        /// Lists project references in a solution
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="solution">Solution file to add to.  Uses working directory if null.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>An array of absolute paths to any references found.  These can be .csproj, .fsproj, .dwproj files etc.</returns>
+        /// <example>
+        /// <code>
+        /// DotNetSlnList("MySolution.sln", settings);
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// If a solution file is not specified, dotnet searches the current working directory for a solution file and uses that file.
+        /// </remarks>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Sln")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln")]
+        public static string[] DotNetSlnList(this ICakeContext context, string solution, DotNetSlnSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetSlnSettings();
+            }
+
+            var executor = new DotNetSln(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return executor.List(solution, settings);
+        }
+
+
+        /// <summary>
+        /// Given a project file, lists project references.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project to inspect for project references.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>An array of absolute paths to any project references found.  These can be .csproj, .fsproj, .dwproj files etc.</returns>
+        /// <example>
+        /// <code>
+        /// DotNetListProjectReferences("MyProject.csproj", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("List")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.List")]
+        public static string[] DotNetListProjectReferences(ICakeContext context, string project, DotNetListSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetListSettings();
+            }
+
+            var executor = new DotNetList(context.FileSystem, context.Environment, context.ProcessRunner,
+                context.Tools);
+            return executor.ListProjectReferences(project, settings);
+        }
         /// <summary>
         /// Test one or more projects specified by a path or glob pattern using the VS Test host runner.
         /// </summary>
