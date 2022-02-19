@@ -27,6 +27,7 @@
 #load "./Cake.Common/Tools/DotNet/DotNetAliases.cake"
 #load "./Cake.Common/Tools/DotNetCore/DotNetCoreAliases.cake"
 #load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
+#load "./Cake.Common/Tools/Chocolatey/ChocolateyAliases.cake"
 #load "./Cake.Common/Tools/TextTransform/TextTransformAliases.cake"
 #load "./Cake.Core/Diagnostics/ICakeLog.cake"
 #load "./Cake.Core/IO/Path.cake"
@@ -94,12 +95,16 @@ Task("Cake.Common")
 Task("Cake.NuGet")
     .IsDependentOn("Cake.NuGet.InProcessInstaller");
 
+Task("Cake.Chocolatey")
+    .IsDependentOn("Cake.Common.Tools.Chocolatey.ChocolateyAliases");
+
 Task("Run-All-Tests")
     .IsDependentOn("Setup-Tests")
     .IsDependentOn("Cake.Core")
     .IsDependentOn("Cake.Common")
     .IsDependentOn("Cake.DotNetTool.Module")
-    .IsDependentOn("Cake.NuGet");
+    .IsDependentOn("Cake.NuGet")
+    .IsDependentOn("Cake.Chocolatey");
 
 //////////////////////////////////////////////////
 

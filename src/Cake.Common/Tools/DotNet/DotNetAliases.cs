@@ -9,6 +9,7 @@ using Cake.Common.Tools.DotNet.Build;
 using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Common.Tools.DotNet.Clean;
 using Cake.Common.Tools.DotNet.Execute;
+using Cake.Common.Tools.DotNet.Format;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.NuGet.Delete;
 using Cake.Common.Tools.DotNet.NuGet.Push;
@@ -17,6 +18,7 @@ using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
+using Cake.Common.Tools.DotNet.SDKCheck;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNet.VSTest;
@@ -1602,6 +1604,246 @@ namespace Cake.Common.Tools.DotNet
             var buildServer = new DotNetCoreBuildServer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
 
             buildServer.Shutdown(settings ?? new DotNetBuildServerShutdownSettings());
+        }
+
+        /// <summary>
+        /// Formats code to match editorconfig settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="root">The project or solution path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetFormat("./src/project");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Format")]
+        public static void DotNetFormat(this ICakeContext context, string root)
+        {
+            context.DotNetFormat(root, null);
+        }
+
+        /// <summary>
+        /// Formats code to match editorconfig settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="root">The project or solution path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetFormatSettings
+        /// {
+        ///     NoRestore = true,
+        ///     Include = "Program.cs Utility\Logging.cs",
+        ///     Severity = DotNetFormatSeverity.Error
+        /// };
+        ///
+        /// DotNetFormat("./src/project", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Format")]
+        public static void DotNetFormat(this ICakeContext context, string root, DotNetFormatSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetFormatSettings();
+            }
+
+            var formatter = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formatter.Format(root, null, settings);
+        }
+
+        /// <summary>
+        /// Format code to match editorconfig settings for whitespace.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="root">The project or solution path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetFormatWhitespace("./src/*");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Format")]
+        public static void DotNetFormatWhitespace(this ICakeContext context, string root)
+        {
+            context.DotNetFormatWhitespace(root, null);
+        }
+
+        /// <summary>
+        /// Format code to match editorconfig settings for whitespace.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="root">The project or solution path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetFormatSettings
+        /// {
+        ///     NoRestore = true,
+        ///     Include = "Program.cs Utility\Logging.cs"
+        /// };
+        ///
+        /// DotNetFormatWhitespace("./src/*", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Format")]
+        public static void DotNetFormatWhitespace(this ICakeContext context, string root, DotNetFormatSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetFormatSettings();
+            }
+
+            var formatter = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formatter.Format(root, "whitespace", settings);
+        }
+
+        /// <summary>
+        /// Format code to match editorconfig settings for code style.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="root">The project or solution path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetFormatStyle("./src/*");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Format")]
+        public static void DotNetFormatStyle(this ICakeContext context, string root)
+        {
+            context.DotNetFormatStyle(root, null);
+        }
+
+        /// <summary>
+        /// Format code to match editorconfig settings for code style.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="root">The project or solution path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetFormatSettings
+        /// {
+        ///     NoRestore = true,
+        ///     Include = "Program.cs Utility\Logging.cs"
+        /// };
+        ///
+        /// DotNetFormatStyle("./src/*", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Format")]
+        public static void DotNetFormatStyle(this ICakeContext context, string root, DotNetFormatSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetFormatSettings();
+            }
+
+            var formatter = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formatter.Format(root, "style", settings);
+        }
+
+        /// <summary>
+        /// Format code to match editorconfig settings for analyzers.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetFormatAnalyzers("./src/*");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Format")]
+        public static void DotNetFormatAnalyzers(this ICakeContext context, string project)
+        {
+            context.DotNetFormatAnalyzers(project, null);
+        }
+
+        /// <summary>
+        /// Format code to match editorconfig settings for analyzers.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="root">The project or solution path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetFormatSettings
+        /// {
+        ///     NoRestore = true,
+        ///     Include = "Program.cs Utility\Logging.cs"
+        /// };
+        ///
+        /// DotNetFormatAnalyzers("./src/*", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Format")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Format")]
+        public static void DotNetFormatAnalyzers(this ICakeContext context, string root, DotNetFormatSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetFormatSettings();
+            }
+
+            var formatter = new DotNetFormatter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            formatter.Format(root, "analyzers", settings);
+        }
+
+        /// <summary>
+        /// Lists the latest available version of the .NET SDK and .NET Runtime.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// DotNetSDKCheck();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("SDK")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.SDKCheck")]
+        public static void DotNetSDKCheck(this ICakeContext context)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var checker = new DotNetSDKChecker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            checker.Check();
         }
     }
 }

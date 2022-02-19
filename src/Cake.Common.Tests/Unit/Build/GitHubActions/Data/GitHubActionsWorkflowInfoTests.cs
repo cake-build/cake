@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Build.GitHubActions.Data;
 using Cake.Common.Tests.Fixtures.Build;
 using Xunit;
 
@@ -310,6 +311,73 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
 
                 // Then
                 Assert.Equal("/home/runner/work/cake/cake", result);
+            }
+        }
+
+        public sealed class TheAttemptProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.Attempt;
+
+                // Then
+                Assert.Equal(2, result);
+            }
+        }
+
+        public sealed class TheRefProtectedProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.RefProtected;
+
+                // Then
+                Assert.True(result);
+            }
+        }
+
+        public sealed class TheRefNameProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.RefName;
+
+                // Then
+                Assert.Equal("main", result);
+            }
+        }
+
+        public sealed class TheRefTypeProperty
+        {
+            [Theory]
+            [InlineData("branch", GitHubActionsRefType.Branch)]
+            [InlineData("tag", GitHubActionsRefType.Tag)]
+            [InlineData("", GitHubActionsRefType.Unknown)]
+            public void Should_Return_Correct_Value(string value, GitHubActionsRefType expected)
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo(refType: value);
+
+                // When
+                var result = info.RefType;
+
+                // Then
+                Assert.Equal(expected, result);
             }
         }
     }

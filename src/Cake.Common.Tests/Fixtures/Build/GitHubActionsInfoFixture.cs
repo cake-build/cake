@@ -26,6 +26,9 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("RUNNER_TEMP").Returns("/home/runner/work/_temp");
             Environment.GetEnvironmentVariable("RUNNER_TOOL_CACHE").Returns("/opt/hostedtoolcache");
             Environment.GetEnvironmentVariable("RUNNER_WORKSPACE").Returns("/home/runner/work/cake");
+            Environment.GetEnvironmentVariable("ImageOS").Returns("ubuntu20");
+            Environment.GetEnvironmentVariable("ImageVersion").Returns("20211209.3");
+            Environment.GetEnvironmentVariable("RUNNER_USER").Returns("runner");
 
             Environment.GetEnvironmentVariable("GITHUB_ACTION").Returns("run1");
             Environment.GetEnvironmentVariable("GITHUB_ACTION_PATH").Returns("/path/to/action");
@@ -46,6 +49,9 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("GITHUB_SHA").Returns("d1e4f990f57349334368c8253382abc63be02d73");
             Environment.GetEnvironmentVariable("GITHUB_WORKFLOW").Returns("Build");
             Environment.GetEnvironmentVariable("GITHUB_WORKSPACE").Returns("/home/runner/work/cake/cake");
+            Environment.GetEnvironmentVariable("GITHUB_RUN_ATTEMPT").Returns("2");
+            Environment.GetEnvironmentVariable("GITHUB_REF_PROTECTED").Returns("true");
+            Environment.GetEnvironmentVariable("GITHUB_REF_NAME").Returns("main");
 
             Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_TOKEN").Returns(ActionRuntimeToken);
             Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL").Returns(ActionRuntimeUrl);
@@ -54,13 +60,15 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.WorkingDirectory.Returns("/home/runner/work/cake/cake");
         }
 
-        public GitHubActionsRunnerInfo CreateRunnerInfo()
+        public GitHubActionsRunnerInfo CreateRunnerInfo(string architecture = null)
         {
+            Environment.GetEnvironmentVariable("RUNNER_ARCH").Returns(architecture);
             return new GitHubActionsRunnerInfo(Environment);
         }
 
-        public GitHubActionsWorkflowInfo CreateWorkflowInfo()
+        public GitHubActionsWorkflowInfo CreateWorkflowInfo(string refType = null)
         {
+            Environment.GetEnvironmentVariable("GITHUB_REF_TYPE").Returns(refType);
             return new GitHubActionsWorkflowInfo(Environment);
         }
 

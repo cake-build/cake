@@ -14,7 +14,7 @@ namespace Cake.Core.IO
     /// Represents a directory path.
     /// </summary>
     [TypeConverter(typeof(DirectoryPathConverter))]
-    public sealed class DirectoryPath : Path, IEquatable<DirectoryPath>, IComparer<DirectoryPath>
+    public sealed class DirectoryPath : Path, IEquatable<DirectoryPath>, IComparer<DirectoryPath>, IPath<DirectoryPath>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DirectoryPath"/> class.

@@ -112,7 +112,19 @@ namespace Cake.Core.Scripting
                     // Reference found assemblies.
                     foreach (var assembly in assemblies)
                     {
-                        _log.Debug("The addin {0} will reference {1}.", addin.Package, assembly.Path.GetFilename());
+                        var assemblyPath = assembly.Path.MakeAbsolute(_environment);
+
+                        try
+                        {
+                            assemblyPath = _environment.WorkingDirectory.GetRelativePath(assemblyPath);
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            // Paths must share a common prefix.
+                        }
+
+                        _log.Debug("The addin {0} will reference {1}.", addin.Package, assemblyPath);
+
                         result.Add(assembly.Path);
                     }
                 }

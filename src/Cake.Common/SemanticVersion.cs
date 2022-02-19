@@ -321,7 +321,7 @@ namespace Cake.Common
         /// <param name="operand2">second. SemVersion.</param>
         /// <returns>A value indicating if the operand1 was greater than operand2.</returns>
         public static bool operator >(SemVersion operand1, SemVersion operand2)
-            => operand1.CompareTo(operand2) == 1;
+            => operand1 is { } && operand1.CompareTo(operand2) == 1;
 
         /// <summary>
         /// The less than-operator for the SemVersion class.
@@ -330,7 +330,9 @@ namespace Cake.Common
         /// <param name="operand2">second. SemVersion.</param>
         /// <returns>A value indicating if the operand1 was less than operand2.</returns>
         public static bool operator <(SemVersion operand1, SemVersion operand2)
-            => operand1.CompareTo(operand2) == -1;
+            => operand1 is { }
+                ? operand1.CompareTo(operand2) == -1
+                : operand2 is { };
 
         /// <summary>
         /// The greater than or equal to-operator for the SemVersion class.
@@ -339,7 +341,9 @@ namespace Cake.Common
         /// <param name="operand2">second. SemVersion.</param>
         /// <returns>A value indicating if the operand1 was greater than or equal to operand2.</returns>
         public static bool operator >=(SemVersion operand1, SemVersion operand2)
-            => operand1.CompareTo(operand2) >= 0;
+            => operand1 is { }
+                ? operand1.CompareTo(operand2) >= 0
+                : operand2 is null;
 
         /// <summary>
         /// The lesser than or equal to-operator for the SemVersion class.
@@ -348,7 +352,7 @@ namespace Cake.Common
         /// <param name="operand2">second. SemVersion.</param>
         /// <returns>A value indicating if the operand1 was lesser than or equal to operand2.</returns>
         public static bool operator <=(SemVersion operand1, SemVersion operand2)
-            => operand1.CompareTo(operand2) <= 0;
+            => operand1 is null || operand1.CompareTo(operand2) <= 0;
 
         /// <summary>
         /// The equal to-operator for the SemVersion class.
@@ -357,7 +361,7 @@ namespace Cake.Common
         /// <param name="operand2">second. SemVersion.</param>
         /// <returns>A value indicating if the operand1 was equal to operand2.</returns>
         public static bool operator ==(SemVersion operand1, SemVersion operand2)
-            => operand1.Equals(operand2);
+            => operand1?.Equals(operand2) ?? operand2 is null;
 
         /// <summary>
         /// The not equal to-operator for the SemVersion class.
@@ -366,6 +370,6 @@ namespace Cake.Common
         /// <param name="operand2">second. SemVersion.</param>
         /// <returns>A value indicating if the operand1 was not equal to operand2.</returns>
         public static bool operator !=(SemVersion operand1, SemVersion operand2)
-            => !operand1.Equals(operand2);
+            => !(operand1?.Equals(operand2) ?? operand2 is null);
     }
 }
