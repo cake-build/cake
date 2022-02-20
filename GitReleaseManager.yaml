@@ -22,8 +22,6 @@ close:
     The release is available on:
 
     - [GitHub Release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
-    - [NuGet Package](https://www.nuget.org/packages/Cake/{milestone})
-    - [Chocolatey Package](https://chocolatey.org/packages/cake.portable/{milestone})
-    - [.Net Global Tool](https://www.nuget.org/packages/Cake.Tool/{milestone})
-    
+    - [.NET Tool](https://www.nuget.org/packages/Cake.Tool/{milestone})
+
     Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
