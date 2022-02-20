@@ -1,3 +1,23 @@
+### New in 2.1.0 (Released 2022/02/19)
+
+* 2524 XmlTransform support for xsl arguments
+* 3479 Add alias for dotnet format command
+* 3480 Add alias for dotnet sdk check command
+* 3771 Add support for the Chocolatey Export command
+* 2746 Add duration of a task
+* 3733 Show relative path of addin assemblies that are being loaded
+* 3756 Update NuGet.* to 6.0.0
+* 3758 Update Autofac to 6.3.0
+* 3760 Update Spectre.Console to 0.43.0
+* 3764 Add missing GitHub Actions environment info
+* 3769 Update Microsoft.NETCore.Platforms to 6.0.1
+* 3776 Introduce IPath<T> interface for easier code reuse
+* 3777 GitHub Actions UploadArtifact command should accept relative paths
+* 3778 Add GitHub Actions DownloadArtifact command
+* 3743 SemVersion class crashes if compared to `null`
+* 3772 VSTest Alias does not work when only VS 2022 Preview is installed
+* 3794 VS2022 BuildTools are not found by the logic introduced in #3775
+
 ### New in 2.0.0 (Released 2021/11/30)
 
 * 3714 Use Basic.Reference.Assemblies.* to ensure all standard reference assemblies are available for Roslyn.
