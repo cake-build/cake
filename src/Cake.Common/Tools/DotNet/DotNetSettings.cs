@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using Cake.Core.IO;
 using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.DotNet
@@ -25,5 +27,10 @@ namespace Cake.Common.Tools.DotNet
         /// Gets or sets the dotnet roll forward policy.
         /// </summary>
         public DotNetRollForward? RollForward { get; set; }
+
+        /// <summary>
+        /// Gets or sets a delegate which is executed after the process was started.
+        /// </summary>
+        public Action<IProcess> PostAction { get; set; }
     }
 }

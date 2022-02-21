@@ -61,7 +61,7 @@ namespace Cake.Common.Tools.DotNet
             // add arguments common to all commands last
             AppendCommonArguments(arguments, settings);
 
-            Run(settings, arguments, null, null);
+            Run(settings, arguments, null, settings.PostAction);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Cake.Common.Tools.DotNet
             // add arguments common to all commands last
             AppendCommonArguments(arguments, settings);
 
-            Run(settings, arguments, processSettings, null);
+            Run(settings, arguments, processSettings, settings.PostAction);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Cake.Common.Tools.DotNet
             // add arguments common to all commands last
             AppendCommonArguments(arguments, settings);
 
-            Run(settings, arguments, processSettings, postAction);
+            Run(settings, arguments, processSettings, postAction ?? settings.PostAction);
         }
 
         /// <summary>

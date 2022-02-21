@@ -96,6 +96,27 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.Tool
                 // Then
                 AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
             }
+
+            [Fact]
+            public void Executes_PostAction()
+            {
+                var wasExecuted = false;
+
+                // Given
+                var fixture = new DotNetCoreToolFixture();
+                fixture.ProjectPath = "./tests/Cake.Common.Tests/";
+                fixture.Command = "xunit";
+                fixture.Settings = new DotNetCoreToolSettings();
+                fixture.Settings.PostAction = (p) => wasExecuted = true;
+
+                fixture.GivenProcessExitsWithCode(0);
+
+                // When
+                _ = fixture.Run();
+
+                // Then
+                Assert.True(wasExecuted);
+            }
         }
     }
 }
