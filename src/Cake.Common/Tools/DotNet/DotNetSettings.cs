@@ -27,10 +27,5 @@ namespace Cake.Common.Tools.DotNet
         /// Gets or sets the dotnet roll forward policy.
         /// </summary>
         public DotNetRollForward? RollForward { get; set; }
-
-        /// <summary>
-        /// Gets or sets a delegate which is executed after the process was started.
-        /// </summary>
-        public Action<IProcess> PostAction { get; set; }
     }
 }
