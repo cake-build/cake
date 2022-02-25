@@ -159,6 +159,42 @@ namespace Cake.Core.Tests.Unit.Tooling
                 // Then
                 Assert.IsNotType<Exception>(result);
             }
+
+            [Fact]
+            public void Executes_PostAction()
+            {
+                var wasExecuted = false;
+
+                // Given
+                var fixture = new DummyToolFixture();
+                fixture.Settings.PostAction = (p) => wasExecuted = true;
+
+                fixture.GivenProcessExitsWithCode(0);
+
+                // When
+                _ = fixture.Run();
+
+                // Then
+                Assert.True(wasExecuted);
+            }
+
+            [Fact]
+            public void Executes_SetupProcessSettings()
+            {
+                var wasExecuted = false;
+
+                // Given
+                var fixture = new DummyToolFixture();
+                fixture.Settings.SetupProcessSettings = (p) => wasExecuted = true;
+
+                fixture.GivenProcessExitsWithCode(0);
+
+                // When
+                _ = fixture.Run();
+
+                // Then
+                Assert.True(wasExecuted);
+            }
         }
     }
 }
