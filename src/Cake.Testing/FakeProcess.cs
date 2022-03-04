@@ -29,7 +29,7 @@ namespace Cake.Testing
         }
 
         /// <inheritdoc/>
-        public bool WaitForExit(int milliseconds)
+        public bool WaitForExit(int milliseconds ,bool entireProcessTree = false)
         {
             return true;
         }
@@ -53,7 +53,7 @@ namespace Cake.Testing
         }
 
         /// <inheritdoc/>
-        public void Kill()
+        public void Kill(bool entireProcessTree = false)
         {
         }
 

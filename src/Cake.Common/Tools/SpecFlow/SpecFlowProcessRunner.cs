@@ -24,7 +24,7 @@ namespace Cake.Common.Tools.SpecFlow
             {
             }
 
-            public bool WaitForExit(int milliseconds)
+            public bool WaitForExit(int milliseconds, bool entireProcessTree = false)
             {
                 return true;
             }
@@ -44,7 +44,7 @@ namespace Cake.Common.Tools.SpecFlow
                 return Enumerable.Empty<string>();
             }
 
-            public void Kill()
+            public void Kill(bool entireProcessTree = false)
             {
             }
         }

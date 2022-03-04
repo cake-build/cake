@@ -21,8 +21,9 @@ namespace Cake.Core.IO
         /// Waits for the process to exit with possible timeout for command.
         /// </summary>
         /// <param name="milliseconds">The amount of time, in milliseconds, to wait for the associated process to exit. The maximum is the largest possible value of a 32-bit integer, which represents infinity to the operating system.</param>
+        /// <param name="entireProcessTree">true to kill the associated process and its descendants; false to kill only the associated process.</param>
         /// <returns>true if the associated process has exited; otherwise, false.</returns>
-        bool WaitForExit(int milliseconds);
+        bool WaitForExit(int milliseconds, bool entireProcessTree = false);
 
         /// <summary>
         /// Gets the exit code of the process.
@@ -45,6 +46,7 @@ namespace Cake.Core.IO
         /// <summary>
         /// Immediately stops the associated process.
         /// </summary>
-        void Kill();
+        /// <param name="entireProcessTree">true to kill the associated process and its descendants; false to kill only the associated process.</param>
+        void Kill(bool entireProcessTree = false);
     }
 }

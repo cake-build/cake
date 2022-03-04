@@ -39,7 +39,7 @@ namespace Cake.Core.IO
             _process.WaitForExit();
         }
 
-        public bool WaitForExit(int milliseconds)
+        public bool WaitForExit(int milliseconds, bool entireProcessTree=false)
         {
             if (_process.WaitForExit(milliseconds))
             {
@@ -48,7 +48,7 @@ namespace Cake.Core.IO
             _process.Refresh();
             if (!_process.HasExited)
             {
-                _process.Kill();
+                _process.Kill(entireProcessTree);
             }
             return false;
         }
@@ -106,9 +106,9 @@ namespace Cake.Core.IO
             }
         }
 
-        public void Kill()
+        public void Kill(bool entireProcessTree=false)
         {
-            _process.Kill();
+            _process.Kill(entireProcessTree);
             _process.WaitForExit();
         }
 
