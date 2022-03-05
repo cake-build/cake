@@ -39,7 +39,7 @@ namespace Cake.Core.IO
             _process.WaitForExit();
         }
 
-        public bool WaitForExit(int milliseconds, bool entireProcessTree=false)
+        public bool WaitForExit(int milliseconds, bool entireProcessTree = false)
         {
             if (_process.WaitForExit(milliseconds))
             {
