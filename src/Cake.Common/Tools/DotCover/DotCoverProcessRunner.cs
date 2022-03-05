@@ -24,7 +24,7 @@ namespace Cake.Common.Tools.DotCover
             {
             }
 
-            public bool WaitForExit(int milliseconds , bool entireProcessTree = false)
+            public bool WaitForExit(int milliseconds, bool entireProcessTree = false)
             {
                 return true;
             }
