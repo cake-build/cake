@@ -106,7 +106,7 @@ namespace Cake.Core.IO
             }
         }
 
-        public void Kill(bool entireProcessTree=false)
+        public void Kill(bool entireProcessTree = false)
         {
             _process.Kill(entireProcessTree);
             _process.WaitForExit();
