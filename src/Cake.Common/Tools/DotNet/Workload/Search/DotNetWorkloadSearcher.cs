@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -32,10 +35,25 @@ namespace Cake.Common.Tools.DotNet.Workload.Search
         /// Lists the latest available version of the .NET SDK and .NET Runtime, for each feature band.
         /// </summary>
         /// <param name="searchString">The workload ID to search for, or part of it.</param>
-        public void Search(string searchString)
+        /// <param name="settings">The settings.</param>
+        /// <returns>The list of available workloads.</returns>
+        public IEnumerable<DotNetWorkload> Search(string searchString, DotNetWorkloadSearchSettings settings)
         {
-            var settings = new DotNetWorkloadSearchSettings();
-            RunCommand(settings, GetArguments(searchString, settings));
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            var processSettings = new ProcessSettings
+            {
+                RedirectStandardOutput = true
+            };
+
+            IEnumerable<string> result = null;
+            RunCommand(settings, GetArguments(searchString, settings), processSettings,
+                process => result = process.GetStandardOutput());
+
+            return ParseResult(result).ToList();
         }
 
         private ProcessArgumentBuilder GetArguments(string searchString, DotNetWorkloadSearchSettings settings)
@@ -50,6 +68,40 @@ namespace Cake.Common.Tools.DotNet.Workload.Search
             }
 
             return builder;
+        }
+
+        private static IEnumerable<DotNetWorkload> ParseResult(IEnumerable<string> result)
+        {
+            bool first = true;
+            int descriptionIndex = -1;
+            foreach (var line in result)
+            {
+                if (first)
+                {
+                    if (line?.StartsWith("Workload ID") == true
+                        && (descriptionIndex = line?.IndexOf("Description") ?? -1) > 11)
+                    {
+                        first = false;
+                    }
+                    continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+
+                var trimmedLine = line.Trim();
+
+                if (trimmedLine.Trim().All(c => c == '-'))
+                {
+                    continue;
+                }
+
+                yield return new DotNetWorkload(
+                    string.Concat(trimmedLine.Take(descriptionIndex)).TrimEnd(),
+                    string.Concat(trimmedLine.Skip(descriptionIndex)));
+            }
         }
     }
 }

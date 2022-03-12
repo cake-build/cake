@@ -1851,17 +1851,23 @@ namespace Cake.Common.Tools.DotNet
         /// Lists available workloads.
         /// </summary>
         /// <param name="context">The context.</param>
+        /// <returns>The list of available workloads.</returns>
         /// <example>
         /// <code>
-        /// DotNetWorkloadSearch();
+        /// var workloads = DotNetWorkloadSearch();
+        ///
+        /// foreach (var workload in workloads)
+        /// {
+        ///      Information($"Id: {workload.Id}, Description: {workload.Description}");
+        /// }
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Workload")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Search")]
-        public static void DotNetWorkloadSearch(this ICakeContext context)
+        public static IEnumerable<DotNetWorkload> DotNetWorkloadSearch(this ICakeContext context)
         {
-            context.DotNetWorkloadSearch(null);
+            return context.DotNetWorkloadSearch(null);
         }
 
         /// <summary>
@@ -1869,23 +1875,63 @@ namespace Cake.Common.Tools.DotNet
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="searchString">The workload ID to search for, or part of it.</param>
+        /// <returns>The list of available workloads.</returns>
         /// <example>
         /// <code>
-        /// DotNetWorkloadSearch("maui");
+        /// var workloads = DotNetWorkloadSearch("maui");
+        ///
+        /// foreach (var workload in workloads)
+        /// {
+        ///      Information($"Id: {workload.Id}, Description: {workload.Description}");
+        /// }
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Workload")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Search")]
-        public static void DotNetWorkloadSearch(this ICakeContext context, string searchString)
+        public static IEnumerable<DotNetWorkload> DotNetWorkloadSearch(this ICakeContext context, string searchString)
+        {
+            return context.DotNetWorkloadSearch(searchString, null);
+        }
+
+        /// <summary>
+        /// Lists available workloads by specifying all or part of the workload ID.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="searchString">The workload ID to search for, or part of it.</param>
+        /// <returns>The list of available workloads.</returns>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadSearchSettings
+        /// {
+        ///     Verbosity = Detailed
+        /// };
+        ///
+        /// var workloads = DotNetWorkloadSearch("maui", settings);
+        ///
+        /// foreach (var workload in workloads)
+        /// {
+        ///      Information($"Id: {workload.Id}, Description: {workload.Description}");
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Search")]
+        public static IEnumerable<DotNetWorkload> DotNetWorkloadSearch(this ICakeContext context, string searchString, DotNetWorkloadSearchSettings settings)
         {
             if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
+            if (settings == null)
+            {
+                settings = new DotNetWorkloadSearchSettings();
+            }
+
             var searcher = new DotNetWorkloadSearcher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            searcher.Search(searchString);
+            return searcher.Search(searchString, settings);
         }
     }
 }

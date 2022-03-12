@@ -53,6 +53,36 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Workload.Search
                 // Then
                 Assert.Equal("workload search maui", result.Args);
             }
+
+            [Fact]
+            public void Should_Return_Correct_List_Of_Workloads()
+            {
+                // Given
+                var fixture = new DotNetWorkloadSearcherFixture();
+                fixture.SearchString = "maui";
+                fixture.GivenAvailableWorkloadsResult();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Collection(fixture.Workloads,
+                    item =>
+                    {
+                        Assert.Equal(item.Id, "maui");
+                        Assert.Equal(item.Description, ".NET MAUI SDK for all platforms");
+                    },
+                    item =>
+                    {
+                        Assert.Equal(item.Id, "maui-desktop");
+                        Assert.Equal(item.Description, ".NET MAUI SDK for Desktop");
+                    },
+                    item =>
+                    {
+                        Assert.Equal(item.Id, "maui-mobile");
+                        Assert.Equal(item.Description, ".NET MAUI SDK for Mobile");
+                    });
+            }
         }
     }
 }

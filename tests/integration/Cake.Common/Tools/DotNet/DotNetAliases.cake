@@ -270,7 +270,14 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadSearch")
     var searchString = "maui";
 
     // When
-    DotNetWorkloadSearch(searchString);
+    var workloads = DotNetWorkloadSearch(searchString);
+
+    // Then
+    foreach(var workload in workloads)
+    {
+        Assert.Contains(workload.Id, "maui");
+        Assert.Contains(workload.Description, ".NET MAUI SDK");
+    }
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
