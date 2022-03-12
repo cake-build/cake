@@ -1899,6 +1899,7 @@ namespace Cake.Common.Tools.DotNet
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="searchString">The workload ID to search for, or part of it.</param>
+        /// <param name="settings">The settings.</param>
         /// <returns>The list of available workloads.</returns>
         /// <example>
         /// <code>
