@@ -275,8 +275,8 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadSearch")
     // Then
     foreach(var workload in workloads)
     {
-        Assert.Contains(workload.Id, "maui");
-        Assert.Contains(workload.Description, ".NET MAUI SDK");
+        Assert.Contains("maui", workload.Id);
+        Assert.Contains(".NET MAUI SDK", workload.Description);
     }
 });
 
