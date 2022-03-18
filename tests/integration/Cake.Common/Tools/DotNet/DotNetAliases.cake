@@ -271,7 +271,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetStore")
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
 
     // When
-    DotNetStore(project.FullPath, "net6.0", "win-x64");
+    DotNetStore(project.FullPath, "netcoreapp3.1", "win-x64");
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
