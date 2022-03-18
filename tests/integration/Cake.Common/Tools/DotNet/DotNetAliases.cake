@@ -269,9 +269,22 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetStore")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    string runtime = null;
+    switch(Context.Environment.Platform.Family)
+    {
+        case PlatformFamily.Windows:
+            runtime = "win-x64";
+            break;
+        case PlatformFamily.Linux:
+            runtime = "linux-x64";
+            break;
+        case PlatformFamily.OSX:
+            runtime = "osx-x64";
+            break;
+    }
 
     // When
-    DotNetStore(project.FullPath, "netcoreapp3.1", "win-x64");
+    DotNetStore(project.FullPath, "netcoreapp3.1", runtime);
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
