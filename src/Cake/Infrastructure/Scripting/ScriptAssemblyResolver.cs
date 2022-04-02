@@ -15,6 +15,7 @@ namespace Cake.Infrastructure.Scripting
     public sealed class ScriptAssemblyResolver : IDisposable
     {
         private const string AssemblyResourcesExtension = ".resources";
+        private static readonly Version VersionZero = new Version(0, 0, 0, 0);
 
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
@@ -49,6 +50,11 @@ namespace Cake.Infrastructure.Scripting
             var shortName = assemblyName.Name;
             var version = assemblyName.Version;
 
+            if (version == VersionZero)
+            {
+                return null;
+            }
+
             // Preventing indirect recursive calls via Assembly.Load()
             if (!_resolvedNames.Add(shortName + version))
             {
@@ -64,6 +70,11 @@ namespace Cake.Infrastructure.Scripting
             var fullName = assemblyName.FullName;
             var shortName = assemblyName.Name;
             var version = assemblyName.Version;
+
+            if (version == VersionZero)
+            {
+                return null;
+            }
 
             Assembly assembly = null;
             try
