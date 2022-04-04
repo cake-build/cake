@@ -18,11 +18,11 @@ namespace Cake.Testing.Xunit
         }
 
         // ReSharper disable once UnusedParameter.Local
-        public WindowsTheory(string reason = null)
+        public WindowsTheory(bool invert = false, string reason = null)
         {
-            if (_family != PlatformFamily.Windows)
+            if ((_family != PlatformFamily.Windows) ^ invert)
             {
-                Skip = reason ?? "Windows test.";
+                Skip = reason ?? (invert ? "Non-Windows test" : "Windows test.");
             }
         }
     }
