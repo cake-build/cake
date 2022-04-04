@@ -23,6 +23,7 @@ using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNet.VSTest;
 using Cake.Common.Tools.DotNet.Workload.Search;
+using Cake.Common.Tools.DotNet.Workload.Uninstall;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
@@ -1933,6 +1934,48 @@ namespace Cake.Common.Tools.DotNet
 
             var searcher = new DotNetWorkloadSearcher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return searcher.Search(searchString, settings);
+        }
+
+        /// <summary>
+        /// Uninstalls a specified workload.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="workloadId">The workload ID to uninstall.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadUninstall("maui");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Uninstall")]
+        public static void DotNetWorkloadUninstall(this ICakeContext context, string workloadId)
+        {
+            context.DotNetWorkloadUninstall(new string[] { workloadId });
+        }
+
+        /// <summary>
+        /// Uninstalls one or more workloads.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="workloadIds">The workload ID or multiple IDs to uninstall.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadUninstall(new string[] { "maui", "maui-desktop", "maui-mobile" });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Uninstall")]
+        public static void DotNetWorkloadUninstall(this ICakeContext context, IEnumerable<string> workloadIds)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var uninstaller = new DotNetWorkloadUninstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            uninstaller.Uninstall(workloadIds);
         }
     }
 }
