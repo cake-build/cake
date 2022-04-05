@@ -352,7 +352,7 @@ namespace Cake.Core.Tests.Unit.IO
 
             public sealed class InUnixFormat
             {
-                [WindowsTheory(true)]
+                [NonWindowsTheory]
                 [InlineData("/C", "/")]
                 [InlineData("/C/", "/")]
                 [InlineData("/C/Data", "/C")]
@@ -372,7 +372,7 @@ namespace Cake.Core.Tests.Unit.IO
                     Assert.Equal(parentPath, result.FullPath);
                 }
 
-                [WindowsTheory(true)]
+                [NonWindowsTheory]
                 [InlineData("/")]
                 public void Should_Return_Null_If_No_Parent(string directoryPath)
                 {
