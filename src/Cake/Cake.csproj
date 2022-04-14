@@ -26,9 +26,9 @@
 
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.0.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.1.0" />
     <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
-    <PackageReference Include="System.Reflection.Metadata" Version="6.0.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="6.0.1" />
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Basic.Reference.Assemblies.Net60" Version="1.2.4" Condition="'$(TargetFramework)' == 'net6.0'" />
     <PackageReference Include="Basic.Reference.Assemblies.Net50" Version="1.2.4" Condition="'$(TargetFramework)' == 'net5.0'" />

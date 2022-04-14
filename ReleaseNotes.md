@@ -1,3 +1,22 @@
+### New in 2.2.0 (Released 2022/04/15)
+
+* 3821 PostAction is not setable on DotNetSettings.
+* 3485 Add alias for dotnet workload search command.
+* 2099 Cache compiled script on disk.
+* 3866 Update Microsoft.NETCore.Platforms to 6.0.3.
+* 3854 Update Spectre.Console to 0.44.0.
+* 3851 Update System.Reflection.Metadata to 6.0.1.
+* 3846 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.1.0.
+* 3844 Update Microsoft.NETCore.Platforms to 6.0.2.
+* 3843 Update NuGet.* to 6.1.0.
+* 2763 Provide property to return parent directory on DirectoryPath.
+* 2431 UploadFile should support option of username/password.
+* 3819 Update Git Release Manager Comment template to remove Cake NuGet package and Chocolatey portable.
+* 3859 PathCollapser.Collapse breaks UNC paths.
+* 3858 PathCollapser.Collapse shows wrong output for if .. is the second segment in the path.
+* 3823 Executing a cake script leads to System.IO.FileNotFoundException for several System.(...) assemblies.
+* 3735 Incorrect warnings in diagnostic logs.
+
 ### New in 2.1.0 (Released 2022/02/19)
 
 * 2524 XmlTransform support for xsl arguments

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Cake.Core.Polyfill;
 
 namespace Cake.Core.IO
 {
@@ -53,6 +54,55 @@ namespace Cake.Core.IO
             }
 
             return new FilePath(PathHelper.Combine(FullPath, path.GetFilename().FullPath));
+        }
+
+        /// <summary>
+        /// Gets the directory path of a <see cref="DirectoryPath"/>.
+        /// </summary>
+        /// <returns>A <see cref="DirectoryPath"/> to the parent directory of the given <see cref="DirectoryPath"/>.</returns>
+        public DirectoryPath GetParent()
+        {
+            var collapsed = this.Collapse();
+
+            if (collapsed.Segments.Length == 0)
+            {
+                return null;
+            }
+
+            if (collapsed.IsUNC && collapsed.Segments.Length < 4)
+            {
+                // UNC is special: \\server\share makes 3 (!) Segments
+                // Also, \\server\share simply has no parent
+                return null;
+            }
+
+            if (collapsed.Segments.Length == 1)
+            {
+                if (collapsed.IsRelative)
+                {
+                    // something like "relativeFolder/", whose parent is simply "."
+                    return new DirectoryPath(".");
+                }
+
+                // one segment on Windows is e.g. "C:/"
+                // on all other systems one segment is e.g "/home"
+                if (EnvironmentHelper.GetPlatformFamily() == PlatformFamily.Windows)
+                {
+                    // no more parents
+                    return null;
+                }
+
+                // root ("/") is not really a segment for Cake,
+                // so we return that directly.
+                return new DirectoryPath("/");
+            }
+
+            var segments = collapsed.Segments.Take(collapsed.Segments.Length - 1);
+            var fullPath = collapsed.IsUNC
+                ? @"\\" + string.Join(Separator.ToString(), segments.Skip(1))
+                : string.Join(Separator.ToString(), segments);
+
+            return new DirectoryPath(fullPath);
         }
 
         /// <summary>
@@ -186,7 +236,7 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
-        /// Determines wheter two <see cref="DirectoryPath"/> instances are equal.
+        /// Determines whether two <see cref="DirectoryPath"/> instances are equal.
         /// </summary>
         /// <param name="other">the <see cref="DirectoryPath"/> to compare.</param>
         /// <returns>True if other is equal to current object, False otherwise.</returns>
@@ -194,7 +244,7 @@ namespace Cake.Core.IO
             => PathComparer.Default.Equals(this, other);
 
         /// <summary>
-        /// Determines wheter two <see cref="DirectoryPath"/> instances are equal.
+        /// Determines whether two <see cref="DirectoryPath"/> instances are equal.
         /// </summary>
         /// <param name="other">the <see cref="DirectoryPath"/> to compare.</param>
         /// <returns>True if other is equal to current object, False otherwise.</returns>
@@ -202,7 +252,7 @@ namespace Cake.Core.IO
             => Equals(other as DirectoryPath);
 
         /// <summary>
-        /// Determines wheter two <see cref="DirectoryPath"/> instances are equal.
+        /// Determines whether two <see cref="DirectoryPath"/> instances are equal.
         /// </summary>
         /// <param name="directoryPath">left side <see cref="DirectoryPath"/>.</param>
         /// <param name="otherDirectoryPath">right side <see cref="DirectoryPath"/>.</param>
@@ -212,7 +262,7 @@ namespace Cake.Core.IO
                 || directoryPath?.Equals(otherDirectoryPath) == true;
 
         /// <summary>
-        /// Determines wheter two <see cref="DirectoryPath"/> instances are different.
+        /// Determines whether two <see cref="DirectoryPath"/> instances are different.
         /// </summary>
         /// <param name="directoryPath">left side <see cref="DirectoryPath"/>.</param>
         /// <param name="otherDirectoryPath">right side <see cref="DirectoryPath"/>.</param>

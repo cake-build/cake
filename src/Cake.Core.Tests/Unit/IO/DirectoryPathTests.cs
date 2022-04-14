@@ -255,6 +255,139 @@ namespace Cake.Core.Tests.Unit.IO
             }
         }
 
+        public sealed class TheGetParentMethod
+        {
+            public sealed class InUncFormat
+            {
+                [Theory]
+                [InlineData(@"\\server\share\folder", @"\\server\share")]
+                public void Should_Return_Parent_Directory(string directoryPath, string parentPath)
+                {
+                    // Given
+                    var path = new DirectoryPath(directoryPath);
+
+                    // When
+                    var result = path.GetParent();
+
+                    // Then
+                    Assert.Equal(parentPath, result.FullPath);
+                }
+
+                [Theory]
+                [InlineData(@"\\Server\")]
+                [InlineData(@"\\Server")]
+                [InlineData(@"\\Server\Share")]
+                public void Should_Return_Null_If_No_Parent(string directoryPath)
+                {
+                    // Given
+                    var path = new DirectoryPath(directoryPath);
+
+                    // When
+                    var result = path.GetParent();
+
+                    // Then
+                    Assert.Equal(null, result);
+                }
+            }
+            public sealed class InRelativeFormat
+            {
+                [Theory]
+                [InlineData("foo\\bar", "foo")]
+                [InlineData("foo\\bar\\baz\\..\\..\\Work", "foo")]
+                [InlineData("foo/bar/baz/../../Work", "foo")]
+                [InlineData("foo/bar", "foo")]
+                [InlineData("Data\\Work\\..\\foo", "Data")]
+                [InlineData("Data/Work/../foo", "Data")]
+                [InlineData("someFolder", ".")]
+                [InlineData("..", ".")] // a bit unexpected, but due to the way "Collapse" works.
+                [InlineData("./", ".")] // a bit unexpected, but due to the way "Collapse" works.
+                public void Should_Return_Parent_Directory(string directoryPath, string parentPath)
+                {
+                    // Given
+                    var path = new DirectoryPath(directoryPath);
+
+                    // When
+                    var result = path.GetParent();
+
+                    // Then
+                    Assert.Equal(parentPath, result.FullPath);
+                }
+            }
+
+            public sealed class InWindowsFormat
+            {
+                [WindowsTheory]
+                [InlineData("C:/Data", "C:/")]
+                [InlineData("C:/Data/Work", "C:/Data")]
+                [InlineData("C:/Data/Work/file.txt", "C:/Data/Work")]
+                [InlineData("C:\\folder\\foo\\..", "C:/")]
+                public void Should_Return_Parent_Directory(string directoryPath, string parentPath)
+                {
+                    // Given
+                    var path = new DirectoryPath(directoryPath);
+
+                    // When
+                    var result = path.GetParent();
+
+                    // Then
+                    Assert.Equal(parentPath, result.FullPath);
+                }
+
+                [WindowsTheory]
+                [InlineData("C:/")]
+                [InlineData("C:")]
+                [InlineData("C:/..")]
+                public void Should_Return_Null_If_No_Parent(string directoryPath)
+                {
+                    // Given
+                    var path = new DirectoryPath(directoryPath);
+
+                    // When
+                    var result = path.GetParent();
+
+                    // Then
+                    Assert.Equal(null, result);
+                }
+            }
+
+            public sealed class InUnixFormat
+            {
+                [NonWindowsTheory]
+                [InlineData("/C", "/")]
+                [InlineData("/C/", "/")]
+                [InlineData("/C/Data", "/C")]
+                [InlineData("/C/Data/Work", "/C/Data")]
+                [InlineData("/C/Data/Work/file.txt", "/C/Data/Work")]
+                [InlineData("/folder/foo/..", "/")]
+                public void Should_Return_Parent_Directory(string directoryPath, string parentPath)
+                {
+                    // Given
+                    var path = new DirectoryPath(directoryPath);
+
+                    // When
+                    var result = path.GetParent();
+
+                    // Then
+                    Assert.Equal(parentPath, result.FullPath);
+                }
+
+                [NonWindowsTheory]
+                [InlineData("/")]
+                [InlineData("/..")]
+                public void Should_Return_Null_If_No_Parent(string directoryPath)
+                {
+                    // Given
+                    var path = new DirectoryPath(directoryPath);
+
+                    // When
+                    var result = path.GetParent();
+
+                    // Then
+                    Assert.Equal(null, result);
+                }
+            }
+        }
+
         public sealed class TheMakeAbsoluteMethod
         {
             public sealed class ThatTakesAnEnvironment

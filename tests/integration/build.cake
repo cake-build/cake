@@ -6,6 +6,7 @@
 // Tests
 #load "setup.cake"
 #load "teardown.cake"
+#load "./Cake/ScriptCache.cake"
 #load "./Cake.Common/ArgumentAliases.cake"
 #load "./Cake.Common/Build/BuildSystemAliases.cake"
 #load "./Cake.Common/EnvironmentAliases.cake"
@@ -54,6 +55,9 @@ var target = Argument<string>("target", "Run-All-Tests");
 // TARGETS
 //////////////////////////////////////////////////
 
+Task("Cake")
+    .IsDependentOn("Cake.ScriptCache");
+
 Task("Cake.Core")
     .IsDependentOn("Cake.Core.Diagnostics")
     .IsDependentOn("Cake.Core.IO.Path")
@@ -100,6 +104,7 @@ Task("Cake.Chocolatey")
 
 Task("Run-All-Tests")
     .IsDependentOn("Setup-Tests")
+    .IsDependentOn("Cake")
     .IsDependentOn("Cake.Core")
     .IsDependentOn("Cake.Common")
     .IsDependentOn("Cake.DotNetTool.Module")

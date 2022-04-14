@@ -95,7 +95,7 @@ namespace Cake.Core.Tooling
             }
 
             // Post action specified?
-            postAction?.Invoke(process);
+            (postAction ?? settings.PostAction)?.Invoke(process);
 
             var exitCode = process.GetExitCode();
             if (!settings.HandleExitCode?.Invoke(exitCode) ?? true)
@@ -189,6 +189,9 @@ namespace Cake.Core.Tooling
 
             // Want to opt out of using a working directory?
             info.NoWorkingDirectory = settings.NoWorkingDirectory;
+
+            // Configure process settings
+            settings.SetupProcessSettings?.Invoke(info);
 
             // Run the process.
             var process = _processRunner.Start(toolPath, info);

@@ -109,5 +109,15 @@ namespace Cake.Core.Tooling
         /// </code>
         /// </example>
         public Func<int, bool> HandleExitCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets a delegate which is executed after the process was started.
+        /// </summary>
+        public Action<IProcess> PostAction { get; set; }
+
+        /// <summary>
+        /// Gets or sets a delegate to configure the process settings.
+        /// </summary>
+        public Action<ProcessSettings> SetupProcessSettings { get; set; }
     }
 }

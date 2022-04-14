@@ -9,6 +9,7 @@ namespace Cake.Infrastructure.Scripting
 {
     public sealed class ReferenceAssemblyResolver : IReferenceAssemblyResolver
     {
+        private static readonly Version VersionZero = new Version(0, 0, 0, 0);
         private readonly ICakeLog _log;
 
         public ReferenceAssemblyResolver(ICakeLog log)
@@ -36,7 +37,7 @@ namespace Cake.Infrastructure.Scripting
                     }
                     catch (Exception ex)
                     {
-                        _log.Debug(log => log("Failed to load {0}\r\n{1}", reference.FilePath, ex));
+                        _log.Debug(log => log("Failed to load {0}\r\nException: {1}", reference.FilePath, ex));
                         continue;
                     }
 
@@ -49,6 +50,12 @@ namespace Cake.Infrastructure.Scripting
 
                     foreach (var assemblyRefName in assembly.GetReferencedAssemblies())
                     {
+                        if (assemblyRefName == null ||
+                            assemblyRefName.Version == VersionZero)
+                        {
+                            continue;
+                        }
+
                         Assembly assemblyRef;
                         try
                         {
@@ -56,7 +63,7 @@ namespace Cake.Infrastructure.Scripting
                         }
                         catch (Exception ex)
                         {
-                            _log.Debug(log => log("Failed to load {0}\r\n{1}", reference.FilePath, ex));
+                            _log.Debug(log => log("Failed to load {0}\r\nReference: {1}\r\n Exception: {2}", assemblyRefName, assembly, ex));
                             continue;
                         }
 

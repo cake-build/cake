@@ -235,15 +235,20 @@ namespace Cake.Common.Net
         /// <example>
         /// <code>
         /// var address = new Uri("http://www.example.org/upload");
-        /// UploadFile(address, @"path/to/file.txt");
+        /// UploadFile(address, @"path/to/file.txt", new UploadFileSettings()
+        /// {
+        ///     Username = "bob",
+        ///     Password = "builder"
+        /// }
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the upload resource.</param>
         /// <param name="filePath">The file to upload.</param>
+        /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Upload")]
-        public static void UploadFile(this ICakeContext context, Uri address, FilePath filePath)
+        public static void UploadFile(this ICakeContext context, Uri address, FilePath filePath, UploadFileSettings settings)
         {
             if (context == null)
             {
@@ -259,8 +264,17 @@ namespace Cake.Common.Net
             }
 
             context.Log.Verbose("Uploading file: {0}", address);
-            using (var client = GetHttpClient(context, false))
+            using (var client = GetHttpClient(context, settings.UseDefaultCredentials))
             {
+                if (!settings.UseDefaultCredentials)
+                {
+                    if (!string.IsNullOrWhiteSpace(settings.Username) && !string.IsNullOrWhiteSpace(settings.Password))
+                    {
+                        var byteArray = Encoding.ASCII.GetBytes(string.Concat(settings.Username, ":", settings.Password));
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+                    }
+                }
+
                 client.UploadFileAsync(address, filePath.FullPath).Wait();
             }
             context.Log.Verbose("File upload complete");
@@ -282,7 +296,7 @@ namespace Cake.Common.Net
         [CakeAliasCategory("Upload")]
         public static void UploadFile(this ICakeContext context, string address, FilePath filePath)
         {
-            UploadFile(context, new Uri(address), filePath);
+            UploadFile(context, new Uri(address), filePath, new UploadFileSettings());
         }
 
         /// <summary>
@@ -291,16 +305,20 @@ namespace Cake.Common.Net
         /// <example>
         /// <code>
         /// var address = new Uri("http://www.example.org/upload");
-        /// UploadFile(address, @"path/to/file.txt");
+        /// UploadFile(address, @"path/to/file.txt", new UploadFileSettings() {
+        ///     Username = "bob",
+        ///     Password = "builder"
+        /// });
         /// </code>
         /// </example>
         /// <param name="context">The context.</param>
         /// <param name="address">The URL of the upload resource.</param>
         /// <param name="data">The data to upload.</param>
         /// <param name="fileName">The filename to give the uploaded data.</param>
+        /// <param name="settings">The settings.</param>
         [CakeMethodAlias]
         [CakeAliasCategory("Upload")]
-        public static void UploadFile(this ICakeContext context, Uri address, byte[] data, string fileName)
+        public static void UploadFile(this ICakeContext context, Uri address, byte[] data, string fileName, UploadFileSettings settings)
         {
             if (context == null)
             {
@@ -316,8 +334,17 @@ namespace Cake.Common.Net
             }
 
             context.Log.Verbose("Uploading file: {0}", address);
-            using (var client = GetHttpClient(context, false))
+            using (var client = GetHttpClient(context, settings.UseDefaultCredentials))
             {
+                if (!settings.UseDefaultCredentials)
+                {
+                    if (!string.IsNullOrWhiteSpace(settings.Username) && !string.IsNullOrWhiteSpace(settings.Password))
+                    {
+                        var byteArray = Encoding.ASCII.GetBytes(string.Concat(settings.Username, ":", settings.Password));
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+                    }
+                }
+
                 client.UploadFileAsync(address, data, fileName).Wait();
             }
             context.Log.Verbose("File upload complete");
@@ -340,7 +367,7 @@ namespace Cake.Common.Net
         [CakeAliasCategory("Upload")]
         public static void UploadFile(this ICakeContext context, string address, byte[] data, string fileName)
         {
-            UploadFile(context, new Uri(address), data, fileName);
+            UploadFile(context, new Uri(address), data, fileName, new UploadFileSettings());
         }
 
         /// <summary>
