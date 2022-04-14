@@ -69,12 +69,6 @@ namespace Cake.Core.IO
                 return null;
             }
 
-            if (IsUNC && collapsed.FullPath.StartsWith("//"))
-            {
-                // workaround for GH-3859
-                collapsed = new DirectoryPath(collapsed.FullPath.Replace("/", "\\"));
-            }
-
             if (collapsed.IsUNC && collapsed.Segments.Length < 4)
             {
                 // UNC is special: \\server\share makes 3 (!) Segments

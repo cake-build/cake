@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cake.Core.Polyfill;
 
 namespace Cake.Core.IO
 {
@@ -16,8 +17,31 @@ namespace Cake.Core.IO
             {
                 throw new ArgumentNullException(nameof(path));
             }
+
+            var isUncPath = path.IsUNC;
+            var isWindowsPlatform = EnvironmentHelper.IsWindows(EnvironmentHelper.GetPlatformFamily());
+            var minStackHeight = 0;
             var stack = new Stack<string>();
             var segments = path.FullPath.Split('/', '\\');
+            if (!path.IsRelative)
+            {
+                if (isUncPath)
+                {
+                    // first two segments are string.Empty, followed by server and share
+                    minStackHeight = 3;
+                }
+                else if (isWindowsPlatform)
+                {
+                    // first segment is c:
+                    minStackHeight = 1;
+                }
+                else
+                {
+                    // first segment is string.Empty
+                    minStackHeight = 1;
+                }
+            }
+
             foreach (var segment in segments)
             {
                 if (segment == ".")
@@ -26,7 +50,7 @@ namespace Cake.Core.IO
                 }
                 if (segment == "..")
                 {
-                    if (stack.Count > 1)
+                    if (stack.Count > minStackHeight)
                     {
                         stack.Pop();
                     }
@@ -34,8 +58,23 @@ namespace Cake.Core.IO
                 }
                 stack.Push(segment);
             }
-            string collapsed = string.Join("/", stack.Reverse());
-            return collapsed == string.Empty ? "." : collapsed;
+            var collapsed = string.Join(path.Separator.ToString(), stack.Reverse());
+            if (collapsed != string.Empty)
+            {
+                return collapsed;
+            }
+
+            if (path.IsRelative)
+            {
+                return ".";
+            }
+
+            if (isUncPath)
+            {
+                return @"\\";
+            }
+
+            return isWindowsPlatform ? path.Segments[0] : "/";
         }
     }
 }

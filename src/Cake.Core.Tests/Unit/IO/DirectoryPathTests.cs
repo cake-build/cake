@@ -359,7 +359,6 @@ namespace Cake.Core.Tests.Unit.IO
                 [InlineData("/C/Data/Work", "/C/Data")]
                 [InlineData("/C/Data/Work/file.txt", "/C/Data/Work")]
                 [InlineData("/folder/foo/..", "/")]
-                [InlineData("/..", ".")] // a bit unexpected, but due to the way "Collapse" works.
                 public void Should_Return_Parent_Directory(string directoryPath, string parentPath)
                 {
                     // Given
@@ -374,6 +373,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 [NonWindowsTheory]
                 [InlineData("/")]
+                [InlineData("/..")]
                 public void Should_Return_Null_If_No_Parent(string directoryPath)
                 {
                     // Given
