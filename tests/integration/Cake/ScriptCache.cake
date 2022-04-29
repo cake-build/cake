@@ -5,19 +5,17 @@ using System.Diagnostics;
 public class ScriptCacheData
 {
     public FilePath ScriptPath { get; }
-    public FilePath ScriptCacheAssemblyPath { get; }
-    public FilePath ScriptCacheHashPath { get; }
+    public GlobPattern ScriptCacheAssemblyPattern { get; }
     public FilePath ConfigScriptPath { get; }
     public DirectoryPath ConfigScriptCachePath { get; }
-    public FilePath ConfigScriptCacheAssemblyPath { get; }
-    public FilePath ConfigScriptCacheHashPath { get; }
+    public GlobPattern ConfigScriptCacheAssemblyPattern { get; }
     public (TimeSpan Elapsed, string Hash) CompileResult { get; set; }
     public (TimeSpan Elapsed, string Hash) ExecuteResult { get; set; }
     public (TimeSpan Elapsed, string Hash) ReCompileResult { get; set; }
     public (TimeSpan Elapsed, string Hash) ConfigCompileResult { get; set; }
     public CakeSettings Settings { get; }
     private Action<FilePath, CakeSettings> CakeExecuteScript { get; }
-    private Func<FilePath, FileHash> CalculateFileHash { get; }
+    private Func<GlobPattern, FileHash> CalculateFileHash { get; }
 
     public TimeSpan Time(Action action)
     {
@@ -45,25 +43,35 @@ public class ScriptCacheData
                     scriptPath ?? ScriptPath,
                     Settings);
             }),
-            CalculateFileHash(ScriptCacheAssemblyPath).ToHex()
+            CalculateFileHash(ScriptCacheAssemblyPattern).ToHex()
         );
 
     public ScriptCacheData(
         DirectoryPath scriptDirectoryPath,
         Action<FilePath, CakeSettings> cakeExecuteScript,
-        Func<FilePath, FileHash> calculateFileHash
+        Func<GlobPattern, FileHash> calculateFileHash
         )
     {
-        ScriptPath = scriptDirectoryPath.CombineWithFilePath("build.cake");
-        var cacheDirectoryPath = scriptDirectoryPath.Combine("tools").Combine("cache");
-        ScriptCacheAssemblyPath = cacheDirectoryPath.CombineWithFilePath("build.cake.dll");
-        ScriptCacheHashPath = cacheDirectoryPath.CombineWithFilePath("build.cake.hash");
         var configScriptDirectoryPath = scriptDirectoryPath.Combine("Config");
-        ConfigScriptPath = configScriptDirectoryPath.CombineWithFilePath("build.cake");
         var configCacheRootPath = configScriptDirectoryPath.Combine("CacheRootPath");
-        ConfigScriptCachePath = configCacheRootPath.Combine("cake-build").Combine("CacheLeafPath");
-        ConfigScriptCacheAssemblyPath = ConfigScriptCachePath.CombineWithFilePath("build.cake.dll");
-        ConfigScriptCacheHashPath = ConfigScriptCachePath.CombineWithFilePath("build.cake.hash");
+
+        ScriptPath = scriptDirectoryPath
+                        .CombineWithFilePath("build.cake");
+        ScriptCacheAssemblyPattern = scriptDirectoryPath
+                                        .Combine("tools")
+                                        .Combine("cache")
+                                        .CombineWithFilePath($"build.BuildScriptHost.*.dll")
+                                        .FullPath;
+
+        ConfigScriptPath = configScriptDirectoryPath
+                                .CombineWithFilePath("build.cake");
+        ConfigScriptCachePath = configCacheRootPath
+                                    .Combine("cake-build")
+                                    .Combine("CacheLeafPath");
+        ConfigScriptCacheAssemblyPattern = ConfigScriptCachePath
+                                            .CombineWithFilePath($"build.BuildScriptHost.*.dll")
+                                            .FullPath;
+
         Settings = new CakeSettings {
                         EnvironmentVariables = new Dictionary<string, string> {
                             { "CAKE_SETTINGS_ENABLESCRIPTCACHE", "true" },
@@ -79,11 +87,13 @@ public class ScriptCacheData
 
 Setup(context =>
     new ScriptCacheData(
-                    Paths.Temp
-                        .Combine("./Cake/ScriptCache"),
-                    context.CakeExecuteScript,
-                    context.CalculateFileHash
-    ));
+            Paths
+                .Temp
+                .Combine("./Cake/ScriptCache"),
+            context.CakeExecuteScript,
+            globberPattern => context.CalculateFileHash(context.GetFiles(globberPattern).OrderByDescending(file => System.IO.File.GetLastWriteTime(file.FullPath)).FirstOrDefault())
+        )
+    );
 
 Task("Cake.ScriptCache.Setup")
     .Does(() =>
@@ -111,8 +121,8 @@ Task("Cake.ScriptCache.Compile")
     data.CompileResult = data.TimeCakeExecuteScript();
 
     // Then
-    Assert.True(FileExists(data.ScriptCacheAssemblyPath), $"Script Cache Assembly Path {data.ScriptCacheAssemblyPath} missing.");
-    Assert.True(FileExists(data.ScriptCacheHashPath), $"Script Cache Hash Path {data.ScriptCacheHashPath} missing.");
+    var count = GetFiles(data.ScriptCacheAssemblyPattern).Count();
+    Assert.True(1 == count, $"Script Cache Assembly Path {data.ScriptCacheAssemblyPattern.Pattern} expected 1 got {count}.");
 });
 
 var scriptCacheExecute =  Task("Cake.ScriptCache.Execute");
@@ -149,8 +159,8 @@ Task("Cake.ScriptCache.Config")
         data.ConfigCompileResult = data.TimeCakeExecuteScript(data.ConfigScriptPath);
 
         // Then
-        Assert.True(FileExists(data.ConfigScriptCacheAssemblyPath), $"Script Cache Assembly Path {data.ConfigScriptCacheAssemblyPath} missing.");
-        Assert.True(FileExists(data.ConfigScriptCacheHashPath), $"Script Cache Hash Path {data.ConfigScriptCacheHashPath} missing.");
+        var count = GetFiles(data.ConfigScriptCacheAssemblyPattern).Count();
+        Assert.True(1 == count, $"Script Cache Assembly Path {data.ConfigScriptCacheAssemblyPattern.Pattern} expected 1 got {count}.");
     });
 
 Task("Cake.ScriptCache")
