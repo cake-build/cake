@@ -23,7 +23,6 @@ namespace Cake.Tests.Unit.Features
             Assert.Contains("Details: 3.2.1", console.Messages);
         }
 
-
         [Fact]
         public void Should_Throw_If_Console_Is_Null()
         {
