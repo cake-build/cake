@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Core;
+using System;
 
 namespace Cake.Cli
 {
@@ -37,6 +38,11 @@ namespace Cake.Cli
         /// <inheritdoc/>
         public void Run(IConsole console)
         {
+            if (console is null)
+            {
+                throw new ArgumentNullException(nameof(console));
+            }
+
             var version = _resolver.GetVersion();
             var product = _resolver.GetProductVersion();
 
