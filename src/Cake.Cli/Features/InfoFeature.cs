@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core;
 
 namespace Cake.Cli
@@ -37,6 +38,11 @@ namespace Cake.Cli
         /// <inheritdoc/>
         public void Run(IConsole console)
         {
+            if (console is null)
+            {
+                throw new ArgumentNullException(nameof(console));
+            }
+
             var version = _resolver.GetVersion();
             var product = _resolver.GetProductVersion();
 
