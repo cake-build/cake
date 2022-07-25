@@ -46,15 +46,7 @@ namespace Cake.Common.Tools.DotNetCore.MSBuild
                     throw new ArgumentException("A property must have at least one non-empty value", nameof(settings.Properties));
                 }
 
-                foreach (var value in property.Value)
-                {
-                    if (string.IsNullOrWhiteSpace(value))
-                    {
-                        continue;
-                    }
-
-                    builder.AppendMSBuildSwitch("property", $"{property.Key}={value.EscapeMSBuildPropertySpecialCharacters()}");
-                }
+                builder.AppendMSBuildSwitch("property", $"{property.Key}={property.BuildMSBuildPropertyParameterString()}");
             }
 
             // Set the maximum number of processors?

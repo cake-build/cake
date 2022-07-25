@@ -820,7 +820,39 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /p:A=B /p:A=E /p:C=D /target:Build " +
+                Assert.Equal("/v:normal /p:A=B;E /p:C=D /target:Build " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Concatenate_Property_With_Multiple_Arguments_To_Process_Argument()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithProperty("A", "B", "E");
+                fixture.Settings.WithProperty("C", "D", "F", "G");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:A=B;E /p:C=D;F;G /target:Build " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Escape_Semicolons_For_Specified_Property_Arguments_When_Appending_To_Process_Argument()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithProperty("DefineConstants", "A;B");
+                fixture.Settings.WithProperty("A", "A;B");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:DefineConstants=A;B /p:A=A%3BB /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 

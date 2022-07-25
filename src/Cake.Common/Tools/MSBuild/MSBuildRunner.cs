@@ -293,15 +293,11 @@ namespace Cake.Common.Tools.MSBuild
                     throw new ArgumentOutOfRangeException(nameof(platform), platform, "Invalid platform");
             }
         }
-
         private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
         {
-            foreach (var propertyKey in properties.Keys)
+            foreach (var property in properties)
             {
-                foreach (var propertyValue in properties[propertyKey])
-                {
-                    yield return string.Concat("/p:", propertyKey, "=", propertyValue.EscapeMSBuildPropertySpecialCharacters());
-                }
+                yield return string.Concat("/p:", property.Key, "=", property.BuildMSBuildPropertyParameterString());
             }
         }
 
