@@ -110,6 +110,11 @@ namespace Cake.Common.Tools.GitVersion
         public string Sha { get; set; }
 
         /// <summary>
+        /// Gets or sets the shortened Git SHA.
+        /// </summary>
+        public string ShortSha { get; set; }
+
+        /// <summary>
         /// Gets or sets the NuGet version for v2.
         /// </summary>
         public string NuGetVersionV2 { get; set; }

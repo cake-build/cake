@@ -155,6 +155,13 @@ namespace Cake.Common.Tools.GitVersion
         }
 
         [DataMember]
+        public string ShortSha
+        {
+            get => GitVersion.ShortSha;
+            set => GitVersion.ShortSha = value;
+        }
+
+        [DataMember]
         public string NuGetVersionV2
         {
             get => GitVersion.NuGetVersionV2;
