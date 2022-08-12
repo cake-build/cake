@@ -62,7 +62,7 @@ Task("Cake.Core.Scripting.AddinDirective.LoadNativeAssemblies")
     FilePath cake = cakeCore.GetDirectory().CombineWithFilePath("Cake.dll");
     var script = @"#addin nuget:?package=Cake.Git&version=2.0.0
 
-var repoRoot = GitFindRootFromPath(Context.Environment.WorkingDirectory);
+var repoRoot = GitFindRootFromPath(Context.EnvironmentVariable(""CAKE_TEST_DIR""));
 
 var hasUncommittedChanges = GitHasUncommitedChanges(repoRoot);";
 
@@ -73,7 +73,8 @@ var hasUncommittedChanges = GitHasUncommitedChanges(repoRoot);";
                 {"CAKE_PATHS_TOOLS", $"{Paths.Temp}/native/tools"},
                 {"CAKE_PATHS_MODULES", $"{Paths.Temp}/native/tools/Modules"},
                 {"NUGET_PACKAGES", $"{Paths.Temp}/nuget/Packages"},
-                {"NUGET_HTTP_CACHE_PATH ", $"{Paths.Temp}/nuget/Cache"}
+                {"NUGET_HTTP_CACHE_PATH ", $"{Paths.Temp}/nuget/Cache"},
+                {"CAKE_TEST_DIR", Context.Environment.WorkingDirectory.FullPath}
             },
             ToolPath = cake,
             Verbosity = Context.Log.Verbosity
