@@ -75,7 +75,13 @@ namespace Cake.NuGet
             var tfm = NuGetFramework.Parse(_environment.Runtime.BuiltFramework.FullName, DefaultFrameworkNameProvider.Instance);
 
             // Get current runtime identifier.
-            string rid = _environment.Runtime.IsCoreClr ? Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.GetRuntimeIdentifier() : null;
+            var rid = _environment.Runtime.IsCoreClr
+#if NETCOREAPP3_1
+                ? Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.GetRuntimeIdentifier()
+#else
+                ? System.Runtime.InteropServices.RuntimeInformation.RuntimeIdentifier
+#endif
+                    : null;
 
             // Get all candidate files.
             var pathComparer = PathComparer.Default;

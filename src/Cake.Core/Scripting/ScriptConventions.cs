@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Cake.Core.Configuration;
 using Cake.Core.IO;
 using Cake.Core.Reflection;
 
