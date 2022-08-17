@@ -25,6 +25,7 @@
 #load "./Cake.Common/Solution/Project/XmlDoc/XmlDocAliases.cake"
 #load "./Cake.Common/Text/TextTransformationAliases.cake"
 #load "./Cake.Common/Tools/Cake/CakeAliases.cake"
+#load "./Cake.Common/Tools/Command/CommandAliases.cake"
 #load "./Cake.Common/Tools/DotNet/DotNetAliases.cake"
 #load "./Cake.Common/Tools/DotNetCore/DotNetCoreAliases.cake"
 #load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
@@ -91,6 +92,7 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Solution.Project.XmlDoc.XmlDocAliases")
     .IsDependentOn("Cake.Common.Text.TextTransformationAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases")
+    .IsDependentOn("Cake.Common.Tools.Command.CommandAliases")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases")
     .IsDependentOn("Cake.Common.Tools.DotNetCore.DotNetCoreAliases")
     .IsDependentOn("Cake.Common.Tools.NuGet.NuGetAliases")
