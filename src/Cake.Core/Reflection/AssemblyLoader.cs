@@ -4,6 +4,7 @@
 
 using System.Reflection;
 using Cake.Core.Configuration;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
 
@@ -17,6 +18,7 @@ namespace Cake.Core.Reflection
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
         private readonly IAssemblyVerifier _verifier;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
@@ -24,11 +26,13 @@ namespace Cake.Core.Reflection
         /// <param name="environment">The environment.</param>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="verifier">The assembly verifier.</param>
-        public AssemblyLoader(ICakeEnvironment environment, IFileSystem fileSystem, IAssemblyVerifier verifier)
+        /// <param name="log">The cake log.</param>
+        public AssemblyLoader(ICakeEnvironment environment, IFileSystem fileSystem, IAssemblyVerifier verifier, ICakeLog log)
         {
             _environment = environment;
             _fileSystem = fileSystem;
             _verifier = verifier;
+            _log = log;
         }
 
         /// <inheritdoc/>
@@ -40,7 +44,7 @@ namespace Cake.Core.Reflection
         /// <inheritdoc/>
         public Assembly Load(FilePath path, bool verify)
         {
-            var assembly = AssemblyHelper.LoadAssembly(_environment, _fileSystem, path);
+            var assembly = AssemblyHelper.LoadAssembly(_environment, _fileSystem, _log, path);
             if (verify && assembly != null)
             {
                 _verifier.Verify(assembly);

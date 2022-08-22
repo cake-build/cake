@@ -75,7 +75,7 @@ namespace Cake.Infrastructure.Composition
                     return null;
                 }
 
-                var loader = new AssemblyLoader(_environment, _fileSystem, new AssemblyVerifier(configuration, _log));
+                var loader = new AssemblyLoader(_environment, _fileSystem, new AssemblyVerifier(configuration, _log), _log);
                 var assembly = loader.Load(path, true);
 
                 var attribute = assembly.GetCustomAttributes<CakeModuleAttribute>().FirstOrDefault();
