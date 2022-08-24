@@ -24,6 +24,7 @@ using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNet.VSTest;
 using Cake.Common.Tools.DotNet.Workload.Install;
 using Cake.Common.Tools.DotNet.Workload.List;
+using Cake.Common.Tools.DotNet.Workload.Repair;
 using Cake.Common.Tools.DotNet.Workload.Search;
 using Cake.Common.Tools.DotNet.Workload.Uninstall;
 using Cake.Common.Tools.DotNetCore.Build;
@@ -2138,6 +2139,58 @@ namespace Cake.Common.Tools.DotNet
 
             var lister = new DotNetWorkloadLister(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return lister.List(settings);
+        }
+
+        /// <summary>
+        /// Repairs all workloads installations.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadRepair();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Repair")]
+        public static void DotNetWorkloadRepair(this ICakeContext context)
+        {
+            context.DotNetWorkloadRepair(null);
+        }
+
+        /// <summary>
+        /// Repairs all workloads installations.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadRepairSettings
+        /// {
+        ///     IncludePreviews = true,
+        ///     NoCache = true
+        /// };
+        ///
+        /// DotNetWorkloadRepair(settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Repair")]
+        public static void DotNetWorkloadRepair(this ICakeContext context, DotNetWorkloadRepairSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetWorkloadRepairSettings();
+            }
+
+            var repairer = new DotNetWorkloadRepairer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            repairer.Repair(settings);
         }
     }
 }
