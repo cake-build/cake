@@ -25,6 +25,7 @@ using Cake.Common.Tools.DotNet.VSTest;
 using Cake.Common.Tools.DotNet.Workload.Install;
 using Cake.Common.Tools.DotNet.Workload.List;
 using Cake.Common.Tools.DotNet.Workload.Repair;
+using Cake.Common.Tools.DotNet.Workload.Restore;
 using Cake.Common.Tools.DotNet.Workload.Search;
 using Cake.Common.Tools.DotNet.Workload.Uninstall;
 using Cake.Common.Tools.DotNet.Workload.Update;
@@ -2244,6 +2245,60 @@ namespace Cake.Common.Tools.DotNet
 
             var updater = new DotNetWorkloadUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             updater.Update(settings);
+        }
+
+        /// <summary>
+        /// Installs workloads needed for a project or a solution.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution file to install workloads for.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadRestore("./src/project");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Restore")]
+        public static void DotNetWorkloadRestore(this ICakeContext context, string project)
+        {
+            context.DotNetWorkloadRestore(project, null);
+        }
+
+        /// <summary>
+        /// Installs workloads needed for a project or a solution.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution file to install workloads for.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadRestoreSettings
+        /// {
+        ///     IncludePreviews = true,
+        ///     NoCache = true
+        /// };
+        ///
+        /// DotNetWorkloadRestore("./src/project", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Restore")]
+        public static void DotNetWorkloadRestore(this ICakeContext context, string project, DotNetWorkloadRestoreSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetWorkloadRestoreSettings();
+            }
+
+            var restorer = new DotNetWorkloadRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            restorer.Restore(project, settings);
         }
     }
 }
