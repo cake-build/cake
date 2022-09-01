@@ -63,5 +63,9 @@ namespace Cake.Commands
         [CommandOption("--" + Infrastructure.Constants.Cache.InvalidateScriptCache)]
         [Description("Forces the script to be recompiled if caching is enabled.")]
         public bool Recompile { get; set; }
+
+        [CommandOption("--parallel|-p")]
+        [Description("Enables the support for parallel tasks.")]
+        public bool Parallel { get; set; }
     }
 }

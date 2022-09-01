@@ -102,6 +102,11 @@ namespace Cake.Features.Building
                     host.Settings.UseExclusiveTarget();
                 }
 
+                if (settings.Parallel)
+                {
+                    host.Settings.RunInParallel();
+                }
+
                 // Debug?
                 if (settings.Debug)
                 {

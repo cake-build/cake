@@ -1558,6 +1558,118 @@ namespace Cake.Core.Tests.Unit
                 Assert.Equal(CakeTaskExecutionStatus.Delegated, report.First(e => e.TaskName == "A").ExecutionStatus);
                 Assert.Equal(CakeTaskExecutionStatus.Failed, report.First(e => e.TaskName == "B").ExecutionStatus);
             }
+
+            [Fact]
+            public async Task Should_Throw_Exception_For_Circular_Dependencies()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("B");
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("B").IsDependentOn("C");
+                engine.RegisterTask("C").IsDependentOn("D");
+                engine.RegisterTask("D").IsDependentOn("B");
+
+                // When
+                var result = await Record.ExceptionAsync(() => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Graph contains circular references.", result?.Message);
+            }
+
+            [Fact]
+            public async Task Should_Throw_Exception_For_Circular_Dependencies_In_Parallel()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("B").RunInParallel();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("B").IsDependentOn("C");
+                engine.RegisterTask("C").IsDependentOn("D");
+                engine.RegisterTask("D").IsDependentOn("B");
+
+                // When
+                var result = await Record.ExceptionAsync(() => engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Graph contains circular references.", result?.Message);
+            }
+
+            [Fact]
+            public async Task Should_Execute_Tasks_In_Order_In_Parallel()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("E").RunInParallel();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("A").Does(() => result.Add("B"));
+                engine.RegisterTask("C").IsDependentOn("B").Does(() => result.Add("C"));
+                engine.RegisterTask("D").IsDependentOn("C").IsDependeeOf("E").Does(() => { result.Add("D"); });
+                engine.RegisterTask("E").Does(() => { result.Add("E"); });
+
+                // When
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
+
+                // Then
+                Assert.Equal(5, result.Count);
+                Assert.Equal("A", result[0]);
+                Assert.Equal("B", result[1]);
+                Assert.Equal("C", result[2]);
+                Assert.Equal("D", result[3]);
+                Assert.Equal("E", result[4]);
+            }
+
+            [Fact]
+            public async Task Should_Execute_Tasks_In_Parallel()
+            {
+                // Given
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("E").RunInParallel();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("A").Does(async () => { await Task.Delay(20); result.Add("B"); });
+                engine.RegisterTask("C").IsDependentOn("A").Does(async () => { await Task.Delay(5); result.Add("C"); });
+                engine.RegisterTask("D").IsDependentOn("A").Does(() => result.Add("D"));
+                engine.RegisterTask("E").IsDependentOn("B").IsDependentOn("C").IsDependentOn("D").Does(() => result.Add("E"));
+
+                // When
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
+
+                // Then
+                Assert.Equal(5, result.Count);
+                Assert.Equal("A", result[0]);
+                Assert.Equal("D", result[1]);
+                Assert.Equal("C", result[2]);
+                Assert.Equal("B", result[3]);
+                Assert.Equal("E", result[4]);
+            }
+
+            [Fact]
+            public async Task Should_Not_Catch_Exceptions_From_Task_If_ContinueOnError_Is_Not_Set_In_Parallel()
+            {
+                // Given
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTarget("E").RunInParallel();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A");
+                engine.RegisterTask("B").IsDependentOn("A");
+                engine.RegisterTask("C").IsDependentOn("A").Does(() => throw new InvalidOperationException("Whoopsie"));
+                engine.RegisterTask("D").IsDependentOn("A");
+                engine.RegisterTask("E").IsDependentOn("B").IsDependentOn("C").IsDependentOn("D");
+
+                // When
+                var result = await Record.ExceptionAsync(() =>
+                    engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
+
+                // Then
+                Assert.IsType<InvalidOperationException>(result);
+                Assert.Equal("Whoopsie", result?.Message);
+            }
         }
 
         public sealed class TheSetupEvent

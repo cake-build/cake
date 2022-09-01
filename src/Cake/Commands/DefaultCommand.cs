@@ -75,6 +75,7 @@ namespace Cake.Commands
                     Script = settings.Script,
                     Verbosity = settings.Verbosity,
                     Exclusive = settings.Exclusive,
+                    Parallel = settings.Parallel,
                     Debug = settings.Debug,
                     NoBootstrapping = settings.SkipBootstrap,
                 });

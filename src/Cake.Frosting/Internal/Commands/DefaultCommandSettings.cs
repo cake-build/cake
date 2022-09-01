@@ -51,5 +51,9 @@ namespace Cake.Frosting.Internal
         [CommandOption("--info")]
         [Description("Displays additional information about Cake.")]
         public bool Info { get; set; }
+
+        [CommandOption("--parallel|-p")]
+        [Description("Enables the support for parallel tasks.")]
+        public bool Parallel { get; set; }
     }
 }

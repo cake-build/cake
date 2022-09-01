@@ -68,6 +68,11 @@ namespace Cake.Frosting.Internal
                     runner.Settings.UseExclusiveTarget();
                 }
 
+                if (settings.Parallel)
+                {
+                    runner.Settings.RunInParallel();
+                }
+
                 runner.Run(settings.Target);
             }
             catch (Exception ex)

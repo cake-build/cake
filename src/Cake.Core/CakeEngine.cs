@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Cake.Core.Diagnostics;
 using Cake.Core.Graph;
@@ -211,18 +212,47 @@ namespace Cake.Core
                 {
                     // Execute only the target task.
                     var task = _tasks.FirstOrDefault(x => x.Name.Equals(settings.Target, StringComparison.OrdinalIgnoreCase));
-                    await RunTask(context, strategy, task, target, stopWatch, report);
+                    await RunTask(context, strategy, task, target, stopWatch, report, null);
+                }
+                else if (settings.Parallel)
+                {
+                    await graph.TraverseAsync(target, async (taskName, cancellationTokenSource) =>
+                    {
+                        if (cancellationTokenSource.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
+                        var task = _tasks.FirstOrDefault(_ => _.Name.Equals(taskName, StringComparison.OrdinalIgnoreCase));
+                        Debug.Assert(task != null, "Node should not be null");
+
+                        var isTarget = task.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
+
+                        await RunTask(context, strategy, task, target, stopWatch, report, cancellationTokenSource);
+                    });
                 }
                 else
                 {
                     // Execute all scheduled tasks.
                     foreach (var task in orderedTasks)
                     {
-                        await RunTask(context, strategy, task, target, stopWatch, report);
+                        await RunTask(context, strategy, task, target, stopWatch, report, null);
                     }
                 }
 
                 return report;
+            }
+            catch (TaskCanceledException)
+            {
+                exceptionWasThrown = true;
+                throw;
+            }
+            catch (AggregateException ex)
+            {
+                exceptionWasThrown = true;
+                thrownException = ex.InnerException;
+
+                throw ex.GetBaseException();
             }
             catch (Exception ex)
             {
@@ -236,7 +266,7 @@ namespace Cake.Core
             }
         }
 
-        private async Task RunTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, string target, Stopwatch stopWatch, CakeReport report)
+        private async Task RunTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, string target, Stopwatch stopWatch, CakeReport report, CancellationTokenSource cancellationTokenSource)
         {
             // Is this the current target?
             var isTarget = task.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
@@ -255,7 +285,7 @@ namespace Cake.Core
 
             if (!skipped)
             {
-                await ExecuteTaskAsync(context, strategy, stopWatch, task, report).ConfigureAwait(false);
+                await ExecuteTaskAsync(context, strategy, stopWatch, task, report, cancellationTokenSource).ConfigureAwait(false);
             }
         }
 
@@ -309,7 +339,7 @@ namespace Cake.Core
         }
 
         private async Task ExecuteTaskAsync(ICakeContext context, IExecutionStrategy strategy, Stopwatch stopWatch,
-            CakeTask task, CakeReport report)
+            CakeTask task, CakeReport report, CancellationTokenSource cancellationTokenSource)
         {
             stopWatch.Restart();
 
@@ -320,6 +350,11 @@ namespace Cake.Core
             {
                 // Execute the task.
                 await strategy.ExecuteAsync(task, context).ConfigureAwait(false);
+            }
+            catch (TaskCanceledException exception)
+            {
+                taskException = exception;
+                throw;
             }
             catch (Exception exception)
             {
@@ -340,6 +375,8 @@ namespace Cake.Core
                 }
                 else
                 {
+                    cancellationTokenSource?.Cancel();
+
                     // No error handler defined for this task.
                     // Rethrow the exception and let it propagate.
                     throw;
