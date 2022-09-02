@@ -1632,8 +1632,16 @@ namespace Cake.Core.Tests.Unit
                 var settings = new ExecutionSettings().SetTarget("E").RunInParallel();
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A").Does(() => result.Add("A"));
-                engine.RegisterTask("B").IsDependentOn("A").Does(async () => { await Task.Delay(20); result.Add("B"); });
-                engine.RegisterTask("C").IsDependentOn("A").Does(async () => { await Task.Delay(5); result.Add("C"); });
+                engine.RegisterTask("B").IsDependentOn("A").Does(async () =>
+                {
+                    await Task.Delay(20);
+                    result.Add("B");
+                });
+                engine.RegisterTask("C").IsDependentOn("A").Does(async () =>
+                {
+                    await Task.Delay(5);
+                    result.Add("C");
+                });
                 engine.RegisterTask("D").IsDependentOn("A").Does(() => result.Add("D"));
                 engine.RegisterTask("E").IsDependentOn("B").IsDependentOn("C").IsDependentOn("D").Does(() => result.Add("E"));
 
