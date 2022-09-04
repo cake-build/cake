@@ -49,8 +49,9 @@ namespace Cake.Core.Scripting
                 "System.IO",
                 "Cake.Core",
                 "Cake.Core.IO",
+                "Cake.Core.Diagnostics",
                 "Cake.Core.Scripting",
-                "Cake.Core.Diagnostics"
+                "Cake.Core.Tooling"
             };
         }
 
