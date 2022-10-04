@@ -18,7 +18,12 @@ namespace Cake.Core
 
         internal CakeTask Target { get; }
 
-        internal CakeTaskBuilder(CakeTask task)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CakeTaskBuilder"/> class.
+        /// </summary>
+        /// <param name="task">The target task.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="task"/> is null.</exception>
+        public CakeTaskBuilder(CakeTask task)
         {
             Target = task ?? throw new ArgumentNullException(nameof(task));
         }
