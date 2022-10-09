@@ -27,6 +27,7 @@ using Cake.Common.Tools.DotNet.Workload.List;
 using Cake.Common.Tools.DotNet.Workload.Repair;
 using Cake.Common.Tools.DotNet.Workload.Search;
 using Cake.Common.Tools.DotNet.Workload.Uninstall;
+using Cake.Common.Tools.DotNet.Workload.Update;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
@@ -2191,6 +2192,58 @@ namespace Cake.Common.Tools.DotNet
 
             var repairer = new DotNetWorkloadRepairer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             repairer.Repair(settings);
+        }
+
+        /// <summary>
+        /// Updates all installed workloads to the newest available version.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadUpdate();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Update")]
+        public static void DotNetWorkloadUpdate(this ICakeContext context)
+        {
+            context.DotNetWorkloadUpdate(null);
+        }
+
+        /// <summary>
+        /// Updates all installed workloads to the newest available version.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadUpdateSettings
+        /// {
+        ///     IncludePreviews = true,
+        ///     NoCache = true
+        /// };
+        ///
+        /// DotNetWorkloadUpdate(settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Update")]
+        public static void DotNetWorkloadUpdate(this ICakeContext context, DotNetWorkloadUpdateSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetWorkloadUpdateSettings();
+            }
+
+            var updater = new DotNetWorkloadUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            updater.Update(settings);
         }
     }
 }
