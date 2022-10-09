@@ -23,6 +23,7 @@ using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNet.VSTest;
 using Cake.Common.Tools.DotNet.Workload.Install;
+using Cake.Common.Tools.DotNet.Workload.List;
 using Cake.Common.Tools.DotNet.Workload.Search;
 using Cake.Common.Tools.DotNet.Workload.Uninstall;
 using Cake.Common.Tools.DotNetCore.Build;
@@ -182,7 +183,7 @@ namespace Cake.Common.Tools.DotNet
         ///     Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
         ///     FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
         ///     PackagesDirectory = "./packages",
-        ///     Verbosity = Information,
+        ///     DotNetVerbosity.Information,
         ///     DisableParallel = true,
         ///     InferRuntimes = new[] {"runtime1", "runtime2"}
         /// };
@@ -211,7 +212,7 @@ namespace Cake.Common.Tools.DotNet
         ///     Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
         ///     FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
         ///     PackagesDirectory = "./packages",
-        ///     Verbosity = Information,
+        ///     DotNetVerbosity.Information,
         ///     DisableParallel = true,
         ///     InferRuntimes = new[] {"runtime1", "runtime2"}
         /// };
@@ -1907,7 +1908,7 @@ namespace Cake.Common.Tools.DotNet
         /// <code>
         /// var settings = new DotNetWorkloadSearchSettings
         /// {
-        ///     Verbosity = Detailed
+        ///     DotNetVerbosity.Detailed
         /// };
         ///
         /// var workloads = DotNetWorkloadSearch("maui", settings);
@@ -2074,6 +2075,69 @@ namespace Cake.Common.Tools.DotNet
 
             var installer = new DotNetWorkloadInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             installer.Install(workloadIds, settings);
+        }
+
+        /// <summary>
+        /// Lists all installed workloads.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>The list of installed workloads.</returns>
+        /// <example>
+        /// <code>
+        /// var workloadIds = DotNetWorkloadList();
+        ///
+        /// foreach (var workloadId in workloadIds)
+        /// {
+        ///      Information($"Installed Workload Id: {workloadId}");
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.List")]
+        public static IEnumerable<DotNetWorkloadListItem> DotNetWorkloadList(this ICakeContext context)
+        {
+            return context.DotNetWorkloadList(null);
+        }
+
+        /// <summary>
+        /// Lists all installed workloads.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The list of installed workloads.</returns>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadListSettings
+        /// {
+        ///     Verbosity = DotNetVerbosity.Detailed
+        /// };
+        ///
+        /// var workloads = DotNetWorkloadList(settings);
+        ///
+        /// foreach (var workload in workloads)
+        /// {
+        ///      Information($"Installed Workload Id: {workload.Id}\t Manifest Version: {workload.ManifestVersion}\t Installation Source: {workload.InstallationSource}");
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.List")]
+        public static IEnumerable<DotNetWorkloadListItem> DotNetWorkloadList(this ICakeContext context, DotNetWorkloadListSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetWorkloadListSettings();
+            }
+
+            var lister = new DotNetWorkloadLister(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return lister.List(settings);
         }
     }
 }
