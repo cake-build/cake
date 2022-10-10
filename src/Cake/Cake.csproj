@@ -30,8 +30,8 @@
     <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="6.0.1" />
     <PackageReference Include="Autofac" Version="6.4.0" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net60" Version="1.2.4" Condition="'$(TargetFramework)' == 'net6.0'" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net50" Version="1.2.4" Condition="'$(TargetFramework)' == 'net5.0'" />
-    <PackageReference Include="Basic.Reference.Assemblies.NetCoreApp31" Version="1.2.4" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net60" Version="1.3.0" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net50" Version="1.3.0" Condition="'$(TargetFramework)' == 'net5.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.NetCoreApp31" Version="1.3.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
   </ItemGroup>
 </Project>
