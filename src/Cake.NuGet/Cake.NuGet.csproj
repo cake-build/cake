@@ -20,7 +20,7 @@
   <ItemGroup>
     <PackageReference Include="NuGet.Frameworks" Version="6.3.0" />
     <PackageReference Include="NuGet.Versioning" Version="6.3.0" />
-    <PackageReference Include="NuGet.Protocol" Version="6.3.0" />
+    <PackageReference Include="NuGet.Protocol" Version="6.3.1" />
     <PackageReference Include="NuGet.Packaging" Version="6.3.0" />
     <PackageReference Include="NuGet.Resolver" Version="6.3.0" />
     <PackageReference Include="NuGet.Common" Version="6.3.0" />
