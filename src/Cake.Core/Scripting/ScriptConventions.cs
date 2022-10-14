@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Cake.Core.Configuration;
 using Cake.Core.IO;
 using Cake.Core.Reflection;
 
@@ -50,8 +49,9 @@ namespace Cake.Core.Scripting
                 "System.IO",
                 "Cake.Core",
                 "Cake.Core.IO",
+                "Cake.Core.Diagnostics",
                 "Cake.Core.Scripting",
-                "Cake.Core.Diagnostics"
+                "Cake.Core.Tooling"
             };
         }
 

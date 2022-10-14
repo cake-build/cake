@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.Tooling;
 
@@ -46,6 +47,32 @@ namespace Cake.Common.Tools.MSBuild
         /// </summary>
         /// <value>The MSBuild platform.</value>
         public MSBuildPlatform MSBuildPlatform { get; set; }
+
+        /// <summary>
+        /// Gets or sets the MSBuild target.
+        /// </summary>
+        /// <value>The MSBuild target.</value>
+        public string Target
+        {
+            get => string.Join(";", Targets);
+            set
+            {
+                Targets.Clear();
+
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return;
+                }
+
+                foreach (var target in value
+                                            .Split(';')
+                                            .Select(target => target.Trim())
+                                            .Where(target => !string.IsNullOrEmpty(target)))
+                {
+                    Targets.Add(target);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the tool version.

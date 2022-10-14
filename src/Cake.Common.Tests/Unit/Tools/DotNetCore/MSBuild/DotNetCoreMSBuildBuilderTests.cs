@@ -185,7 +185,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNetCore.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /property:A=B /property:A=E /property:C=D", result.Args);
+                Assert.Equal("msbuild /property:A=B;E /property:C=D", result.Args);
             }
 
             [Theory]

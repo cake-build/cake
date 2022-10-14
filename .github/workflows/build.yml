@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-18.04, macos-latest]
+        os: [windows-latest, ubuntu-18.04, macos-latest, ubuntu-22.04]
     steps:
       - name: Get the sources
         uses: actions/checkout@v2

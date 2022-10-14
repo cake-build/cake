@@ -777,12 +777,170 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
             }
 
             [Fact]
-            public void Should_Append_Targets_To_Process_Arguments()
+            public void Should_Add_Single_Target_With_AddTarget()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithTarget("A");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Multiple_Targets_With_AddTarget()
             {
                 // Given
                 var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
                 fixture.Settings.WithTarget("A");
                 fixture.Settings.WithTarget("B");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A;B " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Add_Duplicate_Target_With_AddTarget()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithTarget("A");
+                fixture.Settings.WithTarget("A");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Single_Target_With_Initializer()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows)
+                {
+                    Settings = new MSBuildSettings
+                    {
+                        Target = "A",
+                    }
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Remove_Existing_Targets_When_Set_After_Initializer()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows)
+                {
+                    Settings = new MSBuildSettings
+                    {
+                        Target = "A",
+                    }
+                };
+
+                fixture.Settings.Target = "B";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:B " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Multiple_Targets_With_Initializer()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows)
+                {
+                    Settings = new MSBuildSettings
+                    {
+                        Target = "A;B",
+                    }
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A;B " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Multiple_Targets_With_Initializer_And_AddTarget()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows)
+                {
+                    Settings = new MSBuildSettings
+                    {
+                        Target = "A;B",
+                    }
+                };
+
+                fixture.Settings.WithTarget("C");
+                fixture.Settings.WithTarget("D");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A;B;C;D " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Add_Duplicate_Target_With_Initializer()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows)
+                {
+                    Settings = new MSBuildSettings
+                    {
+                        Target = "A",
+                    }
+                };
+
+                fixture.Settings.Target = "A";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:A " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Remove_Whitespace_From_Targets_With_Initializer()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows)
+                {
+                    Settings = new MSBuildSettings
+                    {
+                        Target = " A ; B   ;;",
+                    }
+                };
 
                 // When
                 var result = fixture.Run();
@@ -820,7 +978,39 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/v:normal /p:A=B /p:A=E /p:C=D /target:Build " +
+                Assert.Equal("/v:normal /p:A=B;E /p:C=D /target:Build " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Concatenate_Property_With_Multiple_Arguments_To_Process_Argument()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithProperty("A", "B", "E");
+                fixture.Settings.WithProperty("C", "D", "F", "G");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:A=B;E /p:C=D;F;G /target:Build " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Escape_Semicolons_For_Specified_Property_Arguments_When_Appending_To_Process_Argument()
+            {
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithProperty("DefineConstants", "A;B");
+                fixture.Settings.WithProperty("A", "A;B");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /p:DefineConstants=A;B /p:A=A%3BB /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
             }
 

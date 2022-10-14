@@ -98,29 +98,17 @@ namespace Cake.Infrastructure.Scripting
         public void Execute(Script script)
         {
             var scriptName = _settings.Script.GetFilename();
-            var cacheDLLFileName = $"{scriptName}.dll";
-            var cacheHashFileName = $"{scriptName}.hash";
-            var cachedAssembly = _scriptCachePath.CombineWithFilePath(cacheDLLFileName);
-            var hashFile = _scriptCachePath.CombineWithFilePath(cacheHashFileName);
-            string scriptHash = default;
+            FilePath cachedAssembly = _scriptCacheEnabled
+                                        ? GetCachedAssemblyPath(script, scriptName)
+                                        : default;
+
             if (_scriptCacheEnabled && _fileSystem.Exist(cachedAssembly) && !_regenerateCache)
             {
-                _log.Verbose($"Cache enabled: Checking cache build script ({cacheDLLFileName})");
-                scriptHash = FastHash.GenerateHash(Encoding.UTF8.GetBytes(string.Concat(script.Lines)));
-                var cachedHash = _fileSystem.Exist(hashFile)
-                               ? _fileSystem.GetFile(hashFile).ReadLines(Encoding.UTF8).FirstOrDefault()
-                               : string.Empty;
-                if (scriptHash.Equals(cachedHash, StringComparison.Ordinal))
-                {
-                    _log.Verbose("Running cached build script...");
-                    RunScriptAssembly(cachedAssembly.FullPath);
-                    return;
-                }
-                else
-                {
-                    _log.Verbose("Cache check failed.");
-                }
+                _log.Verbose("Running cached build script...");
+                RunScriptAssembly(cachedAssembly.FullPath);
+                return;
             }
+
             // Generate the script code.
             var generator = new RoslynCodeGenerator();
             var code = generator.Generate(script);
@@ -205,19 +193,11 @@ namespace Cake.Infrastructure.Scripting
                 {
                     _fileSystem.GetDirectory(_scriptCachePath).Create();
                 }
-                if (string.IsNullOrWhiteSpace(scriptHash))
-                {
-                    scriptHash = FastHash.GenerateHash(Encoding.UTF8.GetBytes(string.Concat(script.Lines)));
-                }
+
                 var emitResult = compilation.Emit(cachedAssembly.FullPath);
 
                 if (emitResult.Success)
                 {
-                    using (var stream = _fileSystem.GetFile(hashFile).OpenWrite())
-                    using (var writer = new StreamWriter(stream, Encoding.UTF8))
-                    {
-                        writer.Write(scriptHash);
-                    }
                     RunScriptAssembly(cachedAssembly.FullPath);
                 }
             }
@@ -226,6 +206,15 @@ namespace Cake.Infrastructure.Scripting
                 roslynScript.RunAsync(_host).GetAwaiter().GetResult();
             }
         }
+
+        private FilePath GetCachedAssemblyPath(Script script, FilePath scriptName)
+            => _scriptCachePath.CombineWithFilePath(
+                string.Join(
+                    '.',
+                    scriptName.GetFilenameWithoutExtension().FullPath,
+                    _host.GetType().Name,
+                    FastHash.GenerateHash(Encoding.UTF8.GetBytes(string.Concat(script.Lines))),
+                    "dll"));
 
         private void RunScriptAssembly(string assemblyPath)
         {

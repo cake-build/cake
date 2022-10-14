@@ -145,6 +145,24 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
             }
 
             [Fact]
+            public void Should_Append_CaseSensitive_Filters()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Settings.Filters.Add("Value");
+                fixture.Settings.Filters.Add("value");
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"-argument\" " +
+                             "-filter:\"Value value\" " +
+                             "-register:user -output:\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Append_Attribute_Filters()
             {
                 // Given

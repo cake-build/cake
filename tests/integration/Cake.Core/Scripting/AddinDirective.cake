@@ -55,8 +55,35 @@ Task("Cake.Core.Scripting.AddinDirective.CallDuplicatedMethod")
     var result = context.EnvironmentVariable("CAKE_DOES_ROCK", true);
 });
 
+Task("Cake.Core.Scripting.AddinDirective.LoadNativeAssemblies")
+    .Does(() =>
+{
+    FilePath cakeCore = typeof(ICakeContext).GetTypeInfo().Assembly.Location;
+    FilePath cake = cakeCore.GetDirectory().CombineWithFilePath("Cake.dll");
+    var script = @"#addin nuget:?package=Cake.Git&version=2.0.0
+
+var repoRoot = GitFindRootFromPath(Context.EnvironmentVariable(""CAKE_TEST_DIR""));
+
+var hasUncommittedChanges = GitHasUncommitedChanges(repoRoot);";
+
+    CakeExecuteExpression(script,
+        new CakeSettings {
+            EnvironmentVariables = new Dictionary<string, string>{
+                {"CAKE_PATHS_ADDINS", $"{Paths.Temp}/native/tools/Addins"},
+                {"CAKE_PATHS_TOOLS", $"{Paths.Temp}/native/tools"},
+                {"CAKE_PATHS_MODULES", $"{Paths.Temp}/native/tools/Modules"},
+                {"NUGET_PACKAGES", $"{Paths.Temp}/nuget/Packages"},
+                {"NUGET_HTTP_CACHE_PATH ", $"{Paths.Temp}/nuget/Cache"},
+                {"CAKE_TEST_DIR", Context.Environment.WorkingDirectory.FullPath}
+            },
+            ToolPath = cake,
+            Verbosity = Context.Log.Verbosity
+        });
+});
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.AddinDirective")
     .IsDependentOn("Cake.Core.Scripting.AddinDirective.LoadTargetedAddin")
-    .IsDependentOn("Cake.Core.Scripting.AddinDirective.CallDuplicatedMethod");
+    .IsDependentOn("Cake.Core.Scripting.AddinDirective.CallDuplicatedMethod")
+    .IsDependentOn("Cake.Core.Scripting.AddinDirective.LoadNativeAssemblies");

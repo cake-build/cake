@@ -1,3 +1,33 @@
+### New in 2.3.0 (Released 2022/10/14)
+
+* 3947 Easier Way to Read Process Output?.
+* 3916 GitVersion: Add ShortSha property.
+* 3487 Add alias for dotnet workload update command.
+* 3486 Add alias for dotnet workload uninstall command.
+* 3484 Add alias for dotnet workload restore command.
+* 3483 Add alias for dotnet workload repair command.
+* 3482 Add alias for dotnet workload list command.
+* 3978 Microsoft.Extensions.DependencyInjection to 6.0.1.
+* 3976 Update NuGet.* to 6.3.1.
+* 3970 Update Basic.Reference.Assemblies.* to 1.3.0.
+* 3965 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.3.1.
+* 3956 Extensibility issue - CakeEngineActions is internal.
+* 3933 Update NuGet.* to 6.3.0.
+* 3920 Update Microsoft.NETCore.Platforms to 6.0.5.
+* 3909 Update Autofac to 6.4.0.
+* 3901 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.2.0.
+* 3899 Microsoft.NETCore.Platforms to 6.0.4.
+* 3897 Update NuGet.* to 6.2.1.
+* 3890 Update NuGet.* to 6.2.0.
+* 3880 Better support global script cache.
+* 2953 Allow setting MSBuild target via MSBuildSettings using a string.
+* 2591 Extensibility issue - CakeTaskBuilder is sealed and CakeTaskBuilder(CakeTask task) is internal. .
+* 3931 Cake fails to load native libraries on Ubuntu 22.04.
+* 3894 Guard against null Console instance on InfoFeature.
+* 3879 Build script caching throws after running dry-run on non-changed Cake script.
+* 3878 OpenCover filters should be case sensitive.
+* 1852 Incorrect escaping of semi-colon in property values for MS Build.
+
 ### New in 2.2.0 (Released 2022/04/15)
 
 * 3821 PostAction is not setable on DotNetSettings.

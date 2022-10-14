@@ -284,6 +284,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                         InformationalVersion = "0.1.1+Branch.master.Sha.f2467748c78b3c8b37972ad0b30df2e15dfbf2cb",
                         BranchName = "master",
                         Sha = "f2467748c78b3c8b37972ad0b30df2e15dfbf2cb",
+                        ShortSha = "f2467748",
                         NuGetVersionV2 = "0.1.1",
                         NuGetVersion = "0.1.1",
                         CommitsSinceVersionSource = null,
@@ -315,6 +316,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                         "  \"InformationalVersion\":\"0.1.1+Branch.master.Sha.f2467748c78b3c8b37972ad0b30df2e15dfbf2cb\",",
                         "  \"BranchName\":\"master\",",
                         "  \"Sha\":\"f2467748c78b3c8b37972ad0b30df2e15dfbf2cb\",",
+                        "  \"ShortSha\":\"f2467748\",",
                         "  \"NuGetVersionV2\":\"0.1.1\",",
                         "  \"NuGetVersion\":\"0.1.1\",",
                         "  \"CommitsSinceVersionSource\":\"\",",
@@ -348,6 +350,7 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 Assert.Equal(expect.InformationalVersion, result.InformationalVersion);
                 Assert.Equal(expect.BranchName, result.BranchName);
                 Assert.Equal(expect.Sha, result.Sha);
+                Assert.Equal(expect.ShortSha, result.ShortSha);
                 Assert.Equal(expect.NuGetVersionV2, result.NuGetVersionV2);
                 Assert.Equal(expect.NuGetVersion, result.NuGetVersion);
                 Assert.Equal(expect.CommitsSinceVersionSource, result.CommitsSinceVersionSource);

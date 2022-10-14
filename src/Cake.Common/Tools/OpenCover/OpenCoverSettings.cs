@@ -115,7 +115,7 @@ namespace Cake.Common.Tools.OpenCover
         /// </summary>
         public OpenCoverSettings()
         {
-            _filters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _filters = new HashSet<string>(StringComparer.Ordinal);
             _excludedAttributeFilters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _excludedFileFilters = new HashSet<string>(StringComparer.Ordinal);
             Register = new OpenCoverRegisterOptionUser();

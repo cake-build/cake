@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Cake.Common.Tools.MSBuild
 {
@@ -21,7 +18,38 @@ namespace Cake.Common.Tools.MSBuild
             { '\n', "%0A" }
         };
 
-        internal static string EscapeMSBuildPropertySpecialCharacters(this string value)
+        private static readonly HashSet<string> _propertiesNotEscapeSemicolons = new HashSet<string>
+        {
+            "DefineConstants",
+            "ExcludeFilesFromDeployment"
+        };
+
+        internal static string BuildMSBuildPropertyParameterString<TValue>(this KeyValuePair<string, TValue> property)
+            where TValue : ICollection<string>
+        {
+            var propertyParameterString = new StringBuilder();
+            var last = property.Value.Count - 1;
+            var index = 0;
+
+            var escapeSemicolons = property.Key.AllowEscapeSemicolon();
+            foreach (var parameter in property.Value)
+            {
+                if (string.IsNullOrEmpty(parameter))
+                {
+                    index++;
+                    continue;
+                }
+
+                propertyParameterString.Append(parameter.EscapeMSBuildPropertySpecialCharacters(escapeSemicolons));
+                propertyParameterString.Append(index != last ? ";" : null);
+
+                index++;
+            }
+
+            return propertyParameterString.ToString();
+        }
+
+        private static string EscapeMSBuildPropertySpecialCharacters(this string value, bool escapeSemicolons)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -31,17 +59,22 @@ namespace Cake.Common.Tools.MSBuild
             var escapedBuilder = new StringBuilder();
             foreach (var c in value)
             {
-                if (_escapeLookup.TryGetValue(c, out string newChar))
+                if ((!escapeSemicolons && c.Equals(';')) || !_escapeLookup.TryGetValue(c, out var newChar))
                 {
-                    escapedBuilder.Append(newChar);
+                    escapedBuilder.Append(c);
                 }
                 else
                 {
-                    escapedBuilder.Append(c);
+                    escapedBuilder.Append(newChar);
                 }
             }
 
             return escapedBuilder.ToString();
+        }
+
+        private static bool AllowEscapeSemicolon(this string propertyName)
+        {
+            return !_propertiesNotEscapeSemicolons.Contains(propertyName);
         }
     }
 }

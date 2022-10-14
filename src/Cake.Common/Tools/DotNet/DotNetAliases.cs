@@ -22,7 +22,13 @@ using Cake.Common.Tools.DotNet.SDKCheck;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNet.VSTest;
+using Cake.Common.Tools.DotNet.Workload.Install;
+using Cake.Common.Tools.DotNet.Workload.List;
+using Cake.Common.Tools.DotNet.Workload.Repair;
+using Cake.Common.Tools.DotNet.Workload.Restore;
 using Cake.Common.Tools.DotNet.Workload.Search;
+using Cake.Common.Tools.DotNet.Workload.Uninstall;
+using Cake.Common.Tools.DotNet.Workload.Update;
 using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.BuildServer;
 using Cake.Common.Tools.DotNetCore.Clean;
@@ -180,7 +186,7 @@ namespace Cake.Common.Tools.DotNet
         ///     Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
         ///     FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
         ///     PackagesDirectory = "./packages",
-        ///     Verbosity = Information,
+        ///     DotNetVerbosity.Information,
         ///     DisableParallel = true,
         ///     InferRuntimes = new[] {"runtime1", "runtime2"}
         /// };
@@ -209,7 +215,7 @@ namespace Cake.Common.Tools.DotNet
         ///     Sources = new[] {"https://www.example.com/nugetfeed", "https://www.example.com/nugetfeed2"},
         ///     FallbackSources = new[] {"https://www.example.com/fallbacknugetfeed"},
         ///     PackagesDirectory = "./packages",
-        ///     Verbosity = Information,
+        ///     DotNetVerbosity.Information,
         ///     DisableParallel = true,
         ///     InferRuntimes = new[] {"runtime1", "runtime2"}
         /// };
@@ -1905,7 +1911,7 @@ namespace Cake.Common.Tools.DotNet
         /// <code>
         /// var settings = new DotNetWorkloadSearchSettings
         /// {
-        ///     Verbosity = Detailed
+        ///     DotNetVerbosity.Detailed
         /// };
         ///
         /// var workloads = DotNetWorkloadSearch("maui", settings);
@@ -1933,6 +1939,366 @@ namespace Cake.Common.Tools.DotNet
 
             var searcher = new DotNetWorkloadSearcher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return searcher.Search(searchString, settings);
+        }
+
+        /// <summary>
+        /// Uninstalls a specified workload.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="workloadId">The workload ID to uninstall.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadUninstall("maui");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Uninstall")]
+        public static void DotNetWorkloadUninstall(this ICakeContext context, string workloadId)
+        {
+            context.DotNetWorkloadUninstall(new string[] { workloadId });
+        }
+
+        /// <summary>
+        /// Uninstalls one or more workloads.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="workloadIds">The workload ID or multiple IDs to uninstall.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadUninstall(new string[] { "maui", "maui-desktop", "maui-mobile" });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Uninstall")]
+        public static void DotNetWorkloadUninstall(this ICakeContext context, IEnumerable<string> workloadIds)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var uninstaller = new DotNetWorkloadUninstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            uninstaller.Uninstall(workloadIds);
+        }
+
+        /// <summary>
+        /// Installs a specified optional workload.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="workloadId">The workload ID to install.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadInstall("maui");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Install")]
+        public static void DotNetWorkloadInstall(this ICakeContext context, string workloadId)
+        {
+            context.DotNetWorkloadInstall(workloadId, null);
+        }
+
+        /// <summary>
+        /// Installs a specified optional workload.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="workloadId">The workload ID to install.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadInstallSettings
+        /// {
+        ///     IncludePreviews = true,
+        ///     NoCache = true
+        /// };
+        ///
+        /// DotNetWorkloadInstall("maui", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Install")]
+        public static void DotNetWorkloadInstall(this ICakeContext context, string workloadId, DotNetWorkloadInstallSettings settings)
+        {
+            context.DotNetWorkloadInstall(new string[] { workloadId }, settings);
+        }
+
+        /// <summary>
+        /// Installs one or more optional workloads.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="workloadIds">The workload ID or multiple IDs to install.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadInstall(new string[] { "maui", "maui-desktop", "maui-mobile" });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Install")]
+        public static void DotNetWorkloadInstall(this ICakeContext context, IEnumerable<string> workloadIds)
+        {
+            context.DotNetWorkloadInstall(workloadIds, null);
+        }
+
+        /// <summary>
+        /// Installs one or more optional workloads.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="workloadIds">The workload ID or multiple IDs to install.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadInstallSettings
+        /// {
+        ///     IncludePreviews = true,
+        ///     NoCache = true
+        /// };
+        ///
+        /// DotNetWorkloadInstall(new string[] { "maui", "maui-desktop", "maui-mobile" }, settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Install")]
+        public static void DotNetWorkloadInstall(this ICakeContext context, IEnumerable<string> workloadIds, DotNetWorkloadInstallSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetWorkloadInstallSettings();
+            }
+
+            var installer = new DotNetWorkloadInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            installer.Install(workloadIds, settings);
+        }
+
+        /// <summary>
+        /// Lists all installed workloads.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>The list of installed workloads.</returns>
+        /// <example>
+        /// <code>
+        /// var workloadIds = DotNetWorkloadList();
+        ///
+        /// foreach (var workloadId in workloadIds)
+        /// {
+        ///      Information($"Installed Workload Id: {workloadId}");
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.List")]
+        public static IEnumerable<DotNetWorkloadListItem> DotNetWorkloadList(this ICakeContext context)
+        {
+            return context.DotNetWorkloadList(null);
+        }
+
+        /// <summary>
+        /// Lists all installed workloads.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The list of installed workloads.</returns>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadListSettings
+        /// {
+        ///     Verbosity = DotNetVerbosity.Detailed
+        /// };
+        ///
+        /// var workloads = DotNetWorkloadList(settings);
+        ///
+        /// foreach (var workload in workloads)
+        /// {
+        ///      Information($"Installed Workload Id: {workload.Id}\t Manifest Version: {workload.ManifestVersion}\t Installation Source: {workload.InstallationSource}");
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.List")]
+        public static IEnumerable<DotNetWorkloadListItem> DotNetWorkloadList(this ICakeContext context, DotNetWorkloadListSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetWorkloadListSettings();
+            }
+
+            var lister = new DotNetWorkloadLister(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return lister.List(settings);
+        }
+
+        /// <summary>
+        /// Repairs all workloads installations.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadRepair();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Repair")]
+        public static void DotNetWorkloadRepair(this ICakeContext context)
+        {
+            context.DotNetWorkloadRepair(null);
+        }
+
+        /// <summary>
+        /// Repairs all workloads installations.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadRepairSettings
+        /// {
+        ///     IncludePreviews = true,
+        ///     NoCache = true
+        /// };
+        ///
+        /// DotNetWorkloadRepair(settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Repair")]
+        public static void DotNetWorkloadRepair(this ICakeContext context, DotNetWorkloadRepairSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetWorkloadRepairSettings();
+            }
+
+            var repairer = new DotNetWorkloadRepairer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            repairer.Repair(settings);
+        }
+
+        /// <summary>
+        /// Updates all installed workloads to the newest available version.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadUpdate();
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Update")]
+        public static void DotNetWorkloadUpdate(this ICakeContext context)
+        {
+            context.DotNetWorkloadUpdate(null);
+        }
+
+        /// <summary>
+        /// Updates all installed workloads to the newest available version.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadUpdateSettings
+        /// {
+        ///     IncludePreviews = true,
+        ///     NoCache = true
+        /// };
+        ///
+        /// DotNetWorkloadUpdate(settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Update")]
+        public static void DotNetWorkloadUpdate(this ICakeContext context, DotNetWorkloadUpdateSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings == null)
+            {
+                settings = new DotNetWorkloadUpdateSettings();
+            }
+
+            var updater = new DotNetWorkloadUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            updater.Update(settings);
+        }
+
+        /// <summary>
+        /// Installs workloads needed for a project or a solution.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution file to install workloads for.</param>
+        /// <example>
+        /// <code>
+        /// DotNetWorkloadRestore("./src/project");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Restore")]
+        public static void DotNetWorkloadRestore(this ICakeContext context, string project)
+        {
+            context.DotNetWorkloadRestore(project, null);
+        }
+
+        /// <summary>
+        /// Installs workloads needed for a project or a solution.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project or solution file to install workloads for.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetWorkloadRestoreSettings
+        /// {
+        ///     IncludePreviews = true,
+        ///     NoCache = true
+        /// };
+        ///
+        /// DotNetWorkloadRestore("./src/project", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Workload")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Restore")]
+        public static void DotNetWorkloadRestore(this ICakeContext context, string project, DotNetWorkloadRestoreSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetWorkloadRestoreSettings();
+            }
+
+            var restorer = new DotNetWorkloadRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            restorer.Restore(project, settings);
         }
     }
 }
