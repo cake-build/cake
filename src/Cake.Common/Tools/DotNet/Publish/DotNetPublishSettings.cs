@@ -4,13 +4,12 @@
 
 using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.MSBuild;
-using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.Publish
 {
     /// <summary>
-    /// Contains settings used by <see cref="DotNetCorePublisher" />.
+    /// Contains settings used by <see cref="DotNetPublisher" />.
     /// </summary>
     public class DotNetPublishSettings : DotNetSettings
     {

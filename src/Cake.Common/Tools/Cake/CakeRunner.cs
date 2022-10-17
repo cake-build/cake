@@ -9,7 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Cake.Common.Tools.DotNetCore.Execute;
+using Cake.Common.Tools.DotNet.Execute;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
@@ -25,7 +25,7 @@ namespace Cake.Common.Tools.Cake
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
         private readonly IGlobber _globber;
-        private readonly DotNetCoreExecutor _coreExecutor;
+        private readonly DotNetExecutor _coreExecutor;
         private static readonly IEnumerable<FilePath> _executingAssemblyToolPaths;
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Cake.Common.Tools.Cake
             _environment = environment;
             _fileSystem = fileSystem;
             _globber = globber;
-            _coreExecutor = new DotNetCoreExecutor(fileSystem, environment, processRunner, tools);
+            _coreExecutor = new DotNetExecutor(fileSystem, environment, processRunner, tools);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Cake.Common.Tools.Cake
                 _coreExecutor.Execute(
                     toolPath,
                     GetArguments(scriptPath, settings),
-                    new DotNetCoreExecuteSettings
+                    new DotNetExecuteSettings
                     {
                         ArgumentCustomization = settings.ArgumentCustomization,
                         EnvironmentVariables = settings.EnvironmentVariables,

@@ -3,17 +3,16 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.DotNet.Clean;
-using Cake.Common.Tools.DotNetCore.Clean;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Clean
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Clean
 {
-    internal sealed class DotNetCoreCleanerFixture : DotNetCoreFixture<DotNetCleanSettings>
+    internal sealed class DotNetCleanerFixture : DotNetFixture<DotNetCleanSettings>
     {
         public string Project { get; set; }
 
         protected override void RunTool()
         {
-            var tool = new DotNetCoreCleaner(FileSystem, Environment, ProcessRunner, Tools);
+            var tool = new DotNetCleaner(FileSystem, Environment, ProcessRunner, Tools);
             tool.Clean(Project, Settings);
         }
     }

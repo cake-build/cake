@@ -2,12 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.DotNetCore.Execute;
+using Cake.Common.Tools.DotNet.Execute;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Execute
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Execute
 {
-    internal sealed class DotNetCoreExecutorFixture : DotNetCoreFixture<DotNetCoreExecuteSettings>
+    internal sealed class DotNetExecutorFixture : DotNetFixture<DotNetExecuteSettings>
     {
         public FilePath AssemblyPath { get; set; }
 
@@ -15,7 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Execute
 
         protected override void RunTool()
         {
-            var tool = new DotNetCoreExecutor(FileSystem, Environment, ProcessRunner, Tools);
+            var tool = new DotNetExecutor(FileSystem, Environment, ProcessRunner, Tools);
             tool.Execute(AssemblyPath, Arguments, Settings);
         }
     }

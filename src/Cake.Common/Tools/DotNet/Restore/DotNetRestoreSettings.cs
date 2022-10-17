@@ -4,13 +4,12 @@
 
 using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.MSBuild;
-using Cake.Common.Tools.DotNetCore.Restore;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.Restore
 {
     /// <summary>
-    /// Contains settings used by <see cref="DotNetCoreRestoreSettings" />.
+    /// Contains settings used by <see cref="DotNetRestorer" />.
     /// </summary>
     public class DotNetRestoreSettings : DotNetSettings
     {

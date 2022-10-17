@@ -4,13 +4,12 @@
 
 using System;
 using System.Collections.Generic;
-using Cake.Common.Tools.DotNetCore.Test;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.Test
 {
     /// <summary>
-    /// Contains settings used by <see cref="DotNetCoreTester" />.
+    /// Contains settings used by <see cref="DotNetTester" />.
     /// </summary>
     public class DotNetTestSettings : DotNetSettings
     {

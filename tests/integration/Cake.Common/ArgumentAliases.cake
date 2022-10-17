@@ -118,24 +118,24 @@ Task("Cake.Common.ArgumentAliases.Argument.FilePathArgument")
     Assert.Equal(testAssemblyPath.FullPath, arg.FullPath);
 });
 
-Task("Cake.Common.ArgumentAliases.Argument.DotNetCoreVerbosityArgument")
+Task("Cake.Common.ArgumentAliases.Argument.DotNetVerbosityArgument")
     .Does(() =>
 {
     // Given, When
-    var arg = Argument<DotNetCoreVerbosity>("testDotNetCoreVerbosity");
+    var arg = Argument<DotNetVerbosity>("testDotNetVerbosity");
 
     // Then
-    Assert.Equal(DotNetCoreVerbosity.Diagnostic, arg);
+    Assert.Equal(DotNetVerbosity.Diagnostic, arg);
 });
 
-Task("Cake.Common.ArgumentAliases.Argument.DotNetCoreRollForwardArgument")
+Task("Cake.Common.ArgumentAliases.Argument.DotNetRollForwardArgument")
     .Does(() =>
 {
     // Given, When
-    var arg = Argument<DotNetCoreRollForward>("testDotNetRollForward");
+    var arg = Argument<DotNetRollForward>("testDotNetRollForward");
 
     // Then
-    Assert.Equal(DotNetCoreRollForward.LatestMajor, arg);
+    Assert.Equal(DotNetRollForward.LatestMajor, arg);
 });
 
 //////////////////////////////////////////////////////////////////////////////
@@ -151,6 +151,6 @@ Task("Cake.Common.ArgumentAliases")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument.MultipleArguments.WithLazyDefaultValue")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument.DirectoryPathArgument")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument.FilePathArgument")
-  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.DotNetCoreVerbosityArgument")
-  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.DotNetCoreRollForwardArgument")
+  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.DotNetVerbosityArgument")
+  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.DotNetRollForwardArgument")
 ;
