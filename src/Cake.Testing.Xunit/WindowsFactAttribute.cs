@@ -8,17 +8,17 @@ using Xunit;
 
 namespace Cake.Testing.Xunit
 {
-    public sealed class WindowsFact : FactAttribute
+    public sealed class WindowsFactAttribute : FactAttribute
     {
         private static readonly PlatformFamily _family;
 
-        static WindowsFact()
+        static WindowsFactAttribute()
         {
             _family = EnvironmentHelper.GetPlatformFamily();
         }
 
         // ReSharper disable once UnusedParameter.Local
-        public WindowsFact(string reason = null)
+        public WindowsFactAttribute(string reason = null)
         {
             if (_family != PlatformFamily.Windows)
             {
