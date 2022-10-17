@@ -16,7 +16,8 @@ Task("ValidateEnvironment")
         data => new [] {
             $"CAKE_{data.OS}_NETCOREAPP_3_1_VERSION",
             $"CAKE_{data.OS}_NETCOREAPP_5_0_VERSION",
-            $"CAKE_{data.OS}_NETCOREAPP_6_0_VERSION"
+            $"CAKE_{data.OS}_NETCOREAPP_6_0_VERSION",
+            $"CAKE_{data.OS}_NETCOREAPP_7_0_VERSION"
         },
         (data, envKey) => Assert.Equal(data.GitVersion, EnvironmentVariable(envKey))
     );
@@ -24,6 +25,7 @@ Task("ValidateEnvironment")
 Task("ValidatePath")
     .DoesForEach<BuildData, string>(
         new [] {
+            "Cake\\WTool\\Wtools\\Wnet7\\W0",
             "Cake\\WTool\\Wtools\\Wnet6\\W0",
             "Cake\\WTool\\Wtools\\Wnet5\\W0",
             "Cake\\WTool\\Wtools\\Wnetcoreapp3\\W1"
