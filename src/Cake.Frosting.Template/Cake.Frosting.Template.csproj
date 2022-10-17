@@ -5,7 +5,7 @@
     <AssemblyName>Cake.Frosting.Template</AssemblyName>
     <Title>Cake.Frosting templates for the .NET SDK.</Title>
     <Description>Cake.Frosting templates for the .NET SDK.</Description>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <IncludeContentInPack>true</IncludeContentInPack>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <ContentTargetFolders>content</ContentTargetFolders>

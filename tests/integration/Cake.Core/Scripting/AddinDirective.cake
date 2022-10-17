@@ -23,7 +23,6 @@ Task("Cake.Core.Scripting.AddinDirective.LoadTargetedAddin")
                                  .SetTargetFramework(
                                      cake switch
                                      {
-                                        FilePath netCoreApp3_1Path  when netCoreApp3_1Path.FullPath.Contains("netcoreapp3.1")   => "netcoreapp3.1",
                                         FilePath net5_0Path         when net5_0Path.FullPath.Contains("net5.0")                 => "net5.0",
                                         FilePath net6_0Path         when net6_0Path.FullPath.Contains("net6.0")                 => "net6.0",
                                         _ => "net7.0"
