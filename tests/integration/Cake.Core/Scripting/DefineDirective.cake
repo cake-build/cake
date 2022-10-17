@@ -50,6 +50,8 @@ Task("Cake.Core.Scripting.DefineDirective.Runtime")
                     "5.0",
 #elif NET6_0
                     "6.0",
+#elif NET7_0
+                    "7.0",
 #endif
                     context.Environment.Runtime.BuiltFramework.FullName);
 });
@@ -66,7 +68,7 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
     Assert.True(cake);
 });
 
-#if NET5_0 || NET6_0
+#if NET5_0 || NET6_0 || NET7_0
     Task("Cake.Core.Scripting.DefineDirective.C#9")
     .Does(() =>
 {
@@ -78,7 +80,7 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
 public record CSharpNine(bool IsNine);
 #endif
 
-#if NET6_0
+#if NET6_0 || NET7_0
     Task("Cake.Core.Scripting.DefineDirective.C#10")
     .Does(() =>
 {
@@ -95,14 +97,34 @@ public record CSharpNine(bool IsNine);
 
 #endif
 
+#if NET7_0
+    Task("Cake.Core.Scripting.DefineDirective.C#11")
+    .Does(() =>
+{
+    // Given / When / Then
+    const string longMessage = """
+    This is a long message.
+    It has several lines.
+        Some are indented
+                more than others.
+    Some should start at the first column.
+    Some have "quoted text" in them.
+    """;
+});
+
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
-#if NET5_0 || NET6_0
+#if NET5_0 || NET6_0 || NET7_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#9")
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#10")
+#endif
+#if NET7_0
+    .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#11")
 #endif
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Defined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.NotDefined")
