@@ -2,18 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.DotNetCore.NuGet.Delete;
+using Cake.Common.Tools.DotNet.NuGet.Delete;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.NuGet.Delete
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Delete
 {
-    internal sealed class DotNetCoreNuGetDeleterFixture : DotNetCoreFixture<DotNetCoreNuGetDeleteSettings>
+    internal sealed class DotNetNuGetDeleterFixture : DotNetFixture<DotNetNuGetDeleteSettings>
     {
         public string PackageName { get; set; }
         public string PackageVersion { get; set; }
 
         protected override void RunTool()
         {
-            var tool = new DotNetCoreNuGetDeleter(FileSystem, Environment, ProcessRunner, Tools);
+            var tool = new DotNetNuGetDeleter(FileSystem, Environment, ProcessRunner, Tools);
             tool.Delete(PackageName, PackageVersion, Settings);
         }
     }

@@ -4,14 +4,13 @@
 
 using System;
 using System.Collections.Generic;
-using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.MSBuild
 {
     /// <summary>
-    /// Contains settings used by <see cref="DotNetCoreMSBuildBuilder" />.
+    /// Contains settings used by <see cref="DotNetMSBuildBuilder" />.
     /// </summary>
     public class DotNetMSBuildSettings : DotNetSettings
     {

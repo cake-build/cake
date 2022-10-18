@@ -4,13 +4,12 @@
 
 using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.MSBuild;
-using Cake.Common.Tools.DotNetCore.Pack;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.Pack
 {
     /// <summary>
-    /// Contains settings used by <see cref="DotNetCorePacker" />.
+    /// Contains settings used by <see cref="DotNetPacker" />.
     /// </summary>
     public class DotNetPackSettings : DotNetSettings
     {

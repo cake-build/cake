@@ -5,7 +5,7 @@
 using Cake.Common.Tests.Fixtures.Tools.DotNet;
 using Cake.Common.Tools.DotNet;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet
 {
     internal abstract class DotNetCoreFixture<TSettings> : DotNetFixture<TSettings>
         where TSettings : DotNetSettings, new()
