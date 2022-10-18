@@ -159,5 +159,12 @@ namespace Cake.Common.Build.TeamCity
         /// <param name="status">Build status.</param>
         /// <param name="errorDetails">Error details if status is error.</param>
         void WriteStatus(string message, string status = "NORMAL", string errorDetails = null);
+
+        /// <summary>
+        /// Write a statistic message to the TeamCity build log.
+        /// </summary>
+        /// <param name="key">The statistic key.</param>
+        /// <param name="value">The statistic value.</param>
+        void WriteStatistic(string key, string value);
     }
 }

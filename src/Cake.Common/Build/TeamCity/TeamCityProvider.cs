@@ -198,6 +198,16 @@ namespace Cake.Common.Build.TeamCity
             });
         }
 
+        /// <inheritdoc/>
+        public void WriteStatistic(string key, string value)
+        {
+            WriteServiceMessage("buildStatisticValue", new Dictionary<string, string>
+            {
+                { "key", key },
+                { "value", value }
+            });
+        }
+
         private void WriteServiceMessage(string messageName, string attributeValue)
         {
             WriteServiceMessage(messageName, new Dictionary<string, string> { { " ", attributeValue } });
