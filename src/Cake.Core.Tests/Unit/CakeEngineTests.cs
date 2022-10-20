@@ -1613,11 +1613,11 @@ namespace Cake.Core.Tests.Unit
                 var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
-                engine.Setup += (sender, args) =>
+                engine.BeforeSetup += (sender, args) =>
                 {
                     list.Add("HANDLER_1");
                 };
-                engine.Setup += (sender, args) =>
+                engine.BeforeSetup += (sender, args) =>
                 {
                     list.Add("HANDLER_2");
                 };
@@ -1642,7 +1642,7 @@ namespace Cake.Core.Tests.Unit
                 engine.RegisterTask("A");
                 engine.RegisterTask("B").IsDependentOn("A");
                 engine.RegisterTask("C").IsDependentOn("B");
-                engine.Setup += (sender, args) =>
+                engine.BeforeSetup += (sender, args) =>
                 {
                     list.Add("SETUP_EVENT");
                 };
@@ -1731,15 +1731,15 @@ namespace Cake.Core.Tests.Unit
                 var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
-                engine.Setup += (sender, args) =>
+                engine.BeforeSetup += (sender, args) =>
                 {
                     list.Add("SETUP_EVENT");
                 };
-                engine.TaskSetup += (sender, args) =>
+                engine.BeforeTaskSetup += (sender, args) =>
                 {
                     list.Add("TASK_SETUP_EVENT_1");
                 };
-                engine.TaskSetup += (sender, args) =>
+                engine.BeforeTaskSetup += (sender, args) =>
                 {
                     list.Add("TASK_SETUP_EVENT_2");
                 };
@@ -1767,7 +1767,7 @@ namespace Cake.Core.Tests.Unit
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
                 engine.RegisterTask("B").IsDependentOn("A");
-                engine.TaskSetup += (sender, args) =>
+                engine.BeforeTaskSetup += (sender, args) =>
                 {
                     list.Add("TASK_SETUP_EVENT_" + args.TaskSetupContext.Task.Name);
                 };
@@ -1857,7 +1857,7 @@ namespace Cake.Core.Tests.Unit
                 var settings = new ExecutionSettings().SetTarget("A");
                 var engine = fixture.CreateEngine();
                 engine.RegisterTask("A");
-                engine.TaskSetup += (sender, args) =>
+                engine.BeforeTaskSetup += (sender, args) =>
                 {
                     list.Add("TASK_SETUP_EVENT");
                 };
