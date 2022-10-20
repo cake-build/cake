@@ -81,15 +81,6 @@ namespace Cake.Common.Tools.DotNet.Test
                 builder.AppendQuoted(settings.TestAdapterPath.MakeAbsolute(_environment).FullPath);
             }
 
-            // Logger
-#pragma warning disable CS0618
-            if (!string.IsNullOrWhiteSpace(settings.Logger))
-            {
-                builder.Append("--logger");
-                builder.AppendQuoted(settings.Logger);
-            }
-#pragma warning restore CS0618
-
             // Loggers
             if (settings.Loggers != null)
             {
