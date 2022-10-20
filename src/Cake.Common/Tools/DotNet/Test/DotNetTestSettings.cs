@@ -32,12 +32,6 @@ namespace Cake.Common.Tools.DotNet.Test
         public DirectoryPath TestAdapterPath { get; set; }
 
         /// <summary>
-        /// Gets or sets a logger for test results.
-        /// </summary>
-        [Obsolete("Please use Loggers instead.")]
-        public string Logger { get; set; }
-
-        /// <summary>
         /// Gets or sets the loggers for test results.
         /// </summary>
         public ICollection<string> Loggers { get; set; } = new List<string>();

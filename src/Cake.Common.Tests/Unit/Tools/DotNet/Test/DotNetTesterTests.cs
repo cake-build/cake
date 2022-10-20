@@ -132,9 +132,6 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Test
                 fixture.Settings.Settings = "./demo.runsettings";
                 fixture.Settings.Filter = "Priority = 1";
                 fixture.Settings.TestAdapterPath = @"/Working/custom-test-adapter";
-#pragma warning disable CS0618
-                fixture.Settings.Logger = "trx;LogFileName=/Working/logfile.trx";
-#pragma warning restore CS0618
                 fixture.Settings.Loggers = new[] { "html;LogFileName=/Working/logfile.html" };
                 fixture.Settings.DiagnosticFile = "./artifacts/logging/diagnostics.txt";
                 fixture.Settings.ResultsDirectory = "./tests/";
@@ -147,7 +144,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Test
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"trx;LogFileName=/Working/logfile.trx\" --logger \"html;LogFileName=/Working/logfile.html\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --collect \"XPlat Code Coverage\" --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --nologo --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64 --source \"https://api.nuget.org/v3/index.json\" --blame", result.Args);
+                Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"html;LogFileName=/Working/logfile.html\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --collect \"XPlat Code Coverage\" --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --nologo --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64 --source \"https://api.nuget.org/v3/index.json\" --blame", result.Args);
             }
 
             [Fact]
