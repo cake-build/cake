@@ -136,7 +136,6 @@ lessen the chance of getting accepted. Eventually, this means it will be closed 
 Please know this doesn't mean we don't value your contribution, just that things go stale. If in the
 future you want to pick it back up, feel free to address our concerns/questions/feedback and reopen
 the issue/open a new PR (referencing old one).
-
 Sometimes we may need you to rebase your commit against the latest code before we can review it further.
 If this happens, you can do the following:
 
