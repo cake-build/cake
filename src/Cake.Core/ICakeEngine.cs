@@ -20,13 +20,6 @@ namespace Cake.Core
         IReadOnlyList<ICakeTaskInfo> Tasks { get; }
 
         /// <summary>
-        /// [deprecated] Setup is obsolete and will be removed in a future release. Use <see cref="BeforeSetup" /> instead.
-        /// Raised at the start of setup before any tasks are run.
-        /// </summary>
-        [Obsolete("Setup is obsolete and will be removed in a future release. Use BeforeSetup instead.")]
-        event EventHandler<SetupEventArgs> Setup;
-
-        /// <summary>
         /// Raised at the start of setup before any tasks are run.
         /// </summary>
         event EventHandler<BeforeSetupEventArgs> BeforeSetup;
@@ -35,13 +28,6 @@ namespace Cake.Core
         /// Raised at the end of setup before any tasks are run.
         /// </summary>
         event EventHandler<AfterSetupEventArgs> AfterSetup;
-
-        /// <summary>
-        /// [deprecated] Teardown is obsolete and will be removed in a future release. Use <see cref="BeforeTeardown" /> instead.
-        /// Raised at the start of teardown after all other tasks have been run.
-        /// </summary>
-        [Obsolete("Teardown is obsolete and will be removed in a future release. Use BeforeTeardown instead.")]
-        event EventHandler<TeardownEventArgs> Teardown;
 
         /// <summary>
         /// Raised at the start of teardown after all other tasks have been run.
@@ -54,13 +40,6 @@ namespace Cake.Core
         event EventHandler<AfterTeardownEventArgs> AfterTeardown;
 
         /// <summary>
-        /// [deprecated] TaskSetup is obsolete and will be removed in a future release. Use <see cref="BeforeTaskSetup" /> instead.
-        /// Raised at the start of task setup before each task is run.
-        /// </summary>
-        [Obsolete("TaskSetup is obsolete and will be removed in a future release. Use BeforeTaskSetup instead.")]
-        event EventHandler<TaskSetupEventArgs> TaskSetup;
-
-        /// <summary>
         /// Raised at the start of task setup before each task is run.
         /// </summary>
         event EventHandler<BeforeTaskSetupEventArgs> BeforeTaskSetup;
@@ -69,13 +48,6 @@ namespace Cake.Core
         /// Raised at the end of task setup before each task is run.
         /// </summary>
         event EventHandler<AfterTaskSetupEventArgs> AfterTaskSetup;
-
-        /// <summary>
-        /// [deprecated] TaskTeardown is obsolete and will be removed in a future release. Use <see cref="BeforeTaskTeardown" /> instead.
-        /// Raised at the start of task teardown after each task has been run.
-        /// </summary>
-        [Obsolete("TaskTeardown is obsolete and will be removed in a future release. Use BeforeTaskTeardown instead.")]
-        event EventHandler<TaskTeardownEventArgs> TaskTeardown;
 
         /// <summary>
         /// Raised at the start of task teardown after each task has been run.

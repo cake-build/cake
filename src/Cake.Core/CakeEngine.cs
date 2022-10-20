@@ -27,20 +27,10 @@ namespace Cake.Core
         public IReadOnlyList<ICakeTaskInfo> Tasks => _tasks;
 
         /// <inheritdoc/>
-#pragma warning disable 618
-        public event EventHandler<SetupEventArgs> Setup;
-#pragma warning restore 618
-
-        /// <inheritdoc/>
         public event EventHandler<BeforeSetupEventArgs> BeforeSetup;
 
         /// <inheritdoc/>
         public event EventHandler<AfterSetupEventArgs> AfterSetup;
-
-        /// <inheritdoc/>
-#pragma warning disable 618
-        public event EventHandler<TeardownEventArgs> Teardown;
-#pragma warning restore 618
 
         /// <inheritdoc/>
         public event EventHandler<BeforeTeardownEventArgs> BeforeTeardown;
@@ -49,20 +39,10 @@ namespace Cake.Core
         public event EventHandler<AfterTeardownEventArgs> AfterTeardown;
 
         /// <inheritdoc/>
-#pragma warning disable 618
-        public event EventHandler<TaskSetupEventArgs> TaskSetup;
-#pragma warning restore 618
-
-        /// <inheritdoc/>
         public event EventHandler<BeforeTaskSetupEventArgs> BeforeTaskSetup;
 
         /// <inheritdoc/>
         public event EventHandler<AfterTaskSetupEventArgs> AfterTaskSetup;
-
-        /// <inheritdoc/>
-#pragma warning disable 618
-        public event EventHandler<TaskTeardownEventArgs> TaskTeardown;
-#pragma warning restore 618
 
         /// <inheritdoc/>
         public event EventHandler<BeforeTaskTeardownEventArgs> BeforeTaskTeardown;
@@ -265,9 +245,6 @@ namespace Cake.Core
             stopWatch.Restart();
 
             PublishEvent(BeforeSetup, new BeforeSetupEventArgs(context));
-#pragma warning disable 618
-            PublishEvent(Setup, new SetupEventArgs(context));
-#pragma warning restore 618
 
             try
             {
@@ -377,9 +354,7 @@ namespace Cake.Core
         {
             var taskSetupContext = new TaskSetupContext(context, task);
             PublishEvent(BeforeTaskSetup, new BeforeTaskSetupEventArgs(taskSetupContext));
-#pragma warning disable 618
-            PublishEvent(TaskSetup, new TaskSetupEventArgs(taskSetupContext));
-#pragma warning restore 618
+
             // Trying to stay consistent with the behavior of script-level Setup & Teardown (if setup fails, don't run the task, but still run the teardown)
             try
             {
@@ -408,9 +383,6 @@ namespace Cake.Core
 
             var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped, taskException);
             PublishEvent(BeforeTaskTeardown, new BeforeTaskTeardownEventArgs(taskTeardownContext));
-#pragma warning disable 618
-            PublishEvent(TaskTeardown, new TaskTeardownEventArgs(taskTeardownContext));
-#pragma warning restore 618
 
             try
             {
@@ -493,9 +465,6 @@ namespace Cake.Core
 
             var teardownContext = new TeardownContext(context, thrownException);
             PublishEvent(BeforeTeardown, new BeforeTeardownEventArgs(teardownContext));
-#pragma warning disable 618
-            PublishEvent(Teardown, new TeardownEventArgs(teardownContext));
-#pragma warning restore 618
 
             try
             {
