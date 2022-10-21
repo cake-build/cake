@@ -121,6 +121,54 @@ namespace Cake.Common.Build.TeamCity
         }
 
         /// <inheritdoc/>
+        public void WriteAppendBuildStatus(string message, string status = null)
+        {
+            var attrs = new Dictionary<string, string>
+            {
+                { "text", $"{{build.status.text}}; {message}" }
+            };
+
+            if (status != null)
+            {
+                attrs.Add("status", status);
+            }
+
+            WriteServiceMessage("buildStatus", attrs);
+        }
+
+        /// <inheritdoc/>
+        public void WritePrependBuildStatus(string message, string status = null)
+        {
+            var attrs = new Dictionary<string, string>
+            {
+                { "text", $"{message}; {{build.status.text}}" }
+            };
+
+            if (status != null)
+            {
+                attrs.Add("status", status);
+            }
+
+            WriteServiceMessage("buildStatus", attrs);
+        }
+
+        /// <inheritdoc/>
+        public void WriteReplacementBuildStatus(string message, string status = null)
+        {
+            var attrs = new Dictionary<string, string>
+            {
+                { "text", message }
+            };
+
+            if (status != null)
+            {
+                attrs.Add("status", status);
+            }
+
+            WriteServiceMessage("buildStatus", attrs);
+        }
+
+        /// <inheritdoc/>
         public void ImportData(string type, FilePath path)
         {
             if (type == null)

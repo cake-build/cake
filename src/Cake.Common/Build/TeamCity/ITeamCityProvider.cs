@@ -153,12 +153,33 @@ namespace Cake.Common.Build.TeamCity
         void WriteStartProgress(string message);
 
         /// <summary>
-        /// Write a status message to the TeamCity build log.
+        /// Write a message to the TeamCity build log. - Messages not added to the build status.
         /// </summary>
         /// <param name="message">Message contents.</param>
         /// <param name="status">Build status.</param>
         /// <param name="errorDetails">Error details if status is error.</param>
         void WriteStatus(string message, string status = "NORMAL", string errorDetails = null);
+
+        /// <summary>
+        /// Write a status message to the TeamCity build log. - Prepend message to build status.
+        /// </summary>
+        /// <param name="message">Message contents.</param>
+        /// <param name="status">Build status.</param>
+        void WritePrependBuildStatus(string message, string status = null);
+
+        /// <summary>
+        /// Write a status message to the TeamCity build log. - append message to build status.
+        /// </summary>
+        /// <param name="message">Message contents.</param>
+        /// <param name="status">Build status.</param>
+        void WriteAppendBuildStatus(string message, string status = null);
+
+        /// <summary>
+        /// Write a status message to the TeamCity build log. - replace existing build status.
+        /// </summary>
+        /// <param name="message">Message contents.</param>
+        /// <param name="status">Build status.</param>
+        void WriteReplacementBuildStatus(string message, string status = null);
 
         /// <summary>
         /// Write a statistic message to the TeamCity build log.
