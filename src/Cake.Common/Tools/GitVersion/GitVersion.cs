@@ -40,9 +40,19 @@ namespace Cake.Common.Tools.GitVersion
         public string PreReleaseLabel { get; set; }
 
         /// <summary>
+        /// Gets or sets the pre-release label with dash.
+        /// </summary>
+        public string PreReleaseLabelWithDash { get; set; }
+
+        /// <summary>
         /// Gets or sets the pre-release number.
         /// </summary>
         public int? PreReleaseNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the weighted pre-release number.
+        /// </summary>
+        public int? WeightedPreReleaseNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the build metadata.
@@ -105,6 +115,11 @@ namespace Cake.Common.Tools.GitVersion
         public string BranchName { get; set; }
 
         /// <summary>
+        /// Gets or sets the escaped branch name.
+        /// </summary>
+        public string EscapedBranchName { get; set; }
+
+        /// <summary>
         /// Gets or sets the Git SHA.
         /// </summary>
         public string Sha { get; set; }
@@ -125,6 +140,21 @@ namespace Cake.Common.Tools.GitVersion
         public string NuGetVersion { get; set; }
 
         /// <summary>
+        /// Gets or sets the NuGet pre-release tag for v2.
+        /// </summary>
+        public string NuGetPreReleaseTagV2 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the NuGet pre-release tag.
+        /// </summary>
+        public string NuGetPreReleaseTag { get; set; }
+
+        /// <summary>
+        /// Gets or sets the version source sha.
+        /// </summary>
+        public string VersionSourceSha { get; set; }
+
+        /// <summary>
         /// Gets or sets the commits since version source.
         /// </summary>
         public int? CommitsSinceVersionSource { get; set; }
@@ -133,6 +163,11 @@ namespace Cake.Common.Tools.GitVersion
         /// Gets or sets the commits since version source padded.
         /// </summary>
         public string CommitsSinceVersionSourcePadded { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of uncommited changes.
+        /// </summary>
+        public int? UncommittedChanges { get; set; }
 
         /// <summary>
         /// Gets or sets the commit date.
