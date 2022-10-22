@@ -86,18 +86,35 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 Assert.Equal("/Working", result.Process.WorkingDirectory.FullPath);
             }
 
-            [Fact]
-            public void Should_Add_OutputType_To_Arguments_If_Set()
+            [Theory]
+            [InlineData(GitVersionOutput.Json, "-output json")]
+            [InlineData(GitVersionOutput.File, "-output file")]
+            public void Should_Add_OutputType_To_Arguments_If_Set(GitVersionOutput outputType, string args)
             {
                 // Given
                 var fixture = new GitVersionRunnerFixture();
-                fixture.Settings.OutputType = GitVersionOutput.Json;
+                fixture.Settings.OutputType = outputType;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("-output json", result.Args);
+                Assert.Equal(args, result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_OutputFile_If_Set_With_OutputType_File()
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.OutputType = GitVersionOutput.File;
+                fixture.Settings.OutputFile = "GitVersion.json";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-output file -outputfile \"GitVersion.json\"", result.Args);
             }
 
             [Fact]
@@ -159,6 +176,20 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
             }
 
             [Fact]
+            public void Should_Add_ConfigFile_To_Arguments_If_Set()
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.ConfigFile = "c:/temp/gitversion.yml";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-config \"c:/temp/gitversion.yml\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_RepositoryPath_To_Arguments_If_Set()
             {
                 // Given
@@ -211,6 +242,102 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 // Given
                 var fixture = new GitVersionRunnerFixture();
                 fixture.Settings.NoFetch = nofetch;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(args, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "-nocache")]
+            [InlineData(false, "")]
+            public void Should_Add_NoCache_To_Arguments_If_Set(bool nocache, string args)
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.NoCache = nocache;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(args, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "-nonormalize")]
+            [InlineData(false, "")]
+            public void Should_Add_NoNormalize_To_Arguments_If_Set(bool nonormalize, string args)
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.NoNormalize = nonormalize;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(args, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "-diag")]
+            [InlineData(false, "")]
+            public void Should_Add_Diag_To_Arguments_If_Set(bool diag, string args)
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.Diag = diag;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(args, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "-updateprojectfiles")]
+            [InlineData(false, "")]
+            public void Should_Add_UpdateProjectFiles_To_Arguments_If_Set(bool updateProjectFiles, string args)
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.UpdateProjectFiles = updateProjectFiles;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(args, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "-ensureassemblyinfo")]
+            [InlineData(false, "")]
+            public void Should_Add_EnsureAssemblyInfo_To_Arguments_If_Set(bool ensureAssemblyInfo, string args)
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.EnsureAssemblyInfo = ensureAssemblyInfo;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(args, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "-updatewixversionfile")]
+            [InlineData(false, "")]
+            public void Should_Add_UpdateWixVersionFile_To_Arguments_If_Set(bool updateWixVersionFile, string args)
+            {
+                // Given
+                var fixture = new GitVersionRunnerFixture();
+                fixture.Settings.UpdateWixVersionFile = updateWixVersionFile;
 
                 // When
                 var result = fixture.Run();

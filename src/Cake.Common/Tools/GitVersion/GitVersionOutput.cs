@@ -17,6 +17,11 @@ namespace Cake.Common.Tools.GitVersion
         /// <summary>
         /// Outputs to the stdout in a way usable by a detected build server.
         /// </summary>
-        BuildServer
+        BuildServer,
+
+        /// <summary>
+        /// Outputs to a file, as specified in the OutputFile parameter.
+        /// </summary>
+        File
     }
 }
