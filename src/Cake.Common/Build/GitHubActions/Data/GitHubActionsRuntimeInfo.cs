@@ -63,6 +63,14 @@ namespace Cake.Common.Build.GitHubActions.Data
         public FilePath OutputPath => GetEnvironmentFilePath("GITHUB_OUTPUT");
 
         /// <summary>
+        /// Gets the path to output file to set the step summary.
+        /// </summary>
+        /// <value>
+        /// The path to output file to set the step summary.
+        /// </value>
+        public FilePath StepSummary => GetEnvironmentFilePath("GITHUB_STEP_SUMMARY");
+
+        /// <summary>
         /// Gets the path to path file to add a path to system path that the following steps in a job can use.
         /// </summary>
         /// <value>
