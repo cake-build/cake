@@ -134,6 +134,12 @@ namespace Cake.Common.Tests.Fixtures.Build
             return this;
         }
 
+        public GitHubActionsCommandsFixture WithNoGitHubOutput()
+        {
+            Environment.GetEnvironmentVariable("GITHUB_OUTPUT").Returns(null as string);
+            return this;
+        }
+
         public GitHubActionsCommandsFixture WithNoGitHubPath()
         {
             Environment.GetEnvironmentVariable("GITHUB_PATH").Returns(null as string);

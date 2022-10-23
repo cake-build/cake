@@ -186,6 +186,73 @@ CAKEEOF
             }
         }
 
+        public sealed class TheSetOutputParameterMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Key_Is_Null()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture().CreateGitHubActionsCommands();
+
+                // When
+                var result = Record.Exception(() => commands.SetOutputParameter(null, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "key");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Value_Is_Null()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture().CreateGitHubActionsCommands();
+                var key = "Key";
+
+                // When
+                var result = Record.Exception(() => commands.SetOutputParameter(key, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "value");
+            }
+
+            [Fact]
+            public void Should_Throw_If_OutputPath_Is_Null()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture()
+                                .WithNoGitHubOutput()
+                                .CreateGitHubActionsCommands();
+
+                var key = "Key";
+                var value = "Value";
+
+                // When
+                var result = Record.Exception(() => commands.SetOutputParameter(key, value));
+
+                // Then
+                AssertEx.IsCakeException(result, "GitHub Actions Runtime OutputPath missing.");
+            }
+
+            [Fact]
+            public void Should_SetOutputParameter()
+            {
+                // Given
+                var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture();
+                var commands = gitHubActionsCommandsFixture.CreateGitHubActionsCommands();
+                var key = "Key";
+                var value = "Value";
+
+                // When
+                commands.SetOutputParameter(key, value);
+
+                // Then
+                Assert.Equal(
+                    @"Key=Value
+".NormalizeLineEndings(),
+                    gitHubActionsCommandsFixture.FileSystem.GetFile("/opt/github.output").GetTextContent().NormalizeLineEndings());
+            }
+        }
+
         public sealed class TheUploadArtifactMethod
         {
             public sealed class File
