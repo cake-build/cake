@@ -32,14 +32,19 @@ jobs:
             include-prerelease: 'true'
 
       - name: Run Cake script
+        id: build-cake
         uses: cake-build/cake-action@v1
         with:
           target: Run-Integration-Tests
           cake-version: tool-manifest
 
       - name: Validate Integration Tests
+        id: validate-cake
         uses: cake-build/cake-action@master
         with:
           script-path: tests/integration/Cake.Common/Build/GitHubActions/ValidateGitHubActionsProvider.cake
           cake-version: tool-manifest
+          arguments: |
+            CAKE_NETCOREAPP_6_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_6_0_VERSION_OS }}
+            CAKE_NETCOREAPP_7_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_7_0_VERSION_OS }}
 

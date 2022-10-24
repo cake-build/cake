@@ -8,7 +8,7 @@ Task("Cake.Common.Build.GitHubActionsProvider.Provider")
 });
 
 Task("Cake.Common.Build.GitHubActionsProvider.Commands.AddPath")
-    .Does<GitHubActionsData>(async data => {
+    .Does<GitHubActionsData>(data => {
         // When
         GitHubActions.Commands.AddPath(data.AssemblyPath.GetDirectory());
 });
@@ -25,6 +25,23 @@ Task("Cake.Common.Build.GitHubActionsProvider.Commands.SetEnvironmentVariable")
 
         // When
         GitHubActions.Commands.SetEnvironmentVariable(key, value);
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.SetOutputParameter")
+    .Does(() => {
+        // Given
+        string key = $"CAKE_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}_VERSION_OS"
+                        .Replace(".", "_")
+                        .Replace("__", "_")
+                        .ToUpper(),
+                value = string.Join(
+                                '_',
+                                Context.Environment.Runtime.CakeVersion.ToString(3),
+                                GitHubActions.Environment.Runner.OS)
+                            .ToUpper();
+
+        // When
+        GitHubActions.Commands.SetOutputParameter(key, value);
 });
 
 Task("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.File")
@@ -90,7 +107,8 @@ if (GitHubActions.IsRunningOnGitHubActions)
     gitHubActionsProviderTask
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Provider")
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.AddPath")
-        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.SetEnvironmentVariable");
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.SetEnvironmentVariable")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.SetOutputParameter");
 
 }
 
