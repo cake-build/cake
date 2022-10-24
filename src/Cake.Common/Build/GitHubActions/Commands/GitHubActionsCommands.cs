@@ -104,6 +104,36 @@ namespace Cake.Common.Build.GitHubActions.Commands
         }
 
         /// <summary>
+        /// Creates or updates an output parameter for any steps running next in a job.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The Value.</param>
+        public void SetOutputParameter(string key, string value)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (_actionsEnvironment.Runtime.OutputPath == null)
+            {
+                throw new CakeException("GitHub Actions Runtime OutputPath missing.");
+            }
+
+            var file = _fileSystem.GetFile(_actionsEnvironment.Runtime.OutputPath);
+            using var stream = file.Open(FileMode.Append, FileAccess.Write, FileShare.None);
+            using var writer = new StreamWriter(stream);
+            writer.Write(key);
+            writer.Write("=");
+            writer.WriteLine(value);
+        }
+
+        /// <summary>
         /// Upload local file into a file container folder, and create an artifact.
         /// </summary>
         /// <param name="path">Path to the local file.</param>
