@@ -68,7 +68,7 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
     Assert.True(cake);
 });
 
-#if NET5_0 || NET6_0 || NET7_0
+#if NET6_0 || NET7_0
     Task("Cake.Core.Scripting.DefineDirective.C#9")
     .Does(() =>
 {
@@ -117,7 +117,7 @@ public record CSharpNine(bool IsNine);
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
-#if NET5_0 || NET6_0 || NET7_0
+#if NET6_0 || NET7_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#9")
 #endif
 #if NET6_0 || NET7_0
