@@ -253,6 +253,56 @@ CAKEEOF
             }
         }
 
+        public sealed class TheSetStepSummaryMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Summary_Is_Null()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture().CreateGitHubActionsCommands();
+
+                // When
+                var result = Record.Exception(() => commands.SetStepSummary(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "summary");
+            }
+
+            [Fact]
+            public void Should_Throw_If_StepSummary_Is_Null()
+            {
+                // Given
+                var commands = new GitHubActionsCommandsFixture()
+                                .WithNoGitHubStepSummary()
+                                .CreateGitHubActionsCommands();
+
+                var summary = "summary";
+
+                // When
+                var result = Record.Exception(() => commands.SetStepSummary(summary));
+
+                // Then
+                AssertEx.IsCakeException(result, "GitHub Actions Runtime StepSummary missing.");
+            }
+
+            [Fact]
+            public void Should_SetStepSummary()
+            {
+                // Given
+                var gitHubActionsCommandsFixture = new GitHubActionsCommandsFixture();
+                var commands = gitHubActionsCommandsFixture.CreateGitHubActionsCommands();
+                var summary = "## This is some markdown content :rocket:";
+
+                // When
+                commands.SetStepSummary(summary);
+
+                // Then
+                Assert.Equal(
+                    string.Concat(summary, System.Environment.NewLine).NormalizeLineEndings(),
+                    gitHubActionsCommandsFixture.FileSystem.GetFile("/opt/github.stepsummary").GetTextContent().NormalizeLineEndings());
+            }
+        }
+
         public sealed class TheUploadArtifactMethod
         {
             public sealed class File

@@ -134,6 +134,28 @@ namespace Cake.Common.Build.GitHubActions.Commands
         }
 
         /// <summary>
+        /// Creates or updates the step summary for a GitHub workflow.
+        /// </summary>
+        /// <param name="summary">The step summary.</param>
+        public void SetStepSummary(string summary)
+        {
+            if (string.IsNullOrEmpty(summary))
+            {
+                throw new ArgumentNullException(nameof(summary));
+            }
+
+            if (_actionsEnvironment.Runtime.StepSummary == null)
+            {
+                throw new CakeException("GitHub Actions Runtime StepSummary missing.");
+            }
+
+            var file = _fileSystem.GetFile(_actionsEnvironment.Runtime.StepSummary);
+            using var stream = file.Open(FileMode.Append, FileAccess.Write, FileShare.None);
+            using var writer = new StreamWriter(stream);
+            writer.WriteLine(summary);
+        }
+
+        /// <summary>
         /// Upload local file into a file container folder, and create an artifact.
         /// </summary>
         /// <param name="path">Path to the local file.</param>
