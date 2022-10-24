@@ -11,5 +11,24 @@
     "type": "project"
   },
   "groupIdentity": "Cake",
-  "description": "Create a Cake.Frosting build project."
+  "description": "Create a Cake.Frosting build project.",
+  "symbols": {
+    "framework": {
+        "type": "parameter",
+        "description": "The target framework for the project.",
+        "datatype": "choice",
+        "defaultValue": "net7.0",
+        "replaces": "TargetFrameworkValue",
+        "choices": [
+            {
+            "choice": "net6.0",
+            "description": "Target .NET 6"
+            },
+            {
+            "choice": "net7.0",
+            "description": "Target .NET 7"
+            }
+        ]
+    }
+  }
 }
