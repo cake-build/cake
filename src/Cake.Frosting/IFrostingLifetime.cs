@@ -16,7 +16,8 @@ namespace Cake.Frosting
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="context">The context.</param>
-        void Setup(ICakeContext context);
+        /// <param name="info">The setup information.</param>
+        void Setup(ICakeContext context, ISetupContext info);
     }
 
     /// <summary>
