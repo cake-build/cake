@@ -23,9 +23,9 @@ namespace Cake.Infrastructure.Scripting
             {
                 foreach (var reference in
 #if NET6_0
-            Basic.Reference.Assemblies.Net60.All)
+            Basic.Reference.Assemblies.Net60.References.All)
 #else
-            Basic.Reference.Assemblies.Net70.All)
+            Basic.Reference.Assemblies.Net70.References.All)
 #endif
                 {
                     Assembly assembly;
