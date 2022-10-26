@@ -4,8 +4,9 @@
 
 | Version   | Supported          |
 | --------- | ------------------ |
+| 2.x.x     | :white_check_mark: |
 | 1.0.x     | :white_check_mark: |
-| 0.38.5    | :white_check_mark: |
+| 0.38.5    | :x:                |
 | <= 0.38.4 | :x:                |
 
 ## Reporting Security Issues
