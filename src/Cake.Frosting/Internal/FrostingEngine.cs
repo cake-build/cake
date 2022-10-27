@@ -128,7 +128,7 @@ namespace Cake.Frosting.Internal
                     // Is the criteria method overridden?
                     if (task.IsShouldRunOverridden(_context))
                     {
-                        cakeTask.WithCriteria(task.ShouldRun);
+                        cakeTask.WithCriteria(task.ShouldRun, task.SkippedMessage);
                     }
 
                     // Continue on error?
