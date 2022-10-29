@@ -56,7 +56,7 @@ namespace Cake.Common.Build
             var travisCIProvider = new TravisCIProvider(context.Environment, new BuildSystemServiceMessageWriter());
             var bitbucketPipelinesProvider = new BitbucketPipelinesProvider(context.Environment);
             var goCDProvider = new GoCDProvider(context.Environment, context.Log);
-            var gitLabCIProvider = new GitLabCIProvider(context.Environment);
+            var gitLabCIProvider = new GitLabCIProvider(context.Environment, context.FileSystem);
             var gitHubActionsProvider = new GitHubActionsProvider(context.Environment, context.FileSystem);
             var azurePipelinesProvider = new AzurePipelinesProvider(context.Environment, new BuildSystemServiceMessageWriter());
 
