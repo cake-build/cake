@@ -11,7 +11,7 @@ namespace Cake.Frosting.Tests
         public int SetupCount { get; set; }
         public int TeardownCount { get; set; }
 
-        public override void Setup(ICakeContext context)
+        public override void Setup(ICakeContext context, ISetupContext info)
         {
             SetupCount++;
         }

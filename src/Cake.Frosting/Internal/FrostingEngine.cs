@@ -80,7 +80,7 @@ namespace Cake.Frosting.Internal
             if (_setup != null)
             {
                 _log.Debug("Registering setup: {0}", _setup.GetType().Name);
-                _engine.RegisterSetupAction(info => _setup.Setup(_context));
+                _engine.RegisterSetupAction(info => _setup.Setup(_context, info));
             }
 
             if (_teardown != null)
