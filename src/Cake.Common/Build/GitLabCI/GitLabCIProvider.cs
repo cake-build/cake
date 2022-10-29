@@ -5,6 +5,7 @@
 using System;
 using Cake.Common.Build.GitLabCI.Data;
 using Cake.Core;
+using Cake.Core.IO;
 
 namespace Cake.Common.Build.GitLabCI
 {
@@ -19,10 +20,12 @@ namespace Cake.Common.Build.GitLabCI
         /// Initializes a new instance of the <see cref="GitLabCIProvider"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public GitLabCIProvider(ICakeEnvironment environment)
+        /// <param name="fileSystem">The file system.</param>
+        public GitLabCIProvider(ICakeEnvironment environment, IFileSystem fileSystem)
         {
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment = new GitLabCIEnvironmentInfo(environment);
+            Commands = new GitLabCICommands(fileSystem);
         }
 
         /// <inheritdoc/>
@@ -30,5 +33,8 @@ namespace Cake.Common.Build.GitLabCI
 
         /// <inheritdoc/>
         public GitLabCIEnvironmentInfo Environment { get; }
+
+        /// <inheritdoc/>
+        public GitLabCICommands Commands { get; }
     }
 }

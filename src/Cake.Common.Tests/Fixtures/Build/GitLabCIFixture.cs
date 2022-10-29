@@ -4,18 +4,22 @@
 
 using Cake.Common.Build.GitLabCI;
 using Cake.Core;
+using Cake.Testing;
 using NSubstitute;
 
 namespace Cake.Common.Tests.Fixtures.Build
 {
     internal sealed class GitLabCIFixture
     {
-        public ICakeEnvironment Environment { get; set; }
+        public ICakeEnvironment Environment { get; }
+        public FakeFileSystem FileSystem { get; }
 
         public GitLabCIFixture()
         {
             Environment = Substitute.For<ICakeEnvironment>();
             Environment.GetEnvironmentVariable("CI_SERVER").Returns((string)null);
+            Environment.WorkingDirectory.Returns("/runner/builds");
+            FileSystem = new FakeFileSystem(Environment);
         }
 
         public void IsRunningOnGitLabCI()
@@ -25,7 +29,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public GitLabCIProvider CreateGitLabCIService()
         {
-            return new GitLabCIProvider(Environment);
+            return new GitLabCIProvider(Environment, FileSystem);
         }
     }
 }
