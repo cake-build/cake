@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cake.Common.Build.GitHubActions.Commands;
 using Cake.Common.Build.GitHubActions.Data;
+using Cake.Common.Tests.Fakes;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
@@ -108,6 +109,7 @@ namespace Cake.Common.Tests.Fixtures.Build
         private GitHubActionsInfoFixture GitHubActionsInfoFixture { get; }
         private ICakeEnvironment Environment { get; }
         public FakeFileSystem FileSystem { get; }
+        public FakeBuildSystemServiceMessageWriter Writer { get; }
 
         public GitHubActionsCommandsFixture()
         {
@@ -115,11 +117,12 @@ namespace Cake.Common.Tests.Fixtures.Build
             FileSystem = new FakeFileSystem(GitHubActionsInfoFixture.Environment);
             FileSystem.CreateDirectory("/opt");
             Environment = GitHubActionsInfoFixture.Environment;
+            Writer = new FakeBuildSystemServiceMessageWriter();
         }
 
         public GitHubActionsCommands CreateGitHubActionsCommands()
         {
-            return new GitHubActionsCommands(Environment, FileSystem, GitHubActionsInfoFixture.CreateEnvironmentInfo(), CreateClient);
+            return new GitHubActionsCommands(Environment, FileSystem, Writer, GitHubActionsInfoFixture.CreateEnvironmentInfo(), CreateClient);
         }
 
         public GitHubActionsCommandsFixture WithWorkingDirectory(DirectoryPath workingDirectory)
