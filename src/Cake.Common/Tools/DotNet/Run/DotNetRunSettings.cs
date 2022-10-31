@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using Cake.Common.Tools.DotNet.MSBuild;
 
 namespace Cake.Common.Tools.DotNet.Run
 {
@@ -45,5 +46,10 @@ namespace Cake.Common.Tools.DotNet.Run
         /// Gets or sets the target runtime.
         /// </summary>
         public string Runtime { get; set; }
+
+        /// <summary>
+        /// Gets or sets additional arguments to be passed to MSBuild.
+        /// </summary>
+        public DotNetMSBuildSettings MSBuildSettings { get; set; }
     }
 }
