@@ -22,11 +22,12 @@ namespace Cake.Common.Build.GitHubActions
         /// </summary>
         /// <param name="environment">The environment.</param>
         /// <param name="fileSystem">The file system.</param>
-        public GitHubActionsProvider(ICakeEnvironment environment, IFileSystem fileSystem)
+        /// <param name="writer">The build system service message writer.</param>
+        public GitHubActionsProvider(ICakeEnvironment environment, IFileSystem fileSystem, IBuildSystemServiceMessageWriter writer)
         {
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Environment = new GitHubActionsEnvironmentInfo(environment);
-            Commands = new GitHubActionsCommands(environment, fileSystem, Environment, _ => new System.Net.Http.HttpClient());
+            Commands = new GitHubActionsCommands(environment, fileSystem, writer, Environment, _ => new System.Net.Http.HttpClient());
         }
 
         /// <inheritdoc/>
