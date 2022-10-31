@@ -54,7 +54,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
             builder.Append("msbuild");
 
             // add msbuild settings
-            builder.AppendMSBuildSettings(settings, _environment);
+            builder.AppendMSBuildSettings(settings, _environment, false);
 
             // Specific path?
             if (projectOrDirectory != null)
