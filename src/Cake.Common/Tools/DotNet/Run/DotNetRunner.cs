@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -14,6 +15,8 @@ namespace Cake.Common.Tools.DotNet.Run
     /// </summary>
     public sealed class DotNetRunner : DotNetTool<DotNetRunSettings>
     {
+        private readonly ICakeEnvironment _environment;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetRunner" /> class.
         /// </summary>
@@ -27,6 +30,7 @@ namespace Cake.Common.Tools.DotNet.Run
             IProcessRunner processRunner,
             IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
+            _environment = environment;
         }
 
         /// <summary>
@@ -106,6 +110,12 @@ namespace Cake.Common.Tools.DotNet.Run
             {
                 builder.Append("--roll-forward");
                 builder.Append(settings.RollForward.Value.ToString("F"));
+            }
+
+            // MSBuild Settings
+            if (settings.MSBuildSettings != null)
+            {
+                builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
             }
 
             // Arguments
