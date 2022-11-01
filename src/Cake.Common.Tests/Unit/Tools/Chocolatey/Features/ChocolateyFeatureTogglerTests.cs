@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Tests.Fixtures.Tools.Chocolatey.ApiKey;
 using Cake.Common.Tests.Fixtures.Tools.Chocolatey.Features;
 using Cake.Testing;
 using Cake.Testing.Xunit;
@@ -125,12 +126,12 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("feature enable -n \"checkSumFiles\" -y", result.Args);
+                Assert.Equal("feature enable --name=\"checkSumFiles\" --confirm", result.Args);
             }
 
             [Theory]
-            [InlineData(true, "feature enable -n \"checkSumFiles\" -d -y")]
-            [InlineData(false, "feature enable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --debug --confirm")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_Debug_Flag_To_Arguments_If_Set(bool debug, string expected)
             {
                 // Given
@@ -145,8 +146,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(true, "feature enable -n \"checkSumFiles\" -v -y")]
-            [InlineData(false, "feature enable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --verbose --confirm")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_Verbose_Flag_To_Arguments_If_Set(bool verbose, string expected)
             {
                 // Given
@@ -161,8 +162,56 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(true, "feature enable -n \"checkSumFiles\" -y -f")]
-            [InlineData(false, "feature enable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --trace --confirm")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_Trace_Flag_To_Arguments_If_Set(bool trace, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.Trace = trace;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --no-color --confirm")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_NoColor_Flag_To_Arguments_If_Set(bool noColor, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.NoColor = noColor;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --accept-license --confirm")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_AcceptLicense_Flag_To_Arguments_If_Set(bool acceptLicense, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.AcceptLicense = acceptLicense;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --confirm --force")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_Force_Flag_To_Arguments_If_Set(bool force, string expected)
             {
                 // Given
@@ -177,8 +226,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(true, "feature enable -n \"checkSumFiles\" -y --noop")]
-            [InlineData(false, "feature enable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --confirm --what-if")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_Noop_Flag_To_Arguments_If_Set(bool noop, string expected)
             {
                 // Given
@@ -193,8 +242,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(true, "feature enable -n \"checkSumFiles\" -y -r")]
-            [InlineData(false, "feature enable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --confirm --limit-output")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_LimitOutput_Flag_To_Arguments_If_Set(bool limitOutput, string expected)
             {
                 // Given
@@ -209,8 +258,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(5, "feature enable -n \"checkSumFiles\" -y --execution-timeout \"5\"")]
-            [InlineData(0, "feature enable -n \"checkSumFiles\" -y")]
+            [InlineData(5, "feature enable --name=\"checkSumFiles\" --confirm --execution-timeout=\"5\"")]
+            [InlineData(0, "feature enable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_ExecutionTimeout_To_Arguments_If_Set(int executionTimeout, string expected)
             {
                 // Given
@@ -225,8 +274,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(@"c:\temp", "feature enable -n \"checkSumFiles\" -y -c \"c:\\temp\"")]
-            [InlineData("", "feature enable -n \"checkSumFiles\" -y")]
+            [InlineData(@"c:\temp", "feature enable --name=\"checkSumFiles\" --confirm --cache-location=\"c:\\temp\"")]
+            [InlineData("", "feature enable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_CacheLocation_Flag_To_Arguments_If_Set(string cacheLocation, string expected)
             {
                 // Given
@@ -241,13 +290,173 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(true, "feature enable -n \"checkSumFiles\" -y --allowunofficial")]
-            [InlineData(false, "feature enable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --confirm --allow-unofficial")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_AllowUnofficial_Flag_To_Arguments_If_Set(bool allowUnofficial, string expected)
             {
                 // Given
                 var fixture = new ChocolateyEnableFeatureFixture();
                 fixture.Settings.AllowUnofficial = allowUnofficial;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --confirm --fail-on-error-output")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_FailOnErrorOutput_Flag_To_Arguments_If_Set(bool failOnErrorOutput, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.FailOnErrorOutput = failOnErrorOutput;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --confirm --use-system-powershell")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_UseSystemPowerShell_Flag_To_Arguments_If_Set(bool useSystemPowerShell, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.UseSystemPowerShell = useSystemPowerShell;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --confirm --no-progress")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_NoProgress_Flag_To_Arguments_If_Set(bool noProgress, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.NoProgress = noProgress;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy", "feature enable --name=\"checkSumFiles\" --confirm --proxy=\"proxy\"")]
+            [InlineData(null, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_Proxy_Flag_To_Arguments_If_Set(string proxy, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.Proxy = proxy;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy-user", "feature enable --name=\"checkSumFiles\" --confirm --proxy-user=\"proxy-user\"")]
+            [InlineData(null, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_ProxyUser_Flag_To_Arguments_If_Set(string proxyUser, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.ProxyUser = proxyUser;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy-password", "feature enable --name=\"checkSumFiles\" --confirm --proxy-password=\"proxy-password\"")]
+            [InlineData(null, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_ProxyPassword_Flag_To_Arguments_If_Set(string proxyPassword, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.ProxyPassword = proxyPassword;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy1,proxy2", "feature enable --name=\"checkSumFiles\" --confirm --proxy-bypass-list=\"proxy1,proxy2\"")]
+            [InlineData(null, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_ProxyByPassList_Flag_To_Arguments_If_Set(string proxyByPassList, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.ProxyByPassList = proxyByPassList;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --confirm --proxy-bypass-on-local")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_ProxyByPassOnLocal_Flag_To_Arguments_If_Set(bool proxyBypassOnLocal, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.ProxyBypassOnLocal = proxyBypassOnLocal;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("./output.log", "feature enable --name=\"checkSumFiles\" --confirm --log-file=\"/Working/output.log\"")]
+            [InlineData(null, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_Log_File_Flag_To_Arguments_If_Set(string logFilePath, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.LogFile = logFilePath;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature enable --name=\"checkSumFiles\" --confirm --skip-compatibility-checks")]
+            [InlineData(false, "feature enable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_Skip_Compatibility_Flag_To_Arguments_If_Set(bool skipCompatibiity, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyEnableFeatureFixture();
+                fixture.Settings.SkipCompatibilityChecks = skipCompatibiity;
 
                 // When
                 var result = fixture.Run();
@@ -371,12 +580,12 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("feature disable -n \"checkSumFiles\" -y", result.Args);
+                Assert.Equal("feature disable --name=\"checkSumFiles\" --confirm", result.Args);
             }
 
             [Theory]
-            [InlineData(true, "feature disable -n \"checkSumFiles\" -d -y")]
-            [InlineData(false, "feature disable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --debug --confirm")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_Debug_Flag_To_Arguments_If_Set(bool debug, string expected)
             {
                 // Given
@@ -391,8 +600,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(true, "feature disable -n \"checkSumFiles\" -v -y")]
-            [InlineData(false, "feature disable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --verbose --confirm")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_Verbose_Flag_To_Arguments_If_Set(bool verbose, string expected)
             {
                 // Given
@@ -407,8 +616,56 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(true, "feature disable -n \"checkSumFiles\" -y -f")]
-            [InlineData(false, "feature disable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --trace --confirm")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_Trace_Flag_To_Arguments_If_Set(bool trace, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.Trace = trace;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --no-color --confirm")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_NoColor_Flag_To_Arguments_If_Set(bool noColor, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.NoColor = noColor;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --accept-license --confirm")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_AcceptLicense_Flag_To_Arguments_If_Set(bool acceptLicense, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.AcceptLicense = acceptLicense;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --confirm --force")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_Force_Flag_To_Arguments_If_Set(bool force, string expected)
             {
                 // Given
@@ -423,8 +680,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(true, "feature disable -n \"checkSumFiles\" -y --noop")]
-            [InlineData(false, "feature disable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --confirm --what-if")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_Noop_Flag_To_Arguments_If_Set(bool noop, string expected)
             {
                 // Given
@@ -439,8 +696,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(true, "feature disable -n \"checkSumFiles\" -y -r")]
-            [InlineData(false, "feature disable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --confirm --limit-output")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_LimitOutput_Flag_To_Arguments_If_Set(bool limitOutput, string expected)
             {
                 // Given
@@ -455,8 +712,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(5, "feature disable -n \"checkSumFiles\" -y --execution-timeout \"5\"")]
-            [InlineData(0, "feature disable -n \"checkSumFiles\" -y")]
+            [InlineData(5, "feature disable --name=\"checkSumFiles\" --confirm --execution-timeout=\"5\"")]
+            [InlineData(0, "feature disable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_ExecutionTimeout_To_Arguments_If_Set(int executionTimeout, string expected)
             {
                 // Given
@@ -471,8 +728,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(@"c:\temp", "feature disable -n \"checkSumFiles\" -y -c \"c:\\temp\"")]
-            [InlineData("", "feature disable -n \"checkSumFiles\" -y")]
+            [InlineData(@"c:\temp", "feature disable --name=\"checkSumFiles\" --confirm --cache-location=\"c:\\temp\"")]
+            [InlineData("", "feature disable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_CacheLocation_Flag_To_Arguments_If_Set(string cacheLocation, string expected)
             {
                 // Given
@@ -487,13 +744,172 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Features
             }
 
             [Theory]
-            [InlineData(true, "feature disable -n \"checkSumFiles\" -y --allowunofficial")]
-            [InlineData(false, "feature disable -n \"checkSumFiles\" -y")]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --confirm --allow-unofficial")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
             public void Should_Add_AllowUnofficial_Flag_To_Arguments_If_Set(bool allowUnofficial, string expected)
             {
                 // Given
                 var fixture = new ChocolateyDisableFeatureFixture();
                 fixture.Settings.AllowUnofficial = allowUnofficial;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+            [Theory]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --confirm --fail-on-error-output")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_FailOnErrorOutput_Flag_To_Arguments_If_Set(bool failOnErrorOutput, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.FailOnErrorOutput = failOnErrorOutput;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --confirm --use-system-powershell")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_UseSystemPowerShell_Flag_To_Arguments_If_Set(bool useSystemPowerShell, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.UseSystemPowerShell = useSystemPowerShell;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --confirm --no-progress")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_NoProgress_Flag_To_Arguments_If_Set(bool noProgress, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.NoProgress = noProgress;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy", "feature disable --name=\"checkSumFiles\" --confirm --proxy=\"proxy\"")]
+            [InlineData(null, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_Proxy_Flag_To_Arguments_If_Set(string proxy, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.Proxy = proxy;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy-user", "feature disable --name=\"checkSumFiles\" --confirm --proxy-user=\"proxy-user\"")]
+            [InlineData(null, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_ProxyUser_Flag_To_Arguments_If_Set(string proxyUser, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.ProxyUser = proxyUser;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy-password", "feature disable --name=\"checkSumFiles\" --confirm --proxy-password=\"proxy-password\"")]
+            [InlineData(null, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_ProxyPassword_Flag_To_Arguments_If_Set(string proxyPassword, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.ProxyPassword = proxyPassword;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy1,proxy2", "feature disable --name=\"checkSumFiles\" --confirm --proxy-bypass-list=\"proxy1,proxy2\"")]
+            [InlineData(null, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_ProxyByPassList_Flag_To_Arguments_If_Set(string proxyByPassList, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.ProxyByPassList = proxyByPassList;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --confirm --proxy-bypass-on-local")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_ProxyByPassOnLocal_Flag_To_Arguments_If_Set(bool proxyBypassOnLocal, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.ProxyBypassOnLocal = proxyBypassOnLocal;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("./output.log", "feature disable --name=\"checkSumFiles\" --confirm --log-file=\"/Working/output.log\"")]
+            [InlineData(null, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_Log_File_Flag_To_Arguments_If_Set(string logFilePath, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.LogFile = logFilePath;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "feature disable --name=\"checkSumFiles\" --confirm --skip-compatibility-checks")]
+            [InlineData(false, "feature disable --name=\"checkSumFiles\" --confirm")]
+            public void Should_Add_Skip_Compatibility_Flag_To_Arguments_If_Set(bool skipCompatibiity, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyDisableFeatureFixture();
+                fixture.Settings.SkipCompatibilityChecks = skipCompatibiity;
 
                 // When
                 var result = fixture.Run();

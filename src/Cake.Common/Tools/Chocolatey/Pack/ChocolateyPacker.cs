@@ -52,22 +52,27 @@ namespace Cake.Common.Tools.Chocolatey.Pack
             {
                 throw new ArgumentNullException(nameof(settings));
             }
+
             if (string.IsNullOrWhiteSpace(settings.Id))
             {
                 throw new CakeException("Required setting Id not specified.");
             }
+
             if (string.IsNullOrWhiteSpace(settings.Version))
             {
                 throw new CakeException("Required setting Version not specified.");
             }
+
             if (settings.Authors == null || settings.Authors.Count == 0)
             {
                 throw new CakeException("Required setting Authors not specified.");
             }
+
             if (string.IsNullOrWhiteSpace(settings.Description))
             {
                 throw new CakeException("Required setting Description not specified.");
             }
+
             if (settings.Files == null || settings.Files.Count == 0)
             {
                 throw new CakeException("Required setting Files not specified.");
@@ -87,6 +92,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
             {
                 throw new ArgumentNullException(nameof(nuspecFilePath));
             }
+
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
@@ -104,7 +110,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
                 processedNuspecFilePath = process();
 
                 // Start the process.
-                Run(settings, GetArguments(processedNuspecFilePath, settings), new ProcessSettings { WorkingDirectory = settings.OutputDirectory }, null);
+                Run(settings, GetArguments(processedNuspecFilePath, settings), null, null);
             }
             finally
             {
@@ -122,71 +128,28 @@ namespace Cake.Common.Tools.Chocolatey.Pack
 
         private ProcessArgumentBuilder GetArguments(FilePath nuspecFilePath, ChocolateyPackSettings settings)
         {
+            const string separator = "=";
             var builder = new ProcessArgumentBuilder();
+
             builder.Append("pack");
 
-            // Debug
-            if (settings.Debug)
-            {
-                builder.Append("-d");
-            }
+            // Nuspec file
+            builder.AppendQuoted(nuspecFilePath.MakeAbsolute(_environment).FullPath);
 
-            // Verbose
-            if (settings.Verbose)
-            {
-                builder.Append("-v");
-            }
-
-            // Always say yes, so as to not show interactive prompt
-            builder.Append("-y");
-
-            // Force
-            if (settings.Force)
-            {
-                builder.Append("-f");
-            }
-
-            // Noop
-            if (settings.Noop)
-            {
-                builder.Append("--noop");
-            }
-
-            // Limit Output
-            if (settings.LimitOutput)
-            {
-                builder.Append("-r");
-            }
-
-            // Execution Timeout
-            if (settings.ExecutionTimeout != 0)
-            {
-                builder.Append("--execution-timeout");
-                builder.AppendQuoted(settings.ExecutionTimeout.ToString(CultureInfo.InvariantCulture));
-            }
-
-            // Cache Location
-            if (!string.IsNullOrWhiteSpace(settings.CacheLocation))
-            {
-                builder.Append("-c");
-                builder.AppendQuoted(settings.CacheLocation);
-            }
-
-            // Allow Unofficial
-            if (settings.AllowUnofficial)
-            {
-                builder.Append("--allowunofficial");
-            }
+            // Add common arguments using the inherited method
+            AddGlobalArguments(settings, builder);
 
             // Version
             if (!string.IsNullOrWhiteSpace(settings.Version))
             {
-                builder.Append("--version");
-                builder.AppendQuoted(settings.Version);
+                builder.AppendSwitchQuoted("--version", separator, settings.Version);
             }
 
-            // Nuspec file
-            builder.AppendQuoted(nuspecFilePath.MakeAbsolute(_environment).FullPath);
+            // Output Directory
+            if (settings.OutputDirectory != null)
+            {
+                builder.AppendSwitchQuoted("--output-directory", separator, settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
+            }
 
             return builder;
         }

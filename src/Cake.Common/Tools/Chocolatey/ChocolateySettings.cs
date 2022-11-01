@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Core.IO;
 using Cake.Core.Tooling;
 
 namespace Cake.Common.Tools.Chocolatey
@@ -24,9 +25,21 @@ namespace Cake.Common.Tools.Chocolatey
         public bool Verbose { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to run in trace mode.
+        /// </summary>
+        /// <value>The trace flag.</value>
+        public bool Trace { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to run in no color mode.
+        /// </summary>
+        /// <value>The no-color flag.</value>
+        public bool NoColor { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to accept license for package.
         /// </summary>
-        /// <value>The accept license flag.</value>
+        /// <value>The accept-license flag.</value>
         public bool AcceptLicense { get; set; }
 
         /// <summary>
@@ -44,7 +57,7 @@ namespace Cake.Common.Tools.Chocolatey
         /// <summary>
         /// Gets or sets a value indicating whether to run in limited output mode.
         /// </summary>
-        /// <value>The limit output flag.</value>
+        /// <value>The limit-output flag.</value>
         public bool LimitOutput { get; set; }
 
         /// <summary>
@@ -63,48 +76,66 @@ namespace Cake.Common.Tools.Chocolatey
         /// <summary>
         /// Gets or sets a value indicating whether to run in allow unofficial mode.
         /// </summary>
-        /// <value>The allow unofficial flag.</value>
+        /// <value>The allow-unofficial flag.</value>
         public bool AllowUnofficial { get; set; }
 
         /// <summary>
-        /// Gets or sets a package sources to use for this command.
+        /// Gets or sets a value indicating whether to faile when error output is detected.
         /// </summary>
-        /// <value>The package source to use for this command.</value>
-        public string Source { get; set; }
+        /// <value>The fail-on-error-output flag.</value>
+        public bool FailOnErrorOutput { get; set; }
 
         /// <summary>
-        /// Gets or sets the version of the package to install.
-        /// If none specified, the latest will be used.
+        /// Gets or sets a value indicating whether to run using system installed version of PowerShell.
         /// </summary>
-        public string Version { get; set; }
+        /// <value>The use-system-powershell flag.</value>
+        public bool UseSystemPowerShell { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to override the passed arguments.
+        /// Gets or sets a value indicating whether to run while not showing download progress.
         /// </summary>
-        /// <value>The override arguments flag.</value>
-        public bool OverrideArguments { get; set; }
+        /// <value>The no-progress flag.</value>
+        public bool NoProgress { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether or not to install silently.
+        /// Gets or sets the explicit proxy location.
         /// </summary>
-        /// <value>The not silent flag.</value>
-        public bool NotSilent { get; set; }
+        /// <value>The proxy location.</value>
+        public string Proxy { get; set; }
 
         /// <summary>
-        /// Gets or sets the parameters to pass to the package.
+        /// Gets or sets the explicit proxy user.
         /// </summary>
-        public string PackageParameters { get; set; }
+        /// <value>The proxy user.</value>
+        public string ProxyUser { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to allow side by side installation.
+        /// Gets or sets the explicit proxy password.
         /// </summary>
-        /// <value>The side by side installation flag.</value>
-        public bool SideBySide { get; set; }
+        /// <value>The proxy password.</value>
+        public string ProxyPassword { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to skip the PowerShell installation of package.
+        /// Gets or sets the comma separated list of regex location to bypass on proxy.
         /// </summary>
-        /// <value>The skip powershell flag.</value>
-        public bool SkipPowerShell { get; set; }
+        /// <value>The bypass proxy list.</value>
+        public string ProxyByPassList { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to bypass proxy for local connections.
+        /// </summary>
+        /// <value>The proxy-bypass-on-local flag.</value>
+        public bool ProxyBypassOnLocal { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path to the file where all log entries will be sent.
+        /// </summary>
+        public FilePath LogFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to skip all compatibility checks.
+        /// </summary>
+        /// <value>The skip-compatibility-checks flag.</value>
+        public bool SkipCompatibilityChecks { get; set; }
     }
 }

@@ -43,6 +43,7 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
             {
                 throw new ArgumentNullException(nameof(packageIds));
             }
+
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
@@ -53,6 +54,7 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
 
         private ProcessArgumentBuilder GetArguments(IEnumerable<string> packageIds, ChocolateyUninstallSettings settings)
         {
+            const string separator = "=";
             var builder = new ProcessArgumentBuilder();
 
             builder.Append("uninstall");
@@ -62,54 +64,27 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
             }
 
             // Add common arguments using the inherited method
-            AddCommonArguments(settings, builder);
+            AddGlobalArguments(settings, builder);
 
-            // Fail On Standard Error
-            if (settings.FailOnStandardError)
-            {
-                builder.Append("--failstderr");
-            }
-
-            // Use System Powershell
-            if (settings.UseSystemPowershell)
-            {
-                builder.Append("--use-system-powershell");
-            }
+            // Add shared arguments using the inherited method
+            AddSharedArguments(settings, builder);
 
             // All Versions
             if (settings.AllVersions)
             {
-                builder.Append("--allversions");
+                builder.Append("--all-versions");
             }
 
-            // Global Arguments
-            if (settings.GlobalArguments)
+            // Uninstall Arguments
+            if (!string.IsNullOrEmpty(settings.UninstallArguments))
             {
-                builder.Append("--argsglobal");
-            }
-
-            // Global Package Parameters
-            if (settings.GlobalPackageParameters)
-            {
-                builder.Append("--paramsglobal");
+                builder.AppendSwitchQuoted("--uninstall-arguments", separator, settings.UninstallArguments);
             }
 
             // Force Dependencies
             if (settings.ForceDependencies)
             {
-                builder.Append("-x");
-            }
-
-            // Ignore Package Codes
-            if (settings.IgnorePackageExitCodes)
-            {
-                builder.Append("--ignorepackageexitcodes");
-            }
-
-            // Use Package Exit Codes
-            if (settings.UsePackageExitCodes)
-            {
-                builder.Append("--usepackageexitcodes");
+                builder.Append("--force-dependencies");
             }
 
             // Use Auto Uninstaller
@@ -121,19 +96,24 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
             // Skip Auto Uninstaller
             if (settings.SkipAutoUninstaller)
             {
-                builder.Append("--skipautouninstaller");
+                builder.Append("--skip-autouninstaller");
             }
 
             // Fail on Auto Uninstaller
             if (settings.FailOnAutoUninstaller)
             {
-                builder.Append("--failonautouninstaller");
+                builder.Append("--fail-on-autouninstaller");
             }
 
             // Ignore Auto Uninstaller failure
-            if (settings.IgnoreAutoUninstaller)
+            if (settings.IgnoreAutoUninstallerFailure)
             {
-                builder.Append("--ignoreautouninstallerfailure");
+                builder.Append("--ignore-autouninstaller-failure");
+            }
+
+            if (settings.FromProgramsAndFeatures)
+            {
+                builder.Append("--from-programs-and-features");
             }
 
             return builder;

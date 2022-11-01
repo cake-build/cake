@@ -15,6 +15,10 @@ namespace Cake.Common.Tools.Chocolatey.Sources
     /// </summary>
     public sealed class ChocolateySources : ChocolateyTool<ChocolateySourcesSettings>
     {
+        private const string Separator = "=";
+
+        private readonly ICakeEnvironment _environment;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ChocolateySources"/> class.
         /// </summary>
@@ -30,6 +34,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
             IToolLocator tools,
             IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
         {
+            _environment = environment;
         }
 
         /// <summary>
@@ -44,18 +49,22 @@ namespace Cake.Common.Tools.Chocolatey.Sources
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException("Source name cannot be empty.", nameof(name));
             }
+
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
+
             if (string.IsNullOrWhiteSpace(source))
             {
                 throw new ArgumentException("Source cannot be empty.", nameof(source));
             }
+
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
@@ -75,10 +84,12 @@ namespace Cake.Common.Tools.Chocolatey.Sources
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException("Source name cannot be empty.", nameof(name));
             }
+
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
@@ -98,10 +109,12 @@ namespace Cake.Common.Tools.Chocolatey.Sources
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException("Source name cannot be empty.", nameof(name));
             }
+
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
@@ -121,10 +134,12 @@ namespace Cake.Common.Tools.Chocolatey.Sources
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException("Source name cannot be empty.", nameof(name));
             }
+
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
@@ -133,7 +148,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
             Run(settings, GetDisableArguments(name, settings));
         }
 
-        private static ProcessArgumentBuilder GetAddArguments(string name, string source, ChocolateySourcesSettings settings)
+        private ProcessArgumentBuilder GetAddArguments(string name, string source, ChocolateySourcesSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
@@ -144,21 +159,49 @@ namespace Cake.Common.Tools.Chocolatey.Sources
             // User name specified?
             if (!string.IsNullOrWhiteSpace(settings.UserName))
             {
-                builder.Append("-u");
-                builder.AppendQuoted(settings.UserName);
+                builder.AppendSwitchQuoted("--user", Separator, settings.UserName);
             }
 
             // Password specified?
             if (!string.IsNullOrWhiteSpace(settings.Password))
             {
-                builder.Append("-p");
-                builder.AppendQuotedSecret(settings.Password);
+                builder.AppendSwitchQuoted("--password", Separator, settings.Password);
+            }
+
+            // Certificate
+            if (settings.Certificate != null)
+            {
+                builder.AppendSwitchQuoted("--cert", Separator, settings.Certificate.MakeAbsolute(_environment).FullPath);
+            }
+
+            // Certificate Password
+            if (!string.IsNullOrEmpty(settings.CertificatePassword))
+            {
+                builder.AppendSwitchQuoted("--certpassword", Separator, settings.CertificatePassword);
+            }
+
+            // By Pass Proxy
+            if (settings.ByPassProxy)
+            {
+                builder.Append("--bypass-proxy");
+            }
+
+            // Allow Self Service
+            if (settings.AllowSelfService)
+            {
+                builder.Append("--allow-self-service");
+            }
+
+            // Admin Only
+            if (settings.AdminOnly)
+            {
+                builder.Append("--admin-only");
             }
 
             return builder;
         }
 
-        private static ProcessArgumentBuilder GetRemoveArguments(string name, ChocolateySourcesSettings settings)
+        private ProcessArgumentBuilder GetRemoveArguments(string name, ChocolateySourcesSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
@@ -169,7 +212,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
             return builder;
         }
 
-        private static ProcessArgumentBuilder GetEnableArguments(string name, ChocolateySourcesSettings settings)
+        private ProcessArgumentBuilder GetEnableArguments(string name, ChocolateySourcesSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
@@ -180,7 +223,7 @@ namespace Cake.Common.Tools.Chocolatey.Sources
             return builder;
         }
 
-        private static ProcessArgumentBuilder GetDisableArguments(string name, ChocolateySourcesSettings settings)
+        private ProcessArgumentBuilder GetDisableArguments(string name, ChocolateySourcesSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
 
@@ -191,74 +234,21 @@ namespace Cake.Common.Tools.Chocolatey.Sources
             return builder;
         }
 
-        private static void AddCommonParameters(string name, string source, ChocolateySourcesSettings settings, ProcessArgumentBuilder builder)
+        private void AddCommonParameters(string name, string source, ChocolateySourcesSettings settings, ProcessArgumentBuilder builder)
         {
-            builder.Append("-n");
-            builder.AppendQuoted(name);
+            builder.AppendSwitchQuoted("--name", Separator, name);
 
             if (!string.IsNullOrWhiteSpace(source))
             {
-                builder.Append("-s");
-                builder.AppendQuoted(source);
+                builder.AppendSwitchQuoted("--source", Separator, source);
             }
 
-            // Debug
-            if (settings.Debug)
-            {
-                builder.Append("-d");
-            }
-
-            // Verbose
-            if (settings.Verbose)
-            {
-                builder.Append("-v");
-            }
-
-            // Always say yes, so as to not show interactive prompt
-            builder.Append("-y");
-
-            // Force
-            if (settings.Force)
-            {
-                builder.Append("-f");
-            }
-
-            // Noop
-            if (settings.Noop)
-            {
-                builder.Append("--noop");
-            }
-
-            // Limit Output
-            if (settings.LimitOutput)
-            {
-                builder.Append("-r");
-            }
-
-            // Execution Timeout
-            if (settings.ExecutionTimeout != 0)
-            {
-                builder.Append("--execution-timeout");
-                builder.AppendQuoted(settings.ExecutionTimeout.ToString(CultureInfo.InvariantCulture));
-            }
-
-            // Cache Location
-            if (!string.IsNullOrWhiteSpace(settings.CacheLocation))
-            {
-                builder.Append("-c");
-                builder.AppendQuoted(settings.CacheLocation);
-            }
-
-            // Allow Unofficial
-            if (settings.AllowUnofficial)
-            {
-                builder.Append("--allowunofficial");
-            }
+            // Add common arguments using the inherited method
+            AddGlobalArguments(settings, builder);
 
             if (settings.Priority > 0)
             {
-                builder.Append("--priority");
-                builder.AppendQuoted(settings.Priority.ToString(CultureInfo.InvariantCulture));
+                builder.AppendSwitchQuoted("--priority", Separator, settings.Priority.ToString(CultureInfo.InvariantCulture));
             }
         }
     }
