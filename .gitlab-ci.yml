@@ -5,5 +5,5 @@ stages:
 build_job:
   stage: build
   script:
-  - git fetch --unshallow
+  - git fetch --unshallow || true
   - ./build.sh --target="Run-Unit-Tests"
