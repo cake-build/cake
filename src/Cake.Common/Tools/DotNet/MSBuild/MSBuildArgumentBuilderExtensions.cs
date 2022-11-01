@@ -25,7 +25,22 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         /// <param name="environment">The environment.</param>
         /// <exception cref="InvalidOperationException">Throws if 10 or more file loggers specified.</exception>
         public static void AppendMSBuildSettings(this ProcessArgumentBuilder builder, DotNetMSBuildSettings settings, ICakeEnvironment environment)
+            => builder.AppendMSBuildSettings(settings, environment, true);
+
+        /// <summary>
+        /// Adds MSBuild arguments.
+        /// </summary>
+        /// <param name="builder">Argument builder.</param>
+        /// <param name="settings">MSBuild settings to add.</param>
+        /// <param name="environment">The environment.</param>
+        /// <param name="invokeArgumentCustomization">The flag for if argument customization should be invoked.</param>
+        /// <exception cref="InvalidOperationException">Throws if 10 or more file loggers specified.</exception>
+        public static void AppendMSBuildSettings(this ProcessArgumentBuilder builder, DotNetMSBuildSettings settings, ICakeEnvironment environment, bool invokeArgumentCustomization)
         {
+            ArgumentNullException.ThrowIfNull(builder);
+
+            var msBuilder = new ProcessArgumentBuilder();
+
             // Got any targets?
             if (settings.Targets.Any())
             {
@@ -34,7 +49,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
                     throw new ArgumentException("Specify the name of the target", nameof(settings.Targets));
                 }
 
-                builder.AppendMSBuildSwitch("target", string.Join(";", settings.Targets));
+                msBuilder.AppendMSBuildSwitch("target", string.Join(";", settings.Targets));
             }
 
             // Got any properties?
@@ -45,19 +60,19 @@ namespace Cake.Common.Tools.DotNet.MSBuild
                     throw new ArgumentException("A property must have at least one non-empty value", nameof(settings.Properties));
                 }
 
-                builder.AppendMSBuildSwitch("property", $"{property.Key}={property.BuildMSBuildPropertyParameterString()}");
+                msBuilder.AppendMSBuildSwitch("property", $"{property.Key}={property.BuildMSBuildPropertyParameterString()}");
             }
 
             // Set the maximum number of processors?
             if (settings.MaxCpuCount.HasValue)
             {
-                builder.AppendMSBuildSwitchWithOptionalValue("maxcpucount", settings.MaxCpuCount.Value, maxCpuCount => maxCpuCount > 0);
+                msBuilder.AppendMSBuildSwitchWithOptionalValue("maxcpucount", settings.MaxCpuCount.Value, maxCpuCount => maxCpuCount > 0);
             }
 
             // use different version of msbuild?
             if (settings.ToolVersion.HasValue)
             {
-                builder.AppendMSBuildSwitch("toolsversion", GetToolVersionValue(settings.ToolVersion.Value));
+                msBuilder.AppendMSBuildSwitch("toolsversion", GetToolVersionValue(settings.ToolVersion.Value));
             }
 
             // configure console logger?
@@ -67,14 +82,14 @@ namespace Cake.Common.Tools.DotNet.MSBuild
 
                 if (arguments.Any())
                 {
-                    builder.AppendMSBuildSwitch("consoleloggerparameters", arguments);
+                    msBuilder.AppendMSBuildSwitch("consoleloggerparameters", arguments);
                 }
             }
 
             // disable console logger?
             if (settings.DisableConsoleLogger)
             {
-                builder.AppendMSBuildSwitch("noconsolelogger");
+                msBuilder.AppendMSBuildSwitch("noconsolelogger");
             }
 
             // Got any file loggers?
@@ -92,7 +107,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
 
                 foreach (var argument in arguments)
                 {
-                    builder.Append(argument);
+                    msBuilder.Append(argument);
                 }
             }
 
@@ -115,25 +130,25 @@ namespace Cake.Common.Tools.DotNet.MSBuild
                     binaryOptions = binaryOptions + "ProjectImports=" + settings.BinaryLogger.Imports;
                 }
 
-                builder.AppendMSBuildSwitchWithOptionalValueIfNotEmpty("binarylogger", binaryOptions);
+                msBuilder.AppendMSBuildSwitchWithOptionalValueIfNotEmpty("binarylogger", binaryOptions);
             }
 
             // Got any distributed loggers?
             foreach (var distributedLogger in settings.DistributedLoggers)
             {
-                builder.AppendMSBuildSwitch("distributedlogger", $"{GetLoggerValue(distributedLogger.CentralLogger)}*{GetLoggerValue(distributedLogger.ForwardingLogger)}");
+                msBuilder.AppendMSBuildSwitch("distributedlogger", $"{GetLoggerValue(distributedLogger.CentralLogger)}*{GetLoggerValue(distributedLogger.ForwardingLogger)}");
             }
 
             // use a file logger for each node?
             if (settings.DistributedFileLogger)
             {
-                builder.AppendMSBuildSwitch("distributedfilelogger");
+                msBuilder.AppendMSBuildSwitch("distributedfilelogger");
             }
 
             // Got any loggers?
             foreach (var logger in settings.Loggers)
             {
-                builder.AppendMSBuildSwitch("logger", GetLoggerValue(logger));
+                msBuilder.AppendMSBuildSwitch("logger", GetLoggerValue(logger));
             }
 
             var showWarningsAsError = settings.TreatAllWarningsAs == MSBuildTreatAllWarningsAs.Error || settings.WarningCodesAsError.Any();
@@ -142,51 +157,56 @@ namespace Cake.Common.Tools.DotNet.MSBuild
             // Treat all or some warnings as errors?
             if (showWarningsAsError)
             {
-                builder.AppendMSBuildSwitchWithOptionalValueIfNotEmpty("warnaserror", GetWarningCodes(settings.TreatAllWarningsAs == MSBuildTreatAllWarningsAs.Error, settings.WarningCodesAsError));
+                msBuilder.AppendMSBuildSwitchWithOptionalValueIfNotEmpty("warnaserror", GetWarningCodes(settings.TreatAllWarningsAs == MSBuildTreatAllWarningsAs.Error, settings.WarningCodesAsError));
             }
 
             // Treat all or some warnings as messages?
             if (showWarningsAsMessages)
             {
-                builder.AppendMSBuildSwitchWithOptionalValueIfNotEmpty("warnasmessage", GetWarningCodes(settings.TreatAllWarningsAs == MSBuildTreatAllWarningsAs.Message, settings.WarningCodesAsMessage));
+                msBuilder.AppendMSBuildSwitchWithOptionalValueIfNotEmpty("warnasmessage", GetWarningCodes(settings.TreatAllWarningsAs == MSBuildTreatAllWarningsAs.Message, settings.WarningCodesAsMessage));
             }
 
             // set project file extensions to ignore when searching for project file
             if (settings.IgnoreProjectExtensions.Any())
             {
-                builder.AppendMSBuildSwitch("ignoreprojectextensions", string.Join(",", settings.IgnoreProjectExtensions));
+                msBuilder.AppendMSBuildSwitch("ignoreprojectextensions", string.Join(",", settings.IgnoreProjectExtensions));
             }
 
             // detailed summary?
             if (settings.DetailedSummary)
             {
-                builder.AppendMSBuildSwitch("detailedsummary");
+                msBuilder.AppendMSBuildSwitch("detailedsummary");
             }
 
             // Include response files?
             foreach (var responseFile in settings.ResponseFiles)
             {
-                builder.AppendSwitchQuoted("@", string.Empty, responseFile.MakeAbsolute(environment).FullPath);
+                msBuilder.AppendSwitchQuoted("@", string.Empty, responseFile.MakeAbsolute(environment).FullPath);
             }
 
             // exclude auto response files?
             if (settings.ExcludeAutoResponseFiles)
             {
-                builder.AppendMSBuildSwitch("noautoresponse");
+                msBuilder.AppendMSBuildSwitch("noautoresponse");
             }
 
             // don't output MSBuild logo?
             if (settings.NoLogo)
             {
-                builder.AppendMSBuildSwitch("nologo");
+                msBuilder.AppendMSBuildSwitch("nologo");
             }
 
             // Set Continuous Integration Build?
             if (settings.ContinuousIntegrationBuild.HasValue)
             {
                 var continuousIntegrationBuild = settings.ContinuousIntegrationBuild.Value ? "true" : "false";
-                builder.AppendMSBuildSwitch("property", $"ContinuousIntegrationBuild={continuousIntegrationBuild}");
+                msBuilder.AppendMSBuildSwitch("property", $"ContinuousIntegrationBuild={continuousIntegrationBuild}");
             }
+
+            builder.AppendRange(
+                invokeArgumentCustomization
+                    ? settings.ArgumentCustomization?.Invoke(msBuilder) ?? msBuilder
+                    : msBuilder);
         }
 
         private static string GetLoggerValue(MSBuildLogger logger)
