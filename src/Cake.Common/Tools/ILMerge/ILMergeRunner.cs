@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -84,12 +85,93 @@ namespace Cake.Common.Tools.ILMerge
             FilePath primaryAssemblyFilePath, IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings)
         {
             var builder = new ProcessArgumentBuilder();
+            const string separator = ":";
 
-            builder.Append(GetOutputParameter(outputAssemblyPath.MakeAbsolute(_environment)));
+            if (settings.SearchDirectories != null)
+            {
+                foreach (var searchDirectory in settings.SearchDirectories)
+                {
+                    var directoryPath = searchDirectory.MakeAbsolute(_environment);
+                    builder.AppendSwitchQuoted("/lib", separator, directoryPath.FullPath);
+                }
+            }
+
+            if (settings.Log && settings.LogFile == null)
+            {
+                builder.Append("/log");
+            }
+
+            if (settings.LogFile != null)
+            {
+                var logFilePath = settings.LogFile.MakeAbsolute(_environment);
+                builder.AppendSwitchQuoted("/log", separator, logFilePath.FullPath);
+            }
+
+            if (settings.KeyFile != null)
+            {
+                var keyFilePath = settings.KeyFile.MakeAbsolute(_environment);
+                builder.AppendSwitchQuoted("/keyfile", separator, keyFilePath.FullPath);
+            }
+
+            if (!string.IsNullOrEmpty(settings.KeyContainer))
+            {
+                builder.AppendSwitchQuoted("/keycontainer", separator, settings.KeyContainer);
+            }
+
+            if ((settings.KeyFile != null || !string.IsNullOrEmpty(settings.KeyContainer)) && settings.DelaySign)
+            {
+                builder.Append("/delaysign");
+            }
+
+            if (settings.Internalize)
+            {
+                builder.Append("/internalize");
+            }
 
             if (settings.TargetKind != TargetKind.Default)
             {
                 builder.Append(GetTargetKindParameter(settings));
+            }
+
+            if (settings.Closed)
+            {
+                builder.Append("/closed");
+            }
+
+            if (settings.NDebug)
+            {
+                builder.Append("/ndebug");
+            }
+
+            if (!string.IsNullOrEmpty(settings.Version))
+            {
+                builder.AppendSwitch("/ver", separator, settings.Version);
+            }
+
+            if (settings.CopyAttributes)
+            {
+                builder.Append("/copyattrs");
+
+                if (settings.AllowMultiple)
+                {
+                    builder.Append("/allowMultiple");
+                }
+
+                if (settings.KeepFirst)
+                {
+                    builder.Append("/keepFirst");
+                }
+            }
+
+            if (settings.XmlDocumentation)
+            {
+                builder.Append("/xmldocs");
+            }
+
+            if (settings.AttributeFile != null)
+            {
+                var attributeFilePath = settings.AttributeFile.MakeAbsolute(_environment);
+                builder.AppendSwitchQuoted("/attr", separator, attributeFilePath.FullPath);
             }
 
             if (settings.TargetPlatform != null)
@@ -97,10 +179,45 @@ namespace Cake.Common.Tools.ILMerge
                 builder.Append(GetTargetPlatformParameter(settings));
             }
 
-            if (settings.Internalize)
+            if (settings.UseFullPublicKeyForReferences)
             {
-                builder.Append("/internalize");
+                builder.Append("/useFullPublicKeyForReferences");
             }
+
+            if (settings.Wildcards)
+            {
+                builder.Append("/wildcards");
+            }
+
+            if (settings.ZeroPeKind)
+            {
+                builder.Append("/zeroPeKind");
+            }
+
+            if (settings.AllowDuplicateTypes && settings.DuplicateTypes == null)
+            {
+                builder.Append("/allowDup");
+            }
+
+            if (settings.DuplicateTypes != null)
+            {
+                foreach (var duplicateType in settings.DuplicateTypes)
+                {
+                    builder.AppendSwitch("/allowDup", separator, duplicateType);
+                }
+            }
+
+            if (settings.Union)
+            {
+                builder.Append("/union");
+            }
+
+            if (settings.Align.HasValue)
+            {
+                builder.AppendSwitch("/align", separator, settings.Align.Value.ToString(CultureInfo.InvariantCulture));
+            }
+
+            builder.Append(GetOutputParameter(outputAssemblyPath.MakeAbsolute(_environment)));
 
             // Add primary assembly.
             builder.AppendQuoted(primaryAssemblyFilePath.MakeAbsolute(_environment).FullPath);
