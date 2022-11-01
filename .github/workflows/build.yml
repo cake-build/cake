@@ -16,20 +16,19 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
     steps:
       - name: Get the sources
-        uses: actions/checkout@v2
-
-      - name: Fetch all history for all tags and branches
-        run: git fetch --prune --unshallow
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Install .NET SDK 6.0.x
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.x'
 
       - name: Install .NET Core SDK (global.json)
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-            include-prerelease: 'true'
+            global-json-file: global.json
 
       - name: Run Cake script
         id: build-cake
