@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.Test
@@ -111,5 +112,10 @@ namespace Cake.Common.Tools.DotNet.Test
         /// Requires .NET Core 2.x or newer.
         /// </remarks>
         public ICollection<string> Sources { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets additional arguments to be passed to MSBuild.
+        /// </summary>
+        public DotNetMSBuildSettings MSBuildSettings { get; set; }
     }
 }
