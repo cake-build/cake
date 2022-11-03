@@ -28,7 +28,7 @@ jobs:
       - name: Install .NET Core SDK (global.json)
         uses: actions/setup-dotnet@v3
         with:
-            global-json-file: global.json
+          global-json-file: global.json
 
       - name: Run Cake script
         id: build-cake
