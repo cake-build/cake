@@ -62,5 +62,26 @@ namespace Cake.Core
             builder.Target.AddDependee(name);
             return builder;
         }
+
+        /// <summary>
+        /// Makes the task a dependency of another task.
+        /// </summary>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="other">The name of the dependent task.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder IsDependeeOf(this CakeTaskBuilder builder, CakeTaskBuilder other)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+            if (other == null)
+            {
+                throw new ArgumentNullException(nameof(other));
+            }
+
+            builder.Target.AddDependee(other.Target.Name);
+            return builder;
+        }
     }
 }
