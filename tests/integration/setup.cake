@@ -86,6 +86,55 @@ Task("Can-Access-Typed-Data-WithCriteria-False-Message")
     Assert.False(data.Initialized);
 });
 
+TaskOf<ScriptContext>("Can-Access-Typed-Data-Task")
+    .Description("Very typed task")
+    .WithCriteria(static (context, data) => true)
+    .Does(static (context, data) => context.Information("Initialized: {0}.", data.Initialized))
+    .Does(static async (context, data) => await System.Threading.Tasks.Task.CompletedTask)
+    .DoesForEach(
+        static (data, context) => new [] { data.Initialized },
+        static (data, item, context) => context.Information("Initialized: {0}.", data.Initialized)
+    )
+    .DoesForEach(
+        new [] { true, false },
+        static (data, item, context) => context.Information("Initialized: {0}.", data.Initialized)
+    );
+
+
+Task("Can-Access-Typed-Data-Task-Of")
+    .Of<ScriptContext>()
+    .Description("Very typed task")
+    .WithCriteria(static (context, data) => true)
+    .Does(static (context, data) => context.Information("Initialized: {0}.", data.Initialized))
+    .Does(static async (context, data) => await System.Threading.Tasks.Task.CompletedTask)
+    .DoesForEach(
+        static (data, context) => new [] { data.Initialized },
+        static (data, item, context) => context.Information("Initialized: {0}.", data.Initialized)
+    )
+    .DoesForEach(
+        new [] { true, false },
+        static (data, item, context) => context.Information("Initialized: {0}.", data.Initialized)
+    );
+
+Task("Can-Access-Typed-Data-Finally")
+    .Does<ScriptContext>(data =>
+{
+})
+.Finally<ScriptContext>(
+    (context, data) => Assert.True(data.Initialized)
+);
+
+Task("Can-Access-Typed-Data-Finally-Async")
+    .Does<ScriptContext>(async data =>
+{
+    await System.Threading.Tasks.Task.Delay(0);
+}).Finally<ScriptContext>(
+    async (context, data) => {
+        Assert.True(data.Initialized);
+        await System.Threading.Tasks.Task.Delay(0);
+    }
+);
+
 //////////////////////////////////////////////////
 // TARGETS
 //////////////////////////////////////////////////
@@ -96,4 +145,8 @@ Task("Setup-Tests")
     .IsDependentOn("Can-Access-Typed-Data-With-Context")
     .IsDependentOn("Can-Access-Typed-Data-With-Context-Async")
     .IsDependentOn("Can-Access-Typed-Data-WithCriteria-True")
-    .IsDependentOn("Can-Access-Typed-Data-WithCriteria-False-Message");
+    .IsDependentOn("Can-Access-Typed-Data-WithCriteria-False-Message")
+    .IsDependentOn("Can-Access-Typed-Data-Task")
+    .IsDependentOn("Can-Access-Typed-Data-Task-Of")
+    .IsDependentOn("Can-Access-Typed-Data-Finally")
+    .IsDependentOn("Can-Access-Typed-Data-Finally-Async");
