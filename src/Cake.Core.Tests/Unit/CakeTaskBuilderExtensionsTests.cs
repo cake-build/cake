@@ -110,6 +110,23 @@ namespace Cake.Core.Tests.Unit
                 Assert.Single(task.Dependees);
                 Assert.Equal("other", task.Dependees[0].Name);
             }
+
+            [Fact]
+            public void Should_Add_Dependee_To_Task_From_Other()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var other = new CakeTask("other");
+                var builder = new CakeTaskBuilder(task);
+                var otherBuilder = new CakeTaskBuilder(other);
+
+                // When
+                builder.IsDependeeOf(otherBuilder);
+
+                // Then
+                Assert.Single(task.Dependees);
+                Assert.Equal("other", task.Dependees[0].Name);
+            }
         }
 
         public sealed class TheWithCriteriaMethod
