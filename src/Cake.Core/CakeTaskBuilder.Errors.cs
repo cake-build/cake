@@ -230,6 +230,76 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Adds a finally handler to be executed after the task have finished executing.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="finallyHandler">The finally handler.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Action<ICakeContext> finallyHandler)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Target.SetFinallyHandler(finallyHandler);
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds a finally handler to be executed after the task have finished executing.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="finallyHandler">The finally handler.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Func<ICakeContext, Task> finallyHandler)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Target.SetFinallyHandler(finallyHandler);
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds a finally handler to be executed after the task have finished executing.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="finallyHandler">The finally handler.</param>
+        /// <typeparam name="TData">The extra data to operate with inside the finally handler.</typeparam>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder Finally<TData>(this CakeTaskBuilder builder, Action<ICakeContext, TData> finallyHandler)
+             where TData : class
+        {
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(finallyHandler);
+
+            builder.Target.SetFinallyHandler(context => finallyHandler(context, context.Data.Get<TData>()));
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds a finally handler to be executed after the task have finished executing.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="finallyHandler">The finally handler.</param>
+        /// <typeparam name="TData">The extra data to operate with inside the finally handler.</typeparam>
+        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder Finally<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, Task> finallyHandler)
+             where TData : class
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            builder.Target.SetFinallyHandler(context => finallyHandler(context, context.Data.Get<TData>()));
+            return builder;
+        }
+
+        /// <summary>
         /// Adds an error reporter for the task to be executed when an exception is thrown from the task.
         /// This action is invoked before the error handler, but gives no opportunity to recover from the error.
         /// </summary>
