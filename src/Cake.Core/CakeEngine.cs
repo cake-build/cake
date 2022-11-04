@@ -326,7 +326,7 @@ namespace Cake.Core
             {
                 if (task.FinallyHandler != null)
                 {
-                    await strategy.InvokeFinallyAsync(task.FinallyHandler);
+                    await strategy.InvokeFinallyAsync(task.FinallyHandler, context);
                 }
 
                 PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, taskException);

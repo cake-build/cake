@@ -115,14 +115,14 @@ namespace Cake.Core
         }
 
         /// <inheritdoc/>
-        public async Task InvokeFinallyAsync(Func<Task> action)
+        public async Task InvokeFinallyAsync(Func<ICakeContext, Task> action, ICakeContext context)
         {
             if (action is null)
             {
                 return;
             }
 
-            await action();
+            await action(context);
         }
 
         /// <inheritdoc/>

@@ -52,7 +52,7 @@ namespace Cake.Core
         /// <summary>
         /// Gets or sets the finally handler.
         /// </summary>
-        public Func<Task> FinallyHandler { get; set; }
+        public Func<ICakeContext, Task> FinallyHandler { get; set; }
 
         /// <summary>
         /// Gets the task's actions.
