@@ -34,6 +34,21 @@ namespace Cake.Cli
         /// <inheritdoc/>
         public override Task<CakeReport> RunTargetAsync(string target)
         {
+            PrintTaskDescriptions();
+
+            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
+        }
+
+        /// <inheritdoc/>
+        public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
+        {
+            PrintTaskDescriptions();
+
+            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
+        }
+
+        private void PrintTaskDescriptions()
+        {
             var maxTaskNameLength = 29;
 
             foreach (var task in Tasks)
@@ -56,8 +71,6 @@ namespace Cake.Cli
             {
                 _console.WriteLine(lineFormat, key, _descriptions[key]);
             }
-
-            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
         }
-    }
+     }
 }

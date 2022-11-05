@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -70,7 +71,21 @@ namespace Cake.Cli
         {
             Settings.SetTarget(target);
 
+            return await internalRunTargetAsync();
+        }
+
+        /// <inheritdoc/>
+        public override async Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
+        {
+            Settings.SetTargets(targets);
+
+            return await internalRunTargetAsync();
+        }
+
+        private async Task<CakeReport> internalRunTargetAsync()
+        {
             var report = await Engine.RunTargetAsync(_context, _executionStrategy, Settings).ConfigureAwait(false);
+
             if (report != null && !report.IsEmpty)
             {
                 _reportPrinter.Write(report);

@@ -148,5 +148,19 @@ namespace Cake.Core.Scripting
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
         Task<CakeReport> RunTargetAsync(string target);
+
+        /// <summary>
+        /// Runs the specified targets.
+        /// </summary>
+        /// <param name="targets">The targets to run.</param>
+        /// <returns>The resulting report.</returns>
+        CakeReport RunTargets(IEnumerable<string> targets);
+
+        /// <summary>
+        /// Runs the specified targets.
+        /// </summary>
+        /// <param name="targets">The targets to run.</param>
+        /// <returns>The resulting report.</returns>
+        Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets);
     }
 }

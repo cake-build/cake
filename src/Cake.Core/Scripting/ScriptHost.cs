@@ -112,5 +112,14 @@ namespace Cake.Core.Scripting
 
         /// <inheritdoc/>
         public abstract Task<CakeReport> RunTargetAsync(string target);
+
+        /// <inheritdoc/>
+        public CakeReport RunTargets(IEnumerable<string> targets)
+        {
+            return RunTargetsAsync(targets).GetAwaiter().GetResult();
+        }
+
+        /// <inheritdoc/>
+        public abstract Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets);
     }
 }

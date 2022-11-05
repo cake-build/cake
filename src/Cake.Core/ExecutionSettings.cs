@@ -2,6 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static Cake.Core.Constants;
+
 namespace Cake.Core
 {
     /// <summary>
@@ -10,9 +15,9 @@ namespace Cake.Core
     public sealed class ExecutionSettings
     {
         /// <summary>
-        /// Gets the target to be executed.
+        /// Gets the targets to be executed.
         /// </summary>
-        public string Target { get; private set; }
+        public IEnumerable<string> Targets { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether or not to use the target exclusively.
@@ -20,13 +25,35 @@ namespace Cake.Core
         public bool Exclusive { get; private set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ExecutionSettings"/> class.
+        /// </summary>
+        public ExecutionSettings()
+        {
+            Targets = Array.Empty<string>();
+            Exclusive = false;
+        }
+
+        /// <summary>
         /// Sets the target to be executed.
         /// </summary>
         /// <param name="target">The target.</param>
         /// <returns>The same <see cref="ExecutionSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <remarks>Targets consisting of whitespace only will be ignored.</remarks>
         public ExecutionSettings SetTarget(string target)
         {
-            Target = target;
+            Targets = string.IsNullOrWhiteSpace(target) ? Array.Empty<string>() : new string[] { target };
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the targets to be executed.
+        /// </summary>
+        /// <param name="targets">The targets.</param>
+        /// <returns>The same <see cref="ExecutionSettings"/> instance so that multiple calls can be chained.</returns>
+        /// <remarks>Targets consisting of whitespace only will be ignored.</remarks>
+        public ExecutionSettings SetTargets(IEnumerable<string> targets)
+        {
+            Targets = targets?.ToArray().Where(s => !string.IsNullOrWhiteSpace(s)) ?? Array.Empty<string>();
             return this;
         }
 
