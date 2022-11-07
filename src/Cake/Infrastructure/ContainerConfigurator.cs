@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Cli;
 using Cake.Common.Modules;
 using Cake.Core;
@@ -13,6 +14,7 @@ using Cake.Core.Scripting;
 using Cake.DotNetTool.Module;
 using Cake.Infrastructure.Scripting;
 using Cake.NuGet;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Cake.Infrastructure
@@ -47,6 +49,17 @@ namespace Cake.Infrastructure
 
             // Misc registrations.
             registrar.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().Singleton();
+
+            registrar.RegisterInstance(AnsiConsole.Console).As<IAnsiConsole>().Singleton();
+
+            var useSpectreConsoleForConsoleOutputString = configuration.GetValue(Constants.Settings.UseSpectreConsoleForConsoleOutput);
+            var useSpectreConsoleForConsoleOutput = useSpectreConsoleForConsoleOutputString != null && useSpectreConsoleForConsoleOutputString.Equals("true", StringComparison.OrdinalIgnoreCase);
+
+            if (useSpectreConsoleForConsoleOutput)
+            {
+                registrar.RegisterType<CakeSpectreReportPrinter>().As<ICakeReportPrinter>().Singleton();
+            }
+
             registrar.RegisterType<CakeConsole>().As<IConsole>().Singleton();
             registrar.RegisterInstance(configuration).As<ICakeConfiguration>().Singleton();
         }

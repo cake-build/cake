@@ -9,6 +9,7 @@ namespace Cake.Infrastructure
         public static class Settings
         {
             public const string EnableScriptCache = "Settings_EnableScriptCache";
+            public const string UseSpectreConsoleForConsoleOutput = "Settings_UseSpectreConsoleForConsoleOutput";
         }
 
         public static class Paths

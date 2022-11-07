@@ -10,7 +10,7 @@ using NSubstitute;
 namespace Cake.DotNetTool.Module.Tests
 {
     /// <summary>
-    /// Fixture used for testing DotNetToolPackageInstaller
+    /// Fixture used for testing DotNetToolPackageInstaller.
     /// </summary>
     internal sealed class DotNetToolPackageInstallerFixture
     {

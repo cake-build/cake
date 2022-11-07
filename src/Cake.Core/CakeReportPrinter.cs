@@ -78,6 +78,48 @@ namespace Cake.Core
             }
         }
 
+        /// <inheritdoc/>
+        public void WriteStep(string name, Verbosity verbosity)
+        {
+            if (verbosity < Verbosity.Normal)
+            {
+                return;
+            }
+
+            _console.WriteLine();
+            _console.WriteLine("========================================");
+            _console.WriteLine(name);
+            _console.WriteLine("========================================");
+        }
+
+        /// <inheritdoc/>
+        public void WriteLifeCycleStep(string name, Verbosity verbosity)
+        {
+            if (verbosity < Verbosity.Normal)
+            {
+                return;
+            }
+
+            _console.WriteLine();
+            _console.WriteLine("----------------------------------------");
+            _console.WriteLine(name);
+            _console.WriteLine("----------------------------------------");
+        }
+
+        /// <inheritdoc/>
+        public void WriteSkippedStep(string name, Verbosity verbosity)
+        {
+            if (verbosity < Verbosity.Verbose)
+            {
+                return;
+            }
+
+            _console.WriteLine();
+            _console.WriteLine("----------------------------------------");
+            _console.WriteLine(name);
+            _console.WriteLine("----------------------------------------");
+        }
+
         private bool ShouldWriteTask(CakeReportEntry item)
         {
             if (item.ExecutionStatus == CakeTaskExecutionStatus.Delegated)
@@ -88,7 +130,7 @@ namespace Cake.Core
             return true;
         }
 
-        private static string FormatDuration(CakeReportEntry item)
+        private string FormatDuration(CakeReportEntry item)
         {
             if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
             {

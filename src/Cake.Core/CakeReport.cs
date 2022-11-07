@@ -38,7 +38,7 @@ namespace Cake.Core
         /// <param name="span">The span.</param>
         public void Add(string task, TimeSpan span)
         {
-            Add(task, CakeReportEntryCategory.Task, span, CakeTaskExecutionStatus.Executed);
+            Add(task, string.Empty, CakeReportEntryCategory.Task, span, CakeTaskExecutionStatus.Executed);
         }
 
         /// <summary>
@@ -49,16 +49,17 @@ namespace Cake.Core
         /// <param name="span">The span.</param>
         public void Add(string task, CakeReportEntryCategory category, TimeSpan span)
         {
-            Add(task, category, span, CakeTaskExecutionStatus.Executed);
+            Add(task, string.Empty, category, span, CakeTaskExecutionStatus.Executed);
         }
 
         /// <summary>
         /// Adds a skipped task result to the report.
         /// </summary>
         /// <param name="task">The task.</param>
-        public void AddSkipped(string task)
+        /// <param name="skippedMessage">The message explaining why the task was skipped.</param>
+        public void AddSkipped(string task, string skippedMessage)
         {
-            Add(task, CakeReportEntryCategory.Task, TimeSpan.Zero, CakeTaskExecutionStatus.Skipped);
+            Add(task, skippedMessage, CakeReportEntryCategory.Task, TimeSpan.Zero, CakeTaskExecutionStatus.Skipped);
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace Cake.Core
         /// <param name="span">The span.</param>
         public void AddFailed(string task, TimeSpan span)
         {
-            Add(task, CakeReportEntryCategory.Task, span, CakeTaskExecutionStatus.Failed);
+            Add(task, string.Empty, CakeReportEntryCategory.Task, span, CakeTaskExecutionStatus.Failed);
         }
 
         /// <summary>
@@ -78,19 +79,20 @@ namespace Cake.Core
         /// <param name="span">The span.</param>
         public void AddDelegated(string task, TimeSpan span)
         {
-            Add(task, CakeReportEntryCategory.Task, span, CakeTaskExecutionStatus.Delegated);
+            Add(task, string.Empty, CakeReportEntryCategory.Task, span, CakeTaskExecutionStatus.Delegated);
         }
 
         /// <summary>
         /// Adds a task result to the report.
         /// </summary>
         /// <param name="task">The task.</param>
+        /// <param name="skippedMessage">The message explaining why the task was skipped.</param>
         /// <param name="category">The category.</param>
         /// <param name="span">The span.</param>
         /// <param name="executionStatus">The execution status.</param>
-        public void Add(string task, CakeReportEntryCategory category, TimeSpan span, CakeTaskExecutionStatus executionStatus)
+        public void Add(string task, string skippedMessage, CakeReportEntryCategory category, TimeSpan span, CakeTaskExecutionStatus executionStatus)
         {
-            _report.Add(new CakeReportEntry(task, category, span, executionStatus));
+            _report.Add(new CakeReportEntry(task, skippedMessage, category, span, executionStatus));
         }
 
         /// <summary>

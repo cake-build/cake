@@ -5,7 +5,7 @@ using Xunit;
 namespace Cake.DotNetTool.Module.Tests
 {
     /// <summary>
-    /// DotNetToolPackageInstaller unit tests
+    /// DotNetToolPackageInstaller unit tests.
     /// </summary>
     public sealed class DotNetToolPackageInstallerTests
     {

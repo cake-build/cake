@@ -12,6 +12,11 @@ namespace Cake.Core
     public sealed class CakeTaskCriteria
     {
         /// <summary>
+        /// Gets or sets a value indicating whether this criteria caused the task to be skipped.
+        /// </summary>
+        public bool CausedSkippingOfTask { get; set; }
+
+        /// <summary>
         /// Gets the criteria predicate.
         /// </summary>
         /// <value>The criteria predicate.</value>
