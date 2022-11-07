@@ -242,6 +242,7 @@ namespace Cake.Core
             {
                 if (!ShouldTaskExecute(context, task, criteria, isTarget))
                 {
+                    criteria.CausedSkippingOfTask = true;
                     SkipTask(context, strategy, task, report, criteria);
                     skipped = true;
                     break;
@@ -437,7 +438,17 @@ namespace Cake.Core
             PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, true, null);
 
             // Add the skipped task to the report.
-            report.AddSkipped(task.Name);
+            var skippedTaskCriteria = task.Criterias.FirstOrDefault(c => c.CausedSkippingOfTask == true);
+            var skippedMessage = string.Empty;
+            if (skippedTaskCriteria != null)
+            {
+                if (!string.IsNullOrEmpty(skippedTaskCriteria.Message))
+                {
+                    skippedMessage = skippedTaskCriteria.Message;
+                }
+            }
+
+            report.AddSkipped(task.Name, skippedMessage);
         }
 
         private static bool IsDelegatedTask(CakeTask task)
