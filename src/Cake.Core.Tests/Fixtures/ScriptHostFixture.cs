@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -20,6 +21,12 @@ namespace Cake.Core.Tests.Fixtures
             }
 
             public override Task<CakeReport> RunTargetAsync(string target)
+            {
+                return System.Threading.Tasks.Task.FromResult(new CakeReport());
+            }
+
+            /// <inheritdoc/>
+            public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
             {
                 return System.Threading.Tasks.Task.FromResult(new CakeReport());
             }

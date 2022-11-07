@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -56,6 +57,25 @@ namespace Cake.Cli
             _log.Information(string.Empty);
 
             Settings.SetTarget(target);
+
+            var strategy = new DryRunExecutionStrategy(_log);
+            var result = await Engine.RunTargetAsync(Context, strategy, Settings).ConfigureAwait(false);
+
+            _log.Information(string.Empty);
+            _log.Information("This was a dry run.");
+            _log.Information("No tasks were actually executed.");
+
+            return result;
+        }
+
+        /// <inheritdoc/>
+        public override async Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
+        {
+            _log.Information("Performing dry run...");
+            _log.Information("Targets are: {0}", string.Join(", ", targets));
+            _log.Information(string.Empty);
+
+            Settings.SetTargets(targets);
 
             var strategy = new DryRunExecutionStrategy(_log);
             var result = await Engine.RunTargetAsync(Context, strategy, Settings).ConfigureAwait(false);
