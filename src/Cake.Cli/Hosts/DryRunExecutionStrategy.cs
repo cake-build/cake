@@ -55,7 +55,7 @@ namespace Cake.Cli
             return Task.CompletedTask;
         }
 
-        public Task InvokeFinallyAsync(Func<Task> action)
+        public Task InvokeFinallyAsync(Func<ICakeContext, Task> action, ICakeContext context)
         {
             return Task.CompletedTask;
         }

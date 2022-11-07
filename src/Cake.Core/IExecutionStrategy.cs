@@ -62,8 +62,9 @@ namespace Cake.Core
         /// Invokes the finally handler.
         /// </summary>
         /// <param name="action">The action.</param>
+        /// <param name="context">The context.</param>
         /// <returns>The awaitable task.</returns>
-        Task InvokeFinallyAsync(Func<Task> action);
+        Task InvokeFinallyAsync(Func<ICakeContext, Task> action, ICakeContext context);
 
         /// <summary>
         /// Performs the specified setup action before each task is invoked.

@@ -187,7 +187,20 @@ namespace Cake.Core.Tests.Unit
                 var task = new CakeTask("task");
 
                 // When
-                var result = Record.Exception(() => task.SetFinallyHandler(null));
+                var result = Record.Exception(() => task.SetFinallyHandler(default(Action)));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "finallyHandler");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Finally_Context_Handler_Is_Null()
+            {
+                // Given
+                var task = new CakeTask("task");
+
+                // When
+                var result = Record.Exception(() => task.SetFinallyHandler(default(Action<ICakeContext>)));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "finallyHandler");
@@ -201,6 +214,19 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 task.SetFinallyHandler(() => { });
+
+                // Then
+                Assert.NotNull(task.FinallyHandler);
+            }
+
+            [Fact]
+            public void Should_Set_Finally_Context_Handler()
+            {
+                // Given
+                var task = new CakeTask("task");
+
+                // When
+                task.SetFinallyHandler(context => { });
 
                 // Then
                 Assert.NotNull(task.FinallyHandler);
