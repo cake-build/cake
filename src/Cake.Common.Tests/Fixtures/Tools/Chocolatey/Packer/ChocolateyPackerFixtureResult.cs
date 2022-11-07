@@ -25,8 +25,8 @@ namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Packer
         {
             var args = process.Arguments.Render();
             var parts = args.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            var last = parts.Last();
-            var file = fileSystem.GetFile(last.UnQuote());
+            var nuspecFilePath = parts[1];
+            var file = fileSystem.GetFile(nuspecFilePath.UnQuote());
             return file.Exists ? file.GetTextContent() : null;
         }
     }

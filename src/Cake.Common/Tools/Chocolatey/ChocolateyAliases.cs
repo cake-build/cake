@@ -535,12 +535,12 @@ namespace Cake.Common.Tools.Chocolatey
         /// Sets the Api Key for a Chocolatey Source using the specified settings.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="apiKey">The API Key.</param>
         /// <param name="source">The source.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
-        /// ChocolateyApiKey("myApiKey", "http://www.mysource.com", new ChocolateyApiKeySettings {
+        /// ChocolateyApiKey("http://www.mysource.com", new ChocolateyApiKeySettings {
+        ///     ApiKey                = "myApiKey",
         ///     Debug                 = false,
         ///     Verbose               = false,
         ///     Force                 = false,
@@ -555,7 +555,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeMethodAlias]
         [CakeAliasCategory("ApiKey")]
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.ApiKey")]
-        public static void ChocolateyApiKey(this ICakeContext context, string apiKey, string source, ChocolateyApiKeySettings settings)
+        public static void ChocolateyApiKey(this ICakeContext context, string source, ChocolateyApiKeySettings settings)
         {
             if (context == null)
             {
@@ -564,7 +564,7 @@ namespace Cake.Common.Tools.Chocolatey
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyApiKeySetter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
-            packer.Set(apiKey, source, settings);
+            packer.Set(source, settings);
         }
 
         /// <summary>

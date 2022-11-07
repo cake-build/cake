@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -48,6 +49,7 @@ namespace Cake.Common.Tools.Chocolatey.Download
             {
                 throw new ArgumentNullException(nameof(packageId));
             }
+
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
@@ -58,12 +60,26 @@ namespace Cake.Common.Tools.Chocolatey.Download
 
         private ProcessArgumentBuilder GetArguments(string packageId, ChocolateyDownloadSettings settings)
         {
+            const string separator = "=";
             var builder = new ProcessArgumentBuilder();
 
             builder.Append("download");
             builder.AppendQuoted(packageId);
 
-            AddCommonArguments(settings, builder);
+            // Add common arguments using the inherited method
+            AddGlobalArguments(settings, builder);
+
+            // Source
+            if (!string.IsNullOrEmpty(settings.Source))
+            {
+                builder.AppendSwitchQuoted("--source", separator, settings.Source);
+            }
+
+            // Version
+            if (!string.IsNullOrEmpty(settings.Version))
+            {
+                builder.AppendSwitchQuoted("--version", separator, settings.Version);
+            }
 
             // Prerelease
             if (settings.Prerelease)
@@ -71,17 +87,58 @@ namespace Cake.Common.Tools.Chocolatey.Download
                 builder.Append("--pre");
             }
 
+            // User
+            if (!string.IsNullOrWhiteSpace(settings.User))
+            {
+                builder.AppendSwitchQuoted("--user", separator, settings.User);
+            }
+
+            // Password
+            if (!string.IsNullOrWhiteSpace(settings.Password))
+            {
+                builder.AppendSwitchQuoted("--password", separator, settings.Password);
+            }
+
+            // Certificate
+            if (settings.Certificate != null)
+            {
+                builder.AppendSwitchQuoted("--cert", separator, settings.Certificate.MakeAbsolute(_environment).FullPath);
+            }
+
+            // Certificate Password
+            if (!string.IsNullOrEmpty(settings.CertificatePassword))
+            {
+                builder.AppendSwitchQuoted("--certpassword", separator, settings.CertificatePassword);
+            }
+
             // Output directory
             if (settings.OutputDirectory != null)
             {
-                builder.Append("--outputdirectory");
-                builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
+                builder.AppendSwitchQuoted("--output-directory", separator, settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // Ignore Dependencies
             if (settings.IgnoreDependencies)
             {
-                builder.Append("-i");
+                builder.Append("--ignore-dependencies");
+            }
+
+            // Installed
+            if (settings.Installed)
+            {
+                builder.Append("--installed-packages");
+            }
+
+            // Ignore Unfound
+            if (settings.IgnoreUnfound)
+            {
+                builder.Append("--ignore-unfound");
+            }
+
+            // Disable Repository Optimizations
+            if (settings.DisableRepositoryOptimizations)
+            {
+                builder.Append("--disable-repository-optimizations");
             }
 
             // Internalize
@@ -98,34 +155,50 @@ namespace Cake.Common.Tools.Chocolatey.Download
                 // Resources Location
                 if (!string.IsNullOrWhiteSpace(settings.ResourcesLocation))
                 {
-                    builder.AppendSwitchQuoted("--resources-location", "=", settings.ResourcesLocation);
+                    builder.AppendSwitchQuoted("--resources-location", separator, settings.ResourcesLocation);
 
                     // Download Location
                     if (!string.IsNullOrWhiteSpace(settings.DownloadLocation))
                     {
-                        builder.AppendSwitchQuoted("--download-location", "=", settings.DownloadLocation);
+                        builder.AppendSwitchQuoted("--download-location", separator, settings.DownloadLocation);
                     }
                 }
 
                 // Append -UseOriginalLocation
                 if (settings.AppendUseOriginalLocation)
                 {
-                    builder.Append("--append-useoriginallocation");
+                    builder.Append("--append-use-original-location");
                 }
             }
 
-            // User
-            if (!string.IsNullOrWhiteSpace(settings.User))
+            // Skip Download Cache
+            if (settings.SkipDownloadCache)
             {
-                builder.Append("-u");
-                builder.AppendQuoted(settings.User);
+                builder.Append("--skip-download-cache");
             }
 
-            // Password
-            if (!string.IsNullOrWhiteSpace(settings.Password))
+            // Use Download Cache
+            if (settings.UseDownloadCache)
             {
-                builder.Append("-p");
-                builder.AppendQuoted(settings.Password);
+                builder.Append("--use-download-cache");
+            }
+
+            // Skip Virus Check
+            if (settings.SkipVirusCheck)
+            {
+                builder.Append("--skip-virus-check");
+            }
+
+            // Virus Check
+            if (settings.VirusCheck)
+            {
+                builder.Append("--virus-check");
+            }
+
+            // Virus Positive Minimum
+            if (settings.VirusPositivesMinimum != 0)
+            {
+                builder.AppendSwitchQuoted("--virus-positives-minimum", separator, settings.VirusPositivesMinimum.ToString(CultureInfo.InvariantCulture));
             }
 
             return builder;

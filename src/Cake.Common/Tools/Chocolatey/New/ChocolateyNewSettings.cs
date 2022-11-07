@@ -15,9 +15,24 @@ namespace Cake.Common.Tools.Chocolatey.New
         private readonly Dictionary<string, string> _additionalPropertyValues = new Dictionary<string, string>();
 
         /// <summary>
+        /// Gets or sets a value indicating whether to generate automatic package instead or normal.
+        /// </summary>
+        public bool AutomaticPackage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the template to generate new package with.
+        /// </summary>
+        public string TemplateName { get; set; }
+
+        /// <summary>
         /// Gets or sets the path where the package will be created.
         /// </summary>
         public DirectoryPath OutputDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use original built-in template, rather than an overridden one.
+        /// </summary>
+        public bool BuiltInTemplate { get; set; }
 
         /// <summary>
         /// Gets or sets the version of the package to be created.
@@ -64,5 +79,60 @@ namespace Cake.Common.Tools.Chocolatey.New
                 return _additionalPropertyValues;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the file or URL to binary used for auto-detection and generation of package.
+        /// </summary>
+        public string File { get; set; }
+
+        /// <summary>
+        /// Gets or sets the file or URL to 64-bit binary used for auto-detection and generation of package.
+        /// </summary>
+        public string File64 { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use original location of binary in packaging.
+        /// </summary>
+        public bool UseOriginalFilesLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the checksum for 32 bit installation.
+        /// </summary>
+        public string Checksum { get; set; }
+
+        /// <summary>
+        /// Gets or sets the checksum for 64 bit installation.
+        /// </summary>
+        public string Checksum64 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the checksum type to use for 32 bit installation.
+        /// </summary>
+        public string ChecksumType { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to pause when there is an error creating a package.
+        /// </summary>
+        public bool PauseOnError { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to attempt to compile the package after creating it.
+        /// </summary>
+        public bool BuildPackage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to generate packages from the currenty installed software on a system.
+        /// </summary>
+        public bool GeneratePackagesFromInstalledSoftware { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to remove x86, x64, etc. from generated package id.
+        /// </summary>
+        public bool RemoveArchitectureFromName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to leave x86, x64, etc. as part of the generated package id.
+        /// </summary>
+        public bool IncludeArchitectureInPackageName { get; set; }
     }
 }

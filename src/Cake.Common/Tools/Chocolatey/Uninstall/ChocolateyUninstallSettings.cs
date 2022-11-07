@@ -7,20 +7,8 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
     /// <summary>
     /// Contains settings used by <see cref="ChocolateyUninstaller"/>.
     /// </summary>
-    public sealed class ChocolateyUninstallSettings : ChocolateySettings
+    public sealed class ChocolateyUninstallSettings : ChocolateySharedSettings
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether it fails on standard error output.
-        /// </summary>
-        /// <value>The fail on standard error flag.</value>
-        public bool FailOnStandardError { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether an external process is used instead of built in PowerShell host.
-        /// </summary>
-        /// <value>The use system powershell flag.</value>
-        public bool UseSystemPowershell { get; set; }
-
         /// <summary>
         /// Gets or sets a value indicating whether to uninstall all versions.
         /// </summary>
@@ -33,35 +21,10 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
         public string UninstallArguments { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether install arguments should be applied to dependent packages.
-        /// </summary>
-        /// <value>The global arguments flag.</value>
-        public bool GlobalArguments { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether global parameters are passed to the package.
-        /// </summary>
-        /// <value>The global package parameters flag.</value>
-        public bool GlobalPackageParameters { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether to force dependencies.
         /// </summary>
         /// <value>The force dependencies flag.</value>
         public bool ForceDependencies { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to Exit with a 0 for success and 1 for non-success
-        /// no matter what package scripts provide for exit codes.
-        /// </summary>
-        /// <value>The ignore package exit codes flag.</value>
-        public bool IgnorePackageExitCodes { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use package exit codes.
-        /// </summary>
-        /// <value>The use package exit codes flag.</value>
-        public bool UsePackageExitCodes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use auto uninstaller service when uninstalling.
@@ -87,6 +50,11 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
         /// uninstaller reports an error.
         /// </summary>
         /// <value>The ignore auto uninstaller flag.</value>
-        public bool IgnoreAutoUninstaller { get; set; }
+        public bool IgnoreAutoUninstallerFailure { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to uninstall a program from programs and features.
+        /// </summary>
+        public bool FromProgramsAndFeatures { get; set; }
     }
 }

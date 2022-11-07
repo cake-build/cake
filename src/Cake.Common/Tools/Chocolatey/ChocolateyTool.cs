@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -18,7 +19,10 @@ namespace Cake.Common.Tools.Chocolatey
     public abstract class ChocolateyTool<TSettings> : Tool<TSettings>
         where TSettings : ToolSettings
     {
+        private const string Separator = "=";
+
         private readonly IChocolateyToolResolver _resolver;
+        private readonly ICakeEnvironment _environment;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChocolateyTool{TSettings}"/> class.
@@ -36,6 +40,7 @@ namespace Cake.Common.Tools.Chocolatey
             IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools)
         {
             _resolver = resolver;
+            _environment = environment;
         }
 
         /// <summary>
@@ -77,110 +82,237 @@ namespace Cake.Common.Tools.Chocolatey
         /// <param name="settings">The settings.</param>
         /// <param name="builder">The process argument builder.</param>
         /// <returns>The process argument builder.</returns>
-        protected ProcessArgumentBuilder AddCommonArguments(ChocolateySettings settings, ProcessArgumentBuilder builder)
+        protected ProcessArgumentBuilder AddGlobalArguments(ChocolateySettings settings, ProcessArgumentBuilder builder)
         {
             // Debug
             if (settings.Debug)
             {
-                builder.Append("-d");
+                builder.Append("--debug");
             }
 
             // Verbose
             if (settings.Verbose)
             {
-                builder.Append("-v");
+                builder.Append("--verbose");
+            }
+
+            // Trace
+            if (settings.Trace)
+            {
+                builder.Append("--trace");
+            }
+
+            // NoColor
+            if (settings.NoColor)
+            {
+                builder.Append("--no-color");
             }
 
             // Accept License
             if (settings.AcceptLicense)
             {
-                builder.Append("--acceptLicense");
+                builder.Append("--accept-license");
             }
 
             // Always say yes, so as to not show interactive prompt
-            builder.Append("-y");
+            builder.Append("--confirm");
 
             // Force
             if (settings.Force)
             {
-                builder.Append("-f");
+                builder.Append("--force");
             }
 
             // Noop
             if (settings.Noop)
             {
-                builder.Append("--noop");
+                builder.Append("--what-if");
             }
 
             // Limit Output
             if (settings.LimitOutput)
             {
-                builder.Append("-r");
+                builder.Append("--limit-output");
             }
 
             // Execution Timeout
             if (settings.ExecutionTimeout != 0)
             {
-                builder.Append("--execution-timeout");
-                builder.AppendQuoted(settings.ExecutionTimeout.ToString(CultureInfo.InvariantCulture));
+                builder.AppendSwitchQuoted("--execution-timeout", Separator, settings.ExecutionTimeout.ToString(CultureInfo.InvariantCulture));
             }
 
             // Cache Location
             if (!string.IsNullOrWhiteSpace(settings.CacheLocation))
             {
-                builder.Append("-c");
-                builder.AppendQuoted(settings.CacheLocation);
+                builder.AppendSwitchQuoted("--cache-location", Separator, settings.CacheLocation);
             }
 
             // Allow Unofficial
             if (settings.AllowUnofficial)
             {
-                builder.Append("--allowunofficial");
+                builder.Append("--allow-unofficial");
             }
 
-            // Package source
-            if (!string.IsNullOrWhiteSpace(settings.Source))
+            // Fail On Error Output
+            if (settings.FailOnErrorOutput)
             {
-                builder.Append("-s");
-                builder.AppendQuoted(settings.Source);
+                builder.Append("--fail-on-error-output");
+            }
+
+            // Use System PowerShell
+            if (settings.UseSystemPowerShell)
+            {
+                builder.Append("--use-system-powershell");
+            }
+
+            // No Progress
+            if (settings.NoProgress)
+            {
+                builder.Append("--no-progress");
+            }
+
+            // Proxy
+            if (!string.IsNullOrEmpty(settings.Proxy))
+            {
+                builder.AppendSwitchQuoted("--proxy", Separator, settings.Proxy);
+            }
+
+            // Proxy User
+            if (!string.IsNullOrEmpty(settings.ProxyUser))
+            {
+                builder.AppendSwitchQuoted("--proxy-user", Separator, settings.ProxyUser);
+            }
+
+            // Proxy Password
+            if (!string.IsNullOrEmpty(settings.ProxyPassword))
+            {
+                builder.AppendSwitchQuotedSecret("--proxy-password", Separator, settings.ProxyPassword);
+            }
+
+            // Proxy By-Pass List
+            if (!string.IsNullOrEmpty(settings.ProxyByPassList))
+            {
+                builder.AppendSwitchQuoted("--proxy-bypass-list", Separator, settings.ProxyByPassList);
+            }
+
+            // Proxy ByPass On Local
+            if (settings.ProxyBypassOnLocal)
+            {
+                builder.Append("--proxy-bypass-on-local");
+            }
+
+            // Log File
+            if (settings.LogFile != null)
+            {
+                var logFilePath = settings.LogFile.MakeAbsolute(_environment);
+                builder.AppendSwitchQuoted("--log-file", Separator, logFilePath.FullPath);
+            }
+
+            // Skip Compatibility Checks
+            if (settings.SkipCompatibilityChecks)
+            {
+                builder.Append("--skip-compatibility-checks");
+            }
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds shared arguents to the process builder.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="builder">The process arguments builder.</param>
+        /// <returns>The process arguments builder.</returns>
+        protected ProcessArgumentBuilder AddSharedArguments(ChocolateySharedSettings settings, ProcessArgumentBuilder builder)
+        {
+            // Source
+            if (!string.IsNullOrEmpty(settings.Source))
+            {
+                builder.AppendSwitchQuoted("--source", Separator, settings.Source);
             }
 
             // Version
-            if (settings.Version != null)
+            if (!string.IsNullOrEmpty(settings.Version))
             {
-                builder.Append("--version");
-                builder.AppendQuoted(settings.Version);
+                builder.AppendSwitchQuoted("--version", Separator, settings.Version);
             }
 
-            // OverrideArguments
+            // Override Arguments
             if (settings.OverrideArguments)
             {
-                builder.Append("-o");
+                builder.Append("--override-arguments");
             }
 
-            // NotSilent
+            // Not Silent
             if (settings.NotSilent)
             {
-                builder.Append("--notSilent");
+                builder.Append("--not-silent");
             }
 
             // Package Parameters
-            if (!string.IsNullOrWhiteSpace(settings.PackageParameters))
+            if (!string.IsNullOrEmpty(settings.PackageParameters))
             {
-                builder.Append("--params");
-                builder.AppendQuoted(settings.PackageParameters);
+                builder.AppendSwitchQuoted("--package-parameters", Separator, settings.PackageParameters);
             }
 
-            // Side by side installation
+            // Global Arguments
+            if (settings.ApplyInstallArgumentsToDependencies)
+            {
+                builder.Append("--apply-install-arguments-to-dependencies");
+            }
+
+            // Global Package Parameters
+            if (settings.ApplyPackageParametersToDependencies)
+            {
+                builder.Append("--apply-package-parameters-to-dependencies");
+            }
+
+            // Side By Side
             if (settings.SideBySide)
             {
-                builder.Append("-m");
+                builder.Append("--side-by-side");
             }
 
             // Skip PowerShell
             if (settings.SkipPowerShell)
             {
-                builder.Append("-n");
+                builder.Append("--skip-automation-scripts");
+            }
+
+            // Ignore Package Codes
+            if (settings.IgnorePackageExitCodes)
+            {
+                builder.Append("--ignore-package-exit-codes");
+            }
+
+            // Use Package Exit Codes
+            if (settings.UsePackageExitCodes)
+            {
+                builder.Append("--use-package-exit-codes");
+            }
+
+            // Stop On First Faliure
+            if (settings.StopOnFirstFailure)
+            {
+                builder.Append("--stop-on-first-package-failure");
+            }
+
+            // Exit Where Reboot Detected
+            if (settings.ExitWhenRebootDetected)
+            {
+                builder.Append("--exit-when-reboot-detected");
+            }
+
+            // Ignore Detected Reboot
+            if (settings.IgnoreDetectedReboot)
+            {
+                builder.Append("--ignore-detected-reboot");
+            }
+
+            // Skip Hooks
+            if (settings.SkipHooks)
+            {
+                builder.Append("--skip-hooks");
             }
 
             return builder;

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Tests.Fixtures.Tools.Chocolatey.ApiKey;
 using Cake.Common.Tests.Fixtures.Tools.Chocolatey.Config;
 using Cake.Testing;
 using Cake.Testing.Xunit;
@@ -125,13 +126,13 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Config
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("config set --name \"cacheLocation\" " +
-                             "--value \"c:\\temp\" -y", result.Args);
+                Assert.Equal("config set --name=\"cacheLocation\" " +
+                             "--value=\"c:\\temp\" --confirm", result.Args);
             }
 
             [Theory]
-            [InlineData(true, "config set --name \"cacheLocation\" --value \"c:\\temp\" -d -y")]
-            [InlineData(false, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y")]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --debug --confirm")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
             public void Should_Add_Debug_Flag_To_Arguments_If_Set(bool debug, string expected)
             {
                 // Given
@@ -146,8 +147,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Config
             }
 
             [Theory]
-            [InlineData(true, "config set --name \"cacheLocation\" --value \"c:\\temp\" -v -y")]
-            [InlineData(false, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y")]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --verbose --confirm")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
             public void Should_Add_Verbose_Flag_To_Arguments_If_Set(bool verbose, string expected)
             {
                 // Given
@@ -162,8 +163,56 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Config
             }
 
             [Theory]
-            [InlineData(true, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y -f")]
-            [InlineData(false, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y")]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --trace --confirm")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_Trace_Flag_To_Arguments_If_Set(bool trace, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.Trace = trace;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --no-color --confirm")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_NoColor_Flag_To_Arguments_If_Set(bool noColor, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.NoColor = noColor;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --accept-license --confirm")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_AcceptLicense_Flag_To_Arguments_If_Set(bool acceptLicense, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.AcceptLicense = acceptLicense;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --force")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
             public void Should_Add_Force_Flag_To_Arguments_If_Set(bool force, string expected)
             {
                 // Given
@@ -178,8 +227,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Config
             }
 
             [Theory]
-            [InlineData(true, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y --noop")]
-            [InlineData(false, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y")]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --what-if")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
             public void Should_Add_Noop_Flag_To_Arguments_If_Set(bool noop, string expected)
             {
                 // Given
@@ -194,8 +243,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Config
             }
 
             [Theory]
-            [InlineData(true, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y -r")]
-            [InlineData(false, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y")]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --limit-output")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
             public void Should_Add_LimitOutput_Flag_To_Arguments_If_Set(bool limitOutput, string expected)
             {
                 // Given
@@ -210,8 +259,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Config
             }
 
             [Theory]
-            [InlineData(5, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y --execution-timeout \"5\"")]
-            [InlineData(0, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y")]
+            [InlineData(5, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --execution-timeout=\"5\"")]
+            [InlineData(0, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
             public void Should_Add_ExecutionTimeout_To_Arguments_If_Set(int executionTimeout, string expected)
             {
                 // Given
@@ -226,8 +275,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Config
             }
 
             [Theory]
-            [InlineData(@"c:\temp", "config set --name \"cacheLocation\" --value \"c:\\temp\" -y -c \"c:\\temp\"")]
-            [InlineData("", "config set --name \"cacheLocation\" --value \"c:\\temp\" -y")]
+            [InlineData(@"c:\temp", "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --cache-location=\"c:\\temp\"")]
+            [InlineData("", "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
             public void Should_Add_CacheLocation_Flag_To_Arguments_If_Set(string cacheLocation, string expected)
             {
                 // Given
@@ -242,13 +291,173 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Config
             }
 
             [Theory]
-            [InlineData(true, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y --allowunofficial")]
-            [InlineData(false, "config set --name \"cacheLocation\" --value \"c:\\temp\" -y")]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --allow-unofficial")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
             public void Should_Add_AllowUnofficial_Flag_To_Arguments_If_Set(bool allowUnofficial, string expected)
             {
                 // Given
                 var fixture = new ChocolateyConfigSetterFixture();
                 fixture.Settings.AllowUnofficial = allowUnofficial;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --fail-on-error-output")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_FailOnErrorOutput_Flag_To_Arguments_If_Set(bool failOnErrorOutput, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.FailOnErrorOutput = failOnErrorOutput;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --use-system-powershell")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_UseSystemPowerShell_Flag_To_Arguments_If_Set(bool useSystemPowerShell, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.UseSystemPowerShell = useSystemPowerShell;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --no-progress")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_NoProgress_Flag_To_Arguments_If_Set(bool noProgress, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.NoProgress = noProgress;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy", "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --proxy=\"proxy\"")]
+            [InlineData(null, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_Proxy_Flag_To_Arguments_If_Set(string proxy, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.Proxy = proxy;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy-user", "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --proxy-user=\"proxy-user\"")]
+            [InlineData(null, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_ProxyUser_Flag_To_Arguments_If_Set(string proxyUser, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.ProxyUser = proxyUser;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy-password", "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --proxy-password=\"proxy-password\"")]
+            [InlineData(null, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_ProxyPassword_Flag_To_Arguments_If_Set(string proxyPassword, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.ProxyPassword = proxyPassword;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy1,proxy2", "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --proxy-bypass-list=\"proxy1,proxy2\"")]
+            [InlineData(null, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_ProxyByPassList_Flag_To_Arguments_If_Set(string proxyByPassList, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.ProxyByPassList = proxyByPassList;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --proxy-bypass-on-local")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_ProxyByPassOnLocal_Flag_To_Arguments_If_Set(bool proxyBypassOnLocal, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.ProxyBypassOnLocal = proxyBypassOnLocal;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("./output.log", "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --log-file=\"/Working/output.log\"")]
+            [InlineData(null, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_Log_File_Flag_To_Arguments_If_Set(string logFilePath, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.LogFile = logFilePath;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm --skip-compatibility-checks")]
+            [InlineData(false, "config set --name=\"cacheLocation\" --value=\"c:\\temp\" --confirm")]
+            public void Should_Add_Skip_Compatibility_Flag_To_Arguments_If_Set(bool skipCompatibiity, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyConfigSetterFixture();
+                fixture.Settings.SkipCompatibilityChecks = skipCompatibiity;
 
                 // When
                 var result = fixture.Run();

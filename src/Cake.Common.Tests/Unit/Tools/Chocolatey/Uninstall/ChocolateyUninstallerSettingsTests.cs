@@ -16,7 +16,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Uninstall
             var settings = new ChocolateyUninstallSettings();
 
             // Then
-            Assert.False(settings.GlobalArguments);
+            Assert.False(settings.ApplyInstallArgumentsToDependencies);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Uninstall
             var settings = new ChocolateyUninstallSettings();
 
             // Then
-            Assert.False(settings.GlobalPackageParameters);
+            Assert.False(settings.ApplyPackageParametersToDependencies);
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Uninstall
             var settings = new ChocolateyUninstallSettings();
 
             // Then
-            Assert.False(settings.IgnoreAutoUninstaller);
+            Assert.False(settings.IgnoreAutoUninstallerFailure);
         }
     }
 }
