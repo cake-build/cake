@@ -20,6 +20,11 @@ namespace Cake.Core
         public bool Exclusive { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether the dependend task of the target should be run in parallel (if possible).
+        /// </summary>
+        public bool Parallel { get; private set; }
+
+        /// <summary>
         /// Sets the target to be executed.
         /// </summary>
         /// <param name="target">The target.</param>
@@ -37,6 +42,16 @@ namespace Cake.Core
         public ExecutionSettings UseExclusiveTarget()
         {
             Exclusive = true;
+            return this;
+        }
+
+        /// <summary>
+        /// Whether or not to run the dependend task in parallel.
+        /// </summary>
+        /// <returns>The same <see cref="ExecutionSettings"/> instance so that multiple calls can be chained.</returns>
+        public ExecutionSettings RunInParallel()
+        {
+            Parallel = true;
             return this;
         }
     }

@@ -5,6 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Cake.Core.Graph
 {
@@ -112,6 +114,29 @@ namespace Cake.Core.Graph
             return result;
         }
 
+        /// <summary>
+        /// Traverses the graph asynchrounus leading to the specified target.
+        /// </summary>
+        /// <param name="target">The target to traverse to.</param>
+        /// <param name="executeTask">Action which will be called on each task.</param>
+        /// <returns>A task to wait for.</returns>
+        public async Task TraverseAsync(string target, Func<string, CancellationTokenSource, Task> executeTask)
+        {
+            if (!Exist(target))
+            {
+                return;
+            }
+
+            if (HasCircularReferences(target))
+            {
+                throw new CakeException("Graph contains circular references.");
+            }
+
+            var cancellationTokenSource = new CancellationTokenSource();
+            var visitedNodes = new Dictionary<string, Task>();
+            await TraverseAsync(target, executeTask, cancellationTokenSource, visitedNodes);
+        }
+
         private void Traverse(string node, ICollection<string> result, ISet<string> visited = null)
         {
             visited = visited ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -129,6 +154,60 @@ namespace Cake.Core.Graph
             {
                 throw new CakeException("Graph contains circular references.");
             }
+        }
+
+        private async Task TraverseAsync(string node, Func<string, CancellationTokenSource, Task> executeTask,
+            CancellationTokenSource cancellationTokenSource, IDictionary<string, Task> visitedNodes)
+        {
+            if (visitedNodes.ContainsKey(node))
+            {
+                await visitedNodes[node];
+                return;
+            }
+
+            var token = cancellationTokenSource.Token;
+            var dependentTasks = _edges
+                .Where(x => x.End.Equals(node, StringComparison.OrdinalIgnoreCase))
+                .Select(x =>
+                {
+                    var task = TraverseAsync(x.Start, executeTask, cancellationTokenSource, visitedNodes);
+                    visitedNodes[x.Start] = task;
+
+                    if (task.IsFaulted)
+                    {
+                        throw task.Exception;
+                    }
+
+                    return task;
+                })
+                .ToArray();
+
+            if (dependentTasks.Any())
+            {
+                TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+                token.Register(() => tcs.TrySetCanceled(), false);
+                await Task.WhenAny(Task.WhenAll(dependentTasks), tcs.Task);
+            }
+
+            await executeTask(node, cancellationTokenSource);
+        }
+
+        private bool HasCircularReferences(string node, Stack<string> visited = null)
+        {
+            visited = visited ?? new Stack<string>();
+
+            if (visited.Contains(node))
+            {
+                return true;
+            }
+
+            visited.Push(node);
+            var hasCircularReference = _edges
+                .Where(x => x.End.Equals(node, StringComparison.OrdinalIgnoreCase))
+                .Any(x => HasCircularReferences(x.Start, visited));
+            visited.Pop();
+
+            return hasCircularReference;
         }
     }
 }

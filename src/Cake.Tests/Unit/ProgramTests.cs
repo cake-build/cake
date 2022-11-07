@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Cake.Cli;
@@ -32,6 +31,7 @@ namespace Cake.Tests.Unit
                     settings.BuildHostKind == BuildHostKind.Build &&
                     settings.Debug == false &&
                     settings.Exclusive == false &&
+                    settings.Parallel == false &&
                     settings.Script.FullPath == "build.cake" &&
                     settings.Verbosity == Verbosity.Normal &&
                     settings.NoBootstrapping == false));
