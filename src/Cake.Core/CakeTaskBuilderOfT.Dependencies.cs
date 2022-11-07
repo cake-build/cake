@@ -7,7 +7,7 @@ namespace Cake.Core
     public static partial class CakeTaskBuilderOfTExtensions
     {
         /// <summary>
-        /// Makes the task a dependency of another task.
+        /// Makes the task a dependee of another task.
         /// </summary>
         /// <typeparam name="TData">The type of the data context.</typeparam>
         /// <param name="builder">The task builder.</param>
@@ -20,7 +20,7 @@ namespace Cake.Core
             => builder.Process(builder => builder.IsDependeeOf(name));
 
         /// <summary>
-        /// Makes the task a dependency of another task.
+        /// Makes the task a dependee of another task.
         /// </summary>
         /// <typeparam name="TData">The type of the data context.</typeparam>
         /// <param name="builder">The task builder.</param>
