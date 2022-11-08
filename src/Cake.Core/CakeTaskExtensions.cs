@@ -169,7 +169,7 @@ namespace Cake.Core
             }
 
 #pragma warning disable CS1998
-            task.FinallyHandler = async () => finallyHandler();
+            task.FinallyHandler = async context => finallyHandler();
 #pragma warning restore CS1998
         }
 
@@ -181,6 +181,52 @@ namespace Cake.Core
         /// <exception cref="CakeException">There can only be one finally handler per task.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="finallyHandler"/> is null.</exception>
         public static void SetFinallyHandler(this CakeTask task, Func<Task> finallyHandler)
+        {
+            if (task.FinallyHandler != null)
+            {
+                throw new CakeException("There can only be one finally handler per task.");
+            }
+
+            if (finallyHandler is null)
+            {
+                throw new ArgumentNullException(nameof(finallyHandler));
+            }
+
+            task.FinallyHandler = context => finallyHandler();
+        }
+
+        /// <summary>
+        /// Sets the task's finally handler.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        /// <param name="finallyHandler">The finally handler.</param>
+        /// <exception cref="CakeException">There can only be one finally handler per task.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="finallyHandler"/> is null.</exception>
+        public static void SetFinallyHandler(this CakeTask task, Action<ICakeContext> finallyHandler)
+        {
+            if (task.FinallyHandler != null)
+            {
+                throw new CakeException("There can only be one finally handler per task.");
+            }
+
+            if (finallyHandler is null)
+            {
+                throw new ArgumentNullException(nameof(finallyHandler));
+            }
+
+#pragma warning disable CS1998
+            task.FinallyHandler = async context => finallyHandler(context);
+#pragma warning restore CS1998
+        }
+
+        /// <summary>
+        /// Sets the task's finally handler.
+        /// </summary>
+        /// <param name="task">The task.</param>
+        /// <param name="finallyHandler">The finally handler.</param>
+        /// <exception cref="CakeException">There can only be one finally handler per task.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="finallyHandler"/> is null.</exception>
+        public static void SetFinallyHandler(this CakeTask task, Func<ICakeContext, Task> finallyHandler)
         {
             if (task.FinallyHandler != null)
             {

@@ -4,6 +4,8 @@
 
 using Cake.Common.Build.GitLabCI;
 using Cake.Common.Tests.Fixtures.Build;
+using Cake.Core;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.GitLabCI
@@ -16,10 +18,23 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI
             public void Should_Throw_If_Environment_Is_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new GitLabCIProvider(null));
+                var result = Record.Exception(() => new GitLabCIProvider(null, null));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
+            }
+
+            [Fact]
+            public void Should_Throw_If_FileSystem_Is_Null()
+            {
+                // Given
+                var environment = Substitute.For<ICakeEnvironment>();
+
+                // When
+                var result = Record.Exception(() => new GitLabCIProvider(environment, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "fileSystem");
             }
         }
 
@@ -66,6 +81,23 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI
 
                 // When
                 var result = gitLabCI.Environment;
+
+                // Then
+                Assert.NotNull(result);
+            }
+        }
+
+        public sealed class TheCommandsProperty
+        {
+            [Fact]
+            public void Should_Return_Non_Null_Reference()
+            {
+                // Given
+                var fixture = new GitLabCIFixture();
+                var gitLabCI = fixture.CreateGitLabCIService();
+
+                // When
+                var result = gitLabCI.Commands;
 
                 // Then
                 Assert.NotNull(result);

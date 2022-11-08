@@ -57,10 +57,24 @@ namespace Cake.Common.Tools.GitVersion
         }
 
         [DataMember]
+        public string PreReleaseLabelWithDash
+        {
+            get => GitVersion.PreReleaseLabelWithDash;
+            set => GitVersion.PreReleaseLabelWithDash = value;
+        }
+
+        [DataMember]
         public string PreReleaseNumber
         {
             get => ToString(GitVersion.PreReleaseNumber);
             set => GitVersion.PreReleaseNumber = ToNullableInt(value);
+        }
+
+        [DataMember]
+        public string WeightedPreReleaseNumber
+        {
+            get => ToString(GitVersion.WeightedPreReleaseNumber);
+            set => GitVersion.WeightedPreReleaseNumber = ToNullableInt(value);
         }
 
         [DataMember]
@@ -148,6 +162,13 @@ namespace Cake.Common.Tools.GitVersion
         }
 
         [DataMember]
+        public string EscapedBranchName
+        {
+            get => GitVersion.EscapedBranchName;
+            set => GitVersion.EscapedBranchName = value;
+        }
+
+        [DataMember]
         public string Sha
         {
             get => GitVersion.Sha;
@@ -176,6 +197,27 @@ namespace Cake.Common.Tools.GitVersion
         }
 
         [DataMember]
+        public string NuGetPreReleaseTagV2
+        {
+            get => GitVersion.NuGetPreReleaseTagV2;
+            set => GitVersion.NuGetPreReleaseTagV2 = value;
+        }
+
+        [DataMember]
+        public string NuGetPreReleaseTag
+        {
+            get => GitVersion.NuGetPreReleaseTag;
+            set => GitVersion.NuGetPreReleaseTag = value;
+        }
+
+        [DataMember]
+        public string VersionSourceSha
+        {
+            get => GitVersion.VersionSourceSha;
+            set => GitVersion.VersionSourceSha = value;
+        }
+
+        [DataMember]
         public string CommitsSinceVersionSource
         {
             get => ToString(GitVersion.CommitsSinceVersionSource);
@@ -187,6 +229,13 @@ namespace Cake.Common.Tools.GitVersion
         {
             get => GitVersion.CommitsSinceVersionSourcePadded;
             set => GitVersion.CommitsSinceVersionSourcePadded = value;
+        }
+
+        [DataMember]
+        public string UncommittedChanges
+        {
+            get => ToString(GitVersion.UncommittedChanges);
+            set => GitVersion.UncommittedChanges = ToNullableInt(value);
         }
 
         [DataMember]

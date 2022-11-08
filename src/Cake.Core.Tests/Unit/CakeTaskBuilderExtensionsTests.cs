@@ -110,6 +110,23 @@ namespace Cake.Core.Tests.Unit
                 Assert.Single(task.Dependees);
                 Assert.Equal("other", task.Dependees[0].Name);
             }
+
+            [Fact]
+            public void Should_Add_Dependee_To_Task_From_Other()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var other = new CakeTask("other");
+                var builder = new CakeTaskBuilder(task);
+                var otherBuilder = new CakeTaskBuilder(other);
+
+                // When
+                builder.IsDependeeOf(otherBuilder);
+
+                // Then
+                Assert.Single(task.Dependees);
+                Assert.Equal("other", task.Dependees[0].Name);
+            }
         }
 
         public sealed class TheWithCriteriaMethod
@@ -646,7 +663,21 @@ namespace Cake.Core.Tests.Unit
                 var builder = new CakeTaskBuilder(task);
 
                 // When
-                var result = Record.Exception(() => CakeTaskBuilderExtensions.Finally(builder, null));
+                var result = Record.Exception(() => CakeTaskBuilderExtensions.Finally(builder, default(Action)));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "finallyHandler");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Action_Context_Is_Null()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
+
+                // When
+                var result = Record.Exception(() => CakeTaskBuilderExtensions.Finally(builder, default(Action<ICakeContext>)));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "finallyHandler");
@@ -661,6 +692,20 @@ namespace Cake.Core.Tests.Unit
 
                 // When
                 builder.Finally(() => { });
+
+                // Then
+                Assert.NotNull(builder.Target.FinallyHandler);
+            }
+
+            [Fact]
+            public void Should_Set_The_Finally_Context_Handler()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
+
+                // When
+                builder.Finally(context => { });
 
                 // Then
                 Assert.NotNull(builder.Target.FinallyHandler);

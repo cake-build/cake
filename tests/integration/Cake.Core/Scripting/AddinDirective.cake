@@ -1,4 +1,6 @@
-#addin nuget:?package=Cake.Kudu.Client&version=0.9.0
+#addin nuget:?package=Cake.Kudu.Client&version=2.0.0
+#load "./../../utilities/paths.cake"
+
 
 Task("Cake.Core.Scripting.AddinDirective.LoadTargetedAddin")
     .Does(() =>
@@ -8,27 +10,31 @@ Task("Cake.Core.Scripting.AddinDirective.LoadTargetedAddin")
     FilePath cakeCore = typeof(ICakeContext).GetTypeInfo().Assembly.Location;
     FilePath cake = cakeCore.GetDirectory().CombineWithFilePath("Cake.dll");
 
-    var msBuildSettings = new DotNetCoreMSBuildSettings
+    var msBuildSettings = new DotNetMSBuildSettings
                                 {
-                                    Version = "1.0.0",
+                                    Version = string.Format("{0}.{1}.{2}.{3}",
+                                                    DateTime.Now.Year,
+                                                    DateTime.Now.Month,
+                                                    DateTime.Now.Day,
+                                                    (DateTime.Now.Hour << 4) + DateTime.Now.Minute
+                                                ),
                                 }
                                  .WithProperty("CakeCorePath", typeof(ICakeContext).GetTypeInfo().Assembly.Location)
                                  .SetTargetFramework(
                                      cake switch
                                      {
-                                        FilePath netCoreApp3_1Path  when netCoreApp3_1Path.FullPath.Contains("netcoreapp3.1")   => "netcoreapp3.1",
-                                        FilePath net5_0Path         when net5_0Path.FullPath.Contains("net5.0")                 => "net5.0",
-                                        _ => "net6.0"
+                                        FilePath net6_0Path         when net6_0Path.FullPath.Contains("net6.0")                 => "net6.0",
+                                        _ => "net7.0"
                                      }
                                  );
 
-    DotNetCorePack($"{Paths.Resources}/Cake.Core/Scripting/addin/addin.csproj",
-        new DotNetCorePackSettings {
+    DotNetPack($"{Paths.Resources}/Cake.Core/Scripting/addin/addin.csproj",
+        new DotNetPackSettings {
             Configuration = "Release",
             MSBuildSettings = msBuildSettings
         });
 
-    var script = $@"#addin nuget:{Paths.Resources}/Cake.Core/Scripting/addin/bin/Release?package=addin&version=1.0.0
+    var script = $@"#addin nuget:{Paths.Resources}/Cake.Core/Scripting/addin/bin/Release?package=addin&version={msBuildSettings.Version}
         Information(""Magic number: {0}"", GetMagicNumber(false));
         Information(""The answer to life: {0}"", TheAnswerToLife);
         Information(""Get Dynamic Magic Number: {0}"", GetDynamicMagicNumber(false).MagicNumber);

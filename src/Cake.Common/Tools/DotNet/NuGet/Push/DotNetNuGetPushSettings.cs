@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.DotNetCore.NuGet.Push;
-
 namespace Cake.Common.Tools.DotNet.NuGet.Push
 {
     /// <summary>
-    /// Contains settings used by <see cref="DotNetCoreNuGetPusher" />.
+    /// Contains settings used by <see cref="DotNetNuGetPusher" />.
     /// </summary>
     public class DotNetNuGetPushSettings : DotNetSettings
     {

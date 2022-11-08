@@ -35,19 +35,13 @@ namespace Cake.Common.Tools.Chocolatey.ApiKey
         /// <summary>
         /// Pins Chocolatey packages using the specified package id and settings.
         /// </summary>
-        /// <param name="apiKey">The API key.</param>
         /// <param name="source">The Server URL where the API key is valid.</param>
         /// <param name="settings">The settings.</param>
-        public void Set(string apiKey, string source, ChocolateyApiKeySettings settings)
+        public void Set(string source, ChocolateyApiKeySettings settings)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
-            }
-
-            if (string.IsNullOrWhiteSpace(apiKey))
-            {
-                throw new ArgumentNullException(nameof(apiKey));
             }
 
             if (string.IsNullOrWhiteSpace(source))
@@ -55,72 +49,29 @@ namespace Cake.Common.Tools.Chocolatey.ApiKey
                 throw new ArgumentNullException(nameof(source));
             }
 
-            Run(settings, GetArguments(apiKey, source, settings));
+            Run(settings, GetArguments(source, settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string apiKey, string source, ChocolateyApiKeySettings settings)
+        private ProcessArgumentBuilder GetArguments(string source, ChocolateyApiKeySettings settings)
         {
+            const string separator = "=";
             var builder = new ProcessArgumentBuilder();
 
             builder.Append("apikey");
 
-            builder.Append("-s");
-            builder.AppendQuoted(source);
+            builder.AppendSwitchQuoted("--source", separator, source);
 
-            builder.Append("-k");
-            builder.AppendQuotedSecret(apiKey);
+            // Add common arguments using the inherited method
+            AddGlobalArguments(settings, builder);
 
-            // Debug
-            if (settings.Debug)
+            if (!string.IsNullOrEmpty(settings.ApiKey))
             {
-                builder.Append("-d");
+                builder.AppendSwitchQuoted("--api-key", separator, settings.ApiKey);
             }
 
-            // Verbose
-            if (settings.Verbose)
+            if (settings.Remove)
             {
-                builder.Append("-v");
-            }
-
-            // Always say yes, so as to not show interactive prompt
-            builder.Append("-y");
-
-            // Force
-            if (settings.Force)
-            {
-                builder.Append("-f");
-            }
-
-            // Noop
-            if (settings.Noop)
-            {
-                builder.Append("--noop");
-            }
-
-            // Limit Output
-            if (settings.LimitOutput)
-            {
-                builder.Append("-r");
-            }
-
-            // Execution Timeout
-            if (settings.ExecutionTimeout != 0)
-            {
-                builder.Append("--execution-timeout");
-                builder.AppendQuoted(settings.ExecutionTimeout.ToString(CultureInfo.InvariantCulture));
-            }
-
-            // Cache Location
-            if (!string.IsNullOrWhiteSpace(settings.CacheLocation))
-            {
-                builder.Append("-c");
-                builder.AppendQuoted(settings.CacheLocation);
-            }
-
-            // Allow Unofficial
-            if (settings.AllowUnofficial)
-            {
-                builder.Append("--allowunofficial");
+                builder.Append("--remove");
             }
 
             return builder;

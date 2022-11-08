@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using Cake.Common.Tools.DotNetCore.VSTest;
 using Cake.Common.Tools.VSTest;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.VSTest
 {
     /// <summary>
-    /// Contains settings used by <see cref="DotNetCoreVSTester" />.
+    /// Contains settings used by <see cref="DotNetVSTester" />.
     /// </summary>
     public class DotNetVSTestSettings : DotNetSettings
     {

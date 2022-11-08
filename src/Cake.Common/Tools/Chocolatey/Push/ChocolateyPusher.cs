@@ -46,6 +46,7 @@ namespace Cake.Common.Tools.Chocolatey.Push
             {
                 throw new ArgumentNullException(nameof(packageFilePath));
             }
+
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
@@ -56,80 +57,50 @@ namespace Cake.Common.Tools.Chocolatey.Push
 
         private ProcessArgumentBuilder GetArguments(FilePath packageFilePath, ChocolateyPushSettings settings)
         {
+            const string separator = "=";
             var builder = new ProcessArgumentBuilder();
+
             builder.Append("push");
 
             builder.AppendQuoted(packageFilePath.MakeAbsolute(_environment).FullPath);
 
+            // Add common arguments using the inherited method
+            AddGlobalArguments(settings, builder);
+
+            // Source
             if (settings.Source != null)
             {
-                builder.Append("-s");
-                builder.AppendQuoted(settings.Source);
+                builder.AppendSwitchQuoted("--source", separator, settings.Source);
             }
 
-            if (settings.Timeout != null)
-            {
-                builder.Append("-t");
-                builder.Append(Convert.ToInt32(settings.Timeout.Value.TotalSeconds).ToString(CultureInfo.InvariantCulture));
-            }
-
+            // Api Key
             if (settings.ApiKey != null)
             {
-                builder.Append("-k");
-                builder.AppendSecret(settings.ApiKey);
+                builder.AppendSwitchQuoted("--api-key", separator, settings.ApiKey);
             }
 
-            // Debug
-            if (settings.Debug)
+            // Client Code
+            if (!string.IsNullOrEmpty(settings.ClientCode))
             {
-                builder.Append("-d");
+                builder.AppendSwitchQuoted("--client-code", separator, settings.ClientCode);
             }
 
-            // Verbose
-            if (settings.Verbose)
+            // Redirect URL
+            if (!string.IsNullOrEmpty(settings.RedirectUrl))
             {
-                builder.Append("-v");
+                builder.AppendSwitchQuoted("--redirect-url", separator, settings.RedirectUrl);
             }
 
-            // Always say yes, so as to not show interactive prompt
-            builder.Append("-y");
-
-            // Force
-            if (settings.Force)
+            // Endpoint
+            if (!string.IsNullOrEmpty(settings.EndPoint))
             {
-                builder.Append("-f");
+                builder.AppendSwitchQuoted("--endpoint", separator, settings.EndPoint);
             }
 
-            // Noop
-            if (settings.Noop)
+            // Skip Cleanup
+            if (settings.SkipCleanup)
             {
-                builder.Append("--noop");
-            }
-
-            // Limit Output
-            if (settings.LimitOutput)
-            {
-                builder.Append("-r");
-            }
-
-            // Execution Timeout
-            if (settings.ExecutionTimeout != 0)
-            {
-                builder.Append("--execution-timeout");
-                builder.AppendQuoted(settings.ExecutionTimeout.ToString(CultureInfo.InvariantCulture));
-            }
-
-            // Cache Location
-            if (!string.IsNullOrWhiteSpace(settings.CacheLocation))
-            {
-                builder.Append("-c");
-                builder.AppendQuoted(settings.CacheLocation);
-            }
-
-            // Allow Unofficial
-            if (settings.AllowUnofficial)
-            {
-                builder.Append("--allowunofficial");
+                builder.Append("--skip-cleanup");
             }
 
             return builder;

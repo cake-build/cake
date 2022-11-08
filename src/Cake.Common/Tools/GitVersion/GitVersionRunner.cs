@@ -88,15 +88,25 @@ namespace Cake.Common.Tools.GitVersion
 
             if (settings.OutputType.HasValue)
             {
+                builder.Append("-output");
+
                 switch (settings.OutputType.Value)
                 {
                     case GitVersionOutput.Json:
-                        builder.Append("-output");
                         builder.Append("json");
                         break;
                     case GitVersionOutput.BuildServer:
-                        builder.Append("-output");
                         builder.Append("buildserver");
+                        break;
+                    case GitVersionOutput.File:
+                        builder.Append("file");
+
+                        if (settings.OutputFile != null)
+                        {
+                            builder.Append("-outputfile");
+                            builder.AppendQuoted(settings.OutputFile.FullPath);
+                        }
+
                         break;
                 }
             }
@@ -165,9 +175,45 @@ namespace Cake.Common.Tools.GitVersion
                 builder.AppendQuoted(settings.LogFilePath.FullPath);
             }
 
+            if (settings.ConfigFile != null)
+            {
+                builder.Append("-config");
+                builder.AppendQuoted(settings.ConfigFile.FullPath);
+            }
+
             if (settings.NoFetch)
             {
                 builder.Append("-nofetch");
+            }
+
+            if (settings.NoCache)
+            {
+                builder.Append("-nocache");
+            }
+
+            if (settings.NoNormalize)
+            {
+                builder.Append("-nonormalize");
+            }
+
+            if (settings.Diag)
+            {
+                builder.Append("-diag");
+            }
+
+            if (settings.UpdateProjectFiles)
+            {
+                builder.Append("-updateprojectfiles");
+            }
+
+            if (settings.EnsureAssemblyInfo)
+            {
+                builder.Append("-ensureassemblyinfo");
+            }
+
+            if (settings.UpdateWixVersionFile)
+            {
+                builder.Append("-updatewixversionfile");
             }
 
             if (settings.Verbosity.HasValue)

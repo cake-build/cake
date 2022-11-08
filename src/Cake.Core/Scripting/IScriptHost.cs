@@ -38,6 +38,16 @@ namespace Cake.Core.Scripting
         CakeTaskBuilder Task(string name);
 
         /// <summary>
+        /// Registers a new task.
+        /// </summary>
+        /// <param name="name">The name of the task.</param>
+        /// <returns>A <see cref="CakeTaskBuilder"/>.</returns>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        CakeTaskBuilder<TData> TaskOf<TData>(string name)
+            where TData : class
+            => new (Task(name));
+
+        /// <summary>
         /// Allows registration of an action that's executed before any tasks are run.
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
@@ -138,5 +148,19 @@ namespace Cake.Core.Scripting
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
         Task<CakeReport> RunTargetAsync(string target);
+
+        /// <summary>
+        /// Runs the specified targets.
+        /// </summary>
+        /// <param name="targets">The targets to run.</param>
+        /// <returns>The resulting report.</returns>
+        CakeReport RunTargets(IEnumerable<string> targets);
+
+        /// <summary>
+        /// Runs the specified targets.
+        /// </summary>
+        /// <param name="targets">The targets to run.</param>
+        /// <returns>The resulting report.</returns>
+        Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets);
     }
 }

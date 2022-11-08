@@ -23,6 +23,17 @@ namespace Cake.Common.Tools.GitVersion
         public GitVersionOutput? OutputType { get; set; }
 
         /// <summary>
+        /// Gets or sets the path to a file to store the asserted GitVersion numbers in JSON format.
+        /// </summary>
+        public FilePath OutputFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path to config file.
+        /// </summary>
+        /// <remarks>Defaults to GitVersion.yml.</remarks>
+        public FilePath ConfigFile { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to update all the AssemblyInfo files.
         /// </summary>
         public bool UpdateAssemblyInfo { get; set; }
@@ -31,6 +42,23 @@ namespace Cake.Common.Tools.GitVersion
         /// Gets or sets whether to update all the AssemblyInfo files.
         /// </summary>
         public FilePath UpdateAssemblyInfoFilePath { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to recursively search for all project files (.csproj/.vbproj/.fsproj) files in the git repo and update them.
+        /// </summary>
+        /// <remarks>This is only compatible with the newer Sdk projects.</remarks>
+        public bool UpdateProjectFiles { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether if the assembly info file specified with /updateassemblyinfo or /updateassemblyinfofilename is not found, it be created with these attributes: AssemblyFileVersion, AssemblyVersion and AssemblyInformationalVersion.
+        /// </summary>
+        /// <remarks>Supports writing version info for: C#, F#, VB.</remarks>
+        public bool EnsureAssemblyInfo { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether all the GitVersion variables are written to 'GitVersion_WixVersion.wxi'. The variables can then be referenced in other WiX project files for versioning.
+        /// </summary>
+        public bool UpdateWixVersionFile { get; set; }
 
         /// <summary>
         /// Gets or sets whether to only show a specific variable.
@@ -67,6 +95,22 @@ namespace Cake.Common.Tools.GitVersion
         /// </summary>
         /// <remarks>If your CI server clones the entire repository you can set this to 'true' to prevent GitVersion attempting any remote repository fetching.</remarks>
         public bool NoFetch { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to bypass the cached GitVersion result. Result will not be written to the cache.
+        /// </summary>
+        public bool NoCache { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to disable normalize step on a build server.
+        /// </summary>
+        public bool NoNormalize { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to run GitVersion with additional diagnostic information.
+        /// </summary>
+        /// <remarks>Requires git.exe to be installed.</remarks>
+        public bool Diag { get; set; }
 
         /// <summary>
         /// Gets or sets the dynamic repository path. Defaults to %TEMP%.

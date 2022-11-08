@@ -3,18 +3,18 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using Cake.Common.Tools.DotNetCore.VSTest;
+using Cake.Common.Tools.DotNet.VSTest;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.VSTest
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.VSTest
 {
-    internal sealed class DotNetCoreVSTesterFixture : DotNetCoreFixture<DotNetCoreVSTestSettings>
+    internal sealed class DotNetVSTesterFixture : DotNetFixture<DotNetVSTestSettings>
     {
         public ICollection<FilePath> TestFiles { get; set; }
 
         protected override void RunTool()
         {
-            var tool = new DotNetCoreVSTester(FileSystem, Environment, ProcessRunner, Tools);
+            var tool = new DotNetVSTester(FileSystem, Environment, ProcessRunner, Tools);
             tool.Test(TestFiles, Settings);
         }
     }

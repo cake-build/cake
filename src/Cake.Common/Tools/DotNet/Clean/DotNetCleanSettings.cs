@@ -3,13 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.DotNet.MSBuild;
-using Cake.Common.Tools.DotNetCore.Clean;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.Clean
 {
     /// <summary>
-    /// Contains settings used by <see cref="DotNetCoreCleaner" />.
+    /// Contains settings used by <see cref="DotNetCleaner" />.
     /// </summary>
     public class DotNetCleanSettings : DotNetSettings
     {

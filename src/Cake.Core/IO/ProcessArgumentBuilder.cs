@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,28 @@ namespace Cake.Core.IO
         public void Prepend(IProcessArgument argument)
         {
             _tokens.Insert(0, argument);
+        }
+
+        /// <summary>
+        /// Appends arguments.
+        /// </summary>
+        /// <param name="arguments">The arguments.</param>
+        public void AppendRange(IEnumerable<IProcessArgument> arguments)
+        {
+            ArgumentNullException.ThrowIfNull(arguments);
+
+            _tokens.AddRange(arguments);
+        }
+
+        /// <summary>
+        /// Prepends arguments.
+        /// </summary>
+        /// <param name="arguments">The arguments.</param>
+        public void PrependRange(IEnumerable<IProcessArgument> arguments)
+        {
+            ArgumentNullException.ThrowIfNull(arguments);
+
+            _tokens.InsertRange(0, arguments);
         }
 
         /// <summary>

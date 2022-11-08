@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core.IO;
 

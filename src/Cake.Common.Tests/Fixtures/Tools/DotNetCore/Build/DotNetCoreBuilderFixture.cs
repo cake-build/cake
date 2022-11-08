@@ -3,17 +3,16 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.DotNet.Build;
-using Cake.Common.Tools.DotNetCore.Build;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Build
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Build
 {
-    internal sealed class DotNetCoreBuilderFixture : DotNetCoreFixture<DotNetBuildSettings>
+    internal sealed class DotNetBuilderFixture : DotNetFixture<DotNetBuildSettings>
     {
         public string Project { get; set; }
 
         protected override void RunTool()
         {
-            var tool = new DotNetCoreBuilder(FileSystem, Environment, ProcessRunner, Tools);
+            var tool = new DotNetBuilder(FileSystem, Environment, ProcessRunner, Tools);
             tool.Build(Project, Settings);
         }
     }

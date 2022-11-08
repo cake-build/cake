@@ -17,6 +17,7 @@ namespace Cake.Core.Tests.Fixtures
         public ICakeArguments Arguments { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
         public ICakeContext Context { get; set; }
+        public ICakeReportPrinter ReportPrinter { get; set; }
         public IExecutionStrategy ExecutionStrategy { get; set; }
         public ICakeDataService DataService { get; set; }
 
@@ -28,7 +29,8 @@ namespace Cake.Core.Tests.Fixtures
             Globber = Substitute.For<IGlobber>();
             Arguments = Substitute.For<ICakeArguments>();
             ProcessRunner = Substitute.For<IProcessRunner>();
-            ExecutionStrategy = new DefaultExecutionStrategy(Log);
+            ReportPrinter = Substitute.For<ICakeReportPrinter>();
+            ExecutionStrategy = new DefaultExecutionStrategy(Log, ReportPrinter);
             DataService = Substitute.For<ICakeDataService>();
 
             Context = Substitute.For<ICakeContext>();

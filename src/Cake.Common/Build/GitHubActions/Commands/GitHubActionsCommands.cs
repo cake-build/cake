@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -28,6 +29,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
 
         private readonly ICakeEnvironment _environment;
         private readonly IFileSystem _fileSystem;
+        private readonly IBuildSystemServiceMessageWriter _writer;
         private readonly GitHubActionsEnvironmentInfo _actionsEnvironment;
         private readonly Func<string, HttpClient> _createHttpClient;
 
@@ -35,19 +37,87 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// Initializes a new instance of the <see cref="GitHubActionsCommands"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        /// <param name="actionsEnvironment">The actions environment.</param>
         /// <param name="fileSystem">The file system.</param>
+        /// <param name="writer">The build system service message writer.</param>
+        /// <param name="actionsEnvironment">The actions environment.</param>
         /// <param name="createHttpClient">The http client factory.</param>
         public GitHubActionsCommands(
             ICakeEnvironment environment,
             IFileSystem fileSystem,
+            IBuildSystemServiceMessageWriter writer,
             GitHubActionsEnvironmentInfo actionsEnvironment,
             Func<string, HttpClient> createHttpClient)
         {
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
             _actionsEnvironment = actionsEnvironment ?? throw new ArgumentNullException(nameof(actionsEnvironment));
             _createHttpClient = createHttpClient ?? throw new ArgumentNullException(nameof(createHttpClient));
+        }
+
+        /// <summary>
+        /// Write debug message to the build log.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        public void Debug(string message)
+        {
+            WriteCommand("debug", message);
+        }
+
+        /// <summary>
+        /// Write notice message to the build log.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="annotation">The annotation.</param>
+        public void Notice(string message, GitHubActionsAnnotation annotation = null)
+        {
+            WriteCommand("notice", annotation?.GetParameters(), message);
+        }
+
+        /// <summary>
+        /// Write warning message to the build log.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="annotation">The annotation.</param>
+        public void Warning(string message, GitHubActionsAnnotation annotation = null)
+        {
+            WriteCommand("warning", annotation?.GetParameters(), message);
+        }
+
+        /// <summary>
+        /// Write error message to the build log.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="annotation">The annotation.</param>
+        public void Error(string message, GitHubActionsAnnotation annotation = null)
+        {
+            WriteCommand("error", annotation?.GetParameters(), message);
+        }
+
+        /// <summary>
+        /// Start a group in the build log.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        public void StartGroup(string title)
+        {
+            WriteCommand("group", title);
+        }
+
+        /// <summary>
+        /// End a group in the build log.
+        /// </summary>
+        public void EndGroup()
+        {
+            WriteCommand("endgroup");
+        }
+
+        /// <summary>
+        /// Registers a secret which will get masked in the build log.
+        /// </summary>
+        /// <param name="secret">The secret.</param>
+        public void SetSecret(string secret)
+        {
+            WriteCommand("add-mask", secret);
         }
 
         /// <summary>
@@ -101,6 +171,58 @@ namespace Cake.Common.Build.GitHubActions.Commands
             writer.WriteLine("<<CAKEEOF");
             writer.WriteLine(value);
             writer.WriteLine("CAKEEOF");
+        }
+
+        /// <summary>
+        /// Creates or updates an output parameter for any steps running next in a job.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The Value.</param>
+        public void SetOutputParameter(string key, string value)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (_actionsEnvironment.Runtime.OutputPath == null)
+            {
+                throw new CakeException("GitHub Actions Runtime OutputPath missing.");
+            }
+
+            var file = _fileSystem.GetFile(_actionsEnvironment.Runtime.OutputPath);
+            using var stream = file.Open(FileMode.Append, FileAccess.Write, FileShare.None);
+            using var writer = new StreamWriter(stream);
+            writer.Write(key);
+            writer.Write("=");
+            writer.WriteLine(value);
+        }
+
+        /// <summary>
+        /// Creates or updates the step summary for a GitHub workflow.
+        /// </summary>
+        /// <param name="summary">The step summary.</param>
+        public void SetStepSummary(string summary)
+        {
+            if (string.IsNullOrEmpty(summary))
+            {
+                throw new ArgumentNullException(nameof(summary));
+            }
+
+            if (_actionsEnvironment.Runtime.StepSummary == null)
+            {
+                throw new CakeException("GitHub Actions Runtime StepSummary missing.");
+            }
+
+            var file = _fileSystem.GetFile(_actionsEnvironment.Runtime.StepSummary);
+            using var stream = file.Open(FileMode.Append, FileAccess.Write, FileShare.None);
+            using var writer = new StreamWriter(stream);
+            writer.WriteLine(summary);
         }
 
         /// <summary>
@@ -170,6 +292,22 @@ namespace Cake.Common.Build.GitHubActions.Commands
 
             await DownloadItemResources(client, containerItemResources);
         }
+
+        internal void WriteCommand(string command, string message = null)
+        {
+            WriteCommand(command, new Dictionary<string, string>(), message);
+        }
+
+        internal void WriteCommand(string command, Dictionary<string, string> parameters, string message)
+        {
+            var parameterString = parameters?.Count > 0 ? string.Concat(" ", string.Join(",", parameters.Select(pair => $"{pair.Key}={EscapeCommandParameter(pair.Value)}"))) : string.Empty;
+
+            _writer.Write("::{0}{1}::{2}", command, parameterString, EscapeCommandMessage(message));
+        }
+
+        private static string EscapeCommandMessage(string value) => (value ?? string.Empty).Replace("%", "%25").Replace("\r", "%0D").Replace("\n", "%0A");
+
+        private static string EscapeCommandParameter(string value) => (value ?? string.Empty).Replace("%", "%25").Replace("\r", "%0D").Replace("\n", "%0A").Replace(":", "%3A").Replace(",", "%2C");
 
         private async Task DownloadItemResources(HttpClient client, (FilePath FilePath, string ContentLocation, long FileLength)[] containerItemResourceContent)
         {

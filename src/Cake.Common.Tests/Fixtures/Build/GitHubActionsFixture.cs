@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Build.GitHubActions;
+using Cake.Common.Tests.Fakes;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
@@ -14,6 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Build
     {
         public ICakeEnvironment Environment { get; }
         public IFileSystem FileSystem { get; }
+        public FakeBuildSystemServiceMessageWriter Writer { get; }
 
         public GitHubActionsFixture()
         {
@@ -21,6 +23,7 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("GITHUB_ACTIONS").Returns((string)null);
             Environment.WorkingDirectory.Returns("/home/cake");
             FileSystem = new FakeFileSystem(Environment);
+            Writer = new FakeBuildSystemServiceMessageWriter();
         }
 
         public void IsRunningOnGitHubActions()
@@ -30,7 +33,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         public GitHubActionsProvider CreateGitHubActionsService()
         {
-            return new GitHubActionsProvider(Environment, FileSystem);
+            return new GitHubActionsProvider(Environment, FileSystem, Writer);
         }
     }
 }

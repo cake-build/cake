@@ -1,13 +1,17 @@
 #load "./../../../utilities/xunit.cake"
 #load "./../../../utilities/paths.cake"
 
+var environmentVariables = new Dictionary<string, string> {
+    { "DOTNET_ROLL_FORWARD", "Major" }
+};
+
 Task("Cake.Common.Tools.TextTransform.TextTransformAliases.TransformTemplate.Setup")
     .Does(() =>
 {
     var t4Path = Context.Tools.Resolve("t4") ?? Context.Tools.Resolve("t4.exe");
     if (t4Path == null)
     {
-        DotNetCoreTool(null, "tool", "install --tool-path ./tools dotnet-t4 --version \"2.2.0-preview-0020-g990c44075e\" --add-source \"https://pkgs.dev.azure.com/cake-build/Cake/_packaging/cake/nuget/v3/index.json\"");
+        DotNetTool(null, "tool", "install --tool-path ./tools dotnet-t4 --version \"2.2.1\"");
     }
 });
 
@@ -28,7 +32,8 @@ Task("Cake.Common.Tools.TextTransform.TextTransformAliases.TransformTemplate.Pro
                     Properties = {
                         ["FirstName"] = "John",
                         ["LastName"] = "Doe"
-                    }
+                    },
+                    EnvironmentVariables = environmentVariables
                 };
 
     var expect = "Hello John Doe!";
@@ -53,7 +58,8 @@ Task("Cake.Common.Tools.TextTransform.TextTransformAliases.TransformTemplate.Cla
 
     var settings = new TextTransformSettings {
                     OutputFile = targetFile,
-                    Class = "HelloWorld"
+                    Class = "HelloWorld",
+                    EnvironmentVariables = environmentVariables
                 };
 
     var expect = @"public partial class HelloWorld : HelloWorldBase {";

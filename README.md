@@ -1,4 +1,4 @@
-﻿# Cake
+# Cake
 
 Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
@@ -95,7 +95,7 @@ For more information see the [.NET Foundation Code of Conduct](http://www.dotnet
 
 ## Contribution License Agreement
 
-By signing the [CLA](https://cla.dotnetfoundation.org/cake-build/cake), the community is free to use your contribution to .NET Foundation projects.
+By signing the [CLA](https://github.com/dotnet-foundation/.github/blob/main/CLA/dotnetfoundation.yml), the community is free to use your contribution to .NET Foundation projects.
 
 ## .NET Foundation
 

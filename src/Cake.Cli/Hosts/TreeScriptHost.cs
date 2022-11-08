@@ -38,6 +38,21 @@ namespace Cake.Cli
         /// <inheritdoc/>
         public override Task<CakeReport> RunTargetAsync(string target)
         {
+            PrintTaskTree();
+
+            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
+        }
+
+        /// <inheritdoc/>
+        public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
+        {
+            PrintTaskTree();
+
+            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
+        }
+
+        private void PrintTaskTree()
+        {
             var topLevelTasks = GetTopLevelTasks();
             _console.WriteLine();
 
@@ -46,8 +61,6 @@ namespace Cake.Cli
                 PrintTask(task, string.Empty, false, 0);
                 _console.WriteLine();
             }
-
-            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
         }
 
         private List<ICakeTaskInfo> GetTopLevelTasks()

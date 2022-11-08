@@ -14,14 +14,17 @@ namespace Cake.Core
     public sealed class DefaultExecutionStrategy : IExecutionStrategy
     {
         private readonly ICakeLog _log;
+        private readonly ICakeReportPrinter _reportPrinter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultExecutionStrategy"/> class.
         /// </summary>
         /// <param name="log">The log.</param>
-        public DefaultExecutionStrategy(ICakeLog log)
+        /// <param name="reportPrinter">The report printer.</param>
+        public DefaultExecutionStrategy(ICakeLog log, ICakeReportPrinter reportPrinter)
         {
             _log = log;
+            _reportPrinter = reportPrinter;
         }
 
         /// <inheritdoc/>
@@ -29,10 +32,8 @@ namespace Cake.Core
         {
             if (action != null)
             {
-                _log.Information(string.Empty);
-                _log.Information("----------------------------------------");
-                _log.Information("Setup");
-                _log.Information("----------------------------------------");
+                _reportPrinter.WriteLifeCycleStep("Setup", _log.Verbosity);
+
                 _log.Verbose("Executing custom setup action...");
 
                 action(context);
@@ -48,10 +49,8 @@ namespace Cake.Core
             }
             if (action != null)
             {
-                _log.Information(string.Empty);
-                _log.Information("----------------------------------------");
-                _log.Information("Teardown");
-                _log.Information("----------------------------------------");
+                _reportPrinter.WriteLifeCycleStep("TearDown", _log.Verbosity);
+
                 _log.Verbose("Executing custom teardown action...");
 
                 action(teardownContext);
@@ -63,10 +62,8 @@ namespace Cake.Core
         {
             if (task != null)
             {
-                _log.Information(string.Empty);
-                _log.Information("========================================");
-                _log.Information(task.Name);
-                _log.Information("========================================");
+                _reportPrinter.WriteStep(task.Name, _log.Verbosity);
+
                 _log.Verbose("Executing task: {0}", task.Name);
 
                 await task.Execute(context).ConfigureAwait(false);
@@ -80,10 +77,7 @@ namespace Cake.Core
         {
             if (task != null)
             {
-                _log.Verbose(string.Empty);
-                _log.Verbose("========================================");
-                _log.Verbose(task.Name);
-                _log.Verbose("========================================");
+                _reportPrinter.WriteSkippedStep(task.Name, _log.Verbosity);
 
                 var message = string.IsNullOrWhiteSpace(criteria.Message)
                     ? task.Name : criteria.Message;
@@ -115,14 +109,14 @@ namespace Cake.Core
         }
 
         /// <inheritdoc/>
-        public async Task InvokeFinallyAsync(Func<Task> action)
+        public async Task InvokeFinallyAsync(Func<ICakeContext, Task> action, ICakeContext context)
         {
             if (action is null)
             {
                 return;
             }
 
-            await action();
+            await action(context);
         }
 
         /// <inheritdoc/>

@@ -56,6 +56,8 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_TOKEN").Returns(ActionRuntimeToken);
             Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL").Returns(ActionRuntimeUrl);
             Environment.GetEnvironmentVariable("GITHUB_ENV").Returns("/opt/github.env");
+            Environment.GetEnvironmentVariable("GITHUB_OUTPUT").Returns("/opt/github.output");
+            Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY").Returns("/opt/github.stepsummary");
             Environment.GetEnvironmentVariable("GITHUB_PATH").Returns("/opt/github.path");
             Environment.WorkingDirectory.Returns("/home/runner/work/cake/cake");
         }

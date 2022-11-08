@@ -4,7 +4,7 @@ using Cake.Frosting;
 
 public sealed class Lifetime : FrostingLifetime<Context>
 {
-    public override void Setup(Context context)
+    public override void Setup(Context context, ISetupContext info)
     {
         context.Information("Setting things up...");
     }

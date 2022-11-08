@@ -180,6 +180,132 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             }
 
             [Fact]
+            public void Should_Add_SearchDirectories_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.SearchDirectories = new DirectoryPath[] { "/Working/DirectoryA", "/Working/DirectoryB" };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/lib:\"/Working/DirectoryA\" " +
+                             "/lib:\"/Working/DirectoryB\" " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Log_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.Log = true;
+                fixture.Settings.LogFile = null;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/log " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_LogFile_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.Log = false;
+                fixture.Settings.LogFile = "/Working/output.log";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/log:\"/Working/output.log\" " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_KeyFile_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.KeyFile = "/Working/input.key";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/keyfile:\"/Working/input.key\" " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_KeyFile_And_DelaySign_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.KeyFile = "/Working/input.key";
+                fixture.Settings.DelaySign = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/keyfile:\"/Working/input.key\" " +
+                             "/delaysign " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_KeyContainer_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.KeyContainer = "myContainer";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/keycontainer:\"myContainer\" " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_KeyContainer_And_DelaySign_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.KeyContainer = "myContainer";
+                fixture.Settings.DelaySign = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/keycontainer:\"myContainer\" " +
+                             "/delaysign " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Add_DelaySign_If_KeyFile_Or_KeyContainer_Not_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.DelaySign = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Internalize_If_Enabled_In_Settings()
             {
                 // Given
@@ -190,14 +316,14 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/out:\"/Working/output.exe\" " +
-                             "/internalize \"/Working/input.exe\"", result.Args);
+                Assert.Equal("/internalize " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
             }
 
             [Theory]
-            [InlineData(TargetKind.Dll, "/out:\"/Working/output.exe\" /target:\"dll\" \"/Working/input.exe\"")]
-            [InlineData(TargetKind.Exe, "/out:\"/Working/output.exe\" /target:\"exe\" \"/Working/input.exe\"")]
-            [InlineData(TargetKind.WinExe, "/out:\"/Working/output.exe\" /target:\"winexe\" \"/Working/input.exe\"")]
+            [InlineData(TargetKind.Dll, "/target:\"dll\" /out:\"/Working/output.exe\" \"/Working/input.exe\"")]
+            [InlineData(TargetKind.Exe, "/target:\"exe\" /out:\"/Working/output.exe\" \"/Working/input.exe\"")]
+            [InlineData(TargetKind.WinExe, "/target:\"winexe\" /out:\"/Working/output.exe\" \"/Working/input.exe\"")]
             [InlineData(TargetKind.Default, "/out:\"/Working/output.exe\" \"/Working/input.exe\"")]
             public void Should_Set_Target_Kind_If_Enabled_In_Settings(TargetKind kind, string expected)
             {
@@ -213,6 +339,160 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
             }
 
             [Fact]
+            public void Should_Add_Closed_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.Closed = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/closed " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_NDebug_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.NDebug = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/ndebug " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Version_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.Version = "1.2.3.4";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/ver:1.2.3.4 " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_CopyAttributes_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.CopyAttributes = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/copyattrs " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_CopyAttributes_And_AllowMultiple_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.CopyAttributes = true;
+                fixture.Settings.AllowMultiple = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/copyattrs /allowMultiple " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_CopyAttributes_And_KeepFirst_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.CopyAttributes = true;
+                fixture.Settings.KeepFirst = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/copyattrs /keepFirst " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_CopyAttributes_And_AllowMultiple_And_KeepFirst_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.CopyAttributes = true;
+                fixture.Settings.AllowMultiple = true;
+                fixture.Settings.KeepFirst = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/copyattrs /allowMultiple /keepFirst " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Add_AllowMultiple_And_KeepFirst_If_CopyAttributes_Not_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.AllowMultiple = true;
+                fixture.Settings.KeepFirst = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_XmlDocumentation_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.XmlDocumentation = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/xmldocs " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_AttributeFile_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.AttributeFile = "/Working/input.attributes";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/attr:\"/Working/input.attributes\" " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Set_Target_Platform_If_Enabled_In_Settings()
             {
                 // Given
@@ -225,8 +505,8 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/out:\"/Working/output.exe\" " +
-                             "/targetPlatform:v4,\"/NetFramework\" " +
+                Assert.Equal("/targetPlatform:v4,\"/NetFramework\" " +
+                             "/out:\"/Working/output.exe\" " +
                              "\"/Working/input.exe\"", result.Args);
             }
 
@@ -241,8 +521,8 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("/out:\"/Working/output.exe\" " +
-                             "/targetPlatform:v4 \"/Working/input.exe\"", result.Args);
+                Assert.Equal("/targetPlatform:v4 " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
             }
 
             [Fact]
@@ -257,6 +537,113 @@ namespace Cake.Common.Tests.Unit.Tools.ILMerge
                 // Then
                 Assert.Equal("/out:\"/Working/output.exe\" " +
                              "\"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_UseFullPublicKeyForReferences_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.UseFullPublicKeyForReferences = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/useFullPublicKeyForReferences " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_WildCards_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.Wildcards = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/wildcards " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_ZeroPeKind_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.ZeroPeKind = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/zeroPeKind " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_AllowDuplicates_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.AllowDuplicateTypes = true;
+                fixture.Settings.DuplicateTypes = null;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/allowDup " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_DuplicateType_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.AllowDuplicateTypes = false;
+                fixture.Settings.DuplicateTypes = new string[] { "typeA", "typeB" };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/allowDup:typeA /allowDup:typeB " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Union_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.Union = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/union " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Align_If_Enabled_In_Settings()
+            {
+                // Given
+                var fixture = new ILMergeRunnerFixture();
+                fixture.Settings.Align = 13;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/align:13 " +
+                             "/out:\"/Working/output.exe\" \"/Working/input.exe\"", result.Args);
             }
         }
     }

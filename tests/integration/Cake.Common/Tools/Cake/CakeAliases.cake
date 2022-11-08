@@ -97,6 +97,43 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.CakeException.Cus
     Assert.Equal(expect, (exception as CakeException)?.ExitCode);
 });
 
+Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Resources.Combine("./Cake.Common/Tools/Cake");
+    var file = path.CombineWithFilePath("./targets.cake");
+
+    // When
+    CakeExecuteScript(file, new CakeSettings {
+        ArgumentCustomization = args => args
+                                .AppendSwitchQuoted("--target", "=", "A")
+                                .AppendSwitchQuoted("--target", "=", "B")
+                                .AppendSwitchQuoted("--target", "=", "C")
+                                .AppendSwitchQuoted("--target", "=", "D")
+                                .AppendSwitchQuoted("--expected", "=", "A,B,C,E,D")
+     });
+});
+
+Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.Exclusive")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Resources.Combine("./Cake.Common/Tools/Cake");
+    var file = path.CombineWithFilePath("./targets.cake");
+
+    // When
+    CakeExecuteScript(file, new CakeSettings {
+        ArgumentCustomization = args => args
+                                .AppendSwitchQuoted("--target", "=", "A")
+                                .AppendSwitchQuoted("--target", "=", "B")
+                                .AppendSwitchQuoted("--target", "=", "C")
+                                .AppendSwitchQuoted("--target", "=", "D")
+                                .Append("--exclusive")
+                                .AppendSwitchQuoted("--expected", "=", "A,B,C,D")
+     });
+});
+
 Task("Cake.Common.Tools.Cake.CakeAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.Ok")
@@ -104,4 +141,6 @@ Task("Cake.Common.Tools.Cake.CakeAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.Ok")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk")
-    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.CakeException.CustomExitCode");
+    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.CakeException.CustomExitCode")
+    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets")
+    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.Exclusive");

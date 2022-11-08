@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tests.Fixtures.Tools.Chocolatey.ApiKey;
 using Cake.Common.Tests.Fixtures.Tools.Chocolatey.Packer;
 using Cake.Common.Tests.Properties;
 using Cake.Common.Tools.Chocolatey.Pack;
@@ -176,8 +177,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             }
 
             [Theory]
-            [InlineData(true, "pack -d -y \"/Working/existing.temp.nuspec\"")]
-            [InlineData(false, "pack -y \"/Working/existing.temp.nuspec\"")]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --debug --confirm")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
             public void Should_Add_Debug_Flag_To_Arguments_If_Set(bool debug, string expected)
             {
                 // Given
@@ -192,8 +193,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             }
 
             [Theory]
-            [InlineData(true, "pack -v -y \"/Working/existing.temp.nuspec\"")]
-            [InlineData(false, "pack -y \"/Working/existing.temp.nuspec\"")]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --verbose --confirm")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
             public void Should_Add_Verbose_Flag_To_Arguments_If_Set(bool verbose, string expected)
             {
                 // Given
@@ -208,8 +209,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             }
 
             [Theory]
-            [InlineData(true, "pack -y -f \"/Working/existing.temp.nuspec\"")]
-            [InlineData(false, "pack -y \"/Working/existing.temp.nuspec\"")]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --confirm --force")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
             public void Should_Add_Force_Flag_To_Arguments_If_Set(bool force, string expected)
             {
                 // Given
@@ -224,8 +225,56 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             }
 
             [Theory]
-            [InlineData(true, "pack -y --noop \"/Working/existing.temp.nuspec\"")]
-            [InlineData(false, "pack -y \"/Working/existing.temp.nuspec\"")]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --trace --confirm")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_Trace_Flag_To_Arguments_If_Set(bool trace, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.Trace = trace;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --no-color --confirm")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_NoColor_Flag_To_Arguments_If_Set(bool noColor, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.NoColor = noColor;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --accept-license --confirm")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_AcceptLicense_Flag_To_Arguments_If_Set(bool acceptLicense, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.AcceptLicense = acceptLicense;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --confirm --what-if")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
             public void Should_Add_Noop_Flag_To_Arguments_If_Set(bool noop, string expected)
             {
                 // Given
@@ -240,8 +289,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             }
 
             [Theory]
-            [InlineData(true, "pack -y -r \"/Working/existing.temp.nuspec\"")]
-            [InlineData(false, "pack -y \"/Working/existing.temp.nuspec\"")]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --confirm --limit-output")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
             public void Should_Add_LimitOutput_Flag_To_Arguments_If_Set(bool limitOutput, string expected)
             {
                 // Given
@@ -256,8 +305,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             }
 
             [Theory]
-            [InlineData(5, "pack -y --execution-timeout \"5\" \"/Working/existing.temp.nuspec\"")]
-            [InlineData(0, "pack -y \"/Working/existing.temp.nuspec\"")]
+            [InlineData(5, "pack \"/Working/existing.temp.nuspec\" --confirm --execution-timeout=\"5\"")]
+            [InlineData(0, "pack \"/Working/existing.temp.nuspec\" --confirm")]
             public void Should_Add_ExecutionTimeout_To_Arguments_If_Set(int executionTimeout, string expected)
             {
                 // Given
@@ -272,8 +321,8 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             }
 
             [Theory]
-            [InlineData(@"c:\temp", "pack -y -c \"c:\\temp\" \"/Working/existing.temp.nuspec\"")]
-            [InlineData("", "pack -y \"/Working/existing.temp.nuspec\"")]
+            [InlineData(@"c:\temp", "pack \"/Working/existing.temp.nuspec\" --confirm --cache-location=\"c:\\temp\"")]
+            [InlineData("", "pack \"/Working/existing.temp.nuspec\" --confirm")]
             public void Should_Add_CacheLocation_Flag_To_Arguments_If_Set(string cacheLocation, string expected)
             {
                 // Given
@@ -288,13 +337,173 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
             }
 
             [Theory]
-            [InlineData(true, "pack -y --allowunofficial \"/Working/existing.temp.nuspec\"")]
-            [InlineData(false, "pack -y \"/Working/existing.temp.nuspec\"")]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --confirm --allow-unofficial")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
             public void Should_Add_AllowUnofficial_Flag_To_Arguments_If_Set(bool allowUnofficial, string expected)
             {
                 // Given
                 var fixture = new ChocolateyPackerWithNuSpecFixture();
                 fixture.Settings.AllowUnofficial = allowUnofficial;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --confirm --fail-on-error-output")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_FailOnErrorOutput_Flag_To_Arguments_If_Set(bool failOnErrorOutput, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.FailOnErrorOutput = failOnErrorOutput;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --confirm --use-system-powershell")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_UseSystemPowerShell_Flag_To_Arguments_If_Set(bool useSystemPowerShell, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.UseSystemPowerShell = useSystemPowerShell;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --confirm --no-progress")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_NoProgress_Flag_To_Arguments_If_Set(bool noProgress, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.NoProgress = noProgress;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy", "pack \"/Working/existing.temp.nuspec\" --confirm --proxy=\"proxy\"")]
+            [InlineData(null, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_Proxy_Flag_To_Arguments_If_Set(string proxy, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.Proxy = proxy;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy-user", "pack \"/Working/existing.temp.nuspec\" --confirm --proxy-user=\"proxy-user\"")]
+            [InlineData(null, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_ProxyUser_Flag_To_Arguments_If_Set(string proxyUser, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.ProxyUser = proxyUser;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy-password", "pack \"/Working/existing.temp.nuspec\" --confirm --proxy-password=\"proxy-password\"")]
+            [InlineData(null, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_ProxyPassword_Flag_To_Arguments_If_Set(string proxyPassword, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.ProxyPassword = proxyPassword;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("proxy1,proxy2", "pack \"/Working/existing.temp.nuspec\" --confirm --proxy-bypass-list=\"proxy1,proxy2\"")]
+            [InlineData(null, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_ProxyByPassList_Flag_To_Arguments_If_Set(string proxyByPassList, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.ProxyByPassList = proxyByPassList;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --confirm --proxy-bypass-on-local")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_ProxyByPassOnLocal_Flag_To_Arguments_If_Set(bool proxyBypassOnLocal, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.ProxyBypassOnLocal = proxyBypassOnLocal;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData("./output.log", "pack \"/Working/existing.temp.nuspec\" --confirm --log-file=\"/Working/output.log\"")]
+            [InlineData(null, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_Log_File_Flag_To_Arguments_If_Set(string logFilePath, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.LogFile = logFilePath;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Theory]
+            [InlineData(true, "pack \"/Working/existing.temp.nuspec\" --confirm --skip-compatibility-checks")]
+            [InlineData(false, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_Skip_Compatibility_Flag_To_Arguments_If_Set(bool skipCompatibiity, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.SkipCompatibilityChecks = skipCompatibiity;
 
                 // When
                 var result = fixture.Run();
@@ -314,8 +523,23 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack -y --version \"1.0.0\" " +
-                             "\"/Working/existing.temp.nuspec\"", result.Args);
+                Assert.Equal("pack \"/Working/existing.temp.nuspec\" --confirm --version=\"1.0.0\"", result.Args);
+            }
+
+            [Theory]
+            [InlineData("./output", "pack \"/Working/existing.temp.nuspec\" --confirm --output-directory=\"/Working/output\"")]
+            [InlineData(null, "pack \"/Working/existing.temp.nuspec\" --confirm")]
+            public void Should_Add_OutputDirectory_Flag_To_Arguments_If_Set(string outputDirectory, string expected)
+            {
+                // Given
+                var fixture = new ChocolateyPackerWithNuSpecFixture();
+                fixture.Settings.OutputDirectory = outputDirectory;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
             }
 
             [Fact]
@@ -547,8 +771,7 @@ namespace Cake.Common.Tests.Unit.Tools.Chocolatey.Pack
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("pack -y --version \"1.0.0\" " +
-                             "\"/Working/nonexisting.temp.nuspec\"", result.Args);
+                Assert.Equal("pack \"/Working/nonexisting.temp.nuspec\" --confirm --version=\"1.0.0\"", result.Args);
             }
 
             [Fact]

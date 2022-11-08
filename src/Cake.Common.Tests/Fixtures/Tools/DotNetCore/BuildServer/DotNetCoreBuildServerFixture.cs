@@ -3,15 +3,14 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.DotNet.BuildServer;
-using Cake.Common.Tools.DotNetCore.BuildServer;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Build
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Build
 {
-    internal sealed class DotNetCoreBuildServerFixture : DotNetCoreFixture<DotNetBuildServerShutdownSettings>
+    internal sealed class DotNetBuildServerFixture : DotNetFixture<DotNetBuildServerShutdownSettings>
     {
         protected override void RunTool()
         {
-            var tool = new DotNetCoreBuildServer(FileSystem, Environment, ProcessRunner, Tools);
+            var tool = new DotNetBuildServer(FileSystem, Environment, ProcessRunner, Tools);
             tool.Shutdown(Settings);
         }
     }

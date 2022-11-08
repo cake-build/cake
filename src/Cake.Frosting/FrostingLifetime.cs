@@ -28,7 +28,8 @@ namespace Cake.Frosting
         /// If setup fails, no tasks will be executed but teardown will be performed.
         /// </summary>
         /// <param name="context">The context.</param>
-        public abstract void Setup(TContext context);
+        /// <param name="info">The setup information.</param>
+        public abstract void Setup(TContext context, ISetupContext info);
 
         /// <summary>
         /// This method is executed after all tasks have been run.
@@ -38,29 +39,20 @@ namespace Cake.Frosting
         /// <param name="info">The teardown information.</param>
         public abstract void Teardown(TContext context, ITeardownContext info);
 
-        /// <inheritdoc/>
-        void IFrostingSetup.Setup(ICakeContext context)
+        /// <inheritdoc cref="IFrostingSetup" />
+        void IFrostingSetup.Setup(ICakeContext context, ISetupContext info)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(info);
 
-            Setup((TContext)context);
+            Setup((TContext)context, info);
         }
 
         /// <inheritdoc/>
         void IFrostingTeardown.Teardown(ICakeContext context, ITeardownContext info)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (info is null)
-            {
-                throw new ArgumentNullException(nameof(info));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(info);
 
             Teardown((TContext)context, info);
         }

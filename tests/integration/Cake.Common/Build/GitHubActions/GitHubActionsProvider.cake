@@ -7,8 +7,53 @@ Task("Cake.Common.Build.GitHubActionsProvider.Provider")
         Assert.Equal(BuildProvider.GitHubActions, BuildSystem.Provider);
 });
 
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.Debug")
+    .Does(() => {
+        // When
+        GitHubActions.Commands.Debug("This is a debug message");
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.Notice")
+    .Does(() => {
+        // When
+        GitHubActions.Commands.Notice("This is a notice message");
+        GitHubActions.Commands.Notice("This is a notice message with annotation", new GitHubActionsAnnotation { File = "tests/integration/Cake.Common/Build/GitHubActions/GitHubActionsProvider.cake", StartLine = 20, StartColumn = 40, EndColumn = 80 });
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.Warning")
+    .Does(() => {
+        // When
+        GitHubActions.Commands.Warning("This is a warning message");
+        GitHubActions.Commands.Warning("This is a warning message with annotation", new GitHubActionsAnnotation { File = "tests/integration/Cake.Common/Build/GitHubActions/GitHubActionsProvider.cake", StartLine = 27, StartColumn = 41, EndColumn = 82 });
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.Error")
+    .Does(() => {
+        // When
+        GitHubActions.Commands.Error("This is an error message");
+        GitHubActions.Commands.Error("This is an error message with annotation", new GitHubActionsAnnotation { File = "tests/integration/Cake.Common/Build/GitHubActions/GitHubActionsProvider.cake", StartLine = 34, StartColumn = 39, EndColumn = 79 });
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.Group")
+    .Does(() => {
+        // When
+        GitHubActions.Commands.StartGroup("Cake group");
+        System.Console.WriteLine("This is inside a group");
+        GitHubActions.Commands.EndGroup();
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.SetSecret")
+    .Does(() => {
+        // Given
+        var secret = Guid.NewGuid().ToString();
+
+        // When
+        GitHubActions.Commands.SetSecret(secret);
+        Information("This is secret: {0}", secret);
+});
+
 Task("Cake.Common.Build.GitHubActionsProvider.Commands.AddPath")
-    .Does<GitHubActionsData>(async data => {
+    .Does<GitHubActionsData>(data => {
         // When
         GitHubActions.Commands.AddPath(data.AssemblyPath.GetDirectory());
 });
@@ -25,6 +70,42 @@ Task("Cake.Common.Build.GitHubActionsProvider.Commands.SetEnvironmentVariable")
 
         // When
         GitHubActions.Commands.SetEnvironmentVariable(key, value);
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.SetOutputParameter")
+    .Does(() => {
+        // Given
+        string key = $"CAKE_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}_VERSION_OS"
+                        .Replace(".", "_")
+                        .Replace("__", "_")
+                        .ToUpper(),
+                value = string.Join(
+                                '_',
+                                Context.Environment.Runtime.CakeVersion.ToString(3),
+                                GitHubActions.Environment.Runner.OS)
+                            .ToUpper();
+
+        // When
+        GitHubActions.Commands.SetOutputParameter(key, value);
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.SetStepSummary")
+    .Does(() => {
+        // Given
+        string summary = $@"## Identifier
+{Context.Environment.Runtime.BuiltFramework.Identifier}
+
+## Built Framework Version
+{Context.Environment.Runtime.BuiltFramework.Version}
+
+## Cake Version
+{Context.Environment.Runtime.CakeVersion.ToString(3)}
+
+## Runner OS
+{GitHubActions.Environment.Runner.OS}";
+
+        // When
+        GitHubActions.Commands.SetStepSummary(summary);
 });
 
 Task("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.File")
@@ -89,9 +170,16 @@ if (GitHubActions.IsRunningOnGitHubActions)
 {
     gitHubActionsProviderTask
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Provider")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.Debug")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.Notice")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.Warning")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.Error")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.Group")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.SetSecret")
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.AddPath")
-        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.SetEnvironmentVariable");
-
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.SetEnvironmentVariable")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.SetOutputParameter")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.SetStepSummary");
 }
 
 if (GitHubActions.Environment.Runtime.IsRuntimeAvailable)

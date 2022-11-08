@@ -2,17 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Tools.DotNetCore.Pack;
+using Cake.Common.Tools.DotNet.Pack;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNetCore.Pack
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Pack
 {
-    internal sealed class DotNetCorePackFixture : DotNetCoreFixture<DotNetCorePackSettings>
+    internal sealed class DotNetPackFixture : DotNetFixture<DotNetPackSettings>
     {
         public string Project { get; set; }
 
         protected override void RunTool()
         {
-            var tool = new DotNetCorePacker(FileSystem, Environment, ProcessRunner, Tools);
+            var tool = new DotNetPacker(FileSystem, Environment, ProcessRunner, Tools);
             tool.Pack(Project, Settings);
         }
     }

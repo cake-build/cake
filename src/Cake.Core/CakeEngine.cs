@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Cake.Core.Diagnostics;
@@ -27,20 +28,10 @@ namespace Cake.Core
         public IReadOnlyList<ICakeTaskInfo> Tasks => _tasks;
 
         /// <inheritdoc/>
-#pragma warning disable 618
-        public event EventHandler<SetupEventArgs> Setup;
-#pragma warning restore 618
-
-        /// <inheritdoc/>
         public event EventHandler<BeforeSetupEventArgs> BeforeSetup;
 
         /// <inheritdoc/>
         public event EventHandler<AfterSetupEventArgs> AfterSetup;
-
-        /// <inheritdoc/>
-#pragma warning disable 618
-        public event EventHandler<TeardownEventArgs> Teardown;
-#pragma warning restore 618
 
         /// <inheritdoc/>
         public event EventHandler<BeforeTeardownEventArgs> BeforeTeardown;
@@ -49,20 +40,10 @@ namespace Cake.Core
         public event EventHandler<AfterTeardownEventArgs> AfterTeardown;
 
         /// <inheritdoc/>
-#pragma warning disable 618
-        public event EventHandler<TaskSetupEventArgs> TaskSetup;
-#pragma warning restore 618
-
-        /// <inheritdoc/>
         public event EventHandler<BeforeTaskSetupEventArgs> BeforeTaskSetup;
 
         /// <inheritdoc/>
         public event EventHandler<AfterTaskSetupEventArgs> AfterTaskSetup;
-
-        /// <inheritdoc/>
-#pragma warning disable 618
-        public event EventHandler<TaskTeardownEventArgs> TaskTeardown;
-#pragma warning restore 618
 
         /// <inheritdoc/>
         public event EventHandler<BeforeTaskTeardownEventArgs> BeforeTaskTeardown;
@@ -161,11 +142,10 @@ namespace Cake.Core
             {
                 throw new ArgumentNullException(nameof(settings));
             }
-            if (string.IsNullOrWhiteSpace(settings.Target))
+            if (settings.Targets.Count() == 0)
             {
                 throw new ArgumentException("No target specified.", nameof(settings));
             }
-
             if (strategy == null)
             {
                 throw new ArgumentNullException(nameof(strategy));
@@ -177,12 +157,17 @@ namespace Cake.Core
             // Create a graph out of the tasks.
             var graph = CakeGraphBuilder.Build(_tasks);
 
-            // Make sure target exist.
-            var target = settings.Target;
-            if (!graph.Exist(target))
+            // Make sure each target exists, prior to attempting to execute them.
+            var missingTargets = settings.Targets.Where(target => !graph.Exist(target)).ToArray();
+            if (missingTargets.Count() == 1)
             {
                 const string format = "The target '{0}' was not found.";
-                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, target));
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, missingTargets[0]));
+            }
+            else if (missingTargets.Count() > 1)
+            {
+                const string format = "The targets {0} were not found.";
+                throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, string.Join(", ", missingTargets.Select(s => $"'{s}'"))));
             }
 
             // This isn't pretty, but we need to keep track of exceptions thrown
@@ -196,30 +181,22 @@ namespace Cake.Core
 
             try
             {
-                // Get all nodes to traverse in the correct order.
-                var orderedTasks = graph.Traverse(target)
-                    .Select(y => _tasks.FirstOrDefault(x =>
-                        x.Name.Equals(y, StringComparison.OrdinalIgnoreCase))).ToArray();
-
-                // Get target node
-                var targetNode = orderedTasks
-                    .FirstOrDefault(node => node.Name.Equals(target, StringComparison.OrdinalIgnoreCase));
-
-                PerformSetup(strategy, context, targetNode, orderedTasks, stopWatch, report);
-
-                if (settings.Exclusive)
+                for (int i = 0; i < settings.Targets.Count(); i++)
                 {
-                    // Execute only the target task.
-                    var task = _tasks.FirstOrDefault(x => x.Name.Equals(settings.Target, StringComparison.OrdinalIgnoreCase));
-                    await RunTask(context, strategy, task, target, stopWatch, report);
-                }
-                else
-                {
-                    // Execute all scheduled tasks.
-                    foreach (var task in orderedTasks)
+                    var target = settings.Targets.ElementAt(i);
+
+                    // Get all nodes to traverse in the correct order.
+                    var orderedTasks = graph.Traverse(target)
+                        .Select(y => _tasks.FirstOrDefault(x =>
+                            x.Name.Equals(y, StringComparison.OrdinalIgnoreCase))).ToArray();
+
+                    // Execute setup once, even if multiple run targets have been specified.
+                    if (i == 0)
                     {
-                        await RunTask(context, strategy, task, target, stopWatch, report);
+                        PerformSetup(context, strategy, orderedTasks, target, stopWatch, report);
                     }
+
+                    await RunTarget(context, strategy, orderedTasks, target, settings.Exclusive, stopWatch, report);
                 }
 
                 return report;
@@ -236,6 +213,24 @@ namespace Cake.Core
             }
         }
 
+        private async Task RunTarget(ICakeContext context, IExecutionStrategy strategy, CakeTask[] orderedTasks, string target, bool exclusive, Stopwatch stopWatch, CakeReport report)
+        {
+            if (exclusive)
+            {
+                // Execute only the target task.
+                var task = _tasks.FirstOrDefault(x => x.Name.Equals(target, StringComparison.OrdinalIgnoreCase));
+                await RunTask(context, strategy, task, target, stopWatch, report);
+            }
+            else
+            {
+                // Execute all scheduled tasks.
+                foreach (var task in orderedTasks)
+                {
+                    await RunTask(context, strategy, task, target, stopWatch, report);
+                }
+            }
+        }
+
         private async Task RunTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, string target, Stopwatch stopWatch, CakeReport report)
         {
             // Is this the current target?
@@ -247,6 +242,7 @@ namespace Cake.Core
             {
                 if (!ShouldTaskExecute(context, task, criteria, isTarget))
                 {
+                    criteria.CausedSkippingOfTask = true;
                     SkipTask(context, strategy, task, report, criteria);
                     skipped = true;
                     break;
@@ -259,15 +255,15 @@ namespace Cake.Core
             }
         }
 
-        private void PerformSetup(IExecutionStrategy strategy, ICakeContext context, CakeTask targetTask,
-            CakeTask[] tasks, Stopwatch stopWatch, CakeReport report)
+        private void PerformSetup(ICakeContext context, IExecutionStrategy strategy, CakeTask[] orderedTasks, string target, Stopwatch stopWatch, CakeReport report)
         {
+            // Get target node
+            var targetTask = orderedTasks
+                .FirstOrDefault(node => node.Name.Equals(target, StringComparison.OrdinalIgnoreCase));
+
             stopWatch.Restart();
 
             PublishEvent(BeforeSetup, new BeforeSetupEventArgs(context));
-#pragma warning disable 618
-            PublishEvent(Setup, new SetupEventArgs(context));
-#pragma warning restore 618
 
             try
             {
@@ -275,7 +271,7 @@ namespace Cake.Core
                 {
                     foreach (var setup in _actions.Setups)
                     {
-                        strategy.PerformSetup(setup, new SetupContext(context, targetTask, tasks));
+                        strategy.PerformSetup(setup, new SetupContext(context, targetTask, orderedTasks));
                     }
 
                     report.Add("Setup", CakeReportEntryCategory.Setup, stopWatch.Elapsed);
@@ -349,7 +345,7 @@ namespace Cake.Core
             {
                 if (task.FinallyHandler != null)
                 {
-                    await strategy.InvokeFinallyAsync(task.FinallyHandler);
+                    await strategy.InvokeFinallyAsync(task.FinallyHandler, context);
                 }
 
                 PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, taskException);
@@ -377,9 +373,7 @@ namespace Cake.Core
         {
             var taskSetupContext = new TaskSetupContext(context, task);
             PublishEvent(BeforeTaskSetup, new BeforeTaskSetupEventArgs(taskSetupContext));
-#pragma warning disable 618
-            PublishEvent(TaskSetup, new TaskSetupEventArgs(taskSetupContext));
-#pragma warning restore 618
+
             // Trying to stay consistent with the behavior of script-level Setup & Teardown (if setup fails, don't run the task, but still run the teardown)
             try
             {
@@ -408,9 +402,6 @@ namespace Cake.Core
 
             var taskTeardownContext = new TaskTeardownContext(context, task, duration, skipped, taskException);
             PublishEvent(BeforeTaskTeardown, new BeforeTaskTeardownEventArgs(taskTeardownContext));
-#pragma warning disable 618
-            PublishEvent(TaskTeardown, new TaskTeardownEventArgs(taskTeardownContext));
-#pragma warning restore 618
 
             try
             {
@@ -447,7 +438,17 @@ namespace Cake.Core
             PerformTaskTeardown(context, strategy, task, TimeSpan.Zero, true, null);
 
             // Add the skipped task to the report.
-            report.AddSkipped(task.Name);
+            var skippedTaskCriteria = task.Criterias.FirstOrDefault(c => c.CausedSkippingOfTask == true);
+            var skippedMessage = string.Empty;
+            if (skippedTaskCriteria != null)
+            {
+                if (!string.IsNullOrEmpty(skippedTaskCriteria.Message))
+                {
+                    skippedMessage = skippedTaskCriteria.Message;
+                }
+            }
+
+            report.AddSkipped(task.Name, skippedMessage);
         }
 
         private static bool IsDelegatedTask(CakeTask task)
@@ -493,9 +494,6 @@ namespace Cake.Core
 
             var teardownContext = new TeardownContext(context, thrownException);
             PublishEvent(BeforeTeardown, new BeforeTeardownEventArgs(teardownContext));
-#pragma warning disable 618
-            PublishEvent(Teardown, new TeardownEventArgs(teardownContext));
-#pragma warning restore 618
 
             try
             {

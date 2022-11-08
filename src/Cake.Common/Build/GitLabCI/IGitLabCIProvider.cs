@@ -26,5 +26,13 @@ namespace Cake.Common.Build.GitLabCI
         /// The GitLab CI environment.
         /// </value>
         GitLabCIEnvironmentInfo Environment { get; }
+
+        /// <summary>
+        /// Gets the GitLab CI commands.
+        /// </summary>
+        /// <value>
+        /// The GitLab CI commands.
+        /// </value>
+        public GitLabCICommands Commands { get; }
     }
 }

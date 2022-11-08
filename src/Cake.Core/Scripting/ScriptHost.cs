@@ -51,6 +51,11 @@ namespace Cake.Core.Scripting
         }
 
         /// <inheritdoc/>
+        public CakeTaskBuilder<TData> TaskOf<TData>(string name)
+            where TData : class
+            => new (Task(name));
+
+        /// <inheritdoc/>
         public void Setup(Action<ISetupContext> action)
         {
             Engine.RegisterSetupAction(action);
@@ -107,5 +112,14 @@ namespace Cake.Core.Scripting
 
         /// <inheritdoc/>
         public abstract Task<CakeReport> RunTargetAsync(string target);
+
+        /// <inheritdoc/>
+        public CakeReport RunTargets(IEnumerable<string> targets)
+        {
+            return RunTargetsAsync(targets).GetAwaiter().GetResult();
+        }
+
+        /// <inheritdoc/>
+        public abstract Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets);
     }
 }

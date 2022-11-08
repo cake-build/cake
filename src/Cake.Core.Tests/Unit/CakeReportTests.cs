@@ -61,7 +61,7 @@ namespace Cake.Core.Tests.Unit
                 var taskName = "task";
 
                 // When
-                report.AddSkipped(taskName);
+                report.AddSkipped(taskName, "This task was skipped for a great reason!");
 
                 // Then
                 var firstTask = report.First();
@@ -75,12 +75,12 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var report = new CakeReport();
-                report.AddSkipped("task 1");
+                report.AddSkipped("task 1", "This task was skipped for a great reason!");
 
                 var taskName = "task 2";
 
                 // When
-                report.AddSkipped(taskName);
+                report.AddSkipped(taskName, "This task was skipped for a great reason!");
 
                 // Then
                 var lastTask = report.Last();
@@ -115,7 +115,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var report = new CakeReport();
-                report.AddSkipped("task 1");
+                report.AddSkipped("task 1", "This task was skipped for a great reason!");
 
                 var taskName = "task 2";
                 var duration = TimeSpan.FromMilliseconds(100);
@@ -156,7 +156,7 @@ namespace Cake.Core.Tests.Unit
             {
                 // Given
                 var report = new CakeReport();
-                report.AddSkipped("task 1");
+                report.AddSkipped("task 1", "This task was skipped for a great reason!");
 
                 var taskName = "task 2";
                 var duration = TimeSpan.FromMilliseconds(100);

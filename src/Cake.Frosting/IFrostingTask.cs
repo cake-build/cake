@@ -30,6 +30,11 @@ namespace Cake.Frosting
         bool ShouldRun(ICakeContext context);
 
         /// <summary>
+        /// Gets message used for criteria if <see cref="ShouldRun(ICakeContext)" /> returns <c>false</c>.
+        /// </summary>
+        string SkippedMessage => string.Empty;
+
+        /// <summary>
         /// The error handler to be executed if an exception occurs in the task.
         /// </summary>
         /// <param name="exception">The exception.</param>

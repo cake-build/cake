@@ -4,13 +4,13 @@
 
 using System;
 using System.Collections.Generic;
-using Cake.Common.Tools.DotNetCore.Test;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.Test
 {
     /// <summary>
-    /// Contains settings used by <see cref="DotNetCoreTester" />.
+    /// Contains settings used by <see cref="DotNetTester" />.
     /// </summary>
     public class DotNetTestSettings : DotNetSettings
     {
@@ -31,12 +31,6 @@ namespace Cake.Common.Tools.DotNet.Test
         /// Gets or sets the path to use for the custom test adapter in the test run.
         /// </summary>
         public DirectoryPath TestAdapterPath { get; set; }
-
-        /// <summary>
-        /// Gets or sets a logger for test results.
-        /// </summary>
-        [Obsolete("Please use Loggers instead.")]
-        public string Logger { get; set; }
 
         /// <summary>
         /// Gets or sets the loggers for test results.
@@ -118,5 +112,10 @@ namespace Cake.Common.Tools.DotNet.Test
         /// Requires .NET Core 2.x or newer.
         /// </remarks>
         public ICollection<string> Sources { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets additional arguments to be passed to MSBuild.
+        /// </summary>
+        public DotNetMSBuildSettings MSBuildSettings { get; set; }
     }
 }

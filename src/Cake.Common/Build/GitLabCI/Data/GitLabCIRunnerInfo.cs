@@ -47,10 +47,10 @@ namespace Cake.Common.Build.GitLabCI.Data
         {
             get
             {
-                var tags = GetEnvironmentString("CI_RUNNER_TAGS").Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                var tags = GetEnvironmentString("CI_RUNNER_TAGS").Trim('[', ']').Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < tags.Length; i++)
                 {
-                    tags[i] = tags[i].Trim();
+                    tags[i] = tags[i].Trim(' ', '"');
                 }
                 return tags;
             }
