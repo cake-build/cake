@@ -47,6 +47,7 @@ namespace Cake.Common.Tests.Fixtures.IO
             fileSystem.CreateFile("/Temp/HasFiles/A.txt");
             fileSystem.CreateFile("/HasReadonly/Readonly.txt", FileAttributes.ReadOnly);
             fileSystem.CreateFile("/HasReadonly/Not-Readonly.txt");
+            fileSystem.CreateFile("/HasReadonly/Hidden.txt").Hide();
             return fileSystem;
         }
     }

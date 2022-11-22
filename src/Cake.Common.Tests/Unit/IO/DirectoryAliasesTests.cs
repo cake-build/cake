@@ -147,6 +147,65 @@ namespace Cake.Common.Tests.Unit.IO
             }
 
             [Fact]
+            public void Should_Throw_When_Deleting_Readonly_Files_In_Provided_Directory_If_Not_Forced()
+            {
+                // Given
+                var directory = new DirectoryPath("/HasReadonly");
+                var fixture = new FileSystemFixture();
+                var context = Substitute.For<ICakeContext>();
+                context.FileSystem.Returns(fixture.FileSystem);
+
+                // When
+                var result = Record.Exception(() => DirectoryAliases.CleanDirectory(context, directory, new CleanDirectorySettings { Force = false }));
+
+                // Then
+                AssertEx.IsExceptionWithMessage<System.IO.IOException>(result, "Cannot delete readonly file '/HasReadonly/Readonly.txt'.");
+            }
+
+            [Fact]
+            public void Should_Delete_Readonly_Files_In_Provided_Directory_If_Forced()
+            {
+                // Given
+                var directory = new DirectoryPath("/HasReadonly");
+                var fixture = new FileSystemFixture();
+                var context = Substitute.For<ICakeContext>();
+                context.FileSystem.Returns(fixture.FileSystem);
+
+                // When
+                DirectoryAliases.CleanDirectory(context, directory, new CleanDirectorySettings { Force = true });
+
+                // Then
+                Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive));
+            }
+
+            [Fact]
+            public void Should_Delete_Readonly_Files_Respecting_Predicate_In_Provided_Directory_If_Forced()
+            {
+                // Given
+                var directory = new DirectoryPath("/HasReadonly");
+                var fixture = new FileSystemFixture();
+                var context = Substitute.For<ICakeContext>();
+                Func<IFileSystemInfo, bool> wherePredicate = entry => !entry.Hidden;
+                context.FileSystem.Returns(fixture.FileSystem);
+                var filesNotMatchingPredicate = fixture
+                    .FileSystem
+                    .GetDirectory(directory)
+                    .GetFiles("*", SearchScope.Recursive)
+                    .Where(entry => !wherePredicate(entry))
+                    .ToArray();
+
+                // When
+                DirectoryAliases.CleanDirectory(context, directory, wherePredicate, new CleanDirectorySettings { Force = true });
+
+                // Then
+                Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive).Where(wherePredicate));
+                Assert.Equal(filesNotMatchingPredicate, fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive));
+
+                Assert.Single(filesNotMatchingPredicate);
+                Assert.Equal("/HasReadonly/Hidden.txt", filesNotMatchingPredicate[0].Path.FullPath);
+            }
+
+            [Fact]
             public void Should_Delete_Directories_Respecting_Predicate_In_Provided_Directory()
             {
                 // Given
@@ -325,6 +384,41 @@ namespace Cake.Common.Tests.Unit.IO
                     // Then
                     Assert.True(fixture.FileSystem.Exist((DirectoryPath)"/NonExisting"));
                 }
+
+                [Fact]
+                public void Should_Throw_When_Deleting_With_Readonly_Files_If_Not_Force()
+                {
+                    // Given
+                    var fixture = new FileSystemFixture();
+                    var context = Substitute.For<ICakeContext>();
+                    context.FileSystem.Returns(fixture.FileSystem);
+
+                    var paths = new DirectoryPath[] { "/HasReadonly" };
+
+                    // When
+                    var result = Record.Exception(() => DirectoryAliases.CleanDirectories(context, paths, new CleanDirectorySettings() { Force = false }));
+
+                    // Then
+                    Assert.IsType<IOException>(result);
+                    Assert.Equal("Cannot delete readonly file '/HasReadonly/Readonly.txt'.", result?.Message);
+                }
+
+                [Fact]
+                public void Should_Delete_Directories_With_Readonly_Files_If_Force()
+                {
+                    // Given
+                    var fixture = new FileSystemFixture();
+                    var context = Substitute.For<ICakeContext>();
+                    context.FileSystem.Returns(fixture.FileSystem);
+
+                    var paths = new DirectoryPath[] { "/HasReadonly" };
+
+                    // When
+                    DirectoryAliases.CleanDirectories(context, paths, new CleanDirectorySettings() { Force = true });
+
+                    // Then
+                    Assert.Empty(fixture.FileSystem.GetDirectory("/HasReadonly").GetDirectories("*", SearchScope.Recursive));
+                }
             }
 
             public sealed class WithStrings
@@ -417,6 +511,41 @@ namespace Cake.Common.Tests.Unit.IO
 
                     // Then
                     Assert.True(fixture.FileSystem.Exist((DirectoryPath)"/NonExisting"));
+                }
+
+                [Fact]
+                public void Should_Throw_When_Deleting_With_Readonly_Files_If_Not_Force()
+                {
+                    // Given
+                    var fixture = new FileSystemFixture();
+                    var context = Substitute.For<ICakeContext>();
+                    context.FileSystem.Returns(fixture.FileSystem);
+
+                    var paths = new[] { "/HasReadonly" };
+
+                    // When
+                    var result = Record.Exception(() => DirectoryAliases.CleanDirectories(context, paths, new CleanDirectorySettings() { Force = false }));
+
+                    // Then
+                    Assert.IsType<IOException>(result);
+                    Assert.Equal("Cannot delete readonly file '/HasReadonly/Readonly.txt'.", result?.Message);
+                }
+
+                [Fact]
+                public void Should_Delete_Directories_With_Readonly_Files_If_Force()
+                {
+                    // Given
+                    var fixture = new FileSystemFixture();
+                    var context = Substitute.For<ICakeContext>();
+                    context.FileSystem.Returns(fixture.FileSystem);
+
+                    var paths = new[] { "/HasReadonly" };
+
+                    // When
+                    DirectoryAliases.CleanDirectories(context, paths, new CleanDirectorySettings() { Force = true });
+
+                    // Then
+                    Assert.Empty(fixture.FileSystem.GetDirectory("/HasReadonly").GetDirectories("*", SearchScope.Recursive));
                 }
             }
         }
