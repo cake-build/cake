@@ -68,7 +68,7 @@ Any new code should also have reasonable unit test coverage.
    you talk about a feature you would like to see (or a bug), and why it should be in Cake.
    * If approved through the GitHub discussions, ensure an accompanying GitHub issue is created with
      information and a link back to the discussion.
- * Once you get a nod from one of the [Cake Team](https://github.com/cake-build?tab=members), you can start on the feature.
+ * Once you get a nod from one of the [Cake Team](https://github.com/orgs/cake-build/people), you can start on the feature.
  * Alternatively, if a feature is on the issues list with the
    [Up For Grabs](https://github.com/cake-build/cake/labels/up-for-grabs) label,
    it is open for a community member (contributor) to patch. You should comment that you are signing up for it on
