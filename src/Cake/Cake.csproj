@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>Cake</AssemblyName>
@@ -26,11 +26,11 @@
 
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.4.0" />
-    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
-    <PackageReference Include="System.Reflection.Metadata" Version="7.0.0" />
-    <PackageReference Include="Autofac" Version="6.5.0" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net70" Version="1.4.1" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net60" Version="1.4.1" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.Reflection.Metadata" />
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net70" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net60" Condition="'$(TargetFramework)' == 'net6.0'" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Cake.Cli</AssemblyName>
     <OutputType>Library</OutputType>
@@ -18,8 +18,8 @@
   </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="6.5.0" />
-      <PackageReference Include="Spectre.Console" Version="0.45.0" />
-      <PackageReference Include="Spectre.Console.Cli" Version="0.45.0" />
+      <PackageReference Include="Autofac" />
+      <PackageReference Include="Spectre.Console" />
+      <PackageReference Include="Spectre.Console.Cli" />
   </ItemGroup>
 </Project>

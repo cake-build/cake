@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Cake.Testing.Xunit</AssemblyName>
     <OutputType>Library</OutputType>
@@ -11,7 +11,7 @@
   </PropertyGroup>
    <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="xunit" Version="2.4.2" />
+    <PackageReference Include="xunit" />
   </ItemGroup>
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
