@@ -289,6 +289,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Publish
                 // Then
                 Assert.Equal("publish -p:EnableCompressionInSingleFile=true", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_Os()
+            {
+                // Given
+                var fixture = new DotNetPublisherFixture();
+                fixture.Settings.OS = "linux";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish --os linux", result.Args);
+            }
         }
     }
 }
