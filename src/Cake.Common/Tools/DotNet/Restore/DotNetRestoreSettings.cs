@@ -109,6 +109,18 @@ namespace Cake.Common.Tools.DotNet.Restore
         public bool ForceEvaluate { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to compile your application assemblies as ReadyToRun (R2R) format.
+        /// </summary>
+        /// <remarks>
+        /// In .NET 6, dotnet restore followed by dotnet publish -p:PublishReadyToRun=true --no-restore will fail with the NETSDK1095 error.
+        /// This is because the crossgen binary is now shipped as a separate NuGet package, and so needs to be part of the restore operation for publishing to succeed.
+        /// <para>
+        /// Supported by .NET SDK version 6.0.100 and above.
+        /// </para>
+        /// </remarks>
+        public bool? PublishReadyToRun { get; set; }
+
+        /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
         public DotNetMSBuildSettings MSBuildSettings { get; set; }

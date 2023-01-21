@@ -148,10 +148,23 @@ namespace Cake.Common.Tools.DotNet.Restore
                 builder.AppendSwitchQuoted("--lock-file-path", " ", settings.LockFilePath.MakeAbsolute(_environment).FullPath);
             }
 
-            // force evaluate
+            // Force Evaluate
             if (settings.ForceEvaluate)
             {
                 builder.Append("--force-evaluate");
+            }
+
+            // Publish ReadyToRun
+            if (settings.PublishReadyToRun.HasValue)
+            {
+                if (settings.PublishReadyToRun.Value)
+                {
+                    builder.Append("-p:PublishReadyToRun=true");
+                }
+                else
+                {
+                    builder.Append("-p:PublishReadyToRun=false");
+                }
             }
 
             if (settings.MSBuildSettings != null)
