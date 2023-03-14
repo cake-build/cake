@@ -78,7 +78,7 @@ namespace Cake.Common
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var value = context.Arguments.GetArguments(name).FirstOrDefault();
+            var value = context.Arguments.GetArguments(name).LastOrDefault();
             if (value == null)
             {
                 const string format = "Argument '{0}' was not set.";
@@ -248,7 +248,7 @@ namespace Cake.Common
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var value = context.Arguments.GetArguments(name)?.FirstOrDefault();
+            var value = context.Arguments.GetArguments(name)?.LastOrDefault();
             return value == null
                 ? defaultValue
                 : Convert<T>(value);
