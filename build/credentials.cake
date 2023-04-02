@@ -23,14 +23,3 @@ public record TwitterCredentials(
             context.EnvironmentVariable("TWITTER_ACCESS_TOKEN_SECRET"));
     }
 }
-
-public record GitterCredentials(string Token, string RoomId)
-{
-    public static GitterCredentials GetGitterCredentials(ICakeContext context)
-    {
-        return new GitterCredentials(
-            context.EnvironmentVariable("GITTER_TOKEN"),
-            context.EnvironmentVariable("GITTER_ROOM_ID")
-        );
-    }
-}

@@ -1,6 +1,5 @@
 // Install addins.
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=2.0.0"
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Gitter&version=2.0.0"
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.10.3"
@@ -53,25 +52,6 @@ Teardown<BuildParameters>((context, parameters) =>
             if(parameters.CanPostToTwitter)
             {
                 TwitterSendTweet(parameters.Twitter.ConsumerKey, parameters.Twitter.ConsumerSecret, parameters.Twitter.AccessToken, parameters.Twitter.AccessTokenSecret, message);
-            }
-
-            if(parameters.CanPostToGitter)
-            {
-                var gitterMessage = $"@/all {message}";
-
-                var postMessageResult = Gitter.Chat.PostMessage(
-                    message: gitterMessage,
-                    messageSettings: new GitterChatMessageSettings { Token = parameters.Gitter.Token, RoomId = parameters.Gitter.RoomId}
-                );
-
-                if (postMessageResult.Ok)
-                {
-                    Information("Message {0} successfully sent", postMessageResult.TimeStamp);
-                }
-                else
-                {
-                    Error("Failed to send message: {0}", postMessageResult.Error);
-                }
             }
         }
     }

@@ -22,7 +22,6 @@ public class BuildParameters
     public bool SkipSigning { get; }
     public BuildCredentials GitHub { get; }
     public TwitterCredentials Twitter { get; }
-    public GitterCredentials Gitter { get; }
     public ReleaseNotes ReleaseNotes { get; }
     public BuildVersion Version { get; set; }
     public BuildPaths Paths { get; }
@@ -59,14 +58,6 @@ public class BuildParameters
         }
     }
 
-    public bool CanPostToGitter
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(Gitter.Token) && !string.IsNullOrEmpty(Gitter.RoomId);
-        }
-    }
-
     public BuildParameters (ISetupContext context)
     {
         if (context == null)
@@ -89,7 +80,6 @@ public class BuildParameters
         IsTagged = IsBuildTagged(buildSystem);
         GitHub = BuildCredentials.GetGitHubCredentials(context);
         Twitter = TwitterCredentials.GetTwitterCredentials(context);
-        Gitter = GitterCredentials.GetGitterCredentials(context);
         ReleaseNotes = context.ParseReleaseNotes("./ReleaseNotes.md");
         IsPublishBuild = IsPublishing(context.TargetTask.Name);
         IsReleaseBuild = IsReleasing(context.TargetTask.Name);
