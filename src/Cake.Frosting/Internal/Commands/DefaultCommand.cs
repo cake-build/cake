@@ -68,7 +68,7 @@ namespace Cake.Frosting.Internal
                     runner.Settings.UseExclusiveTarget();
                 }
 
-                runner.Run(settings.Target);
+                runner.Run(settings.Targets);
             }
             catch (Exception ex)
             {
@@ -98,7 +98,11 @@ namespace Cake.Frosting.Internal
             {
                 arguments[targetArgumentName] = new List<string>();
             }
-            arguments[targetArgumentName].Add(settings.Target);
+
+            foreach (var target in settings.Targets)
+            {
+                arguments[targetArgumentName].Add(target);
+            }
 
             var argumentLookUp = arguments.SelectMany(a => a.Value, Tuple.Create).ToLookup(a => a.Item1.Key, a => a.Item2);
             return new CakeArguments(argumentLookUp);
