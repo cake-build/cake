@@ -58,7 +58,7 @@ namespace Cake
                 }
 
                 // Top level examples.
-                config.AddExample(new[] { string.Empty });
+                config.AddExample(Array.Empty<string>());
                 config.AddExample(new[] { "build.cake", "--verbosity", "quiet" });
                 config.AddExample(new[] { "build.cake", "--tree" });
             });
