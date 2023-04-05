@@ -5,7 +5,7 @@ Task("Cake.Core.Scripting.Spectre.Console.FigletText")
 {
     AnsiConsole.Render(
         new FigletText("Cake")
-            .LeftAligned()
+            .LeftJustified()
             .Color(Color.Red));
 });
 
