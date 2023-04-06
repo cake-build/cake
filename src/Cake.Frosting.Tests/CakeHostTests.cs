@@ -316,7 +316,7 @@ namespace Cake.Frosting.Tests
         }
 
         [Fact]
-        public void Should_pass_target_within_cakeContext_arguments()
+        public void Should_Pass_Target_Within_CakeContext_Arguments()
         {
             // Given
             var fixture = new CakeHostFixture();
@@ -358,6 +358,23 @@ namespace Cake.Frosting.Tests
                 fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task1), Arg.Any<ICakeContext>());
                 fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task2), Arg.Any<ICakeContext>());
             });
+        }
+
+        [Fact]
+        public void Should_Pass_Cake_Runner_Argument_And_Value_To_Build_Script()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+            // When
+            fixture.Run("--version", "1.2.3");
+
+            // Then
+            fixture.Strategy.Received(1).ExecuteAsync(
+                Arg.Any<CakeTask>(), 
+                Arg.Is<ICakeContext>(cc => cc.Arguments.HasArgument("version") && cc.Arguments.GetArgument("version").Equals("1.2.3")));
         }
     }
 }

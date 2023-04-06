@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Autofac;
 using Cake.Cli;
 using Cake.Core;
@@ -129,6 +130,23 @@ namespace Cake.Tests.Unit
 
             // Then
             feature.Received(1).Run(fixture.Console);
+        }
+
+        [Fact]
+        public async void Should_Pass_Cake_Runner_Argument_And_Value_To_Build_Script()
+        {
+            // Given
+            var fixture = new ProgramFixture();
+            var feature = Substitute.For<IBuildFeature>();
+            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+
+            // When
+            var result = await fixture.Run("--version", "1.2.3");
+
+            // Then
+            feature.Received(1).Run(
+                Arg.Is<IRemainingArguments>(arguments => arguments.Parsed.Contains("version") && arguments.Parsed["version"].Contains("1.2.3")),
+                Arg.Is<BuildFeatureSettings>(settings => settings.BuildHostKind == BuildHostKind.Build));
         }
     }
 }
