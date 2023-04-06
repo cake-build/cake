@@ -141,7 +141,7 @@ namespace Cake.Tests.Unit
             fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
 
             // When
-            var result = await fixture.Run("--version", "1.2.3");
+            var result = await fixture.Run("--version=1.2.3");
 
             // Then
             feature.Received(1).Run(

@@ -381,7 +381,7 @@ namespace Cake.Frosting.Tests
             fixture.Run("--version");
 
             // Then
-            Assert.Collection(fixture.Console.Messages, s => string.Compare(s, "FakeVersion"));
+            Assert.Collection(fixture.Console.Messages, s => s.Equals("FakeVersion"));
         }
 
         [Fact]
@@ -393,12 +393,12 @@ namespace Cake.Frosting.Tests
             fixture.Strategy = Substitute.For<IExecutionStrategy>();
 
             // When
-            fixture.Run("--version", "1.2.3");
+            fixture.Run("--target", "dummytask", "--version=1.2.3");
 
             // Then
             fixture.Strategy.Received(1).ExecuteAsync(
                 Arg.Any<CakeTask>(),
-                Arg.Is<ICakeContext>(cc => cc.Arguments.HasArgument("version") && cc.Arguments.GetArgument("version").Equals("1.2.3")));
+                Arg.Is<ICakeContext>(cc => cc.Arguments.HasArgument("version") && cc.Arguments.GetArgument("version") == "1.2.3"));
         }
     }
 }
