@@ -3,9 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
+using Autofac.Core;
+using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Packaging;
+using Cake.Frosting.Tests.Fakes;
 using Cake.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -361,6 +365,26 @@ namespace Cake.Frosting.Tests
         }
 
         [Fact]
+        public void The_Version_Option_Should_Call_Version_Feature()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+            // Replace the Cake.Cli.VersionResolver that CakeHost adds to its service collection
+            // with a fake so that the call to VersionFeature can be asserted below
+            fixture.Host.ConfigureServices(services => services.Remove(services.Single(sd => sd.ServiceType == typeof(IVersionResolver))));
+            fixture.Host.ConfigureServices(services => services.AddSingleton<IVersionResolver, FakeVersionResolver>());
+
+            // When
+            fixture.Run("--version");
+
+            // Then
+            Assert.Collection(fixture.Console.Messages, s => string.Compare(s, "FakeVersion"));
+        }
+
+        [Fact]
         public void Should_Pass_Cake_Runner_Argument_And_Value_To_Build_Script()
         {
             // Given
@@ -373,7 +397,7 @@ namespace Cake.Frosting.Tests
 
             // Then
             fixture.Strategy.Received(1).ExecuteAsync(
-                Arg.Any<CakeTask>(), 
+                Arg.Any<CakeTask>(),
                 Arg.Is<ICakeContext>(cc => cc.Arguments.HasArgument("version") && cc.Arguments.GetArgument("version").Equals("1.2.3")));
         }
     }
