@@ -29,8 +29,18 @@ namespace Cake.Cli
         }
 
         /// <inheritdoc/>
-        public void Write(CakeReport report)
+        public void Write(CakeReport report, Verbosity verbosity)
         {
+            if (report == null)
+            {
+                throw new ArgumentNullException(nameof(report));
+            }
+
+            if (verbosity <= Verbosity.Quiet)
+            {
+                return;
+            }
+
             // Create a table
             var table = new Table().Border(TableBorder.SimpleHeavy);
             table.Width(100);
