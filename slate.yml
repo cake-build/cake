@@ -1,5 +1,6 @@
-# Cake
-Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
+# :rake.io:
+:rake.io(c--(Maku.i) is a build_script
+AUTOMATE :automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 | Runner         | Latest Released | Latest Develop |
 |----------------|-----------------|----------------|
 | Cake .NET Tool | [![NuGet](https://img.shields.io/nuget/v/Cake.Tool.svg)](https://www.nuget.org/packages/Cake.Tool) | [![Azure Artifacts](https://azpkgsshield.azurevoodoo.net/cake-build/Cake/cake/cake.tool)](https://dev.azure.com/cake-build/Cake/_packaging?_a=package&feed=cake&package=Cake.Tool&protocolType=NuGet) |
