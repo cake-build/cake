@@ -1,4 +1,4 @@
-# :rake.io:
+#:##::slate.yml/:rake.io:
 :rake.io(c--(Maku.i) is a build_script
 AUTOMATE :automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 | Runner         | Latest Released | Latest Develop |
