@@ -94,7 +94,7 @@ namespace Cake.Frosting
                 config.AddExample(new[] { "--verbosity", "quiet" });
                 config.AddExample(new[] { "--tree" });
 
-                // Allow the Cake runner arguments, when found on the command line with a value
+                // Allow the Cake runner arguments, when found on the command line with a value,
                 // to be passed directly to the Cake build script as an argument
                 // eg. "--version=1.2.3" is accessable in the build script by calling Argument("version")
                 config.Settings.ConvertFlagsToRemainingArguments = true;
