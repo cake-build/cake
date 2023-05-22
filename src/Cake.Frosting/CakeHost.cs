@@ -52,7 +52,7 @@ namespace Cake.Frosting
         /// Registers an assembly which will be used to find tasks.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
-        /// <returns>The same <see cref="CakeHost"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>The same <see cref="CakeHost"/> instance so that multiple calls, can be chained.</returns>
         public CakeHost AddAssembly(Assembly assembly)
         {
             _assemblies.Add(assembly);
