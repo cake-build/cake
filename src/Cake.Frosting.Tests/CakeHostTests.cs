@@ -384,7 +384,7 @@ namespace Cake.Frosting.Tests
             Assert.Collection(fixture.Console.Messages, s => s.Equals("FakeVersion"));
         }
 
-        [Fact(Skip = "Excluded to see if the performance implication of this test is causing the integration tests to break on push to PR")]
+        [Fact]
         public void Should_Pass_Cake_Runner_Argument_And_Value_To_Build_Script()
         {
             // Given

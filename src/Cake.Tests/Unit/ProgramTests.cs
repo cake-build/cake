@@ -132,7 +132,7 @@ namespace Cake.Tests.Unit
             feature.Received(1).Run(fixture.Console);
         }
 
-        [Fact(Skip = "Excluded to see if the performance implication of this test is causing the integration tests to break on push to PR")]
+        [Fact]
         public async void Should_Pass_Cake_Runner_Argument_And_Value_To_Build_Script()
         {
             // Given
