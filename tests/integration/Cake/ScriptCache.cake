@@ -78,7 +78,7 @@ public class ScriptCacheData
                             { "TEST_ROOT_PATH", configCacheRootPath.FullPath },
                             { "TEST_LEAF_PATH", "CacheLeafPath" }
                         },
-                        Verbosity = Verbosity.Quiet
+                        Verbosity = Verbosity.Diagnostic
                     };
         CakeExecuteScript = cakeExecuteScript;
         CalculateFileHash = calculateFileHash;
