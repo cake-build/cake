@@ -136,7 +136,7 @@ for(var index = 1; index <= 5; index++)
             data.ExecuteResult = data.TimeCakeExecuteScript();
 
             // Then
-            //Assert.True(data.CompileResult.Elapsed > data.ExecuteResult.Elapsed, $"Compile time {data.CompileResult.Elapsed} should be greater than execute time  {data.ExecuteResult.Elapsed}.");
+            Assert.True(data.CompileResult.Elapsed > data.ExecuteResult.Elapsed, $"Compile time {data.CompileResult.Elapsed} should be greater than execute time  {data.ExecuteResult.Elapsed}.");
             Assert.Equal(data.CompileResult.Hash, data.ExecuteResult.Hash);
         })
     );
@@ -149,7 +149,7 @@ Task("Cake.ScriptCache.ReCompile")
         data.ReCompileResult = data.TimeCakeExecuteScript(args => args.Append("--invalidate-script-cache"));
 
         // Then
-        //Assert.True(data.ReCompileResult.Elapsed> data.ExecuteResult.Elapsed, $"ReCompileTime time {data.ReCompileResult.Elapsed} should be greater than execute time  {data.ExecuteResult.Elapsed}.");
+        Assert.True(data.ReCompileResult.Elapsed> data.ExecuteResult.Elapsed, $"ReCompileTime time {data.ReCompileResult.Elapsed} should be greater than execute time  {data.ExecuteResult.Elapsed}.");
         Assert.NotEqual(data.CompileResult.Hash , data.ReCompileResult.Hash);
     });
 
