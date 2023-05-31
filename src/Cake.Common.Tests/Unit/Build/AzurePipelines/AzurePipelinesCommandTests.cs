@@ -128,6 +128,48 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
             }
 
             [Fact]
+            public void Should_Begin_Group_With_Name()
+            {
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+
+                // When
+                service.Commands.BeginGroup("Example Group");
+
+                // Then
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##[group]Example Group");
+            }
+
+            [Fact]
+            public void Should_End_Group()
+            {
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+
+                // When
+                service.Commands.EndGroup();
+
+                // Then
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##[endgroup]");
+            }
+
+            [Fact]
+            public void Should_Section_With_Name()
+            {
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+
+                // When
+                service.Commands.Section("Example Section");
+
+                // Then
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##[section]Example Section");
+            }
+
+            [Fact]
             public void Should_Set_Current_Progress()
             {
                 // Given
@@ -152,7 +194,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.CompleteCurrentTask();
 
                 // Then
-                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.complete ]DONE");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.complete]DONE");
             }
 
             [Fact]
@@ -281,7 +323,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UploadTaskSummary("./summary.md");
 
                 // Then
-                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.uploadsummary ]{path}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.uploadsummary]{path}");
             }
 
             [Fact]
@@ -296,7 +338,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UploadTaskLogFile("./logs/task.log");
 
                 // Then
-                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.uploadfile ]{path}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[task.uploadfile]{path}");
             }
 
             [Theory]
@@ -432,7 +474,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UploadBuildLogFile("./dist/buildlog.txt");
 
                 // Then
-                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[build.uploadlog ]{path}");
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##vso[build.uploadlog]{path}");
             }
 
             [Fact]
@@ -446,7 +488,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.UpdateBuildNumber("CIBuild_1");
 
                 // Then
-                Assert.Contains(fixture.Writer.Entries, m => m == "##vso[build.updatebuildnumber ]CIBuild_1");
+                Assert.Contains(fixture.Writer.Entries, m => m == "##vso[build.updatebuildnumber]CIBuild_1");
             }
 
             [Fact]
@@ -460,7 +502,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 service.Commands.AddBuildTag("Stable");
 
                 // Then
-                Assert.Contains(fixture.Writer.Entries, m => m == "##vso[build.addbuildtag ]Stable");
+                Assert.Contains(fixture.Writer.Entries, m => m == "##vso[build.addbuildtag]Stable");
             }
 
             [Fact]
