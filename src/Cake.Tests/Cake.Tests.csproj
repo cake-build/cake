@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>Cake.Tests</AssemblyName>
@@ -7,22 +7,22 @@
   </PropertyGroup>
 
   <!-- Import shared functionality -->
-  <Import Project="..\Shared.msbuild" />
+  <Import Project="..\Shared.msbuild"></Import>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
-    <PackageReference Include="xunit" Version="2.4.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
+    
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NSubstitute" Version="4.4.0" />
-    <PackageReference Include="Castle.Core" Version="5.1.0" />
+    <PackageReference Include="NSubstitute" Version="5.0.0" />
+    
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Cake\Cake.csproj" />
-    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+    
     <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj" />
     <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj" />
   </ItemGroup>

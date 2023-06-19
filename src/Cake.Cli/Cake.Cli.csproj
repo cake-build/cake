@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Cake.Cli</AssemblyName>
     <OutputType>Library</OutputType>
@@ -12,14 +12,14 @@
   </PropertyGroup>
 
   <!-- Import shared functionality -->
-  <Import Project="..\Shared.msbuild" />
+  <Import Project="..\Shared.msbuild"></Import>
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
   </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="6.5.0" />
-      <PackageReference Include="Spectre.Console" Version="0.46.0" />
-      <PackageReference Include="Spectre.Console.Cli" Version="0.46.0" />
+      <PackageReference Include="Autofac" Version="7.0.1" />
+      
+      <PackageReference Include="Spectre.Console.Cli" Version="0.47.0" />
   </ItemGroup>
 </Project>
