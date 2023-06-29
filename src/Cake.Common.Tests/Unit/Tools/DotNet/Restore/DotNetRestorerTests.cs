@@ -216,6 +216,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Restore
                 // Then
                 Assert.Equal($@"restore --force-evaluate", result.Args);
             }
+
+            [Fact]
+            public void Should_Add_PublishReadyToRun()
+            {
+                // Given
+                var fixture = new DotNetRestorerFixture();
+                fixture.Settings.PublishReadyToRun = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("restore -p:PublishReadyToRun=true", result.Args);
+            }
         }
     }
 }
