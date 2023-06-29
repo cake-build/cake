@@ -19,6 +19,12 @@ namespace Cake.Core
         DirectoryPath WorkingDirectory { get; set; }
 
         /// <summary>
+        /// Gets the user's home directory.
+        /// </summary>
+        /// <value>The user's home directory.</value>
+        DirectoryPath UserHomeDirectory => GetSpecialPath(SpecialPath.UserProfile);
+
+        /// <summary>
         /// Gets the application root path.
         /// </summary>
         /// <value>The application root path.</value>

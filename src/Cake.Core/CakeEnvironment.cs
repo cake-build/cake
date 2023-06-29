@@ -21,6 +21,9 @@ namespace Cake.Core
         }
 
         /// <inheritdoc/>
+        public DirectoryPath UserHomeDirectory { get; }
+
+        /// <inheritdoc/>
         public DirectoryPath ApplicationRoot { get; }
 
         /// <inheritdoc/>
@@ -46,6 +49,9 @@ namespace Cake.Core
 
             // Get the working directory.
             WorkingDirectory = new DirectoryPath(System.IO.Directory.GetCurrentDirectory());
+
+            // Get the Home directory.
+            UserHomeDirectory = GetSpecialPath(SpecialPath.UserProfile);
         }
 
         /// <inheritdoc/>

@@ -24,6 +24,9 @@ namespace Cake.Testing
         public DirectoryPath WorkingDirectory { get; set; }
 
         /// <inheritdoc/>
+        public DirectoryPath UserHomeDirectory { get; set; }
+
+        /// <inheritdoc/>
         public DirectoryPath ApplicationRoot { get; set; }
 
         /// <inheritdoc/>
@@ -67,6 +70,7 @@ namespace Cake.Testing
         {
             var environment = new FakeEnvironment(PlatformFamily.Linux, is64Bit);
             environment.WorkingDirectory = new DirectoryPath("/Working");
+            environment.UserHomeDirectory = new DirectoryPath("/Users/CakeUser");
             environment.ApplicationRoot = "/Working/bin";
             return environment;
         }
@@ -80,6 +84,7 @@ namespace Cake.Testing
         {
             var environment = new FakeEnvironment(PlatformFamily.Windows, is64Bit);
             environment.WorkingDirectory = new DirectoryPath("C:/Working");
+            environment.UserHomeDirectory = new DirectoryPath("C:/Users/CakeUser");
             environment.ApplicationRoot = "C:/Working/bin";
             return environment;
         }
