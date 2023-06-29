@@ -29,7 +29,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.6.0" />
     <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="7.0.2" />
-    <PackageReference Include="Autofac" Version="6.5.0" />
+    <PackageReference Include="Autofac" Version="7.0.1" />
     <PackageReference Include="Basic.Reference.Assemblies.Net70" Version="1.4.2" Condition="'$(TargetFramework)' == 'net7.0'" />
     <PackageReference Include="Basic.Reference.Assemblies.Net60" Version="1.4.2" Condition="'$(TargetFramework)' == 'net6.0'" />
   </ItemGroup>
