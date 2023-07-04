@@ -3,8 +3,8 @@
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.12.0"
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=SignClient&version=1.3.155"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.13.0"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=sign&version=0.9.1-beta.23274.1&prerelease"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -28,6 +28,11 @@ Setup<BuildParameters>(context =>
         parameters.Target,
         parameters.Version.CakeVersion,
         parameters.IsTagged);
+
+    if (parameters.ShouldSignPackages && !parameters.CodeSigning.HasCredentials)
+    {
+        throw new CakeException("Code signing credentials are missing.");
+    }
 
     foreach(var assemblyInfo in GetFiles("./src/**/AssemblyInfo.cs"))
     {
@@ -145,52 +150,44 @@ Task("Create-NuGet-Packages")
 
 Task("Sign-Binaries")
     .IsDependentOn("Create-NuGet-Packages")
-    .WithCriteria<BuildParameters>((context, parameters) =>
-        (parameters.ShouldPublish && !parameters.SkipSigning) ||
-        StringComparer.OrdinalIgnoreCase.Equals(EnvironmentVariable("SIGNING_TEST"), "True"))
-    .Does<BuildParameters>((context, parameters) =>
+    .WithCriteria<BuildParameters>(static (context, parameters) => parameters.ShouldSignPackages)
+    .Does<BuildParameters>(async static (context, parameters) =>
 {
-    // Get the secret.
-    var secret = EnvironmentVariable("SIGNING_SECRET");
-    if(string.IsNullOrWhiteSpace(secret)) {
-        throw new InvalidOperationException("Could not resolve signing secret.");
-    }
-    // Get the user.
-    var user = EnvironmentVariable("SIGNING_USER");
-    if(string.IsNullOrWhiteSpace(user)) {
-        throw new InvalidOperationException("Could not resolve signing user.");
-    }
-
-    var settings = File("./signclient.json");
-    var filter = File("./signclient.filter");
-
     // Get the files to sign.
-    var files = GetFiles(string.Concat(parameters.Paths.Directories.NuGetRoot, "/", "*.nupkg"));
+    var files = context.GetFiles(string.Concat(parameters.Paths.Directories.NuGetRoot, "/", "*.nupkg"));
+    var commandSettings = new CommandSettings{
+        ToolExecutableNames = new [] { "sign", "sign.exe" },
+        ToolName = "sign",
+        ToolPath = parameters.Paths.SignClientPath.FullPath
+    };
 
-    foreach(var file in files)
-    {
-        Information("Signing {0}...", file.FullPath);
+    Parallel.ForEach(
+        files,
+        file => {
+        context.Information("Signing {0}...", file.FullPath);
 
         // Build the argument list.
         var arguments = new ProcessArgumentBuilder()
-            .Append("sign")
-            .AppendSwitchQuoted("-c", MakeAbsolute(settings.Path).FullPath)
-            .AppendSwitchQuoted("-i", MakeAbsolute(file).FullPath)
-            .AppendSwitchQuoted("-f", MakeAbsolute(filter).FullPath)
-            .AppendSwitchQuotedSecret("-s", secret)
-            .AppendSwitchQuotedSecret("-r", user)
-            .AppendSwitchQuoted("-n", "Cake")
-            .AppendSwitchQuoted("-d", "Cake (C# Make) is a cross platform build automation system.")
-            .AppendSwitchQuoted("-u", "https://cakebuild.net");
+            .Append("code")
+            .Append("azure-key-vault")
+            .AppendQuoted(file.FullPath)
+            .AppendSwitchQuoted("--file-list", parameters.Paths.SignFilterPath.FullPath)
+            .AppendSwitchQuoted("--publisher-name", "Cake")
+            .AppendSwitchQuoted("--description", "Cake (C# Make) is a cross platform build automation system.")
+            .AppendSwitchQuoted("--description-url", "https://cakebuild.net")
+            .AppendSwitchQuotedSecret("--azure-key-vault-tenant-id", parameters.CodeSigning.SignTenantId)
+            .AppendSwitchQuotedSecret("--azure-key-vault-client-id", parameters.CodeSigning.SignClientId)
+            .AppendSwitchQuotedSecret("--azure-key-vault-client-secret", parameters.CodeSigning.SignClientSecret)
+            .AppendSwitchQuotedSecret("--azure-key-vault-certificate", parameters.CodeSigning.SignKeyVaultCertificate)
+            .AppendSwitchQuotedSecret("--azure-key-vault-url", parameters.CodeSigning.SignKeyVaultUrl);
 
-        // Sign the binary.
-        var result = StartProcess(parameters.Paths.SignClientPath.FullPath, new ProcessSettings {  Arguments = arguments });
-        if(result != 0)
-        {
-            // We should not recover from this.
-            throw new InvalidOperationException("Signing failed!");
-        }
-    }
+        context.Command(
+            commandSettings,
+            arguments
+        );
+
+        context.Information("Done signing {0}.", file.FullPath);
+    });
 });
 
 Task("Upload-AppVeyor-Artifacts")
