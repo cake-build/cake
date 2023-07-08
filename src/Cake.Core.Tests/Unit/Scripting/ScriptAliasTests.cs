@@ -34,7 +34,7 @@ namespace Cake.Core.Tests.Unit.Scripting
                 var result = new ScriptAlias(method, ScriptAliasType.Method, null);
 
                 // Then
-                Assert.Equal(0, result.Namespaces.Count);
+                Assert.Empty(result.Namespaces);
             }
         }
     }

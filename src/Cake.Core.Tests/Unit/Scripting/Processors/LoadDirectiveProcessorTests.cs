@@ -25,7 +25,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var result = fixture.Analyze("/Working/script.cake");
 
             // Then
-            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Single(result.Script.Includes);
             Assert.Equal("/Working/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
 
@@ -44,7 +44,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var result = fixture.Analyze("/Working/script.cake");
 
             // Then
-            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Single(result.Script.Includes);
             Assert.Equal("/Working/test/my utils.cake", result.Script.Includes[0].Path.FullPath);
         }
 
@@ -63,7 +63,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var result = fixture.Analyze("/Working/script.cake");
 
             // Then
-            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Single(result.Script.Includes);
             Assert.Equal($"/Working/{filename}", result.Script.Includes[0].Path.FullPath);
         }
 
@@ -103,7 +103,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var result = fixture.Analyze("/Working/script.cake");
 
             // Then
-            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Single(result.Script.Includes);
             Assert.Equal("/Working/test/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
 
@@ -123,7 +123,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var result = fixture.Analyze("/Working/script.cake");
 
             // Then
-            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Single(result.Script.Includes);
             Assert.Equal("/Working/test/scripts/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
 
@@ -151,7 +151,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var result = fixture.Analyze("/Working/bootstrap.cake");
 
             // Then
-            Assert.Equal(0, result.Script.Includes.Count);
+            Assert.Empty(result.Script.Includes);
         }
 
         [Theory]
@@ -232,7 +232,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var result = fixture.Analyze("/Working/script.cake");
 
             // Then
-            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Single(result.Script.Includes);
             Assert.Equal("/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
 
@@ -251,7 +251,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var result = fixture.Analyze("/Working/script.cake");
 
             // Then
-            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Single(result.Script.Includes);
             Assert.Equal("/Working/test/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
 
@@ -270,7 +270,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var result = fixture.Analyze("C:/Working/script.cake");
 
             // Then
-            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Single(result.Script.Includes);
             Assert.Equal("C:/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
 
@@ -289,7 +289,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Processors
             var result = fixture.Analyze("C:/Working/script.cake");
 
             // Then
-            Assert.Equal(1, result.Script.Includes.Count);
+            Assert.Single(result.Script.Includes);
             Assert.Equal("C:/Working/test/utils.cake", result.Script.Includes[0].Path.FullPath);
         }
     }

@@ -148,7 +148,7 @@ namespace Cake.NuGet.Tests.Unit
                 fixture.Load();
 
                 // Then
-                Assert.Equal(1, fixture.Log.Entries.Count);
+                Assert.Single(fixture.Log.Entries);
                 Assert.Equal("No scripts found in NuGet package Cake.Recipe.", fixture.Log.Entries[0].Message);
                 Assert.Equal(Verbosity.Minimal, fixture.Log.Entries[0].Verbosity);
                 Assert.Equal(LogLevel.Warning, fixture.Log.Entries[0].Level);
