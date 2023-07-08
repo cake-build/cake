@@ -1,5 +1,5 @@
 // Install addins.
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=2.0.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=3.0.0"
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.12.0"
@@ -151,7 +151,7 @@ Task("Create-NuGet-Packages")
 Task("Sign-Binaries")
     .IsDependentOn("Create-NuGet-Packages")
     .WithCriteria<BuildParameters>(static (context, parameters) => parameters.ShouldSignPackages)
-    .Does<BuildParameters>(async static (context, parameters) =>
+    .Does<BuildParameters>(static (context, parameters) =>
 {
     // Get the files to sign.
     var files = context.GetFiles(string.Concat(parameters.Paths.Directories.NuGetRoot, "/", "*.nupkg"));
