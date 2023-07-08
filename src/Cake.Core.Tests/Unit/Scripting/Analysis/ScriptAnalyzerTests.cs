@@ -82,7 +82,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
 
                 // Then
                 Assert.False(result.Succeeded);
-                Assert.Equal(1, result.Errors.Count);
+                Assert.Single(result.Errors);
                 Assert.Equal("Could not find script '/Working/notfound.cake'.", result.Errors[0].Message);
             }
 
@@ -115,7 +115,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.References.Count);
+                Assert.Single(result.Script.References);
                 Assert.Equal("hello.dll", result.Script.References.ElementAt(0));
             }
 
@@ -132,7 +132,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.References.Count);
+                Assert.Single(result.Script.References);
                 Assert.Equal("hello world.dll", result.Script.References.ElementAt(0));
             }
 
@@ -165,7 +165,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.Namespaces.Count);
+                Assert.Single(result.Script.Namespaces);
                 Assert.Equal("Cake.Core", result.Script.Namespaces.ElementAt(0));
             }
 
@@ -180,7 +180,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.UsingAliases.Count);
+                Assert.Single(result.Script.UsingAliases);
                 Assert.Equal("using Core = Cake.Core;", result.Script.UsingAliases.ElementAt(0));
             }
 
@@ -195,8 +195,8 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(0, result.Script.UsingAliases.Count);
-                Assert.Equal(0, result.Script.Namespaces.Count);
+                Assert.Empty(result.Script.UsingAliases);
+                Assert.Empty(result.Script.Namespaces);
                 Assert.Equal(4, result.Lines.Count);
                 Assert.Equal(result.Lines[0], "#line 1 \"/Working/script.cake\"");
                 Assert.Equal(result.Lines[1], "using(new Temp())");
@@ -232,7 +232,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.Addins.Count);
+                Assert.Single(result.Script.Addins);
                 Assert.Equal("nuget:?package=Hello.World", result.Script.Addins.ElementAt(0).OriginalString);
             }
 
@@ -247,7 +247,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.Addins.Count);
+                Assert.Single(result.Script.Addins);
                 Assert.Equal("npm:?package=node", result.Script.Addins.ElementAt(0).OriginalString);
             }
 
@@ -262,7 +262,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.Addins.Count);
+                Assert.Single(result.Script.Addins);
                 Assert.Equal("nuget:http://source/?package=Hello.World", result.Script.Addins.ElementAt(0).OriginalString);
             }
 
@@ -277,7 +277,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.Tools.Count);
+                Assert.Single(result.Script.Tools);
                 Assert.Equal("nuget:?package=Hello.World", result.Script.Tools.ElementAt(0).OriginalString);
             }
 
@@ -292,7 +292,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.Tools.Count);
+                Assert.Single(result.Script.Tools);
                 Assert.Equal("nuget:http://source/?package=Hello.World", result.Script.Tools.ElementAt(0).OriginalString);
             }
 
@@ -307,7 +307,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.Tools.Count);
+                Assert.Single(result.Script.Tools);
                 Assert.Equal("npm:?package=node", result.Script.Tools.ElementAt(0).OriginalString);
             }
 
@@ -343,7 +343,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 Assert.Equal("#line 1 \"/Working/script.cake\"", result.Lines[0]);
                 Assert.Equal("// #load \"local:?pat\"", result.Lines[1]);
                 Assert.False(result.Succeeded);
-                Assert.Equal(1, result.Errors.Count);
+                Assert.Single(result.Errors);
                 Assert.Equal("/Working/script.cake", result.Errors[0].File.FullPath);
                 Assert.Equal(1, result.Errors[0].Line);
                 Assert.Equal("Query string for #load is missing parameter 'path'.", result.Errors[0].Message);
@@ -364,7 +364,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 // Then
                 Assert.Equal(6, result.Lines.Count);
                 Assert.False(result.Succeeded);
-                Assert.Equal(1, result.Errors.Count);
+                Assert.Single(result.Errors);
                 Assert.Equal("/Working/script2.cake", result.Errors[0].File.FullPath);
                 Assert.Equal(2, result.Errors[0].Line);
                 Assert.Equal("Query string for #load contains more than one parameter 'path'.", result.Errors[0].Message);
@@ -381,7 +381,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.UsingStaticDirectives.Count);
+                Assert.Single(result.Script.UsingStaticDirectives);
                 Assert.Equal("using static System.Math;", result.Script.UsingStaticDirectives.ElementAt(0));
             }
 
@@ -396,7 +396,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 var result = fixture.Analyze("/Working/script.cake");
 
                 // Then
-                Assert.Equal(1, result.Script.Defines.Count);
+                Assert.Single(result.Script.Defines);
                 Assert.Equal("#define FOO", result.Script.Defines.ElementAt(0));
             }
         }

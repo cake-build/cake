@@ -29,7 +29,7 @@ namespace Cake.NuGet.Tests.Unit
                 var files = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(1, files.Count);
+                Assert.Single(files);
                 Assert.Equal("/Working/tools/Foo/Foo.exe", files.First().Path.FullPath);
             }
 
@@ -46,7 +46,7 @@ namespace Cake.NuGet.Tests.Unit
                 var files = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(1, files.Count);
+                Assert.Single(files);
                 Assert.Equal("/Working/tools/Foo/Foo.dll", files.First().Path.FullPath);
             }
 
@@ -87,7 +87,7 @@ namespace Cake.NuGet.Tests.Unit
                 var files = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(0, files.Count);
+                Assert.Empty(files);
             }
 
             [Fact]
@@ -148,7 +148,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
                 Assert.Equal($"/Working/lib/{expected}/file.dll", result.ElementAt(0).Path.FullPath);
             }
 
@@ -169,7 +169,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
                 Assert.Equal($"/Working/lib/{expected}/file.dll", result.ElementAt(0).Path.FullPath);
             }
 
@@ -188,7 +188,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(0, result.Count);
+                Assert.Empty(result);
             }
 
             [Fact]
@@ -206,7 +206,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
                 Assert.Equal($"/Working/lib/netstandard1.6/file.dll", result.ElementAt(0).Path.FullPath);
             }
 
@@ -223,7 +223,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
                 Assert.Equal("/Working/lib/netstandard1.6/file.dll", result.ElementAt(0).Path.FullPath);
             }
 
@@ -266,7 +266,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
                 Assert.Equal($"/Working/lib/{expected}/file.dll", result.ElementAt(0).Path.FullPath);
             }
 
@@ -285,7 +285,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
                 Assert.Equal($"/Working/file.dll", result.ElementAt(0).Path.FullPath);
             }
 
@@ -330,7 +330,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(0, result.Count);
+                Assert.Empty(result);
             }
 
             public void Should_Return_Runtimes_Assemblies_If_CoreCLR()
@@ -349,7 +349,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
             }
 
             public void Should_Return_Native_Runtimes_Assemblies_If_CoreCLR()
@@ -367,7 +367,7 @@ namespace Cake.NuGet.Tests.Unit
                 var result = fixture.GetFiles();
 
                 // Then
-                Assert.Equal(1, result.Count);
+                Assert.Single(result);
             }
         }
     }

@@ -36,7 +36,7 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Add("start");
 
                 // Then
-                Assert.Equal(1, graph.Nodes.Count);
+                Assert.Single(graph.Nodes);
             }
 
             [Fact]
@@ -110,7 +110,7 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Connect("start", "end");
 
                 // Then
-                Assert.Equal(1, graph.Edges.Count);
+                Assert.Single(graph.Edges);
             }
 
             [Fact]
@@ -124,7 +124,7 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Connect("START", "END");
 
                 // Then
-                Assert.Equal(1, graph.Edges.Count);
+                Assert.Single(graph.Edges);
             }
 
             [Fact]
