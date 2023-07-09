@@ -10,6 +10,7 @@ using Cake.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Xunit;
+using Xunit.Sdk;
 
 namespace Cake.Frosting.Tests
 {
@@ -329,6 +330,34 @@ namespace Cake.Frosting.Tests
             fixture.Strategy
                 .Received(1)
                 .ExecuteAsync(Arg.Any<CakeTask>(), Arg.Is<ICakeContext>(cc => cc.Arguments.HasArgument("target") && cc.Arguments.GetArgument("target").Equals(nameof(DummyTask))));
+        }
+
+        [Theory]
+        [InlineData(nameof(DummyTask), nameof(DummyTask2), nameof(DummyTask3))]
+        [InlineData(nameof(DummyTask), nameof(DummyTask3), nameof(DummyTask2))]
+        [InlineData(nameof(DummyTask2), nameof(DummyTask3), nameof(DummyTask))]
+        [InlineData(nameof(DummyTask2), nameof(DummyTask), nameof(DummyTask3))]
+        [InlineData(nameof(DummyTask3), nameof(DummyTask2), nameof(DummyTask))]
+        [InlineData(nameof(DummyTask3), nameof(DummyTask), nameof(DummyTask2))]
+        public void Should_Execute_Multiple_Targets_In_Correct_Order(string task0, string task1, string task2)
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.RegisterTask<DummyTask2>();
+            fixture.RegisterTask<DummyTask3>();
+            fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+            // When
+            fixture.Run("--target", task0, "--target", task1, "--target", task2);
+
+            // Then
+            Received.InOrder(() =>
+            {
+                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task0), Arg.Any<ICakeContext>());
+                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task1), Arg.Any<ICakeContext>());
+                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task2), Arg.Any<ICakeContext>());
+            });
         }
     }
 }

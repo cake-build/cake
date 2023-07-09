@@ -1,6 +1,7 @@
 public record BuildPaths(
     BuildDirectories Directories,
-    FilePath SignClientPath
+    FilePath SignClientPath,
+    FilePath SignFilterPath
 )
 {
     public static BuildPaths GetPaths(
@@ -38,11 +39,20 @@ public record BuildPaths(
             nugetRoot,
             integrationTestsBinTool);
 
-        var signClientPath = context.Tools.Resolve("SignClient.exe") ?? context.Tools.Resolve("SignClient") ?? throw new Exception("Failed to locate sign tool");
+        var signClientPath = context.Tools.Resolve("sign.exe")
+                                ?? context.Tools.Resolve("sign")
+                                ?? (
+                                    context.IsRunningOnWindows()
+                                        ? throw new Exception("Failed to locate sign tool")
+                                        : null
+                                    );
+
+        var signFilterPath = context.MakeAbsolute(context.File("./build/signclient.filter"));
 
         return new BuildPaths(
             Directories: buildDirectories,
-            SignClientPath: signClientPath
+            SignClientPath: signClientPath,
+            SignFilterPath: signFilterPath
         );
     }
 }

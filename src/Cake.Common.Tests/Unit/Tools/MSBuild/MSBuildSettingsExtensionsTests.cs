@@ -945,7 +945,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.True(settings.WarningsAsError);
-                Assert.Equal(0, settings.WarningsAsErrorCodes.Count);
+                Assert.Empty(settings.WarningsAsErrorCodes);
             }
 
             [Fact]
@@ -959,7 +959,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.True(settings.WarningsAsError);
-                Assert.Equal(1, settings.WarningsAsErrorCodes.Count);
+                Assert.Single(settings.WarningsAsErrorCodes);
                 Assert.Equal("12345", settings.WarningsAsErrorCodes.First());
             }
 
@@ -989,7 +989,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 settings.WithWarningsAsMessage("12345");
 
                 // Then
-                Assert.Equal(1, settings.WarningsAsMessageCodes.Count);
+                Assert.Single(settings.WarningsAsMessageCodes);
                 Assert.Equal("12345", settings.WarningsAsMessageCodes.First());
             }
 

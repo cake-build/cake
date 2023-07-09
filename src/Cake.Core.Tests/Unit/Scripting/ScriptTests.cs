@@ -4,6 +4,7 @@
 
 using Cake.Core.Scripting;
 using Xunit;
+using static System.Array;
 
 namespace Cake.Core.Tests.Unit.Scripting
 {
@@ -15,60 +16,60 @@ namespace Cake.Core.Tests.Unit.Scripting
             public void Should_Not_Throw_If_Namespaces_Are_Null()
             {
                 // Given, When
-                var script = new Script(null, new string[] { }, new ScriptAlias[] { }, new string[] { }, new string[] { }, new string[] { });
+                var script = new Script(null, Empty<string>(), Empty<ScriptAlias>(), Empty<string>(), Empty<string>(), Empty<string>());
 
                 // Then
-                Assert.Equal(0, script.Namespaces.Count);
+                Assert.Empty(script.Namespaces);
             }
 
             [Fact]
             public void Should_Not_Throw_If_Lines_Are_Null()
             {
                 // Given, When
-                var script = new Script(new string[] { }, null, new ScriptAlias[] { }, new string[] { }, new string[] { }, new string[] { });
+                var script = new Script(Empty<string>(), null, new ScriptAlias[] { }, Empty<string>(), Empty<string>(), Empty<string>());
 
                 // Then
-                Assert.Equal(0, script.Lines.Count);
+                Assert.Empty(script.Lines);
             }
 
             [Fact]
             public void Should_Not_Throw_If_Aliases_Are_Null()
             {
                 // Given, When
-                var script = new Script(new string[] { }, new string[] { }, null, new string[] { }, new string[] { }, new string[] { });
+                var script = new Script(Empty<string>(), Empty<string>(), null, Empty<string>(), Empty<string>(), Empty<string>());
 
                 // Then
-                Assert.Equal(0, script.Aliases.Count);
+                Assert.Empty(script.Aliases);
             }
 
             [Fact]
             public void Should_Not_Throw_If_Using_Alias_Directives_Are_Null()
             {
                 // Given, When
-                var script = new Script(new string[] { }, new string[] { }, new ScriptAlias[] { }, null, new string[] { }, new string[] { });
+                var script = new Script(Empty<string>(), Empty<string>(), Empty<ScriptAlias>(), null, Empty<string>(), Empty<string>());
 
                 // Then
-                Assert.Equal(0, script.UsingAliasDirectives.Count);
+                Assert.Empty(script.UsingAliasDirectives);
             }
 
             [Fact]
             public void Should_Not_Throw_If_Using_Static_Directives_Are_Null()
             {
                 // Given, When
-                var script = new Script(new string[] { }, new string[] { }, new ScriptAlias[] { }, new string[] { }, null, new string[] { });
+                var script = new Script(Empty<string>(), Empty<string>(), Empty<ScriptAlias>(), Empty<string>(), null, Empty<string>());
 
                 // Then
-                Assert.Equal(0, script.UsingStaticDirectives.Count);
+                Assert.Empty(script.UsingStaticDirectives);
             }
 
             [Fact]
             public void Should_Not_Throw_If_Defines_Are_Null()
             {
                 // Given, When
-                var script = new Script(new string[] { }, new string[] { }, new ScriptAlias[] { }, new string[] { }, new string[] { }, null);
+                var script = new Script(Empty<string>(), Empty<string>(), Empty<ScriptAlias>(), Empty<string>(), Empty<string>(), null);
 
                 // Then
-                Assert.Equal(0, script.Defines.Count);
+                Assert.Empty(script.Defines);
             }
         }
     }

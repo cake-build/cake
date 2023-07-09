@@ -45,6 +45,11 @@ namespace Cake.Core.IO
         /// <summary>
         /// The current user's temporary folder.
         /// </summary>
-        LocalTemp
+        LocalTemp,
+
+        /// <summary>
+        /// The user's profile folder.
+        /// </summary>
+        UserProfile,
     }
 }

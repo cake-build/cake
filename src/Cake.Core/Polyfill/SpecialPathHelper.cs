@@ -17,6 +17,11 @@ namespace Cake.Core.Polyfill
                 return new DirectoryPath(System.IO.Path.GetTempPath());
             }
 
+            if (path == SpecialPath.UserProfile)
+            {
+                return new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+            }
+
             var result = GetXPlatFolderPath(platform, path);
             if (result != null)
             {

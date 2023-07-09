@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.IO;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -13,10 +14,20 @@ namespace Cake.Common.IO
     {
         public static void Clean(ICakeContext context, DirectoryPath path)
         {
-            Clean(context, path, null);
+            Clean(context, path, null, null);
+        }
+
+        public static void Clean(ICakeContext context, DirectoryPath path, CleanDirectorySettings settings)
+        {
+            Clean(context, path, null, settings);
         }
 
         public static void Clean(ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate)
+        {
+            Clean(context, path, predicate, null);
+        }
+
+        public static void Clean(ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate, CleanDirectorySettings settings)
         {
             if (context == null)
             {
@@ -43,10 +54,11 @@ namespace Cake.Common.IO
 
             context.Log.Verbose("Cleaning directory {0}", path);
             predicate = predicate ?? (info => true);
-            CleanDirectory(root, predicate, 0);
+            settings = settings ?? new CleanDirectorySettings();
+            CleanDirectory(root, predicate, 0, settings);
         }
 
-        private static bool CleanDirectory(IDirectory root, Func<IFileSystemInfo, bool> predicate, int level)
+        private static bool CleanDirectory(IDirectory root, Func<IFileSystemInfo, bool> predicate, int level, CleanDirectorySettings settings)
         {
             var shouldDeleteRoot = predicate(root);
 
@@ -54,7 +66,7 @@ namespace Cake.Common.IO
             var directories = root.GetDirectories("*", SearchScope.Current);
             foreach (var directory in directories)
             {
-                if (!CleanDirectory(directory, predicate, level + 1))
+                if (!CleanDirectory(directory, predicate, level + 1, settings))
                 {
                     // Since the child directory reported it shouldn't be
                     // removed, we should not remove the current directory either.
@@ -68,6 +80,12 @@ namespace Cake.Common.IO
             {
                 if (predicate(file))
                 {
+                    if (settings.Force)
+                    {
+                        // Remove the ReadOnly attribute on file (if set)
+                        file.Attributes &= ~FileAttributes.ReadOnly;
+                    }
+
                     file.Delete();
                 }
                 else

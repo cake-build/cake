@@ -266,6 +266,13 @@ namespace Cake.Common.Tools.DotNet.Publish
                 }
             }
 
+            // Os
+            if (!string.IsNullOrEmpty(settings.OS))
+            {
+                builder.Append("--os");
+                builder.Append(settings.OS);
+            }
+
             if (settings.MSBuildSettings != null)
             {
                 builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);

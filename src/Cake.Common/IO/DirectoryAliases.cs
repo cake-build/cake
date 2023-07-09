@@ -169,6 +169,31 @@ namespace Cake.Common.IO
         /// </summary>
         /// <example>
         /// <code>
+        /// CleanDirectories("./src/**/bin/debug", new CleanDirectorySettings() { Force = true });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The pattern to match.</param>
+        /// <param name="settings">The clean settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        public static void CleanDirectories(this ICakeContext context, GlobPattern pattern, CleanDirectorySettings settings)
+        {
+            var directories = context.GetDirectories(pattern);
+            if (directories.Count == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any directories.");
+                return;
+            }
+            CleanDirectories(context, directories, settings);
+        }
+
+        /// <summary>
+        /// Cleans the directories matching the specified pattern.
+        /// Cleaning the directory will remove all its content but not the directory itself.
+        /// </summary>
+        /// <example>
+        /// <code>
         /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
         /// fileSystemInfo=>!fileSystemInfo.Path.FullPath.EndsWith(
         ///                 "node_modules",
@@ -190,6 +215,36 @@ namespace Cake.Common.IO
                 return;
             }
             CleanDirectories(context, directories);
+        }
+
+        /// <summary>
+        /// Cleans the directories matching the specified pattern.
+        /// Cleaning the directory will remove all its content but not the directory itself.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
+        /// fileSystemInfo=>!fileSystemInfo.Path.FullPath.EndsWith(
+        ///                 "node_modules",
+        ///                 StringComparison.OrdinalIgnoreCase);
+        /// CleanDirectories("./src/**/bin/debug", exclude_node_modules, new CleanDirectorySettings() { Force = true });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="pattern">The pattern to match.</param>
+        /// <param name="predicate">The predicate used to filter directories based on file system information.</param>
+        /// <param name="settings">The clean settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        public static void CleanDirectories(this ICakeContext context, GlobPattern pattern, Func<IFileSystemInfo, bool> predicate, CleanDirectorySettings settings)
+        {
+            var directories = context.GetDirectories(pattern, new GlobberSettings { Predicate = predicate });
+            if (directories.Count == 0)
+            {
+                context.Log.Verbose("The provided pattern did not match any directories.");
+                return;
+            }
+            CleanDirectories(context, directories, settings);
         }
 
         /// <summary>
@@ -224,6 +279,33 @@ namespace Cake.Common.IO
         /// </summary>
         /// <example>
         /// <code>
+        /// var directoriesToClean = GetDirectories("./src/**/bin/");
+        /// CleanDirectories(directoriesToClean, new CleanDirectorySettings() { Force = true });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="directories">The directory paths.</param>
+        /// <param name="settings">The clean settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        public static void CleanDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, CleanDirectorySettings settings)
+        {
+            if (directories == null)
+            {
+                throw new ArgumentNullException(nameof(directories));
+            }
+            foreach (var directory in directories)
+            {
+                CleanDirectory(context, directory, settings);
+            }
+        }
+
+        /// <summary>
+        /// Cleans the specified directories.
+        /// Cleaning a directory will remove all its content but not the directory itself.
+        /// </summary>
+        /// <example>
+        /// <code>
         /// var directoriesToClean = new []{
         ///     "./src/Cake/obj",
         ///     "./src/Cake.Common/obj"
@@ -249,6 +331,37 @@ namespace Cake.Common.IO
         }
 
         /// <summary>
+        /// Cleans the specified directories.
+        /// Cleaning a directory will remove all its content but not the directory itself.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var directoriesToClean = new []{
+        ///     "./src/Cake/obj",
+        ///     "./src/Cake.Common/obj"
+        /// };
+        /// CleanDirectories(directoriesToClean, new CleanDirectorySettings() { Force = true });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="directories">The directory paths.</param>
+        /// <param name="settings">The clean settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        public static void CleanDirectories(this ICakeContext context, IEnumerable<string> directories, CleanDirectorySettings settings)
+        {
+            if (directories == null)
+            {
+                throw new ArgumentNullException(nameof(directories));
+            }
+            var paths = directories.Select(p => new DirectoryPath(p));
+            foreach (var directory in paths)
+            {
+                CleanDirectory(context, directory, settings);
+            }
+        }
+
+        /// <summary>
         /// Cleans the specified directory.
         /// </summary>
         /// <example>
@@ -270,6 +383,26 @@ namespace Cake.Common.IO
         /// </summary>
         /// <example>
         /// <code>
+        /// CleanDirectory("./src/Cake.Common/obj", new CleanDirectorySettings {
+        ///     Force = true
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        /// <param name="settings">The clean settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        public static void CleanDirectory(this ICakeContext context, DirectoryPath path, CleanDirectorySettings settings)
+        {
+            DirectoryCleaner.Clean(context, path, settings);
+        }
+
+        /// <summary>
+        /// Cleans the specified directory.
+        /// </summary>
+        /// <example>
+        /// <code>
         /// CleanDirectory("./src/Cake.Common/obj", fileSystemInfo=>!fileSystemInfo.Hidden);
         /// </code>
         /// </example>
@@ -281,6 +414,27 @@ namespace Cake.Common.IO
         public static void CleanDirectory(this ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate)
         {
             DirectoryCleaner.Clean(context, path, predicate);
+        }
+
+        /// <summary>
+        /// Cleans the specified directory.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// CleanDirectory("./src/Cake.Common/obj", fileSystemInfo=>!fileSystemInfo.Hidden, new CleanDirectorySettings {
+        ///     Force = true
+        /// });
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="path">The directory path.</param>
+        /// <param name="predicate">Predicate used to determine which files/directories should get deleted.</param>
+        /// <param name="settings">The clean settings.</param>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Clean")]
+        public static void CleanDirectory(this ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate, CleanDirectorySettings settings)
+        {
+            DirectoryCleaner.Clean(context, path, predicate, settings);
         }
 
         /// <summary>

@@ -1,3 +1,23 @@
+### New in 3.1.0 (Released 2023/07/09)
+
+* 4122 Call multiple tasks from CLI in Frosting.
+* 4092 Add support for getting the user's home directory in the Cake Environment.
+* 4184 Update Autofac to 7.0.1.
+* 4183 Update System.Reflection.Metadata to 7.0.2.
+* 4182 Update Basic.Reference.Assemblies.Net60/Net70 to 1.4.2.
+* 4181 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.6.0.
+* 4170 Update NuGet.* to v6.6.1.
+* 4138 Upgrade Spectre.Console to v0.46.0.
+* 4109 Add PublishReadyToRun to DotNetRestoreSettings.
+* 4107 DotNetPublishSettings is missing a way to set the --os option.
+* 4090 Update Microsoft.CodeAnalysis.CSharp.Scripting to v4.4.0.
+* 4087 Update Newtonsoft.Json to v13.0.2.
+* 4086 Update Autofac to v6.5.0.
+* 4085 Update NuGet.* to v6.4.0.
+* 1317 CleanDirectory does not clean readonly files.
+* 4095 Fix broken link to Cake Team on CONTRIBUTING.md.
+* 4128 Inconsistent determination of positional Argument when using context.Arguments versus context.Argument.
+
 ### New in 3.0.0 (Released 2022/11/08)
 
 * 4046 Add typed data context CakeTaskBuilder.Finally overload.

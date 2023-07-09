@@ -90,7 +90,7 @@ namespace Cake.Frosting
                 config.ValidateExamples();
 
                 // Top level examples.
-                config.AddExample(new[] { string.Empty });
+                config.AddExample(Array.Empty<string>());
                 config.AddExample(new[] { "--verbosity", "quiet" });
                 config.AddExample(new[] { "--tree" });
             });

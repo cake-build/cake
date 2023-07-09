@@ -79,7 +79,7 @@ namespace Cake.Common.Tests.Unit
                     var result = parser.Parse(content);
 
                     // Then
-                    Assert.Equal(1, result[0].Notes.Count);
+                    Assert.Single(result[0].Notes);
                     Assert.Equal("Line 1", result[0].Notes[0]);
                 }
 
@@ -94,7 +94,7 @@ namespace Cake.Common.Tests.Unit
                     var result = parser.Parse(content);
 
                     // Then
-                    Assert.Equal(1, result[0].Notes.Count);
+                    Assert.Single(result[0].Notes);
                     Assert.Equal("Line 1", result[0].Notes[0]);
                 }
 
@@ -143,7 +143,7 @@ namespace Cake.Common.Tests.Unit
                     var result = parser.Parse(content);
 
                     // Then
-                    Assert.Equal(1, result[0].Notes.Count);
+                    Assert.Single(result[0].Notes);
                     Assert.Equal("Line 1", result[0].Notes[0]);
                 }
 
@@ -239,7 +239,7 @@ namespace Cake.Common.Tests.Unit
                     var result = parser.Parse(content);
 
                     // Then
-                    Assert.Equal(1, result[0].Notes.Count);
+                    Assert.Single(result[0].Notes);
                     Assert.Equal("Line 1", result[0].Notes[0]);
                 }
 

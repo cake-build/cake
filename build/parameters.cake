@@ -22,13 +22,13 @@ public class BuildParameters
     public bool SkipSigning { get; }
     public BuildCredentials GitHub { get; }
     public TwitterCredentials Twitter { get; }
-    public GitterCredentials Gitter { get; }
     public ReleaseNotes ReleaseNotes { get; }
     public BuildVersion Version { get; set; }
     public BuildPaths Paths { get; }
     public BuildPackages Packages { get; }
     public bool PublishingError { get; set; }
     public DotNetMSBuildSettings MSBuildSettings { get; }
+    public CodeSigningCredentials CodeSigning { get; }
 
     public bool ShouldPublish
     {
@@ -48,6 +48,8 @@ public class BuildParameters
         }
     }
 
+
+    public bool ShouldSignPackages { get; }
     public bool CanPostToTwitter
     {
         get
@@ -56,14 +58,6 @@ public class BuildParameters
                 !string.IsNullOrEmpty(Twitter.ConsumerSecret) &&
                 !string.IsNullOrEmpty(Twitter.AccessToken) &&
                 !string.IsNullOrEmpty(Twitter.AccessTokenSecret);
-        }
-    }
-
-    public bool CanPostToGitter
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(Gitter.Token) && !string.IsNullOrEmpty(Gitter.RoomId);
         }
     }
 
@@ -89,7 +83,7 @@ public class BuildParameters
         IsTagged = IsBuildTagged(buildSystem);
         GitHub = BuildCredentials.GetGitHubCredentials(context);
         Twitter = TwitterCredentials.GetTwitterCredentials(context);
-        Gitter = GitterCredentials.GetGitterCredentials(context);
+        CodeSigning = CodeSigningCredentials.GetCodeSigningCredentials(context);
         ReleaseNotes = context.ParseReleaseNotes("./ReleaseNotes.md");
         IsPublishBuild = IsPublishing(context.TargetTask.Name);
         IsReleaseBuild = IsReleasing(context.TargetTask.Name);
@@ -129,6 +123,14 @@ public class BuildParameters
         {
             MSBuildSettings.WithProperty("TemplateVersion", Version.SemVersion);
         }
+
+
+        ShouldSignPackages = (!SkipSigning && ShouldPublish)
+                                ||
+                                StringComparer.OrdinalIgnoreCase.Equals(
+                                    context.EnvironmentVariable("SIGNING_TEST"),
+                                    "True"
+                                );
     }
 
     private static bool IsBuildTagged(BuildSystem buildSystem)

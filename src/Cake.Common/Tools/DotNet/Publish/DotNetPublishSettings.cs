@@ -171,6 +171,16 @@ namespace Cake.Common.Tools.DotNet.Publish
         public ICollection<string> Sources { get; set; } = new List<string>();
 
         /// <summary>
+        /// Gets or sets the target operating system (OS).
+        /// This is a shorthand syntax for setting the Runtime Identifier (RID), where the provided value is combined with the default RID.
+        /// If you use this option, don't use the -r|--runtime option.
+        /// </summary>
+        /// <remarks>
+        /// Requires .NET 6 or newer.
+        /// </remarks>
+        public string OS { get; set; }
+
+        /// <summary>
         /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
         public DotNetMSBuildSettings MSBuildSettings { get; set; }

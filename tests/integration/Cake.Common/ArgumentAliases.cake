@@ -42,7 +42,18 @@ Task("Cake.Common.ArgumentAliases.Argument.WithDefaultValue")
     Assert.Equal("foo", arg);
 });
 
-Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments")
+Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments.GetsLastValue")
+    .Does(() =>
+{
+    // Given, When
+    var arg = Argument<string>("multipleargs");
+
+    // Then
+    Assert.Equal("b", arg);
+});
+
+
+Task("Cake.Common.ArgumentAliases.Arguments.MultipleArguments")
     .Does(() =>
 {
 
@@ -53,7 +64,7 @@ Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments")
     Assert.Equal(new[] { "a", "b" }, arg);
 });
 
-Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments.WithSingleDefaultValue")
+Task("Cake.Common.ArgumentAliases.Arguments.MultipleArguments.WithSingleDefaultValue")
     .Does(() =>
 {
     // Given
@@ -66,7 +77,7 @@ Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments.WithSingleDefaultVa
     Assert.Equal(expect, arg);
 });
 
-Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments.WithMultipleDefaultValue")
+Task("Cake.Common.ArgumentAliases.Arguments.MultipleArguments.WithMultipleDefaultValue")
     .Does(() =>
 {
     // Given
@@ -79,7 +90,7 @@ Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments.WithMultipleDefault
     Assert.Equal(expect, arg);
 });
 
-Task("Cake.Common.ArgumentAliases.Argument.MultipleArguments.WithLazyDefaultValue")
+Task("Cake.Common.ArgumentAliases.Arguments.MultipleArguments.WithLazyDefaultValue")
     .Does(() =>
 {
     // Given
@@ -145,10 +156,11 @@ Task("Cake.Common.ArgumentAliases")
   .IsDependentOn("Cake.Common.ArgumentAliases.HasArgument.ThatDoNotExist")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument.WithDefaultValue")
-  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.MultipleArguments")
-  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.MultipleArguments.WithSingleDefaultValue")
-  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.MultipleArguments.WithMultipleDefaultValue")
-  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.MultipleArguments.WithLazyDefaultValue")
+  .IsDependentOn("Cake.Common.ArgumentAliases.Argument.MultipleArguments.GetsLastValue")
+  .IsDependentOn("Cake.Common.ArgumentAliases.Arguments.MultipleArguments")
+  .IsDependentOn("Cake.Common.ArgumentAliases.Arguments.MultipleArguments.WithSingleDefaultValue")
+  .IsDependentOn("Cake.Common.ArgumentAliases.Arguments.MultipleArguments.WithMultipleDefaultValue")
+  .IsDependentOn("Cake.Common.ArgumentAliases.Arguments.MultipleArguments.WithLazyDefaultValue")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument.DirectoryPathArgument")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument.FilePathArgument")
   .IsDependentOn("Cake.Common.ArgumentAliases.Argument.DotNetVerbosityArgument")

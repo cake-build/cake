@@ -15,7 +15,7 @@ namespace Cake.Frosting.Internal
         [CommandOption("--target|-t <TARGET>")]
         [DefaultValue("Default")]
         [Description("Target task to invoke.")]
-        public string Target { get; set; }
+        public string[] Targets { get; set; }
 
         [CommandOption("--working|-w <PATH>")]
         [TypeConverter(typeof(Cli.DirectoryPathConverter))]
