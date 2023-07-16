@@ -814,7 +814,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.MSBuild
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("msbuild /nr:true", result.Args);
+                Assert.Equal("msbuild /nodeReuse:true", result.Args);
             }
         }
 

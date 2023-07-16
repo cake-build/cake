@@ -204,9 +204,9 @@ namespace Cake.Common.Tools.DotNet.MSBuild
             }
 
             // Re-use of MSBuild nodes?
-            if (settings.NodeReuse != null)
+            if (settings.NodeReuse.HasValue)
             {
-                msBuilder.Append(string.Concat("/nr:", settings.NodeReuse.Value ? "true" : "false"));
+                msBuilder.Append(string.Concat("/nodeReuse:", settings.NodeReuse.Value ? "true" : "false"));
             }
 
             builder.AppendRange(
