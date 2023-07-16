@@ -440,6 +440,20 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         }
 
         /// <summary>
+        /// Sets whether or not node reuse should be enabled.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="reuse"><c>true</c> if node reuse should be enabled; otherwise <c>false</c>.</param>
+        /// <returns>The same <see cref="DotNetMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static DotNetMSBuildSettings SetNodeReuse(this DotNetMSBuildSettings settings, bool reuse)
+        {
+            EnsureSettings(settings);
+
+            settings.NodeReuse = reuse;
+            return settings;
+        }
+
+        /// <summary>
         /// Sets the configuration.
         /// </summary>
         /// <param name="settings">The settings.</param>

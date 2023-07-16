@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tests.Fixtures.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.MSBuild;
@@ -800,6 +801,20 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.MSBuild
 
                 // Then
                 Assert.Equal("--diagnostics msbuild", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_Node_Reuse_If_Specified()
+            {
+                // Given
+                var fixture = new DotNetMSBuildBuilderFixture();
+                fixture.Settings.NodeReuse = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /nr:true", result.Args);
             }
         }
 
