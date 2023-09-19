@@ -111,7 +111,12 @@ namespace Cake.Core.IO
         /// </remarks>
         public static bool IsClrAssembly(this IFile file)
         {
-            if (!file.Exists || file.Length < 365 || file.Path.GetExtension().ToLower().Equals("dylib"))
+            if (!file.Exists || file.Length < 365)
+            {
+                return false;
+            }
+
+            if (file.Path != null && file.Path.FullPath.EndsWith(".dylib"))
             {
                 return false;
             }
