@@ -261,6 +261,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // When
                 file.Exists.Returns(true);
+                file.Path.Returns(new string(""));  // not ideal, but better then leave it null
                 file.Length.Returns(_validPeAndClrAssemblyBytes.Length);
                 file.OpenRead().Returns(new MemoryStream(_validPeAndClrAssemblyBytes));
 
@@ -276,6 +277,7 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // When
                 file.Exists.Returns(true);
+                file.Path.Returns(new string(""));  // not ideal, but better then leave it null
                 file.Length.Returns(_validPeButNotClrAssemblyBytes.Length);
                 file.OpenRead().Returns(new MemoryStream(_validPeButNotClrAssemblyBytes));
 
@@ -291,6 +293,23 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // When
                 file.Exists.Returns(true);
+                file.Path.Returns(new string(""));  // not ideal, but better then leave it null
+                file.Length.Returns(_invalidPeBytes.Length);
+                file.OpenRead().Returns(new MemoryStream(_invalidPeBytes));
+
+                // Then
+                Assert.False(FileExtensions.IsClrAssembly(file));
+            }
+
+            [Fact]
+            public void Should_Return_False_When_File_Is_MacOS_MachO_dylib()
+            {
+                // Given
+                var file = Substitute.For<IFile>();
+
+                // When
+                file.Exists.Returns(true);
+                file.Path.Returns(new string("fulnname.dylib"));
                 file.Length.Returns(_invalidPeBytes.Length);
                 file.OpenRead().Returns(new MemoryStream(_invalidPeBytes));
 
