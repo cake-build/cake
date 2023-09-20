@@ -116,9 +116,9 @@ namespace Cake.Core.IO
                 return false;
             }
 
-            if (file.Path != null 
-                && 
-                  ! (
+            if (file.Path != null
+                &&
+                  !(
                     file.Path.FullPath.EndsWith(".dll") || file.Path.FullPath.EndsWith(".exe")
                     ||
                     file.Path.FullPath.EndsWith(".sys") || file.Path.FullPath.EndsWith(".tsp")
@@ -129,9 +129,7 @@ namespace Cake.Core.IO
                     ||
                     file.Path.FullPath.EndsWith(".efi") || file.Path.FullPath.EndsWith(".mui")
                     ||
-                    file.Path.FullPath.EndsWith(".ocx") || file.Path.FullPath.EndsWith(".scr")
-                    )
-                )
+                    file.Path.FullPath.EndsWith(".ocx") || file.Path.FullPath.EndsWith(".scr")))
             {
                 return false;
             }
