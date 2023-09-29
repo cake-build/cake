@@ -712,6 +712,37 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.MSBuild
             }
         }
 
+        public sealed class TheNodeReuseMethod
+        {
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Set_Node_Reuse(bool reuse)
+            {
+                // Given
+                var settings = new DotNetMSBuildSettings();
+
+                // When
+                settings.SetNodeReuse(reuse);
+
+                // Then
+                Assert.Equal(reuse, settings.NodeReuse);
+            }
+
+            [Fact]
+            public void Should_Return_The_Same_Configuration()
+            {
+                // Given
+                var settings = new DotNetMSBuildSettings();
+
+                // When
+                var result = settings.SetNodeReuse(true);
+
+                // Then
+                Assert.Equal(settings, result);
+            }
+        }
+
         public sealed class TheSetConfigurationMethod
         {
             private const string Configuration = "TheConfiguration";

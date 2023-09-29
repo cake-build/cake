@@ -215,6 +215,13 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         public IList<string> WarningCodesAsMessage { get; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether or not node reuse is used.
+        /// When you’re doing multiple builds in a row, this helps reduce your total build time,
+        /// by avoiding the start up costs of each MSBuild child node.
+        /// </summary>
+        public bool? NodeReuse { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DotNetMSBuildSettings"/> class.
         /// </summary>
         public DotNetMSBuildSettings()
