@@ -18,6 +18,7 @@ namespace Cake.Common.Build.AzurePipelines
     /// </summary>
     public sealed class AzurePipelinesCommands : IAzurePipelinesCommands
     {
+        private const string FormatPrefix = "##[";
         private const string MessagePrefix = "##vso[";
         private const string MessagePostfix = "]";
 
@@ -67,6 +68,24 @@ namespace Cake.Common.Build.AzurePipelines
             var properties = data.GetProperties();
             properties.Add("type", "error");
             WriteLoggingCommand("task.logissue", properties, message);
+        }
+
+        /// <inheritdoc/>
+        public void BeginGroup(string name)
+        {
+            WriteFormatCommand("group", name);
+        }
+
+        /// <inheritdoc/>
+        public void EndGroup()
+        {
+            WriteFormatCommand("endgroup", string.Empty);
+        }
+
+        /// <inheritdoc/>
+        public void Section(string name)
+        {
+            WriteFormatCommand("section", name);
         }
 
         /// <inheritdoc/>
@@ -287,9 +306,14 @@ namespace Cake.Common.Build.AzurePipelines
             PublishCodeCoverage(summaryFilePath, data);
         }
 
+        private void WriteFormatCommand(string actionName, string value)
+        {
+            _writer.Write("{0}{1}{2}{3}", FormatPrefix, actionName, MessagePostfix, value);
+        }
+
         private void WriteLoggingCommand(string actionName, string value)
         {
-            WriteLoggingCommand(actionName, new Dictionary<string, string>(), value);
+            _writer.Write("{0}{1}{2}{3}", MessagePrefix, actionName, MessagePostfix, value);
         }
 
         private void WriteLoggingCommand(string actionName, Dictionary<string, string> properties, string value)
