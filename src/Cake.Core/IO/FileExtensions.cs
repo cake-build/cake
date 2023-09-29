@@ -116,22 +116,26 @@ namespace Cake.Core.IO
                 return false;
             }
 
-            if (file.Path != null
-                &&
-                  !(
-                    file.Path.FullPath.EndsWith(".dll") || file.Path.FullPath.EndsWith(".exe")
-                    ||
-                    file.Path.FullPath.EndsWith(".sys") || file.Path.FullPath.EndsWith(".tsp")
-                    ||
-                    file.Path.FullPath.EndsWith(".acm") || file.Path.FullPath.EndsWith(".ax")
-                    ||
-                    file.Path.FullPath.EndsWith(".cpl") || file.Path.FullPath.EndsWith(".drv")
-                    ||
-                    file.Path.FullPath.EndsWith(".efi") || file.Path.FullPath.EndsWith(".mui")
-                    ||
-                    file.Path.FullPath.EndsWith(".ocx") || file.Path.FullPath.EndsWith(".scr")))
+            // Is known extension?
+            switch (file.Path?.GetExtension().ToLowerInvariant())
             {
-                return false;
+                case "dll":
+                case "exe":
+                case "sys":
+                case "tsp":
+                case "acm":
+                case "ax":
+                case "cpl":
+                case "drv":
+                case "efi":
+                case "mui":
+                case "ocx":
+                case "scr":
+                case null:
+                    break;
+
+                default:
+                    return false;
             }
 
             using (var fs = file.OpenRead())
