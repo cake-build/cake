@@ -18,17 +18,17 @@
   </ItemGroup>
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="NuGet.Frameworks" Version="6.6.1" />
-    <PackageReference Include="NuGet.Versioning" Version="6.6.1" />
-    <PackageReference Include="NuGet.Protocol" Version="6.6.1" />
-    <PackageReference Include="NuGet.Packaging" Version="6.6.1" />
-    <PackageReference Include="NuGet.Resolver" Version="6.6.1" />
-    <PackageReference Include="NuGet.Common" Version="6.6.1" />
+    <PackageReference Include="NuGet.Frameworks" Version="6.7.0" />
+    <PackageReference Include="NuGet.Versioning" Version="6.7.0" />
+    <PackageReference Include="NuGet.Protocol" Version="6.7.0" />
+    <PackageReference Include="NuGet.Packaging" Version="6.7.0" />
+    <PackageReference Include="NuGet.Resolver" Version="6.7.0" />
+    <PackageReference Include="NuGet.Common" Version="6.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="7.0.3" GeneratePathProperty="true">
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="7.0.4" GeneratePathProperty="true">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <EmbeddedResource Include="$(PkgMicrosoft_NETCore_Platforms)\runtime.json">
