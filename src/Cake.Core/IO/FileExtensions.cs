@@ -116,6 +116,28 @@ namespace Cake.Core.IO
                 return false;
             }
 
+            // Is known extension?
+            switch (file.Path?.GetExtension().ToLowerInvariant())
+            {
+                case ".dll":
+                case ".exe":
+                case ".sys":
+                case ".tsp":
+                case ".acm":
+                case ".ax":
+                case ".cpl":
+                case ".drv":
+                case ".efi":
+                case ".mui":
+                case ".ocx":
+                case ".scr":
+                case null:
+                    break;
+
+                default:
+                    return false;
+            }
+
             using (var fs = file.OpenRead())
             {
                 using (var reader = new System.IO.BinaryReader(fs))

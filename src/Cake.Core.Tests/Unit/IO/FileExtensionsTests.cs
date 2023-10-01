@@ -297,6 +297,21 @@ namespace Cake.Core.Tests.Unit.IO
                 // Then
                 Assert.False(FileExtensions.IsClrAssembly(file));
             }
+
+            [Fact]
+            public void Should_Return_False_When_File_Is_MacOS_MachO_dylib()
+            {
+                // Given
+                var file = Substitute.For<IFile>();
+
+                // When
+                file.Exists.Returns(true);
+                file.Path.Returns(new string("fullname.dylib"));
+                file.Length.Returns(_invalidPeBytes.Length);
+
+                // Then
+                Assert.False(FileExtensions.IsClrAssembly(file));
+            }
         }
     }
 }
