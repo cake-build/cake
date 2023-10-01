@@ -203,6 +203,12 @@ namespace Cake.Common.Tools.DotNet.MSBuild
                 msBuilder.AppendMSBuildSwitch("property", $"ContinuousIntegrationBuild={continuousIntegrationBuild}");
             }
 
+            // Re-use of MSBuild nodes?
+            if (settings.NodeReuse.HasValue)
+            {
+                msBuilder.Append(string.Concat("/nodeReuse:", settings.NodeReuse.Value ? "true" : "false"));
+            }
+
             builder.AppendRange(
                 invokeArgumentCustomization
                     ? settings.ArgumentCustomization?.Invoke(msBuilder) ?? msBuilder

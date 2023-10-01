@@ -484,5 +484,18 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.MSBuild
                 Assert.Empty(settings.DistributedLoggers);
             }
         }
+
+        public sealed class TheNodeReuseProperty
+        {
+            [Fact]
+            public void Should_Be_Null_By_Default()
+            {
+                // Given
+                var settings = new DotNetMSBuildSettings();
+
+                // Then
+                Assert.Null(settings.NodeReuse);
+            }
+        }
     }
 }
