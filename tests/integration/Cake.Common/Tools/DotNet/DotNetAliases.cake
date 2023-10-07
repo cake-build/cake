@@ -251,7 +251,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
 
     // When
-    DotNetFormat(project.FullPath); 
+    DotNetFormat(project.FullPath);
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSDKCheck")
@@ -308,6 +308,19 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRestore")
     DotNetWorkloadRestore(project.FullPath);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+
+    // When
+    DotNetWorkloadRestore(project.FullPath);
+    DotNetAddPackage("Cake.FileHelper", project.FullPath);
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
@@ -329,6 +342,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRepair")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadUpdate")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRestore")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     .Does(() =>
 {
     // When
