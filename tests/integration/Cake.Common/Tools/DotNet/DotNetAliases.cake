@@ -315,10 +315,18 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    var package = "Cake.FileHelper";
 
     // When
-    DotNetWorkloadRestore(project.FullPath);
-    DotNetAddPackage("Cake.FileHelper", project.FullPath);
+    DotNetAddPackage(package, project.FullPath);
+
+    var value = XmlPeek(
+        project.FullPath,
+        $"/Project/ItemGroup/PackageReference[@Include='{package}']/@Include"
+    );
+
+    // Then
+    Assert.Equal(package, value);
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
