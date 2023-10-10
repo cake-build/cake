@@ -315,7 +315,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var package = "Cake.FileHelper";
+    var package = "grok.net";
 
     // When
     DotNetAddPackage(package, project.FullPath);
