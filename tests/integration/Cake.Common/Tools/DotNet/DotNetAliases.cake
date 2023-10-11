@@ -329,6 +329,18 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     Assert.Equal(package, value);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+
+    // When
+    DotNetListPackage(project.FullPath);
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
@@ -351,6 +363,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadUpdate")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListPackage")
     .Does(() =>
 {
     // When

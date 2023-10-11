@@ -2,26 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotNet.Format
+namespace Cake.Common.Tools.DotNet.Package.List
 {
     /// <summary>
-    /// Severity of dotnet format.
+    /// Formats of dotnet list package.
     /// </summary>
-    public enum DotNetFormatSeverity
+    public enum DotNetPackageListFormat
     {
         /// <summary>
-        /// Information
+        /// Console.
         /// </summary>
-        Info,
+        Console,
 
         /// <summary>
-        /// Warning
+        /// Json.
         /// </summary>
-        Warning,
-
-        /// <summary>
-        /// Error
-        /// </summary>
-        Error
+        Json
     }
 }
