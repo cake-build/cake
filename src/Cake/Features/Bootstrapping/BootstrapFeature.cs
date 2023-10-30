@@ -17,7 +17,7 @@ namespace Cake.Features.Bootstrapping
 {
     public interface IBootstrapFeature
     {
-        int Run(IRemainingArguments arguments, BootstrapFeatureSettings settings);
+        int Run(ICakeArguments arguments, BootstrapFeatureSettings settings);
     }
 
     public sealed class BootstrapFeature : Feature, IBootstrapFeature
@@ -32,7 +32,7 @@ namespace Cake.Features.Bootstrapping
             _environment = environment;
         }
 
-        public int Run(IRemainingArguments arguments, BootstrapFeatureSettings settings)
+        public int Run(ICakeArguments arguments, BootstrapFeatureSettings settings)
         {
             // Fix the script path.
             settings.Script = settings.Script ?? new FilePath("build.cake");
