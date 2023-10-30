@@ -145,7 +145,7 @@ namespace Cake.Tests.Unit
 
             // Then
             feature.Received(1).Run(
-                Arg.Is<IRemainingArguments>(arguments => arguments.Parsed.Contains("version") && arguments.Parsed["version"].Contains("1.2.3")),
+                Arg.Is<ICakeArguments>(arguments => arguments.HasArgument("version") && arguments.GetArguments("version").Contains("1.2.3")),
                 Arg.Is<BuildFeatureSettings>(settings => settings.BuildHostKind == BuildHostKind.Build));
         }
     }
