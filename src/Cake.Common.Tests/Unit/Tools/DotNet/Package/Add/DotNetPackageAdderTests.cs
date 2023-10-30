@@ -3,10 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNet.Package.Add;
-using Cake.Common.Tests.Fixtures.Tools.DotNet.SDKCheck;
-using Cake.Common.Tests.Fixtures.Tools.DotNet.Workload.Restore;
 using Cake.Common.Tools.DotNet;
-using Cake.Common.Tools.DotNet.Package.Add;
 using Cake.Testing;
 using Xunit;
 

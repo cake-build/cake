@@ -329,6 +329,32 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     Assert.Equal(package, value);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemovePackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    var package = "grok.net";
+    var value = XmlPeek(
+        project.FullPath,
+        $"/Project/ItemGroup/PackageReference[@Include='{package}']/@Include"
+    );
+    Assert.Equal(package, value);
+
+    // When
+    DotNetRemovePackage(package, project.FullPath);
+
+    value = XmlPeek(
+        project.FullPath,
+        $"/Project/ItemGroup/PackageReference[@Include='{package}']/@Include"
+    );
+
+    // Then
+    Assert.Null(value);
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
@@ -351,6 +377,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadUpdate")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemovePackage")
     .Does(() =>
 {
     // When
