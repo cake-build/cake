@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Cake.Core;
 using Cake.Core.Composition;
@@ -63,7 +65,10 @@ namespace Cake.Tests.Fixtures
 
         public BuildFeatureFixtureResult Run(BuildFeatureSettings settings, IDictionary<string, string> arguments = null)
         {
-            var remaining = new FakeRemainingArguments(arguments);
+            var parsed = (arguments ?? new Dictionary<string, string>())
+                .ToLookup(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
+
+            var remaining = new CakeArguments(parsed);
             var exitCode = ((IBuildFeature)this).Run(remaining, settings);
 
             return new BuildFeatureFixtureResult
@@ -88,7 +93,7 @@ namespace Cake.Tests.Fixtures
             return builder.ToString();
         }
 
-        int IBuildFeature.Run(IRemainingArguments arguments, BuildFeatureSettings settings)
+        int IBuildFeature.Run(ICakeArguments arguments, BuildFeatureSettings settings)
         {
             var feature = new BuildFeature(FileSystem, Environment, Bootstrapper, ModuleSearcher, Log);
             return feature.Run(arguments, settings);

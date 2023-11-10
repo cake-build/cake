@@ -40,6 +40,23 @@ namespace Cake.Common.Build.AzurePipelines
         void WriteError(string message, AzurePipelinesMessageData data);
 
         /// <summary>
+        /// Begin a collapsible group.
+        /// </summary>
+        /// <param name="name">The name of the group.</param>
+        public void BeginGroup(string name);
+
+        /// <summary>
+        /// End a collapsible group.
+        /// </summary>
+        public void EndGroup();
+
+        /// <summary>
+        /// Log section.
+        /// </summary>
+        /// <param name="name">The name of the section.</param>
+        public void Section(string name);
+
+        /// <summary>
         /// Set progress and current operation for current task.
         /// </summary>
         /// <param name="progress">Current progress as percentage.</param>

@@ -21,7 +21,7 @@ namespace Cake.Features.Building
 {
     public interface IBuildFeature
     {
-        int Run(IRemainingArguments arguments, BuildFeatureSettings settings);
+        int Run(ICakeArguments arguments, BuildFeatureSettings settings);
     }
 
     public sealed class BuildFeature : Feature, IBuildFeature
@@ -42,7 +42,7 @@ namespace Cake.Features.Building
             _log = log;
         }
 
-        public int Run(IRemainingArguments arguments, BuildFeatureSettings settings)
+        public int Run(ICakeArguments arguments, BuildFeatureSettings settings)
         {
             using (new ScriptAssemblyResolver(_environment, _log))
             {
@@ -50,7 +50,7 @@ namespace Cake.Features.Building
             }
         }
 
-        private int RunCore(IRemainingArguments arguments, BuildFeatureSettings settings)
+        private int RunCore(ICakeArguments arguments, BuildFeatureSettings settings)
         {
             // Fix the script path.
             settings.Script = settings.Script ?? new FilePath("build.cake");

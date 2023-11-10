@@ -15,6 +15,8 @@ using Cake.Common.Tools.DotNet.NuGet.Delete;
 using Cake.Common.Tools.DotNet.NuGet.Push;
 using Cake.Common.Tools.DotNet.NuGet.Source;
 using Cake.Common.Tools.DotNet.Pack;
+using Cake.Common.Tools.DotNet.Package.Add;
+using Cake.Common.Tools.DotNet.Package.Remove;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
@@ -2284,6 +2286,148 @@ namespace Cake.Common.Tools.DotNet
 
             var restorer = new DotNetWorkloadRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             restorer.Restore(project, settings);
+        }
+
+        /// <summary>
+        /// Adds or updates a package reference in a project file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">The package reference to add.</param>
+        /// <example>
+        /// <code>
+        /// DotNetAddPackage("Cake.FileHelper");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Package")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Add")]
+        public static void DotNetAddPackage(this ICakeContext context, string packageName)
+        {
+            context.DotNetAddPackage(packageName, null, null);
+        }
+
+        /// <summary>
+        /// Adds or updates a package reference in a project file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">The package reference to add.</param>
+        /// <param name="project">The target project file path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetAddPackage("Cake.FileHelper", "ToDo.csproj");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Package")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Add")]
+        public static void DotNetAddPackage(this ICakeContext context, string packageName, string project)
+        {
+            context.DotNetAddPackage(packageName, project, null);
+        }
+
+        /// <summary>
+        /// Adds or updates a package reference in a project file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">The package reference to add.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetPackageAddSettings
+        /// {
+        ///     NoRestore = true,
+        ///     Version = "6.1.3"
+        /// };
+        ///
+        /// DotNetAddPackage("Cake.FileHelper", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Package")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Add")]
+        public static void DotNetAddPackage(this ICakeContext context, string packageName, DotNetPackageAddSettings settings)
+        {
+            context.DotNetAddPackage(packageName, null, settings);
+        }
+
+        /// <summary>
+        /// Adds or updates a package reference in a project file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">The package reference to add.</param>
+        /// <param name="project">The target project file path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetPackageAddSettings
+        /// {
+        ///     NoRestore = true,
+        ///     Version = "6.1.3"
+        /// };
+        ///
+        /// DotNetAddPackage("Cake.FileHelper", "ToDo.csproj", settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Package")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Add")]
+        public static void DotNetAddPackage(this ICakeContext context, string packageName, string project, DotNetPackageAddSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetPackageAddSettings();
+            }
+
+            var adder = new DotNetPackageAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            adder.Add(packageName, project, settings);
+        }
+
+        /// <summary>
+        /// Removes package reference from a project file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">The package reference to remove.</param>
+        /// <example>
+        /// <code>
+        /// DotNetRemovePackage("Cake.FileHelper");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Package")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Remove")]
+        public static void DotNetRemovePackage(this ICakeContext context, string packageName)
+        {
+            context.DotNetRemovePackage(packageName, null);
+        }
+
+        /// <summary>
+        /// Removes package reference from a project file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">The package reference to remove.</param>
+        /// <param name="project">The target project file path.</param>
+        /// <example>
+        /// <code>
+        /// DotNetRemovePackage("Cake.FileHelper", "ToDo.csproj");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Package")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Remove")]
+        public static void DotNetRemovePackage(this ICakeContext context, string packageName, string project)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var adder = new DotNetPackageRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            adder.Remove(packageName, project);
         }
     }
 }
