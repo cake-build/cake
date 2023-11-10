@@ -1,3 +1,15 @@
+### New in 3.2.0 (Released 2023/11/10)
+
+* 4225 Add DotNetRemovePackage alias for dotnet remove package command.
+* 4187 Add DotNetAddPackage alias for dotnet add package command.
+* 4221 Add Azure Pipelines group logging commands.
+* 4219 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.7.0.
+* 4217 Update NuGet.* to 6.7.0.
+* 4215 Update Autofac to 7.1.0.
+* 4157 Upgrading to spectre.console 0.47.0 breaks the cake build.
+* 4144 DotNetMSBuildSettings is missing NodeReuse.
+* 3996 Error: Bad IL format with Cake MacOSX (2.3.0 - 3.1.0).
+
 ### New in 3.1.0 (Released 2023/07/09)
 
 * 4122 Call multiple tasks from CLI in Frosting.
