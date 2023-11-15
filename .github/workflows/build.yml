@@ -20,10 +20,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install .NET SDK 6.0.x
+      - name: Install .NET SDK 6.0.x - 8.0.x
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: |
+            6.0.x
+            7.0.x
+            8.0.x
 
       - name: Install .NET Core SDK (global.json)
         uses: actions/setup-dotnet@v3
@@ -46,4 +49,5 @@ jobs:
           arguments: |
             CAKE_NETCOREAPP_6_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_6_0_VERSION_OS }}
             CAKE_NETCOREAPP_7_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_7_0_VERSION_OS }}
-
+            CAKE_NETCOREAPP_8_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_8_0_VERSION_OS }}
+            ValidateGitHubActionsProvider: true
