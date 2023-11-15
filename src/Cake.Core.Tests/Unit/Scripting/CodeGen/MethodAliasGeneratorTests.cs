@@ -2,14 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Threading.Tasks;
 using Cake.Core.Scripting.CodeGen;
 using Cake.Core.Tests.Fixtures;
+using VerifyXunit;
 using Xunit;
+using static VerifyXunit.Verifier;
 
 namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 {
+    [UsesVerify]
     public sealed class MethodAliasGeneratorTests
     {
+        [UsesVerify]
         public sealed class TheGeneratorMethod : IClassFixture<MethodAliasGeneratorFixture>
         {
             private readonly MethodAliasGeneratorFixture _fixture;
@@ -56,16 +61,14 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("NonGeneric_ExtensionMethodWithGenericCollectionOfNestedType")]
             [InlineData("NonGeneric_ExtensionMethodWithParameterAttributes")]
             [InlineData("NonGeneric_ExtensionMethodWithDynamicReturnValue")]
-            public void Should_Return_Correct_Generated_Code_For_Non_Generic_Methods(string name)
+            public Task Should_Return_Correct_Generated_Code_For_Non_Generic_Methods(string name)
             {
-                // Given
-                var expected = _fixture.GetExpectedCode(name);
-
-                // When
+                // Given / When
                 var result = _fixture.Generate(name);
 
                 // Then
-                Assert.Equal(expected, result);
+                return Verify(result)
+                    .UseParameters(name);
             }
 
             [Theory]
@@ -73,16 +76,14 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("Generic_ExtensionMethodWithParameter")]
             [InlineData("Generic_ExtensionMethodWithGenericReturnValue")]
             [InlineData("Generic_ExtensionMethodWithGenericReturnValueAndTypeParamConstraints")]
-            public void Should_Return_Correct_Generated_Code_For_Generic_Methods(string name)
+            public Task Should_Return_Correct_Generated_Code_For_Generic_Methods(string name)
             {
-                // Given
-                var expected = _fixture.GetExpectedCode(name);
-
-                // When
+                // Given / When
                 var result = _fixture.Generate(name);
 
                 // Then
-                Assert.Equal(expected, result);
+                return Verify(result)
+                    .UseParameters(name);
             }
 
             [Theory]
@@ -90,16 +91,14 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("Obsolete_ImplicitWarning_WithMessage")]
             [InlineData("Obsolete_ExplicitWarning_WithMessage")]
             [InlineData("Obsolete_ExplicitError_WithMessage")]
-            public void Should_Return_Correct_Generated_Code_For_Obsolete_Methods(string name)
+            public Task Should_Return_Correct_Generated_Code_For_Obsolete_Methods(string name)
             {
-                // Given
-                var expected = _fixture.GetExpectedCode(name);
-
-                // When
+                // Given / When
                 var result = _fixture.Generate(name);
 
                 // Then
-                Assert.Equal(expected, result);
+                return Verify(result)
+                    .UseParameters(name);
             }
         }
     }
