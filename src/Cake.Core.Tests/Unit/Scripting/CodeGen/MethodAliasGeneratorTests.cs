@@ -61,6 +61,8 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("ExtensionMethodWithGenericCollectionOfNestedType")]
             [InlineData("ExtensionMethodWithParameterAttributes")]
             [InlineData("ExtensionMethodWithDynamicReturnValue")]
+            [InlineData("ExtensionMethodWithNullableParameter")]
+            [InlineData("ExtensionMethodWithNullableReturnValue")]
             public Task Should_Return_Correct_Generated_Code_For_Non_Generic_Methods(string name)
             {
                 // Given / When
