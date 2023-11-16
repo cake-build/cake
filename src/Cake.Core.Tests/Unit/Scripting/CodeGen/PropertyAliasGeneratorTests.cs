@@ -3,14 +3,19 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Reflection;
+using System.Threading.Tasks;
 using Cake.Core.Scripting.CodeGen;
 using Cake.Core.Tests.Fixtures;
+using VerifyXunit;
 using Xunit;
+using static Cake.Core.Tests.VerifyConfig;
 
 namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 {
+    [UsesVerify]
     public sealed class PropertyAliasGeneratorTests
     {
+        [UsesVerify]
         public sealed class TheGenerateMethod : IClassFixture<PropertyAliasGeneratorFixture>
         {
             private readonly PropertyAliasGeneratorFixture _fixture;
@@ -113,32 +118,28 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [Theory]
             [InlineData("NonCached_Value_Type")]
             [InlineData("NonCached_Dynamic_Type")]
-            public void Should_Return_Correct_Generated_Code_For_Non_Cached_Properties(string name)
+            public Task Should_Return_Correct_Generated_Code_For_Non_Cached_Properties(string name)
             {
-                // Given
-                var expected = _fixture.GetExpectedData(name);
-
-                // When
+                // Given / When
                 var result = _fixture.Generate(name);
 
                 // Then
-                Assert.Equal(expected, result);
+                return VerifyCake(result)
+                    .UseParameters(name);
             }
 
             [Theory]
             [InlineData("Cached_Reference_Type")]
             [InlineData("Cached_Value_Type")]
             [InlineData("Cached_Dynamic_Type")]
-            public void Should_Return_Correct_Generated_Code_For_Cached_Properties(string name)
+            public Task Should_Return_Correct_Generated_Code_For_Cached_Properties(string name)
             {
-                // Given
-                var expected = _fixture.GetExpectedData(name);
-
-                // When
+                // Given / When
                 var result = _fixture.Generate(name);
 
                 // Then
-                Assert.Equal(expected, result);
+                return VerifyCake(result)
+                    .UseParameters(name);
             }
 
             [Theory]
@@ -146,16 +147,14 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("NonCached_Obsolete_ImplicitWarning_WithMessage")]
             [InlineData("NonCached_Obsolete_ExplicitWarning_WithMessage")]
             [InlineData("NonCached_Obsolete_ExplicitError_WithMessage")]
-            public void Should_Return_Correct_Generated_Code_For_Non_Cached_Obsolete_Properties(string name)
+            public Task Should_Return_Correct_Generated_Code_For_Non_Cached_Obsolete_Properties(string name)
             {
-                // Given
-                var expected = _fixture.GetExpectedData(name);
-
-                // When
+                // Given / When
                 var result = _fixture.Generate(name);
 
                 // Then
-                Assert.Equal(expected, result);
+                return VerifyCake(result)
+                    .UseParameters(name);
             }
 
             [Theory]
@@ -163,16 +162,14 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("Cached_Obsolete_ImplicitWarning_WithMessage")]
             [InlineData("Cached_Obsolete_ExplicitWarning_WithMessage")]
             [InlineData("Cached_Obsolete_ExplicitError_WithMessage")]
-            public void Should_Return_Correct_Generated_Code_For_Cached_Obsolete_Properties(string name)
+            public Task Should_Return_Correct_Generated_Code_For_Cached_Obsolete_Properties(string name)
             {
-                // Given
-                var expected = _fixture.GetExpectedData(name);
-
-                // When
+                // Given / When
                 var result = _fixture.Generate(name);
 
                 // Then
-                Assert.Equal(expected, result);
+                return VerifyCake(result)
+                    .UseParameters(name);
             }
         }
     }
