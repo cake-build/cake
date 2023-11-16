@@ -7,7 +7,7 @@ using Cake.Core.Scripting.CodeGen;
 using Cake.Core.Tests.Fixtures;
 using VerifyXunit;
 using Xunit;
-using static VerifyXunit.Verifier;
+using static Cake.Core.Tests.VerifyConfig;
 
 namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 {
@@ -67,7 +67,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
                 var result = _fixture.Generate(name);
 
                 // Then
-                return Verify(result)
+                return VerifyCake(result)
                     .UseParameters(name);
             }
 
@@ -82,7 +82,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
                 var result = _fixture.Generate(name);
 
                 // Then
-                return Verify(result)
+                return VerifyCake(result)
                     .UseParameters(name);
             }
 
@@ -97,7 +97,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
                 var result = _fixture.Generate(name);
 
                 // Then
-                return Verify(result)
+                return VerifyCake(result)
                     .UseParameters(name);
             }
         }

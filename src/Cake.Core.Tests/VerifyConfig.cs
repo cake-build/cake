@@ -1,6 +1,7 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 using VerifyTests;
-using VerifyXunit;
+using static VerifyXunit.Verifier;
 
 namespace Cake.Core.Tests
 {
@@ -9,7 +10,20 @@ namespace Cake.Core.Tests
         [ModuleInitializer]
         public static void Init()
         {
-            Verifier.DerivePathInfo(Expectations.Initialize);
+            EmptyFiles.FileExtensions.AddTextExtension(Extensions.Cake);
+            DerivePathInfo(Expectations.Initialize);
         }
+
+        public static class Extensions
+        {
+            public const string Cake = "cake";
+        }
+
+        [Pure]
+        public static SettingsTask VerifyCake(
+                string target,
+                VerifySettings settings = null,
+                [CallerFilePath] string sourceFile = "")
+            => Verify(target, Extensions.Cake, settings, sourceFile);
     }
 }
