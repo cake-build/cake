@@ -108,7 +108,7 @@ Task("Run-Unit-Tests")
         () => GetFiles("./src/**/*.Tests.csproj"),
         (parameters, project, context) =>
 {
-    foreach(var framework in new[] { "net6.0", "net7.0" })
+    foreach(var framework in new[] { "net6.0", "net7.0", "net8.0" })
     {
         FilePath testResultsPath = MakeAbsolute(parameters.Paths.Directories.TestResults
             .CombineWithFilePath($"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.xml"));
@@ -368,7 +368,8 @@ Task("Run-Integration-Tests")
     .DoesForEach<BuildParameters, FilePath>(
         parameters => new[] {
             GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net6.0/**/Cake.dll").Single(),
-            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net7.0/**/Cake.dll").Single()
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net7.0/**/Cake.dll").Single(),
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net8.0/**/Cake.dll").Single()
         },
         (parameters, cakeAssembly, context) =>
 {
