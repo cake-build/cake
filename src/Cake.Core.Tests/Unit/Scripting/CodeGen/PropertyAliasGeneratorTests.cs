@@ -132,6 +132,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("Cached_Reference_Type")]
             [InlineData("Cached_Value_Type")]
             [InlineData("Cached_Dynamic_Type")]
+            [InlineData("Cached_Nullable_Type")]
             public Task Should_Return_Correct_Generated_Code_For_Cached_Properties(string name)
             {
                 // Given / When
