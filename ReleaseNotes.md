@@ -1,3 +1,14 @@
+### New in 4.0.0 (Released 2023/11/18)
+
+* 4266 Update LatestPotentialBreakingChange to 4.0.0.
+* 4132 Add File APIs for setting timestamps (creation time, last write time, last access time).
+* 4250 Update System.Collections.Immutable to 8.0.0.
+* 4260 Unzip alias should support overwrite files.
+* 4251 Update System.Reflection.Metadata 8.0.0.
+* 4249 Update Microsoft.Extensions.DependencyInjection to 8.0.0.
+* 4197 Execution of Cake script fails if an addin defines an alias that uses nullable reference types in its signature.
+* 4150 Cake script is contributing unactionable diagnostics in VS Code Problems pane.
+
 ### New in 3.2.0 (Released 2023/11/10)
 
 * 4225 Add DotNetRemovePackage alias for dotnet remove package command.
