@@ -52,6 +52,8 @@ Task("Cake.Core.Scripting.DefineDirective.Runtime")
                     "6.0",
 #elif NET7_0
                     "7.0",
+#elif NET8_0
+                    "8.0",
 #endif
                     context.Environment.Runtime.BuiltFramework.FullName);
 });
@@ -68,7 +70,7 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
     Assert.True(cake);
 });
 
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
     Task("Cake.Core.Scripting.DefineDirective.C#9")
     .Does(() =>
 {
@@ -80,7 +82,7 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
 public record CSharpNine(bool IsNine);
 #endif
 
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
     Task("Cake.Core.Scripting.DefineDirective.C#10")
     .Does(() =>
 {
@@ -97,7 +99,7 @@ public record CSharpNine(bool IsNine);
 
 #endif
 
-#if NET7_0
+#if NET7_0 || NET8_0
     Task("Cake.Core.Scripting.DefineDirective.C#11")
     .Does(() =>
 {
@@ -114,17 +116,33 @@ public record CSharpNine(bool IsNine);
 
 #endif
 
+#if NET8_0
+    Task("Cake.Core.Scripting.DefineDirective.C#12")
+    .Does(() =>
+{
+    // Given / When / Then
+    int[] row0 = [1, 2, 3];
+    int[] row1 = [4, 5, 6];
+    int[] row2 = [7, 8, 9];
+    int[] single = [..row0, ..row1, ..row2];
+});
+
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#9")
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#10")
 #endif
-#if NET7_0
+#if NET7_0 || NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#11")
+#endif
+#if NET8_0
+    .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#12")
 #endif
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Defined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.NotDefined")

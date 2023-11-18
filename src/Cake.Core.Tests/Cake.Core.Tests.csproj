@@ -14,8 +14,10 @@
   </ItemGroup>
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Spectre.Verify.Extensions" Version="22.3.0" />
+    <PackageReference Include="Verify.Xunit" Version="22.5.0" />
+    <PackageReference Include="xunit" Version="2.6.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -24,7 +26,6 @@
     <PackageReference Include="Castle.Core" Version="5.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Unit\Scripting\CodeGen\Expected\Methods\*;Unit\Scripting\CodeGen\Expected\Properties\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 </Project>
