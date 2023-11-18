@@ -135,14 +135,27 @@ namespace Cake.Common.IO
         /// </example>
         [CakeMethodAlias]
         public static void Unzip(this ICakeContext context, FilePath zipFile, DirectoryPath outputPath)
+            => context.Unzip(zipFile, outputPath, false);
+
+        /// <summary>
+        /// Unzips the specified file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="zipFile">Zip file to unzip.</param>
+        /// <param name="outputPath">Output path to unzip into.</param>
+        /// <param name="overwriteFiles">Flag for if files should be overwritten in output.</param>
+        /// <example>
+        /// <code>
+        /// Unzip("Cake.zip", "./cake", true);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static void Unzip(this ICakeContext context, FilePath zipFile, DirectoryPath outputPath, bool overwriteFiles)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);
-            zipper.Unzip(zipFile, outputPath);
+            zipper.Unzip(zipFile, outputPath, overwriteFiles);
         }
     }
 }
