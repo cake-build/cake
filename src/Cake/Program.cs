@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Cake.Cli;
@@ -63,7 +64,14 @@ namespace Cake
                 config.AddExample(new[] { "build.cake", "--tree" });
             });
 
-            return await app.RunAsync(args);
+            return await app.RunAsync(
+                args.Select(
+                    arg => arg switch {
+                        // Opt-out Spectre.Console.Cli no version parameter for default command
+                        "-v" => "--ver",
+                        "--version" => "--ver",
+                        _ => arg
+                    }));
         }
 
         // Register everything that the CLI needs to function.
