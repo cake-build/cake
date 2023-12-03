@@ -75,19 +75,5 @@ namespace Cake.Common.Tools.DotNet.Package.List
         /// Nuget.org is the source of information about vulnerabilities.
         /// </summary>
         public bool Vulnerable { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value the report output format. Defaults to <see cref="DotNetPackageListFormat.Console"/>.
-        /// Available starting in .NET SDK 7.0.200.
-        /// </summary>
-        public DotNetPackageListFormat? Format { get; set; }
-
-        /// <summary>
-        /// Gets or sets the report output version. Allowed value is 1. Defaults to 1. Requires the --format json option.
-        /// When a new JSON version is available, the command will produce the new format by default.
-        /// This option will let you specify that the command should produce an earlier format.
-        /// Available starting in .NET SDK 7.0.200.
-        /// </summary>
-        public int? OutputVersion { get; set; }
     }
 }

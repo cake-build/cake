@@ -2391,17 +2391,18 @@ namespace Cake.Common.Tools.DotNet
         /// Lists the package references for a project or solution.
         /// </summary>
         /// <param name="context">The context.</param>
+        /// <returns>The the package references.</returns>
         /// <example>
         /// <code>
-        /// DotNetListPackage();
+        /// DotNetPackageList output = DotNetListPackage();
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Package")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.List")]
-        public static void DotNetListPackage(this ICakeContext context)
+        public static DotNetPackageList DotNetListPackage(this ICakeContext context)
         {
-            context.DotNetListPackage(null);
+            return context.DotNetListPackage(null);
         }
 
         /// <summary>
@@ -2409,17 +2410,18 @@ namespace Cake.Common.Tools.DotNet
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="project">The project or solution file to operate on. If not specified, the command searches the current directory for one. If more than one solution or project is found, an error is thrown.</param>
+        /// <returns>The the package references.</returns>
         /// <example>
         /// <code>
-        /// DotNetListPackage("./src/MyProject/MyProject.csproj");
+        /// DotNetPackageList output = DotNetListPackage("./src/MyProject/MyProject.csproj");
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Package")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.List")]
-        public static void DotNetListPackage(this ICakeContext context, string project)
+        public static DotNetPackageList DotNetListPackage(this ICakeContext context, string project)
         {
-            context.DotNetListPackage(project, null);
+            return context.DotNetListPackage(project, null);
         }
 
         /// <summary>
@@ -2428,6 +2430,7 @@ namespace Cake.Common.Tools.DotNet
         /// <param name="context">The context.</param>
         /// <param name="project">The project or solution file to operate on. If not specified, the command searches the current directory for one. If more than one solution or project is found, an error is thrown.</param>
         /// <param name="settings">The settings.</param>
+        /// <returns>The the package references.</returns>
         /// <example>
         /// <code>
         /// var settings = new DotNetPackageListSettings
@@ -2436,13 +2439,13 @@ namespace Cake.Common.Tools.DotNet
         ///     Format = DotNetPackageListFormat.Json
         /// };
         ///
-        /// DotNetListPackage("./src/MyProject/MyProject.csproj", settings);
+        /// DotNetPackageList output = DotNetListPackage("./src/MyProject/MyProject.csproj", settings);
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Package")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.List")]
-        public static void DotNetListPackage(this ICakeContext context, string project, DotNetPackageListSettings settings)
+        public static DotNetPackageList DotNetListPackage(this ICakeContext context, string project, DotNetPackageListSettings settings)
         {
             if (context is null)
             {
@@ -2454,8 +2457,8 @@ namespace Cake.Common.Tools.DotNet
                 settings = new DotNetPackageListSettings();
             }
 
-            var adder = new DotNetPackageLister(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            adder.List(project, settings);
+            var lister = new DotNetPackageLister(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return lister.List(project, settings);
         }
     }
 }

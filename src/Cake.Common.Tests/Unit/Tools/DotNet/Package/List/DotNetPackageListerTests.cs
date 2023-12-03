@@ -4,7 +4,6 @@
 
 using Cake.Common.Tests.Fixtures.Tools.DotNet.Package.List;
 using Cake.Common.Tools.DotNet;
-using Cake.Common.Tools.DotNet.Package.List;
 using Cake.Testing;
 using Xunit;
 
@@ -88,8 +87,6 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.List
                 fixture.Settings.Source.Add("http://www.nuget.org/api/v2/package");
                 fixture.Settings.Source.Add("http://www.symbolserver.org/");
                 fixture.Settings.Vulnerable = true;
-                fixture.Settings.Format = DotNetPackageListFormat.Json;
-                fixture.Settings.OutputVersion = 1;
                 fixture.Settings.Verbosity = DotNetVerbosity.Diagnostic;
 
                 // When
@@ -99,6 +96,21 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.List
                 var expected = "list package --config \"/Working/nuget.config\" --deprecated --framework net7.0 --highest-minor --highest-patch --include-prerelease --include-transitive --interactive --outdated ";
                 expected += "--source \"http://www.nuget.org/api/v2/package\" --source \"http://www.symbolserver.org/\" --vulnerable --format Json --output-version 1 --verbosity diagnostic";
                 Assert.Equal(expected, result.Args);
+            }
+
+            [Fact]
+            public void Should_Return_Correct_Result()
+            {
+                // Given
+                var fixture = new DotNetPackageListerFixture();
+                fixture.GivenPackgeListResult();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(1, fixture.Result.Version);
+                Assert.Contains(fixture.Result.Projects, item => item.Path == "src/lib/MyProject.csproj");
             }
         }
     }

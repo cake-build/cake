@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq;
+using System.Text.Json;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -38,14 +39,24 @@ namespace Cake.Common.Tools.DotNet.Package.List
         /// </summary>
         /// <param name="project">The project or solution file to operate on. If not specified, the command searches the current directory for one. If more than one solution or project is found, an error is thrown.</param>
         /// <param name="settings">The settings.</param>
-        public void List(string project, DotNetPackageListSettings settings)
+        /// <returns>A task with the GitVersion results.</returns>
+        public DotNetPackageList List(string project, DotNetPackageListSettings settings)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            RunCommand(settings, GetArguments(project, settings));
+            var output = string.Empty;
+            Run(settings, GetArguments(project, settings), new ProcessSettings { RedirectStandardOutput = true }, process =>
+            {
+                output = string.Join("\n", process.GetStandardOutput());
+            });
+
+            return JsonSerializer.Deserialize<DotNetPackageList>(output, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
         }
 
         private ProcessArgumentBuilder GetArguments(string project, DotNetPackageListSettings settings)
@@ -132,16 +143,10 @@ namespace Cake.Common.Tools.DotNet.Package.List
             }
 
             // Format
-            if (settings.Format != null)
-            {
-                builder.AppendSwitch("--format", settings.Format.ToString());
-            }
+            builder.Append("--format json");
 
             // Version
-            if (settings.OutputVersion != null)
-            {
-                builder.AppendSwitch("--output-version", settings.OutputVersion.ToString());
-            }
+            builder.Append("--output-version 1");
 
             return builder;
         }

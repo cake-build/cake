@@ -5,18 +5,18 @@
 namespace Cake.Common.Tools.DotNet.Package.List
 {
     /// <summary>
-    /// Formats of dotnet list package.
+    /// The problem types.
     /// </summary>
-    public enum DotNetPackageListFormat
+    public enum DotNetPackageListProblemType
     {
         /// <summary>
-        /// Console.
+        /// Warning.
         /// </summary>
-        Console,
+        Warning,
 
         /// <summary>
-        /// Json.
+        /// Error.
         /// </summary>
-        Json
+        Error
     }
 }

@@ -338,7 +338,11 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListPackage")
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
 
     // When
-    DotNetListPackage(project.FullPath);
+    var result = DotNetListPackage(project.FullPath);
+
+    // Then
+    Assert.Equal(1, result.Version);
+    Assert.Contains(result.Projects, item => item.Path == project);
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
