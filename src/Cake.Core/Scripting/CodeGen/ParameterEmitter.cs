@@ -17,6 +17,15 @@ namespace Cake.Core.Scripting.CodeGen
     /// </summary>
     internal sealed class ParameterEmitter
     {
+        // filter out the any custom parameter attributes that will be emitted by other means.
+        private static readonly Type[] Exclusions = new[]
+                    {
+                        typeof(OptionalAttribute),
+                        typeof(OutAttribute),
+                        typeof(ParamArrayAttribute),
+                        typeof(DecimalConstantAttribute),
+                    };
+
         private static readonly ParameterFormatter _parameterFormatter = new ParameterFormatter();
 
         internal static string Emit(ParameterInfo parameter, bool includeType)
@@ -36,6 +45,7 @@ namespace Cake.Core.Scripting.CodeGen
             }
             if (includeType)
             {
+                var isNullable = false;
                 if (parameter.IsDefined(typeof(ParamArrayAttribute)))
                 {
                     yield return "params ";
@@ -45,21 +55,17 @@ namespace Cake.Core.Scripting.CodeGen
                 var customAttrs = parameter.GetCustomAttributesData();
                 if (customAttrs.Count > 0)
                 {
-                    // filter out the any custom parameter attributes that will be emitted by other means.
-                    var exclusions = new[]
-                    {
-                        typeof(OptionalAttribute),
-                        typeof(OutAttribute),
-                        typeof(ParamArrayAttribute),
-                        typeof(DecimalConstantAttribute)
-                    };
-
-                    foreach (var item in customAttrs.Where(p => !exclusions.Contains(p.AttributeType)))
+                    foreach (var item in customAttrs.Where(p => !Exclusions.Contains(p.AttributeType)))
                     {
                         var attributeType = item.AttributeType.GetFullName();
+                        if (item.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute")
+                        {
+                            isNullable = true;
+                            continue;
+                        }
                         if (item.AttributeType.Name.EndsWith("Attribute", StringComparison.OrdinalIgnoreCase))
                         {
-                            attributeType = attributeType.Substring(0, attributeType.LastIndexOf("Attribute", StringComparison.OrdinalIgnoreCase));
+                            attributeType = attributeType[..attributeType.LastIndexOf("Attribute", StringComparison.OrdinalIgnoreCase)];
                         }
 
                         if (item.ConstructorArguments.Count < 1 && item.NamedArguments.Count < 1)
@@ -100,6 +106,11 @@ namespace Cake.Core.Scripting.CodeGen
                 else
                 {
                     yield return parameter.ParameterType.GetFullName();
+                }
+
+                if (isNullable)
+                {
+                    yield return "?";
                 }
                 yield return " ";
             }

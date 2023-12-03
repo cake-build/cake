@@ -204,22 +204,25 @@ namespace Cake.Common.IO
         /// <param name="zipPath">Zip file path.</param>
         /// <param name="outputPath">Output directory path.</param>
         public void Unzip(FilePath zipPath, DirectoryPath outputPath)
+            => Unzip(zipPath, outputPath, false);
+
+        /// <summary>
+        /// Unzips the specified file to the specified output path.
+        /// </summary>
+        /// <param name="zipPath">Zip file path.</param>
+        /// <param name="outputPath">Output directory path.</param>
+        /// <param name="overwriteFiles">Flag for if files should be overwritten in output.</param>
+        public void Unzip(FilePath zipPath, DirectoryPath outputPath, bool overwriteFiles)
         {
-            if (zipPath == null)
-            {
-                throw new ArgumentNullException(nameof(zipPath));
-            }
-            if (outputPath == null)
-            {
-                throw new ArgumentNullException(nameof(outputPath));
-            }
+            ArgumentNullException.ThrowIfNull(zipPath);
+            ArgumentNullException.ThrowIfNull(outputPath);
 
             // Make root path and output file path absolute.
             zipPath = zipPath.MakeAbsolute(_environment);
             outputPath = outputPath.MakeAbsolute(_environment);
 
-            _log.Verbose("Unzipping file {0} to {1}", zipPath.FullPath, outputPath.FullPath);
-            ZipFile.ExtractToDirectory(zipPath.FullPath, outputPath.FullPath);
+            _log.Verbose("Unzipping file {0} to {1} (overwrite files: {2})", zipPath.FullPath, outputPath.FullPath, overwriteFiles);
+            ZipFile.ExtractToDirectory(zipPath.FullPath, outputPath.FullPath, overwriteFiles);
         }
 
         private string GetRelativePath(DirectoryPath root, Path path)

@@ -33,7 +33,7 @@ namespace Cake.Features
 
         protected IContainer CreateScope(
             ICakeConfiguration configuration,
-            IRemainingArguments arguments,
+            ICakeArguments arguments,
             Action<ICakeContainerRegistrar> action = null)
         {
             var registrar = new AutofacTypeRegistrar(new ContainerBuilder());
@@ -45,10 +45,10 @@ namespace Cake.Features
         }
 
         protected ICakeConfiguration ReadConfiguration(
-            IRemainingArguments remaining, DirectoryPath root)
+            ICakeArguments arguments, DirectoryPath root)
         {
             var provider = new CakeConfigurationProvider(_fileSystem, _environment);
-            var args = remaining.Parsed.ToDictionary(x => x.Key, x => x.FirstOrDefault() ?? string.Empty);
+            var args = arguments.GetArguments().ToDictionary(x => x.Key, x => x.Value?.FirstOrDefault() ?? string.Empty);
 
             return provider.CreateConfiguration(root, args);
         }

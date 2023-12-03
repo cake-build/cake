@@ -67,7 +67,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.List
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("list \"ToDo.csproj\" package", result.Args);
+                Assert.Equal("list \"ToDo.csproj\" package --format json --output-version 1", result.Args);
             }
 
             [Fact]
@@ -94,7 +94,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.List
 
                 // Then
                 var expected = "list package --config \"/Working/nuget.config\" --deprecated --framework net7.0 --highest-minor --highest-patch --include-prerelease --include-transitive --interactive --outdated ";
-                expected += "--source \"http://www.nuget.org/api/v2/package\" --source \"http://www.symbolserver.org/\" --vulnerable --format Json --output-version 1 --verbosity diagnostic";
+                expected += "--source \"http://www.nuget.org/api/v2/package\" --source \"http://www.symbolserver.org/\" --vulnerable --format json --output-version 1 --verbosity diagnostic";
                 Assert.Equal(expected, result.Args);
             }
 

@@ -95,3 +95,6 @@ Thumbs.db
 
 # Generated Assembly info
 AssemblyInfo.Generated.cs
+
+# Verify
+*.received

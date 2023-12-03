@@ -47,16 +47,25 @@ namespace Cake.Common.Tools.DotNet.Package.List
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            var output = string.Empty;
-            Run(settings, GetArguments(project, settings), new ProcessSettings { RedirectStandardOutput = true }, process =>
+            var processSettings = new ProcessSettings
             {
-                output = string.Join("\n", process.GetStandardOutput());
-            });
+                RedirectStandardOutput = true
+            };
 
-            return JsonSerializer.Deserialize<DotNetPackageList>(output, new JsonSerializerOptions
+            var result = string.Empty;
+            RunCommand(settings, GetArguments(project, settings), processSettings,
+                process => result = string.Join("\n", process.GetStandardOutput()));
+
+            if (string.IsNullOrEmpty(result))
+            {
+                return new DotNetPackageList();
+            }
+
+            var jsonOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
-            });
+            };
+            return JsonSerializer.Deserialize<DotNetPackageList>(result, jsonOptions);
         }
 
         private ProcessArgumentBuilder GetArguments(string project, DotNetPackageListSettings settings)

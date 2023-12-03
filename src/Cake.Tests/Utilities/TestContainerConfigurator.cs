@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cake.Core;
 using Cake.Core.Composition;
 using Cake.Core.Configuration;
 using Cake.Infrastructure;
-using Spectre.Console.Cli;
 
 namespace Cake.Tests.Fakes
 {
@@ -21,7 +21,7 @@ namespace Cake.Tests.Fakes
         public void Configure(
             ICakeContainerRegistrar registrar,
             ICakeConfiguration configuration,
-            IRemainingArguments arguments)
+            ICakeArguments arguments)
         {
             _decorated.Configure(registrar, configuration, arguments);
 

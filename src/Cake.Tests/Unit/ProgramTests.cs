@@ -27,7 +27,7 @@ namespace Cake.Tests.Unit
 
             // Then
             feature.Received(1).Run(
-                Arg.Any<IRemainingArguments>(),
+                Arg.Any<ICakeArguments>(),
                 Arg.Is<BuildFeatureSettings>(settings =>
                     settings.BuildHostKind == BuildHostKind.Build &&
                     settings.Debug == false &&
@@ -53,7 +53,7 @@ namespace Cake.Tests.Unit
 
             // Then
             feature.Received(1).Run(
-                Arg.Any<IRemainingArguments>(),
+                Arg.Any<ICakeArguments>(),
                 Arg.Is<BuildFeatureSettings>(settings =>
                     settings.BuildHostKind == BuildHostKind.DryRun));
         }
@@ -73,7 +73,7 @@ namespace Cake.Tests.Unit
 
             // Then
             feature.Received(1).Run(
-                Arg.Any<IRemainingArguments>(),
+                Arg.Any<ICakeArguments>(),
                 Arg.Is<BuildFeatureSettings>(settings =>
                     settings.BuildHostKind == BuildHostKind.Tree));
         }
@@ -93,7 +93,7 @@ namespace Cake.Tests.Unit
 
             // Then
             feature.Received(1).Run(
-                Arg.Any<IRemainingArguments>(),
+                Arg.Any<ICakeArguments>(),
                 Arg.Is<BuildFeatureSettings>(settings =>
                     settings.BuildHostKind == BuildHostKind.Description));
         }
