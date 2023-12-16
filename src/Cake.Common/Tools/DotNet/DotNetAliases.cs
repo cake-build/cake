@@ -18,6 +18,7 @@ using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Package.Add;
 using Cake.Common.Tools.DotNet.Package.Remove;
 using Cake.Common.Tools.DotNet.Publish;
+using Cake.Common.Tools.DotNet.Reference.Add;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.SDKCheck;
@@ -2428,6 +2429,103 @@ namespace Cake.Common.Tools.DotNet
 
             var adder = new DotNetPackageRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             adder.Remove(packageName, project);
+        }
+
+        /// <summary>
+        /// Adds project-to-project (P2P) references.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectReferences">One or more project references to add. Glob patterns are supported on Unix/Linux-based systems.</param>
+        /// <example>
+        /// <code>
+        /// DotNetAddReference(GetFiles("./src/*.csproj"));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("AddReference")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Reference.Add")]
+        public static void DotNetAddReference(this ICakeContext context, IEnumerable<FilePath> projectReferences)
+        {
+            context.DotNetAddReference(projectReferences, null);
+        }
+
+        /// <summary>
+        /// Adds project-to-project (P2P) references.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectReferences">One or more project references to add. Glob patterns are supported on Unix/Linux-based systems.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetReferenceAddSettings
+        /// {
+        ///     Framework = "net8.0"
+        /// };
+        ///
+        /// DotNetAddReference(GetFiles("./src/*.csproj"), settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("AddReference")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Reference.Add")]
+        public static void DotNetAddReference(this ICakeContext context, IEnumerable<FilePath> projectReferences, DotNetReferenceAddSettings settings)
+        {
+            context.DotNetAddReference(null, projectReferences, settings);
+        }
+
+        /// <summary>
+        /// Adds project-to-project (P2P) references.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The target project file path. If not specified, the command searches the current directory for one.</param>
+        /// <param name="projectReferences">One or more project references to add. Glob patterns are supported on Unix/Linux-based systems.</param>
+        /// <example>
+        /// <code>
+        /// DotNetAddReference("./app/app.csproj", GetFiles("./src/*.csproj"));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("AddReference")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Reference.Add")]
+        public static void DotNetAddReference(this ICakeContext context, string project, IEnumerable<FilePath> projectReferences)
+        {
+            context.DotNetAddReference(project, projectReferences, null);
+        }
+
+        /// <summary>
+        /// Adds project-to-project (P2P) references.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The target project file path. If not specified, the command searches the current directory for one.</param>
+        /// <param name="projectReferences">One or more project references to add. Glob patterns are supported on Unix/Linux-based systems.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetReferenceAddSettings
+        /// {
+        ///     Framework = "net8.0"
+        /// };
+        ///
+        /// DotNetAddReference("./app/app.csproj", GetFiles("./src/*.csproj"), settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("AddReference")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Reference.Add")]
+        public static void DotNetAddReference(this ICakeContext context, string project, IEnumerable<FilePath> projectReferences, DotNetReferenceAddSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetReferenceAddSettings();
+            }
+
+            var adder = new DotNetReferenceAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            adder.Add(project, projectReferences, settings);
         }
     }
 }
