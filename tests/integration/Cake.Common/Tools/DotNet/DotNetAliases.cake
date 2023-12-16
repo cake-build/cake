@@ -329,6 +329,28 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     Assert.Equal(package, value);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
+    var projectReferencePath = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    var projectReference = "..\\hwapp\\hwapp.csproj";
+
+    // When
+    DotNetAddReference(project.FullPath, new[] { (FilePath)projectReferencePath.FullPath});
+
+    var value = XmlPeek(
+        project.FullPath,
+        $"/Project/ItemGroup/ProjectReference[@Include='{projectReference}']/@Include"
+    );
+
+    // Then
+    Assert.Equal(projectReference, value);
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
@@ -351,6 +373,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadUpdate")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
     .Does(() =>
 {
     // When
