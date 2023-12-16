@@ -2479,8 +2479,7 @@ namespace Cake.Common.Tools.DotNet
         /// <code>
         /// var settings = new DotNetPackageListSettings
         /// {
-        ///     Outdated = true,
-        ///     Format = DotNetPackageListFormat.Json
+        ///     Outdated = true
         /// };
         ///
         /// DotNetPackageList output = DotNetListPackage("./src/MyProject/MyProject.csproj", settings);
