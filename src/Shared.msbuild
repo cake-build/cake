@@ -1,7 +1,7 @@
 <Project>
   <!-- General package metadata -->
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <PackageId>$(AssemblyName)</PackageId>
     <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
     <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio, C. Augusto Proiete, Nils Andresen, and contributors</Authors>
@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <!-- Define .NET Core constants -->
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net7.0' ">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net7.0'  OR '$(TargetFramework)' == 'net8.0'">
     <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     <DebugType>portable</DebugType>

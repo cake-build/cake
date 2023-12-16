@@ -157,5 +157,41 @@ namespace Cake.Testing
             }
             throw new NotSupportedException();
         }
+
+        /// <inheritdoc/>
+        public IFile SetCreationTime(DateTime creationTime)
+        {
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetCreationTimeUtc(DateTime creationTimeUtc)
+        {
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetLastAccessTime(DateTime lastAccessTime)
+        {
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetLastAccessTimeUtc(DateTime lastAccessTimeUtc)
+        {
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetLastWriteTime(DateTime lastWriteTime)
+        {
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetLastWriteTimeUtc(DateTime lastWriteTimeUtc)
+        {
+            return this;
+        }
     }
 }

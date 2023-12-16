@@ -24,10 +24,10 @@ namespace Cake.Infrastructure
         public void Configure(
             ICakeContainerRegistrar registrar,
             ICakeConfiguration configuration,
-            IRemainingArguments arguments)
+            ICakeArguments arguments)
         {
             // Arguments
-            registrar.RegisterInstance(new CakeArguments(arguments.Parsed)).AsSelf().As<ICakeArguments>();
+            registrar.RegisterInstance(arguments).AsSelf().As<ICakeArguments>();
 
             // Scripting
             registrar.RegisterType<RoslynScriptEngine>().As<IScriptEngine>().Singleton();

@@ -246,5 +246,21 @@ namespace Cake.Core.Tests.Data
         {
             throw new NotImplementedException();
         }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void NonGeneric_ExtensionMethodWithNullableParameter(this ICakeContext context, string? parameter)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static string? NonGeneric_ExtensionMethodWithNullableReturnValue(this ICakeContext context)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
     }
 }

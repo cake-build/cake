@@ -17,7 +17,7 @@
         "type": "parameter",
         "description": "The target framework for the project.",
         "datatype": "choice",
-        "defaultValue": "net7.0",
+        "defaultValue": "net8.0",
         "replaces": "TargetFrameworkValue",
         "choices": [
             {
@@ -27,6 +27,10 @@
             {
             "choice": "net7.0",
             "description": "Target .NET 7"
+            },
+            {
+            "choice": "net8.0",
+            "description": "Target .NET 8"
             }
         ]
     }

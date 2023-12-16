@@ -1,3 +1,26 @@
+### New in 4.0.0 (Released 2023/11/18)
+
+* 4266 Update LatestPotentialBreakingChange to 4.0.0.
+* 4132 Add File APIs for setting timestamps (creation time, last write time, last access time).
+* 4250 Update System.Collections.Immutable to 8.0.0.
+* 4260 Unzip alias should support overwrite files.
+* 4251 Update System.Reflection.Metadata 8.0.0.
+* 4249 Update Microsoft.Extensions.DependencyInjection to 8.0.0.
+* 4197 Execution of Cake script fails if an addin defines an alias that uses nullable reference types in its signature.
+* 4150 Cake script is contributing unactionable diagnostics in VS Code Problems pane.
+
+### New in 3.2.0 (Released 2023/11/10)
+
+* 4225 Add DotNetRemovePackage alias for dotnet remove package command.
+* 4187 Add DotNetAddPackage alias for dotnet add package command.
+* 4221 Add Azure Pipelines group logging commands.
+* 4219 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.7.0.
+* 4217 Update NuGet.* to 6.7.0.
+* 4215 Update Autofac to 7.1.0.
+* 4157 Upgrading to spectre.console 0.47.0 breaks the cake build.
+* 4144 DotNetMSBuildSettings is missing NodeReuse.
+* 3996 Error: Bad IL format with Cake MacOSX (2.3.0 - 3.1.0).
+
 ### New in 3.1.0 (Released 2023/07/09)
 
 * 4122 Call multiple tasks from CLI in Frosting.

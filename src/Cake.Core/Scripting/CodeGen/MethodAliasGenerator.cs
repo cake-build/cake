@@ -44,15 +44,18 @@ namespace Cake.Core.Scripting.CodeGen
                 throw new ArgumentNullException(nameof(method));
             }
 
-            var isFunction = method.ReturnType != typeof(void);
             var builder = new StringBuilder();
-            var parameters = method.GetParameters().Skip(1).ToArray();
+            var parameters = method.GetParameters()[1..];
+
+            // Method is obsolete?
+            var obsolete = method.GetCustomAttribute<ObsoleteAttribute>();
+            var isObsolete = obsolete != null;
 
             // Generate method signature.
             builder.AppendLine("[System.Diagnostics.DebuggerStepThrough]");
             builder.Append("public ");
             builder.Append(GetReturnType(method));
-            builder.Append(" ");
+            builder.Append(' ');
             builder.Append(method.Name);
 
             if (method.IsGenericMethod)
@@ -61,9 +64,9 @@ namespace Cake.Core.Scripting.CodeGen
                 BuildGenericArguments(method, builder);
             }
 
-            builder.Append("(");
+            builder.Append('(');
             builder.Append(string.Concat(GetProxyParameters(parameters, true)));
-            builder.Append(")");
+            builder.Append(')');
 
             // if the method is generic, emit any constraints that might exist.
             if (method.IsGenericMethod)
@@ -71,19 +74,16 @@ namespace Cake.Core.Scripting.CodeGen
                 GenericParameterConstraintEmitter.BuildGenericConstraints(method, builder);
             }
 
-            hash = _hasher
-                .ComputeHash(Encoding.UTF8.GetBytes(builder.ToString()))
-                .Aggregate(new StringBuilder(),
-                (sb, b) => sb.AppendFormat("{0:x2}", b),
-                sb => sb.ToString());
+            hash = Convert.ToHexString(
+                    _hasher.ComputeHash(Encoding.UTF8.GetBytes(builder.ToString())));
 
             builder.AppendLine();
-            builder.Append("{");
-            builder.AppendLine();
 
-            // Method is obsolete?
-            var obsolete = method.GetCustomAttribute<ObsoleteAttribute>();
-            var isObsolete = obsolete != null;
+            if (isObsolete && !obsolete.IsError)
+            {
+                builder.AppendLine("#pragma warning disable 0618");
+            }
+            builder.Append("    => ");
             if (isObsolete)
             {
                 var message = GetObsoleteMessage(method, obsolete);
@@ -93,32 +93,13 @@ namespace Cake.Core.Scripting.CodeGen
                     // Throw an exception.
                     var exception = string.Format(
                         CultureInfo.InvariantCulture,
-                        "    throw new Cake.Core.CakeException(\"{0}\");", message);
+                        "throw new Cake.Core.CakeException(\"{0}\");", message);
                     builder.AppendLine(exception);
 
                     // End method.
-                    builder.Append("}");
-                    builder.AppendLine();
                     builder.AppendLine();
                     return builder.ToString();
                 }
-
-                builder.AppendLine(string.Format(
-                    CultureInfo.InvariantCulture,
-                    "    Context.Log.Warning(\"Warning: {0}\");", message));
-            }
-
-            if (isObsolete)
-            {
-                builder.AppendLine("#pragma warning disable 0618");
-            }
-
-            builder.Append("    ");
-
-            if (isFunction)
-            {
-                // Add return keyword.
-                builder.Append("return ");
             }
 
             // Call extension method.
@@ -130,10 +111,9 @@ namespace Cake.Core.Scripting.CodeGen
                 BuildGenericArguments(method, builder);
             }
 
-            builder.Append("(");
+            builder.Append('(');
             builder.Append(string.Concat(GetProxyParameters(parameters, false)));
-            builder.Append(");");
-            builder.AppendLine();
+            builder.AppendLine(");");
 
             if (isObsolete)
             {
@@ -141,8 +121,6 @@ namespace Cake.Core.Scripting.CodeGen
             }
 
             // End method.
-            builder.Append("}");
-            builder.AppendLine();
             builder.AppendLine();
 
             return builder.ToString();
@@ -156,7 +134,10 @@ namespace Cake.Core.Scripting.CodeGen
             }
 
             var isDynamic = method.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(DynamicAttribute), true).Any();
-            return isDynamic ? "dynamic" : method.ReturnType.GetFullName();
+            var isNullable = method.ReturnTypeCustomAttributes.GetCustomAttributes(true).Any(attr => attr.GetType().FullName == "System.Runtime.CompilerServices.NullableAttribute");
+            return string.Concat(
+                isDynamic ? "dynamic" : method.ReturnType.GetFullName(),
+                isNullable ? "?" : string.Empty);
         }
 
         private static IEnumerable<string> GetProxyParameters(IEnumerable<ParameterInfo> parameters, bool includeType)
@@ -183,14 +164,14 @@ namespace Cake.Core.Scripting.CodeGen
 
         private static void BuildGenericArguments(MethodInfo method, StringBuilder builder)
         {
-            builder.Append("<");
+            builder.Append('<');
             var genericArguments = new List<string>();
             foreach (var argument in method.GetGenericArguments())
             {
                 genericArguments.Add(argument.Name);
             }
             builder.Append(string.Join(", ", genericArguments));
-            builder.Append(">");
+            builder.Append('>');
         }
 
         private static string GetObsoleteMessage(MethodInfo method, ObsoleteAttribute attribute)

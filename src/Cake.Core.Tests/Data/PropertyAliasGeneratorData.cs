@@ -123,5 +123,13 @@ namespace Cake.Core.Tests.Data
         {
             throw new NotImplementedException();
         }
+
+        [CakePropertyAlias(Cache = true)]
+#nullable enable
+        public static string? Cached_Nullable_Type(this ICakeContext context)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
     }
 }

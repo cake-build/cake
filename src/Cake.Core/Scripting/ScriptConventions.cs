@@ -125,6 +125,9 @@ namespace Cake.Core.Scripting
                 case ".NETCoreApp,Version=v7.0":
                     return "NET7_0";
 
+                case ".NETCoreApp,Version=v8.0":
+                    return "NET8_0";
+
                 default:
                     Console.Error.WriteLine(_runtime.BuiltFramework.FullName);
                     Console.Error.Flush();

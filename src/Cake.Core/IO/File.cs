@@ -62,5 +62,47 @@ namespace Cake.Core.IO
         {
             return _file.Open(fileMode, fileAccess, fileShare);
         }
+
+        /// <inheritdoc/>
+        public IFile SetCreationTime(DateTime creationTime)
+        {
+            System.IO.File.SetCreationTime(Path.FullPath, creationTime);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetCreationTimeUtc(DateTime creationTimeUtc)
+        {
+            System.IO.File.SetCreationTimeUtc(Path.FullPath, creationTimeUtc);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetLastAccessTime(DateTime lastAccessTime)
+        {
+            System.IO.File.SetLastAccessTime(Path.FullPath, lastAccessTime);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetLastAccessTimeUtc(DateTime lastAccessTimeUtc)
+        {
+            System.IO.File.SetLastAccessTimeUtc(Path.FullPath, lastAccessTimeUtc);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetLastWriteTime(DateTime lastWriteTime)
+        {
+            System.IO.File.SetLastWriteTime(Path.FullPath, lastWriteTime);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetLastWriteTimeUtc(DateTime lastWriteTimeUtc)
+        {
+            System.IO.File.SetLastWriteTimeUtc(Path.FullPath, lastWriteTimeUtc);
+            return this;
+        }
     }
 }

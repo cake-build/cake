@@ -115,48 +115,27 @@ namespace Cake.Core.Scripting.CodeGen
         {
             var builder = new StringBuilder();
 
-            hash = GenerateCommonInitalCode(method, ref builder);
-
-            builder.Append("{");
-            builder.AppendLine();
-            builder.AppendLine("    [System.Diagnostics.DebuggerStepThrough]");
-            builder.Append("    get");
-            builder.AppendLine();
-            builder.AppendLine("    {");
-
             // Property is obsolete?
             var obsolete = method.GetCustomAttribute<ObsoleteAttribute>();
             if (obsolete != null)
             {
-                var message = GetObsoleteMessage(method, obsolete);
-
-                if (obsolete.IsError)
-                {
-                    builder.Append("        throw new Cake.Core.CakeException(\"");
-                    builder.Append(message);
-                    builder.Append("\");");
-                    builder.AppendLine();
-                    builder.AppendLine("    }");
-                    builder.AppendLine("}");
-                    builder.AppendLine();
-                    builder.AppendLine();
-
-                    return builder.ToString();
-                }
-
-                builder.AppendLine(string.Format(
-                    CultureInfo.InvariantCulture,
-                    "        Context.Log.Warning(\"Warning: {0}\");", message));
+                AddObsoleteAttribute(builder, obsolete);
             }
 
-            builder.Append("        return ");
+            hash = GenerateCommonInitalCode(method, ref builder);
+            if (obsolete != null)
+            {
+                builder.AppendLine("#pragma warning disable CS0618");
+            }
+
+            builder.AppendFormat("    => ", method.Name);
             builder.Append(method.GetFullName());
-            builder.Append("(Context);");
-            builder.AppendLine();
-            builder.AppendLine("    }");
-            builder.AppendLine("}");
-            builder.AppendLine();
-            builder.AppendLine();
+            builder.AppendLine("(Context);");
+
+            if (obsolete != null)
+            {
+                builder.AppendLine("#pragma warning restore CS0618");
+            }
 
             return builder.ToString();
         }
@@ -167,15 +146,14 @@ namespace Cake.Core.Scripting.CodeGen
             var curPos = builder.Length;
             builder.Append("public ");
             builder.Append(GetReturnType(method));
-            builder.Append(" ");
+            builder.Append(' ');
             builder.Append(method.Name);
             builder.AppendLine();
 
-            hash = SHA256
-                .ComputeHash(Encoding.UTF8.GetBytes(builder.ToString(curPos, builder.Length - curPos)))
-                .Aggregate(new StringBuilder(),
-                (sb, b) => sb.AppendFormat("{0:x2}", b),
-                sb => sb.ToString());
+            hash = Convert.ToHexString(
+                    SHA256
+                        .ComputeHash(Encoding.UTF8.GetBytes(builder.ToString(curPos, builder.Length - curPos))));
+
             return hash;
         }
 
@@ -195,97 +173,59 @@ namespace Cake.Core.Scripting.CodeGen
             builder.Append(GetReturnType(method));
             if (method.ReturnType.GetTypeInfo().IsValueType)
             {
-                builder.Append("?");
+                builder.Append('?');
             }
             builder.Append(" _");
             builder.Append(method.Name);
-            builder.Append(";");
+            builder.Append(';');
             builder.AppendLine();
 
             // Property
             if (obsolete != null)
             {
-                if (string.IsNullOrEmpty(obsolete.Message))
-                {
-                    builder.Append("[Obsolete]");
-                }
-                else
-                {
-                    builder.AppendFormat("[Obsolete(\"{0}\")]", obsolete.Message);
-                }
-
-                builder.AppendLine();
+                AddObsoleteAttribute(builder, obsolete);
             }
             hash = GenerateCommonInitalCode(method, ref builder);
-            builder.Append("{");
-            builder.AppendLine();
-            builder.AppendLine("    [System.Diagnostics.DebuggerStepThrough]");
-            builder.AppendLine("    get");
-            builder.Append("    {");
-            builder.AppendLine();
-
-            // Property is obsolete?
-            if (obsolete != null)
-            {
-                var message = GetObsoleteMessage(method, obsolete);
-                builder.AppendLine(string.Format(
-                    CultureInfo.InvariantCulture,
-                    "        Context.Log.Warning(\"Warning: {0}\");", message));
-            }
-
-            builder.AppendLine(string.Format(
-                CultureInfo.InvariantCulture,
-                "        if (_{0}==null)", method.Name));
-
-            builder.Append("        {");
-            builder.AppendLine();
 
             if (obsolete != null)
             {
                 builder.AppendLine("#pragma warning disable CS0618");
             }
 
-            builder.AppendFormat("            _{0} = ", method.Name);
+            builder.AppendFormat("    => _{0} ??= ", method.Name);
             builder.Append(method.GetFullName());
-            builder.Append("(Context);");
-            builder.AppendLine();
+            builder.AppendLine("(Context);");
 
             if (obsolete != null)
             {
                 builder.AppendLine("#pragma warning restore CS0618");
             }
 
-            builder.Append("        }");
-            builder.AppendLine();
-            builder.AppendFormat("        return _{0}", method.Name);
-            if (method.ReturnType.GetTypeInfo().IsValueType)
-            {
-                builder.Append(".Value");
-            }
-            builder.Append(";");
-            builder.AppendLine();
-            builder.Append("    }");
-            builder.AppendLine();
-            builder.Append("}");
-            builder.AppendLine();
-            builder.AppendLine();
-
             return builder.ToString();
+        }
+
+        private static void AddObsoleteAttribute(StringBuilder builder, ObsoleteAttribute obsolete)
+        {
+            builder.Append("[Obsolete");
+
+            if (!string.IsNullOrEmpty(obsolete.Message))
+            {
+                builder.AppendFormat(
+                    "(\"{0}\", {1})",
+                    obsolete.Message,
+                    obsolete.IsError ? "true" : "false");
+            }
+
+            builder.AppendLine("]");
         }
 
         private static string GetReturnType(MethodInfo method)
         {
             var isDynamic = method.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(DynamicAttribute), true).Any();
-            return isDynamic ? "dynamic" : method.ReturnType.GetFullName();
-        }
-
-        private static string GetObsoleteMessage(MethodInfo method, ObsoleteAttribute attribute)
-        {
-            const string format = "The alias {0} has been made obsolete. {1}";
-            var message = string.Format(
-                CultureInfo.InvariantCulture,
-                format, method.Name, attribute.Message);
-            return message.Trim();
+            var isNullable = method.ReturnTypeCustomAttributes.GetCustomAttributes(true).Any(attr => attr.GetType().FullName == "System.Runtime.CompilerServices.NullableAttribute");
+            return string.Concat(
+                isDynamic ? "dynamic" : method.ReturnType.GetFullName(),
+                isNullable ? "?" : string.Empty);
         }
     }
 }

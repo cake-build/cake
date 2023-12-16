@@ -82,6 +82,7 @@ namespace Cake.Frosting.Internal
         private static CakeArguments CreateCakeArguments(IRemainingArguments remainingArguments, DefaultCommandSettings settings)
         {
             var arguments = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+
             // Keep the actual remaining arguments in the cake arguments
             foreach (var group in remainingArguments.Parsed)
             {
@@ -98,7 +99,6 @@ namespace Cake.Frosting.Internal
             {
                 arguments[targetArgumentName] = new List<string>();
             }
-
             foreach (var target in settings.Targets)
             {
                 arguments[targetArgumentName].Add(target);
