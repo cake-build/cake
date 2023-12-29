@@ -51,7 +51,7 @@ namespace Cake.NuGet
             _localRepositories.Add(CreateRepository(SettingsUtility.GetGlobalPackagesFolder(settings)));
             _localRepositories.AddRange(SettingsUtility.GetFallbackPackageFolders(settings).Select(CreateRepository));
 
-            var packageSources = SettingsUtility.GetEnabledSources().ToList();
+            var packageSources = SettingsUtility.GetEnabledSources(settings).ToList();
 
             if (package.Address != null)
             {
