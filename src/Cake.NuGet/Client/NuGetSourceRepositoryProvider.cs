@@ -85,16 +85,13 @@ namespace Cake.NuGet
                 // Only add sources added via NuGet.config if nuget_source configuration value is not specified.
                 foreach (var source in packageSources)
                 {
-                    if (source.IsEnabled)
-                    {
-                        var repository = CreateRepository(source);
-                        _repositories.Add(repository);
+                    var repository = CreateRepository(source);
+                    _repositories.Add(repository);
 
-                        // If source is not specified in directive, add it as primary source.
-                        if (package.Address == null)
-                        {
-                            _primaryRepositories.Add(repository);
-                        }
+                    // If source is not specified in directive, add it as primary source.
+                    if (package.Address == null)
+                    {
+                        _primaryRepositories.Add(repository);
                     }
                 }
             }
@@ -102,7 +99,6 @@ namespace Cake.NuGet
             SourceRepository GetOrCreateRepository(string source)
             {
                 var packageSource = packageSources
-                    .Where(p => p.IsEnabled)
                     .FirstOrDefault(p => p.Source.Equals(source, StringComparison.OrdinalIgnoreCase));
 
                 return packageSource == null ?
