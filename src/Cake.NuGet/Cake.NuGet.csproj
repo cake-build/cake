@@ -18,12 +18,12 @@
   </ItemGroup>
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="NuGet.Frameworks" Version="6.8.0" />
-    <PackageReference Include="NuGet.Versioning" Version="6.8.0" />
+    <PackageReference Include="NuGet.Frameworks" Version="6.8.1" />
+    <PackageReference Include="NuGet.Versioning" Version="6.8.1" />
     <PackageReference Include="NuGet.Protocol" Version="6.8.0" />
-    <PackageReference Include="NuGet.Packaging" Version="6.8.0" />
+    <PackageReference Include="NuGet.Packaging" Version="6.8.1" />
     <PackageReference Include="NuGet.Resolver" Version="6.8.0" />
-    <PackageReference Include="NuGet.Common" Version="6.8.0" />
+    <PackageReference Include="NuGet.Common" Version="6.8.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
