@@ -1,11 +1,15 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
+using Autofac.Core;
+using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Packaging;
+using Cake.Frosting.Tests.Fakes;
 using Cake.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -316,7 +320,7 @@ namespace Cake.Frosting.Tests
         }
 
         [Fact]
-        public void Should_pass_target_within_cakeContext_arguments()
+        public void Should_Pass_Target_Within_CakeContext_Arguments()
         {
             // Given
             var fixture = new CakeHostFixture();
@@ -358,6 +362,43 @@ namespace Cake.Frosting.Tests
                 fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task1), Arg.Any<ICakeContext>());
                 fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task2), Arg.Any<ICakeContext>());
             });
+        }
+
+        [Fact]
+        public void The_Version_Option_Should_Call_Version_Feature()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+            // Replace the Cake.Cli.VersionResolver that CakeHost adds to its service collection
+            // with a fake so that the call to VersionFeature can be asserted below
+            fixture.Host.ConfigureServices(services => services.Remove(services.Single(sd => sd.ServiceType == typeof(IVersionResolver))));
+            fixture.Host.ConfigureServices(services => services.AddSingleton<IVersionResolver, FakeVersionResolver>());
+
+            // When
+            fixture.Run("--version");
+
+            // Then
+            Assert.Collection(fixture.Console.Messages, s => s.Equals("FakeVersion"));
+        }
+
+        [Fact]
+        public void Should_Pass_Cake_Runner_Argument_And_Value_To_Build_Script()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+            // When
+            fixture.Run("--target", "dummytask", "--version=1.2.3");
+
+            // Then
+            fixture.Strategy.Received(1).ExecuteAsync(
+                Arg.Any<CakeTask>(),
+                Arg.Is<ICakeContext>(cc => cc.Arguments.HasArgument("version") && cc.Arguments.GetArgument("version") == "1.2.3"));
         }
     }
 }
