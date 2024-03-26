@@ -30,8 +30,8 @@
     <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="8.0.0" />
     <PackageReference Include="Autofac" Version="7.1.0" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net80" Version="1.4.5" Condition="'$(TargetFramework)' == 'net8.0'" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net70" Version="1.4.5" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net60" Version="1.4.5" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net80" Version="1.5.0" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net70" Version="1.5.0" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net60" Version="1.5.0" Condition="'$(TargetFramework)' == 'net6.0'" />
   </ItemGroup>
 </Project>
