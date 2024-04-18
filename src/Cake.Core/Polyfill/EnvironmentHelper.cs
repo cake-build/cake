@@ -54,6 +54,16 @@ namespace Cake.Core.Polyfill
             catch (PlatformNotSupportedException)
             {
             }
+            try
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+                {
+                    return PlatformFamily.FreeBSD;
+                }
+            }
+            catch (PlatformNotSupportedException)
+            {
+            }
 
             return PlatformFamily.Unknown;
         }
@@ -81,7 +91,8 @@ namespace Cake.Core.Polyfill
         public static bool IsUnix(PlatformFamily family)
         {
             return family == PlatformFamily.Linux
-                   || family == PlatformFamily.OSX;
+                   || family == PlatformFamily.OSX
+                   || family == PlatformFamily.FreeBSD;
         }
 
         public static bool IsOSX(PlatformFamily family)
@@ -92,6 +103,10 @@ namespace Cake.Core.Polyfill
         public static bool IsLinux(PlatformFamily family)
         {
             return family == PlatformFamily.Linux;
+        }
+        public static bool IsFreeBSD(PlatformFamily family)
+        {
+            return family == PlatformFamily.FreeBSD;
         }
 
         public static Runtime GetRuntime()
