@@ -182,6 +182,7 @@ namespace Cake.Common.Tests.Unit
             [Theory]
             [InlineData(PlatformFamily.Linux, false)]
             [InlineData(PlatformFamily.OSX, false)]
+            [InlineData(PlatformFamily.FreeBSD, false)]
             [InlineData(PlatformFamily.Windows, true)]
             public void Should_Return_Correct_Value(PlatformFamily family, bool expected)
             {
@@ -212,6 +213,7 @@ namespace Cake.Common.Tests.Unit
             [Theory]
             [InlineData(PlatformFamily.Linux, true)]
             [InlineData(PlatformFamily.OSX, true)]
+            [InlineData(PlatformFamily.FreeBSD, true)]
             [InlineData(PlatformFamily.Windows, false)]
             public void Should_Return_Correct_Value(PlatformFamily family, bool expected)
             {
@@ -242,6 +244,7 @@ namespace Cake.Common.Tests.Unit
             [Theory]
             [InlineData(PlatformFamily.Linux, true)]
             [InlineData(PlatformFamily.OSX, false)]
+            [InlineData(PlatformFamily.FreeBSD, false)]
             [InlineData(PlatformFamily.Windows, false)]
             public void Should_Return_Correct_Value(PlatformFamily family, bool expected)
             {
@@ -272,6 +275,7 @@ namespace Cake.Common.Tests.Unit
             [Theory]
             [InlineData(PlatformFamily.Linux, false)]
             [InlineData(PlatformFamily.OSX, true)]
+            [InlineData(PlatformFamily.FreeBSD, false)]
             [InlineData(PlatformFamily.Windows, false)]
             public void Should_Return_Correct_Value(PlatformFamily family, bool expected)
             {
@@ -281,6 +285,36 @@ namespace Cake.Common.Tests.Unit
 
                 // When
                 var result = EnvironmentAliases.IsRunningOnMacOs(context);
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+        }
+        public sealed class TheIsRunningOnFreeBSDMethod
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => EnvironmentAliases.IsRunningOnFreeBSD(null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Theory]
+            [InlineData(PlatformFamily.Linux, false)]
+            [InlineData(PlatformFamily.OSX, false)]
+            [InlineData(PlatformFamily.FreeBSD, true)]
+            [InlineData(PlatformFamily.Windows, false)]
+            public void Should_Return_Correct_Value(PlatformFamily family, bool expected)
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                context.Environment.Returns(new FakeEnvironment(family));
+
+                // When
+                var result = EnvironmentAliases.IsRunningOnFreeBSD(context);
 
                 // Then
                 Assert.Equal(expected, result);

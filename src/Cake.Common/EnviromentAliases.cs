@@ -217,6 +217,32 @@ namespace Cake.Common
         }
 
         /// <summary>
+        /// Determines whether the build script running on a FreeBSD based system.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (IsRunningOnFreeBSD())
+        /// {
+        ///     Information("FreeBSD!");
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>
+        ///   <c>true</c> if the build script running on a FreeBSD based system; otherwise <c>false</c>.
+        /// </returns>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Platform")]
+        public static bool IsRunningOnFreeBSD(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            return context.Environment.Platform.FreeBSD();
+        }
+
+        /// <summary>
         /// Determines whether the build script running on a Linux based system.
         /// </summary>
         /// <example>
