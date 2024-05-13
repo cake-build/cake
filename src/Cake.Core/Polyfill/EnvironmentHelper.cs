@@ -56,7 +56,7 @@ namespace Cake.Core.Polyfill
             }
             try
             {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("FREEBSD")))
                 {
                     return PlatformFamily.FreeBSD;
                 }
@@ -104,6 +104,7 @@ namespace Cake.Core.Polyfill
         {
             return family == PlatformFamily.Linux;
         }
+
         public static bool IsFreeBSD(PlatformFamily family)
         {
             return family == PlatformFamily.FreeBSD;

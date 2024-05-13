@@ -239,7 +239,7 @@ namespace Cake.Common
             {
                 throw new ArgumentNullException(nameof(context));
             }
-            return context.Environment.Platform.FreeBSD();
+            return context.Environment.Platform.IsFreeBSD();
         }
 
         /// <summary>
