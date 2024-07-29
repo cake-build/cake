@@ -235,7 +235,7 @@ namespace Cake.Common
         [CakeAliasCategory("Platform")]
         public static bool IsRunningOnFreeBSD(this ICakeContext context)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
