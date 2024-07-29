@@ -76,7 +76,7 @@ namespace Cake.Core
         /// <returns><c>true</c> if the platform is a FreeBSD platform; otherwise <c>false</c>.</returns>
         public static bool IsFreeBSD(this ICakePlatform platform)
         {
-            if (platform == null)
+            if (platform is null)
             {
                 throw new ArgumentNullException(nameof(platform));
             }
