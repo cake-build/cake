@@ -33,6 +33,6 @@ namespace Cake.Core
         /// <summary>
         /// Represents the FreeBSD platform family.
         /// </summary>
-        FreeBSD = 4
+        FreeBSD = 4,
     }
 }

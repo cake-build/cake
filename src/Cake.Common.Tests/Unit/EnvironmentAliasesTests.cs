@@ -290,6 +290,7 @@ namespace Cake.Common.Tests.Unit
                 Assert.Equal(expected, result);
             }
         }
+
         public sealed class TheIsRunningOnFreeBSDMethod
         {
             [Fact]
