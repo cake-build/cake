@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Cake.Core.Polyfill;
 
 namespace Cake.Core.IO
 {
@@ -9,8 +8,6 @@ namespace Cake.Core.IO
         private const char Backslash = '\\';
         private const char Slash = '/';
         private const string UncPrefix = @"\\";
-
-        private static readonly bool _isWindows = EnvironmentHelper.GetPlatformFamily() == PlatformFamily.Windows;
 
         public static string Combine(params string[] paths)
         {
@@ -271,13 +268,10 @@ namespace Cake.Core.IO
                     }
                 }
 
-                if (_isWindows)
+                // Windows drive?
+                if (length >= 2 && path[1] == ':')
                 {
-                    // Windows drive?
-                    if (length >= 2 && path[1] == ':')
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
