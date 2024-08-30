@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -33,7 +34,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.MSBuild")]
         public static void DotNetMSBuild(this ICakeContext context)
         {
-            context.DotNetMSBuild(null, null);
+            context.DotNetMSBuild((string)null, (DotNetMSBuildSettings)null);
         }
 
         /// <summary>
@@ -87,6 +88,32 @@ namespace Cake.Common.Tools.DotNet
         }
 
         /// <summary>
+        /// Builds the specified targets in a project file found in the current working directory.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <param name="standardOutputAction">The action to invoke with the standard output.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetMSBuildSettings
+        /// {
+        ///     NoLogo = true,
+        ///     MaxCpuCount = -1
+        /// };
+        ///
+        /// DotNetMSBuild(settings,
+        ///     output => foreach(var line in output) outputBuilder.AppendLine(line));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("MSBuild")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.MSBuild")]
+        public static void DotNetMSBuild(this ICakeContext context, DotNetMSBuildSettings settings, Action<IEnumerable<string>> standardOutputAction)
+        {
+            context.DotNetMSBuild(null, settings, standardOutputAction);
+        }
+
+        /// <summary>
         /// Builds the specified targets in the project file.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -123,7 +150,49 @@ namespace Cake.Common.Tools.DotNet
             }
 
             var builder = new DotNetMSBuildBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            builder.Build(projectOrDirectory, settings);
+            builder.Build(projectOrDirectory, settings, null);
+        }
+
+        /// <summary>
+        /// Builds the specified targets in the project file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectOrDirectory">Project file or directory to search for project file.</param>
+        /// <param name="settings">The settings.</param>
+        /// <param name="standardOutputAction">The action to invoke with the standard output.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetMSBuildSettings
+        /// {
+        ///     NoLogo = true,
+        ///     MaxCpuCount = -1
+        /// };
+        ///
+        /// DotNetMSBuild("foobar.proj", settings,
+        ///     output => foreach(var line in output) outputBuilder.AppendLine(line));
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// If a project file is not specified, MSBuild searches the current working directory for a file that has a file
+        /// extension that ends in "proj" and uses that file. If a directory is specified, MSBuild searches that directory for a project file.
+        /// </remarks>
+        [CakeMethodAlias]
+        [CakeAliasCategory("MSBuild")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.MSBuild")]
+        public static void DotNetMSBuild(this ICakeContext context, string projectOrDirectory, DotNetMSBuildSettings settings, Action<IEnumerable<string>> standardOutputAction)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetMSBuildSettings();
+            }
+
+            var builder = new DotNetMSBuildBuilder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            builder.Build(projectOrDirectory, settings, standardOutputAction);
         }
     }
 }

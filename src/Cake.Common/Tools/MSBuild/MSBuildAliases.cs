@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -32,7 +33,25 @@ namespace Cake.Common.Tools.MSBuild
         [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution)
         {
-            MSBuild(context, solution, settings => { });
+            MSBuild(context, solution, (MSBuildSettings settings) => { });
+        }
+
+        /// <summary>
+        /// Builds the specified solution or MsBuild project file using MSBuild.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="solution">The solution or MsBuild project file to build.</param>
+        /// <param name="standardOutputAction">The action to invoke with the standard output.</param>
+        /// <example>
+        /// <code>
+        /// MSBuild("./src/Cake.sln",
+        ///     output => foreach(var line in output) outputBuilder.AppendLine(line));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static void MSBuild(this ICakeContext context, FilePath solution, Action<IEnumerable<string>> standardOutputAction)
+        {
+            MSBuild(context, solution, settings => { }, standardOutputAction);
         }
 
         /// <summary>
@@ -75,6 +94,48 @@ namespace Cake.Common.Tools.MSBuild
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="solution">The solution or MsBuild project file to build.</param>
+        /// <param name="configurator">The settings configurator.</param>
+        /// <param name="standardOutputAction">The action to invoke with the standard output.</param>
+        /// <example>
+        /// <code>
+        /// var outputBuilder = new StringBuilder();
+        /// MSBuild("./src/Cake.sln", configurator =>
+        ///     configurator.SetConfiguration("Debug")
+        ///         .SetVerbosity(Verbosity.Minimal)
+        ///         .UseToolVersion(MSBuildToolVersion.VS2015)
+        ///         .SetMSBuildPlatform(MSBuildPlatform.x86)
+        ///         .SetPlatformTarget(PlatformTarget.MSIL),
+        ///     output => foreach(var line in output) outputBuilder.AppendLine(line));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static void MSBuild(this ICakeContext context, FilePath solution, Action<MSBuildSettings> configurator, Action<IEnumerable<string>> standardOutputAction)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (configurator == null)
+            {
+                throw new ArgumentNullException(nameof(configurator));
+            }
+            if (standardOutputAction == null)
+            {
+                throw new ArgumentNullException(nameof(standardOutputAction));
+            }
+
+            var settings = new MSBuildSettings();
+            configurator(settings);
+
+            // Perform the build.
+            MSBuild(context, solution, settings, standardOutputAction);
+        }
+
+        /// <summary>
+        /// Builds the specified solution using MSBuild.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="solution">The solution or MsBuild project file to build.</param>
         /// <param name="settings">The settings.</param>
         /// <example>
         /// <code>
@@ -99,7 +160,46 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            runner.Run(solution, settings);
+            runner.Run(solution, settings, null);
+        }
+
+        /// <summary>
+        /// Builds the specified solution or MsBuild project file using MSBuild.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="solution">The solution to build.</param>
+        /// <param name="settings">The settings.</param>
+        /// <param name="standardOutputAction">The action to invoke with the standard output.</param>
+        /// <example>
+        /// <code>
+        /// var outputBuilder = new StringBuilder();
+        /// MSBuild("./src/Cake.sln", new MSBuildSettings {
+        ///     Verbosity = Verbosity.Minimal,
+        ///     ToolVersion = MSBuildToolVersion.VS2015,
+        ///     Configuration = "Release",
+        ///     PlatformTarget = PlatformTarget.MSIL
+        ///     },
+        ///     output => foreach(var line in output) outputBuilder.AppendLine(line));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        public static void MSBuild(this ICakeContext context, FilePath solution, MSBuildSettings settings, Action<IEnumerable<string>> standardOutputAction)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            if (standardOutputAction == null)
+            {
+                throw new ArgumentNullException(nameof(standardOutputAction));
+            }
+
+            var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            runner.Run(solution, settings, standardOutputAction);
         }
     }
 }
