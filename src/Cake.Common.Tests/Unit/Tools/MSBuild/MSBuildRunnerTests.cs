@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
@@ -1012,6 +1013,113 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Then
                 Assert.Equal("/v:normal /p:DefineConstants=A;B /p:A=A%3BB /target:Build " +
                              "\"C:/Working/src/Solution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Append_GetProperty_To_Process_Arguments_And_Collects_Output()
+            {
+                IEnumerable<string> msbuildOutput = null;
+
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithGetProperty("A");
+                fixture.Settings.WithGetProperty("B");
+                fixture.StandardOutputAction = lines => msbuildOutput = lines;
+                var standardOutput = new string[]
+                {
+                    "{",
+                    "  \"Properties\": {",
+                    "    \"A\": \"A value\",",
+                    "    \"B\": \"B value\"",
+                    "  }",
+                    "}",
+                };
+                fixture.ProcessRunner.Process.SetStandardOutput(standardOutput);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:Build /getProperty:A /getProperty:B " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+
+                Assert.Equal(standardOutput, msbuildOutput);
+            }
+
+            [Fact]
+            public void Should_Append_GetItem_To_Process_Arguments_And_Collects_Output()
+            {
+                IEnumerable<string> msbuildOutput = null;
+
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithGetItem("A");
+                fixture.Settings.WithGetItem("B");
+                fixture.StandardOutputAction = lines => msbuildOutput = lines;
+                var standardOutput = new string[]
+                {
+                    "{",
+                    "  \"Items\": {",
+                    "    \"A\": [",
+                    "      {",
+                    "         \"Identity\": \"Identity value\"",
+                    "      }",
+                    "    ],",
+                    "    \"B\": [",
+                    "      {",
+                    "         \"Identity\": \"Identity value\"",
+                    "      }",
+                    "    ],",
+                    "  }",
+                    "}",
+                };
+                fixture.ProcessRunner.Process.SetStandardOutput(standardOutput);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:Build /getItem:A /getItem:B " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+
+                Assert.Equal(standardOutput, msbuildOutput);
+            }
+
+            [Fact]
+            public void Should_Append_GetTargetResult_To_Process_Arguments_And_Collects_Output()
+            {
+                IEnumerable<string> msbuildOutput = null;
+
+                // Given
+                var fixture = new MSBuildRunnerFixture(false, PlatformFamily.Windows);
+                fixture.Settings.WithGetTargetResult("A");
+                fixture.Settings.WithGetTargetResult("B");
+                fixture.StandardOutputAction = lines => msbuildOutput = lines;
+                var standardOutput = new string[]
+                {
+                    "{",
+                    "  \"TargetResults\": {",
+                    "    \"A\": {",
+                    "      \"Result\": \"Success\"",
+                    "      \"Items\": []",
+                    "    },",
+                    "    \"B\": {",
+                    "      \"Result\": \"Success\"",
+                    "      \"Items\": []",
+                    "    }",
+                    "  }",
+                    "}",
+                };
+                fixture.ProcessRunner.Process.SetStandardOutput(standardOutput);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/v:normal /target:Build /getTargetResult:A /getTargetResult:B " +
+                             "\"C:/Working/src/Solution.sln\"", result.Args);
+
+                Assert.Equal(standardOutput, msbuildOutput);
             }
 
             [Theory]
