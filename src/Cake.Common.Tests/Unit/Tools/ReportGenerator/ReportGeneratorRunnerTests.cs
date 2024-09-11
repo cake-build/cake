@@ -179,6 +179,9 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
             [InlineData("JsonSummary", 19)]
             [InlineData("lcov", 20)]
             [InlineData("TeamCitySummary", 21)]
+            [InlineData("MarkdownSummary", 22)]
+            [InlineData("MarkdownAssembliesSummary", 23)]
+            [InlineData("MarkdownSummaryGithub", 24)]
             public void Should_Set_Report_Types(string expected, int enumValue)
             {
                 // Given
