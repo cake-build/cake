@@ -375,6 +375,20 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
     Assert.Equal(projectReference, value);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSearchPackage")
+    .Does(() =>
+{
+    // Given
+    var package = "Cake.Tool";
+
+    // When
+    var result = DotNetSearchPackage(package);
+
+    // Then
+    Assert.NotNull(result);
+    Assert.Contains(package, result.Select(x => x.Name));
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
@@ -399,6 +413,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemovePackage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSearchPackage")
     .Does(() =>
 {
     // When

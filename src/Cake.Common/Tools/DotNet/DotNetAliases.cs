@@ -17,6 +17,7 @@ using Cake.Common.Tools.DotNet.NuGet.Source;
 using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Package.Add;
 using Cake.Common.Tools.DotNet.Package.Remove;
+using Cake.Common.Tools.DotNet.Package.Search;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Reference.Add;
 using Cake.Common.Tools.DotNet.Restore;
@@ -2526,6 +2527,100 @@ namespace Cake.Common.Tools.DotNet
 
             var adder = new DotNetReferenceAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             adder.Add(project, projectReferences, settings);
+        }
+
+        /// <summary>
+        /// List packages on available from source using specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>List of packages with their version.</returns>
+        /// <example>
+        /// <code>
+        /// var packageList = DotNetPackageSearch("Cake", new DotNetPackageSearchSettings {
+        ///     AllVersions = false,
+        ///     Prerelease = false
+        ///     });
+        /// foreach(var package in packageList)
+        /// {
+        ///     Information("Found package {0}, version {1}", package.Name, package.Version);
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Package")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Search")]
+        public static IEnumerable<DotNetPackageSearchItem> DotNetSearchPackage(this ICakeContext context, string searchTerm, DotNetPackageSearchSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            var runner = new DotNetPackageSearcher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return runner.Search(searchTerm, settings);
+        }
+
+        /// <summary>
+        /// List packages on available from source using specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="searchTerm">The package Id.</param>
+        /// <returns>List of packages with their version.</returns>
+        /// <example>
+        /// <code>
+        /// var packageList = DotNetPackageSearch("Cake", new DotNetPackageSearchSettings {
+        ///     AllVersions = false,
+        ///     Prerelease = false
+        ///     });
+        /// foreach(var package in packageList)
+        /// {
+        ///     Information("Found package {0}, version {1}", package.Name, package.Version);
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Package")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Search")]
+        public static IEnumerable<DotNetPackageSearchItem> DotNetSearchPackage(this ICakeContext context, string searchTerm)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            var runner = new DotNetPackageSearcher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return runner.Search(searchTerm, new DotNetPackageSearchSettings());
+        }
+
+        /// <summary>
+        /// List packages on available from source using specified settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>List of packages with their version.</returns>
+        /// <example>
+        /// <code>
+        /// var packageList = DotNetPackageSearch("Cake", new DotNetPackageSearchSettings {
+        ///     AllVersions = false,
+        ///     Prerelease = false
+        ///     });
+        /// foreach(var package in packageList)
+        /// {
+        ///     Information("Found package {0}, version {1}", package.Name, package.Version);
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Package")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Search")]
+        public static IEnumerable<DotNetPackageSearchItem> DotNetSearchPackage(this ICakeContext context, DotNetPackageSearchSettings settings)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+            var runner = new DotNetPackageSearcher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return runner.Search(null, settings);
         }
     }
 }
