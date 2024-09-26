@@ -129,10 +129,11 @@ namespace Cake.Commands
             // Keep the actual remaining arguments in the cake arguments
             foreach (var group in remainingArguments.Parsed)
             {
-                arguments[group.Key] = new List<string>();
+                string key = group.Key.TrimStart('-');
+                arguments[key] = new List<string>();
                 foreach (var argument in group)
                 {
-                    arguments[group.Key].Add(argument);
+                    arguments[key].Add(argument);
                 }
             }
 

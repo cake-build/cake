@@ -67,7 +67,7 @@ Task("Cake.Core.Scripting.AddinDirective.LoadNativeAssemblies")
 {
     FilePath cakeCore = typeof(ICakeContext).GetTypeInfo().Assembly.Location;
     FilePath cake = cakeCore.GetDirectory().CombineWithFilePath("Cake.dll");
-    var script = @"#addin nuget:?package=Cake.Git&version=2.0.0
+    var script = @"#addin nuget:?package=Cake.Git&version=4.0.0
 
 var repoRoot = GitFindRootFromPath(Context.EnvironmentVariable(""CAKE_TEST_DIR""));
 

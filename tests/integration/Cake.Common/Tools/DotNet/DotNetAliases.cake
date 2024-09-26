@@ -282,6 +282,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadSearch")
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRepair")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .OnError(exception => { Console.WriteLine(exception); })
     .Does(() =>
 {
     // When
