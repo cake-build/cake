@@ -130,6 +130,30 @@ namespace Cake.Common.Tools.ReportGenerator
         /// <remarks>
         /// Requires ReportGenerator 4.1.3+
         /// </remarks>
-        TeamCitySummary = 21
+        TeamCitySummary = 21,
+
+        /// <summary>
+        /// Outputs a single Markdown file containing coverage information per class.
+        /// </summary>
+        /// <remarks>
+        /// Requires ReportGenerator 5.1.10+
+        /// </remarks>
+        MarkdownSummary = 22,
+
+        /// <summary>
+        /// Outputs a single Markdown file containing coverage information per assembly.
+        /// </summary>
+        /// <remarks>
+        /// Requires ReportGenerator 5.3.0+
+        /// </remarks>
+        MarkdownAssembliesSummary = 23,
+
+        /// <summary>
+        /// Outputs a single Markdown file containing coverage information per class. The report is optimized for GitHub.
+        /// </summary>
+        /// <remarks>
+        /// Requires ReportGenerator 5.1.13+
+        /// </remarks>
+        MarkdownSummaryGithub = 24
     }
 }
