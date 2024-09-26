@@ -26,12 +26,12 @@
 
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.9.2" />
-    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
-    <PackageReference Include="System.Reflection.Metadata" Version="8.0.0" />
-    <PackageReference Include="Autofac" Version="8.0.0" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net80" Version="1.5.0" Condition="'$(TargetFramework)' == 'net8.0'" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net70" Version="1.5.0" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net60" Version="1.5.0" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.Reflection.Metadata"  />
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net80" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net70" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net60" Condition="'$(TargetFramework)' == 'net6.0'" />
   </ItemGroup>
 </Project>
