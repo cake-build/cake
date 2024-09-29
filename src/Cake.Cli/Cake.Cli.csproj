@@ -18,8 +18,8 @@
   </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="8.0.0" />
-      <PackageReference Include="Spectre.Console" Version="0.49.1" />
-      <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
+      <PackageReference Include="Autofac" />
+      <PackageReference Include="Spectre.Console" />
+      <PackageReference Include="Spectre.Console.Cli" />
   </ItemGroup>
 </Project>
