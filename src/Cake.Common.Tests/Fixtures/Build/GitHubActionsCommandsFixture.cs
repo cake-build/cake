@@ -1,10 +1,12 @@
 using System;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Cake.Common.Build.GitHubActions.Commands;
+using Cake.Common.Build.GitHubActions.Commands.Artifact;
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Common.Tests.Fakes;
 using Cake.Core;
@@ -16,95 +18,25 @@ namespace Cake.Common.Tests.Fixtures.Build
 {
     internal sealed class GitHubActionsCommandsFixture : HttpMessageHandler
     {
-        private const string ApiVersion = "6.0-preview";
-        private const string AcceptHeader = "application/json; api-version=" + ApiVersion;
-        private const string AcceptGzip = "application/octet-stream; api-version=" + ApiVersion;
-        private const string AcceptEncodingGzip = "gzip";
-        private const string CreateArtifactUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
-                                                 "_apis/pipelines/workflows/34058136/artifacts?api-version=" + ApiVersion + "&artifactName=artifact";
-        private const string CreateArtifactsUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
-                                                 "_apis/pipelines/workflows/34058136/artifacts?api-version=" + ApiVersion + "&artifactName=artifacts";
-        private const string PutFileUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
-                                          "_apis/resources/Containers/942031?itemPath=artifact%2Fartifact.txt";
+        private const string AcceptHeaderResults = "application/json";
+        private const string ArtifactUrl = GitHubActionsInfoFixture.ActionResultsUrl + "twirp/github.actions.results.api.v1.ArtifactService/";
+        private const string CreateArtifactUrl = ArtifactUrl + "CreateArtifact";
+        private const string FinalizeArtifactUrl = ArtifactUrl + "FinalizeArtifact";
+        private const string GetSignedArtifactURLurl = ArtifactUrl + "GetSignedArtifactURL";
+        private const string UploadFileUrl = "https://cake.build.net/actions-results/a9d82106-d5d5-4310-8f60-0bfac035cf02/workflow-job-run-1d849a45-2f30-5fbb-3226-b730a17a93af/artifacts/91e64594182918fa8012cdbf7d1a4f801fa0c35f485c3277268aad8e3f45377c.zip?sig=upload";
+        private const string DownloadFileUrl = "https://cake.build.net/actions-results/a9d82106-d5d5-4310-8f60-0bfac035cf02/workflow-job-run-1d849a45-2f30-5fbb-3226-b730a17a93af/artifacts/91e64594182918fa8012cdbf7d1a4f801fa0c35f485c3277268aad8e3f45377c.zip?sig=download";
         private const string CreateArtifactResponse = @"{
-    ""containerId"": 942031,
-    ""size"": -1,
-    ""signedContent"": null,
-    ""fileContainerResourceUrl"": """ + GitHubActionsInfoFixture.ActionRuntimeUrl + @"_apis/resources/Containers/942031"",
-    ""type"": ""actions_storage"",
+    ""ok"": true,
+    ""signed_upload_url"": """ + UploadFileUrl + @"""
+}";
+        private const string FinalizeArtifactResponse = @"{
+    ""ok"": true,
+    ""artifact_id"": ""1991105334""
+}";
+        private const string GetSignedArtifactURLResponse = @"{ 
     ""name"": ""artifact"",
-    ""url"": """ + GitHubActionsInfoFixture.ActionRuntimeUrl + @"_apis/pipelines/1/runs/7/artifacts?artifactName=artifact"",
-    ""expiresOn"": ""2021-12-14T18:43:29.7431144Z"",
-    ""items"": null
+    ""signed_url"": """ + DownloadFileUrl + @"""
 }";
-        private const string CreateArtifactsResponse = @"{
-    ""containerId"": 942031,
-    ""size"": -1,
-    ""signedContent"": null,
-    ""fileContainerResourceUrl"": """ + GitHubActionsInfoFixture.ActionRuntimeUrl + @"_apis/resources/Containers/942031"",
-    ""type"": ""actions_storage"",
-    ""name"": ""artifact"",
-    ""url"": """ + GitHubActionsInfoFixture.ActionRuntimeUrl + @"_apis/pipelines/1/runs/7/artifacts?artifactName=artifacts"",
-    ""expiresOn"": ""2021-12-14T18:43:29.7431144Z"",
-    ""items"": null
-}";
-
-        private const string PutDirectoryRootUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
-                                  "_apis/resources/Containers/942031?itemPath=artifacts%2Fartifact.txt";
-        private const string PutDirectoryFolderAUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
-                                          "_apis/resources/Containers/942031?itemPath=artifacts%2Ffolder_a%2Fartifact.txt";
-        private const string PutDirectoryFolderBUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
-                                          "_apis/resources/Containers/942031?itemPath=artifacts%2Ffolder_b%2Fartifact.txt";
-        private const string PutDirectoryFolderBFolderCUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
-                                          "_apis/resources/Containers/942031?itemPath=artifacts%2Ffolder_b%2Ffolder_c%2Fartifact.txt";
-
-        private const string GetArtifactResourceUrl = GitHubActionsInfoFixture.ActionRuntimeUrl +
-            "_apis/pipelines/workflows/34058136/artifacts?api-version=6.0-preview&artifactName=artifact";
-        private const string FileContainerResourceUrl = GitHubActionsInfoFixture.ActionRuntimeUrl + @"_apis/resources/Containers/4794789";
-        private const string GetArtifactResourceResponse = @"{
-    ""count"": 1,
-    ""value"": [
-        {
-            ""containerId"": 4794789,
-            ""size"": 4,
-            ""signedContent"": null,
-            ""fileContainerResourceUrl"": """ + FileContainerResourceUrl + @""",
-            ""type"": ""actions_storage"",
-            ""name"": ""artifact"",
-            ""url"": """ + GitHubActionsInfoFixture.ActionRuntimeUrl + @"_apis/pipelines/1/runs/7/artifacts?artifactName=artifact"",
-            ""expiresOn"": ""2022-03-16T08:22:01.5699067Z"",
-            ""items"": null
-        }
-    ]
-}";
-
-        private const string GetContainerItemResourcesUrl = FileContainerResourceUrl + "?itemPath=artifact";
-        private const string GetContainerItemResourcesResponse = @"{
-    ""count"": 1,
-    ""value"": [
-        {
-            ""containerId"": 4794789,
-            ""scopeIdentifier"": ""00000000-0000-0000-0000-000000000000"",
-            ""path"": ""artifact/test.txt"",
-            ""itemType"": ""file"",
-            ""status"": ""created"",
-            ""fileLength"": 4,
-            ""fileEncoding"": 1,
-            ""fileType"": 1,
-            ""dateCreated"": ""2021-12-16T09:05:18.803Z"",
-            ""dateLastModified"": ""2021-12-16T09:05:18.907Z"",
-            ""createdBy"": ""2daeb16b-86ae-4e46-ba89-92a8aa076e52"",
-            ""lastModifiedBy"": ""2daeb16b-86ae-4e46-ba89-92a8aa076e52"",
-            ""itemLocation"": """ + GetContainerItemResourcesUrl + @"%2Ftest.txt&metadata=True"",
-            ""contentLocation"": """ + GetContainerItemResourcesUrl + @"%2Ftest.txt"",
-            ""fileId"": 1407,
-            ""contentId"": """"
-        }
-    ]
-}";
-
-        private const string DownloadItemResourceUrl = GetContainerItemResourcesUrl + "%2Ftest.txt";
-        private const string DownloadItemResourceResponse = "Cake";
 
         private GitHubActionsInfoFixture GitHubActionsInfoFixture { get; }
         private ICakeEnvironment Environment { get; }
@@ -159,7 +91,24 @@ namespace Cake.Common.Tests.Fixtures.Build
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (request.Headers.Authorization is null || request.Headers.Authorization.Scheme != "Bearer" || request.Headers.Authorization.Parameter != GitHubActionsInfoFixture.ActionRuntimeToken)
+            if (request.RequestUri.AbsoluteUri == DownloadFileUrl)
+            {
+            }
+            else if (request.RequestUri.AbsoluteUri == UploadFileUrl)
+            {
+                if (
+                    !request.Content.Headers.TryGetValues("x-ms-blob-content-type", out var contentTypes)
+                    || !contentTypes.Contains("application/zip")
+                    || !request.Content.Headers.TryGetValues("x-ms-blob-type", out var blobTypes)
+                    || !blobTypes.Contains("BlockBlob"))
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.Unauthorized
+                    };
+                }
+            }
+            else if (request.Headers.Authorization is null || request.Headers.Authorization.Scheme != "Bearer" || request.Headers.Authorization.Parameter != GitHubActionsInfoFixture.ActionRuntimeToken)
             {
                 return new HttpResponseMessage
                 {
@@ -167,115 +116,95 @@ namespace Cake.Common.Tests.Fixtures.Build
                 };
             }
 
-            if (
-                !request.Headers.TryGetValues("Accept", out var values)
-                || !values.Contains(AcceptHeader))
-            {
-                if (request.RequestUri.AbsoluteUri != DownloadItemResourceUrl
-                    || !values.Contains(AcceptGzip)
-                    || !request.Headers.TryGetValues("Accept-Encoding", out var encodingValues)
-                    || !encodingValues.Contains(AcceptEncodingGzip))
-                {
-                    return new HttpResponseMessage
-                    {
-                        StatusCode = HttpStatusCode.BadRequest
-                    };
-                }
-            }
-
             switch (request)
             {
 #pragma warning disable SA1013
-                // Create Artifact FilePath
+                // Get Signed Artifact Url
+                case
+                {
+                    RequestUri: { AbsoluteUri: GetSignedArtifactURLurl },
+                    Method: { Method: "POST" },
+                }:
+                    {
+                        using var getSignedArtifactURLRequestStream = await request.Content.ReadAsStreamAsync(cancellationToken);
+                        var getSignedArtifactURLRequest = await System.Text.Json.JsonSerializer.DeserializeAsync<GetSignedArtifactURLRequest>(getSignedArtifactURLRequestStream, cancellationToken: cancellationToken);
+                        return getSignedArtifactURLRequest switch
+                        {
+                            { Name: { Length: >0}, WorkflowJobRunBackendId: { Length: >0}, WorkflowRunBackendId: { Length: >0 } } => Ok(new StringContent(GetSignedArtifactURLResponse)),
+                            _ => new HttpResponseMessage
+                            {
+                                StatusCode = HttpStatusCode.BadRequest
+                            }
+                        };
+                    }
+
+                // Create Artifact
                 case
                 {
                     RequestUri: { AbsoluteUri: CreateArtifactUrl },
                     Method: { Method: "POST" },
                 }:
                     {
-                        return Ok(new StringContent(CreateArtifactResponse));
-                    }
+                        using var createArtifactRequestStream = await request.Content.ReadAsStreamAsync(cancellationToken);
+                        var createArtifactRequest = await System.Text.Json.JsonSerializer.DeserializeAsync<CreateArtifactRequest>(createArtifactRequestStream, cancellationToken: cancellationToken);
 
-                // Create Artifact DirectoryPath
+                        return createArtifactRequest switch
+                        {
+                            { Version: 4, Name: "artifact", } => Ok(new StringContent(CreateArtifactResponse)),
+                            { Version: 4, Name: "artifacts", } => Ok(new StringContent(CreateArtifactResponse)),
+                            _ => new HttpResponseMessage
+                                {
+                                    StatusCode = HttpStatusCode.BadRequest
+                                }
+                        };
+                    }
+                // Finalize Artifact
                 case
                 {
-                    RequestUri: { AbsoluteUri: CreateArtifactsUrl },
+                    RequestUri: { AbsoluteUri: FinalizeArtifactUrl },
                     Method: { Method: "POST" },
                 }:
                     {
-                        return Ok(new StringContent(CreateArtifactsResponse));
+                        using var createArtifactRequestStream = await request.Content.ReadAsStreamAsync(cancellationToken);
+                        var finalizeArtifactRequest = await System.Text.Json.JsonSerializer.DeserializeAsync<FinalizeArtifactRequest>(createArtifactRequestStream, cancellationToken: cancellationToken);
+
+                        return finalizeArtifactRequest switch
+                        {
+                            { Hash: { Length: > 0},  Size: >0, Name: "artifact", } => Ok(new StringContent(FinalizeArtifactResponse)),
+                            { Hash: { Length: > 0 }, Size: > 0, Name: "artifacts", } => Ok(new StringContent(FinalizeArtifactResponse)),
+                            _ => new HttpResponseMessage
+                            {
+                                StatusCode = HttpStatusCode.BadRequest
+                            }
+                        };
                     }
 
-                // Download Artifact - Get Artifact Container Resource
+                // Upload File
                 case
                 {
-                    RequestUri: { AbsoluteUri: GetArtifactResourceUrl },
-                    Method: { Method: "GET" }
-                }:
-                    {
-                        return Ok(new StringContent(GetArtifactResourceResponse));
-                    }
-
-                // Download Artifact - Get Artifact Container Item Resource
-                case
-                {
-                    RequestUri: { AbsoluteUri: GetContainerItemResourcesUrl },
-                    Method: { Method: "GET" }
-                }:
-                    {
-                        return Ok(new StringContent(GetContainerItemResourcesResponse));
-                    }
-
-                // Download Artifact - DownloadItemResource
-                case
-                {
-                    RequestUri: { AbsoluteUri: DownloadItemResourceUrl },
-                    Method: { Method: "GET" }
-                }:
-                    {
-                        return Ok(new StringContent(DownloadItemResourceResponse));
-                    }
-
-                // Put FilePath
-                case
-                {
-                    RequestUri: { AbsoluteUri: PutFileUrl },
+                    RequestUri: { AbsoluteUri: UploadFileUrl },
                     Method: { Method: "PUT" }
-                }:
-                case
-                {
-                    RequestUri: { AbsoluteUri: CreateArtifactUrl },
-                    Method: { Method: "PATCH" },
-                }:
-
-                // Put DirectoryPath
-                case
-                {
-                    RequestUri: { AbsoluteUri: PutDirectoryRootUrl },
-                    Method: { Method: "PUT" }
-                }:
-                case
-                {
-                    RequestUri: { AbsoluteUri: PutDirectoryFolderAUrl },
-                    Method: { Method: "PUT" }
-                }:
-                case
-                {
-                    RequestUri: { AbsoluteUri: PutDirectoryFolderBUrl },
-                    Method: { Method: "PUT" }
-                }:
-                case
-                {
-                    RequestUri: { AbsoluteUri: PutDirectoryFolderBFolderCUrl },
-                    Method: { Method: "PUT" }
-                }:
-                case
-                {
-                    RequestUri: { AbsoluteUri: CreateArtifactsUrl },
-                    Method: { Method: "PATCH" },
                 }:
                     {
                         return Ok();
+                    }
+
+                // Download File
+                case
+                {
+                    RequestUri: { AbsoluteUri: DownloadFileUrl },
+                    Method: { Method: "GET" }
+                }:
+                    {
+                        await using var stream = new System.IO.MemoryStream();
+                        using (var zip = new ZipArchive(stream, ZipArchiveMode.Create, true))
+                        {
+                            var entry = zip.CreateEntry("test.txt");
+                            using var entryStream = entry.Open();
+                            using var writer = new System.IO.StreamWriter(entryStream);
+                            writer.Write("Cake");
+                        }
+                        return Ok(new ByteArrayContent(stream.ToArray()));
                     }
 #pragma warning restore SA1013
 
