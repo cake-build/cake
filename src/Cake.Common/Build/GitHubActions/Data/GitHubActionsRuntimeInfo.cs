@@ -28,7 +28,7 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <c>true</c> if the GitHub Actions Runtime is available for the current build.
         /// </value>
         public bool IsRuntimeAvailable
-            => !string.IsNullOrWhiteSpace(Token) && !string.IsNullOrWhiteSpace(Url);
+            => !string.IsNullOrWhiteSpace(Token) && !string.IsNullOrWhiteSpace(Url) && !string.IsNullOrWhiteSpace(ResultsUrl);
 
         /// <summary>
         /// Gets the current runtime API authorization token.
@@ -45,6 +45,11 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// The current runtime API endpoint url.
         /// </value>
         public string Url => GetEnvironmentString("ACTIONS_RUNTIME_URL");
+
+        /// <summary>
+        /// Gets the current runtime API endpoint url for the job.
+        /// </summary>
+        public string ResultsUrl => GetEnvironmentString("ACTIONS_RESULTS_URL");
 
         /// <summary>
         /// Gets the path to environment file to set an environment variable that the following steps in a job can use.
