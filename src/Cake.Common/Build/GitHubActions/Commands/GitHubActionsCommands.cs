@@ -45,6 +45,8 @@ namespace Cake.Common.Build.GitHubActions.Commands
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             _writer = writer ?? throw new ArgumentNullException(nameof(writer));
             _actionsEnvironment = actionsEnvironment ?? throw new ArgumentNullException(nameof(actionsEnvironment));
+            // Internal service class, keeping public API unchanged,
+            // introduced in pr https://github.com/cake-build/cake/pull/4350
             _artifactsService = new GitHubActionsArtifactService(environment, fileSystem, actionsEnvironment, createHttpClient ?? throw new ArgumentNullException(nameof(createHttpClient)));
         }
 
