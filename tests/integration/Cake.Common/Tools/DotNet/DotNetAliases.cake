@@ -397,6 +397,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListPackage")
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
     // When
+    DotNetRestore(project.FullPath);
     var result = DotNetListPackage(project.FullPath);
     // Then
     Assert.Equal(1, result.Version);
