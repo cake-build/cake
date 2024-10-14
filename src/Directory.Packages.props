@@ -6,7 +6,7 @@
   <ItemGroup>
     <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
-    <PackageVersion Include="Autofac" Version="8.1.0" />
+    <PackageVersion Include="Autofac" Version="8.1.1" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net60" Version="1.7.9" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net70" Version="1.7.9" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.7.9" />
