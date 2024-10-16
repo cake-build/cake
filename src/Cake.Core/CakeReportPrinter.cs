@@ -30,11 +30,16 @@ namespace Cake.Core
         }
 
         /// <inheritdoc/>
-        public void Write(CakeReport report)
+        public void Write(CakeReport report, Verbosity verbosity)
         {
             if (report == null)
             {
                 throw new ArgumentNullException(nameof(report));
+            }
+
+            if (verbosity <= Verbosity.Quiet)
+            {
+                return;
             }
 
             try
