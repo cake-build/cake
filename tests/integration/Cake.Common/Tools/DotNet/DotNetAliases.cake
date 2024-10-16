@@ -223,6 +223,26 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
     Assert.True(System.IO.File.Exists(assembly.FullPath));
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuildEmptyParametersAllowed")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetClean")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net7.0/hwapp.dll");
+
+    // When
+    DotNetMSBuild(project.FullPath, new DotNetBuildSettings() {
+        MSBuildSettings = new DotNetMSBuildSettings(){
+        }
+        .WithProperty("APropertyIWantTobeBlank", "")
+    });
+
+    // Then
+    Assert.True(true);
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
     .Does(() =>
