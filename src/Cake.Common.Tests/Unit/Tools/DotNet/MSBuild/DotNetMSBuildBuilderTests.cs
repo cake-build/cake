@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tests.Fixtures.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet;
@@ -203,6 +204,113 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.MSBuild
 
                 // Then
                 AssertEx.IsArgumentException(result, "Properties", "A property must have at least one non-empty value");
+            }
+
+            [Fact]
+            public void Should_Append_GetProperty_To_Process_Arguments_And_Collects_Output()
+            {
+                IEnumerable<string> msbuildOutput = null;
+
+                // Given
+                var fixture = new DotNetMSBuildBuilderFixture();
+                fixture.Settings.WithGetProperty("A");
+                fixture.Settings.WithGetProperty("B");
+                fixture.StandardOutputAction = lines => msbuildOutput = lines;
+                var standardOutput = new string[]
+                {
+                    "{",
+                    "  \"Properties\": {",
+                    "    \"A\": \"A value\",",
+                    "    \"B\": \"B value\"",
+                    "  }",
+                    "}",
+                };
+                fixture.ProcessRunner.Process.SetStandardOutput(standardOutput);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /getProperty:A /getProperty:B",
+                             result.Args);
+
+                Assert.Equal(standardOutput, msbuildOutput);
+            }
+
+            [Fact]
+            public void Should_Append_GetItem_To_Process_Arguments_And_Collects_Output()
+            {
+                IEnumerable<string> msbuildOutput = null;
+
+                // Given
+                var fixture = new DotNetMSBuildBuilderFixture();
+                fixture.Settings.WithGetItem("A");
+                fixture.Settings.WithGetItem("B");
+                fixture.StandardOutputAction = lines => msbuildOutput = lines;
+                var standardOutput = new string[]
+                {
+                    "{",
+                    "  \"Items\": {",
+                    "    \"A\": [",
+                    "      {",
+                    "         \"Identity\": \"Identity value\"",
+                    "      }",
+                    "    ],",
+                    "    \"B\": [",
+                    "      {",
+                    "         \"Identity\": \"Identity value\"",
+                    "      }",
+                    "    ],",
+                    "  }",
+                    "}",
+                };
+                fixture.ProcessRunner.Process.SetStandardOutput(standardOutput);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /getItem:A /getItem:B",
+                             result.Args);
+
+                Assert.Equal(standardOutput, msbuildOutput);
+            }
+
+            [Fact]
+            public void Should_Append_GetTargetResult_To_Process_Arguments_And_Collects_Output()
+            {
+                IEnumerable<string> msbuildOutput = null;
+
+                // Given
+                var fixture = new DotNetMSBuildBuilderFixture();
+                fixture.Settings.WithGetTargetResult("A");
+                fixture.Settings.WithGetTargetResult("B");
+                fixture.StandardOutputAction = lines => msbuildOutput = lines;
+                var standardOutput = new string[]
+                {
+                    "{",
+                    "  \"TargetResults\": {",
+                    "    \"A\": {",
+                    "      \"Result\": \"Success\"",
+                    "      \"Items\": []",
+                    "    },",
+                    "    \"B\": {",
+                    "      \"Result\": \"Success\"",
+                    "      \"Items\": []",
+                    "    }",
+                    "  }",
+                    "}",
+                };
+                fixture.ProcessRunner.Process.SetStandardOutput(standardOutput);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("msbuild /getTargetResult:A /getTargetResult:B",
+                             result.Args);
+
+                Assert.Equal(standardOutput, msbuildOutput);
             }
 
             [Theory]

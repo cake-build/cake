@@ -63,6 +63,39 @@ namespace Cake.Common.Tools.DotNet.MSBuild
                 msBuilder.AppendMSBuildSwitch("property", $"{property.Key}={property.BuildMSBuildPropertyParameterString()}");
             }
 
+            // Got any properties to retrieve?
+            foreach (var property in settings.GetProperties)
+            {
+                if (property == null || string.IsNullOrWhiteSpace(property))
+                {
+                    throw new ArgumentException("A property to retrieve must have have non-empty name", nameof(settings.Properties));
+                }
+
+                msBuilder.AppendMSBuildSwitch("getProperty", property);
+            }
+
+            // Got any items to retrieve?
+            foreach (var item in settings.GetItems)
+            {
+                if (item == null || string.IsNullOrWhiteSpace(item))
+                {
+                    throw new ArgumentException("An item to retrieve must have have non-empty name", nameof(settings.Properties));
+                }
+
+                msBuilder.AppendMSBuildSwitch("getItem", item);
+            }
+
+            // Got any target results to retrieve?
+            foreach (var target in settings.GetTargetResults)
+            {
+                if (target == null || string.IsNullOrWhiteSpace(target))
+                {
+                    throw new ArgumentException("An target to retrieve results must have have non-empty name", nameof(settings.Properties));
+                }
+
+                msBuilder.AppendMSBuildSwitch("getTargetResult", target);
+            }
+
             // Set the maximum number of processors?
             if (settings.MaxCpuCount.HasValue)
             {
