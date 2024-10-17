@@ -21,6 +21,7 @@ using Cake.Common.Tools.DotNet.Package.Remove;
 using Cake.Common.Tools.DotNet.Package.Search;
 using Cake.Common.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet.Reference.Add;
+using Cake.Common.Tools.DotNet.Reference.List;
 using Cake.Common.Tools.DotNet.Reference.Remove;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
@@ -2626,6 +2627,94 @@ namespace Cake.Common.Tools.DotNet
 
             var remover = new DotNetReferenceRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             remover.Remove(project, projectReferences, settings);
+        }
+
+        /// <summary>
+        /// Lists project-to-project references.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>The list of project-to-project references.</returns>
+        /// <example>
+        /// <code>
+        /// var references = DotNetListReference();
+        ///
+        /// foreach (var reference in references)
+        /// {
+        ///      Information(reference);
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Reference")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Reference.List")]
+        public static IEnumerable<string> DotNetListReference(this ICakeContext context)
+        {
+            return context.DotNetListReference(null);
+        }
+
+        /// <summary>
+        /// Lists project-to-project references.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project file to operate on. If a file is not specified, the command will search the current directory for one.</param>
+        /// <returns>The list of project-to-project references.</returns>
+        /// <example>
+        /// <code>
+        /// var references = DotNetListReference("./app/app.csproj");
+        ///
+        /// foreach (var reference in references)
+        /// {
+        ///      Information(reference);
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Reference")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Reference.List")]
+        public static IEnumerable<string> DotNetListReference(this ICakeContext context, string project)
+        {
+            return context.DotNetListReference(project, null);
+        }
+
+        /// <summary>
+        /// Lists project-to-project references.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="project">The project file to operate on. If a file is not specified, the command will search the current directory for one.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>The list of project-to-project references.</returns>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetReferenceListSettings
+        /// {
+        ///     Verbosity = DotNetVerbosity.Diagnostic
+        /// };
+        ///
+        /// var references = DotNetListReference("./app/app.csproj", settings);
+        ///
+        /// foreach (var reference in references)
+        /// {
+        ///      Information(reference);
+        /// }
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Reference")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Reference.List")]
+        public static IEnumerable<string> DotNetListReference(this ICakeContext context, string project, DotNetReferenceListSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetReferenceListSettings();
+            }
+
+            var lister = new DotNetReferenceLister(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            return lister.List(project, settings);
         }
 
         /// <summary>
