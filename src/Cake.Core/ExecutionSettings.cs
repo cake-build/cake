@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Cake.Core.Constants;
 
 namespace Cake.Core
 {

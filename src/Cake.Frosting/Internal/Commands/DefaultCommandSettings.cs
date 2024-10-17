@@ -12,7 +12,7 @@ namespace Cake.Frosting.Internal
 {
     internal sealed class DefaultCommandSettings : CommandSettings
     {
-        [CommandOption("--target|-t <TARGET>")]
+        [CommandOption("--target|-t|--Target <TARGET>")]
         [DefaultValue("Default")]
         [Description("Target task to invoke.")]
         public string[] Targets { get; set; }
