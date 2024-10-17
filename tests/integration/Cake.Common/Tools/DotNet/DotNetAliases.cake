@@ -386,7 +386,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListReference")
     // When
     var result = DotNetListReference(project.FullPath);
     // Then
-    Assert.Contains(result.References, item => item == projectReference);
+    Assert.Contains(result, item => item == projectReference);
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemoveReference")
