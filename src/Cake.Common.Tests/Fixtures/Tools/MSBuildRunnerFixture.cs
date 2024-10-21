@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
@@ -15,6 +16,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
     {
         public HashSet<FilePath> KnownMSBuildPaths { get; }
         public FilePath Solution { get; set; }
+        public Action<IEnumerable<string>> StandardOutputAction { get; set; }
 
         public MSBuildRunnerFixture(bool is64BitOperativeSystem, PlatformFamily platformFamily)
             : base("MSBuild.exe")
@@ -83,7 +85,7 @@ namespace Cake.Common.Tests.Fixtures.Tools
         protected override void RunTool()
         {
             var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner, Tools);
-            runner.Run(Solution, Settings);
+            runner.Run(Solution, Settings, StandardOutputAction);
         }
     }
 }

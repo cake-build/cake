@@ -136,6 +136,27 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         public ICollection<string> Targets { get; }
 
         /// <summary>
+        /// Gets the properties to retrieve.
+        /// </summary>
+        /// <value>The properties to retrieve.</value>
+        /// <remarks>For more information, refer to <see href="https://learn.microsoft.com/en-us/visualstudio/msbuild/evaluate-items-and-properties">Evaluate items and properties and display results of targets</see>.</remarks>
+        public HashSet<string> GetProperties { get; }
+
+        /// <summary>
+        /// Gets the items to retrieve.
+        /// </summary>
+        /// <value>The items to retrieve.</value>
+        /// <remarks>For more information, refer to <see href="https://learn.microsoft.com/en-us/visualstudio/msbuild/evaluate-items-and-items">Evaluate items and items and display results of targets</see>.</remarks>
+        public HashSet<string> GetItems { get; }
+
+        /// <summary>
+        /// Gets the target results to retrieve.
+        /// </summary>
+        /// <value>The target results to retrieve.</value>
+        /// <remarks>For more information, refer to <see href="https://learn.microsoft.com/en-us/visualstudio/msbuild/evaluate-items-and-items">Evaluate items and items and display results of targets</see>.</remarks>
+        public HashSet<string> GetTargetResults { get; }
+
+        /// <summary>
         /// Gets or sets the version of the Toolset to use to build the project.
         /// </summary>
         public MSBuildVersion? ToolVersion { get; set; }
@@ -228,6 +249,9 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         {
             Properties = new Dictionary<string, ICollection<string>>(StringComparer.OrdinalIgnoreCase);
             Targets = new List<string>();
+            GetProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            GetItems = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            GetTargetResults = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             ResponseFiles = new List<FilePath>();
             DistributedLoggers = new List<MSBuildDistributedLogger>();
             FileLoggers = new List<MSBuildFileLoggerSettings>();
