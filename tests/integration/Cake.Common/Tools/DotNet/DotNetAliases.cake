@@ -282,6 +282,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadSearch")
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRepair")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .OnError(exception => { Console.WriteLine(exception); })
     .Does(() =>
 {
     // When
@@ -355,6 +356,87 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemovePackage")
     Assert.Null(value);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
+    var projectReferencePath = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    var projectReference = "..\\hwapp\\hwapp.csproj";
+    // When
+    DotNetAddReference(project.FullPath, new[] { (FilePath)projectReferencePath.FullPath});
+    var value = XmlPeek(
+        project.FullPath,
+        $"/Project/ItemGroup/ProjectReference[@Include='{projectReference}']/@Include"
+    );
+    // Then
+    Assert.Equal(projectReference, value);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListReference")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    var projectReference = "..\\hwapp.common\\hwapp.common.csproj";
+    // When
+    var result = DotNetListReference(project.FullPath);
+    // Then
+    Assert.Contains(result, item => item == projectReference);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemoveReference")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
+    var projectReferencePath = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    var projectReference = "..\\hwapp\\hwapp.csproj";
+    // When
+    DotNetRemoveReference(project.FullPath, new[] { (FilePath)projectReferencePath.FullPath});
+    var value = XmlPeek(
+        project.FullPath,
+        $"/Project/ItemGroup/ProjectReference[@Include='{projectReference}']/@Include"
+    );
+    // Then
+    Assert.Null(value);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSearchPackage")
+    .Does(() =>
+{
+    // Given
+    var package = "Cake.Tool";
+
+    // When
+    var result = DotNetSearchPackage(package);
+
+    // Then
+    Assert.NotNull(result);
+    Assert.Contains(package, result.Select(x => x.Name));
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    // When
+    DotNetRestore(project.FullPath);
+    var result = DotNetListPackage(project.FullPath);
+    // Then
+    Assert.Equal(1, result.Version);
+    Assert.Contains(result.Projects, item => item.Path == project);
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
@@ -378,6 +460,11 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemovePackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSearchPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemoveReference")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListReference")
     .Does(() =>
 {
     // When

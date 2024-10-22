@@ -1,3 +1,37 @@
+### New in 4.1.0 (Released 2024/10/22)
+
+* 4353 Add DotNetListReference alias for dotnet list reference command.
+* 4352 Add DotNetRemoveReference alias for dotnet remove reference command .
+* 4334 Add DotNetSearchPackage Alias for dotnet package search.
+* 4282 Add DotNetAddReference alias for dotnet add reference command.
+* 4224 Add DotNetListPackage alias for dotnet list package command.
+* 4363 Update System.Reflection.Metadata to 8.0.1.
+* 4364 Update Microsoft.Extensions.DependencyInjection to 8.0.1.
+* 4362 Update NuGet.* to 6.11.1.
+* 4359 Update Microsoft.IdentityModel.JsonWebTokens to 8.1.2.
+* 4358 Update Autofac to 8.1.1.
+* 4355 Different target argument values depending on specifying --target or --Target.
+* 4351 Use NuGet Client built-in Settings Utility to Get Enabled Sources.
+* 4349 GitHubActionCommand DownloadArtifact is not using the latest @v4 Version.
+* 4343 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.11.0.
+* 4342 Update Basic.Reference.Assemblies.* to 1.7.9.
+* 4341 Update Autofac to 8.1.0.
+* 4340 Update NuGet.* to 6.11.0.
+* 4335 Add ReportGenerator missing markdown report types.
+* 4331 GitHubActionCommand UploadArtifact is not using the latest @v4 Version.
+* 4322 FakeFileSystem throws on linux, when it is created on a Windows FakeEnvironment.
+* 4306 Update Autofac to 8.0.0.
+* 4305 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.9.2.
+* 4304 Update Basic.Reference.Assemblies.* to 1.5.0.
+* 4303 Update Microsoft.NET.Test.Sdk to 17.9.0.
+* 4302 Update Verify.Xunit to 23.5.2.
+* 4301 Update xunit to 2.7.0.
+* 4300 Update NuGet.* to 6.9.1.
+* 4299 Update NuGet.Packaging to 6.8.1.
+* 4278 Update Spectre.Console to 0.49.1.
+* 4276 Update NuGet.* to 6.8.0.
+* 4274 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.8.0.
+
 ### New in 4.0.0 (Released 2023/11/18)
 
 * 4266 Update LatestPotentialBreakingChange to 4.0.0.

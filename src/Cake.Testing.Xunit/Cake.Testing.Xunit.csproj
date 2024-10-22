@@ -11,7 +11,7 @@
   </PropertyGroup>
    <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="xunit" Version="2.6.1" />
+    <PackageReference Include="xunit" />
   </ItemGroup>
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />

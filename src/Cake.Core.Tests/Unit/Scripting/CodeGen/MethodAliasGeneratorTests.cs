@@ -11,10 +11,8 @@ using static Cake.Core.Tests.VerifyConfig;
 
 namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 {
-    [UsesVerify]
     public sealed class MethodAliasGeneratorTests
     {
-        [UsesVerify]
         public sealed class TheGeneratorMethod : IClassFixture<MethodAliasGeneratorFixture>
         {
             private readonly MethodAliasGeneratorFixture _fixture;

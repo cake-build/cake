@@ -126,7 +126,7 @@ namespace Cake.Common.Tests.Unit.IO
                 DirectoryAliases.CleanDirectory(context, directory, wherePredicate);
 
                 // Then
-                Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive).Where(wherePredicate));
+                Assert.DoesNotContain(fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive), file => wherePredicate(file));
                 Assert.Equal(filesNotMatchingPredicate, fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive));
             }
 
@@ -198,7 +198,7 @@ namespace Cake.Common.Tests.Unit.IO
                 DirectoryAliases.CleanDirectory(context, directory, wherePredicate, new CleanDirectorySettings { Force = true });
 
                 // Then
-                Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive).Where(wherePredicate));
+                Assert.DoesNotContain(fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive), file => wherePredicate(file));
                 Assert.Equal(filesNotMatchingPredicate, fixture.FileSystem.GetDirectory(directory).GetFiles("*", SearchScope.Recursive));
 
                 Assert.Single(filesNotMatchingPredicate);
