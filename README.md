@@ -41,7 +41,7 @@ Cake (C# Make) is a build automation system with a C# DSL to do things like comp
 
 You can read the latest documentation at [https://cakebuild.net/](https://cakebuild.net/).
 
-For a simple example to get started see [Setting up a new project](https://cakebuild.net/docs/getting-started/setting-up-a-new-project).
+For a simple example to get started see [Setting up a new project](https://cakebuild.net/docs/getting-started/setting-up-a-new-scripting-project).
 
 ## Contributing
 
