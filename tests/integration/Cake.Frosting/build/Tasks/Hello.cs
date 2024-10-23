@@ -1,3 +1,4 @@
+using Cake.Common;
 using Cake.Common.Diagnostics;
 using Cake.Frosting;
 
@@ -6,6 +7,6 @@ public sealed class Hello : FrostingTask<Context>
 {
     public override void Run(Context context)
     {
-        context.Information("Hello World");
+        context.Information("Hello {0}", context.Argument<string>("name"));
     }
 }

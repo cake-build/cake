@@ -342,7 +342,8 @@ Task("Frosting-Integration-Tests")
 
         DotNetRun(test.Project.FullPath,
             new ProcessArgumentBuilder()
-                .AppendSwitchQuoted("--verbosity", "=", "quiet"),
+                .AppendSwitchQuoted("--verbosity", "=", "quiet")
+                .AppendSwitchQuoted("--name", "=", "world"),
             new DotNetRunSettings
             {
                 Configuration = parameters.Configuration,

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Cli;
+using Cake.Cli.Infrastructure;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Features.Bootstrapping;
@@ -124,29 +125,17 @@ namespace Cake.Commands
 
         private static CakeArguments CreateCakeArguments(IRemainingArguments remainingArguments, DefaultCommandSettings settings)
         {
-            var arguments = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
-
-            // Keep the actual remaining arguments in the cake arguments
-            foreach (var group in remainingArguments.Parsed)
-            {
-                string key = group.Key.TrimStart('-');
-                arguments[key] = new List<string>();
-                foreach (var argument in group)
+            return remainingArguments.ToCakeArguments(
+                preProcessArgs: arguments =>
                 {
-                    arguments[key].Add(argument);
-                }
-            }
-
-            // Fixes #4157, We have to add arguments manually which are defined within the DefaultCommandSettings type. Those are not considered "as remaining" because they could be parsed
-            const string recompileArgumentName = Infrastructure.Constants.Cache.InvalidateScriptCache;
-            if (settings.Recompile && !arguments.ContainsKey(recompileArgumentName))
-            {
-                arguments[recompileArgumentName] = new List<string>();
-                arguments[recompileArgumentName].Add(true.ToString());
-            }
-
-            var argumentLookUp = arguments.SelectMany(a => a.Value, Tuple.Create).ToLookup(a => a.Item1.Key, a => a.Item2);
-            return new CakeArguments(argumentLookUp);
+                    // Fixes #4157, We have to add arguments manually which are defined within the DefaultCommandSettings type. Those are not considered "as remaining" because they could be parsed
+                    const string recompileArgumentName = Infrastructure.Constants.Cache.InvalidateScriptCache;
+                    if (settings.Recompile && !arguments.ContainsKey(recompileArgumentName))
+                    {
+                        arguments[recompileArgumentName] = new List<string>();
+                        arguments[recompileArgumentName].Add(true.ToString());
+                    }
+                });
         }
     }
 }
