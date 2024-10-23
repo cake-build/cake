@@ -1,3 +1,7 @@
+### New in 4.2.0 (Released 2024/10/23)
+
+* #4374 Argument 'foo' was not set" after update to 4.1 in Cake Frosting.
+
 ### New in 4.1.0 (Released 2024/10/22)
 
 * 4353 Add DotNetListReference alias for dotnet list reference command.
