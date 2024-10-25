@@ -17,7 +17,10 @@ public static class ChainedTasksProgram
     }
 }
 
-class AppTaskChainProvider : ITaskChainProvider
+/// <summary>
+/// Tasks chain provider.
+/// </summary>
+public class AppTaskChainProvider : ITaskChainProvider
 {
     public TaskChainItem GetChain()
     {
