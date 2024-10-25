@@ -3,7 +3,7 @@
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.12.0"
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.16.0"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.18.0"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=sign&version=0.9.1-beta.23530.1&prerelease"
 
 // Load other scripts.
@@ -342,7 +342,8 @@ Task("Frosting-Integration-Tests")
 
         DotNetRun(test.Project.FullPath,
             new ProcessArgumentBuilder()
-                .AppendSwitchQuoted("--verbosity", "=", "quiet"),
+                .AppendSwitchQuoted("--verbosity", "=", "quiet")
+                .AppendSwitchQuoted("--name", "=", "world"),
             new DotNetRunSettings
             {
                 Configuration = parameters.Configuration,

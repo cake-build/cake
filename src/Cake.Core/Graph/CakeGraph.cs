@@ -45,7 +45,7 @@ namespace Cake.Core.Graph
             {
                 throw new ArgumentNullException(nameof(node));
             }
-            if (_nodes.Any(x => x == node))
+            if (Exist(node))
             {
                 throw new CakeException("Node has already been added to graph.");
             }
