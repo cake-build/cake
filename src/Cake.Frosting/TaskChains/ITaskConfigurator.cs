@@ -2,6 +2,9 @@ using Cake.Core;
 
 namespace Cake.Frosting.TaskChains
 {
+    /// <summary>
+    /// Configures the build tasks chain.
+    /// </summary>
     public interface ITaskConfigurator
     {
         /// <summary>
@@ -10,10 +13,5 @@ namespace Cake.Frosting.TaskChains
         /// <param name="task">The task class instance.</param>
         /// <param name="cakeTask">The task configuration in Cake engine.</param>
         void Configure(IFrostingTask task, CakeTaskBuilder cakeTask);
-
-        /// <summary>
-        /// Called when all build tasks have been configured but not executed.
-        /// </summary>
-        void OnConfiguredAll();
     }
 }

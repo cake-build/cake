@@ -121,8 +121,6 @@ namespace Cake.Frosting.Internal
                     _taskConfigurator.Configure(task, cakeTask);
                 }
             }
-
-            _taskConfigurator.OnConfiguredAll();
         }
     }
 }

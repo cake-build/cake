@@ -2,14 +2,27 @@ using Cake.Frosting.Internal;
 
 namespace Cake.Frosting.TaskChains
 {
+    /// <summary>
+    /// Tasks chain extensions.
+    /// </summary>
     public static class TaskChainExtensions
     {
+        /// <summary>
+        /// Sets the next task to be executed in the chain.
+        /// </summary>
+        /// <param name="parent">The task whose next task to set.</param>
+        /// <param name="next">The next task to execute.</param>
         public static void Next(this TaskChainItem parent, TaskChainItem next)
         {
             parent.Next = next;
             next.Previous = parent;
         }
 
+        /// <summary>
+        /// Gets the specified task name.
+        /// </summary>
+        /// <param name="item">The task which name to get.</param>
+        /// <returns>Task name.</returns>
         public static string GetTaskName(this TaskChainItem item)
         {
             return item.TaskName ?? item.TaskType.GetTaskName();

@@ -3,10 +3,17 @@ using System.Linq;
 
 namespace Cake.Frosting.TaskChains
 {
+    /// <summary>
+    /// Iterates the task chain.
+    /// </summary>
     public class TaskChainIterator
     {
         private readonly TaskChainItem _firstItem;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskChainIterator"/> class.
+        /// </summary>
+        /// <param name="chainItem">The chain item.</param>
         public TaskChainIterator(TaskChainItem chainItem)
         {
             ArgumentNullException.ThrowIfNull(chainItem);
@@ -14,7 +21,7 @@ namespace Cake.Frosting.TaskChains
             _firstItem = GetChainFirstItem(chainItem);
         }
 
-        static TaskChainItem GetChainFirstItem(TaskChainItem chainItem)
+        private static TaskChainItem GetChainFirstItem(TaskChainItem chainItem)
         {
             var current = chainItem;
             while (current.Previous != null)
@@ -25,6 +32,11 @@ namespace Cake.Frosting.TaskChains
             return current;
         }
 
+        /// <summary>
+        /// Finds the task configuration that references the specified task.
+        /// </summary>
+        /// <param name="task">The task which reference to find.</param>
+        /// <returns>Task configuration or null if not found.</returns>
         public TaskChainItem FindReferencedItem(IFrostingTask task)
         {
             var currentItem = _firstItem;
@@ -44,6 +56,10 @@ namespace Cake.Frosting.TaskChains
             return null;
         }
 
+        /// <summary>
+        /// Gets the last task in the chain.
+        /// </summary>
+        /// <returns>The last task in the chain.</returns>
         public TaskChainItem GetLast()
         {
             return FindLastItem(_firstItem);

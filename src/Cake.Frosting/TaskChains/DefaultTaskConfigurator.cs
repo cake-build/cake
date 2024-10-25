@@ -3,19 +3,28 @@ using Cake.Frosting.Internal;
 
 namespace Cake.Frosting.TaskChains
 {
+    /// <summary>
+    /// Configures the build task's default behavior.
+    /// </summary>
+    /// <seealso cref="Cake.Frosting.TaskChains.ITaskConfigurator" />
     public class DefaultTaskConfigurator : ITaskConfigurator
     {
         private readonly IFrostingContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultTaskConfigurator"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
         public DefaultTaskConfigurator(IFrostingContext context)
         {
             _context = context;
         }
 
-        public void OnConfiguredAll()
-        {
-        }
-
+        /// <summary>
+        /// Configures the specific task after it was added to the execution engine.
+        /// </summary>
+        /// <param name="task">The task class instance.</param>
+        /// <param name="cakeTask">The task configuration in Cake engine.</param>
         public virtual void Configure(IFrostingTask task, CakeTaskBuilder cakeTask)
         {
             var description = task.GetTaskDescription();
