@@ -41,6 +41,17 @@ namespace Cake.Common.Tools.MSBuild
 
                 throw new CakeException("Could not resolve MSBuild.");
             }
+            else if (environment.Platform.Family == PlatformFamily.FreeBSD)
+            {
+                var freebsdMSBuildPath = new FilePath("/usr/local/bin/msbuild");
+
+                if (fileSystem.Exist(freebsdMSBuildPath))
+                {
+                    return freebsdMSBuildPath;
+                }
+
+                throw new CakeException("Could not resolve MSBuild.");
+            }
 
             var binPath = settings.ToolVersion == MSBuildToolVersion.Default
                 ? GetHighestAvailableMSBuildVersion(fileSystem, environment, buildPlatform, settings.AllowPreviewVersion)
