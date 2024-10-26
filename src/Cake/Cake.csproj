@@ -31,7 +31,5 @@
     <PackageReference Include="System.Reflection.Metadata"  />
     <PackageReference Include="Autofac" />
     <PackageReference Include="Basic.Reference.Assemblies.Net80" Condition="'$(TargetFramework)' == 'net8.0'" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net70" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <PackageReference Include="Basic.Reference.Assemblies.Net60" Condition="'$(TargetFramework)' == 'net6.0'" />
   </ItemGroup>
 </Project>

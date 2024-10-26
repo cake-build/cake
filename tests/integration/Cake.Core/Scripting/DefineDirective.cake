@@ -70,8 +70,7 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
     Assert.True(cake);
 });
 
-#if NET6_0 || NET7_0 || NET8_0
-    Task("Cake.Core.Scripting.DefineDirective.C#9")
+Task("Cake.Core.Scripting.DefineDirective.C#9")
     .Does(() =>
 {
     // given
@@ -80,10 +79,8 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
 });
 
 public record CSharpNine(bool IsNine);
-#endif
 
-#if NET6_0 || NET7_0 || NET8_0
-    Task("Cake.Core.Scripting.DefineDirective.C#10")
+Task("Cake.Core.Scripting.DefineDirective.C#10")
     .Does(() =>
 {
     // Given
@@ -97,10 +94,8 @@ public record CSharpNine(bool IsNine);
     Assert.Equal("Hello world!", helloWorld);
 });
 
-#endif
 
-#if NET7_0 || NET8_0
-    Task("Cake.Core.Scripting.DefineDirective.C#11")
+Task("Cake.Core.Scripting.DefineDirective.C#11")
     .Does(() =>
 {
     // Given / When / Then
@@ -114,9 +109,6 @@ public record CSharpNine(bool IsNine);
     """;
 });
 
-#endif
-
-#if NET8_0
     Task("Cake.Core.Scripting.DefineDirective.C#12")
     .Does(() =>
 {
@@ -127,23 +119,13 @@ public record CSharpNine(bool IsNine);
     int[] single = [..row0, ..row1, ..row2];
 });
 
-#endif
-
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
-#if NET6_0 || NET7_0 || NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#9")
-#endif
-#if NET6_0 || NET7_0 || NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#10")
-#endif
-#if NET7_0 || NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#11")
-#endif
-#if NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#12")
-#endif
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Defined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.NotDefined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Runtime")

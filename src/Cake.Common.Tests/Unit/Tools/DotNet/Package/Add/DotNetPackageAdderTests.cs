@@ -95,7 +95,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.Add
                 // Given
                 var fixture = new DotNetPackageAdderFixture();
                 fixture.PackageName = "Microsoft.AspNetCore.StaticFiles";
-                fixture.Settings.Framework = "net7.0";
+                fixture.Settings.Framework = "net8.0";
                 fixture.Settings.Interactive = true;
                 fixture.Settings.NoRestore = true;
                 fixture.Settings.PackageDirectory = "./src/project";
@@ -108,7 +108,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.Add
                 var result = fixture.Run();
 
                 // Then
-                var expected = "add package Microsoft.AspNetCore.StaticFiles --framework net7.0 --interactive --no-restore --package-directory \"/Working/src/project\" --prerelease --source \"http://www.nuget.org/api/v2/package\" --version \"1.0.0\" --verbosity diagnostic";
+                var expected = "add package Microsoft.AspNetCore.StaticFiles --framework net8.0 --interactive --no-restore --package-directory \"/Working/src/project\" --prerelease --source \"http://www.nuget.org/api/v2/package\" --version \"1.0.0\" --verbosity diagnostic";
                 Assert.Equal(expected, result.Args);
             }
         }
