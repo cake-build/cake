@@ -111,7 +111,7 @@ Task("Cake.Core.Scripting.DefineDirective.C#11")
     """;
 });
 
-    Task("Cake.Core.Scripting.DefineDirective.C#12")
+Task("Cake.Core.Scripting.DefineDirective.C#12")
     .Does(() =>
 {
     // Given / When / Then
@@ -121,6 +121,23 @@ Task("Cake.Core.Scripting.DefineDirective.C#11")
     int[] single = [..row0, ..row1, ..row2];
 });
 
+#if NET9_0
+Task("Cake.Core.Scripting.DefineDirective.C#13")
+    .Does(() =>
+{
+    // Given
+    string Concat(params ReadOnlySpan<string> items)
+        => $"\e[31m{items[^1]}\e[31m{items[^2]}";
+    var concat = Concat;
+
+    // When
+    var result = concat("World", "Hello");
+
+    // Then
+    Assert.Equal("\e[31mHello\e[31mWorld", result);
+});
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
@@ -128,6 +145,9 @@ Task("Cake.Core.Scripting.DefineDirective")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#10")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#11")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#12")
+#if NET9_0
+    .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#13")
+#endif
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Defined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.NotDefined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Runtime")
