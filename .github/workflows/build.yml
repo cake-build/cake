@@ -16,20 +16,19 @@ jobs:
         os: [windows-latest, macos-13, ubuntu-latest]
     steps:
       - name: Get the sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install .NET SDK 6.0.x - 8.0.x
-        uses: actions/setup-dotnet@v3
+      - name: Install .NET SDK 8.0.x - 9.0.x
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            6.0.x
-            7.0.x
             8.0.x
+            9.0.x
 
       - name: Install .NET Core SDK (global.json)
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
 
@@ -47,7 +46,6 @@ jobs:
           script-path: tests/integration/Cake.Common/Build/GitHubActions/ValidateGitHubActionsProvider.cake
           cake-version: tool-manifest
           arguments: |
-            CAKE_NETCOREAPP_6_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_6_0_VERSION_OS }}
-            CAKE_NETCOREAPP_7_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_7_0_VERSION_OS }}
             CAKE_NETCOREAPP_8_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_8_0_VERSION_OS }}
+            CAKE_NETCOREAPP_9_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_9_0_VERSION_OS }}
             ValidateGitHubActionsProvider: true

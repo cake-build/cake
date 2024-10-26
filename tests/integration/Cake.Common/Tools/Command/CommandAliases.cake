@@ -36,11 +36,7 @@ Usage:
 Arguments:
   <PACKAGE_ID>  The NuGet Package Id of the tool to list
 
-Options:
-  -g, --global        List tools installed for the current user.
-  --local             List the tools installed in the local tool manifest.
-  --tool-path <PATH>  The directory containing the tools to list.
-  -?, -h, --help      Show command line help.";
+Options:";
 
     // When
     var exitCode = ctx.Command(settings.ToolExecutableNames, out var standardOutput, "tool list -h");
@@ -65,11 +61,7 @@ Usage:
 Arguments:
   <PACKAGE_ID>  The NuGet Package Id of the tool to list
 
-Options:
-  -g, --global        List tools installed for the current user.
-  --local             List the tools installed in the local tool manifest.
-  --tool-path <PATH>  The directory containing the tools to list.
-  -?, -h, --help      Show command line help.";
+Options:";
 
     // When
     var exitCode = ctx.Command(settings, out var standardOutput, "tool list -h");
@@ -94,11 +86,7 @@ Usage:
 Arguments:
   <PACKAGE_ID>  The NuGet Package Id of the tool to list
 
-Options:
-  -g, --global        List tools installed for the current user.
-  --local             List the tools installed in the local tool manifest.
-  --tool-path <PATH>  The directory containing the tools to list.
-  -?, -h, --help      Show command line help.";
+Options:";
 
     // When
     var exitCode = ctx.Command(

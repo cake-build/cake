@@ -8,6 +8,7 @@
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
     <PackageVersion Include="Autofac" Version="8.1.1" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.7.9" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.7.9" />
     <PackageVersion Include="Cake.Frosting" Version="3.1.0.0" />
     <PackageVersion Include="Castle.Core" Version="5.1.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.11.0" />
@@ -34,5 +35,9 @@
     <PackageVersion Include="Verify.Xunit" Version="27.0.1" />
     <PackageVersion Include="xunit" Version="2.9.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+
+    <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.0-rc.2.24473.5" />
   </ItemGroup>
+
 </Project>

@@ -54,6 +54,8 @@ Task("Cake.Core.Scripting.DefineDirective.Runtime")
                     "7.0",
 #elif NET8_0
                     "8.0",
+#elif NET9_0
+                    "9.0",
 #endif
                     context.Environment.Runtime.BuiltFramework.FullName);
 });

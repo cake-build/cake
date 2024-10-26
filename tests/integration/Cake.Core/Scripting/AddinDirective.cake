@@ -23,7 +23,8 @@ Task("Cake.Core.Scripting.AddinDirective.LoadTargetedAddin")
                                  .SetTargetFramework(
                                      cake switch
                                      {
-                                        _ => "net8.0"
+                                        FilePath net8_0Path         when net8_0Path.FullPath.Contains("net8.0")                 => "net8.0",
+                                        _ => "net9.0"
                                      }
                                  );
 
