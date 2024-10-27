@@ -307,24 +307,6 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
             }
 
             [Fact]
-            public void Should_Not_break_when_old_string_registrations_are_used()
-            {
-                // Given
-                var fixture = new OpenCoverFixture();
-#pragma warning disable CS0618 // Type or member is obsolete
-                fixture.Settings.Register = "Path64";
-#pragma warning restore CS0618 // Type or member is obsolete
-
-                // When
-                var result = fixture.Run();
-
-                // Then
-                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
-                             "-targetargs:\"-argument\" " +
-                             "-register:Path64 -output:\"/Working/result.xml\"", result.Args);
-            }
-
-            [Fact]
             public void Should_Add_ReturnTargetCode_If_ReturnTargetCodeOffset_Is_Set()
             {
                 // Given
