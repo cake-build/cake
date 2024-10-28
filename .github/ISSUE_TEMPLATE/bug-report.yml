@@ -32,6 +32,7 @@ body:
       - Linux
       - Windows
       - macOS
+      - FreeBSD
       - N/A
     multiple: true
   validations:
