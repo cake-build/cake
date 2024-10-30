@@ -143,7 +143,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Reference.Add
                 var fixture = new DotNetReferenceAdderFixture();
                 fixture.ProjectReferences = new[] { (FilePath)"./lib1.csproj" };
                 fixture.Project = "ToDo.csproj";
-                fixture.Settings.Framework = "net7.0";
+                fixture.Settings.Framework = "net8.0";
                 fixture.Settings.Interactive = true;
                 fixture.Settings.Verbosity = DotNetVerbosity.Diagnostic;
 
@@ -151,7 +151,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Reference.Add
                 var result = fixture.Run();
 
                 // Then
-                var expected = "add \"ToDo.csproj\" reference \"/Working/lib1.csproj\" --framework net7.0 --interactive --verbosity diagnostic";
+                var expected = "add \"ToDo.csproj\" reference \"/Working/lib1.csproj\" --framework net8.0 --interactive --verbosity diagnostic";
                 Assert.Equal(expected, result.Args);
             }
         }

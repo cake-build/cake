@@ -68,5 +68,19 @@ namespace Cake.Core
             }
             return EnvironmentHelper.IsLinux(platform.Family);
         }
+
+        /// <summary>
+        /// Determines whether the specified platform is a FreeBSD platform.
+        /// </summary>
+        /// <param name="platform">The platform.</param>
+        /// <returns><c>true</c> if the platform is a FreeBSD platform; otherwise <c>false</c>.</returns>
+        public static bool IsFreeBSD(this ICakePlatform platform)
+        {
+            if (platform is null)
+            {
+                throw new ArgumentNullException(nameof(platform));
+            }
+            return EnvironmentHelper.IsFreeBSD(platform.Family);
+        }
     }
 }
