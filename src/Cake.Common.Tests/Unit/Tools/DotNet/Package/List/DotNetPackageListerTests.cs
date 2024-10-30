@@ -78,7 +78,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.List
                 var fixture = new DotNetPackageListerFixture();
                 fixture.Settings.ConfigFile = "./nuget.config";
                 fixture.Settings.Deprecated = true;
-                fixture.Settings.Framework = "net7.0";
+                fixture.Settings.Framework = "net8.0";
                 fixture.Settings.HighestMinor = true;
                 fixture.Settings.HighestPatch = true;
                 fixture.Settings.Prerelease = true;
@@ -94,7 +94,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.List
                 var result = fixture.Run();
 
                 // Then
-                var expected = "list package --config \"/Working/nuget.config\" --deprecated --framework net7.0 --highest-minor --highest-patch --include-prerelease --include-transitive --interactive --outdated ";
+                var expected = "list package --config \"/Working/nuget.config\" --deprecated --framework net8.0 --highest-minor --highest-patch --include-prerelease --include-transitive --interactive --outdated ";
                 expected += "--source \"http://www.nuget.org/api/v2/package\" --source \"http://www.symbolserver.org/\" --vulnerable --format json --output-version 1";
                 Assert.Equal(expected, result.Args);
             }

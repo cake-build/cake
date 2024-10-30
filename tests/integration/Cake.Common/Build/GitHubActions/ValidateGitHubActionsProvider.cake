@@ -20,9 +20,8 @@ Setup(
 Task("ValidateEnvironment")
     .DoesForEach<BuildData, string>(
         data => new [] {
-            $"CAKE_{data.OS}_NETCOREAPP_6_0_VERSION",
-            $"CAKE_{data.OS}_NETCOREAPP_7_0_VERSION",
-            $"CAKE_{data.OS}_NETCOREAPP_8_0_VERSION"
+            $"CAKE_{data.OS}_NETCOREAPP_8_0_VERSION",
+            $"CAKE_{data.OS}_NETCOREAPP_9_0_VERSION"
         },
         (data, envKey) => Assert.Equal(data.GitVersion, EnvironmentVariable(envKey))
     );
@@ -31,8 +30,7 @@ Task("ValidatePath")
     .DoesForEach<BuildData, string>(
         new [] {
             "Cake\\WTool\\Wtools\\Wnet8\\W0",
-            "Cake\\WTool\\Wtools\\Wnet7\\W0",
-            "Cake\\WTool\\Wtools\\Wnet6\\W0"
+            "Cake\\WTool\\Wtools\\Wnet9\\W0"
         },
         (data, path) => Assert.Matches(path, data.Path)
     );
@@ -40,9 +38,8 @@ Task("ValidatePath")
 Task("ValidateVariable")
     .DoesForEach<BuildData, string>(
         () => new [] {
-            "CAKE_NETCOREAPP_6_0_VERSION_OS",
-            "CAKE_NETCOREAPP_7_0_VERSION_OS",
-            "CAKE_NETCOREAPP_8_0_VERSION_OS"
+            "CAKE_NETCOREAPP_8_0_VERSION_OS",
+            "CAKE_NETCOREAPP_9_0_VERSION_OS"
         },
         (data, varKey) => Assert.Equal(data.GitVersionAndOS, Argument<string>(varKey))
     );
