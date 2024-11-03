@@ -437,6 +437,20 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListPackage")
     Assert.Contains(result.Projects, item => item.Path == project);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListSln")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var solution = path.CombineWithFilePath("hwapp.sln");
+    var project = "hwapp.common\hwapp.common.csproj";
+    // When
+    var result = DotNetSlnList(solution.FullPath);
+    // Then
+    Assert.Contains(result, item => item == project);
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
@@ -465,6 +479,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemoveReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListReference")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListSln")
     .Does(() =>
 {
     // When
