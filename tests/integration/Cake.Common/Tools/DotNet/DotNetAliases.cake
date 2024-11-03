@@ -444,7 +444,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListSln")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var solution = path.CombineWithFilePath("hwapp.sln");
-    var project = "hwapp.common\hwapp.common.csproj";
+    var project = new DirectoryPath("./hwapp.common").CombineWithFilePath("hwapp.common.csproj");
     // When
     var result = DotNetSlnList(solution.FullPath);
     // Then

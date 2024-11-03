@@ -2905,7 +2905,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.List")]
         public static IEnumerable<string> DotNetSlnList(this ICakeContext context)
         {
-            return context.DotNetListSln(null);
+            return context.DotNetSlnList(null);
         }
 
         /// <summary>
@@ -2927,7 +2927,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeMethodAlias]
         [CakeAliasCategory("Sln")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.List")]
-        public static IEnumerable<string> DotNetListSln(this ICakeContext context, string solution)
+        public static IEnumerable<string> DotNetSlnList(this ICakeContext context, string solution)
         {
             return context.DotNetSlnList(solution, null);
         }
