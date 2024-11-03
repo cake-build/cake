@@ -118,7 +118,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Sln.List
                     },
                     item =>
                     {
-                        Assert.Equal(item, ".Common\\Common.Messaging\\Common.Messaging.csproj");
+                        Assert.Equal(item, "Common\\Common.Messaging\\Common.Messaging.csproj");
                     },
                     item =>
                     {
