@@ -40,7 +40,7 @@ namespace Cake.Common.Tools.DotNet.Sln.List
         /// <param name="solution">The solution file to use. If not specified, the command searches the current directory for one. If it finds no solution file or multiple solution files, the command fails.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>The list of project-to-project references.</returns>
-        public IEnumerable<string> List(string solution, DotNetSlnListSettings settings)
+        public IEnumerable<string> List(FilePath solution, DotNetSlnListSettings settings)
         {
             if (settings == null)
             {
@@ -59,16 +59,16 @@ namespace Cake.Common.Tools.DotNet.Sln.List
             return ParseResult(result).ToList();
         }
 
-        private ProcessArgumentBuilder GetArguments(string solution, DotNetSlnListSettings settings)
+        private ProcessArgumentBuilder GetArguments(FilePath solution, DotNetSlnListSettings settings)
         {
             var builder = CreateArgumentBuilder(settings);
 
             builder.Append("sln");
 
             // Solution path
-            if (!string.IsNullOrWhiteSpace(solution))
+            if (solution != null)
             {
-                builder.AppendQuoted(solution);
+                builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
             }
 
             builder.Append("list");

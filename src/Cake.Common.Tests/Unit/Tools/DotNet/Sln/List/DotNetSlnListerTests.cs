@@ -81,7 +81,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Sln.List
                 var result = fixture.Run();
 
                 // Then
-                Assert.Equal("sln \"ToDo.sln\" list", result.Args);
+                Assert.Equal("sln \"/Working/ToDo.sln\" list", result.Args);
             }
 
             [Fact]
@@ -96,7 +96,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Sln.List
                 var result = fixture.Run();
 
                 // Then
-                var expected = "sln \"ToDo.sln\" list --verbosity diagnostic";
+                var expected = "sln \"/Working/ToDo.sln\" list --verbosity diagnostic";
                 Assert.Equal(expected, result.Args);
             }
 
