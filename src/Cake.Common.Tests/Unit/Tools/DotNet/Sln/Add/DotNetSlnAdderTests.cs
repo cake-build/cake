@@ -64,7 +64,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Sln.Add
             {
                 // Given
                 var fixture = new DotNetSlnAdderFixture();
-                fixture.ProjectPath = [];
+                fixture.ProjectPath = new FilePath[] { };
 
                 // When
                 var result = Record.Exception(() => fixture.Run());
