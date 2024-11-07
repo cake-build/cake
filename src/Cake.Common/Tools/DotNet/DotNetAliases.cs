@@ -26,6 +26,7 @@ using Cake.Common.Tools.DotNet.Reference.Remove;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet.SDKCheck;
+using Cake.Common.Tools.DotNet.Sln.Remove;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Common.Tools.DotNet.VSTest;
@@ -2882,6 +2883,79 @@ namespace Cake.Common.Tools.DotNet
 
             var lister = new DotNetPackageLister(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return lister.List(project, settings);
+        }
+
+        /// <summary>
+        /// Removes a project or multiple projects from the solution file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
+        /// <example>
+        /// <code>
+        /// DotNetSlnRemove(GetFiles("./*.csproj"));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Sln")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
+        public static void DotNetSlnRemove(this ICakeContext context, IEnumerable<FilePath> projectPath)
+        {
+            context.DotNetSlnRemove(null, projectPath);
+        }
+
+        /// <summary>
+        /// Removes a project or multiple projects from the solution file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
+        /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
+        /// <example>
+        /// <code>
+        /// DotNetSlnRemove("app.sln", GetFiles("./*.csproj"));
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Sln")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
+        public static void DotNetSlnRemove(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath)
+        {
+            context.DotNetSlnRemove(solution, projectPath, null);
+        }
+
+        /// <summary>
+        /// Removes a project or multiple projects from the solution file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
+        /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// var settings = new DotNetSlnRemoveSettings
+        /// {
+        ///     Verbosity = DotNetVerbosity.Diagnostic
+        /// };
+        ///
+        /// DotNetSlnRemove("app.sln", GetFiles("./*.csproj"), settings);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Sln")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
+        public static void Remove(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnRemoveSettings settings)
+        {
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (settings is null)
+            {
+                settings = new DotNetSlnRemoveSettings();
+            }
+
+            var remover = new DotNetSlnRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            remover.Remove(solution, projectPath, settings);
         }
     }
 }
