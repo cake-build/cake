@@ -2942,7 +2942,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeMethodAlias]
         [CakeAliasCategory("Sln")]
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
-        public static void Remove(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnRemoveSettings settings)
+        public static void DotNetSlnRemove(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnRemoveSettings settings)
         {
             if (context is null)
             {
