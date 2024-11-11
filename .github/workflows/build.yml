@@ -7,8 +7,19 @@ on:
       - develop
       - hotfix/*
 jobs:
+  prepare:
+    name: Prepare integration tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Cake Integration Tests" > cake-integration-tests.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cake-integration-tests
+          path: cake-integration-tests.txt
+
   build:
     name: Build
+    needs: prepare
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -34,7 +45,7 @@ jobs:
 
       - name: Run Cake script
         id: build-cake
-        uses: cake-build/cake-action@v1
+        uses: cake-build/cake-action@master
         with:
           target: Run-Integration-Tests
           cake-version: tool-manifest
