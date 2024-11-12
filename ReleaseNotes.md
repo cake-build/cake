@@ -1,3 +1,15 @@
+### New in 5.0.0 (Released 2024/11/13)
+
+* #4384 Remove obsolete members / methods.
+* #4383 Update LatestPotentialBreakingChange to 5.0.0.
+* #4346 Remove Unsupported TFMS .NET 6 & 7 (net6.0 & net7.0).
+* #4396 Add DotNetSlnAdd alias for dotnet sln add command.
+* #4393 Add DotNetSlnList alias for dotnet sln list command.
+* #4379 C# 13 Scripting Support.
+* #4345 Add .NET 9 (net9.0) TFM.
+* #4310 Update Cake.Tool to support running on FreeBSD.
+* #4391 DownloadArtifacts errors in latest Cake 4.2.0 with 404 error.
+
 ### New in 4.2.0 (Released 2024/10/23)
 
 * #4374 Argument 'foo' was not set" after update to 4.1 in Cake Frosting.
