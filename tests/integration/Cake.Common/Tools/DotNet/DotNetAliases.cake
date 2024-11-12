@@ -34,7 +34,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net8.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net9.0/hwapp.dll");
 
     // When
     DotNetBuild(project.FullPath);
@@ -61,7 +61,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetVSTest")
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
-    var assembly = path.CombineWithFilePath("hwapp.tests/bin/Debug/net8.0/hwapp.tests.dll");
+    var assembly = path.CombineWithFilePath("hwapp.tests/bin/Debug/net9.0/hwapp.tests.dll");
 
     // When
     DotNetVSTest(assembly.FullPath);
@@ -184,7 +184,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetExecute")
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net8.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net9.0/hwapp.dll");
 
     // When
     DotNetExecute(assembly);
@@ -197,7 +197,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetClean")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net8.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net9.0/hwapp.dll");
     Assert.True(System.IO.File.Exists(assembly.FullPath));
 
     // When
@@ -214,7 +214,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net8.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net9.0/hwapp.dll");
 
     // When
     DotNetMSBuild(project.FullPath);
@@ -437,6 +437,32 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListPackage")
     Assert.Contains(result.Projects, item => item.Path == project);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnList")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var solution = path.CombineWithFilePath("hwapp.sln");
+    var project = new DirectoryPath("./hwapp.common").CombineWithFilePath("hwapp.common.csproj");
+    // When
+    var result = DotNetSlnList(solution.FullPath);
+    // Then
+    Assert.Contains(result, item => item == project);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnAdd")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var solution = path.CombineWithFilePath("hwapp.sln");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    // When
+    DotNetSlnAdd(solution.FullPath, new[] { (FilePath)project.FullPath});
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
@@ -465,6 +491,8 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemoveReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListReference")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnList")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnAdd")
     .Does(() =>
 {
     // When

@@ -143,14 +143,14 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Reference.Remove
                 var fixture = new DotNetReferenceRemoverFixture();
                 fixture.ProjectReferences = new[] { (FilePath)"./lib1.csproj" };
                 fixture.Project = "ToDo.csproj";
-                fixture.Settings.Framework = "net7.0";
+                fixture.Settings.Framework = "net8.0";
                 fixture.Settings.Verbosity = DotNetVerbosity.Diagnostic;
 
                 // When
                 var result = fixture.Run();
 
                 // Then
-                var expected = "remove \"ToDo.csproj\" reference \"/Working/lib1.csproj\" --framework net7.0 --verbosity diagnostic";
+                var expected = "remove \"ToDo.csproj\" reference \"/Working/lib1.csproj\" --framework net8.0 --verbosity diagnostic";
                 Assert.Equal(expected, result.Args);
             }
         }

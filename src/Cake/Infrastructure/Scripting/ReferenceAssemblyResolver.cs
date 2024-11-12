@@ -22,12 +22,10 @@ namespace Cake.Infrastructure.Scripting
             IEnumerable<Assembly> TryGetReferenceAssemblies()
             {
                 foreach (var reference in
-#if NET6_0
-            Basic.Reference.Assemblies.Net60.References.All)
-#elif NET7_0
-            Basic.Reference.Assemblies.Net70.References.All)
-#else
+#if NET8_0
             Basic.Reference.Assemblies.Net80.References.All)
+#else
+            Basic.Reference.Assemblies.Net90.References.All)
 #endif
                 {
                     Assembly assembly;

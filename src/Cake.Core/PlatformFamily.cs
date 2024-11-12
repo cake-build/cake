@@ -28,6 +28,11 @@ namespace Cake.Core
         /// Represents the OSX platform family.
         /// </summary>
         // ReSharper disable once InconsistentNaming
-        OSX = 3
+        OSX = 3,
+
+        /// <summary>
+        /// Represents the FreeBSD platform family.
+        /// </summary>
+        FreeBSD = 4,
     }
 }

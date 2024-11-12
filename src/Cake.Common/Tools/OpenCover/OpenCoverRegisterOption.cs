@@ -65,30 +65,6 @@ namespace Cake.Common.Tools.OpenCover
         {
             return commandLineValue;
         }
-
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="System.String"/> to <see cref="OpenCoverRegisterOption"/>.
-        /// (Since the switch from pure string to <see cref="OpenCoverRegisterOption"/> is a breaking change.)
-        /// </summary>
-        /// <param name="option">The option.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
-        [Obsolete("use new OpenCoverRegisterOption() instead.")]
-        public static implicit operator OpenCoverRegisterOption(string option)
-        {
-            if (string.IsNullOrEmpty(option))
-            {
-                return new OpenCoverRegisterOptionAdmin();
-            }
-
-            if (option.Equals("user", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return new OpenCoverRegisterOptionUser();
-            }
-
-            return new OpenCoverRegisterOptionDll(new FilePath(option));
-        }
     }
 
     /// <summary>

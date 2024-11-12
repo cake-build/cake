@@ -54,6 +54,8 @@ Task("Cake.Core.Scripting.DefineDirective.Runtime")
                     "7.0",
 #elif NET8_0
                     "8.0",
+#elif NET9_0
+                    "9.0",
 #endif
                     context.Environment.Runtime.BuiltFramework.FullName);
 });
@@ -70,8 +72,7 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
     Assert.True(cake);
 });
 
-#if NET6_0 || NET7_0 || NET8_0
-    Task("Cake.Core.Scripting.DefineDirective.C#9")
+Task("Cake.Core.Scripting.DefineDirective.C#9")
     .Does(() =>
 {
     // given
@@ -80,10 +81,8 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
 });
 
 public record CSharpNine(bool IsNine);
-#endif
 
-#if NET6_0 || NET7_0 || NET8_0
-    Task("Cake.Core.Scripting.DefineDirective.C#10")
+Task("Cake.Core.Scripting.DefineDirective.C#10")
     .Does(() =>
 {
     // Given
@@ -97,10 +96,8 @@ public record CSharpNine(bool IsNine);
     Assert.Equal("Hello world!", helloWorld);
 });
 
-#endif
 
-#if NET7_0 || NET8_0
-    Task("Cake.Core.Scripting.DefineDirective.C#11")
+Task("Cake.Core.Scripting.DefineDirective.C#11")
     .Does(() =>
 {
     // Given / When / Then
@@ -114,10 +111,7 @@ public record CSharpNine(bool IsNine);
     """;
 });
 
-#endif
-
-#if NET8_0
-    Task("Cake.Core.Scripting.DefineDirective.C#12")
+Task("Cake.Core.Scripting.DefineDirective.C#12")
     .Does(() =>
 {
     // Given / When / Then
@@ -127,22 +121,32 @@ public record CSharpNine(bool IsNine);
     int[] single = [..row0, ..row1, ..row2];
 });
 
+#if NET9_0
+Task("Cake.Core.Scripting.DefineDirective.C#13")
+    .Does(() =>
+{
+    // Given
+    string Concat(params ReadOnlySpan<string> items)
+        => $"\e[31m{items[^1]}\e[31m{items[^2]}";
+    var concat = Concat;
+
+    // When
+    var result = concat("World", "Hello");
+
+    // Then
+    Assert.Equal("\e[31mHello\e[31mWorld", result);
+});
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
-#if NET6_0 || NET7_0 || NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#9")
-#endif
-#if NET6_0 || NET7_0 || NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#10")
-#endif
-#if NET7_0 || NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#11")
-#endif
-#if NET8_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#12")
+#if NET9_0
+    .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#13")
 #endif
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Defined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.NotDefined")

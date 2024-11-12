@@ -30,16 +30,43 @@ namespace Cake.Common.Build.GitHubActions.Commands.Artifact
         private static readonly Uri CreateArtifactUrl = new Uri("CreateArtifact", UriKind.Relative);
         private static readonly Uri FinalizeArtifactUrl = new Uri("FinalizeArtifact", UriKind.Relative);
         private static readonly Uri GetSignedArtifactURLUrl = new Uri("GetSignedArtifactURL", UriKind.Relative);
+        private static readonly Uri ListArtifactsUrl = new Uri("ListArtifacts", UriKind.Relative);
 
         internal async Task DownloadArtifactFiles(
             string artifactName,
             DirectoryPath directoryPath)
         {
+            var listArtifactsResponse = await ListArtifacts(
+                artifactName);
+
+            if (listArtifactsResponse.Artifacts.FirstOrDefault(artifact => artifact.Name == artifactName)
+                is { WorkflowRunBackendId.Length: > 0 } and { WorkflowJobRunBackendId.Length: > 0 } artifact)
+            {
+                var signedArtifactURLResponse = await GetSignedArtifactURL(artifact.WorkflowRunBackendId, artifact.WorkflowJobRunBackendId, artifactName);
+
+                await DownloadArtifact(signedArtifactURLResponse.SignedUrl, directoryPath);
+            }
+            else
+            {
+                throw new CakeException($"Artifact {artifactName} not found.");
+            }
+        }
+
+        private async Task<ListArtifactsResponse> ListArtifacts(
+            string nameFilter = null,
+            long? idFilter = null)
+        {
             GetWorkflowBackendIds(out var workflowRunBackendId, out var workflowJobRunBackendId);
 
-            var (_, signedUrl) = await GetSignedArtifactURL(workflowRunBackendId, workflowJobRunBackendId, artifactName);
+            var listArtifactsRequest = new ListArtifactsRequest(
+                workflowRunBackendId,
+                workflowJobRunBackendId,
+                nameFilter,
+                idFilter);
 
-            await DownloadArtifact(signedUrl, directoryPath);
+            return await PostArtifactService<ListArtifactsRequest, ListArtifactsResponse>(
+                ListArtifactsUrl,
+                listArtifactsRequest);
         }
 
         private async Task DownloadArtifact(string signedUrl, DirectoryPath directoryPath)

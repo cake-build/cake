@@ -15,8 +15,6 @@ body:
     options:
       - Cake .NET Tool
       - Cake Frosting
-      - Cake runner for .NET Framework
-      - Cake runner for .NET Core
     multiple: true
   validations:
     required: true
@@ -32,6 +30,7 @@ body:
       - Linux
       - Windows
       - macOS
+      - FreeBSD
       - N/A
     multiple: true
   validations:
@@ -40,8 +39,9 @@ body:
   attributes:
     label: Operating system architecture
     options:
-      - 32-Bit
-      - 64-Bit
+      - x64
+      - x86
+      - Arm64
       - N/A
   validations:
     required: true

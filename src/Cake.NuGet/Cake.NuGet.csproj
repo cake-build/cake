@@ -25,6 +25,9 @@
     <PackageReference Include="NuGet.Resolver" />
     <PackageReference Include="NuGet.Common" />
     <PackageReference Include="Newtonsoft.Json" />
+
+    <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" />
   </ItemGroup>
 
   <ItemGroup>
