@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cake.Common.Build.GitHubActions.Commands;
 using Cake.Common.Build.GitHubActions.Commands.Artifact;
-using Cake.Common.Build.GitHubActions.Data;
 using Cake.Common.Tests.Fakes;
 using Cake.Core;
 using Cake.Core.IO;
@@ -22,21 +21,45 @@ namespace Cake.Common.Tests.Fixtures.Build
         private const string ArtifactUrl = GitHubActionsInfoFixture.ActionResultsUrl + "twirp/github.actions.results.api.v1.ArtifactService/";
         private const string CreateArtifactUrl = ArtifactUrl + "CreateArtifact";
         private const string FinalizeArtifactUrl = ArtifactUrl + "FinalizeArtifact";
-        private const string GetSignedArtifactURLurl = ArtifactUrl + "GetSignedArtifactURL";
+        private const string GetSignedArtifactURLUrl = ArtifactUrl + "GetSignedArtifactURL";
+        private const string ListArtifactsUrl = ArtifactUrl + "ListArtifacts";
         private const string UploadFileUrl = "https://cake.build.net/actions-results/a9d82106-d5d5-4310-8f60-0bfac035cf02/workflow-job-run-1d849a45-2f30-5fbb-3226-b730a17a93af/artifacts/91e64594182918fa8012cdbf7d1a4f801fa0c35f485c3277268aad8e3f45377c.zip?sig=upload";
         private const string DownloadFileUrl = "https://cake.build.net/actions-results/a9d82106-d5d5-4310-8f60-0bfac035cf02/workflow-job-run-1d849a45-2f30-5fbb-3226-b730a17a93af/artifacts/91e64594182918fa8012cdbf7d1a4f801fa0c35f485c3277268aad8e3f45377c.zip?sig=download";
-        private const string CreateArtifactResponse = @"{
-    ""ok"": true,
-    ""signed_upload_url"": """ + UploadFileUrl + @"""
-}";
-        private const string FinalizeArtifactResponse = @"{
-    ""ok"": true,
-    ""artifact_id"": ""1991105334""
-}";
-        private const string GetSignedArtifactURLResponse = @"{ 
-    ""name"": ""artifact"",
-    ""signed_url"": """ + DownloadFileUrl + @"""
-}";
+        private const string CreateArtifactResponse =
+            $$"""
+            {
+                "ok": true,
+                "signed_upload_url": "{{UploadFileUrl}}"
+            }
+            """;
+        private const string FinalizeArtifactResponse =
+            """
+            {
+                "ok": true,
+                "artifact_id": "1991105334"
+            }
+            """;
+        private const string GetSignedArtifactURLResponse =
+            $$"""
+            { 
+                "name": "artifact",
+                "signed_url": "{{DownloadFileUrl}}"
+            }
+            """;
+        private const string ListArtifactsResponse =
+            $$"""
+            {
+              "artifacts": [
+                {
+                  "workflow_run_backend_id": "b9e28153-ca20-4b86-91dd-09e8f644efdf",
+                  "workflow_job_run_backend_id": "1d849a45-2f30-5fbb-3226-b730a17a93af",
+                  "database_id": "1",
+                  "name": "artifact",
+                  "created_at": "2024-11-09T21:53:00.7110204+00:00"
+                }
+              ]
+            }
+            """;
 
         private GitHubActionsInfoFixture GitHubActionsInfoFixture { get; }
         private ICakeEnvironment Environment { get; }
@@ -122,7 +145,7 @@ namespace Cake.Common.Tests.Fixtures.Build
                 // Get Signed Artifact Url
                 case
                 {
-                    RequestUri: { AbsoluteUri: GetSignedArtifactURLurl },
+                    RequestUri: { AbsoluteUri: GetSignedArtifactURLUrl },
                     Method: { Method: "POST" },
                 }:
                     {
@@ -187,6 +210,16 @@ namespace Cake.Common.Tests.Fixtures.Build
                 }:
                     {
                         return Ok();
+                    }
+
+                // List Artifacts
+                case
+                {
+                    RequestUri: { AbsoluteUri: ListArtifactsUrl },
+                    Method: { Method: "POST" }
+                }:
+                    {
+                        return Ok(new StringContent(ListArtifactsResponse));
                     }
 
                 // Download File

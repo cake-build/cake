@@ -137,6 +137,21 @@ Task("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact")
         Assert.True(FileHashEquals(data.AssemblyPath, targetArtifactPath), $"{data.AssemblyPath.FullPath}=={targetArtifactPath.FullPath}");
 });
 
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact.PreviousJob")
+    .Does(async () => {
+        // Given
+        var targetPath = Paths.Temp.Combine("./Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact.PreviousJob");
+        EnsureDirectoryExists(targetPath);
+        var targetArtifactPath = targetPath.CombineWithFilePath("cake-integration-tests.txt");
+
+        // When
+        await GitHubActions.Commands.DownloadArtifact("cake-integration-tests", targetPath);
+
+        // Then
+        Assert.True(System.IO.File.Exists(targetArtifactPath.FullPath), $"{targetArtifactPath.FullPath} Missing");
+        Assert.Equal("Cake Integration Tests\n", System.IO.File.ReadAllText(targetArtifactPath.FullPath));
+});
+
 Task("Cake.Common.Build.GitHubActionsProvider.Environment.Runner.Architecture")
     .Does(() => {
         // Given / When
@@ -193,7 +208,8 @@ if (GitHubActions.Environment.Runtime.IsRuntimeAvailable)
     gitHubActionsProviderTask
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.File")
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.Directory")
-        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact");
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact.PreviousJob");
 }
 
 public class GitHubActionsData
