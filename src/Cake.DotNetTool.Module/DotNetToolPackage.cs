@@ -26,5 +26,11 @@ namespace Cake.DotNetTool.Module
         /// </summary>
         /// <value>The tool package short code.</value>
         public string ShortCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tool package manifest.
+        /// </summary>
+        /// <value>The tool package manifest.</value>
+        public string Manifest { get; set; }
     }
 }
