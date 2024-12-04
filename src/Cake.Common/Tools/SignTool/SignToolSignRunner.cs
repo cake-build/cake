@@ -241,6 +241,20 @@ namespace Cake.Common.Tools.SignTool
                 builder.Append("/sm");
             }
 
+            // Cryptographic Service Provider
+            if (!string.IsNullOrEmpty(settings.CspName))
+            {
+                builder.Append("/csp");
+                builder.AppendQuoted(settings.CspName);
+            }
+
+            // Private Key Container Name
+            if (!string.IsNullOrEmpty(settings.PrivateKeyContainerName))
+            {
+                builder.Append("/kc");
+                builder.AppendQuoted(settings.PrivateKeyContainerName);
+            }
+
             // open a specific certificate store
             if (!string.IsNullOrWhiteSpace(settings.StoreName))
             {
