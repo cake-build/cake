@@ -202,6 +202,84 @@ namespace Cake.Common.Tools.MSBuild
         }
 
         /// <summary>
+        /// Adds a property to retrieve the value.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="name">The name of the property to retrieve the value.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithGetProperty(this MSBuildSettings settings, string name)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException(nameof(name));
+            }
+
+            settings.GetProperties.Add(name);
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a item to retrieve the value.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="name">The name of the item to retrieve the value.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithGetItem(this MSBuildSettings settings, string name)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException(nameof(name));
+            }
+
+            settings.GetItems.Add(name);
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a target to retrieve the result.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="name">The name of the target to retrieve the result.</param>
+        /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
+        public static MSBuildSettings WithGetTargetResult(this MSBuildSettings settings, string name)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException(nameof(name));
+            }
+
+            settings.GetTargetResults.Add(name);
+
+            return settings;
+        }
+
+        /// <summary>
         /// Sets the configuration.
         /// </summary>
         /// <param name="settings">The settings.</param>

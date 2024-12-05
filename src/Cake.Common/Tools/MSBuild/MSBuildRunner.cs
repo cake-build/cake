@@ -43,9 +43,14 @@ namespace Cake.Common.Tools.MSBuild
         /// </summary>
         /// <param name="solution">The solution or MsBuild project file to build.</param>
         /// <param name="settings">The settings.</param>
-        public void Run(FilePath solution, MSBuildSettings settings)
+        /// <param name="standardOutputAction">The action to invoke with the standard output.</param>
+        public void Run(FilePath solution, MSBuildSettings settings, Action<IEnumerable<string>> standardOutputAction)
         {
-            Run(settings, GetArguments(solution, settings));
+            Run(
+                settings,
+                GetArguments(solution, settings),
+                standardOutputAction == null ? null : new ProcessSettings { RedirectStandardOutput = true },
+                standardOutputAction == null ? null : new Action<IProcess>(process => standardOutputAction(process.GetStandardOutput())));
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath projectFile, MSBuildSettings settings)
@@ -140,6 +145,33 @@ namespace Cake.Common.Tools.MSBuild
                 {
                     // Use default target.
                     builder.Append("/target:Build");
+                }
+            }
+
+            // Got any properties to retrieve?
+            if (settings.GetProperties.Count > 0)
+            {
+                foreach (var property in GetGetPropertiesArguments(settings.GetProperties))
+                {
+                    builder.Append(property);
+                }
+            }
+
+            // Got any items to retrieve?
+            if (settings.GetItems.Count > 0)
+            {
+                foreach (var property in GetGetItemsArguments(settings.GetItems))
+                {
+                    builder.Append(property);
+                }
+            }
+
+            // Got any target results to retrieve?
+            if (settings.GetTargetResults.Count > 0)
+            {
+                foreach (var property in GetGetTargetResultsArguments(settings.GetTargetResults))
+                {
+                    builder.Append(property);
                 }
             }
 
@@ -298,6 +330,30 @@ namespace Cake.Common.Tools.MSBuild
             foreach (var property in properties)
             {
                 yield return string.Concat("/p:", property.Key, "=", property.BuildMSBuildPropertyParameterString());
+            }
+        }
+
+        private static IEnumerable<string> GetGetPropertiesArguments(HashSet<string> getProperties)
+        {
+            foreach (var getProperty in getProperties)
+            {
+                yield return string.Concat("/getProperty:", getProperty);
+            }
+        }
+
+        private static IEnumerable<string> GetGetItemsArguments(HashSet<string> getItems)
+        {
+            foreach (var getItem in getItems)
+            {
+                yield return string.Concat("/getItem:", getItem);
+            }
+        }
+
+        private static IEnumerable<string> GetGetTargetResultsArguments(HashSet<string> getTargetResults)
+        {
+            foreach (var getTargetResult in getTargetResults)
+            {
+                yield return string.Concat("/getTargetResult:", getTargetResult);
             }
         }
 
