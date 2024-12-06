@@ -241,6 +241,13 @@ namespace Cake.Common.Tools.SignTool
                 builder.Append("/sm");
             }
 
+            // open a specific certificate store
+            if (!string.IsNullOrWhiteSpace(settings.StoreName))
+            {
+                builder.Append("/s");
+                builder.AppendQuoted(settings.StoreName);
+            }
+
             // Cryptographic Service Provider
             if (!string.IsNullOrEmpty(settings.CspName))
             {
@@ -253,13 +260,6 @@ namespace Cake.Common.Tools.SignTool
             {
                 builder.Append("/kc");
                 builder.AppendQuoted(settings.PrivateKeyContainerName);
-            }
-
-            // open a specific certificate store
-            if (!string.IsNullOrWhiteSpace(settings.StoreName))
-            {
-                builder.Append("/s");
-                builder.AppendQuoted(settings.StoreName);
             }
 
             // Target Assemblies to sign.
