@@ -77,5 +77,15 @@ namespace Cake.Common.Tools.SignTool
         /// Gets or sets the store to open when searching for the certificate.
         /// </summary>
         public string StoreName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cryptographic service provider (CSP) that contains the private key container.
+        /// </summary>
+        public string CspName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the private key container name.
+        /// </summary>
+        public string PrivateKeyContainerName { get; set; }
     }
 }

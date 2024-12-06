@@ -480,6 +480,34 @@ namespace Cake.Common.Tests.Unit.Tools.SignTool
                 // Then
                 Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /sm /s \"Special Test Store\" \"/Working/a.dll\"", result.Args);
             }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Cryptographic_Service_Provider()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.CspName = "Test Service Provider";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /csp \"Test Service Provider\" \"/Working/a.dll\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Sign_Tool_With_Correct_Parameters_With_Private_Key_Container_Name()
+            {
+                // Given
+                var fixture = new SignToolSignRunnerFixture();
+                fixture.Settings.PrivateKeyContainerName = "[{{password}}]=TestContainerName";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("SIGN /f \"/Working/cert.pfx\" /p secret /kc \"[{{password}}]=TestContainerName\" \"/Working/a.dll\"", result.Args);
+            }
         }
     }
 }
