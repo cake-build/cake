@@ -54,6 +54,25 @@ namespace Cake.Common.Build.AzurePipelines
         }
 
         /// <summary>
+        /// Gets an environment variable as a <see cref="System.Int64"/>.
+        /// </summary>
+        /// <param name="variable">The environment variable name.</param>
+        /// <returns>The environment variable.</returns>
+        protected long GetEnvironmentLongInteger(string variable)
+        {
+            var value = GetEnvironmentString(variable);
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                long result;
+                if (long.TryParse(value, out result))
+                {
+                    return result;
+                }
+            }
+            return 0;
+        }
+
+        /// <summary>
         /// Gets an environment variable as a <see cref="System.Boolean"/>.
         /// </summary>
         /// <param name="variable">The environment variable name.</param>
