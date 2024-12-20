@@ -15,6 +15,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
         {
             [Theory]
             [InlineData("1", true)]
+            [InlineData("2147483648", true)]
             [InlineData("0", false)]
             public void Should_Return_Correct_Value(string value, bool expected)
             {
@@ -33,17 +34,21 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
 
         public sealed class TheIdProperty
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
+            [Theory]
+            [InlineData("1", 1)]
+            [InlineData("2147483648", 2147483648)]
+            public void Should_Return_Correct_Value(string value, long expected)
             {
                 // Given
-                var info = new AzurePipelinesInfoFixture().CreatePullRequestInfo();
+                var fixture = new AzurePipelinesInfoFixture();
+                fixture.Environment.GetEnvironmentVariable("SYSTEM_PULLREQUEST_PULLREQUESTID").Returns(value);
+                var info = fixture.CreatePullRequestInfo();
 
                 // When
                 var result = info.Id;
 
                 // Then
-                Assert.Equal(1, result);
+                Assert.Equal(expected, result);
             }
         }
 

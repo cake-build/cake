@@ -41,7 +41,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         ///   The ID of the pull request that caused this build.
         /// </value>
-        public int Id => GetEnvironmentInteger("SYSTEM_PULLREQUEST_PULLREQUESTID");
+        public long Id => GetEnvironmentLongInteger("SYSTEM_PULLREQUEST_PULLREQUESTID");
 
         /// <summary>
         /// Gets the number of the pull request that caused this build.
