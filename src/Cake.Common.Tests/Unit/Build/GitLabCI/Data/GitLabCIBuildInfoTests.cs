@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Common.Build.GitLabCI.Data;
 using Cake.Common.Tests.Fixtures.Build;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
@@ -360,6 +362,42 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
 
                 // Then
                 Assert.Equal(42, result);
+            }
+        }
+
+        public sealed class TheSourceProperty
+        {
+            // Values taken from https://docs.gitlab.com/ee/ci/jobs/job_rules.html#ci_pipeline_source-predefined-variable
+            [Theory]
+            [InlineData("", null)]
+            [InlineData("unknown_source", null)]
+            [InlineData("api", GitLabCIPipelineSource.Api)]
+            [InlineData("chat", GitLabCIPipelineSource.Chat)]
+            [InlineData("external", GitLabCIPipelineSource.External)]
+            [InlineData("external_pull_request_event", GitLabCIPipelineSource.ExternalPullRequestEvent)]
+            [InlineData("merge_request_event", GitLabCIPipelineSource.MergeRequestEvent)]
+            [InlineData("ondemand_dast_scan", GitLabCIPipelineSource.OnDemandDastScan)]
+            [InlineData("ondemand_dast_validation", GitLabCIPipelineSource.OnDemandDastValidation)]
+            [InlineData("parent_pipeline", GitLabCIPipelineSource.ParentPipeline)]
+            [InlineData("pipeline", GitLabCIPipelineSource.Pipeline)]
+            [InlineData("push", GitLabCIPipelineSource.Push)]
+            [InlineData("schedule", GitLabCIPipelineSource.Schedule)]
+            [InlineData("security_orchestration_policy", GitLabCIPipelineSource.SecurityOrchestrationPolicy)]
+            [InlineData("trigger", GitLabCIPipelineSource.Trigger)]
+            [InlineData("web", GitLabCIPipelineSource.Web)]
+            [InlineData("webide", GitLabCIPipelineSource.WebIde)]
+            public void Should_Return_Correct_Value(string pipelineSourceEnvironmentVariable, GitLabCIPipelineSource? expectedSource)
+            {
+                // Given
+                var fixture = new GitLabCIInfoFixture();
+                fixture.Environment.GetEnvironmentVariable("CI_PIPELINE_SOURCE").Returns(pipelineSourceEnvironmentVariable);
+                var info = fixture.CreateBuildInfo();
+
+                // When
+                var result = info.Source;
+
+                // Then
+                Assert.Equal(expectedSource, result);
             }
         }
     }
