@@ -43,5 +43,13 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// The GitLab revision that is used to schedule builds.
         /// </value>
         public string Revision => GetEnvironmentString("CI_SERVER_REVISION");
+
+        /// <summary>
+        /// Gets the base URL of the GitLab instance, including protocol and port.
+        /// </summary>
+        /// <value>
+        /// The base URL of the GitLab instance, including protocol and port.
+        /// </value>
+        public string Url => GetEnvironmentString("CI_SERVER_URL");
     }
 }
