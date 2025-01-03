@@ -43,5 +43,21 @@ namespace Cake.Common.Build.GitLabCI.Data
         ///   The pull request id.
         /// </value>
         public int IId => GetEnvironmentInteger("CI_MERGE_REQUEST_IID");
+
+        /// <summary>
+        /// Gets the source branch of the pull request.
+        /// </summary>
+        /// <value>
+        ///   The source branch of the pull request.
+        /// </value>
+        public string SourceBranch => GetEnvironmentString("CI_MERGE_REQUEST_SOURCE_BRANCH_NAME");
+
+        /// <summary>
+        /// Gets the target branch of the pull request.
+        /// </summary>
+        /// <value>
+        ///   The target branch name of the pull request.
+        /// </value>
+        public string TargetBranch => GetEnvironmentString("CI_MERGE_REQUEST_TARGET_BRANCH_NAME");
     }
 }
