@@ -34,6 +34,22 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
 
         public sealed class TheIdProperty
         {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new AzurePipelinesInfoFixture().CreatePullRequestInfo();
+
+                // When
+                var result = info.Id;
+
+                // Then
+                Assert.Equal(1, result);
+            }
+        }
+
+        public sealed class TheLongIdProperty
+        {
             [Theory]
             [InlineData("1", 1)]
             [InlineData("2147483648", 2147483648)]
@@ -45,7 +61,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
                 var info = fixture.CreatePullRequestInfo();
 
                 // When
-                var result = info.Id;
+                var result = info.LongId;
 
                 // Then
                 Assert.Equal(expected, result);
