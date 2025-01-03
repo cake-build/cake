@@ -32,6 +32,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
             }
         }
 
+        [Obsolete("The Id property is marked obsolete since the type will change to long in the next major version")]
         public sealed class TheIdProperty
         {
             [Fact]
