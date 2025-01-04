@@ -65,6 +65,8 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("CI_SERVER_VERSION").Returns("8.9.0");
             Environment.GetEnvironmentVariable("GITLAB_USER_ID").Returns("42");
             Environment.GetEnvironmentVariable("GITLAB_USER_EMAIL").Returns("anthony@warwickcontrol.com");
+            Environment.GetEnvironmentVariable("CI_MERGE_REQUEST_SOURCE_BRANCH_NAME").Returns("source-branch");
+            Environment.GetEnvironmentVariable("CI_MERGE_REQUEST_TARGET_BRANCH_NAME").Returns("main");
         }
 
         public GitLabCIBuildInfo CreateBuildInfo()

@@ -61,5 +61,37 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
                 Assert.Equal(1, result);
             }
         }
+
+        public sealed class TheSourceBranchProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture().CreatePullRequestInfo();
+
+                // When
+                var result = info.SourceBranch;
+
+                // Then
+                Assert.Equal("source-branch", result);
+            }
+        }
+
+        public sealed class TheTargetBranchProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitLabCIInfoFixture().CreatePullRequestInfo();
+
+                // When
+                var result = info.TargetBranch;
+
+                // Then
+                Assert.Equal("main", result);
+            }
+        }
     }
 }
