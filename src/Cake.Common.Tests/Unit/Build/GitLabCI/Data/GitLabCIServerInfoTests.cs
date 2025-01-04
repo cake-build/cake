@@ -58,4 +58,20 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
             Assert.Equal("8.9.0", result);
         }
     }
+
+    public sealed class TheUrlProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
+        {
+            // Given
+            var info = new GitLabCIInfoFixture().CreateServerInfo();
+
+            // When
+            var result = info.Url;
+
+            // Then
+            Assert.Equal("https://gitlab.example.com:8080", result);
+        }
+    }
 }
