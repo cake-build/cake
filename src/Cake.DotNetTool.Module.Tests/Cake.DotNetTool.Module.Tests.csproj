@@ -12,12 +12,12 @@
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <ProjectReference Include="..\Cake.DotNetTool.Module\Cake.DotNetTool.Module.csproj" />
     <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj" />
-    <ProjectReference Include="..\Cake.Testing.Xunit\Cake.Testing.Xunit.csproj" />
+    <ProjectReference Include="..\Cake.Testing.Xunit.v3\Cake.Testing.Xunit.v3.csproj" />
   </ItemGroup>
   <!-- Global packages -->
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

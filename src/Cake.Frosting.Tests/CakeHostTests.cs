@@ -10,7 +10,6 @@ using Cake.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Xunit;
-using Xunit.Sdk;
 
 namespace Cake.Frosting.Tests
 {

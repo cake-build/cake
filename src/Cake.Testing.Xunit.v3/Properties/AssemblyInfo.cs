@@ -4,26 +4,15 @@
 
 using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Cake.Core")]
+[assembly: AssemblyTitle("Cake.Testing.Xunit.v3")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
-
-// We're CLS compliant.
-[assembly: CLSCompliant(true)]
-
-// Make internals visible to other Cake assemblies.
-[assembly: InternalsVisibleTo("Cake")]
-[assembly: InternalsVisibleTo("Cake.Tool")]
-[assembly: InternalsVisibleTo("Cake.Common")]
-[assembly: InternalsVisibleTo("Cake.Core.Tests")]
-[assembly: InternalsVisibleTo("Cake.Testing.Xunit")]
-[assembly: InternalsVisibleTo("Cake.Testing.Xunit.v3")]
+[assembly: CLSCompliant(false)]

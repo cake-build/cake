@@ -258,7 +258,7 @@ namespace Cake.Core.Tests.Unit
                             var builder = new CakeTaskBuilder(task);
 
                             // When
-                            builder.Does<string>(async (data, context) => { await Task.Delay(0); });
+                            builder.Does<string>(async (data, context) => { await Task.Delay(0, TestContext.Current.CancellationToken); });
 
                             // Then
                             Assert.Single(task.Actions);
@@ -289,7 +289,7 @@ namespace Cake.Core.Tests.Unit
                             var builder = new CakeTaskBuilder(task);
 
                             // When
-                            builder.Does<string>(async data => { await Task.Delay(0); });
+                            builder.Does<string>(async data => { await Task.Delay(0, TestContext.Current.CancellationToken); });
 
                             // Then
                             Assert.Single(task.Actions);
@@ -323,7 +323,7 @@ namespace Cake.Core.Tests.Unit
                             var builder = new CakeTaskBuilder(task);
 
                             // When
-                            builder.Does(async c => { await Task.Delay(0); });
+                            builder.Does(async c => { await Task.Delay(0, TestContext.Current.CancellationToken); });
 
                             // Then
                             Assert.Single(task.Actions);
@@ -354,7 +354,7 @@ namespace Cake.Core.Tests.Unit
                             var builder = new CakeTaskBuilder(task);
 
                             // When
-                            builder.Does(async () => { await Task.Delay(0); });
+                            builder.Does(async () => { await Task.Delay(0, TestContext.Current.CancellationToken); });
 
                             // Then
                             Assert.Single(task.Actions);

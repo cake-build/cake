@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Frosting\Cake.Frosting.csproj" />
+  </ItemGroup>
+</Project>
