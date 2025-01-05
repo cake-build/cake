@@ -226,7 +226,7 @@ namespace Cake.Core.Tests.Unit
                             var builder = new CakeTaskBuilder<string>(task);
 
                             // When
-                            builder.Does(async (data, ctx) => { await Task.Delay(0); });
+                            builder.Does(async (data, ctx) => { await Task.Delay(0, TestContext.Current.CancellationToken); });
 
                             // Then
                             Assert.Single(task.Actions);
@@ -257,7 +257,7 @@ namespace Cake.Core.Tests.Unit
                             var builder = new CakeTaskBuilder<string>(task);
 
                             // When
-                            builder.Does(async (ctx, data) => { await Task.Delay(0); });
+                            builder.Does(async (ctx, data) => { await Task.Delay(0, TestContext.Current.CancellationToken); });
 
                             // Then
                             Assert.Single(task.Actions);
