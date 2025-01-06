@@ -223,6 +223,31 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
     Assert.True(System.IO.File.Exists(assembly.FullPath));
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild.Results")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    var settings = new DotNetMSBuildSettings
+    {
+        GetProperties = { "Version", "TargetFramwork", },
+        GetItems = { "ProjectReference", },
+        GetTargetResults = { "Build", "Compile", },
+    };
+
+    IEnumerable<string> result = null;
+
+    // When
+    DotNetMSBuild(project.FullPath, settings, output => result = output);
+
+    // Then
+    Assert.NotNull(result);
+    Assert.Equal(result.First(), "{");
+    Assert.Equal(result.Last(), "}");
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
     .Does(() =>
@@ -489,6 +514,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetExecute")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetClean")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild.Results")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSDKCheck")
