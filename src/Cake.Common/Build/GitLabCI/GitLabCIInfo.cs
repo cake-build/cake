@@ -3,6 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using Cake.Core;
 
 namespace Cake.Common.Build.GitLabCI
@@ -98,6 +101,49 @@ namespace Cake.Common.Build.GitLabCI
         protected bool GetEnvironmentBoolean(string primaryVariable, string secondaryVariable)
         {
             return GetEnvironmentBoolean(primaryVariable) ? GetEnvironmentBoolean(primaryVariable) : GetEnvironmentBoolean(secondaryVariable);
+        }
+
+        /// <summary>
+        /// Gets an environment variable as an enum.
+        /// </summary>
+        /// <remarks>
+        /// By default, the environment variable value is presumed to be identical to the enum value name.
+        /// To define a mapping between environment variable value and enum name, apply the <see cref="EnumMemberAttribute"/> attribue in the enum definition.
+        /// <para>
+        /// Parsing is case-insensitive.
+        /// </para>
+        /// </remarks>
+        /// <param name="variable">The primary environment variable name.</param>
+        /// <typeparam name="TEnum">The type of the enum to return.</typeparam>
+        /// <returns>
+        /// The environment variable value converted to the corresponding value of <typeparamref name="TEnum"/> or
+        /// <c>null</c> if the variable is not set or the value could not be converted to the the specified enum type.
+        /// </returns>
+        protected TEnum? GetEnvironmentEnum<TEnum>(string variable) where TEnum : struct, Enum
+        {
+            var value = GetEnvironmentString(variable);
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                // Instead of using Enum.TryParse(), enumerate the enum fields using reflection.
+                // This defining enums where the environment variable value differs from the name of the corresponding enum member:
+                // - If the enum member has a [EnumMember] attribute, use the value defined by the attribute instead of the enum member name
+                // - Otherwise, use the enum member name (matching the behavior of Enum.TryParse())
+                foreach (var field in typeof(TEnum).GetFields().Where(fi => fi.FieldType == typeof(TEnum)))
+                {
+                    var enumMemberName = field.Name;
+                    if (field.GetCustomAttribute<EnumMemberAttribute>() is { Value: { } customName } && !string.IsNullOrEmpty(customName))
+                    {
+                        enumMemberName = customName;
+                    }
+
+                    if (StringComparer.OrdinalIgnoreCase.Equals(enumMemberName, value))
+                    {
+                        return (TEnum?)field.GetValue(null);
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
