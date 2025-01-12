@@ -232,7 +232,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild.Results")
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
     var settings = new DotNetMSBuildSettings
     {
-        GetProperties = { "Version", "TargetFramwork", },
+        GetProperties = { "Version", "TargetFramework", },
         GetItems = { "ProjectReference", },
         GetTargetResults = { "Build", "Compile", },
     };
