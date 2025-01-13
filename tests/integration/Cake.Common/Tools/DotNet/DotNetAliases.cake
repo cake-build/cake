@@ -237,15 +237,18 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild.Results")
         GetTargetResults = { "Build", "Compile", },
     };
 
-    IEnumerable<string> result = null;
+    System.Text.Json.JsonDocument result = null;
 
     // When
-    DotNetMSBuild(project.FullPath, settings, output => result = output);
+    DotNetMSBuild(project.FullPath, settings, output => result = System.Text.Json.JsonDocument.Parse(output.SelectMany(x => x).ToArray()));
 
     // Then
     Assert.NotNull(result);
-    Assert.Equal(result.First(), "{");
-    Assert.Equal(result.Last(), "}");
+    Assert.Equal("1.0.0", result.RootElement.GetProperty("Properties").GetProperty("Version").GetString());
+    Assert.Equal("net9.0", result.RootElement.GetProperty("Properties").GetProperty("TargetFramework").GetString());
+    Assert.Equal(1, result.RootElement.GetProperty("Items").GetProperty("ProjectReference").GetArrayLength());
+    Assert.Equal("Success", result.RootElement.GetProperty("TargetResults").GetProperty("Build").GetProperty("Result").GetString());
+    Assert.Equal("Success", result.RootElement.GetProperty("TargetResults").GetProperty("Compile").GetProperty("Result").GetString());
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
