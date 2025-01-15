@@ -136,9 +136,17 @@ namespace Cake.Common.Tools.NuGet.Install
             }
 
             // No Cache?
+#pragma warning disable CS0618
             if (settings.NoCache)
             {
                 builder.Append("-NoCache");
+            }
+#pragma warning restore CS0618
+
+            // No Http Cache?
+            if (settings.NoHttpCache)
+            {
+                builder.Append("-NoHttpCache");
             }
 
             // Disable Parallel Processing?

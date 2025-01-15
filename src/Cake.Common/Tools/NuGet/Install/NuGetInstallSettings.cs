@@ -71,7 +71,16 @@ namespace Cake.Common.Tools.NuGet.Install
         /// <value>
         ///   <c>true</c> to not use the machine cache as the first package source; otherwise, <c>false</c>.
         /// </value>
+        [System.Obsolete("NoCache is deprecated and has been renamed to NoHttpCache. Please use NoHttpCache instead.")]
         public bool NoCache { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not use the HTTP cache and contact all configured package sources for live information.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> to not use the HTTP cache and contact package sources for live information; otherwise, <c>false</c>.
+        /// </value>
+        public bool NoHttpCache { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to disable parallel processing of packages for this command.
