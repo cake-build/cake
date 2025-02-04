@@ -84,11 +84,8 @@ namespace Cake.Common.Tests.Unit.IO.Paths
 
                     // When
                     var filePath = new ConvertableFilePath("file.txt");
-
-
                     // Then
                     var ex = Assert.Throws<ArgumentNullException>(() => (dirPath + filePath).ToString());
-
                 }
 
                 [Fact]
@@ -100,11 +97,8 @@ namespace Cake.Common.Tests.Unit.IO.Paths
 
                     // When
                     ConvertableFilePath filePath = null;
-
-
                     // Then
                     var ex = Assert.Throws<ArgumentNullException>(() => (dirPath + filePath).ToString());
-
                 }
 
                 [Fact]
@@ -120,7 +114,6 @@ namespace Cake.Common.Tests.Unit.IO.Paths
 
                     // Then
                     Assert.Equal("X/file.txt", result);
-
                 }
 
                 [Fact]
@@ -139,7 +132,6 @@ namespace Cake.Common.Tests.Unit.IO.Paths
 
                     // Then
                     Assert.Equal("../X/file.txt", result);
-
                 }
             }
 
