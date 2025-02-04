@@ -65,8 +65,8 @@ namespace Cake.Common.IO.Paths
         /// <summary>
         /// Combines the directory path and file path with the separator.
         /// </summary>
-        /// <param name="dir">DirectoryPath</param>
-        /// <param name="file">ConvertableFilePath</param>
+        /// <param name="dir">DirectoryPath.</param>
+        /// <param name="file">ConvertableFilePath.</param>
         /// <returns>
         /// A <see cref="System.String" /> that represents this instance.
         /// </returns>
