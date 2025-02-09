@@ -15,7 +15,8 @@ namespace Cake.Core
         /// Writes the specified report to a target.
         /// </summary>
         /// <param name="report">The report to write.</param>
-        void Write(CakeReport report);
+        /// <param name="verbosity">The <see cref="Verbosity"/> at which the report should be written.</param>
+        void Write(CakeReport report, Verbosity verbosity);
 
         /// <summary>
         /// Writes the specified lifecyle steps (i.e. Setup/TearDown) to a target.

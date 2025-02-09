@@ -88,7 +88,7 @@ namespace Cake.Cli
 
             if (report != null && !report.IsEmpty)
             {
-                _reportPrinter.Write(report);
+                _reportPrinter.Write(report, _log.Verbosity);
             }
 
             return report;
