@@ -18,6 +18,7 @@
   </ItemGroup>
   <!-- Global packages -->
   <ItemGroup>
+    <PackageReference Include="NuGet.Credentials"/>
     <PackageReference Include="NuGet.Frameworks"/>
     <PackageReference Include="NuGet.Versioning" />
     <PackageReference Include="NuGet.Protocol" />
