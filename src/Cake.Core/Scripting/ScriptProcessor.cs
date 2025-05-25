@@ -230,8 +230,7 @@ namespace Cake.Core.Scripting
 
         private void CheckPackageVersion(PackageReference packageReference, string directiveName)
         {
-            bool existsVersionParameter = packageReference.Parameters.Any(x => x.Key.Equals("version", StringComparison.OrdinalIgnoreCase));
-            if (!existsVersionParameter && !_skipPackageVersionCheck)
+            if (string.IsNullOrWhiteSpace(packageReference.Version) && !_skipPackageVersionCheck)
             {
                 const string message = "The '{0}' directive is attempting to install the '{1}' package \r\n" +
                                        "without specifying a package version number.  \r\n" +
