@@ -211,7 +211,7 @@ namespace Cake.NuGet
 
                 // If the installed package is not the target package, create a new PackageReference
                 // which is passed to the content resolver. This makes logging make more sense.
-                var installedPackageReference = isTargetPackage ? package : new PackageReference($"nuget:?package={packageToInstall.Id}");
+                var installedPackageReference = isTargetPackage ? package : new PackageReference($"nuget:?package={packageToInstall.Id}&version={packageToInstall.Version}");
                 var assemblies = _contentResolver.GetFiles(installPath, installedPackageReference, type);
                 if (assemblies.Count == 0)
                 {

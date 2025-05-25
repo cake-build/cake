@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Cake.Core.Packaging
 {
@@ -113,7 +114,16 @@ namespace Cake.Core.Packaging
         /// <inheritdoc />
         public override string ToString()
         {
-            return $"{Package} v{Version}";
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append(Package);
+
+            if (!string.IsNullOrEmpty(Version))
+            {
+                stringBuilder.Append($" v{Version}");
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }

@@ -105,7 +105,7 @@ namespace Cake.Core.Scripting
                     if (assemblies.Count == 0)
                     {
                         const string format = "Failed to install addin '{0}'.";
-                        var message = string.Format(CultureInfo.InvariantCulture, format, addin.Package);
+                        var message = string.Format(CultureInfo.InvariantCulture, format, addin);
                         throw new CakeException(message);
                     }
 
