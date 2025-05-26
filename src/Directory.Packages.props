@@ -11,7 +11,7 @@
     <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.0" />
     <PackageVersion Include="Cake.Frosting" Version="3.1.0.0" />
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.12.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.14.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.11.0" />
