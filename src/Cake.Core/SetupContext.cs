@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Cake.Core
 {
@@ -26,7 +27,7 @@ namespace Cake.Core
             : base(context)
         {
             TargetTask = targetTask;
-            TasksToExecute = new List<ICakeTaskInfo>(tasksToExecute ?? Array.Empty<ICakeTaskInfo>());
+            TasksToExecute = tasksToExecute?.ToArray() ?? Array.Empty<ICakeTaskInfo>();
         }
     }
 }
