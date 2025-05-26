@@ -46,6 +46,10 @@ namespace Cake.Cli
                     new Text("Duration", rowStyle)).Footer(
                         new Text(FormatTime(GetTotalTime(report)), rowStyle)));
 
+            table.AddColumn(
+                new TableColumn(
+                    new Text("Status", rowStyle)));
+
             if (includeSkippedReasonColumn)
             {
                 table.AddColumn(new TableColumn(new Text("Skip Reason", rowStyle)));
@@ -59,12 +63,14 @@ namespace Cake.Cli
                 {
                     table.AddRow(new Markup(item.TaskName, itemStyle),
                                 new Markup(FormatDuration(item), itemStyle),
+                                new Markup(item.ExecutionStatus.ToString(), itemStyle),
                                 new Markup(item.SkippedMessage, itemStyle));
                 }
                 else
                 {
                     table.AddRow(new Markup(item.TaskName, itemStyle),
-                                new Markup(FormatDuration(item), itemStyle));
+                                new Markup(FormatDuration(item), itemStyle),
+                                new Markup(item.ExecutionStatus.ToString(), itemStyle));
                 }
             }
 
@@ -122,7 +128,7 @@ namespace Cake.Cli
         {
             if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
             {
-                return "Skipped";
+                return "-";
             }
 
             return FormatTime(item.Duration);

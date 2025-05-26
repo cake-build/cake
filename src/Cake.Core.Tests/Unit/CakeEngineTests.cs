@@ -216,7 +216,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
-                Assert.IsType<CakeException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Could not reach target 'A' since it was skipped due to a criteria.", result?.Message);
             }
 
@@ -442,7 +442,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Whoopsie", result?.Message);
             }
 
@@ -705,7 +705,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Totally my fault", result?.Message);
             }
 
@@ -743,7 +743,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
-                Assert.IsType<CakeException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Could not reach target 'B' since it was skipped due to a criteria.", result?.Message);
             }
 
@@ -826,7 +826,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(result);
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Fail", result?.Message);
                 Assert.Contains(fixture.Log.Entries, x => x.Message == "Executing custom teardown action...");
             }
@@ -849,7 +849,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(result);
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Fail", result?.Message);
                 Assert.Contains(fixture.Log.Entries, x => x.Message == "Executing custom teardown action...");
             }
@@ -872,7 +872,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(result);
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Setup", result?.Message);
             }
 
@@ -988,7 +988,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Teardown error: Teardown #1"));
                 Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Teardown error: Teardown #2"));
             }
@@ -1010,7 +1010,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(result);
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Task", result?.Message);
             }
 
@@ -1032,7 +1032,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Teardown error: Teardown #1"));
                 Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Teardown error: Teardown #2"));
             }
@@ -1291,7 +1291,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(exception);
-                Assert.IsType<InvalidOperationException>(exception);
+                Assert.IsType<CakeReportException>(exception);
                 Assert.Equal("Fail", exception?.Message);
                 Assert.Equal(
                     new List<string>
@@ -1326,7 +1326,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(exception);
-                Assert.IsType<InvalidOperationException>(exception);
+                Assert.IsType<CakeReportException>(exception);
                 Assert.Equal("Fail", exception?.Message);
                 Assert.Equal(
                     new List<string>
@@ -1355,7 +1355,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(result);
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Task Setup: A", result?.Message);
             }
 
@@ -1377,7 +1377,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(result);
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Task Teardown: A", result?.Message);
             }
 
@@ -1401,7 +1401,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(result);
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Task Setup: A", result?.Message);
                 Assert.Contains(fixture.Log.Entries, x => x.Message.StartsWith("Task Teardown error (A):"));
             }
@@ -1424,7 +1424,7 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.NotNull(result);
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Task: A", result?.Message);
             }
 
@@ -1691,7 +1691,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
-                Assert.IsType<CakeException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Could not reach target 'B' since it was skipped due to a criteria.", result?.Message);
             }
 
@@ -1762,7 +1762,7 @@ namespace Cake.Core.Tests.Unit
                     engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings));
 
                 // Then
-                Assert.IsType<InvalidOperationException>(result);
+                Assert.IsType<CakeReportException>(result);
                 Assert.Equal("Whoopsie", result?.Message);
             }
 
