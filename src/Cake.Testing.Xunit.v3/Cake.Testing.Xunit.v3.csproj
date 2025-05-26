@@ -12,7 +12,8 @@
   </PropertyGroup>
    <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.v3.assert" />
+    <PackageReference Include="xunit.v3.extensibility.core" />
   </ItemGroup>
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />

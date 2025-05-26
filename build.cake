@@ -1,9 +1,9 @@
 // Install addins.
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=3.0.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=5.0.0"
 
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.12.0"
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.18.0"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.20.0"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=sign&version=0.9.1-beta.23530.1&prerelease"
 
 // Load other scripts.
