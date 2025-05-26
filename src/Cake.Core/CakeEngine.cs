@@ -205,7 +205,8 @@ namespace Cake.Core
             {
                 exceptionWasThrown = true;
                 thrownException = ex;
-                throw;
+
+                throw new CakeReportException(report, ex.Message, ex);
             }
             finally
             {
@@ -351,20 +352,20 @@ namespace Cake.Core
                 PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, taskException);
 
                 _log.Verbose($"Completed in {stopWatch.Elapsed}");
-            }
 
-            // Add the task results to the report
-            if (IsDelegatedTask(task))
-            {
-                report.AddDelegated(task.Name, stopWatch.Elapsed);
-            }
-            else if (taskException is null)
-            {
-                report.Add(task.Name, CakeReportEntryCategory.Task, stopWatch.Elapsed);
-            }
-            else
-            {
-                report.AddFailed(task.Name, stopWatch.Elapsed);
+                // Add the task results to the report
+                if (IsDelegatedTask(task))
+                {
+                    report.AddDelegated(task.Name, stopWatch.Elapsed);
+                }
+                else if (taskException is null)
+                {
+                    report.Add(task.Name, CakeReportEntryCategory.Task, stopWatch.Elapsed);
+                }
+                else
+                {
+                    report.AddFailed(task.Name, stopWatch.Elapsed);
+                }
             }
         }
 

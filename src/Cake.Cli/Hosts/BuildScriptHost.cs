@@ -84,14 +84,26 @@ namespace Cake.Cli
 
         private async Task<CakeReport> internalRunTargetAsync()
         {
-            var report = await Engine.RunTargetAsync(_context, _executionStrategy, Settings).ConfigureAwait(false);
-
-            if (report != null && !report.IsEmpty)
+            try
             {
-                _reportPrinter.Write(report);
-            }
+                var report = await Engine.RunTargetAsync(_context, _executionStrategy, Settings).ConfigureAwait(false);
 
-            return report;
+                if (report != null && !report.IsEmpty)
+                {
+                    _reportPrinter.Write(report);
+                }
+
+                return report;
+            }
+            catch (CakeReportException cre)
+            {
+                if (cre.Report != null && !cre.Report.IsEmpty)
+                {
+                    _reportPrinter.Write(cre.Report);
+                }
+
+                throw;
+            }
         }
     }
 }
