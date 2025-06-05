@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core.IO;
 using Cake.Testing;
 using Xunit;
@@ -71,6 +72,43 @@ namespace Cake.Core.Tests.Unit.IO
 
                     // Then
                     Assert.Equal("/bar/baz", result.FullPath);
+                }
+            }
+        }
+
+        public sealed class TheExpandShortPathMethod
+        {
+            [Theory]
+            [InlineData("C:/Program Files/cake-build/addins", "C:/Program Files/cake-build/addins")]
+            [InlineData("C:/PROGRA~1/cake-build/addins", "C:/Program Files/cake-build/addins")]
+            public void Will_Normalize_Short_Paths_File(string input, string expected)
+            {
+                // Given, When
+                var path = new FilePath(input);
+
+                path = path.ExpandShortPath();
+
+                // Then
+                if (OperatingSystem.IsWindows())
+                {
+                    Assert.Equal(expected, path.FullPath);
+                }
+            }
+
+            [Theory]
+            [InlineData("C:/Program Files/cake-build/addins", "C:/Program Files/cake-build/addins")]
+            [InlineData("C:/PROGRA~1/cake-build/addins", "C:/Program Files/cake-build/addins")]
+            public void Will_Normalize_Short_Paths_Directory(string input, string expected)
+            {
+                // Given, When
+                var path = new DirectoryPath(input);
+
+                path = path.ExpandShortPath();
+
+                // Then
+                if (OperatingSystem.IsWindows())
+                {
+                    Assert.Equal(expected, path.FullPath);
                 }
             }
         }
