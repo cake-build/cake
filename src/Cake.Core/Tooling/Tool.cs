@@ -274,7 +274,7 @@ namespace Cake.Core.Tooling
             var toolPath = settings.ToolPath;
             if (toolPath != null)
             {
-                return toolPath.MakeAbsolute(_environment);
+                return toolPath.MakeAbsolute(_environment).ExpandShortPath();
             }
 
             // Look for each possible executable name in various places.
@@ -290,7 +290,7 @@ namespace Cake.Core.Tooling
             {
                 if (_fileSystem.Exist(alternativePath))
                 {
-                    return alternativePath.MakeAbsolute(_environment);
+                    return alternativePath.MakeAbsolute(_environment).ExpandShortPath();
                 }
             }
 
