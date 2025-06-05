@@ -9,7 +9,6 @@
     <PackageVersion Include="Autofac" Version="8.3.0" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.2" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.2" />
-    <PackageVersion Include="Cake.Frosting" Version="3.1.0.0" />
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.14.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
