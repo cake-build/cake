@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
@@ -126,9 +127,12 @@ namespace Cake.Frosting.Internal
                     }
 
                     // Is the criteria method overridden?
-                    if (task.IsShouldRunOverridden(_context))
+                    if (task.ShouldRunCriteria.Any())
                     {
-                        cakeTask.WithCriteria(task.ShouldRun, task.SkippedMessage);
+                        foreach (var criteria in task.ShouldRunCriteria)
+                        {
+                            cakeTask.WithCriteria(criteria.Predicate, criteria.Message);
+                        }
                     }
 
                     // Continue on error?

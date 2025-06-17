@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cake.Core;
 
@@ -24,6 +25,9 @@ namespace Cake.Frosting
     public abstract class FrostingTask<T> : IFrostingTask
         where T : ICakeContext
     {
+        /// <inheritdoc/>
+        public virtual List<CakeTaskCriteria> ShouldRunCriteria => new();
+
         /// <summary>
         /// Runs the task using the specified context.
         /// </summary>

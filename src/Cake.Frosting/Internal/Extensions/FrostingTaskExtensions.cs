@@ -61,6 +61,7 @@ namespace Cake.Frosting.Internal
             throw new InvalidOperationException($"This method expects all {nameof(IFrostingTask)} to be instances of {nameof(FrostingTask)} or {nameof(AsyncFrostingTask)}.");
         }
 
+        [Obsolete("ShouldRun method will be removed in a future version")]
         public static bool IsShouldRunOverridden(this IFrostingTask task, IFrostingContext context)
         {
             return task.GetType().GetMethod(nameof(IFrostingTask.ShouldRun), new[] { context.GetType() }).IsOverriden();
