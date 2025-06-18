@@ -26,7 +26,7 @@ namespace Cake.Frosting
         where T : ICakeContext
     {
         /// <inheritdoc/>
-        public virtual List<CakeTaskCriteria> ShouldRunCriteria => new();
+        public virtual List<CakeTaskCriteria> ShouldRunCriteria => new List<CakeTaskCriteria>();
 
         /// <summary>
         /// Runs the task using the specified context.
