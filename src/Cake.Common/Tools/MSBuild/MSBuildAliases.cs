@@ -45,7 +45,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <example>
         /// <code>
         /// MSBuild("./src/Cake.sln",
-        ///     output => foreach(var line in output) outputBuilder.AppendLine(line));
+        ///     output => foreach (var line in output) outputBuilder.AppendLine(line));
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -105,7 +105,7 @@ namespace Cake.Common.Tools.MSBuild
         ///         .UseToolVersion(MSBuildToolVersion.VS2015)
         ///         .SetMSBuildPlatform(MSBuildPlatform.x86)
         ///         .SetPlatformTarget(PlatformTarget.MSIL),
-        ///     output => foreach(var line in output) outputBuilder.AppendLine(line));
+        ///     output => foreach (var line in output) outputBuilder.AppendLine(line));
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -179,7 +179,7 @@ namespace Cake.Common.Tools.MSBuild
         ///     Configuration = "Release",
         ///     PlatformTarget = PlatformTarget.MSIL
         ///     },
-        ///     output => foreach(var line in output) outputBuilder.AppendLine(line));
+        ///     output => foreach (var line in output) outputBuilder.AppendLine(line));
         /// </code>
         /// </example>
         [CakeMethodAlias]

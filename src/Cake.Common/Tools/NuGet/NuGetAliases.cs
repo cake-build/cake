@@ -193,7 +193,7 @@ namespace Cake.Common.Tools.NuGet
         /// <code>
         ///     var solutions = GetFiles("./**/*.sln");
         ///     // Restore all NuGet packages.
-        ///     foreach(var solution in solutions)
+        ///     foreach (var solution in solutions)
         ///     {
         ///         Information("Restoring {0}", solution);
         ///         NuGetRestore(solution);
@@ -239,7 +239,7 @@ namespace Cake.Common.Tools.NuGet
         /// <code>
         ///     var solutions = GetFiles("./**/*.sln");
         ///     // Restore all NuGet packages.
-        ///     foreach(var solution in solutions)
+        ///     foreach (var solution in solutions)
         ///     {
         ///         Information("Restoring {0}", solution);
         ///         NuGetRestore(solution, new NuGetRestoreSettings { NoCache = true });
@@ -1116,7 +1116,7 @@ namespace Cake.Common.Tools.NuGet
         ///     AllVersions = false,
         ///     Prerelease = false
         ///     });
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }
@@ -1145,7 +1145,7 @@ namespace Cake.Common.Tools.NuGet
         /// <example>
         /// <code>
         /// var packageList = NuGetList("Cake");
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }
@@ -1177,7 +1177,7 @@ namespace Cake.Common.Tools.NuGet
         ///     AllVersions = false,
         ///     Prerelease = false
         ///     });
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }

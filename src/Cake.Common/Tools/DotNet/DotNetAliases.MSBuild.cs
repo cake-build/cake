@@ -102,7 +102,7 @@ namespace Cake.Common.Tools.DotNet
         /// };
         ///
         /// DotNetMSBuild(settings,
-        ///     output => foreach(var line in output) outputBuilder.AppendLine(line));
+        ///     output => foreach (var line in output) outputBuilder.AppendLine(line));
         /// </code>
         /// </example>
         [CakeMethodAlias]
@@ -169,7 +169,7 @@ namespace Cake.Common.Tools.DotNet
         /// };
         ///
         /// DotNetMSBuild("foobar.proj", settings,
-        ///     output => foreach(var line in output) outputBuilder.AppendLine(line));
+        ///     output => foreach (var line in output) outputBuilder.AppendLine(line));
         /// </code>
         /// </example>
         /// <remarks>

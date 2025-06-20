@@ -22,7 +22,7 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// var files = GetFiles("./**/Cake.*.dll");
-        /// foreach(var file in files)
+        /// foreach (var file in files)
         /// {
         ///     Information("File: {0}", file);
         /// }
@@ -53,7 +53,7 @@ namespace Cake.Common.IO
         ///         "node_modules", StringComparison.OrdinalIgnoreCase);
         ///
         /// var files = GetFiles("./**/Cake.*.dll", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach(var file in files)
+        /// foreach (var file in files)
         /// {
         ///     Information("File: {0}", file);
         /// }
@@ -81,7 +81,7 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// var directories = GetDirectories("./src/**/obj/*");
-        /// foreach(var directory in directories)
+        /// foreach (var directory in directories)
         /// {
         ///     Information("Directory: {0}", directory);
         /// }
@@ -112,7 +112,7 @@ namespace Cake.Common.IO
         ///         "node_modules", StringComparison.OrdinalIgnoreCase);
         ///
         /// var directories = GetDirectories("./src/**/obj/*", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach(var directory in directories)
+        /// foreach (var directory in directories)
         /// {
         ///     Information("Directory: {0}", directory);
         /// }
@@ -140,7 +140,7 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// var paths = GetPaths("./src/**/obj/*");
-        /// foreach(var path in paths)
+        /// foreach (var path in paths)
         /// {
         ///     Information("Path: {0}", path);
         /// }
@@ -171,7 +171,7 @@ namespace Cake.Common.IO
         ///         "node_modules", StringComparison.OrdinalIgnoreCase);
         ///
         /// var paths = GetPaths("./src/**/obj/*", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach(var path in paths)
+        /// foreach (var path in paths)
         /// {
         ///     Information("Path: {0}", path);
         /// }

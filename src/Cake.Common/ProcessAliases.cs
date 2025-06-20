@@ -228,7 +228,7 @@ namespace Cake.Common
         /// <returns>The newly started process.</returns>
         /// <example>
         /// <code>
-        /// using(var process = StartAndReturnProcess("ping", new ProcessSettings{ Arguments = "localhost" }))
+        /// using (var process = StartAndReturnProcess("ping", new ProcessSettings{ Arguments = "localhost" }))
         /// {
         ///     process.WaitForExit();
         ///     // This should output 0 as valid arguments supplied
@@ -278,7 +278,7 @@ namespace Cake.Common
         /// <returns>The newly started process.</returns>
         /// <example>
         /// <code>
-        /// using(var process = StartAndReturnProcess("ping"))
+        /// using (var process = StartAndReturnProcess("ping"))
         /// {
         ///     process.WaitForExit();
         ///     // This should output 0 as valid arguments supplied
