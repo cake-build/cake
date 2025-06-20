@@ -1,6 +1,6 @@
 public DirectoryPath EnsureDirectoryExist(DirectoryPath path)
 {
-    if(!System.IO.Directory.Exists(path.FullPath))
+    if (!System.IO.Directory.Exists(path.FullPath))
     {
         System.IO.Directory.CreateDirectory(path.FullPath);
     }
@@ -9,7 +9,7 @@ public DirectoryPath EnsureDirectoryExist(DirectoryPath path)
 
 public void EnsureDirectoriesExist(IEnumerable<DirectoryPath> paths)
 {
-    foreach(var path in paths)
+    foreach (var path in paths)
     {
         EnsureDirectoryExist(path);
     }
@@ -17,7 +17,7 @@ public void EnsureDirectoriesExist(IEnumerable<DirectoryPath> paths)
 
 public FilePath EnsureFileExist(FilePath path, string message = "Hello World!")
 {
-    if(!System.IO.File.Exists(path.FullPath))
+    if (!System.IO.File.Exists(path.FullPath))
     {
         EnsureDirectoryExist(path.GetDirectory());
         using (var writer = System.IO.File.CreateText(path.FullPath))
@@ -30,7 +30,7 @@ public FilePath EnsureFileExist(FilePath path, string message = "Hello World!")
 
 public void EnsureFilesExist(IEnumerable<FilePath> paths)
 {
-    foreach(var path in paths)
+    foreach (var path in paths)
     {
         EnsureFileExist(path);
     }
@@ -38,7 +38,7 @@ public void EnsureFilesExist(IEnumerable<FilePath> paths)
 
 public void EnsureDirectoryDoNotExist(DirectoryPath path)
 {
-    if(System.IO.Directory.Exists(path.FullPath))
+    if (System.IO.Directory.Exists(path.FullPath))
     {
         System.IO.Directory.Delete(path.FullPath);
     }

@@ -19,7 +19,7 @@ try  {
     Push-Location
     Set-Location $RootDirectory
     & "$RootDirectory\build.ps1" --target="Run-Integration-Tests" --integration-tests-target="$Target" $Exclusive
-    if($LASTEXITCODE -ne 0) {
+    if ($LASTEXITCODE -ne 0) {
         Throw "An error occurred while building Cake."
     }
 }

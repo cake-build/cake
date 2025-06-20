@@ -172,7 +172,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublish")
     DotNetPublish(project.FullPath, new DotNetPublishSettings { OutputDirectory = outputPath });
 
     // Then
-    foreach(var file in publishFiles)
+    foreach (var file in publishFiles)
     {
         Assert.True(System.IO.File.Exists(file.FullPath), "Path:" + file.FullPath);
     }
@@ -301,7 +301,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadSearch")
     var workloads = DotNetWorkloadSearch(searchString);
 
     // Then
-    foreach(var workload in workloads)
+    foreach (var workload in workloads)
     {
         Assert.Contains("maui", workload.Id);
         Assert.Contains(".NET MAUI SDK", workload.Description);

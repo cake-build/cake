@@ -36,7 +36,7 @@ public class ProjectParserResultEqualityComparer : IEqualityComparer<ProjectPars
         if (files == null)
             yield break;
 
-        foreach(var file in files)
+        foreach (var file in files)
         {
             yield return ProjectFileEqualityComparer.Comparer.GetHashCode(file);
         }
@@ -47,7 +47,7 @@ public class ProjectParserResultEqualityComparer : IEqualityComparer<ProjectPars
         if (references == null)
             yield break;
 
-        foreach(var reference in references)
+        foreach (var reference in references)
         {
             yield return ProjectAssemblyReferenceEqualityComparer.Comparer.GetHashCode(reference);
         }
@@ -58,7 +58,7 @@ public class ProjectParserResultEqualityComparer : IEqualityComparer<ProjectPars
         if (references == null)
             yield break;
 
-        foreach(var reference in references)
+        foreach (var reference in references)
         {
             yield return ProjectReferenceEqualityComparer.Comparer.GetHashCode(reference);
         }
