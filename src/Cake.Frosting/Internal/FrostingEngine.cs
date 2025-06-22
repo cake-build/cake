@@ -126,7 +126,7 @@ namespace Cake.Frosting.Internal
                         cakeTask.Does(task.RunAsync);
                     }
 
-                    // Is the criteria method overridden?
+                    // Check if and criteria added to ShouldRunCriteria?
                     if (task.ShouldRunCriteria.Any())
                     {
                         foreach (var criteria in task.ShouldRunCriteria)
@@ -134,6 +134,13 @@ namespace Cake.Frosting.Internal
                             cakeTask.WithCriteria(criteria.Predicate, criteria.Message);
                         }
                     }
+                    // Check to see if obsoleted ShouldRun is overridden?  Done to not break old projects.
+#pragma warning disable CS0618 // Type or member is obsolete
+                    else if (task.IsShouldRunOverridden(_context))
+                    {
+                        cakeTask.WithCriteria(task.ShouldRun, task.SkippedMessage);
+                    }
+#pragma warning restore CS0618 // Type or member is obsolete
 
                     // Continue on error?
                     if (task.IsContinueOnError())
