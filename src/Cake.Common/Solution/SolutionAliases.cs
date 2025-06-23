@@ -26,7 +26,7 @@ namespace Cake.Common.Solution
         /// var solutionPath = "./src/Cake.sln";
         /// Information("Parsing {0}", solutionPath);
         /// var parsedSolution = ParseSolution(solutionPath);
-        /// foreach(var project in parsedSolution.Projects)
+        /// foreach (var project in parsedSolution.Projects)
         /// {
         ///     Information(
         ///         @"Solution project file:

@@ -57,7 +57,7 @@ namespace Cake.Common.Tools.DotNet
         ///     .Does(() =>
         /// {
         ///     var projectFiles = GetFiles("./test/**/*.csproj");
-        ///     foreach(var file in projectFiles)
+        ///     foreach (var file in projectFiles)
         ///     {
         ///         DotNetTest(file.FullPath);
         ///     }
@@ -103,7 +103,7 @@ namespace Cake.Common.Tools.DotNet
         ///     };
         ///
         ///     var projectFiles = GetFiles("./test/**/*.csproj");
-        ///     foreach(var file in projectFiles)
+        ///     foreach (var file in projectFiles)
         ///     {
         ///         DotNetTest(file.FullPath, settings);
         ///     }
@@ -155,7 +155,7 @@ namespace Cake.Common.Tools.DotNet
         ///     };
         ///
         ///     var projectFiles = GetFiles("./test/**/*.csproj");
-        ///     foreach(var file in projectFiles)
+        ///     foreach (var file in projectFiles)
         ///     {
         ///         DotNetTest(file.FullPath, "MSTest.MapInconclusiveToFailed=true", settings);
         ///     }

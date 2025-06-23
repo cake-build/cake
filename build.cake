@@ -17,7 +17,7 @@ Setup<BuildParameters>(context =>
     var parameters = new BuildParameters(context);
 
     // Increase verbosity?
-    if(parameters.IsMainCakeBranch && (context.Log.Verbosity != Verbosity.Diagnostic)) {
+    if (parameters.IsMainCakeBranch && (context.Log.Verbosity != Verbosity.Diagnostic)) {
         Information("Increasing verbosity to diagnostic.");
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
@@ -34,7 +34,7 @@ Setup<BuildParameters>(context =>
         throw new CakeException("Code signing credentials are missing.");
     }
 
-    foreach(var assemblyInfo in GetFiles("./src/**/AssemblyInfo.cs"))
+    foreach (var assemblyInfo in GetFiles("./src/**/AssemblyInfo.cs"))
     {
         CreateAssemblyInfo(
             assemblyInfo.ChangeExtension(".Generated.cs"),
@@ -48,13 +48,13 @@ Teardown<BuildParameters>((context, parameters) =>
 {
     Information("Starting Teardown...");
 
-    if(context.Successful)
+    if (context.Successful)
     {
-        if(parameters.ShouldPublish)
+        if (parameters.ShouldPublish)
         {
             var message = $"Version {parameters.Version.SemVersion} of Cake has just been released, https://www.nuget.org/packages/Cake.Tool/{parameters.Version.SemVersion} 🎉";
 
-            if(parameters.CanPostToTwitter)
+            if (parameters.CanPostToTwitter)
             {
                 TwitterSendTweet(parameters.Twitter.ConsumerKey, parameters.Twitter.ConsumerSecret, parameters.Twitter.AccessToken, parameters.Twitter.AccessTokenSecret, message);
             }
@@ -108,7 +108,7 @@ Task("Run-Unit-Tests")
         () => GetFiles("./src/**/*.Tests.csproj"),
         (parameters, project, context) =>
 {
-    foreach(var framework in new[] { "net8.0", "net9.0" })
+    foreach (var framework in new[] { "net8.0", "net9.0" })
     {
         FilePath testResultsPath = MakeAbsolute(parameters.Paths.Directories.TestResults
             .CombineWithFilePath($"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.xml"));
@@ -130,10 +130,10 @@ Task("Create-NuGet-Packages")
 {
     // Build libraries
     var projects = GetFiles("./src/*/*.csproj");
-    foreach(var project in projects)
+    foreach (var project in projects)
     {
         var name = project.GetDirectory().FullPath;
-        if(name.EndsWith("Tests") || name.EndsWith("Example"))
+        if (name.EndsWith("Tests") || name.EndsWith("Example"))
         {
             continue;
         }
@@ -195,7 +195,7 @@ Task("Upload-AppVeyor-Artifacts")
     .WithCriteria<BuildParameters>((context, parameters) => parameters.IsRunningOnAppVeyor)
     .Does<BuildParameters>((context, parameters) =>
 {
-    foreach(var package in GetFiles(parameters.Paths.Directories.NuGetRoot + "/*"))
+    foreach (var package in GetFiles(parameters.Paths.Directories.NuGetRoot + "/*"))
     {
         AppVeyor.UploadArtifact(package);
     }
@@ -209,17 +209,17 @@ Task("Publish-MyGet")
 {
     // Resolve the API key.
     var apiKey = EnvironmentVariable("MYGET_API_KEY");
-    if(string.IsNullOrEmpty(apiKey)) {
+    if (string.IsNullOrEmpty(apiKey)) {
         throw new InvalidOperationException("Could not resolve MyGet API key.");
     }
 
     // Resolve the API url.
     var apiUrl = EnvironmentVariable("MYGET_API_URL");
-    if(string.IsNullOrEmpty(apiUrl)) {
+    if (string.IsNullOrEmpty(apiUrl)) {
         throw new InvalidOperationException("Could not resolve MyGet API url.");
     }
 
-    foreach(var package in parameters.Packages.NuGet)
+    foreach (var package in parameters.Packages.NuGet)
     {
         // Push the package.
         var settings = new DotNetNuGetPushSettings {
@@ -244,17 +244,17 @@ Task("Publish-NuGet")
 {
     // Resolve the API key.
     var apiKey = EnvironmentVariable("NUGET_API_KEY");
-    if(string.IsNullOrEmpty(apiKey)) {
+    if (string.IsNullOrEmpty(apiKey)) {
         throw new InvalidOperationException("Could not resolve NuGet API key.");
     }
 
     // Resolve the API url.
     var apiUrl = EnvironmentVariable("NUGET_API_URL");
-    if(string.IsNullOrEmpty(apiUrl)) {
+    if (string.IsNullOrEmpty(apiUrl)) {
         throw new InvalidOperationException("Could not resolve NuGet API url.");
     }
 
-    foreach(var package in parameters.Packages.NuGet)
+    foreach (var package in parameters.Packages.NuGet)
     {
         // Push the package.
         var settings = new DotNetNuGetPushSettings {
@@ -275,7 +275,7 @@ Task("Publish-GitHub-Release")
     .WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublish)
     .Does<BuildParameters>((context, parameters) =>
 {
-    foreach(var package in GetFiles(parameters.Paths.Directories.NuGetRoot + "/*"))
+    foreach (var package in GetFiles(parameters.Paths.Directories.NuGetRoot + "/*"))
     {
         GitReleaseManagerAddAssets(parameters.GitHub.Token, "cake-build", "cake", parameters.Version.Milestone, package.FullPath);
     }
@@ -425,7 +425,7 @@ Task("AppVeyor")
   .IsDependentOn("Publish-GitHub-Release")
   .Does<BuildParameters>((context, parameters) =>
 {
-    if(parameters.PublishingError)
+    if (parameters.PublishingError)
     {
         throw new Exception("An error occurred during the publishing of Cake.  All publishing tasks have been attempted.");
     }

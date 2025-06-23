@@ -178,7 +178,7 @@ namespace Cake.Common.Tools.DotNet
         ///     AllVersions = false,
         ///     Prerelease = false
         ///     });
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }
@@ -209,7 +209,7 @@ namespace Cake.Common.Tools.DotNet
         ///     AllVersions = false,
         ///     Prerelease = false
         ///     });
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }
@@ -240,7 +240,7 @@ namespace Cake.Common.Tools.DotNet
         ///     AllVersions = false,
         ///     Prerelease = false
         ///     });
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }

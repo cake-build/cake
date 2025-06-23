@@ -8,7 +8,7 @@ public static void AssertFiles(this FilePathCollection collection, params FilePa
 {
     Assert.NotNull(collection);
     Assert.Equal(files.Length, collection.Count);
-    foreach(var file in files)
+    foreach (var file in files)
     {
         Assert.True(collection.Contains(file, PathComparer.Default), $"Expected '{file}' to be found by globber.");
     }
@@ -18,7 +18,7 @@ public static void AssertDirectories(this DirectoryPathCollection collection, pa
 {
     Assert.NotNull(collection);
     Assert.Equal(directories.Length, collection.Count);
-    foreach(var directory in directories)
+    foreach (var directory in directories)
     {
         Assert.True(collection.Contains(directory, PathComparer.Default), $"Expected '{directory}' to be found by globber.");
     }
@@ -28,7 +28,7 @@ public static void AssertPaths(this PathCollection collection, params Cake.Core.
 {
     Assert.NotNull(collection);
     Assert.Equal(paths.Length, collection.Count);
-    foreach(var path in paths)
+    foreach (var path in paths)
     {
         Assert.True(collection.Contains(path, PathComparer.Default), $"Expected '{path}' to be found by globber.");
     }
