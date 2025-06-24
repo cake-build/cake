@@ -99,6 +99,7 @@ public class BuildParameters
                 "Cake.Common",
                 "Cake.Testing",
                 "Cake.Testing.Xunit",
+                "Cake.Testing.Xunit.v3",
                 "Cake.NuGet",
                 "Cake.Tool",
                 "Cake.Frosting",
