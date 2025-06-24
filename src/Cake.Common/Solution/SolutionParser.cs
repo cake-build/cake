@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.IO;
 
 namespace Cake.Common.Solution
@@ -53,6 +54,11 @@ namespace Cake.Common.Solution
             if (solutionPath.IsRelative)
             {
                 solutionPath = solutionPath.MakeAbsolute(_environment);
+            }
+
+            if (solutionPath.FullPath.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
+            {
+                return SlnxParser.Parse(solutionPath, _fileSystem);
             }
 
             // Get the release notes file.

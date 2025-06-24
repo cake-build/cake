@@ -13,6 +13,7 @@
   <Import Project="..\Shared.msbuild" />
   <!-- Project references -->
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.SolutionPersistence" />
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
   </ItemGroup>

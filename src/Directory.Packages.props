@@ -17,6 +17,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Microsoft.NETCore.Platforms" Version="7.0.4" />
     <PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="17.14.1" />
+    <PackageVersion Include="Microsoft.VisualStudio.SolutionPersistence" Version="1.0.52" />
     <PackageVersion Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
@@ -37,9 +38,7 @@
     <PackageVersion Include="xunit.v3.assert" Version="2.0.2" />
     <PackageVersion Include="xunit.v3.extensibility.core" Version="2.0.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.0" />
-
     <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.5" />
   </ItemGroup>
-
 </Project>
