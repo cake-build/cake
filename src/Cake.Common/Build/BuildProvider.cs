@@ -80,6 +80,11 @@ namespace Cake.Common.Build
         /// <summary>
         /// GitHubActions build provider.
         /// </summary>
-        GitHubActions = 8192
+        GitHubActions = 8192,
+
+        /// <summary>
+        /// WoodpeckerCI build provider.
+        /// </summary>
+        WoodpeckerCI = 16384
     }
 }

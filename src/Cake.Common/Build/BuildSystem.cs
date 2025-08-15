@@ -16,6 +16,7 @@ using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
 using Cake.Common.Build.TravisCI;
+using Cake.Common.Build.WoodpeckerCI;
 
 namespace Cake.Common.Build
 {
@@ -41,6 +42,7 @@ namespace Cake.Common.Build
         /// <param name="gitLabCIProvider">The GitLab CI provider.</param>
         /// <param name="gitHubActionsProvider">The GitHub Actions provider.</param>
         /// <param name="azurePipelinesProvider">The Azure Pipelines provider.</param>
+        /// <param name="woodpeckerCIProvider">The WoodpeckerCI provider.</param>
         public BuildSystem(
             IAppVeyorProvider appVeyorProvider,
             ITeamCityProvider teamCityProvider,
@@ -54,7 +56,8 @@ namespace Cake.Common.Build
             IGoCDProvider goCDProvider,
             IGitLabCIProvider gitLabCIProvider,
             IGitHubActionsProvider gitHubActionsProvider,
-            IAzurePipelinesProvider azurePipelinesProvider)
+            IAzurePipelinesProvider azurePipelinesProvider,
+            IWoodpeckerCIProvider woodpeckerCIProvider)
         {
             if (appVeyorProvider == null)
             {
@@ -108,6 +111,10 @@ namespace Cake.Common.Build
             {
                 throw new ArgumentNullException(nameof(azurePipelinesProvider));
             }
+            if (woodpeckerCIProvider == null)
+            {
+                throw new ArgumentNullException(nameof(woodpeckerCIProvider));
+            }
 
             AppVeyor = appVeyorProvider;
             TeamCity = teamCityProvider;
@@ -122,6 +129,7 @@ namespace Cake.Common.Build
             GitLabCI = gitLabCIProvider;
             GitHubActions = gitHubActionsProvider;
             AzurePipelines = azurePipelinesProvider;
+            WoodpeckerCI = woodpeckerCIProvider;
 
             Provider = (AppVeyor.IsRunningOnAppVeyor ? BuildProvider.AppVeyor : BuildProvider.Local)
                 | (TeamCity.IsRunningOnTeamCity ? BuildProvider.TeamCity : BuildProvider.Local)
@@ -135,7 +143,8 @@ namespace Cake.Common.Build
                 | (GoCD.IsRunningOnGoCD ? BuildProvider.GoCD : BuildProvider.Local)
                 | (GitLabCI.IsRunningOnGitLabCI ? BuildProvider.GitLabCI : BuildProvider.Local)
                 | (GitHubActions.IsRunningOnGitHubActions ? BuildProvider.GitHubActions : BuildProvider.Local)
-                | (AzurePipelines.IsRunningOnAzurePipelines ? BuildProvider.AzurePipelines : BuildProvider.Local);
+                | (AzurePipelines.IsRunningOnAzurePipelines ? BuildProvider.AzurePipelines : BuildProvider.Local)
+                | (WoodpeckerCI.IsRunningOnWoodpeckerCI ? BuildProvider.WoodpeckerCI : BuildProvider.Local);
 
             IsLocalBuild = Provider == BuildProvider.Local;
 
@@ -147,6 +156,7 @@ namespace Cake.Common.Build
                 || ((Provider & BuildProvider.GitLabCI) != 0 && GitLabCI.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.AzurePipelines) != 0 && AzurePipelines.Environment.PullRequest.IsPullRequest)
                 || ((Provider & BuildProvider.GitHubActions) != 0 && GitHubActions.Environment.PullRequest.IsPullRequest)
+                || ((Provider & BuildProvider.WoodpeckerCI) != 0 && !string.IsNullOrWhiteSpace(WoodpeckerCI.Environment.Commit.PullRequest))
                 || ((Provider & BuildProvider.Jenkins) != 0 && Jenkins.Environment.Change.IsPullRequest);
         }
 
@@ -558,6 +568,37 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         public IGitHubActionsProvider GitHubActions { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is running on WoodpeckerCI.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.IsRunningOnWoodpeckerCI)
+        /// {
+        ///     // Get the commit SHA.
+        ///     var commitSha = BuildSystem.WoodpeckerCI.Environment.Commit.Sha;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on WoodpeckerCI; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnWoodpeckerCI => WoodpeckerCI.IsRunningOnWoodpeckerCI;
+
+        /// <summary>
+        /// Gets the WoodpeckerCI Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.IsRunningOnWoodpeckerCI)
+        /// {
+        ///     // Get the commit SHA.
+        ///     var commitSha = BuildSystem.WoodpeckerCI.Environment.Commit.Sha;
+        /// }
+        /// </code>
+        /// </example>
+        public IWoodpeckerCIProvider WoodpeckerCI { get; }
 
         /// <summary>
         /// Gets the current build provider.
