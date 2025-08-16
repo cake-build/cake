@@ -16,6 +16,7 @@ using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
 using Cake.Common.Build.TeamCity;
 using Cake.Common.Build.TravisCI;
+using Cake.Common.Build.WoodpeckerCI;
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -59,8 +60,9 @@ namespace Cake.Common.Build
             var gitLabCIProvider = new GitLabCIProvider(context.Environment, context.FileSystem);
             var gitHubActionsProvider = new GitHubActionsProvider(context.Environment, context.FileSystem, new BuildSystemServiceMessageWriter());
             var azurePipelinesProvider = new AzurePipelinesProvider(context.Environment, new BuildSystemServiceMessageWriter());
+            var woodpeckerCIProvider = new WoodpeckerCIProvider(context.Environment, context.FileSystem);
 
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
         }
 
         /// <summary>
@@ -384,6 +386,31 @@ namespace Cake.Common.Build
 
             var buildSystem = context.BuildSystem();
             return buildSystem.AzurePipelines;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="WoodpeckerCIProvider"/> instance that can be used to
+        /// obtain information from the WoodpeckerCI environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isWoodpeckerCIBuild = WoodpeckerCI.IsRunningOnWoodpeckerCI;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Build.WoodpeckerCI"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.WoodpeckerCI")]
+        [CakeNamespaceImport("Cake.Common.Build.WoodpeckerCI.Data")]
+        public static IWoodpeckerCIProvider WoodpeckerCI(this ICakeContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var buildSystem = context.BuildSystem();
+            return buildSystem.WoodpeckerCI;
         }
     }
 }
