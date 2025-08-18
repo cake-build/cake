@@ -30,7 +30,7 @@
     <PackageVersion Include="Spectre.Console" Version="0.50.0" />
     <PackageVersion Include="Spectre.Console.Cli" Version="0.50.0" />
     <PackageVersion Include="Spectre.Verify.Extensions" Version="28.16.0" />
-    <PackageVersion Include="System.Collections.Immutable" Version="9.0.5" />
+    <PackageVersion Include="System.Collections.Immutable" Version="9.0.8" />
     <PackageVersion Include="System.Reflection.Metadata" Version="9.0.5" />
     <PackageVersion Include="Verify.XunitV3" Version="30.1.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
