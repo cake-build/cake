@@ -443,8 +443,8 @@ Task("AppVeyor")
 
 
 Task("GitHubActions")
-  .IsDependentOn("Publish-AzureDevOps")
-  .IsDependentOn("Run-Integration-Tests");
+  .IsDependentOn("Run-Integration-Tests")
+  .IsDependentOn("Publish-AzureDevOps");
 
 Task("GitHubActions-Release")
   .IsDependentOn("Publish-AzureDevOps")
