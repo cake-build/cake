@@ -4,7 +4,7 @@
 // Install .NET Core Global tools.
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.12.0"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.20.0"
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=sign&version=0.9.1-beta.25264.1&prerelease"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=sign&version=0.9.1-beta.25379.1&prerelease"
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -22,12 +22,20 @@ Setup<BuildParameters>(context =>
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    Information("Building version {0} of Cake ({1}, {2}) using version {3} of Cake. (IsTagged: {4})",
+    Information("Building version {0} of Cake ({1}, {2}) using version {3} of Cake.\r\n\t(IsTagged: {4}, IsMainCakeRepo: {5}, IsMainCakeBranch: {6}, IsDevelopCakeBranch: {7})\r\n\t(ShouldPublish: {8}, ShouldPublishToAzureDevOps: {9}, ShouldSignPackages: {10}, IsPullRequest: {11})",
         parameters.Version.SemVersion,
         parameters.Configuration,
         parameters.Target,
         parameters.Version.CakeVersion,
-        parameters.IsTagged);
+        parameters.IsTagged,
+        parameters.IsMainCakeRepo,
+        parameters.IsMainCakeBranch,
+        parameters.IsDevelopCakeBranch,
+        parameters.ShouldPublish,
+        parameters.ShouldPublishToAzureDevOps,
+        parameters.ShouldSignPackages,
+        parameters.IsPullRequest
+        );
 
     if (parameters.ShouldSignPackages && !parameters.CodeSigning.HasCredentials)
     {
@@ -175,9 +183,7 @@ Task("Sign-Binaries")
             .AppendSwitchQuoted("--publisher-name", "Cake")
             .AppendSwitchQuoted("--description", "Cake (C# Make) is a cross platform build automation system.")
             .AppendSwitchQuoted("--description-url", "https://cakebuild.net")
-            .AppendSwitchQuotedSecret("--azure-key-vault-tenant-id", parameters.CodeSigning.SignTenantId)
-            .AppendSwitchQuotedSecret("--azure-key-vault-client-id", parameters.CodeSigning.SignClientId)
-            .AppendSwitchQuotedSecret("--azure-key-vault-client-secret", parameters.CodeSigning.SignClientSecret)
+            .AppendSwitchQuoted("--azure-credential-type", "azure-cli")
             .AppendSwitchQuotedSecret("--azure-key-vault-certificate", parameters.CodeSigning.SignKeyVaultCertificate)
             .AppendSwitchQuotedSecret("--azure-key-vault-url", parameters.CodeSigning.SignKeyVaultUrl);
 
@@ -191,7 +197,7 @@ Task("Sign-Binaries")
 });
 
 Task("Upload-AppVeyor-Artifacts")
-    .IsDependentOn("Sign-Binaries")
+    .IsDependentOn("Package")
     .WithCriteria<BuildParameters>((context, parameters) => parameters.IsRunningOnAppVeyor)
     .Does<BuildParameters>((context, parameters) =>
 {
@@ -201,23 +207,37 @@ Task("Upload-AppVeyor-Artifacts")
     }
 });
 
-Task("Publish-MyGet")
+Task("Publish-AzureDevOps")
     .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Package")
-    .WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishToMyGet)
+    .WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishToAzureDevOps)
     .Does<BuildParameters>((context, parameters) =>
 {
-    // Resolve the API key.
-    var apiKey = EnvironmentVariable("MYGET_API_KEY");
-    if (string.IsNullOrEmpty(apiKey)) {
-        throw new InvalidOperationException("Could not resolve MyGet API key.");
+    string
+        apiKey = "AzureDevOps",
+        sourceName = "AzureDevOps",
+        userName = "AzureDevOps";
+
+    // Resolve the password .
+    var password = EnvironmentVariable("AZURE_DEVOPS_NUGET_API_KEY");
+    if (string.IsNullOrEmpty(password)) {
+        throw new InvalidOperationException("Could not resolve AzureDevOps password.");
     }
 
     // Resolve the API url.
-    var apiUrl = EnvironmentVariable("MYGET_API_URL");
+    var apiUrl = EnvironmentVariable("AZURE_DEVOPS_NUGET_API_URL");
     if (string.IsNullOrEmpty(apiUrl)) {
-        throw new InvalidOperationException("Could not resolve MyGet API url.");
+        throw new InvalidOperationException("Could not resolve AzureDevOps API url.");
     }
+
+     DotNetNuGetAddSource(
+                    sourceName,
+                    new DotNetNuGetAddSourceSettings
+                    {
+                        UserName = userName,
+                        Password = password,
+                        Source = apiUrl
+                    });
 
     foreach (var package in parameters.Packages.NuGet)
     {
@@ -232,13 +252,13 @@ Task("Publish-MyGet")
 })
 .OnError<BuildParameters>((exception, parameters) =>
 {
-    Information("Publish-MyGet Task failed, but continuing with next Task...");
+    Information("Publish-AzureDevOps Task failed, but continuing with next Task...");
     parameters.PublishingError = true;
 });
 
 Task("Publish-NuGet")
     .IsDependentOn("Sign-Binaries")
-    .IsDependentOn("Create-NuGet-Packages")
+    .IsDependentOn("Package")
     .WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublish)
     .Does<BuildParameters>((context, parameters) =>
 {
@@ -419,8 +439,15 @@ Task("Default")
   .IsDependentOn("Package");
 
 Task("AppVeyor")
-  .IsDependentOn("Upload-AppVeyor-Artifacts")
-  .IsDependentOn("Publish-MyGet")
+  .IsDependentOn("Upload-AppVeyor-Artifacts");
+
+
+Task("GitHubActions")
+  .IsDependentOn("Publish-AzureDevOps")
+  .IsDependentOn("Run-Integration-Tests");
+
+Task("GitHubActions-Release")
+  .IsDependentOn("Publish-AzureDevOps")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-GitHub-Release")
   .Does<BuildParameters>((context, parameters) =>
@@ -429,7 +456,7 @@ Task("AppVeyor")
     {
         throw new Exception("An error occurred during the publishing of Cake.  All publishing tasks have been attempted.");
     }
-});
+});;
 
 Task("Travis")
   .IsDependentOn("Run-Unit-Tests");

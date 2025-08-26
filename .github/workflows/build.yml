@@ -38,7 +38,7 @@ jobs:
             8.0.x
             9.0.x
 
-      - name: Install .NET Core SDK (global.json)
+      - name: Install .NET SDK (global.json)
         uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
@@ -46,8 +46,11 @@ jobs:
       - name: Run Cake script
         id: build-cake
         uses: cake-build/cake-action@master
+        env:
+          AZURE_DEVOPS_NUGET_API_KEY: ${{ secrets.AZURE_DEVOPS_NUGET_API_KEY }}
+          AZURE_DEVOPS_NUGET_API_URL: ${{ secrets.AZURE_DEVOPS_NUGET_API_URL }}
         with:
-          target: Run-Integration-Tests
+          target: GitHubActions
           cake-version: tool-manifest
 
       - name: Validate Integration Tests
