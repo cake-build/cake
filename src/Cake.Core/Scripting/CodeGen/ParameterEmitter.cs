@@ -30,7 +30,7 @@ namespace Cake.Core.Scripting.CodeGen
 
         internal static string Emit(ParameterInfo parameter, bool includeType)
         {
-            return string.Join(string.Empty, BuildParameterTokens(parameter, includeType));
+            return string.Concat(BuildParameterTokens(parameter, includeType));
         }
 
         private static IEnumerable<string> BuildParameterTokens(ParameterInfo parameter, bool includeType)

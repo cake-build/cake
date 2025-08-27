@@ -318,7 +318,7 @@ namespace Cake.Common.Build.AzurePipelines
 
         private void WriteLoggingCommand(string actionName, Dictionary<string, string> properties, string value)
         {
-            var props = string.Join(string.Empty, properties.Select(pair =>
+            var props = string.Concat(properties.Select(pair =>
             {
                 return string.Format(CultureInfo.InvariantCulture, "{0}={1};", pair.Key, pair.Value);
             }));
