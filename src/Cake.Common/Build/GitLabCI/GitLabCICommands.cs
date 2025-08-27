@@ -51,7 +51,7 @@ namespace Cake.Common.Build.GitLabCI
             using var stream = file.Open(FileMode.Append, FileAccess.Write, FileShare.None);
             using var writer = new StreamWriter(stream);
             writer.Write(key);
-            writer.Write("=");
+            writer.Write('=');
             writer.WriteLine(value);
         }
     }
