@@ -62,7 +62,7 @@ namespace Cake.Common.Tools.DotNet.Workload.Install
 
             if (workloadIds != null && workloadIds.Any())
             {
-                builder.Append(string.Join(" ", workloadIds));
+                builder.Append(string.Join(' ', workloadIds));
             }
 
             // Config File

@@ -121,10 +121,10 @@ namespace Cake.Core.IO
             if (path.IsUNC)
             {
                 var segments = path.Segments.Skip(1).Take(path.Segments.Length - 2);
-                return string.Concat(@"\\", string.Join("\\", segments));
+                return string.Concat(@"\\", string.Join('\\', segments));
             }
 
-            return string.Join("/", path.Segments.Take(path.Segments.Length - 1));
+            return string.Join('/', path.Segments.Take(path.Segments.Length - 1));
         }
 
         public static string GetFileName(FilePath path)

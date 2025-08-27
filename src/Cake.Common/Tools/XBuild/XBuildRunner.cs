@@ -72,7 +72,7 @@ namespace Cake.Common.Tools.XBuild
             // Got any targets?
             if (settings.Targets.Count > 0)
             {
-                var targets = string.Join(";", settings.Targets);
+                var targets = string.Join(';', settings.Targets);
                 builder.Append(string.Concat("/t:", targets));
             }
             else

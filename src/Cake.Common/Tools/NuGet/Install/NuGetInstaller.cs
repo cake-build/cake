@@ -125,14 +125,14 @@ namespace Cake.Common.Tools.NuGet.Install
             if (settings.Source != null && settings.Source.Count > 0)
             {
                 builder.Append("-Source");
-                builder.AppendQuoted(string.Join(";", settings.Source));
+                builder.AppendQuoted(string.Join(';', settings.Source));
             }
 
             // List of package fallback sources.
             if (settings.FallbackSource != null && settings.FallbackSource.Count > 0)
             {
                 builder.Append("-FallbackSource");
-                builder.AppendQuoted(string.Join(";", settings.FallbackSource));
+                builder.AppendQuoted(string.Join(';', settings.FallbackSource));
             }
 
             // No Cache?

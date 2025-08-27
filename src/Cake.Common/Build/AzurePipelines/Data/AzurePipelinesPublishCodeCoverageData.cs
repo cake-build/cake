@@ -79,7 +79,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
             if (AdditionalCodeCoverageFiles != null && AdditionalCodeCoverageFiles.Any())
             {
                 properties.Add("additionalcodecoveragefiles",
-                    string.Join(",",
+                    string.Join(',',
                         AdditionalCodeCoverageFiles
                             .Select(filePath =>
                                 filePath

@@ -100,7 +100,7 @@ namespace Cake.Common.Tools.MSBuild
             parameters.Add(ShowEventId ? "ShowEventId" : null);
             parameters.Add(Verbosity != null ? $"Verbosity={Verbosity.Value.GetMSBuildVerbosityName()}" : null);
 
-            return string.Join(";", parameters.Where(p => p != null));
+            return string.Join(';', parameters.Where(p => p != null));
         }
     }
 }

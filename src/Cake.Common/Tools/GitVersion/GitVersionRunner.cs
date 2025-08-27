@@ -58,7 +58,7 @@ namespace Cake.Common.Tools.GitVersion
                 var output = string.Empty;
                 Run(settings, GetArguments(settings), new ProcessSettings { RedirectStandardOutput = true }, process =>
                 {
-                    output = string.Join("\n", process.GetStandardOutput());
+                    output = string.Join('\n', process.GetStandardOutput());
                     if (_log.Verbosity < Verbosity.Diagnostic)
                     {
                         var errors = Regex.Matches(output, @"( *ERROR:? [^\n]*)\n([^\n]*)").Cast<Match>()

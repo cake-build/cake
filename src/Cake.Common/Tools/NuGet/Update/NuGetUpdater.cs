@@ -63,14 +63,14 @@ namespace Cake.Common.Tools.NuGet.Update
             if (settings.Id != null && settings.Id.Count > 0)
             {
                 builder.Append("-Id");
-                builder.AppendQuoted(string.Join(";", settings.Id));
+                builder.AppendQuoted(string.Join(';', settings.Id));
             }
 
             // List of package sources
             if (settings.Source != null && settings.Source.Count > 0)
             {
                 builder.Append("-Source");
-                builder.AppendQuoted(string.Join(";", settings.Source));
+                builder.AppendQuoted(string.Join(';', settings.Source));
             }
 
             // Verbosity?

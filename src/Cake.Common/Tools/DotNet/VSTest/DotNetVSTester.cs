@@ -76,7 +76,7 @@ namespace Cake.Common.Tools.DotNet.VSTest
             // Tests to run
             if (settings.TestsToRun.Any())
             {
-                builder.AppendSwitch("--Tests", ":", string.Join(",", settings.TestsToRun));
+                builder.AppendSwitch("--Tests", ":", string.Join(',', settings.TestsToRun));
             }
 
             // Path to custom test adapter

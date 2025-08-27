@@ -86,7 +86,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
             if (TestResultsFiles != null && TestResultsFiles.Any())
             {
                 properties.Add("resultFiles",
-                    string.Join(",",
+                    string.Join(',',
                         TestResultsFiles.Select(filePath =>
                             filePath
                                 .MakeAbsolute(environment)

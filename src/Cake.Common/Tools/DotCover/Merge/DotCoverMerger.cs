@@ -75,7 +75,7 @@ namespace Cake.Common.Tools.DotCover.Merge
             GetConfigurationFileArgument(settings).CopyTo(builder);
 
             // Set the Source files.
-            var source = string.Join(";", sourceFiles.Select(s => s.MakeAbsolute(_environment).FullPath));
+            var source = string.Join(';', sourceFiles.Select(s => s.MakeAbsolute(_environment).FullPath));
             builder.AppendSwitch("/Source", "=", source.Quote());
 
             // Set the Output file.

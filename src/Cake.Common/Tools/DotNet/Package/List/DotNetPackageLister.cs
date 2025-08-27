@@ -50,7 +50,7 @@ namespace Cake.Common.Tools.DotNet.Package.List
             var output = string.Empty;
             Run(settings, GetArguments(project, settings), new ProcessSettings { RedirectStandardOutput = true }, process =>
             {
-                output = string.Join("\n", process.GetStandardOutput());
+                output = string.Join('\n', process.GetStandardOutput());
             });
 
             return JsonSerializer.Deserialize<DotNetPackageList>(output, new JsonSerializerOptions

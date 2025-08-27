@@ -396,7 +396,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         private static string ToCommaSeparatedString(ICollection<string> values)
         {
             return values != null && values.Count != 0
-                ? string.Join(",", values)
+                ? string.Join(',', values)
                 : null;
         }
 
@@ -410,7 +410,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         private static string ToSpaceSeparatedString(ICollection<string> values)
         {
             return values != null && values.Count != 0
-                ? string.Join(" ", values.Select(x => x.Replace(" ", "-")))
+                ? string.Join(' ', values.Select(x => x.Replace(" ", "-")))
                 : null;
         }
     }
