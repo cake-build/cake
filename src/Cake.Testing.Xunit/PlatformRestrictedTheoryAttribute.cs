@@ -30,7 +30,7 @@ namespace Cake.Testing.Xunit
             {
                 if (string.IsNullOrEmpty(reason))
                 {
-                    var platformName = Enum.GetName(typeof(PlatformFamily), requiredFamily);
+                    var platformName = Enum.GetName(requiredFamily);
                     if (invert)
                     {
                         platformName = $"Non-{platformName}";
