@@ -27,25 +27,23 @@ namespace Cake.Common.Net
                 contentLength = response.Content.Headers.ContentLength.Value;
             }
 
-            using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-            using (var fileStream = File.Create(path, DefaultBufferSize))
+            await using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            await using var fileStream = File.Create(path, DefaultBufferSize);
+            int bytesRead;
+            var totalBytesRead = 0L;
+            var buffer = new byte[DefaultBufferSize];
+
+            while ((bytesRead = await responseStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
             {
-                int bytesRead;
-                var totalBytesRead = 0L;
-                var buffer = new byte[DefaultBufferSize];
+                await fileStream.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
 
-                while ((bytesRead = await responseStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
+                totalBytesRead += bytesRead;
+
+                if (contentLength.HasValue)
                 {
-                    await fileStream.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
+                    var progressPercentage = totalBytesRead * 1d / (contentLength.Value * 1d);
 
-                    totalBytesRead += bytesRead;
-
-                    if (contentLength.HasValue)
-                    {
-                        var progressPercentage = totalBytesRead * 1d / (contentLength.Value * 1d);
-
-                        progress.Report((int)(progressPercentage * 100));
-                    }
+                    progress.Report((int)(progressPercentage * 100));
                 }
             }
         }

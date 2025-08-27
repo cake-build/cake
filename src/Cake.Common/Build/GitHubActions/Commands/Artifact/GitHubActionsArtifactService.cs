@@ -97,8 +97,9 @@ namespace Cake.Common.Build.GitHubActions.Commands.Artifact
                 {
                     entryDirectory.Create();
                 }
-                using var entryStream = entry.Open();
-                using var fileStream = FileSystem.GetFile(entryPath).OpenWrite();
+
+                await using var entryStream = entry.Open();
+                await using var fileStream = FileSystem.GetFile(entryPath).OpenWrite();
                 await entryStream.CopyToAsync(fileStream);
             }
         }
@@ -304,14 +305,14 @@ namespace Cake.Common.Build.GitHubActions.Commands.Artifact
                 tempArchiveDirectory.Create();
             }
 
-            using var archiveStream = FileSystem.GetFile(tempArchivePath).OpenWrite();
+            await using var archiveStream = FileSystem.GetFile(tempArchivePath).OpenWrite();
             using var archive = new ZipArchive(archiveStream, ZipArchiveMode.Create);
             foreach (var file in files)
             {
                 var relativePath = rootPath.GetRelativePath(file.Path.GetDirectory());
                 var entry = archive.CreateEntry(relativePath.CombineWithFilePath(file.Path.GetFilename()).FullPath, CompressionLevel.SmallestSize);
-                using var entryStream = entry.Open();
-                using var fileStream = file.OpenRead();
+                await using var entryStream = entry.Open();
+                await using var fileStream = file.OpenRead();
                 await fileStream.CopyToAsync(entryStream);
             }
         }
