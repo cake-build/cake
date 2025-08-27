@@ -95,16 +95,16 @@ namespace Cake.Core.Configuration
             {
                 var parser = new ConfigurationParser(_fileSystem, _environment);
                 var configuration = parser.Read(configurationPath);
-                foreach (var key in configuration.Keys)
+                foreach (var (key, value) in configuration.Keys)
                 {
-                    result[KeyNormalizer.Normalize(key)] = configuration[key];
+                    result[KeyNormalizer.Normalize(key)] = value;
                 }
             }
 
             // Add all arguments.
-            foreach (var key in arguments.Keys)
+            foreach (var (key, value) in arguments)
             {
-                result[KeyNormalizer.Normalize(key)] = arguments[key];
+                result[KeyNormalizer.Normalize(key)] = value;
             }
 
             return new CakeConfiguration(result);
