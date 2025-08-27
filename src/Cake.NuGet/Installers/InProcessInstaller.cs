@@ -93,23 +93,14 @@ namespace Cake.NuGet
 
         public bool CanInstall(PackageReference package, PackageType type)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
+            ArgumentNullException.ThrowIfNull(package);
             return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
         }
 
         public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(package);
+            ArgumentNullException.ThrowIfNull(path);
 
             var packageRoot = path.MakeAbsolute(_environment).FullPath;
             var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;

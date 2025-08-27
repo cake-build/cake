@@ -42,10 +42,7 @@ namespace Cake.Common.Build
         [CakePropertyAlias(Cache = true)]
         public static BuildSystem BuildSystem(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var appVeyorProvider = new AppVeyorProvider(context.Environment, context.ProcessRunner, context.Log);
             var teamCityProvider = new TeamCityProvider(context.Environment, context.FileSystem, new BuildSystemServiceMessageWriter());
@@ -81,10 +78,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.AppVeyor.Data")]
         public static IAppVeyorProvider AppVeyor(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.AppVeyor;
@@ -105,10 +99,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.TeamCity")]
         public static ITeamCityProvider TeamCity(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.TeamCity;
@@ -129,10 +120,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.MyGet")]
         public static IMyGetProvider MyGet(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.MyGet;
@@ -154,10 +142,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.Bamboo.Data")]
         public static IBambooProvider Bamboo(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.Bamboo;
@@ -179,10 +164,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.ContinuaCI.Data")]
         public static IContinuaCIProvider ContinuaCI(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.ContinuaCI;
@@ -204,10 +186,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.Jenkins.Data")]
         public static IJenkinsProvider Jenkins(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.Jenkins;
@@ -229,10 +208,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.Bitrise.Data")]
         public static IBitriseProvider Bitrise(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.Bitrise;
@@ -254,10 +230,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.TravisCI.Data")]
         public static ITravisCIProvider TravisCI(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.TravisCI;
@@ -279,10 +252,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.BitbucketPipelines.Data")]
         public static IBitbucketPipelinesProvider BitbucketPipelines(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.BitbucketPipelines;
@@ -304,10 +274,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.GoCD.Data")]
         public static IGoCDProvider GoCD(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.GoCD;
@@ -329,10 +296,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.GitLabCI.Data")]
         public static IGitLabCIProvider GitLabCI(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.GitLabCI;
@@ -354,10 +318,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.GitHubActions.Data")]
         public static IGitHubActionsProvider GitHubActions(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.GitHubActions;
@@ -379,10 +340,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.AzurePipelines.Data")]
         public static IAzurePipelinesProvider AzurePipelines(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.AzurePipelines;
@@ -404,10 +362,7 @@ namespace Cake.Common.Build
         [CakeNamespaceImport("Cake.Common.Build.WoodpeckerCI.Data")]
         public static IWoodpeckerCIProvider WoodpeckerCI(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var buildSystem = context.BuildSystem();
             return buildSystem.WoodpeckerCI;

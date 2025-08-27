@@ -41,15 +41,9 @@ namespace Cake.Frosting
         /// <inheritdoc/>
         void IFrostingTaskSetup.Setup(ICakeContext context, ITaskSetupContext info)
         {
-            if (context is null)
-            {
-                throw new System.ArgumentNullException(nameof(context));
-            }
+            System.ArgumentNullException.ThrowIfNull(context);
 
-            if (info is null)
-            {
-                throw new System.ArgumentNullException(nameof(info));
-            }
+            System.ArgumentNullException.ThrowIfNull(info);
 
             Setup((TContext)context, info);
         }
@@ -57,15 +51,9 @@ namespace Cake.Frosting
         /// <inheritdoc/>
         void IFrostingTaskTeardown.Teardown(ICakeContext context, ITaskTeardownContext info)
         {
-            if (context is null)
-            {
-                throw new System.ArgumentNullException(nameof(context));
-            }
+            System.ArgumentNullException.ThrowIfNull(context);
 
-            if (info is null)
-            {
-                throw new System.ArgumentNullException(nameof(info));
-            }
+            System.ArgumentNullException.ThrowIfNull(info);
 
             Teardown((TContext)context, info);
         }

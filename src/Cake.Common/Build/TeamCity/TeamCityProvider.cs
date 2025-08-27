@@ -171,14 +171,8 @@ namespace Cake.Common.Build.TeamCity
         /// <inheritdoc/>
         public void ImportData(string type, FilePath path)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(type);
+            ArgumentNullException.ThrowIfNull(path);
 
             WriteServiceMessage("importData", new Dictionary<string, string>
             {
@@ -190,10 +184,7 @@ namespace Cake.Common.Build.TeamCity
         /// <inheritdoc/>
         public void ImportDotCoverCoverage(FilePath snapshotFile, DirectoryPath dotCoverHome = null)
         {
-            if (snapshotFile == null)
-            {
-                throw new ArgumentNullException(nameof(snapshotFile));
-            }
+            ArgumentNullException.ThrowIfNull(snapshotFile);
 
             var args = dotCoverHome == null ?
                 new Dictionary<string, string>() :

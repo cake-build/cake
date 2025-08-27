@@ -17,10 +17,7 @@ namespace Cake.Core
         public TaskSetupContext(ICakeContext context, ICakeTaskInfo task)
             : base(context)
         {
-            if (task == null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
+            ArgumentNullException.ThrowIfNull(task);
 
             Task = task;
         }

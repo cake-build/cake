@@ -50,14 +50,8 @@ namespace Cake.Core.IO
         /// <inheritdoc/>
         public IProcess Start(FilePath filePath, ProcessSettings settings)
         {
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(filePath);
+            ArgumentNullException.ThrowIfNull(settings);
 
             ProcessStartInfo info = GetProcessStartInfo(filePath, settings, out Func<string, string> filterUnsafe);
 

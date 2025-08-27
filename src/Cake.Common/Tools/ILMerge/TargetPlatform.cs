@@ -28,10 +28,7 @@ namespace Cake.Common.Tools.ILMerge
         /// <param name="path">The directory where <c>mscorlib.dll</c> can be found.</param>
         public TargetPlatform(TargetPlatformVersion platform, DirectoryPath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
             Platform = platform;
             Path = path;
         }

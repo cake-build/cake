@@ -20,10 +20,7 @@ namespace Cake.Common.Build.TeamCity
         /// <returns>A disposable that writes the report block end.</returns>
         public static IDisposable Block(this ITeamCityProvider teamCityProvider, string blockName)
         {
-            if (teamCityProvider == null)
-            {
-                throw new ArgumentNullException(nameof(teamCityProvider));
-            }
+            ArgumentNullException.ThrowIfNull(teamCityProvider);
             teamCityProvider.WriteStartBlock(blockName);
             return Disposable.Create(() => teamCityProvider.WriteEndBlock(blockName));
         }
@@ -36,10 +33,7 @@ namespace Cake.Common.Build.TeamCity
         /// <returns>A disposable that writes the build block end.</returns>
         public static IDisposable BuildBlock(this ITeamCityProvider teamCityProvider, string compilerName)
         {
-            if (teamCityProvider == null)
-            {
-                throw new ArgumentNullException(nameof(teamCityProvider));
-            }
+            ArgumentNullException.ThrowIfNull(teamCityProvider);
             teamCityProvider.WriteStartBuildBlock(compilerName);
             return Disposable.Create(() => teamCityProvider.WriteEndBuildBlock(compilerName));
         }

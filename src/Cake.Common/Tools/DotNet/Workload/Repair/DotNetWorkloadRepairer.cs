@@ -39,10 +39,7 @@ namespace Cake.Common.Tools.DotNet.Workload.Repair
         /// <param name="settings">The settings.</param>
         public void Repair(DotNetWorkloadRepairSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(settings));
         }

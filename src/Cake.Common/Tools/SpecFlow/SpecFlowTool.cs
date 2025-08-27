@@ -62,14 +62,8 @@ namespace Cake.Common.Tools.SpecFlow
             SpecFlowSettings settings,
             ProcessArgumentBuilder builder)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(builder);
 
             // Set the out file.
             if (settings.Out != null)

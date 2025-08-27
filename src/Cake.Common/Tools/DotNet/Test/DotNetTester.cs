@@ -41,10 +41,7 @@ namespace Cake.Common.Tools.DotNet.Test
         /// <param name="settings">The settings.</param>
         public void Test(string project, ProcessArgumentBuilder arguments, DotNetTestSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(project, arguments, settings));
         }

@@ -43,10 +43,7 @@ namespace Cake.Common.Tools.DotNet.Restore
         /// <param name="settings">The settings.</param>
         public void Restore(string root, DotNetRestoreSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(root, settings));
         }

@@ -40,10 +40,7 @@ namespace Cake.Common.Tools.DotNet.Publish
         /// <param name="settings">The settings.</param>
         public void Publish(string path, DotNetPublishSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(path, settings));
         }

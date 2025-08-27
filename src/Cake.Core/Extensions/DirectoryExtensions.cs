@@ -40,10 +40,7 @@ namespace Cake.Core
         public static IEnumerable<IDirectory> GetDirectories(this IDirectory directory, string filter, SearchScope scope,
             Func<IFileSystemInfo, bool> predicate, Action<IFileSystemInfo> action)
         {
-            if (directory == null)
-            {
-                throw new ArgumentNullException(nameof(directory));
-            }
+            ArgumentNullException.ThrowIfNull(directory);
             return directory.GetDirectories(filter, scope)
                 .Where(entry => Filter(entry, predicate, action));
         }
@@ -73,10 +70,7 @@ namespace Cake.Core
         public static IEnumerable<IFile> GetFiles(this IDirectory directory, string filter, SearchScope scope,
             Func<IFileSystemInfo, bool> predicate, Action<IFileSystemInfo> action)
         {
-            if (directory == null)
-            {
-                throw new ArgumentNullException(nameof(directory));
-            }
+            ArgumentNullException.ThrowIfNull(directory);
             return directory.GetFiles(filter, scope)
                 .Where(entry => Filter(entry, predicate, action));
         }

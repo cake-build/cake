@@ -71,10 +71,7 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
                 throw new ArgumentNullException(nameof(assets));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(userName, password, owner, repository, tagName, assets, settings));
         }
@@ -115,10 +112,7 @@ namespace Cake.Common.Tools.GitReleaseManager.AddAssets
                 throw new ArgumentNullException(nameof(assets));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(token, owner, repository, tagName, assets, settings));
         }

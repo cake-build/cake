@@ -81,10 +81,7 @@ namespace Cake.Core
         /// <param name="name">The name of the task.</param>
         public CakeTask(string name)
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(name);
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException("Task name cannot be empty.");

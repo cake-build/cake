@@ -42,14 +42,8 @@ namespace Cake.Common.Tools.NuGet.Install
         /// <param name="settings">The settings.</param>
         public void InstallFromConfig(FilePath packageConfigPath, NuGetInstallSettings settings)
         {
-            if (packageConfigPath == null)
-            {
-                throw new ArgumentNullException(nameof(packageConfigPath));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(packageConfigPath);
+            ArgumentNullException.ThrowIfNull(settings);
 
             var packageId = packageConfigPath.MakeAbsolute(_environment).FullPath;
 
@@ -67,10 +61,7 @@ namespace Cake.Common.Tools.NuGet.Install
             {
                 throw new ArgumentNullException(nameof(packageId));
             }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(packageId, settings));
         }

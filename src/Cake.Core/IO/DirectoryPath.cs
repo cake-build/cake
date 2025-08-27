@@ -48,10 +48,7 @@ namespace Cake.Core.IO
         /// <returns>A combination of the current path and the file name of the provided <see cref="FilePath"/>.</returns>
         public FilePath GetFilePath(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             return new FilePath(PathHelper.Combine(FullPath, path.GetFilename().FullPath));
         }
@@ -113,10 +110,7 @@ namespace Cake.Core.IO
         /// <returns>A combination of the current path and the provided <see cref="FilePath"/>.</returns>
         public FilePath CombineWithFilePath(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
             if (!path.IsRelative)
             {
                 throw new InvalidOperationException("Cannot combine a directory path with an absolute file path.");
@@ -133,10 +127,7 @@ namespace Cake.Core.IO
         /// <returns>A combination of the current path and the provided <see cref="DirectoryPath"/>.</returns>
         public DirectoryPath Combine(DirectoryPath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
             if (!path.IsRelative)
             {
                 throw new InvalidOperationException("Cannot combine a directory path with an absolute directory path.");
@@ -152,10 +143,7 @@ namespace Cake.Core.IO
         /// <returns>An absolute path.</returns>
         public DirectoryPath MakeAbsolute(DirectoryPath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
             if (path.IsRelative)
             {
                 throw new CakeException("The provided path cannot be relative.");
@@ -172,10 +160,7 @@ namespace Cake.Core.IO
         /// <returns>An absolute path.</returns>
         public DirectoryPath MakeAbsolute(ICakeEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
             return IsRelative
                 ? environment.WorkingDirectory.Combine(this).Collapse()
                 : new DirectoryPath(FullPath);
@@ -227,10 +212,7 @@ namespace Cake.Core.IO
         /// <returns>A <see cref="FilePath"/>.</returns>
         public FilePath GetRelativePath(FilePath to)
         {
-            if (to == null)
-            {
-                throw new ArgumentNullException(nameof(to));
-            }
+            ArgumentNullException.ThrowIfNull(to);
 
             return GetRelativePath(to.GetDirectory()).GetFilePath(to.GetFilename());
         }

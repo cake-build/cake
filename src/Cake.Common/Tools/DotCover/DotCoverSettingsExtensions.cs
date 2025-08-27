@@ -22,10 +22,7 @@ namespace Cake.Common.Tools.DotCover
         public static T WithConfigFile<T>(this T settings, FilePath configFile)
             where T : DotCoverSettings
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.ConfigFile = configFile;
             return settings;

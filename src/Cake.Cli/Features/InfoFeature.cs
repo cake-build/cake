@@ -38,10 +38,7 @@ namespace Cake.Cli
         /// <inheritdoc/>
         public void Run(IConsole console)
         {
-            if (console is null)
-            {
-                throw new ArgumentNullException(nameof(console));
-            }
+            ArgumentNullException.ThrowIfNull(console);
 
             var version = _resolver.GetVersion();
             var product = _resolver.GetProductVersion();

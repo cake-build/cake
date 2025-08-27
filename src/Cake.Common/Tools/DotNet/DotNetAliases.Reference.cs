@@ -106,10 +106,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Reference.Add")]
         public static void DotNetAddReference(this ICakeContext context, string project, IEnumerable<FilePath> projectReferences, DotNetReferenceAddSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {
@@ -203,10 +200,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Reference.Remove")]
         public static void DotNetRemoveReference(this ICakeContext context, string project, IEnumerable<FilePath> projectReferences, DotNetReferenceRemoveSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {
@@ -291,10 +285,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Reference.List")]
         public static IEnumerable<string> DotNetListReference(this ICakeContext context, string project, DotNetReferenceListSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {

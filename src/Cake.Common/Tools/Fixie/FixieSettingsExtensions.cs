@@ -22,10 +22,7 @@ namespace Cake.Common.Tools.Fixie
         /// <returns>The same <see cref="FixieSettings"/> instance so that multiple calls can be chained.</returns>
         public static FixieSettings WithOption(this FixieSettings settings, string name, params string[] values)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             IList<string> currentValue;
             currentValue = new List<string>(settings.Options.TryGetValue(name, out currentValue) && currentValue != null

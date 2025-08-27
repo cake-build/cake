@@ -40,15 +40,9 @@ namespace Cake.Common.Tools.GitLink
         /// <param name="settings">The settings.</param>
         public void Run(DirectoryPath repositoryRootPath, GitLinkSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
-            if (repositoryRootPath == null)
-            {
-                throw new ArgumentNullException(nameof(repositoryRootPath));
-            }
+            ArgumentNullException.ThrowIfNull(repositoryRootPath);
 
             Run(settings, GetArguments(repositoryRootPath, settings));
         }

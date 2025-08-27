@@ -37,10 +37,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
 
         internal Dictionary<string, string> GetProperties(ICakeEnvironment environment, FilePath summaryFilePath = null)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
 
             var properties = new Dictionary<string, string>();
 

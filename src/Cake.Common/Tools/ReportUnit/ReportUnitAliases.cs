@@ -78,10 +78,7 @@ namespace Cake.Common.Tools.ReportUnit
         [CakeMethodAlias]
         public static void ReportUnit(this ICakeContext context, DirectoryPath inputFolder, DirectoryPath outputFolder, ReportUnitSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(inputFolder, outputFolder, settings);
@@ -103,10 +100,7 @@ namespace Cake.Common.Tools.ReportUnit
         [CakeMethodAlias]
         public static void ReportUnit(this ICakeContext context, FilePath inputFile, FilePath outputFile)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(inputFile, outputFile, new ReportUnitSettings());
@@ -131,10 +125,7 @@ namespace Cake.Common.Tools.ReportUnit
         [CakeMethodAlias]
         public static void ReportUnit(this ICakeContext context, FilePath inputFile, FilePath outputFile, ReportUnitSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new ReportUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(inputFile, outputFile, settings);

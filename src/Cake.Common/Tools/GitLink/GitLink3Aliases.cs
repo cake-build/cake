@@ -58,10 +58,7 @@ namespace Cake.Common.Tools.GitLink
         [CakeMethodAlias]
         public static void GitLink3(this ICakeContext context, FilePath pdbFilePath, GitLink3Settings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new GitLink3Runner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(pdbFilePath, settings);
@@ -102,10 +99,7 @@ namespace Cake.Common.Tools.GitLink
         [CakeMethodAlias]
         public static void GitLink3(this ICakeContext context, IEnumerable<FilePath> pdbFiles, GitLink3Settings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new GitLink3Runner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(pdbFiles, settings);

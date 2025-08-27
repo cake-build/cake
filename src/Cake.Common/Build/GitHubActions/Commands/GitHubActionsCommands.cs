@@ -121,10 +121,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <param name="path">The directory path.</param>
         public void AddPath(DirectoryPath path)
         {
-            if (path is null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (_actionsEnvironment.Runtime.SystemPath == null)
             {
@@ -149,10 +146,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             if (_actionsEnvironment.Runtime.EnvPath == null)
             {
@@ -180,10 +174,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             if (_actionsEnvironment.Runtime.OutputPath == null)
             {

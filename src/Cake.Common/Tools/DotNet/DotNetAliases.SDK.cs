@@ -33,10 +33,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.SDKCheck")]
         public static void DotNetSDKCheck(this ICakeContext context)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var checker = new DotNetSDKChecker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             checker.Check();

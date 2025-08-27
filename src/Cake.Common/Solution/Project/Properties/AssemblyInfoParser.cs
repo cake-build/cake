@@ -34,14 +34,8 @@ namespace Cake.Common.Solution.Project.Properties
         /// <param name="environment">The environment.</param>
         public AssemblyInfoParser(IFileSystem fileSystem, ICakeEnvironment environment)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
             _fileSystem = fileSystem;
             _environment = environment;
         }
@@ -53,10 +47,7 @@ namespace Cake.Common.Solution.Project.Properties
         /// <returns>Information about the assembly info content.</returns>
         public AssemblyInfoParseResult Parse(FilePath assemblyInfoPath)
         {
-            if (assemblyInfoPath == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyInfoPath));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyInfoPath);
 
             if (assemblyInfoPath.IsRelative)
             {

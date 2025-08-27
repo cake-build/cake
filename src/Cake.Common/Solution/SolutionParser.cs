@@ -27,14 +27,8 @@ namespace Cake.Common.Solution
         /// <param name="environment">The environment.</param>
         public SolutionParser(IFileSystem fileSystem, ICakeEnvironment environment)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
             _fileSystem = fileSystem;
             _environment = environment;
         }
@@ -46,10 +40,7 @@ namespace Cake.Common.Solution
         /// <returns>A parsed solution.</returns>
         public SolutionParserResult Parse(FilePath solutionPath)
         {
-            if (solutionPath == null)
-            {
-                throw new ArgumentNullException(nameof(solutionPath));
-            }
+            ArgumentNullException.ThrowIfNull(solutionPath);
             if (solutionPath.IsRelative)
             {
                 solutionPath = solutionPath.MakeAbsolute(_environment);

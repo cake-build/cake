@@ -58,10 +58,7 @@ namespace Cake.Core
         /// <param name="log">The log.</param>
         public CakeEngine(ICakeDataService data, ICakeLog log)
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
+            ArgumentNullException.ThrowIfNull(data);
 
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _tasks = new List<CakeTask>();
@@ -138,18 +135,12 @@ namespace Cake.Core
         /// <inheritdoc/>
         public async Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, ExecutionSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             if (settings.Targets.Count() == 0)
             {
                 throw new ArgumentException("No target specified.", nameof(settings));
             }
-            if (strategy == null)
-            {
-                throw new ArgumentNullException(nameof(strategy));
-            }
+            ArgumentNullException.ThrowIfNull(strategy);
 
             // Ensure that registered actions are valid.
             _actions.Validate();

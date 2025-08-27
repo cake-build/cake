@@ -47,10 +47,7 @@ namespace Cake.Common.Tools.DotNet.Package.Search
         /// <returns>A collection of <see cref="DotNetPackageSearchItem"/>.</returns>
         public IEnumerable<DotNetPackageSearchItem> Search(string searchTerm, DotNetPackageSearchSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var processSettings = new ProcessSettings
             {

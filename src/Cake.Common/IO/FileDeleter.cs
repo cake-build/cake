@@ -16,14 +16,8 @@ namespace Cake.Common.IO
     {
         public static void DeleteFiles(ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (pattern == null)
-            {
-                throw new ArgumentNullException(nameof(pattern));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(pattern);
 
             var files = context.GetFiles(pattern);
             if (files.Count == 0)
@@ -37,14 +31,8 @@ namespace Cake.Common.IO
 
         public static void DeleteFiles(ICakeContext context, IEnumerable<FilePath> filePaths)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePaths == null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePaths);
 
             foreach (var filePath in filePaths)
             {
@@ -54,14 +42,8 @@ namespace Cake.Common.IO
 
         public static void DeleteFile(ICakeContext context, FilePath filePath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePath);
 
             filePath = filePath.MakeAbsolute(context.Environment);
 

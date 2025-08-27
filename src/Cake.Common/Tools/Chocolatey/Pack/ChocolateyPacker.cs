@@ -48,10 +48,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// <param name="settings">The settings.</param>
         public void Pack(ChocolateyPackSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (string.IsNullOrWhiteSpace(settings.Id))
             {
@@ -88,15 +85,9 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         /// <param name="settings">The settings.</param>
         public void Pack(FilePath nuspecFilePath, ChocolateyPackSettings settings)
         {
-            if (nuspecFilePath == null)
-            {
-                throw new ArgumentNullException(nameof(nuspecFilePath));
-            }
+            ArgumentNullException.ThrowIfNull(nuspecFilePath);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Pack(settings, () => _processor.Process(nuspecFilePath, settings));
         }

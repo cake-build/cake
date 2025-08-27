@@ -40,14 +40,8 @@ namespace Cake.Common.Tools.DotNet.Build
         /// <param name="settings">The settings.</param>
         public void Build(string project, DotNetBuildSettings settings)
         {
-            if (project == null)
-            {
-                throw new ArgumentNullException(nameof(project));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(project);
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(project, settings));
         }

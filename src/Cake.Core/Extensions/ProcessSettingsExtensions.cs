@@ -21,14 +21,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
         public static ProcessSettings WithArguments(this ProcessSettings settings, Action<ProcessArgumentBuilder> arguments)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (arguments == null)
-            {
-                throw new ArgumentNullException(nameof(arguments));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(arguments);
 
             if (settings.Arguments == null)
             {
@@ -47,14 +41,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
         public static ProcessSettings UseWorkingDirectory(this ProcessSettings settings, DirectoryPath path)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(path);
 
             settings.WorkingDirectory = path;
             return settings;
@@ -68,10 +56,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
         public static ProcessSettings SetRedirectedStandardOutputHandler(this ProcessSettings settings, Func<string, string> handler)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.RedirectedStandardOutputHandler = handler;
             return settings;
@@ -85,10 +70,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
         public static ProcessSettings SetRedirectedStandardErrorHandler(this ProcessSettings settings, Func<string, string> handler)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.RedirectedStandardErrorHandler = handler;
             return settings;
@@ -102,10 +84,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
         public static ProcessSettings SetRedirectStandardOutput(this ProcessSettings settings, bool redirect)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.RedirectStandardOutput = redirect;
             return settings;
@@ -119,10 +98,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
         public static ProcessSettings SetRedirectStandardError(this ProcessSettings settings, bool redirect)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.RedirectStandardError = redirect;
             return settings;
@@ -136,10 +112,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
         public static ProcessSettings SetTimeout(this ProcessSettings settings, int timeout)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.Timeout = timeout;
             return settings;

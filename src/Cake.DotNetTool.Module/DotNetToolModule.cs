@@ -23,10 +23,7 @@ namespace Cake.DotNetTool.Module
         /// <param name="registrar">The container registrar.</param>
         public void Register(ICakeContainerRegistrar registrar)
         {
-            if (registrar == null)
-            {
-                throw new ArgumentNullException(nameof(registrar));
-            }
+            ArgumentNullException.ThrowIfNull(registrar);
 
             registrar.RegisterType<DotNetToolPackageInstaller>().As<IPackageInstaller>().Singleton();
             registrar.RegisterType<DotNetToolContentResolver>().As<IDotNetToolContentResolver>().Singleton();

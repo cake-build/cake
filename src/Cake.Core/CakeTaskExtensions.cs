@@ -71,10 +71,7 @@ namespace Cake.Core
                 throw new CakeException("There can only be one error handler per task.");
             }
 
-            if (errorHandler is null)
-            {
-                throw new ArgumentNullException(nameof(errorHandler));
-            }
+            ArgumentNullException.ThrowIfNull(errorHandler);
 
 #pragma warning disable CS1998
             task.ErrorHandler = async (ex, context) => errorHandler(ex, context);
@@ -95,10 +92,7 @@ namespace Cake.Core
                 throw new CakeException("There can only be one error handler per task.");
             }
 
-            if (errorHandler is null)
-            {
-                throw new ArgumentNullException(nameof(errorHandler));
-            }
+            ArgumentNullException.ThrowIfNull(errorHandler);
 
             task.ErrorHandler = errorHandler;
         }
@@ -117,10 +111,7 @@ namespace Cake.Core
                 throw new CakeException("There can only be one error reporter per task.");
             }
 
-            if (errorReporter is null)
-            {
-                throw new ArgumentNullException(nameof(errorReporter));
-            }
+            ArgumentNullException.ThrowIfNull(errorReporter);
 
 #pragma warning disable CS1998
             task.ErrorReporter = async (ex) => errorReporter(ex);
@@ -141,10 +132,7 @@ namespace Cake.Core
                 throw new CakeException("There can only be one error reporter per task.");
             }
 
-            if (errorReporter is null)
-            {
-                throw new ArgumentNullException(nameof(errorReporter));
-            }
+            ArgumentNullException.ThrowIfNull(errorReporter);
 
             task.ErrorReporter = errorReporter;
         }
@@ -163,10 +151,7 @@ namespace Cake.Core
                 throw new CakeException("There can only be one finally handler per task.");
             }
 
-            if (finallyHandler is null)
-            {
-                throw new ArgumentNullException(nameof(finallyHandler));
-            }
+            ArgumentNullException.ThrowIfNull(finallyHandler);
 
 #pragma warning disable CS1998
             task.FinallyHandler = async context => finallyHandler();
@@ -187,10 +172,7 @@ namespace Cake.Core
                 throw new CakeException("There can only be one finally handler per task.");
             }
 
-            if (finallyHandler is null)
-            {
-                throw new ArgumentNullException(nameof(finallyHandler));
-            }
+            ArgumentNullException.ThrowIfNull(finallyHandler);
 
             task.FinallyHandler = context => finallyHandler();
         }
@@ -209,10 +191,7 @@ namespace Cake.Core
                 throw new CakeException("There can only be one finally handler per task.");
             }
 
-            if (finallyHandler is null)
-            {
-                throw new ArgumentNullException(nameof(finallyHandler));
-            }
+            ArgumentNullException.ThrowIfNull(finallyHandler);
 
 #pragma warning disable CS1998
             task.FinallyHandler = async context => finallyHandler(context);
@@ -233,10 +212,7 @@ namespace Cake.Core
                 throw new CakeException("There can only be one finally handler per task.");
             }
 
-            if (finallyHandler is null)
-            {
-                throw new ArgumentNullException(nameof(finallyHandler));
-            }
+            ArgumentNullException.ThrowIfNull(finallyHandler);
 
             task.FinallyHandler = finallyHandler;
         }
@@ -249,10 +225,7 @@ namespace Cake.Core
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
         public static void AddAction(this CakeTask task, Func<ICakeContext, Task> action)
         {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+            ArgumentNullException.ThrowIfNull(action);
 
             task.Actions.Add(action);
         }
@@ -265,10 +238,7 @@ namespace Cake.Core
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
         public static void AddDelayedAction(this CakeTask task, Action<ICakeContext> action)
         {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+            ArgumentNullException.ThrowIfNull(action);
 
             task.DelayedActions.Enqueue(action);
         }

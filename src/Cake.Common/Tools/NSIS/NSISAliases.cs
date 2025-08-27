@@ -57,15 +57,9 @@ namespace Cake.Common.Tools.NSIS
         // ReSharper disable once InconsistentNaming
         public static void MakeNSIS(this ICakeContext context, FilePath scriptFile, MakeNSISSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (scriptFile == null)
-            {
-                throw new ArgumentNullException(nameof(scriptFile));
-            }
+            ArgumentNullException.ThrowIfNull(scriptFile);
 
             var runner = new MakeNSISRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(scriptFile, settings ?? new MakeNSISSettings());

@@ -21,10 +21,7 @@ namespace Cake.Core
         /// <returns>A process handle.</returns>
         public static IProcess Start(this IProcessRunner processRunner, FilePath filePath)
         {
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException(nameof(processRunner));
-            }
+            ArgumentNullException.ThrowIfNull(processRunner);
             return processRunner.Start(filePath, new ProcessSettings());
         }
     }

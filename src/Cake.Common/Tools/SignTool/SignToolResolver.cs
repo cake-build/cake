@@ -23,18 +23,9 @@ namespace Cake.Common.Tools.SignTool
             _environment = environment;
             _registry = registry;
 
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (registry == null)
-            {
-                throw new ArgumentNullException(nameof(registry));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(registry);
+            ArgumentNullException.ThrowIfNull(environment);
         }
 
         /// <inheritdoc/>

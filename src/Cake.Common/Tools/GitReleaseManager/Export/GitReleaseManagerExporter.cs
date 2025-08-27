@@ -63,15 +63,9 @@ namespace Cake.Common.Tools.GitReleaseManager.Export
                 throw new ArgumentNullException(nameof(repository));
             }
 
-            if (fileOutputPath == null)
-            {
-                throw new ArgumentNullException(nameof(fileOutputPath));
-            }
+            ArgumentNullException.ThrowIfNull(fileOutputPath);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(userName, password, owner, repository, fileOutputPath, settings));
         }
@@ -101,15 +95,9 @@ namespace Cake.Common.Tools.GitReleaseManager.Export
                 throw new ArgumentNullException(nameof(repository));
             }
 
-            if (fileOutputPath == null)
-            {
-                throw new ArgumentNullException(nameof(fileOutputPath));
-            }
+            ArgumentNullException.ThrowIfNull(fileOutputPath);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(token, owner, repository, fileOutputPath, settings));
         }

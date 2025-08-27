@@ -40,10 +40,7 @@ namespace Cake.Core.Text
         /// <param name="placeholder">The key placeholder.</param>
         public TextTransformationTemplate(string template, Tuple<string, string> placeholder)
         {
-            if (template == null)
-            {
-                throw new ArgumentNullException(nameof(template));
-            }
+            ArgumentNullException.ThrowIfNull(template);
             _template = template;
             _tokens = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             _keyExpression = CreateKeyExpression(placeholder);
@@ -52,10 +49,7 @@ namespace Cake.Core.Text
         /// <inheritdoc/>
         public void Register(string key, object value)
         {
-            if (key == null)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
+            ArgumentNullException.ThrowIfNull(key);
             if (string.IsNullOrWhiteSpace(key))
             {
                 throw new ArgumentException("Key cannot be empty.", nameof(key));

@@ -44,10 +44,7 @@ namespace Cake.Common.Text
             this TextTransformation<TTemplate> transformation, IEnumerable<KeyValuePair<string, object>> tokens)
             where TTemplate : class, ITextTransformationTemplate
         {
-            if (tokens == null)
-            {
-                throw new ArgumentNullException(nameof(tokens));
-            }
+            ArgumentNullException.ThrowIfNull(tokens);
 
             foreach (var token in tokens)
             {

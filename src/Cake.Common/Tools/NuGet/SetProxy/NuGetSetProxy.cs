@@ -49,10 +49,7 @@ namespace Cake.Common.Tools.NuGet.SetProxy
                 throw new ArgumentNullException(nameof(url));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             string output = null;
             var processSettings = new ProcessSettings

@@ -13,10 +13,7 @@ namespace Cake.Core.IO
     {
         public static string Collapse(Path path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             var isUncPath = path.IsUNC;
             var isWindowsPlatform = EnvironmentHelper.IsWindows(EnvironmentHelper.GetPlatformFamily());

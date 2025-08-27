@@ -38,10 +38,7 @@ namespace Cake.Core
         /// <param name="environment">The environment.</param>
         public CakeConsole(ICakeEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
 
             _supportAnsiEscapeCodes = new Lazy<bool>(() => AnsiDetector.SupportsAnsi(environment));
         }

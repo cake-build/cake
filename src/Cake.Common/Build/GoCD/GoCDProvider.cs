@@ -50,18 +50,9 @@ namespace Cake.Common.Build.GoCD
         /// <inheritdoc/>
         public GoCDHistoryInfo GetHistory(string username, string password, string serverUrl)
         {
-            if (username == null)
-            {
-                throw new ArgumentNullException(nameof(username));
-            }
-            if (password == null)
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
-            if (serverUrl == null)
-            {
-                throw new ArgumentNullException(nameof(serverUrl));
-            }
+            ArgumentNullException.ThrowIfNull(username);
+            ArgumentNullException.ThrowIfNull(password);
+            ArgumentNullException.ThrowIfNull(serverUrl);
 
             if (!IsRunningOnGoCD)
             {

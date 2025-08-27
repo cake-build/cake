@@ -219,20 +219,11 @@ namespace Cake.Common.Xml
         [CakeMethodAlias]
         public static void XmlPoke(this ICakeContext context, FilePath filePath, string xpath, string value, XmlPokeSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(filePath);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var file = context.FileSystem.GetFile(filePath);
             if (!file.Exists)
@@ -451,10 +442,7 @@ namespace Cake.Common.Xml
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static string XmlPokeString(this ICakeContext context, string sourceXml, string xpath, string value, XmlPokeSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (string.IsNullOrWhiteSpace(sourceXml))
             {
@@ -482,25 +470,16 @@ namespace Cake.Common.Xml
         /// <param name="settings">Additional settings to tweak Xml Poke behavior.</param>
         private static void XmlPoke(Stream source, Stream destination, string xpath, string value, XmlPokeSettings settings)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            ArgumentNullException.ThrowIfNull(source);
 
-            if (destination == null)
-            {
-                throw new ArgumentNullException(nameof(destination));
-            }
+            ArgumentNullException.ThrowIfNull(destination);
 
             if (string.IsNullOrWhiteSpace(xpath))
             {
                 throw new ArgumentNullException(nameof(xpath));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             using (var xmlReader = XmlReader.Create(source, GetXmlReaderSettings(settings)))
             {

@@ -32,10 +32,7 @@ namespace Cake.Core
         /// <inheritdoc/>
         public void Write(CakeReport report)
         {
-            if (report == null)
-            {
-                throw new ArgumentNullException(nameof(report));
-            }
+            ArgumentNullException.ThrowIfNull(report);
 
             try
             {

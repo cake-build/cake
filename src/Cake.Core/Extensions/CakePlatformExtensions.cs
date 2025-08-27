@@ -20,10 +20,7 @@ namespace Cake.Core
         /// <returns><c>true</c> if the platform is a Windows platform; otherwise <c>false</c>.</returns>
         public static bool IsWindows(this ICakePlatform platform)
         {
-            if (platform == null)
-            {
-                throw new ArgumentNullException(nameof(platform));
-            }
+            ArgumentNullException.ThrowIfNull(platform);
             return EnvironmentHelper.IsWindows(platform.Family);
         }
 
@@ -34,10 +31,7 @@ namespace Cake.Core
         /// <returns><c>true</c> if the platform is a Unix platform; otherwise <c>false</c>.</returns>
         public static bool IsUnix(this ICakePlatform platform)
         {
-            if (platform == null)
-            {
-                throw new ArgumentNullException(nameof(platform));
-            }
+            ArgumentNullException.ThrowIfNull(platform);
             return EnvironmentHelper.IsUnix(platform.Family);
         }
 
@@ -48,10 +42,7 @@ namespace Cake.Core
         /// <returns><c>true</c> if the platform is a macOS platform; otherwise <c>false</c>.</returns>
         public static bool IsOSX(this ICakePlatform platform)
         {
-            if (platform == null)
-            {
-                throw new ArgumentNullException(nameof(platform));
-            }
+            ArgumentNullException.ThrowIfNull(platform);
             return EnvironmentHelper.IsOSX(platform.Family);
         }
 
@@ -62,10 +53,7 @@ namespace Cake.Core
         /// <returns><c>true</c> if the platform is a Linux platform; otherwise <c>false</c>.</returns>
         public static bool IsLinux(this ICakePlatform platform)
         {
-            if (platform == null)
-            {
-                throw new ArgumentNullException(nameof(platform));
-            }
+            ArgumentNullException.ThrowIfNull(platform);
             return EnvironmentHelper.IsLinux(platform.Family);
         }
 
@@ -76,10 +64,7 @@ namespace Cake.Core
         /// <returns><c>true</c> if the platform is a FreeBSD platform; otherwise <c>false</c>.</returns>
         public static bool IsFreeBSD(this ICakePlatform platform)
         {
-            if (platform is null)
-            {
-                throw new ArgumentNullException(nameof(platform));
-            }
+            ArgumentNullException.ThrowIfNull(platform);
             return EnvironmentHelper.IsFreeBSD(platform.Family);
         }
     }

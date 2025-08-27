@@ -13,20 +13,14 @@ namespace Cake.Frosting.Internal
     {
         public static string GetTaskName(this IFrostingTask task)
         {
-            if (task is null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
+            ArgumentNullException.ThrowIfNull(task);
 
             return task.GetType().GetTaskName();
         }
 
         public static string GetTaskDescription(this IFrostingTask task)
         {
-            if (task is null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
+            ArgumentNullException.ThrowIfNull(task);
 
             var attribute = task.GetType().GetCustomAttribute<TaskDescriptionAttribute>();
             return attribute != null ? attribute.Description : string.Empty;

@@ -57,10 +57,7 @@ namespace Cake.Common.Tools.NuGet.Delete
             {
                 throw new ArgumentNullException(nameof(packageVersion));
             }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(packageID, packageVersion, settings));
         }

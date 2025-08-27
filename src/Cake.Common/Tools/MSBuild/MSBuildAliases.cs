@@ -73,14 +73,8 @@ namespace Cake.Common.Tools.MSBuild
         [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution, Action<MSBuildSettings> configurator)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (configurator == null)
-            {
-                throw new ArgumentNullException(nameof(configurator));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(configurator);
 
             var settings = new MSBuildSettings();
             configurator(settings);
@@ -111,18 +105,9 @@ namespace Cake.Common.Tools.MSBuild
         [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution, Action<MSBuildSettings> configurator, Action<IEnumerable<string>> standardOutputAction)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (configurator == null)
-            {
-                throw new ArgumentNullException(nameof(configurator));
-            }
-            if (standardOutputAction == null)
-            {
-                throw new ArgumentNullException(nameof(standardOutputAction));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(configurator);
+            ArgumentNullException.ThrowIfNull(standardOutputAction);
 
             var settings = new MSBuildSettings();
             configurator(settings);
@@ -150,14 +135,8 @@ namespace Cake.Common.Tools.MSBuild
         [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution, MSBuildSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(settings);
 
             var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(solution, settings, null);
@@ -185,18 +164,9 @@ namespace Cake.Common.Tools.MSBuild
         [CakeMethodAlias]
         public static void MSBuild(this ICakeContext context, FilePath solution, MSBuildSettings settings, Action<IEnumerable<string>> standardOutputAction)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (standardOutputAction == null)
-            {
-                throw new ArgumentNullException(nameof(standardOutputAction));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(standardOutputAction);
 
             var runner = new MSBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(solution, settings, standardOutputAction);

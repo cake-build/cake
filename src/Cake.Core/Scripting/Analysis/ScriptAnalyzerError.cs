@@ -35,14 +35,8 @@ namespace Cake.Core.Scripting.Analysis
         /// <param name="message">The error message.</param>
         public ScriptAnalyzerError(FilePath file, int line, string message)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
+            ArgumentNullException.ThrowIfNull(file);
+            ArgumentNullException.ThrowIfNull(message);
 
             File = file;
             Line = line;

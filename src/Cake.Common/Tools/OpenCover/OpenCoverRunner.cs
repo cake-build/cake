@@ -49,22 +49,10 @@ namespace Cake.Common.Tools.OpenCover
             FilePath outputPath,
             OpenCoverSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-            if (outputPath == null)
-            {
-                throw new ArgumentNullException(nameof(outputPath));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(action);
+            ArgumentNullException.ThrowIfNull(outputPath);
+            ArgumentNullException.ThrowIfNull(settings);
 
             // Run the tool using the interceptor.
             var interceptor = InterceptAction(context, action);

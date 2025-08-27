@@ -11,14 +11,8 @@ namespace Cake.Core.IO
     {
         public static DirectoryPath Resolve(DirectoryPath from, DirectoryPath to)
         {
-            if (from == null)
-            {
-                throw new ArgumentNullException(nameof(from));
-            }
-            if (to == null)
-            {
-                throw new ArgumentNullException(nameof(to));
-            }
+            ArgumentNullException.ThrowIfNull(from);
+            ArgumentNullException.ThrowIfNull(to);
             if (to.IsRelative)
             {
                 throw new InvalidOperationException("Target path must be an absolute path.");

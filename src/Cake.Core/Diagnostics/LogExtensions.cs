@@ -423,10 +423,7 @@ namespace Cake.Core.Diagnostics
         /// <returns>A disposable that restores the log verbosity.</returns>
         public static IDisposable WithVerbosity(this ICakeLog log, Verbosity verbosity)
         {
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
+            ArgumentNullException.ThrowIfNull(log);
             var lastVerbosity = log.Verbosity;
             log.Verbosity = verbosity;
             return Disposable.Create(() => log.Verbosity = lastVerbosity);

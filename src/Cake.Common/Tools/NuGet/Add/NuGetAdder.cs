@@ -43,10 +43,7 @@ namespace Cake.Common.Tools.NuGet.Add
             {
                 throw new ArgumentNullException(nameof(packageId));
             }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             Run(settings, GetArguments(packageId, settings));
         }
 

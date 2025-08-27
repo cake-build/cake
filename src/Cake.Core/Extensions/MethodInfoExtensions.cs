@@ -24,10 +24,7 @@ namespace Cake.Core
         public static string GetSignature(this MethodInfo method,
             bool includeMethodNamespace = true, bool includeParameterNamespace = false)
         {
-            if (method == null)
-            {
-                throw new ArgumentNullException(nameof(method));
-            }
+            ArgumentNullException.ThrowIfNull(method);
 
             var builder = new StringBuilder();
             builder.Append(includeMethodNamespace ? method.GetFullName() : method.Name);

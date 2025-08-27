@@ -100,10 +100,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Search")]
         public static IEnumerable<DotNetWorkload> DotNetWorkloadSearch(this ICakeContext context, string searchString, DotNetWorkloadSearchSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings == null)
             {
@@ -147,10 +144,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Uninstall")]
         public static void DotNetWorkloadUninstall(this ICakeContext context, IEnumerable<string> workloadIds)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var uninstaller = new DotNetWorkloadUninstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             uninstaller.Uninstall(workloadIds);
@@ -239,10 +233,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Install")]
         public static void DotNetWorkloadInstall(this ICakeContext context, IEnumerable<string> workloadIds, DotNetWorkloadInstallSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings == null)
             {
@@ -302,10 +293,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.List")]
         public static IEnumerable<DotNetWorkloadListItem> DotNetWorkloadList(this ICakeContext context, DotNetWorkloadListSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings == null)
             {
@@ -354,10 +342,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Repair")]
         public static void DotNetWorkloadRepair(this ICakeContext context, DotNetWorkloadRepairSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings == null)
             {
@@ -406,10 +391,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Update")]
         public static void DotNetWorkloadUpdate(this ICakeContext context, DotNetWorkloadUpdateSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings == null)
             {
@@ -460,10 +442,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Workload.Restore")]
         public static void DotNetWorkloadRestore(this ICakeContext context, string project, DotNetWorkloadRestoreSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {

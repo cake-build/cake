@@ -36,10 +36,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Push
         /// <param name="settings">The settings.</param>
         public void Push(string packageName, DotNetNuGetPushSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(packageName, settings));
         }

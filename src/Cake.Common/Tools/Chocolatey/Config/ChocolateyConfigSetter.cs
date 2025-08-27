@@ -40,10 +40,7 @@ namespace Cake.Common.Tools.Chocolatey.Config
         /// <param name="settings">The settings.</param>
         public void Set(string name, string value, ChocolateyConfigSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (string.IsNullOrWhiteSpace(name))
             {

@@ -23,20 +23,11 @@ namespace Cake.NuGet
 
         public NuGetSourceRepositoryProvider(ISettings settings, ICakeConfiguration config, PackageReference package, string packagesRoot)
         {
-            if (settings is null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
-            if (config is null)
-            {
-                throw new ArgumentNullException(nameof(config));
-            }
+            ArgumentNullException.ThrowIfNull(config);
 
-            if (package is null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
+            ArgumentNullException.ThrowIfNull(package);
 
             // Create the default v3 resource provider
             _resourceProviders = new List<Lazy<INuGetResourceProvider>>();

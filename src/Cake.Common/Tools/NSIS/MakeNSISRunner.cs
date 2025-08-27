@@ -42,14 +42,8 @@ namespace Cake.Common.Tools.NSIS
         /// <param name="settings">The settings.</param>
         public void Run(FilePath scriptFile, MakeNSISSettings settings)
         {
-            if (scriptFile == null)
-            {
-                throw new ArgumentNullException(nameof(scriptFile));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(scriptFile);
+            ArgumentNullException.ThrowIfNull(settings);
             Run(settings, GetArguments(scriptFile, settings));
         }
 

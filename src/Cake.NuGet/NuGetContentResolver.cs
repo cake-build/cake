@@ -46,10 +46,7 @@ namespace Cake.NuGet
 
         public IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, PackageReference package, PackageType type)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (type == PackageType.Addin || type == PackageType.Module)
             {

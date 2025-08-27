@@ -40,14 +40,8 @@ namespace Cake.Common.Tools.SpecFlow.StepDefinitionReport
         public void Run(FilePath projectFile,
             SpecFlowStepDefinitionReportSettings settings)
         {
-            if (projectFile == null)
-            {
-                throw new ArgumentNullException(nameof(projectFile));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(projectFile);
+            ArgumentNullException.ThrowIfNull(settings);
 
             // Run the tool.
             Run(settings, GetArguments(settings, projectFile));

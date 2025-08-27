@@ -433,15 +433,9 @@ namespace Cake.Common.Tools.Command
 
         private static CommandRunner GetRunner(ICakeContext context, CommandSettings settings, ref ProcessArgumentBuilder arguments)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             arguments ??= new ProcessArgumentBuilder();
 

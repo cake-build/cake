@@ -34,15 +34,9 @@ namespace Cake.Common.Security
         /// <param name="hashAlgorithmBuilder">The hash algorithm builder.</param>
         public FileHashCalculator(IFileSystem fileSystem, IHashAlgorithmBuilder hashAlgorithmBuilder)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
 
-            if (hashAlgorithmBuilder == null)
-            {
-                throw new ArgumentNullException(nameof(hashAlgorithmBuilder));
-            }
+            ArgumentNullException.ThrowIfNull(hashAlgorithmBuilder);
 
             _fileSystem = fileSystem;
             _hashAlgorithmBuilder = hashAlgorithmBuilder;
@@ -56,10 +50,7 @@ namespace Cake.Common.Security
         /// <returns>A <see cref="FileHash"/> instance representing the calculated hash.</returns>
         public FileHash Calculate(FilePath filePath, HashAlgorithm hashAlgorithm)
         {
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(filePath);
 
             var file = _fileSystem.GetFile(filePath);
 

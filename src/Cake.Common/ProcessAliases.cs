@@ -240,18 +240,9 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static IProcess StartAndReturnProcess(this ICakeContext context, FilePath fileName, ProcessSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (fileName == null)
-            {
-                throw new ArgumentNullException(nameof(fileName));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(fileName);
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (!settings.NoWorkingDirectory)
             {

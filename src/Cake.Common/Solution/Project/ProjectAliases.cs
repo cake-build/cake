@@ -57,10 +57,7 @@ namespace Cake.Common.Solution.Project
         [CakeMethodAlias]
         public static ProjectParserResult ParseProject(this ICakeContext context, FilePath projectPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var parser = new ProjectParser(context.FileSystem, context.Environment);
             return parser.Parse(projectPath);

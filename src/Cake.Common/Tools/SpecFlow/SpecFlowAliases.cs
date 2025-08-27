@@ -36,10 +36,7 @@ namespace Cake.Common.Tools.SpecFlow
         [CakeNamespaceImport("Cake.Common.Tools.SpecFlow.StepDefinitionReport")]
         public static void SpecFlowStepDefinitionReport(this ICakeContext context, FilePath projectFile)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             SpecFlowStepDefinitionReport(context, projectFile, new SpecFlowStepDefinitionReportSettings());
         }
@@ -57,10 +54,7 @@ namespace Cake.Common.Tools.SpecFlow
         [CakeNamespaceImport("Cake.Common.Tools.SpecFlow.StepDefinitionReport")]
         public static void SpecFlowStepDefinitionReport(this ICakeContext context, FilePath projectFile, SpecFlowStepDefinitionReportSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new SpecFlowStepDefinitionReporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(projectFile, settings ?? new SpecFlowStepDefinitionReportSettings());
@@ -82,10 +76,7 @@ namespace Cake.Common.Tools.SpecFlow
             Action<ICakeContext> action,
             FilePath projectFile)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             SpecFlowTestExecutionReport(context, action, projectFile, new SpecFlowTestExecutionReportSettings());
         }
@@ -108,10 +99,7 @@ namespace Cake.Common.Tools.SpecFlow
             FilePath projectFile,
             SpecFlowTestExecutionReportSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings == null)
             {

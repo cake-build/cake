@@ -41,15 +41,9 @@ namespace Cake.Common.Tools.DotNet.Format
         /// <param name="settings">The settings.</param>
         public void Format(string root, string subcommand, DotNetFormatSettings settings)
         {
-            if (root == null)
-            {
-                throw new ArgumentNullException(nameof(root));
-            }
+            ArgumentNullException.ThrowIfNull(root);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(root, subcommand, settings));
         }

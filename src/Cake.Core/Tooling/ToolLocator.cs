@@ -33,10 +33,7 @@ namespace Cake.Core.Tooling
         /// <inheritdoc/>
         public void RegisterFile(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             _repository.Register(path.MakeAbsolute(_environment));
         }
@@ -44,10 +41,7 @@ namespace Cake.Core.Tooling
         /// <inheritdoc/>
         public FilePath Resolve(string tool)
         {
-            if (tool == null)
-            {
-                throw new ArgumentNullException(nameof(tool));
-            }
+            ArgumentNullException.ThrowIfNull(tool);
             if (string.IsNullOrWhiteSpace(tool))
             {
                 throw new ArgumentException("Tool name cannot be empty.", nameof(tool));
@@ -59,10 +53,7 @@ namespace Cake.Core.Tooling
         /// <inheritdoc/>
         public FilePath Resolve(IEnumerable<string> toolExeNames)
         {
-            if (toolExeNames == null)
-            {
-                throw new ArgumentNullException(nameof(toolExeNames));
-            }
+            ArgumentNullException.ThrowIfNull(toolExeNames);
 
             return _strategy.Resolve(_repository, toolExeNames);
         }

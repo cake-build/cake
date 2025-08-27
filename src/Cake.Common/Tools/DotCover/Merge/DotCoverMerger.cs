@@ -49,14 +49,8 @@ namespace Cake.Common.Tools.DotCover.Merge
             {
                 throw new ArgumentNullException("sourceFiles");
             }
-            if (outputFile == null)
-            {
-                throw new ArgumentNullException("outputFile");
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
+            ArgumentNullException.ThrowIfNull(outputFile);
+            ArgumentNullException.ThrowIfNull(settings);
 
             // Run the tool.
             Run(settings, GetArguments(sourceFiles, outputFile, settings));

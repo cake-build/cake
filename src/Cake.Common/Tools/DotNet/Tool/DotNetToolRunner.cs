@@ -43,10 +43,7 @@ namespace Cake.Common.Tools.DotNet.Tool
                 throw new ArgumentNullException(nameof(command));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var processSettings = new ProcessSettings
             {

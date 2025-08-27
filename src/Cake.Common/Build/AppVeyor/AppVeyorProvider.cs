@@ -52,14 +52,8 @@ namespace Cake.Common.Build.AppVeyor
         /// <inheritdoc/>
         public void UploadArtifact(FilePath path, AppVeyorUploadArtifactsSettings settings)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(path);
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (!IsRunningOnAppVeyor)
             {
@@ -91,10 +85,7 @@ namespace Cake.Common.Build.AppVeyor
         /// <inheritdoc/>
         public void UploadArtifact(FilePath path, Action<AppVeyorUploadArtifactsSettings> settingsAction)
         {
-            if (settingsAction == null)
-            {
-                throw new ArgumentNullException(nameof(settingsAction));
-            }
+            ArgumentNullException.ThrowIfNull(settingsAction);
 
             var settings = new AppVeyorUploadArtifactsSettings();
             settingsAction(settings);
@@ -104,10 +95,7 @@ namespace Cake.Common.Build.AppVeyor
         /// <inheritdoc/>
         public void UploadTestResults(FilePath path, AppVeyorTestResultsType resultsType)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (!IsRunningOnAppVeyor)
             {
@@ -138,10 +126,7 @@ namespace Cake.Common.Build.AppVeyor
         /// <inheritdoc/>
         public void UpdateBuildVersion(string version)
         {
-            if (version == null)
-            {
-                throw new ArgumentNullException(nameof(version));
-            }
+            ArgumentNullException.ThrowIfNull(version);
             if (string.IsNullOrWhiteSpace(version))
             {
                 throw new CakeException("The build version cannot be empty.");
@@ -164,10 +149,7 @@ namespace Cake.Common.Build.AppVeyor
         /// <inheritdoc/>
         public void AddMessage(string message, AppVeyorMessageCategoryType category = AppVeyorMessageCategoryType.Information, string details = null)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
+            ArgumentNullException.ThrowIfNull(message);
             if (string.IsNullOrWhiteSpace(message))
             {
                 throw new CakeException("The message cannot be empty.");

@@ -51,14 +51,8 @@ namespace Cake.Common.Tools.NuGet.List
         /// <returns>A list of available packages.</returns>
         public IEnumerable<NuGetListItem> List(string packageId, NuGetListSettings settings)
         {
-            if (packageId == null)
-            {
-                throw new ArgumentNullException(nameof(packageId));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(packageId);
+            ArgumentNullException.ThrowIfNull(settings);
 
             var processSettings = new ProcessSettings
             {

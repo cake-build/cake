@@ -19,10 +19,7 @@ namespace Cake.Testing
         /// <returns>The same <see cref="FakeDirectory"/> instance so that multiple calls can be chained.</returns>
         public static FakeDirectory Hide(this FakeDirectory directory)
         {
-            if (directory == null)
-            {
-                throw new ArgumentNullException(nameof(directory));
-            }
+            ArgumentNullException.ThrowIfNull(directory);
 
             directory.Hidden = true;
             return directory;

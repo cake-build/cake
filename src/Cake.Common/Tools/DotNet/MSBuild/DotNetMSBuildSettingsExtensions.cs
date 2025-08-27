@@ -65,14 +65,8 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         /// <returns>The same <see cref="DotNetMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetMSBuildSettings WithGetProperty(this DotNetMSBuildSettings settings, string name)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(name);
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException(nameof(name));
@@ -91,14 +85,8 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         /// <returns>The same <see cref="DotNetMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetMSBuildSettings WithGetItem(this DotNetMSBuildSettings settings, string name)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(name);
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException(nameof(name));
@@ -117,14 +105,8 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         /// <returns>The same <see cref="DotNetMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetMSBuildSettings WithGetTargetResult(this DotNetMSBuildSettings settings, string name)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(name);
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException(nameof(name));
@@ -341,10 +323,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         {
             EnsureSettings(settings);
 
-            if (fileLoggerParameters == null)
-            {
-                throw new ArgumentNullException(nameof(fileLoggerParameters));
-            }
+            ArgumentNullException.ThrowIfNull(fileLoggerParameters);
 
             settings.FileLoggers.Add(fileLoggerParameters);
 
@@ -369,10 +348,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         /// <returns>The same <see cref="DotNetMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetMSBuildSettings EnableBinaryLogger(this DotNetMSBuildSettings settings, MSBuildBinaryLoggerImports imports)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.BinaryLogger = new MSBuildBinaryLoggerSettings
             {
@@ -403,10 +379,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         /// <returns>The same <see cref="DotNetMSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static DotNetMSBuildSettings EnableBinaryLogger(this DotNetMSBuildSettings settings, string fileName, MSBuildBinaryLoggerImports imports)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.BinaryLogger = new MSBuildBinaryLoggerSettings
             {
@@ -654,10 +627,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
 
         private static void EnsureSettings(DotNetMSBuildSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
         }
     }
 }

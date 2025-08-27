@@ -77,10 +77,7 @@ namespace Cake.Common.Net
         [CakeAliasCategory("Download")]
         public static FilePath DownloadFile(this ICakeContext context, Uri address)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var tempFolder = context.Environment.GetSpecialPath(SpecialPath.LocalTemp);
             var tempFilename = tempFolder.CombineWithFilePath(new FilePath(System.IO.Path.GetRandomFileName()));
             DownloadFile(context, address, tempFilename, new DownloadFileSettings());
@@ -108,10 +105,7 @@ namespace Cake.Common.Net
         [CakeAliasCategory("Download")]
         public static FilePath DownloadFile(this ICakeContext context, Uri address, DownloadFileSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var tempFolder = context.Environment.GetSpecialPath(SpecialPath.LocalTemp);
             var tempFilename = tempFolder.CombineWithFilePath(new FilePath(System.IO.Path.GetRandomFileName()));
             DownloadFile(context, address, tempFilename, settings);
@@ -183,18 +177,9 @@ namespace Cake.Common.Net
         [CakeAliasCategory("Download")]
         public static void DownloadFile(this ICakeContext context, Uri address, FilePath outputPath, DownloadFileSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (address == null)
-            {
-                throw new ArgumentNullException(nameof(address));
-            }
-            if (outputPath == null)
-            {
-                throw new ArgumentNullException(nameof(outputPath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(address);
+            ArgumentNullException.ThrowIfNull(outputPath);
 
             context.Log.Verbose("Downloading file: {0}", address);
 
@@ -250,18 +235,9 @@ namespace Cake.Common.Net
         [CakeAliasCategory("Upload")]
         public static void UploadFile(this ICakeContext context, Uri address, FilePath filePath, UploadFileSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (address == null)
-            {
-                throw new ArgumentNullException(nameof(address));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(address);
+            ArgumentNullException.ThrowIfNull(filePath);
 
             context.Log.Verbose("Uploading file: {0}", address);
             using (var client = GetHttpClient(context, settings.UseDefaultCredentials))
@@ -320,18 +296,9 @@ namespace Cake.Common.Net
         [CakeAliasCategory("Upload")]
         public static void UploadFile(this ICakeContext context, Uri address, byte[] data, string fileName, UploadFileSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (address == null)
-            {
-                throw new ArgumentNullException(nameof(address));
-            }
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(address);
+            ArgumentNullException.ThrowIfNull(data);
 
             context.Log.Verbose("Uploading file: {0}", address);
             using (var client = GetHttpClient(context, settings.UseDefaultCredentials))

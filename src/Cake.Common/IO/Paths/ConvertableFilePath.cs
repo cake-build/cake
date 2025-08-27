@@ -18,10 +18,7 @@ namespace Cake.Common.IO.Paths
         /// <param name="path">The path.</param>
         internal ConvertableFilePath(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
             Path = path;
         }
 

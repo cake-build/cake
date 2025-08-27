@@ -53,10 +53,7 @@ namespace Cake.Common.Security
         [CakeMethodAlias]
         public static FileHash CalculateFileHash(this ICakeContext context, FilePath filePath, HashAlgorithm hashAlgorithm)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var fileHashCalculator = new FileHashCalculator(context.FileSystem, new HashAlgorithmBuilder());
             return fileHashCalculator.Calculate(filePath, hashAlgorithm);
@@ -102,10 +99,7 @@ namespace Cake.Common.Security
         public static DirectoryHash CalculateDirectoryHash(this ICakeContext context,
             DirectoryPath directoryPath, IEnumerable<GlobPattern> globs, HashAlgorithm hashAlgorithm)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var directoryHashCalculator = new DirectoryHashCalculator(context, new HashAlgorithmBuilder());
             return directoryHashCalculator.Calculate(directoryPath, globs, hashAlgorithm);
@@ -151,10 +145,7 @@ namespace Cake.Common.Security
         public static DirectoryHash CalculateDirectoryHash(this ICakeContext context,
             DirectoryPath directoryPath, IEnumerable<string> globs, HashAlgorithm hashAlgorithm)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var directoryHashCalculator = new DirectoryHashCalculator(context, new HashAlgorithmBuilder());
             return directoryHashCalculator.Calculate(directoryPath, globs, hashAlgorithm);
