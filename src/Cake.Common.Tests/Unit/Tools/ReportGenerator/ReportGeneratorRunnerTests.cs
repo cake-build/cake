@@ -192,7 +192,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
                 var result = fixture.Run();
 
                 // Then
-                Assert.True(Enum.IsDefined(typeof(ReportGeneratorReportType), enumValue));
+                Assert.True(Enum.IsDefined<ReportGeneratorReportType>(enumValue));
                 Assert.Equal($"\"-reports:/Working/report.xml\" \"-targetdir:/Working/output\" \"-reporttypes:{expected}\"", result.Args);
             }
 
