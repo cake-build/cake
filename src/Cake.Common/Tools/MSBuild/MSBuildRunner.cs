@@ -291,14 +291,14 @@ namespace Cake.Common.Tools.MSBuild
             if (!string.IsNullOrWhiteSpace(logger.Class))
             {
                 argumentBuilder.Append(logger.Class);
-                argumentBuilder.Append(",");
+                argumentBuilder.Append(',');
             }
 
             argumentBuilder.Append(logger.Assembly.Quote());
 
             if (!string.IsNullOrWhiteSpace(logger.Parameters))
             {
-                argumentBuilder.Append(";");
+                argumentBuilder.Append(';');
                 argumentBuilder.Append(logger.Parameters);
             }
             return argumentBuilder.ToString();
