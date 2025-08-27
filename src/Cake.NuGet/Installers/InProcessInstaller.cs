@@ -252,9 +252,9 @@ namespace Cake.NuGet
         {
             NuGetVersion version = null;
             VersionRange versionRange = null;
-            if (package.Parameters.ContainsKey("version"))
+            if (package.Parameters.TryGetValue("version", out var versions))
             {
-                var versionString = package.Parameters["version"].First();
+                var versionString = versions.First();
                 if (NuGetVersion.TryParse(versionString, out version))
                 {
                     return version;

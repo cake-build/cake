@@ -60,7 +60,7 @@ namespace Cake.Testing
                 // Calculate the current path.
                 path = parent != null ? parent.Path.Combine(currentSegment) : new DirectoryPath(currentSegment);
 
-                if (!children.Directories.ContainsKey(path))
+                if (!children.Directories.TryGetValue(path, out var childDirectory))
                 {
                     current = queue.Count == 0 ? directory : new FakeDirectory(this, path);
                     current.Parent = parent ?? _root;
@@ -69,7 +69,7 @@ namespace Cake.Testing
                 }
                 else
                 {
-                    current = children.Directories[path];
+                    current = childDirectory;
                 }
 
                 current.Exists = true;
@@ -196,12 +196,12 @@ namespace Cake.Testing
                 path = parent != null ? parent.Path.Combine(segment) : new DirectoryPath(segment);
 
                 // Find the current path.
-                if (!children.Directories.ContainsKey(path))
+                if (!children.Directories.TryGetValue(path, out var directory))
                 {
                     return null;
                 }
 
-                current = children.Directories[path];
+                current = directory;
                 children = current.Content;
             }
 
@@ -213,9 +213,9 @@ namespace Cake.Testing
             var directory = FindDirectory(path.GetDirectory());
             if (directory != null)
             {
-                if (directory.Content.Files.ContainsKey(path))
+                if (directory.Content.Files.TryGetValue(path, out var file))
                 {
-                    return directory.Content.Files[path];
+                    return file;
                 }
             }
             return null;

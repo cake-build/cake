@@ -15,9 +15,9 @@ namespace Cake.NuGet
         public static bool ShouldLoadDependencies(this PackageReference packageReference, ICakeConfiguration config)
         {
             bool loadDependencies;
-            if (packageReference.Parameters.ContainsKey(LoadDependenciesKey))
+            if (packageReference.Parameters.TryGetValue(LoadDependenciesKey, out var parameter))
             {
-                bool.TryParse(packageReference.Parameters[LoadDependenciesKey].FirstOrDefault() ?? bool.TrueString, out loadDependencies);
+                bool.TryParse(parameter.FirstOrDefault() ?? bool.TrueString, out loadDependencies);
             }
             else
             {
@@ -29,9 +29,9 @@ namespace Cake.NuGet
         public static bool IsPrerelease(this PackageReference packageReference)
         {
             var isPreRelease = false;
-            if (packageReference.Parameters.ContainsKey("prerelease"))
+            if (packageReference.Parameters.TryGetValue("prerelease", out var prerelease))
             {
-                bool.TryParse(packageReference.Parameters["prerelease"].FirstOrDefault() ?? bool.TrueString, out isPreRelease);
+                bool.TryParse(prerelease.FirstOrDefault() ?? bool.TrueString, out isPreRelease);
             }
             return isPreRelease;
         }

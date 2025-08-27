@@ -55,9 +55,9 @@ namespace Cake.Core.Tooling
         /// <inheritdoc/>
         public IEnumerable<FilePath> Resolve(string tool)
         {
-            if (_paths.ContainsKey(tool))
+            if (_paths.TryGetValue(tool, out var paths))
             {
-                return _paths[tool];
+                return paths;
             }
 
             return Enumerable.Empty<FilePath>();
