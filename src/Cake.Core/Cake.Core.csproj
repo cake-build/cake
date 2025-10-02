@@ -4,6 +4,7 @@
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);NU1510</NoWarn>
   </PropertyGroup>
   <!-- Package specific metadata -->
   <PropertyGroup>

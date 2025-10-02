@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -35,8 +35,10 @@ namespace Cake.Infrastructure.Scripting
                 foreach (var reference in
 #if NET8_0
             Basic.Reference.Assemblies.Net80.References.All)
-#else
+#elif NET9_0
             Basic.Reference.Assemblies.Net90.References.All)
+#else
+            Basic.Reference.Assemblies.Net100.References.All)
 #endif
                 {
                     Assembly assembly;

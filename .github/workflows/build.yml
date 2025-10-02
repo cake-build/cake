@@ -43,6 +43,11 @@ jobs:
         with:
           global-json-file: global.json
 
+      - name: Install .NET SDK 10.0.100 (daily)
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.100-rtm.25479.115
+
       - name: Run Cake script
         id: build-cake
         uses: cake-build/cake-action@v3.0.1

@@ -151,6 +151,9 @@ namespace Cake.Infrastructure.Scripting
 
             // Create the script options dynamically.
             var options = Microsoft.CodeAnalysis.Scripting.ScriptOptions.Default
+#if NET10_0
+                .WithLanguageVersion(Microsoft.CodeAnalysis.CSharp.LanguageVersion.Preview)
+#endif
                 .AddImports(Namespaces.Except(script.ExcludedNamespaces.Keys))
                 .AddReferences(References)
                 .AddReferences(ReferencePaths.Select(r => r.FullPath))
