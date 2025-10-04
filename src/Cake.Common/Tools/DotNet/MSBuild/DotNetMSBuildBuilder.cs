@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -37,14 +38,19 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         /// </summary>
         /// <param name="projectOrDirectory">The target project path.</param>
         /// <param name="settings">The settings.</param>
-        public void Build(string projectOrDirectory, DotNetMSBuildSettings settings)
+        /// <param name="standardOutputAction">The action to invoke with the standard output.</param>
+        public void Build(string projectOrDirectory, DotNetMSBuildSettings settings, Action<IEnumerable<string>> standardOutputAction)
         {
             if (settings == null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            RunCommand(settings, GetArguments(projectOrDirectory, settings));
+            RunCommand(
+                settings,
+                GetArguments(projectOrDirectory, settings),
+                standardOutputAction == null ? null : new ProcessSettings { RedirectStandardOutput = true },
+                standardOutputAction == null ? null : new Action<IProcess>(process => standardOutputAction(process.GetStandardOutput())));
         }
 
         private ProcessArgumentBuilder GetArguments(string projectOrDirectory, DotNetMSBuildSettings settings)

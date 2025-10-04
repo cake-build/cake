@@ -1,7 +1,7 @@
 public record CodeSigningCredentials(
     string SignTenantId,
     string SignClientId,
-    string SignClientSecret,
+    string SignClientSubsription,
     string SignKeyVaultCertificate,
     string SignKeyVaultUrl
 )
@@ -13,7 +13,7 @@ public record CodeSigningCredentials(
             return
                 !string.IsNullOrEmpty(SignTenantId) &&
                 !string.IsNullOrEmpty(SignClientId) &&
-                !string.IsNullOrEmpty(SignClientSecret) &&
+                !string.IsNullOrEmpty(SignClientSubsription) &&
                 !string.IsNullOrEmpty(SignKeyVaultCertificate) &&
                 !string.IsNullOrEmpty(SignKeyVaultUrl);
         }
@@ -24,7 +24,7 @@ public record CodeSigningCredentials(
         return new CodeSigningCredentials(
             SignTenantId: context.EnvironmentVariable("SIGN_TENANT_ID"),
             SignClientId: context.EnvironmentVariable("SIGN_CLIENT_ID"),
-            SignClientSecret: context.EnvironmentVariable("SIGN_CLIENT_SECRET"),
+            SignClientSubsription: context.EnvironmentVariable("SIGN_CLIENT_SUBSCRIPTION"),
             SignKeyVaultCertificate: context.EnvironmentVariable("SIGN_KEYVAULT_CERTIFICATE"),
             SignKeyVaultUrl: context.EnvironmentVariable("SIGN_KEYVAULT_URL"));
     }

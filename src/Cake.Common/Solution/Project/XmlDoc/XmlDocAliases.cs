@@ -25,7 +25,7 @@ namespace Cake.Common.Solution.Project.XmlDoc
         /// <example>
         /// <code>
         /// var exampleCodes = ParseXmlDocExampleCode("./Cake.Common.xml");
-        /// foreach(var exampleCode in exampleCodes)
+        /// foreach (var exampleCode in exampleCodes)
         /// {
         ///     Information(
         ///         "{0}\r\n{1}",
@@ -61,7 +61,7 @@ namespace Cake.Common.Solution.Project.XmlDoc
         /// <example>
         /// <code>
         /// var filesExampleCodes = ParseXmlDocFilesExampleCode("./Cake.*.xml");
-        /// foreach(var exampleCode in filesExampleCodes)
+        /// foreach (var exampleCode in filesExampleCodes)
         /// {
         ///     Information(
         ///         "{0}\r\n{1}",

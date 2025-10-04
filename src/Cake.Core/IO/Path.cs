@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 
 namespace Cake.Core.IO
 {
@@ -57,14 +56,15 @@ namespace Cake.Core.IO
             IsUNC = path.StartsWith(@"\\");
             Separator = IsUNC ? '\\' : '/';
 
+            var separatorToReplace = '\\';
+            var separatorToReplaceWith = Separator;
+
             if (IsUNC)
             {
-                FullPath = path.Replace('/', Separator).Trim();
+                separatorToReplace = '/';
             }
-            else
-            {
-                FullPath = path.Replace('\\', Separator).Trim();
-            }
+
+            FullPath = path.Replace(separatorToReplace, separatorToReplaceWith).Trim();
 
             // Relative paths are considered empty.
             FullPath = FullPath == "./" ? string.Empty : FullPath;

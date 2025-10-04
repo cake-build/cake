@@ -56,5 +56,63 @@ namespace Cake.Core.IO
             var result = environment.ExpandEnvironmentVariables(path.FullPath);
             return new DirectoryPath(result);
         }
+
+        /// <summary>
+        /// Expands short paths (e.g. C:/Users/ABCDEF~1) to long paths (e.g. C:/Users/abcdefghij).
+        /// <para/>
+        /// Note that this method only works for absolute paths, as relative paths cannot be expanded without impact.
+        /// </summary>
+        /// <param name="path">The path to check.</param>
+        /// <returns>The path for which, if available, the short paths are expanded to long paths.</returns>
+        public static FilePath ExpandShortPath(this FilePath path)
+        {
+            if (!path.IsRelative)
+            {
+                // Only when not relative, resolve short paths to long paths, e.g.:
+                //
+                // C:/Users/ABCDEF~1/AppData/Local/Temp/cake-build/addins
+                // C:/Users/abcdefghij/AppData/Local/Temp/cake-build/addins
+                //
+                // The reason this is required is that tools / addins can't be located
+                // when using short paths
+                //
+                // Note that a path can contain multiple ~, thus we need to check for just ~
+                if (path.FullPath.Contains('~'))
+                {
+                    return new FilePath(System.IO.Path.GetFullPath(path.FullPath));
+                }
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// Expands short paths (e.g. C:/Users/ABCDEF~1) to long paths (e.g. C:/Users/abcdefghij).
+        /// <para/>
+        /// Note that this method only works for absolute paths, as relative paths cannot be expanded without impact.
+        /// </summary>
+        /// <param name="path">The path to check.</param>
+        /// <returns>The path for which, if available, the short paths are expanded to long paths.</returns>
+        public static DirectoryPath ExpandShortPath(this DirectoryPath path)
+        {
+            if (!path.IsRelative)
+            {
+                // Only when not relative, resolve short paths to long paths, e.g.:
+                //
+                // C:/Users/ABCDEF~1/AppData/Local/Temp/cake-build/addins
+                // C:/Users/abcdefghij/AppData/Local/Temp/cake-build/addins
+                //
+                // The reason this is required is that tools / addins can't be located
+                // when using short paths
+                //
+                // Note that a path can contain multiple ~, thus we need to check for just ~
+                if (path.FullPath.Contains('~'))
+                {
+                    return new DirectoryPath(System.IO.Path.GetFullPath(path.FullPath));
+                }
+            }
+
+            return path;
+        }
     }
 }

@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+permissions:
+  id-token: write
+  contents: write
+  packages: write
+  issues: write
+
+
+jobs:
+  deployment:
+    runs-on: windows-latest
+    environment: Production
+    steps:
+      - name: Get the sources
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Install .NET SDK 8.0.x - 9.0.x
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: Install .NET SDK (global.json)
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{secrets.NUGET_USER}}
+
+
+      - name: Build & Release Cake 
+        uses: cake-build/cake-action@master
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CAKE_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AZURE_DEVOPS_NUGET_API_KEY: ${{ secrets.AZURE_DEVOPS_NUGET_API_KEY }}
+          AZURE_DEVOPS_NUGET_API_URL: ${{ secrets.AZURE_DEVOPS_NUGET_API_URL }}
+          NUGET_API_KEY: ${{steps.login.outputs.NUGET_API_KEY}}
+          NUGET_API_URL: ${{ secrets.NUGET_API_URL }}
+          SIGN_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          SIGN_CLIENT_SUBSCRIPTION: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          SIGN_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          SIGN_KEYVAULT_URL: ${{ secrets.SIGN_KEYVAULT_URL }}
+          SIGN_KEYVAULT_CERTIFICATE: ${{ secrets.SIGN_KEYVAULT_CERTIFICATE }}
+        with:
+          cake-version: tool-manifest
+          target: GitHubActions-Release

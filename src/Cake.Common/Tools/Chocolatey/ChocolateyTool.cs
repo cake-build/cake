@@ -218,7 +218,7 @@ namespace Cake.Common.Tools.Chocolatey
         }
 
         /// <summary>
-        /// Adds shared arguents to the process builder.
+        /// Adds shared arguments to the process builder.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <param name="builder">The process arguments builder.</param>
@@ -291,7 +291,7 @@ namespace Cake.Common.Tools.Chocolatey
                 builder.Append("--use-package-exit-codes");
             }
 
-            // Stop On First Faliure
+            // Stop On First Failure
             if (settings.StopOnFirstFailure)
             {
                 builder.Append("--stop-on-first-package-failure");

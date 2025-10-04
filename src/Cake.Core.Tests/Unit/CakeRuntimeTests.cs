@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Cake.Testing.Xunit;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Cake.Core.Tests.Unit
 {

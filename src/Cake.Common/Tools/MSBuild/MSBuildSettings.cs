@@ -17,6 +17,9 @@ namespace Cake.Common.Tools.MSBuild
     {
         private readonly HashSet<string> _targets;
         private readonly Dictionary<string, IList<string>> _properties;
+        private readonly HashSet<string> _getProperties;
+        private readonly HashSet<string> _getItems;
+        private readonly HashSet<string> _getTargetResults;
         private readonly List<MSBuildLogger> _loggers;
         private readonly List<MSBuildFileLogger> _fileLoggers;
         private readonly HashSet<string> _warningsAsErrorCodes;
@@ -35,6 +38,27 @@ namespace Cake.Common.Tools.MSBuild
         /// </summary>
         /// <value>The properties.</value>
         public IDictionary<string, IList<string>> Properties => _properties;
+
+        /// <summary>
+        /// Gets the properties to retrieve.
+        /// </summary>
+        /// <value>The properties to retrieve.</value>
+        /// <remarks>For more information, refer to <see href="https://learn.microsoft.com/en-us/visualstudio/msbuild/evaluate-items-and-properties">Evaluate items and properties and display results of targets</see>.</remarks>
+        public HashSet<string> GetProperties => _getProperties;
+
+        /// <summary>
+        /// Gets the items to retrieve.
+        /// </summary>
+        /// <value>The items to retrieve.</value>
+        /// <remarks>For more information, refer to <see href="https://learn.microsoft.com/en-us/visualstudio/msbuild/evaluate-items-and-items">Evaluate items and items and display results of targets</see>.</remarks>
+        public HashSet<string> GetItems => _getItems;
+
+        /// <summary>
+        /// Gets the target results to retrieve.
+        /// </summary>
+        /// <value>The target results to retrieve.</value>
+        /// <remarks>For more information, refer to <see href="https://learn.microsoft.com/en-us/visualstudio/msbuild/evaluate-items-and-items">Evaluate items and items and display results of targets</see>.</remarks>
+        public HashSet<string> GetTargetResults => _getTargetResults;
 
         /// <summary>
         /// Gets or sets the platform target.
@@ -295,6 +319,9 @@ namespace Cake.Common.Tools.MSBuild
         {
             _targets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _properties = new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
+            _getProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _getItems = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _getTargetResults = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _loggers = new List<MSBuildLogger>();
             _fileLoggers = new List<MSBuildFileLogger>();
             _warningsAsErrorCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

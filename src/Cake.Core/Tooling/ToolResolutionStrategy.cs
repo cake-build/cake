@@ -184,7 +184,7 @@ namespace Cake.Core.Tooling
             var toolPath = _configuration.GetValue(Constants.Paths.Tools);
             if (!string.IsNullOrWhiteSpace(toolPath))
             {
-                return new DirectoryPath(toolPath);
+                return new DirectoryPath(toolPath).ExpandShortPath();
             }
 
             return new DirectoryPath("./tools");

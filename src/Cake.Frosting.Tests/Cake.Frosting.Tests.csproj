@@ -5,12 +5,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Cake.Frosting\Cake.Frosting.csproj" />
     <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj" />
+    <ProjectReference Include="..\Cake.Frosting.Tests.Tasks\Cake.Frosting.Tests.Tasks.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" />
-    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

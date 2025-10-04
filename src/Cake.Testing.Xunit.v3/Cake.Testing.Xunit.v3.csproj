@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Cake.Testing.Xunit.v3</AssemblyName>
+    <OutputType>Library</OutputType>
+    <PlatformTarget>AnyCpu</PlatformTarget>
+    <IsPackable>true</IsPackable>
+    <DefineConstants>$(DefineConstants);XUNIT3</DefineConstants>
+  </PropertyGroup>
+  <!-- Package specific metadata -->
+  <PropertyGroup>
+    <Description>Contains Xunit.v3 testing utilities for Cake.</Description>
+  </PropertyGroup>
+   <!-- Global packages -->
+  <ItemGroup>
+    <PackageReference Include="xunit.v3.assert" />
+    <PackageReference Include="xunit.v3.extensibility.core" />
+  </ItemGroup>
+  <!-- Import shared functionality -->
+  <Import Project="..\Shared.msbuild" />
+  <!-- Project references -->
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../Cake.Testing.Xunit/**/*.cs" Exclude="../Cake.Testing.Xunit/obj/**;../Cake.Testing.Xunit/bin/**;../Cake.Testing.Xunit/Properties/**">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+  </ItemGroup>
+</Project>

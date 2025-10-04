@@ -131,5 +131,13 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// The email address of the user.
         /// </value>
         public string UserEmail => GetEnvironmentString("GITLAB_USER_EMAIL");
+
+        /// <summary>
+        /// Gets how the pipeline was triggered.
+        /// </summary>
+        /// <value>
+        /// The trigger of the pipeline as <see cref="GitLabCIPipelineSource"/> or <c>null</c> if the trigger could not be determined.
+        /// </value>
+        public GitLabCIPipelineSource? Source => GetEnvironmentEnum<GitLabCIPipelineSource>("CI_PIPELINE_SOURCE");
     }
 }

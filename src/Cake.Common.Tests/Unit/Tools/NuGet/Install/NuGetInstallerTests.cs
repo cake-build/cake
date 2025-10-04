@@ -191,13 +191,29 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             {
                 // Given
                 var fixture = new NuGetInstallerFixture();
+                #pragma warning disable CS0618
                 fixture.Settings.NoCache = true;
+                #pragma warning restore CS0618
 
                 // When
                 var result = fixture.Run();
 
                 // Then
                 Assert.Equal("install \"Cake\" -NoCache -NonInteractive", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_NoHttpCache_To_Arguments_If_True()
+            {
+                // Given
+                var fixture = new NuGetInstallerFixture();
+                fixture.Settings.NoHttpCache = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("install \"Cake\" -NoHttpCache -NonInteractive", result.Args);
             }
 
             [Fact]
@@ -460,13 +476,30 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             {
                 // Given
                 var fixture = new NuGetInstallerFromConfigFixture();
+                #pragma warning disable CS0618
                 fixture.Settings.NoCache = true;
+                #pragma warning restore CS0618
 
                 // When
                 var result = fixture.Run();
 
                 // Then
                 Assert.Equal("install \"/Working/packages.config\" -NoCache " +
+                             "-NonInteractive", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_NoHttpCache_To_Arguments_If_True()
+            {
+                // Given
+                var fixture = new NuGetInstallerFromConfigFixture();
+                fixture.Settings.NoHttpCache = true;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("install \"/Working/packages.config\" -NoHttpCache " +
                              "-NonInteractive", result.Args);
             }
 

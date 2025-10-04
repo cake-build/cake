@@ -213,8 +213,20 @@ namespace Cake.Infrastructure.Scripting
                     '.',
                     scriptName.GetFilenameWithoutExtension().FullPath,
                     _host.GetType().Name,
-                    FastHash.GenerateHash(Encoding.UTF8.GetBytes(string.Concat(script.Lines))),
+                    GetScriptHash(script),
                     "dll"));
+
+        public string GetScriptHash(Script script)
+        {
+            // Remove specific lines that could cause the same files to generate different
+            // hashes. See https://github.com/cake-build/cake/issues/4471 for more information
+            var linesToHash = script.Lines
+                .Where(line => !line.StartsWith("#line ", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+
+            var hash = FastHash.GenerateHash(Encoding.UTF8.GetBytes(string.Concat(linesToHash)));
+            return hash;
+        }
 
         private void RunScriptAssembly(string assemblyPath)
         {

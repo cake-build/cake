@@ -12,7 +12,9 @@ namespace Cake.Testing.Xunit
     public abstract class PlatformRestrictedFactAttribute : FactAttribute
     {
         private static readonly PlatformFamily _family;
+#if !XUNIT3
         private string _skip;
+#endif
 
         static PlatformRestrictedFactAttribute()
         {
@@ -38,15 +40,23 @@ namespace Cake.Testing.Xunit
                 }
 
                 Reason = reason;
+#if XUNIT3
+                if (!string.IsNullOrEmpty(reason) && string.IsNullOrWhiteSpace(Skip))
+                {
+                    Skip = reason;
+                }
+#endif
             }
         }
 
-        private string Reason { get; }
+        protected string Reason { get; }
 
+#if !XUNIT3
         public override string Skip
         {
             get => _skip ?? Reason;
             set => _skip = value;
         }
+#endif
     }
 }

@@ -82,7 +82,7 @@ namespace Cake.Core.Scripting
             }
 
             // Make the installation root absolute.
-            installPath = installPath.MakeAbsolute(_environment);
+            installPath = installPath.MakeAbsolute(_environment).ExpandShortPath();
 
             var result = new HashSet<FilePath>(PathComparer.Default);
             if (addins.Count > 0)
@@ -187,7 +187,7 @@ namespace Cake.Core.Scripting
             }
 
             // Make the installation root absolute.
-            installPath = installPath.MakeAbsolute(_environment);
+            installPath = installPath.MakeAbsolute(_environment).ExpandShortPath();
 
             if (modules.Count > 0)
             {

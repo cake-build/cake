@@ -14,7 +14,7 @@ Task("Cake.Common.Build.AzurePipelinesProvider.Commands.Section")
 
 var azurePipelinesProviderTask = Task("Cake.Common.Build.AzurePipelinesProvider");
 
-if(AzurePipelines.IsRunningOnAzurePipelines)
+if (AzurePipelines.IsRunningOnAzurePipelines)
 {
     azurePipelinesProviderTask
         .IsDependentOn("Cake.Common.Build.AzurePipelinesProvider.Commands.Group")

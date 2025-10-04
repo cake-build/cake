@@ -17,13 +17,13 @@ if ($PSVersionTable.PSEdition -ne 'Core') {
     # will typically produce a message for PowerShell v2 (just an info
     # message though)
     try {
-        # Set TLS 1.2 (3072), then TLS 1.1 (768), then TLS 1.0 (192), finally SSL 3.0 (48)
-        # Use integers because the enumeration values for TLS 1.2 and TLS 1.1 won't
-        # exist in .NET 4.0, even though they are addressable if .NET 4.5+ is
-        # installed (.NET 4.5 is an in-place upgrade).
-        [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48
+        # Set TLS 1.3 (12288), then TLS 1.2 (3072)
+        # Use integers because the enumeration values for TLS 1.3 and TLS 1.2 won't
+        # exist in .NET 4.0, even though they are addressable if .NET 4.6.2+ is
+        # installed (.NET 4.6.2 is an in-place upgrade).
+        [System.Net.ServicePointManager]::SecurityProtocol = 12288 -bor 3072
       } catch {
-        Write-Output 'Unable to set PowerShell to use TLS 1.2 and TLS 1.1 due to old .NET Framework installed. If you see underlying connection closed or trust errors, you may need to upgrade to .NET Framework 4.5+ and PowerShell v3'
+        Write-Output 'Unable to set PowerShell to use TLS 1.3 and TLS 1.2 due to old .NET Framework installed. If you see underlying connection closed or trust errors, you may need to upgrade to .NET Framework 4.6.2+ and PowerShell v3'
       }
 }
 

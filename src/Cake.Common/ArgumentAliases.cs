@@ -266,7 +266,7 @@ namespace Cake.Common
         ///     Information("Verbose output enabled");
         /// }
         ///
-        /// foreach(var arg in args)
+        /// foreach (var arg in args)
         /// {
         ///     Information(
         ///         "Key: {0}\tValue: \"{1}\"",

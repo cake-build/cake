@@ -84,7 +84,7 @@ namespace Cake.Common
         ///     Information("Path: {0}", path);
         /// }
         ///
-        /// foreach(var envVar in envVars)
+        /// foreach (var envVar in envVars)
         /// {
         ///     Information(
         ///         "Key: {0}\tValue: \"{1}\"",

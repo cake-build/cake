@@ -14,8 +14,8 @@ Task("Cake.Common.IO.FileAsync.CopyFileAsync")
     EnsureFileExist(sourceFile);
 
     // When
-    using(var sourceStream = System.IO.File.OpenRead(sourceFile.ToString()))
-    using(var targetStream = System.IO.File.OpenWrite(targetFile.ToString()))
+    using (var sourceStream = System.IO.File.OpenRead(sourceFile.ToString()))
+    using (var targetStream = System.IO.File.OpenWrite(targetFile.ToString()))
     {
         await sourceStream.CopyToAsync(targetStream);
     }

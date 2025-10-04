@@ -32,7 +32,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         ///   <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
         /// </value>
-        public bool IsPullRequest => Id > 0;
+        public bool IsPullRequest => LongId > 0;
 
         /// <summary>
         /// Gets the ID of the pull request that caused this build.
@@ -41,7 +41,17 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// <value>
         ///   The ID of the pull request that caused this build.
         /// </value>
+        [Obsolete("Type will change in next major version to long, meanwhile use LongId to ensure proper value returned.")]
         public int Id => GetEnvironmentInteger("SYSTEM_PULLREQUEST_PULLREQUESTID");
+
+        /// <summary>
+        /// Gets the ID of the pull request that caused this build.
+        /// This value is set only if the build ran because of a Git PR affected by a branch policy.
+        /// </summary>
+        /// <value>
+        ///   The ID of the pull request that caused this build.
+        /// </value>
+        public long LongId => GetEnvironmentLongInteger("SYSTEM_PULLREQUEST_PULLREQUESTID");
 
         /// <summary>
         /// Gets the number of the pull request that caused this build.

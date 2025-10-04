@@ -60,11 +60,14 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("CI_RUNNER_DESCRIPTION").Returns("my runner");
             Environment.GetEnvironmentVariable("CI_RUNNER_TAGS").Returns("[\"docker\", \"linux\"]");
             Environment.GetEnvironmentVariable("CI_SERVER").Returns("yes");
+            Environment.GetEnvironmentVariable("CI_SERVER_URL").Returns("https://gitlab.example.com:8080");
             Environment.GetEnvironmentVariable("CI_SERVER_NAME").Returns("GitLab");
             Environment.GetEnvironmentVariable("CI_SERVER_REVISION").Returns("70606bf");
             Environment.GetEnvironmentVariable("CI_SERVER_VERSION").Returns("8.9.0");
             Environment.GetEnvironmentVariable("GITLAB_USER_ID").Returns("42");
             Environment.GetEnvironmentVariable("GITLAB_USER_EMAIL").Returns("anthony@warwickcontrol.com");
+            Environment.GetEnvironmentVariable("CI_MERGE_REQUEST_SOURCE_BRANCH_NAME").Returns("source-branch");
+            Environment.GetEnvironmentVariable("CI_MERGE_REQUEST_TARGET_BRANCH_NAME").Returns("main");
         }
 
         public GitLabCIBuildInfo CreateBuildInfo()

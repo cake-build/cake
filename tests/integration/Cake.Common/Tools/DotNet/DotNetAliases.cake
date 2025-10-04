@@ -172,7 +172,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublish")
     DotNetPublish(project.FullPath, new DotNetPublishSettings { OutputDirectory = outputPath });
 
     // Then
-    foreach(var file in publishFiles)
+    foreach (var file in publishFiles)
     {
         Assert.True(System.IO.File.Exists(file.FullPath), "Path:" + file.FullPath);
     }
@@ -221,6 +221,34 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
 
     // Then
     Assert.True(System.IO.File.Exists(assembly.FullPath));
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild.Results")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    var settings = new DotNetMSBuildSettings
+    {
+        GetProperties = { "Version", "TargetFramework", },
+        GetItems = { "ProjectReference", },
+        GetTargetResults = { "Build", "Compile", },
+    };
+
+    System.Text.Json.JsonDocument result = null;
+
+    // When
+    DotNetMSBuild(project.FullPath, settings, output => result = System.Text.Json.JsonDocument.Parse(output.SelectMany(x => x).ToArray()));
+
+    // Then
+    Assert.NotNull(result);
+    Assert.Equal("1.0.0", result.RootElement.GetProperty("Properties").GetProperty("Version").GetString());
+    Assert.Equal("net9.0", result.RootElement.GetProperty("Properties").GetProperty("TargetFramework").GetString());
+    Assert.Equal(1, result.RootElement.GetProperty("Items").GetProperty("ProjectReference").GetArrayLength());
+    Assert.Equal("Success", result.RootElement.GetProperty("TargetResults").GetProperty("Build").GetProperty("Result").GetString());
+    Assert.Equal("Success", result.RootElement.GetProperty("TargetResults").GetProperty("Compile").GetProperty("Result").GetString());
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
@@ -273,7 +301,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadSearch")
     var workloads = DotNetWorkloadSearch(searchString);
 
     // Then
-    foreach(var workload in workloads)
+    foreach (var workload in workloads)
     {
         Assert.Contains("maui", workload.Id);
         Assert.Contains(".NET MAUI SDK", workload.Description);
@@ -463,6 +491,18 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnAdd")
     DotNetSlnAdd(solution.FullPath, new[] { (FilePath)project.FullPath});
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnRemove")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var solution = path.CombineWithFilePath("hwapp.sln");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    // When
+    DotNetSlnRemove(solution.FullPath, new[] { (FilePath)project.FullPath});
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
@@ -477,6 +517,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetExecute")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetClean")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild.Results")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSDKCheck")
@@ -493,6 +534,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnList")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnAdd")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnRemove")
     .Does(() =>
 {
     // When

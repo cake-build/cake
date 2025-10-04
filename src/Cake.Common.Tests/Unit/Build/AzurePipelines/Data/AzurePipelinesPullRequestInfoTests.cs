@@ -15,6 +15,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
         {
             [Theory]
             [InlineData("1", true)]
+            [InlineData("2147483648", true)]
             [InlineData("0", false)]
             public void Should_Return_Correct_Value(string value, bool expected)
             {
@@ -31,6 +32,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
             }
         }
 
+        [Obsolete("The Id property is marked obsolete since the type will change to long in the next major version")]
         public sealed class TheIdProperty
         {
             [Fact]
@@ -44,6 +46,26 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
 
                 // Then
                 Assert.Equal(1, result);
+            }
+        }
+
+        public sealed class TheLongIdProperty
+        {
+            [Theory]
+            [InlineData("1", 1)]
+            [InlineData("2147483648", 2147483648)]
+            public void Should_Return_Correct_Value(string value, long expected)
+            {
+                // Given
+                var fixture = new AzurePipelinesInfoFixture();
+                fixture.Environment.GetEnvironmentVariable("SYSTEM_PULLREQUEST_PULLREQUESTID").Returns(value);
+                var info = fixture.CreatePullRequestInfo();
+
+                // When
+                var result = info.LongId;
+
+                // Then
+                Assert.Equal(expected, result);
             }
         }
 

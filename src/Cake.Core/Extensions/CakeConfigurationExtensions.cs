@@ -21,9 +21,9 @@ namespace Cake.Core
             var toolPath = configuration.GetValue(Constants.Paths.Tools);
             if (!string.IsNullOrWhiteSpace(toolPath))
             {
-                return new DirectoryPath(toolPath).MakeAbsolute(environment);
+                return new DirectoryPath(toolPath).MakeAbsolute(environment).ExpandShortPath();
             }
-            return defaultRoot.Combine("tools");
+            return defaultRoot.Combine("tools").ExpandShortPath();
         }
 
         /// <summary>
@@ -38,9 +38,9 @@ namespace Cake.Core
             var modulePath = configuration.GetValue(Constants.Paths.Modules);
             if (!string.IsNullOrWhiteSpace(modulePath))
             {
-                return new DirectoryPath(modulePath).MakeAbsolute(environment);
+                return new DirectoryPath(modulePath).MakeAbsolute(environment).ExpandShortPath();
             }
-            var toolPath = configuration.GetToolPath(defaultRoot, environment);
+            var toolPath = configuration.GetToolPath(defaultRoot, environment).ExpandShortPath();
             return toolPath.Combine("Modules").Collapse();
         }
     }

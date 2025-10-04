@@ -26,3 +26,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Cake.Common")]
 [assembly: InternalsVisibleTo("Cake.Core.Tests")]
 [assembly: InternalsVisibleTo("Cake.Testing.Xunit")]
+[assembly: InternalsVisibleTo("Cake.Testing.Xunit.v3")]

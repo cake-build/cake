@@ -36,10 +36,10 @@ namespace Cake.Common
         /// <example>
         /// <code>
         /// var releaseNotes = ParseAllReleaseNotes("./ReleaseNotes.md");
-        /// foreach(var releaseNote in releaseNotes)
+        /// foreach (var releaseNote in releaseNotes)
         /// {
         ///     Information("Version: {0}", releaseNote.Version);
-        ///     foreach(var note in releaseNote.Notes)
+        ///     foreach (var note in releaseNote.Notes)
         ///     {
         ///         Information("\t{0}", note);
         ///     }
@@ -88,7 +88,7 @@ namespace Cake.Common
         /// <code>
         /// var releaseNote = ParseReleaseNotes("./ReleaseNotes.md");
         /// Information("Version: {0}", releaseNote.Version);
-        /// foreach(var note in releaseNote.Notes)
+        /// foreach (var note in releaseNote.Notes)
         /// {
         ///     Information("\t{0}", note);
         /// }
