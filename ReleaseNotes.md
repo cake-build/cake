@@ -1,3 +1,57 @@
+### New in 5.1.0 (Released 2025/10/04)
+
+Feature
+
+* #4539 Add Woodpecker CI Support.
+* #4436 Add support for capturing MSBuild properties, items and target results.
+* #4431 Add property for GitLab's "Pipeline Source" to GitLabCIBuildInfo.
+* #4418 GitLab Server url should be available in GitLabCIServerInfo.
+* #4416 Make Merge Request source and target branch available in GitLabCIPullRequestInfo.
+* #4401 Add DotNetSlnRemove alias for dotnet sln remove command.
+* #4584 Update Spectre.Console to 0.51.1.
+* #4583 Update Newtonsoft.Json to 13.0.4.
+* #4582 Update Microsoft.Extensions.DependencyInjection to 9.0.9.
+* #4581 Update System.* to 9.0.9.
+* #4549 Update Basic.Reference.Assemblies.Net90 to 1.8.3.
+* #4548 Update Basic.Reference.Assemblies.Net80 to 1.8.3.
+* #4547 Update Autofac to 8.4.0.
+* #4546 Update Microsoft.IdentityModel.JsonWebTokens to 8.14.0.
+* #4545 Update Microsoft.Extensions.DependencyInjection to 9.0.8.
+* #4544 Update System.Reflection.Metadata to 9.0.8.
+* #4543 Update System.Collections.Immutable to 9.0.8.
+* #4542 Update System.Security.Cryptography.Pkcs to 9.0.8.
+* #4529 Update System.Reflection.Metadata 9.0.7.
+* #4528 Update System.Collections.Immutable to 9.0.7.
+* #4527 Update System.Security.Cryptography.Pkcs to 9.0.7.
+* #4526 Update Microsoft.Extensions.DependencyInjection to 9.0.7.
+* #4523 Update Microsoft.IdentityModel.JsonWebTokens to 8.12.1.
+* #4510 Update Microsoft.IdentityModel.JsonWebTokens to 8.12.0.
+* #4509 Update Basic.Reference.Assemblies.Net* to 1.8.2.
+* #4505 Update Basic.Reference.Assemblies.Net* to 1.8.1.
+* #4497 Cake.Testing.Xunit.v3 should not reference xunit.v3.
+* #4493 Update Spectre.Console to 0.50.0.
+* #4492 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.14.0.
+* #4491 Update System.Reflection.Metadata to 9.0.5.
+* #4490 Update System.Collections.Immutable to 9.0.5.
+* #4489 Update Autofac to 8.3.0.
+* #4488 Update Microsoft.Extensions.DependencyInjection to 9.0.5.
+* #4483 Update System.Security.Cryptography.Pkcs to 9.0.5.
+* #4482 Update Microsoft.IdentityModel.JsonWebTokens to 8.11.0.
+* #4481 Update NuGet.* to 6.14.0.
+* #4471 Improve script caching behavior.
+* #4440 Update Basic.Reference.Assemblies.Net80 to 1.8.0.
+* #4426 Update Microsoft.CodeAnalysis.CSharp.Scripting to 4.12.0.
+* #4425 Update NuGet.* to 6.12.1.
+* #4421 Update Microsoft.IdentityModel.JsonWebTokens to 8.3.0.
+* #4420 Update Autofac to 8.2.0.
+* #4412 NuGet 6.9 renamed no-cache to no-http-cache and deprecated the old setting name.
+* #4407 SignTool missing the /kc and /csp parameters. .
+* #4399 Refactor DotNetAliases: Extract methods into a separate partial class.
+* #4478 Failed to install addin when running from Windows powershell.exe.
+* #4475 Script execution does not always show a report summary.
+* #4410 AzurePipelinesPullRequestInfo fails to detect if build is running in the context of a GitHub Pull Request.
+* #4286 DotNetToolRunner doesn't support empty space at tool path.
+
 ### New in 5.0.0 (Released 2024/11/13)
 
 * #4384 Remove obsolete members / methods.
