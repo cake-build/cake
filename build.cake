@@ -207,6 +207,17 @@ Task("Upload-AppVeyor-Artifacts")
     }
 });
 
+Task("Upload-GitHubActions-Artifacts")
+    .IsDependentOn("Package")
+    .WithCriteria(BuildSystem.IsRunningOnGitHubActions, nameof(BuildSystem.IsRunningOnGitHubActions))
+    .Does<BuildParameters>(
+        static (context, parameters) => context
+            .GitHubActions() is var gh && gh != null
+                ?   gh.Commands
+                    .UploadArtifact(parameters.Paths.Directories.NuGetRoot,  $"Artifact_{gh.Environment.Runner.ImageOS ?? gh.Environment.Runner.OS}_{context.Environment.Runtime.BuiltFramework.Identifier}_{context.Environment.Runtime.BuiltFramework.Version}")
+                : throw new Exception("GitHubActions not available")
+    );
+
 Task("Publish-AzureDevOps")
     .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Package")
@@ -252,9 +263,8 @@ Task("Publish-AzureDevOps")
 })
 .OnError<BuildParameters>((exception, parameters) =>
 {
+    // Azure Artifacts not critical
     Information("Publish-AzureDevOps Task failed, but continuing with next Task...");
-    // Temp fix already published to Azure Artifacts
-    // parameters.PublishingError = true;
 });
 
 Task("Publish-NuGet")
@@ -444,10 +454,12 @@ Task("AppVeyor")
 
 
 Task("GitHubActions")
+  .IsDependentOn("Upload-GitHubActions-Artifacts")
   .IsDependentOn("Run-Integration-Tests")
   .IsDependentOn("Publish-AzureDevOps");
 
 Task("GitHubActions-Release")
+  .IsDependentOn("Upload-GitHubActions-Artifacts")
   .IsDependentOn("Publish-AzureDevOps")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-GitHub-Release")
