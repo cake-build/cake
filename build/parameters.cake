@@ -40,7 +40,6 @@ public class BuildParameters
                 && !IsLocalBuild
                 && !IsPullRequest
                 && IsMainCakeRepo
-                && IsMainCakeBranch
                 && IsTagged;
         }
     }
