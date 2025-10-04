@@ -253,7 +253,8 @@ Task("Publish-AzureDevOps")
 .OnError<BuildParameters>((exception, parameters) =>
 {
     Information("Publish-AzureDevOps Task failed, but continuing with next Task...");
-    parameters.PublishingError = true;
+    // Temp fix already published to Azure Artifacts
+    // parameters.PublishingError = true;
 });
 
 Task("Publish-NuGet")
