@@ -64,10 +64,39 @@ if (!(Test-Path $InstallPath)) {
     New-Item -Path $InstallPath -ItemType Directory -Force | Out-Null;
 }
 
+[bool]$InstallSupportedSdks = $env:CAKE_INSTALL_SUPPORTED_SDKS -eq "true" -or [string]::IsNullOrWhiteSpace($env:TEAMCITY_VERSION) -eq $false
+[string]$InstallSdkVersion = $env:CAKE_INSTALL_SDK_VERSION
+[bool]$InstallSpecificSdkVersion = [string]::IsNullOrWhiteSpace($InstallSdkVersion) -eq $false
+
 if ($IsMacOS -or $IsLinux) {
     $ScriptPath = Join-Path $InstallPath 'dotnet-install.sh'
     (New-Object System.Net.WebClient).DownloadFile($DotNetUnixInstallerUri, $ScriptPath);
+    
+    # Install additional SDK channels if CAKE_INSTALL_SUPPORTED_SDKS is set to true
+    if ($InstallSupportedSdks) {
+        Write-Host "Installing additional supported SDK channels..."
+        
+        # Install .NET 8.0 SDK
+        Write-Host "Installing .NET 8.0 SDK..."
+        & bash $ScriptPath --channel 8.0 --install-dir "$InstallPath" --no-path
+        
+        # Install .NET 9.0 SDK
+        Write-Host "Installing .NET 9.0 SDK..."
+        & bash $ScriptPath --channel 9.0 --install-dir "$InstallPath" --no-path --skip-non-versioned-files
+        
+        # Install .NET 10.0 SDK (preview quality)
+        Write-Host "Installing .NET 10.0 SDK (preview)..."
+        & bash $ScriptPath --channel 10.0 --quality preview --install-dir "$InstallPath" --no-path --skip-non-versioned-files
+    }
+    
+    # Install SDK from global.json
     & bash $ScriptPath --jsonfile "$GlobalJsonPath" --install-dir "$InstallPath" --no-path
+
+    # Install specific SDK version if CAKE_INSTALL_SDK_VERSION is set
+    if ($InstallSpecificSdkVersion) {
+        Write-Host "Installing .NET $InstallSdkVersion SDK..."
+        & bash $ScriptPath --version $InstallSdkVersion --install-dir "$InstallPath" --no-path 
+    }
 
     Remove-PathVariable "$InstallPath"
     $env:PATH = "$($InstallPath):$env:PATH"
@@ -75,12 +104,39 @@ if ($IsMacOS -or $IsLinux) {
 else {
     $ScriptPath = Join-Path $InstallPath 'dotnet-install.ps1'
     (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, $ScriptPath);
+    
+    # Install additional SDK channels if CAKE_INSTALL_SUPPORTED_SDKS is set to true
+    if ($InstallSupportedSdks) {
+        Write-Host "Installing additional supported SDK channels..."
+        
+        # Install .NET 8.0 SDK
+        Write-Host "Installing .NET 8.0 SDK..."
+        & $ScriptPath -Channel 8.0 -InstallDir $InstallPath -NoPath
+        
+        # Install .NET 9.0 SDK
+        Write-Host "Installing .NET 9.0 SDK..."
+        & $ScriptPath -Channel 9.0 -InstallDir $InstallPath -NoPath -SkipNonVersionedFiles
+        
+        # Install .NET 10.0 SDK (preview quality)
+        Write-Host "Installing .NET 10.0 SDK (preview)..."
+        & $ScriptPath -Channel 10.0 -Quality preview -InstallDir $InstallPath -NoPath -SkipNonVersionedFiles
+    }
+    
+    # Install SDK from global.json
     & $ScriptPath -JSonFile $GlobalJsonPath -InstallDir $InstallPath;
+
+    # Install specific SDK version if CAKE_INSTALL_SDK_VERSION is set
+    if ($InstallSpecificSdkVersion) {
+        Write-Host "Installing .NET $InstallSdkVersion SDK..."
+        & $ScriptPath -Version $InstallSdkVersion -InstallDir $InstallPath -NoPath
+    }
 
     Remove-PathVariable "$InstallPath"
     $env:PATH = "$InstallPath;$env:PATH"
 }
 $env:DOTNET_ROOT=$InstallPath
+
+& dotnet --info
 
 ###########################################################################
 # INSTALL CAKE
