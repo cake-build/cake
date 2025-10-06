@@ -4,7 +4,9 @@
 
 | Version   | Supported          |
 | --------- | ------------------ |
-| 4.x.x     | :white_check_mark: |
+| 6.x.x     | :white_check_mark: |
+| 5.x.x     | :x:                |
+| 4.x.x     | :x:                |
 | 3.x.x     | :x:                |
 | 2.x.x     | :x:                |
 | 1.0.x     | :x:                |
@@ -19,15 +21,16 @@ Instead, either encrypted through Keybase chat
   - [keybase.io/cakebuild](https://keybase.io/cakebuild)
 
 Or report them to us using NuGet.org *Contact owners*
-  - [Cake](https://www.nuget.org/packages/Cake)
   - [Cake.Tool](https://www.nuget.org/packages/Cake.Tool)
   - [Cake.Frosting](https://www.nuget.org/packages/Cake.Frosting)
-  - [Cake.CoreCLR](https://www.nuget.org/packages/Cake.CoreCLR)
   - [Cake.Core](https://www.nuget.org/packages/Cake.Core)
   - [Cake.Common](https://www.nuget.org/packages/Cake.Common)
   - [Cake.Testing](https://www.nuget.org/packages/Cake.Testing)
+  - [Cake.Testing.Xunit](https://www.nuget.org/packages/Cake.Testing.Xunit)
+  - [Cake.Testing.Xunit.v3](https://www.nuget.org/packages/Cake.Testing.Xunit.v3)
   - [Cake.NuGet](https://www.nuget.org/packages/Cake.NuGet)
   - [Cake.Cli](https://www.nuget.org/packages/Cake.Cli)
+  - [Cake.DotNetTool.Module](https://www.nuget.org/packages/Cake.DotNetTool.Module)
 
 If you prefer to submit without logging in, send an email to [security@cakebuild.net](mailto:security@cakebuild.net).
 
