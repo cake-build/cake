@@ -52,10 +52,7 @@ namespace Cake.Common.Tools.NuGet.Init
             {
                 throw new ArgumentNullException(nameof(destinationPackageSourcePath));
             }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var sourcePackagePath = sourcePackageSourcePath;
             var destinationPackagePath = destinationPackageSourcePath;

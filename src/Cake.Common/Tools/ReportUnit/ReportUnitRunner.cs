@@ -41,15 +41,9 @@ namespace Cake.Common.Tools.ReportUnit
         /// <param name="settings">The ReportUnit settings.</param>
         public void Run(DirectoryPath inputFolder, DirectoryPath outputFolder, ReportUnitSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
-            if (inputFolder == null)
-            {
-                throw new ArgumentNullException(nameof(inputFolder));
-            }
+            ArgumentNullException.ThrowIfNull(inputFolder);
 
             Run(settings, GetArguments(inputFolder, outputFolder));
         }
@@ -62,20 +56,11 @@ namespace Cake.Common.Tools.ReportUnit
         /// <param name="settings">The ReportUnit settings.</param>
         public void Run(FilePath inputFile, FilePath outputFile, ReportUnitSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
-            if (inputFile == null)
-            {
-                throw new ArgumentNullException(nameof(inputFile));
-            }
+            ArgumentNullException.ThrowIfNull(inputFile);
 
-            if (outputFile == null)
-            {
-                throw new ArgumentNullException(nameof(outputFile));
-            }
+            ArgumentNullException.ThrowIfNull(outputFile);
 
             Run(settings, GetArguments(inputFile, outputFile));
         }

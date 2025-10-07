@@ -49,10 +49,7 @@ namespace Cake.Common.Tools.VSTest
         /// <returns>The same <see cref="VSTestSettings"/> instance so that multiple calls can be chained.</returns>
         public static VSTestSettings WithLogger(this VSTestSettings settings, string loggerName)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Logger = loggerName;
             return settings;
         }

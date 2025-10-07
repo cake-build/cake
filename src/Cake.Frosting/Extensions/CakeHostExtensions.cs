@@ -24,10 +24,7 @@ namespace Cake.Frosting
         public static CakeHost UseStartup<TStartup>(this CakeHost host)
             where TStartup : IFrostingStartup, new()
         {
-            if (host is null)
-            {
-                throw new ArgumentNullException(nameof(host));
-            }
+            ArgumentNullException.ThrowIfNull(host);
 
             return host.ConfigureServices(services =>
             {

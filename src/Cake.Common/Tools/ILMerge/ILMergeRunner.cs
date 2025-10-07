@@ -44,18 +44,9 @@ namespace Cake.Common.Tools.ILMerge
         public void Merge(FilePath outputAssemblyPath, FilePath primaryAssemblyPath,
             IEnumerable<FilePath> assemblyPaths, ILMergeSettings settings = null)
         {
-            if (outputAssemblyPath == null)
-            {
-                throw new ArgumentNullException(nameof(outputAssemblyPath));
-            }
-            if (primaryAssemblyPath == null)
-            {
-                throw new ArgumentNullException(nameof(primaryAssemblyPath));
-            }
-            if (assemblyPaths == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPaths));
-            }
+            ArgumentNullException.ThrowIfNull(outputAssemblyPath);
+            ArgumentNullException.ThrowIfNull(primaryAssemblyPath);
+            ArgumentNullException.ThrowIfNull(assemblyPaths);
 
             settings = settings ?? new ILMergeSettings();
 

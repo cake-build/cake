@@ -88,10 +88,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Create")]
         public static void GitReleaseManagerCreate(this ICakeContext context, string token, string owner, string repository, GitReleaseManagerCreateSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var creator = new GitReleaseManagerCreator(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             creator.Create(token, owner, repository, settings);
@@ -142,10 +139,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.AddAssets")]
         public static void GitReleaseManagerAddAssets(this ICakeContext context, string token, string owner, string repository, string tagName, string assets, GitReleaseManagerAddAssetsSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assetsAdder = new GitReleaseManagerAssetsAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             assetsAdder.AddAssets(token, owner, repository, tagName, assets, settings);
@@ -194,10 +188,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Close")]
         public static void GitReleaseManagerClose(this ICakeContext context, string token, string owner, string repository, string milestone, GitReleaseManagerCloseMilestoneSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var milestoneCloser = new GitReleaseManagerMilestoneCloser(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             milestoneCloser.Close(token, owner, repository, milestone, settings);
@@ -246,10 +237,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Publish")]
         public static void GitReleaseManagerPublish(this ICakeContext context, string token, string owner, string repository, string tagName, GitReleaseManagerPublishSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var publisher = new GitReleaseManagerPublisher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             publisher.Publish(token, owner, repository, tagName, settings);
@@ -300,10 +288,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Export")]
         public static void GitReleaseManagerExport(this ICakeContext context, string token, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var publisher = new GitReleaseManagerExporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             publisher.Export(token, owner, repository, fileOutputPath, settings);
@@ -349,10 +334,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Label")]
         public static void GitReleaseManagerLabel(this ICakeContext context, string token, string owner, string repository, GitReleaseManagerLabelSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var labeller = new GitReleaseManagerLabeller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             labeller.Label(token, owner, repository, settings);
@@ -401,10 +383,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Open")]
         public static void GitReleaseManagerOpen(this ICakeContext context, string token, string owner, string repository, string milestone, GitReleaseManagerOpenMilestoneSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var milestoneOpener = new GitReleaseManagerMilestoneOpener(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             milestoneOpener.Open(token, owner, repository, milestone, settings);
@@ -461,10 +440,7 @@ namespace Cake.Common.Tools.GitReleaseManager
         [CakeNamespaceImport("Cake.Common.Tools.GitReleaseManager.Discard")]
         public static void GitReleaseManagerDiscard(this ICakeContext context, string token, string owner, string repository, string milestone, GitReleaseManagerDiscardSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var discarder = new GitReleaseManagerDiscarder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             discarder.Discard(token, owner, repository, milestone, settings);

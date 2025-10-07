@@ -42,14 +42,8 @@ namespace Cake.Common.Tools.XUnit
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> assemblyPaths, XUnit2Settings settings)
         {
-            if (assemblyPaths == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPaths));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyPaths);
+            ArgumentNullException.ThrowIfNull(settings);
 
             // Make sure we got output directory set when generating reports.
             if (string.IsNullOrWhiteSpace(settings.OutputDirectory?.FullPath))

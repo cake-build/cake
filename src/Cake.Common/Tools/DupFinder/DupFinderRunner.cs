@@ -50,15 +50,9 @@ namespace Cake.Common.Tools.DupFinder
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> filePaths, DupFinderSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
-            if (filePaths == null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
+            ArgumentNullException.ThrowIfNull(filePaths);
 
             Run(settings, GetArgument(settings, filePaths));
 
@@ -77,10 +71,7 @@ namespace Cake.Common.Tools.DupFinder
         /// <param name="configFile">The config file.</param>
         public void RunFromConfig(FilePath configFile)
         {
-            if (configFile == null)
-            {
-                throw new ArgumentNullException(nameof(configFile));
-            }
+            ArgumentNullException.ThrowIfNull(configFile);
 
             Run(new DupFinderSettings(), GetConfigArgument(configFile));
         }

@@ -39,10 +39,7 @@ namespace Cake.Common.Tools.DotNet.Workload.Search
         /// <returns>The list of available workloads.</returns>
         public IEnumerable<DotNetWorkload> Search(string searchString, DotNetWorkloadSearchSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var processSettings = new ProcessSettings
             {

@@ -19,10 +19,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder Description(this CakeTaskBuilder builder, string description)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.Description = description;
             return builder;

@@ -49,23 +49,14 @@ namespace Cake.NuGet
 
         public bool CanInstall(PackageReference package, PackageType type)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
+            ArgumentNullException.ThrowIfNull(package);
             return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
         }
 
         public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(package);
+            ArgumentNullException.ThrowIfNull(path);
 
             // Create the addin directory if it doesn't exist.
             path = GetPackagePath(path.MakeAbsolute(_environment), package);

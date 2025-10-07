@@ -43,18 +43,9 @@ namespace Cake.Common.Tools.ReportGenerator
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> reports, DirectoryPath targetDir, ReportGeneratorSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (reports == null)
-            {
-                throw new ArgumentNullException(nameof(reports));
-            }
-            if (targetDir == null)
-            {
-                throw new ArgumentNullException(nameof(targetDir));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(reports);
+            ArgumentNullException.ThrowIfNull(targetDir);
 
             var reportPaths = reports as FilePath[] ?? reports.ToArray();
             if (!reportPaths.Any())

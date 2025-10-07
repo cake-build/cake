@@ -37,19 +37,13 @@ namespace Cake.Core.IO
 
         public void Copy(FilePath destination, bool overwrite)
         {
-            if (destination == null)
-            {
-                throw new ArgumentNullException(nameof(destination));
-            }
+            ArgumentNullException.ThrowIfNull(destination);
             _file.CopyTo(destination.FullPath, overwrite);
         }
 
         public void Move(FilePath destination)
         {
-            if (destination == null)
-            {
-                throw new ArgumentNullException(nameof(destination));
-            }
+            ArgumentNullException.ThrowIfNull(destination);
             _file.MoveTo(destination.FullPath);
         }
 

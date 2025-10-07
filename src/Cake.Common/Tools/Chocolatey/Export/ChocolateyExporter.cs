@@ -38,10 +38,7 @@ namespace Cake.Common.Tools.Chocolatey.Export
         /// <param name="settings">The settings.</param>
         public void Export(ChocolateyExportSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(settings));
         }

@@ -689,15 +689,9 @@ namespace Cake.Core
         /// <param name="target">The argument builder to copy to.</param>
         public static void CopyTo(this ProcessArgumentBuilder source, ProcessArgumentBuilder target)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            ArgumentNullException.ThrowIfNull(source);
 
-            if (target == null)
-            {
-                throw new ArgumentNullException(nameof(target));
-            }
+            ArgumentNullException.ThrowIfNull(target);
 
             foreach (var token in source)
             {

@@ -110,10 +110,7 @@ namespace Cake.Core.IO
         /// <returns>A new <see cref="FilePath"/> with an appended extension.</returns>
         public FilePath AppendExtension(string extension)
         {
-            if (extension == null)
-            {
-                throw new ArgumentNullException(nameof(extension));
-            }
+            ArgumentNullException.ThrowIfNull(extension);
             if (!extension.StartsWith(".", StringComparison.OrdinalIgnoreCase))
             {
                 extension = string.Concat(".", extension);
@@ -128,10 +125,7 @@ namespace Cake.Core.IO
         /// <returns>An absolute path.</returns>
         public FilePath MakeAbsolute(ICakeEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
             return IsRelative
                 ? environment.WorkingDirectory.CombineWithFilePath(this).Collapse()
                 : new FilePath(FullPath);
@@ -144,10 +138,7 @@ namespace Cake.Core.IO
         /// <returns>An absolute path.</returns>
         public FilePath MakeAbsolute(DirectoryPath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
             if (path.IsRelative)
             {
                 throw new InvalidOperationException("Cannot make a file path absolute with a relative directory path.");

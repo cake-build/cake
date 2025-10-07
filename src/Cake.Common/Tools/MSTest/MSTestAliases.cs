@@ -36,10 +36,7 @@ namespace Cake.Common.Tools.MSTest
         [CakeMethodAlias]
         public static void MSTest(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
             if (assemblies.Length == 0)
@@ -65,10 +62,7 @@ namespace Cake.Common.Tools.MSTest
         [CakeMethodAlias]
         public static void MSTest(this ICakeContext context, GlobPattern pattern, MSTestSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
             if (assemblies.Length == 0)
@@ -112,14 +106,8 @@ namespace Cake.Common.Tools.MSTest
         [CakeMethodAlias]
         public static void MSTest(this ICakeContext context, IEnumerable<FilePath> assemblyPaths, MSTestSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (assemblyPaths == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPaths));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(assemblyPaths);
 
             var runner = new MSTestRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(assemblyPaths, settings);

@@ -42,15 +42,9 @@ namespace Cake.Common.Tools.Chocolatey.Push
         /// <param name="settings">The settings.</param>
         public void Push(FilePath packageFilePath, ChocolateyPushSettings settings)
         {
-            if (packageFilePath == null)
-            {
-                throw new ArgumentNullException(nameof(packageFilePath));
-            }
+            ArgumentNullException.ThrowIfNull(packageFilePath);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(packageFilePath, settings));
         }

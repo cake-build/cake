@@ -141,10 +141,7 @@ namespace Cake.Common.Tools.XBuild
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(XBuildSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var path = XBuildResolver.GetXBuildPath(_fileSystem, _environment, settings.ToolVersion);
 

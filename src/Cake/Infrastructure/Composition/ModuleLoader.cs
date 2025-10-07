@@ -34,10 +34,7 @@ namespace Cake.Infrastructure.Composition
 
         private ICakeModule LoadModule(Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type);
 
             var constructor = GetGreediestConstructor(type);
             var parameters = constructor.GetParameters();

@@ -60,10 +60,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Build")]
         public static void DotNetBuild(this ICakeContext context, string project, DotNetBuildSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {

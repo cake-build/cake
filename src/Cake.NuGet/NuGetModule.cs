@@ -18,10 +18,7 @@ namespace Cake.NuGet
         /// <inheritdoc/>
         public void Register(ICakeContainerRegistrar registrar)
         {
-            if (registrar == null)
-            {
-                throw new ArgumentNullException(nameof(registrar));
-            }
+            ArgumentNullException.ThrowIfNull(registrar);
 
             registrar.RegisterType<NuGetPackageInstaller>().As<INuGetPackageInstaller>().As<IPackageInstaller>().Singleton();
             registrar.RegisterType<NuGetContentResolver>().As<INuGetContentResolver>().Singleton();

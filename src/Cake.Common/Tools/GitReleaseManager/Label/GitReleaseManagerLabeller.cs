@@ -59,10 +59,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Label
                 throw new ArgumentNullException(nameof(repository));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(userName, password, owner, repository, settings));
         }
@@ -91,10 +88,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Label
                 throw new ArgumentNullException(nameof(repository));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(token, owner, repository, settings));
         }

@@ -26,10 +26,7 @@ namespace Cake.Common.Diagnostics
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new ScriptCallerInfo(memberName, sourceFilePath, sourceLineNumber);
         }

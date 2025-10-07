@@ -29,10 +29,7 @@ namespace Cake.Common.Tools.WiX.Heat
         public HeatRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolLocator toolService)
             : base(fileSystem, environment, processRunner, toolService)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
 
             _environment = environment;
         }
@@ -46,20 +43,11 @@ namespace Cake.Common.Tools.WiX.Heat
         /// <param name="settings">The settings.</param>
         public void Run(DirectoryPath directoryPath, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
-            if (directoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(directoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(directoryPath);
 
-            if (outputFile == null)
-            {
-                throw new ArgumentNullException(nameof(outputFile));
-            }
+            ArgumentNullException.ThrowIfNull(outputFile);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(directoryPath, outputFile, harvestType, settings));
         }
@@ -73,20 +61,11 @@ namespace Cake.Common.Tools.WiX.Heat
         /// <param name="settings">The settings.</param>
         public void Run(FilePath objectFile, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
-            if (objectFile == null)
-            {
-                throw new ArgumentNullException(nameof(objectFile));
-            }
+            ArgumentNullException.ThrowIfNull(objectFile);
 
-            if (outputFile == null)
-            {
-                throw new ArgumentNullException(nameof(outputFile));
-            }
+            ArgumentNullException.ThrowIfNull(outputFile);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(objectFile, outputFile, harvestType, settings));
         }
@@ -100,20 +79,11 @@ namespace Cake.Common.Tools.WiX.Heat
         /// <param name="settings">The settings.</param>
         public void Run(string harvestTarget, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
-            if (harvestTarget == null)
-            {
-                throw new ArgumentNullException(nameof(harvestTarget));
-            }
+            ArgumentNullException.ThrowIfNull(harvestTarget);
 
-            if (outputFile == null)
-            {
-                throw new ArgumentNullException(nameof(outputFile));
-            }
+            ArgumentNullException.ThrowIfNull(outputFile);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(harvestTarget, outputFile, harvestType, settings));
         }

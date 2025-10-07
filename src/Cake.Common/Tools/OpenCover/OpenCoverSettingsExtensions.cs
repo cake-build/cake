@@ -21,10 +21,7 @@ namespace Cake.Common.Tools.OpenCover
         /// <returns>The same <see cref="OpenCoverSettings"/> instance so that multiple calls can be chained.</returns>
         public static OpenCoverSettings WithFilter(this OpenCoverSettings settings, string filter)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Filters.Add(filter);
             return settings;
         }
@@ -38,10 +35,7 @@ namespace Cake.Common.Tools.OpenCover
         /// <returns>The same <see cref="OpenCoverSettings"/> instance so that multiple calls can be chained.</returns>
         public static OpenCoverSettings ExcludeByAttribute(this OpenCoverSettings settings, string filter)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.ExcludedAttributeFilters.Add(filter);
             return settings;
         }
@@ -54,10 +48,7 @@ namespace Cake.Common.Tools.OpenCover
         /// <returns>The same <see cref="OpenCoverSettings"/> instance so that multiple calls can be chained.</returns>
         public static OpenCoverSettings ExcludeByFile(this OpenCoverSettings settings, string filter)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.ExcludedFileFilters.Add(filter);
             return settings;
         }
@@ -69,10 +60,7 @@ namespace Cake.Common.Tools.OpenCover
         /// <returns>The same <see cref="OpenCoverSettings"/> instance so that multiple calls can be chained.</returns>
         public static OpenCoverSettings WithoutRegister(this OpenCoverSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Register = null;
             return settings;
         }
@@ -84,10 +72,7 @@ namespace Cake.Common.Tools.OpenCover
         /// <returns>The same <see cref="OpenCoverSettings"/> instance so that multiple calls can be chained.</returns>
         public static OpenCoverSettings WithRegisterAdmin(this OpenCoverSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Register = new OpenCoverRegisterOptionAdmin();
             return settings;
         }
@@ -99,10 +84,7 @@ namespace Cake.Common.Tools.OpenCover
         /// <returns>The same <see cref="OpenCoverSettings"/> instance so that multiple calls can be chained.</returns>
         public static OpenCoverSettings WithRegisterUser(this OpenCoverSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Register = new OpenCoverRegisterOptionUser();
             return settings;
         }
@@ -115,10 +97,7 @@ namespace Cake.Common.Tools.OpenCover
         /// <returns>The same <see cref="OpenCoverSettings"/> instance so that multiple calls can be chained.</returns>
         public static OpenCoverSettings WithRegisterDll(this OpenCoverSettings settings, FilePath path)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Register = new OpenCoverRegisterOptionDll(path);
             return settings;
         }

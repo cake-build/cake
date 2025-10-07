@@ -42,15 +42,9 @@ namespace Cake.Common.Tools.Chocolatey.Install
         /// <param name="settings">The settings.</param>
         public void InstallFromConfig(FilePath packageConfigPath, ChocolateyInstallSettings settings)
         {
-            if (packageConfigPath == null)
-            {
-                throw new ArgumentNullException(nameof(packageConfigPath));
-            }
+            ArgumentNullException.ThrowIfNull(packageConfigPath);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var packageId = packageConfigPath.MakeAbsolute(_environment).FullPath;
 
@@ -69,10 +63,7 @@ namespace Cake.Common.Tools.Chocolatey.Install
                 throw new ArgumentNullException(nameof(packageId));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(packageId, settings));
         }

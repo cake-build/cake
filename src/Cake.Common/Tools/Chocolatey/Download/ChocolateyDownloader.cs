@@ -50,10 +50,7 @@ namespace Cake.Common.Tools.Chocolatey.Download
                 throw new ArgumentNullException(nameof(packageId));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(packageId, settings));
         }

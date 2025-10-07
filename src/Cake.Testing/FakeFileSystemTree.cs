@@ -20,10 +20,7 @@ namespace Cake.Testing
 
         public FakeFileSystemTree(ICakeEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
             if (environment.WorkingDirectory == null)
             {
                 throw new ArgumentException("Working directory not set.");

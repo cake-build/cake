@@ -31,10 +31,7 @@ namespace Cake.Common
         /// <returns>All release notes.</returns>
         public IReadOnlyList<ReleaseNotes> Parse(string content)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            ArgumentNullException.ThrowIfNull(content);
 
             var lines = content.SplitLines();
             if (lines.Length > 0)

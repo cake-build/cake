@@ -22,10 +22,7 @@ namespace Cake.Common.Tools.DotCover
         /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
         public static T WithScope<T>(this T settings, string scope) where T : DotCoverCoverageSettings
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Scope.Add(scope);
             return settings;
         }
@@ -39,10 +36,7 @@ namespace Cake.Common.Tools.DotCover
         /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
         public static T WithFilter<T>(this T settings, string filter) where T : DotCoverCoverageSettings
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Filters.Add(filter);
             return settings;
         }
@@ -56,10 +50,7 @@ namespace Cake.Common.Tools.DotCover
         /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
         public static T WithAttributeFilter<T>(this T settings, string attributeFilter) where T : DotCoverCoverageSettings
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.AttributeFilters.Add(attributeFilter);
             return settings;
         }
@@ -73,10 +64,7 @@ namespace Cake.Common.Tools.DotCover
         /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
         public static T WithProcessFilter<T>(this T settings, string filter) where T : DotCoverCoverageSettings
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.ProcessFilters.Add(filter);
             return settings;
         }

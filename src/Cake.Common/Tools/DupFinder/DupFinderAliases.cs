@@ -124,10 +124,7 @@ namespace Cake.Common.Tools.DupFinder
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, IEnumerable<FilePath> files, DupFinderSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             runner.Run(files, settings);
@@ -171,15 +168,9 @@ namespace Cake.Common.Tools.DupFinder
         [CakeAliasCategory("DupFinder")]
         public static void DupFinder(this ICakeContext context, GlobPattern pattern, DupFinderSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (pattern == null)
-            {
-                throw new ArgumentNullException(nameof(pattern));
-            }
+            ArgumentNullException.ThrowIfNull(pattern);
 
             var sourceFiles = context.Globber.GetFiles(pattern).ToArray();
             if (sourceFiles.Length == 0)
@@ -206,10 +197,7 @@ namespace Cake.Common.Tools.DupFinder
         [CakeAliasCategory("DupFinder")]
         public static void DupFinderFromConfig(this ICakeContext context, FilePath configFile)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new DupFinderRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             runner.RunFromConfig(configFile);

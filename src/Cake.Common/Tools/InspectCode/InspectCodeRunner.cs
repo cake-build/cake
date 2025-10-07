@@ -50,14 +50,8 @@ namespace Cake.Common.Tools.InspectCode
         /// <param name="settings">The settings.</param>
         public void Run(FilePath solution, InspectCodeSettings settings)
         {
-            if (solution == null)
-            {
-                throw new ArgumentNullException(nameof(solution));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(solution);
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(settings, solution));
 
@@ -76,10 +70,7 @@ namespace Cake.Common.Tools.InspectCode
         /// <param name="configFile">The config file.</param>
         public void RunFromConfig(FilePath configFile)
         {
-            if (configFile == null)
-            {
-                throw new ArgumentNullException(nameof(configFile));
-            }
+            ArgumentNullException.ThrowIfNull(configFile);
 
             Run(new InspectCodeSettings(), GetConfigArgument(configFile));
         }

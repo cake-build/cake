@@ -97,10 +97,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Run")]
         public static void DotNetRun(this ICakeContext context, string project, ProcessArgumentBuilder arguments, DotNetRunSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {

@@ -382,10 +382,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(MSBuildSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var buildPlatform = settings.MSBuildPlatform;
 

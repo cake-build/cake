@@ -39,15 +39,9 @@ namespace Cake.Common.Tools.Chocolatey.Uninstall
         /// <param name="settings">The settings.</param>
         public void Uninstall(IEnumerable<string> packageIds, ChocolateyUninstallSettings settings)
         {
-            if (packageIds == null)
-            {
-                throw new ArgumentNullException(nameof(packageIds));
-            }
+            ArgumentNullException.ThrowIfNull(packageIds);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(packageIds, settings));
         }

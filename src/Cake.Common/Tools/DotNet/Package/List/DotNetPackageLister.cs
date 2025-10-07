@@ -42,10 +42,7 @@ namespace Cake.Common.Tools.DotNet.Package.List
         /// <returns>A task with the GitVersion results.</returns>
         public DotNetPackageList List(string project, DotNetPackageListSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var output = string.Empty;
             Run(settings, GetArguments(project, settings), new ProcessSettings { RedirectStandardOutput = true }, process =>

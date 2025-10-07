@@ -39,18 +39,9 @@ namespace Cake.Common.Solution.Project.Properties
         /// <param name="log">The log.</param>
         public AssemblyInfoCreator(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
+            ArgumentNullException.ThrowIfNull(log);
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
@@ -76,14 +67,8 @@ namespace Cake.Common.Solution.Project.Properties
             string vbAttributeWithValueFormat = VBAttributeWithValueFormat,
             string vbAttributeWithKeyValueFormat = VBAttributeWithKeyValueFormat)
         {
-            if (outputPath == null)
-            {
-                throw new ArgumentNullException(nameof(outputPath));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(outputPath);
+            ArgumentNullException.ThrowIfNull(settings);
             string comment = CSharpComment;
             string usingFormat = CSharpUsingFormat;
 

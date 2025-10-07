@@ -17,35 +17,17 @@ namespace Cake.Common.IO
     {
         public static void CopyFileToDirectory(ICakeContext context, FilePath filePath, DirectoryPath targetDirectoryPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
-            if (targetDirectoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(targetDirectoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePath);
+            ArgumentNullException.ThrowIfNull(targetDirectoryPath);
             CopyFile(context, filePath, targetDirectoryPath.GetFilePath(filePath));
         }
 
         public static void CopyFile(ICakeContext context, FilePath filePath, FilePath targetFilePath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
-            if (targetFilePath == null)
-            {
-                throw new ArgumentNullException(nameof(targetFilePath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePath);
+            ArgumentNullException.ThrowIfNull(targetFilePath);
 
             var targetDirectoryPath = targetFilePath.GetDirectory().MakeAbsolute(context.Environment);
 
@@ -62,14 +44,8 @@ namespace Cake.Common.IO
 
         public static void CopyFiles(ICakeContext context, GlobPattern pattern, DirectoryPath targetDirectoryPath, bool preserverFolderStructure)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-            if (pattern == null)
-            {
-                throw new ArgumentNullException("pattern");
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(pattern);
 
             var files = context.GetFiles(pattern);
             if (files.Count == 0)
@@ -83,18 +59,9 @@ namespace Cake.Common.IO
 
         public static void CopyFiles(ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath, bool preserverFolderStructure)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePaths == null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
-            if (targetDirectoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(targetDirectoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePaths);
+            ArgumentNullException.ThrowIfNull(targetDirectoryPath);
 
             // Make all path absolute
             var absoluteTargetDirectoryPath = targetDirectoryPath.MakeAbsolute(context.Environment);

@@ -22,18 +22,9 @@ namespace Cake.Common.Tools.XUnit
         /// <returns>The same <see cref="XUnit2Settings"/> instance so that multiple calls can be chained.</returns>
         public static XUnit2Settings IncludeTrait(this XUnit2Settings settings, string name, params string[] values)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-            if (values == null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(name);
+            ArgumentNullException.ThrowIfNull(values);
 
             if (values.Any(v => v == null))
             {
@@ -62,18 +53,9 @@ namespace Cake.Common.Tools.XUnit
         /// <returns>The same <see cref="XUnit2Settings"/> instance so that multiple calls can be chained.</returns>
         public static XUnit2Settings ExcludeTrait(this XUnit2Settings settings, string name, params string[] values)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-            if (values == null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(name);
+            ArgumentNullException.ThrowIfNull(values);
 
             if (values.Any(v => v == null))
             {
@@ -101,10 +83,7 @@ namespace Cake.Common.Tools.XUnit
         /// <returns>The same <see cref="XUnit2Settings"/> instance so that multiple calls can be chained.</returns>
         public static XUnit2Settings IncludeNamespace(this XUnit2Settings settings, string namespaceToInclude)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (string.IsNullOrEmpty(namespaceToInclude))
             {
@@ -124,10 +103,7 @@ namespace Cake.Common.Tools.XUnit
         /// <returns>The same <see cref="XUnit2Settings"/> instance so that multiple calls can be chained.</returns>
         public static XUnit2Settings IncludeClass(this XUnit2Settings settings, string classNameToInclude)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (string.IsNullOrEmpty(classNameToInclude))
             {
@@ -147,10 +123,7 @@ namespace Cake.Common.Tools.XUnit
         /// <returns>The same <see cref="XUnit2Settings"/> instance so that multiple calls can be chained.</returns>
         public static XUnit2Settings IncludeMethod(this XUnit2Settings settings, string methodNameToInclude)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (string.IsNullOrEmpty(methodNameToInclude))
             {

@@ -39,20 +39,14 @@ namespace Cake.Testing
             params object[] manuallyCreatedInstances)
             where TMemberInfo : MemberInfo
         {
-            if (baseType == null)
-            {
-                throw new ArgumentNullException(nameof(baseType));
-            }
+            ArgumentNullException.ThrowIfNull(baseType);
 
             if (!baseType.IsClass)
             {
                 throw new ArgumentException("BaseType", nameof(baseType));
             }
 
-            if (declaredMemberSelector == null)
-            {
-                throw new ArgumentNullException(nameof(declaredMemberSelector));
-            }
+            ArgumentNullException.ThrowIfNull(declaredMemberSelector);
 
             var typesAndMembers = (
                 from assembly in AppDomain.CurrentDomain.GetAssemblies()

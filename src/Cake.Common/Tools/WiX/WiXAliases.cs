@@ -45,10 +45,7 @@ namespace Cake.Common.Tools.WiX
         [CakeAliasCategory("Candle")]
         public static void WiXCandle(this ICakeContext context, GlobPattern pattern, CandleSettings settings = null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var files = context.Globber.GetFiles(pattern).ToArray();
             if (files.Length == 0)
@@ -80,10 +77,7 @@ namespace Cake.Common.Tools.WiX
         [CakeAliasCategory("Candle")]
         public static void WiXCandle(this ICakeContext context, IEnumerable<FilePath> sourceFiles, CandleSettings settings = null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new CandleRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(sourceFiles, settings ?? new CandleSettings());
@@ -107,10 +101,7 @@ namespace Cake.Common.Tools.WiX
         [CakeAliasCategory("Light")]
         public static void WiXLight(this ICakeContext context, GlobPattern pattern, LightSettings settings = null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var files = context.Globber.GetFiles(pattern).ToArray();
             if (files.Length == 0)
@@ -141,10 +132,7 @@ namespace Cake.Common.Tools.WiX
         [CakeAliasCategory("Light")]
         public static void WiXLight(this ICakeContext context, IEnumerable<FilePath> objectFiles, LightSettings settings = null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new LightRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(objectFiles, settings ?? new LightSettings());
@@ -169,10 +157,7 @@ namespace Cake.Common.Tools.WiX
         [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
         public static void WiXHeat(this ICakeContext context, DirectoryPath directoryPath, FilePath outputFile, WiXHarvestType harvestType)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(directoryPath, outputFile, harvestType, new HeatSettings());
@@ -199,10 +184,7 @@ namespace Cake.Common.Tools.WiX
         [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
         public static void WiXHeat(this ICakeContext context, DirectoryPath directoryPath, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(directoryPath, outputFile, harvestType, settings ?? new HeatSettings());
@@ -227,10 +209,7 @@ namespace Cake.Common.Tools.WiX
         [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
         public static void WiXHeat(this ICakeContext context, FilePath objectFile, FilePath outputFile, WiXHarvestType harvestType)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(objectFile, outputFile, harvestType, new HeatSettings());
@@ -256,10 +235,7 @@ namespace Cake.Common.Tools.WiX
         [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
         public static void WiXHeat(this ICakeContext context, FilePath objectFile, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(objectFile, outputFile, harvestType, settings ?? new HeatSettings());
@@ -283,10 +259,7 @@ namespace Cake.Common.Tools.WiX
         [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
         public static void WiXHeat(this ICakeContext context, string harvestTarget, FilePath outputFile, WiXHarvestType harvestType)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(harvestTarget, outputFile, harvestType, new HeatSettings());
@@ -311,10 +284,7 @@ namespace Cake.Common.Tools.WiX
         [CakeNamespaceImport("Cake.Common.Tools.WiX.Heat")]
         public static void WiXHeat(this ICakeContext context, string harvestTarget, FilePath outputFile, WiXHarvestType harvestType, HeatSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new HeatRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(harvestTarget, outputFile, harvestType, settings ?? new HeatSettings());

@@ -42,14 +42,8 @@ namespace Cake.Common.Tools.MSpec
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> assemblyPaths, MSpecSettings settings)
         {
-            if (assemblyPaths == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPaths));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyPaths);
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (string.IsNullOrWhiteSpace(settings.OutputDirectory?.FullPath))
             {

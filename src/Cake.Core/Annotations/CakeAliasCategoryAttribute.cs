@@ -24,10 +24,7 @@ namespace Cake.Core.Annotations
         /// <param name="name">The category name.</param>
         public CakeAliasCategoryAttribute(string name)
         {
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(name);
             Name = name;
         }
     }

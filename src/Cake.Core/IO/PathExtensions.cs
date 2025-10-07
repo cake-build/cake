@@ -25,10 +25,7 @@ namespace Cake.Core.IO
         /// <returns>A new <see cref="FilePath"/> with each environment variable replaced by its value.</returns>
         public static FilePath ExpandEnvironmentVariables(this FilePath path, ICakeEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
 
             var result = environment.ExpandEnvironmentVariables(path.FullPath);
             return new FilePath(result);
@@ -48,10 +45,7 @@ namespace Cake.Core.IO
         /// <returns>A new <see cref="DirectoryPath"/> with each environment variable replaced by its value.</returns>
         public static DirectoryPath ExpandEnvironmentVariables(this DirectoryPath path, ICakeEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
 
             var result = environment.ExpandEnvironmentVariables(path.FullPath);
             return new DirectoryPath(result);

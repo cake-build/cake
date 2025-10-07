@@ -46,10 +46,7 @@ namespace Cake.Common.Tools.DotNet.Reference.Add
             {
                 throw new ArgumentNullException(nameof(projectReferences));
             }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(project, projectReferences, settings));
         }

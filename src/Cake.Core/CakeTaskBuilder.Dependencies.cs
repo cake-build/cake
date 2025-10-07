@@ -16,10 +16,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder IsDependentOn(this CakeTaskBuilder builder, string name)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.AddDependency(name);
             return builder;
@@ -33,14 +30,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder IsDependentOn(this CakeTaskBuilder builder, CakeTaskBuilder other)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (other == null)
-            {
-                throw new ArgumentNullException(nameof(other));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(other);
 
             builder.Target.AddDependency(other.Target.Name);
             return builder;
@@ -54,10 +45,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder IsDependeeOf(this CakeTaskBuilder builder, string name)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.AddDependee(name);
             return builder;
@@ -71,14 +59,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder IsDependeeOf(this CakeTaskBuilder builder, CakeTaskBuilder other)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (other == null)
-            {
-                throw new ArgumentNullException(nameof(other));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(other);
 
             builder.Target.AddDependee(other.Target.Name);
             return builder;

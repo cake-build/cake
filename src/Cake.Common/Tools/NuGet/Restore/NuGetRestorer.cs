@@ -42,14 +42,8 @@ namespace Cake.Common.Tools.NuGet.Restore
         /// <param name="settings">The settings.</param>
         public void Restore(FilePath targetFilePath, NuGetRestoreSettings settings)
         {
-            if (targetFilePath == null)
-            {
-                throw new ArgumentNullException(nameof(targetFilePath));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(targetFilePath);
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(targetFilePath, settings));
         }

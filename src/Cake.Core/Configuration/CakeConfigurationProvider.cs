@@ -26,14 +26,8 @@ namespace Cake.Core.Configuration
         /// <param name="environment">The environment.</param>
         public CakeConfigurationProvider(IFileSystem fileSystem, ICakeEnvironment environment)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
             _fileSystem = fileSystem;
             _environment = environment;
         }
@@ -56,20 +50,11 @@ namespace Cake.Core.Configuration
         /// <returns>The created configuration.</returns>
         public ICakeConfiguration CreateConfiguration(DirectoryPath path, IEnumerable<KeyValuePair<string, string>> baseConfiguration, IDictionary<string, string> arguments)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
-            if (baseConfiguration == null)
-            {
-                throw new ArgumentNullException(nameof(baseConfiguration));
-            }
+            ArgumentNullException.ThrowIfNull(baseConfiguration);
 
-            if (arguments == null)
-            {
-                throw new ArgumentNullException(nameof(arguments));
-            }
+            ArgumentNullException.ThrowIfNull(arguments);
 
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 

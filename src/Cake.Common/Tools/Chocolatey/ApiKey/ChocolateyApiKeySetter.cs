@@ -39,10 +39,7 @@ namespace Cake.Common.Tools.Chocolatey.ApiKey
         /// <param name="settings">The settings.</param>
         public void Set(string source, ChocolateyApiKeySettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (string.IsNullOrWhiteSpace(source))
             {

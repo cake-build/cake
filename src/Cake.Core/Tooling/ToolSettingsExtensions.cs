@@ -23,15 +23,9 @@ namespace Cake.Core.Tooling
         public static T WithToolSettings<T>(this T toolSettings, Action<T> toolSettingsAction)
                where T : ToolSettings
         {
-            if (toolSettings is null)
-            {
-                throw new ArgumentNullException(nameof(toolSettings));
-            }
+            ArgumentNullException.ThrowIfNull(toolSettings);
 
-            if (toolSettingsAction is null)
-            {
-                throw new ArgumentNullException(nameof(toolSettingsAction));
-            }
+            ArgumentNullException.ThrowIfNull(toolSettingsAction);
 
             toolSettingsAction.Invoke(toolSettings);
 

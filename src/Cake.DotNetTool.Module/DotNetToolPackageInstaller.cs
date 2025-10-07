@@ -37,25 +37,13 @@ namespace Cake.DotNetTool.Module
         /// <param name="fileSystem">The file system.</param>
         public DotNetToolPackageInstaller(ICakeEnvironment environment, IProcessRunner processRunner, ICakeLog log, IDotNetToolContentResolver contentResolver, ICakeConfiguration config, IFileSystem fileSystem)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
 
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException(nameof(processRunner));
-            }
+            ArgumentNullException.ThrowIfNull(processRunner);
 
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
+            ArgumentNullException.ThrowIfNull(log);
 
-            if (contentResolver == null)
-            {
-                throw new ArgumentNullException(nameof(contentResolver));
-            }
+            ArgumentNullException.ThrowIfNull(contentResolver);
 
             _environment = environment;
             _processRunner = processRunner;
@@ -73,10 +61,7 @@ namespace Cake.DotNetTool.Module
         /// <returns><c>true</c> if this installer can install the specified resource; otherwise <c>false</c>.</returns>
         public bool CanInstall(PackageReference package, PackageType type)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
+            ArgumentNullException.ThrowIfNull(package);
 
             return package.Scheme.Equals("dotnet", StringComparison.OrdinalIgnoreCase);
         }
@@ -90,15 +75,9 @@ namespace Cake.DotNetTool.Module
         /// <returns>The installed files.</returns>
         public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
+            ArgumentNullException.ThrowIfNull(package);
 
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             // We are going to assume that the default install location is the
             // currently configured location for the Cake Tools Folder

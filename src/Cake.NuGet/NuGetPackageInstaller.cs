@@ -17,10 +17,7 @@ namespace Cake.NuGet
             InProcessInstaller inProc,
             OutOfProcessInstaller outProc)
         {
-            if (configuration is null)
-            {
-                throw new ArgumentNullException(nameof(configuration));
-            }
+            ArgumentNullException.ThrowIfNull(configuration);
 
             _useInProcessClient = UseInProcessClient(configuration);
             _inProc = inProc ?? throw new ArgumentNullException(nameof(inProc));

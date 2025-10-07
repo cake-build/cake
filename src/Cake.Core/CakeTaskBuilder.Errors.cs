@@ -16,10 +16,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder DeferOnError(this CakeTaskBuilder builder)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.SetDeferExceptions(true);
             return builder;
@@ -54,10 +51,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Func<Task> errorHandler)
         {
-            if (errorHandler == null)
-            {
-                throw new ArgumentNullException(nameof(errorHandler));
-            }
+            ArgumentNullException.ThrowIfNull(errorHandler);
 
             return OnError(builder, async exception => await errorHandler());
         }
@@ -81,10 +75,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Func<Exception, Task> errorHandler)
         {
-            if (errorHandler == null)
-            {
-                throw new ArgumentNullException(nameof(errorHandler));
-            }
+            ArgumentNullException.ThrowIfNull(errorHandler);
 
             return OnError(builder, async (exception, _) => await errorHandler(exception));
         }
@@ -97,10 +88,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Action<Exception, ICakeContext> errorHandler)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.SetErrorHandler(errorHandler);
             return builder;
@@ -114,10 +102,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Func<Exception, ICakeContext, Task> errorHandler)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.SetErrorHandler(errorHandler);
             return builder;
@@ -203,10 +188,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Action finallyHandler)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.SetFinallyHandler(finallyHandler);
             return builder;
@@ -220,10 +202,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Func<Task> finallyHandler)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.SetFinallyHandler(finallyHandler);
             return builder;
@@ -237,10 +216,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Action<ICakeContext> finallyHandler)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.SetFinallyHandler(finallyHandler);
             return builder;
@@ -254,10 +230,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Func<ICakeContext, Task> finallyHandler)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.SetFinallyHandler(finallyHandler);
             return builder;
@@ -290,10 +263,7 @@ namespace Cake.Core
         public static CakeTaskBuilder Finally<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, Task> finallyHandler)
              where TData : class
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.SetFinallyHandler(context => finallyHandler(context, context.Data.Get<TData>()));
             return builder;
@@ -308,10 +278,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder ReportError(this CakeTaskBuilder builder, Action<Exception> errorReporter)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.SetErrorReporter(errorReporter);
             return builder;
@@ -326,10 +293,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder ReportError(this CakeTaskBuilder builder, Func<Exception, Task> errorReporter)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.SetErrorReporter(errorReporter);
             return builder;

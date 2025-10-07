@@ -58,10 +58,7 @@ namespace Cake.Common.Tools.GitLink
         [CakeMethodAlias]
         public static void GitLink(this ICakeContext context, DirectoryPath repositoryRootPath, GitLinkSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new GitLinkRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(repositoryRootPath, settings);

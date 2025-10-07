@@ -67,20 +67,14 @@ namespace Cake.Infrastructure.Scripting
 
         public void AddReference(Assembly assembly)
         {
-            if (assembly == null)
-            {
-                throw new ArgumentNullException(nameof(assembly));
-            }
+            ArgumentNullException.ThrowIfNull(assembly);
             _log.Debug("Adding assembly reference to {0}...", new FilePath(assembly.Location).GetFilename().FullPath);
             References.Add(assembly);
         }
 
         public void AddReference(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             _log.Debug("Adding reference to {0}...", path.GetFilename().FullPath);
             References.Add(_loader.Load(path, true));

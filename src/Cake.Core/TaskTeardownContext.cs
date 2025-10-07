@@ -20,10 +20,7 @@ namespace Cake.Core
         public TaskTeardownContext(ICakeContext context, ICakeTaskInfo task, TimeSpan duration, bool skipped, Exception throwException)
             : base(context)
         {
-            if (task == null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
+            ArgumentNullException.ThrowIfNull(task);
 
             Task = task;
             Duration = duration;

@@ -31,15 +31,9 @@ namespace Cake.Common.Solution.Project.XmlDoc
         /// <param name="log">The log.</param>
         public XmlDocExampleCodeParser(IFileSystem fileSystem, IGlobber globber, ICakeLog log)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
 
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
+            ArgumentNullException.ThrowIfNull(globber);
 
             _fileSystem = fileSystem;
             _globber = globber;

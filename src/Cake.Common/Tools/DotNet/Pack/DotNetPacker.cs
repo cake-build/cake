@@ -40,10 +40,7 @@ namespace Cake.Common.Tools.DotNet.Pack
         /// <param name="settings">The settings.</param>
         public void Pack(string project, DotNetPackSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(project, settings));
         }

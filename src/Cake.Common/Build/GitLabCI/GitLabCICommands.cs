@@ -32,20 +32,14 @@ namespace Cake.Common.Build.GitLabCI
         /// <param name="value">The Value.</param>
         public void SetEnvironmentVariable(FilePath envPath, string key, string value)
         {
-            if (envPath is null)
-            {
-                throw new ArgumentNullException(nameof(envPath));
-            }
+            ArgumentNullException.ThrowIfNull(envPath);
 
             if (string.IsNullOrEmpty(key))
             {
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             var file = _fileSystem.GetFile(envPath);
             using var stream = file.Open(FileMode.Append, FileAccess.Write, FileShare.None);

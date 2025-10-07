@@ -40,14 +40,8 @@ namespace Cake.Common.Tools.GitReleaseNotes
         /// <param name="settings">The settings.</param>
         public void Run(FilePath outputFile, GitReleaseNotesSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (outputFile == null)
-            {
-                throw new ArgumentNullException(nameof(outputFile));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(outputFile);
 
             Run(settings, GetArguments(outputFile, settings));
         }

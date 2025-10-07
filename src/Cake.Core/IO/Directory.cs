@@ -36,10 +36,7 @@ namespace Cake.Core.IO
 
         public void Move(DirectoryPath destination)
         {
-            if (destination == null)
-            {
-                throw new ArgumentNullException(nameof(destination));
-            }
+            ArgumentNullException.ThrowIfNull(destination);
             _directory.MoveTo(destination.FullPath);
         }
 

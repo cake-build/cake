@@ -39,10 +39,7 @@ namespace Cake.Common.Tools.DotNet.Package.Remove
         /// <param name="project">The target project file path. If not specified, the command searches the current directory for one.</param>
         public void Remove(string packageName, string project)
         {
-            if (packageName == null)
-            {
-                throw new ArgumentNullException(nameof(packageName));
-            }
+            ArgumentNullException.ThrowIfNull(packageName);
 
             var settings = new DotNetPackageRemoveSettings();
             RunCommand(settings, GetArguments(packageName, project, settings));

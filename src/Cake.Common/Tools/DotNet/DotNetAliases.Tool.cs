@@ -35,10 +35,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Tool")]
         public static void DotNetTool(this ICakeContext context, string command)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var arguments = new ProcessArgumentBuilder();
             var settings = new DotNetToolSettings();
@@ -67,10 +64,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Tool")]
         public static void DotNetTool(this ICakeContext context, string command, DotNetToolSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var arguments = new ProcessArgumentBuilder();
 
@@ -93,10 +87,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Tool")]
         public static void DotNetTool(this ICakeContext context, FilePath projectPath, string command)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var arguments = new ProcessArgumentBuilder();
             var settings = new DotNetToolSettings();
@@ -121,10 +112,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Tool")]
         public static void DotNetTool(this ICakeContext context, FilePath projectPath, string command, ProcessArgumentBuilder arguments)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var settings = new DotNetToolSettings();
 
@@ -149,10 +137,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Tool")]
         public static void DotNetTool(this ICakeContext context, FilePath projectPath, string command, ProcessArgumentBuilder arguments, DotNetToolSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new DotNetToolRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
 

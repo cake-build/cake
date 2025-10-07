@@ -39,10 +39,7 @@ namespace Cake.Core.Scripting.CodeGen
 
         internal string FormatName(ParameterInfo parameterInfo)
         {
-            if (parameterInfo == null)
-            {
-                throw new ArgumentNullException(nameof(parameterInfo));
-            }
+            ArgumentNullException.ThrowIfNull(parameterInfo);
 
             return FormatName(parameterInfo.Name);
         }

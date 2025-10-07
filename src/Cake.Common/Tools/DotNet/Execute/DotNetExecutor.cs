@@ -40,14 +40,8 @@ namespace Cake.Common.Tools.DotNet.Execute
         /// <param name="settings">The settings.</param>
         public void Execute(FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetExecuteSettings settings)
         {
-            if (assemblyPath == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPath));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyPath);
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(assemblyPath, arguments, settings));
         }

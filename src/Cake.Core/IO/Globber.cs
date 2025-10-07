@@ -26,14 +26,8 @@ namespace Cake.Core.IO
         /// <param name="environment">The environment.</param>
         public Globber(IFileSystem fileSystem, ICakeEnvironment environment)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
 
             _environment = environment;
             _parser = new GlobParser(environment);
@@ -44,10 +38,7 @@ namespace Cake.Core.IO
         /// <inheritdoc/>
         public IEnumerable<Path> Match(GlobPattern pattern, GlobberSettings settings)
         {
-            if (pattern == null)
-            {
-                throw new ArgumentNullException(nameof(pattern));
-            }
+            ArgumentNullException.ThrowIfNull(pattern);
             if (string.IsNullOrWhiteSpace(pattern?.Pattern))
             {
                 return Enumerable.Empty<Path>();

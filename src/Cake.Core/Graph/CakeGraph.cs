@@ -41,10 +41,7 @@ namespace Cake.Core.Graph
         /// <param name="node">The node to add.</param>
         public void Add(string node)
         {
-            if (node == null)
-            {
-                throw new ArgumentNullException(nameof(node));
-            }
+            ArgumentNullException.ThrowIfNull(node);
             if (Exist(node))
             {
                 throw new CakeException("Node has already been added to graph.");

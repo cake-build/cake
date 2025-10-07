@@ -71,20 +71,11 @@ namespace Cake.Common.Xml
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static string XmlPeek(this ICakeContext context, FilePath filePath, string xpath, XmlPeekSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(filePath);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var file = context.FileSystem.GetFile(filePath);
             if (!file.Exists)
@@ -113,20 +104,14 @@ namespace Cake.Common.Xml
         /// <param name="settings">Additional settings to tweak Xml Peek behavior.</param>
         private static string XmlPeek(XmlReader source, string xpath, XmlPeekSettings settings)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            ArgumentNullException.ThrowIfNull(source);
 
             if (string.IsNullOrWhiteSpace(xpath))
             {
                 throw new ArgumentNullException(nameof(xpath));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var document = new XmlDocument();
             document.PreserveWhitespace = settings.PreserveWhitespace;

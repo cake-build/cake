@@ -113,10 +113,7 @@ namespace Cake.Common.Tools.Command
         /// <param name="postAction">If specified called after process exit.</param>
         private void RunCommand(ProcessArgumentBuilder arguments, ProcessSettings processSettings, Action<IProcess> postAction)
         {
-            if (arguments is null)
-            {
-                throw new ArgumentNullException(nameof(arguments));
-            }
+            ArgumentNullException.ThrowIfNull(arguments);
 
             if (string.IsNullOrWhiteSpace(Settings.ToolName))
             {

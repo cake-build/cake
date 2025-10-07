@@ -32,10 +32,7 @@ namespace Cake.Core.Tooling
         /// <inheritdoc/>
         public void Register(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             path = path.MakeAbsolute(_environment);
 

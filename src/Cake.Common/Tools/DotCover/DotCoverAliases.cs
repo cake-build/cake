@@ -58,10 +58,7 @@ namespace Cake.Common.Tools.DotCover
             FilePath outputFile,
             DotCoverAnalyseSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings == null)
             {
@@ -108,10 +105,7 @@ namespace Cake.Common.Tools.DotCover
             FilePath outputFile,
             DotCoverCoverSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings == null)
             {
@@ -153,10 +147,7 @@ namespace Cake.Common.Tools.DotCover
             FilePath outputFile,
             DotCoverReportSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings == null)
             {
@@ -228,10 +219,7 @@ namespace Cake.Common.Tools.DotCover
             FilePath outputFile,
             DotCoverMergeSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings == null)
             {

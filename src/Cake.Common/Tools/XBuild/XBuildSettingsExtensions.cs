@@ -22,10 +22,7 @@ namespace Cake.Common.Tools.XBuild
         /// <returns>The same <see cref="XBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static XBuildSettings WithTarget(this XBuildSettings settings, string target)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Targets.Add(target);
             return settings;
         }
@@ -38,10 +35,7 @@ namespace Cake.Common.Tools.XBuild
         /// <returns>The same <see cref="XBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static XBuildSettings UseToolVersion(this XBuildSettings settings, XBuildToolVersion version)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.ToolVersion = version;
             return settings;
         }
@@ -55,10 +49,7 @@ namespace Cake.Common.Tools.XBuild
         /// <returns>The same <see cref="XBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static XBuildSettings WithProperty(this XBuildSettings settings, string name, params string[] values)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             IList<string> currentValue;
             currentValue = new List<string>(
@@ -79,10 +70,7 @@ namespace Cake.Common.Tools.XBuild
         /// <returns>The same <see cref="XBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static XBuildSettings SetConfiguration(this XBuildSettings settings, string configuration)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Configuration = configuration;
             return settings;
         }
@@ -95,10 +83,7 @@ namespace Cake.Common.Tools.XBuild
         /// <returns>The same <see cref="XBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static XBuildSettings SetVerbosity(this XBuildSettings settings, Verbosity verbosity)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Verbosity = verbosity;
             return settings;
         }

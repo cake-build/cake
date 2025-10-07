@@ -43,10 +43,7 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static bool HasArgument(this ICakeContext context, string name)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Arguments.HasArgument(name);
         }
 
@@ -73,10 +70,7 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static T Argument<T>(this ICakeContext context, string name)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var value = context.Arguments.GetArguments(name).LastOrDefault();
             if (value == null)
@@ -106,10 +100,7 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static ICollection<T> Arguments<T>(this ICakeContext context, string name)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var values = context.Arguments.GetArguments(name);
             if (values == null || values.Count == 0)
@@ -141,10 +132,7 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static ICollection<T> Arguments<T>(this ICakeContext context, string name, T defaultValue)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var values = context.Arguments.GetArguments(name);
             if (values == null || values.Count == 0)
@@ -174,10 +162,7 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static ICollection<T> Arguments<T>(this ICakeContext context, string name, ICollection<T> defaultValues)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var values = context.Arguments.GetArguments(name);
             if (values == null || values.Count == 0)
@@ -207,10 +192,7 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static ICollection<T> Arguments<T>(this ICakeContext context, string name, Func<ICakeContext, ICollection<T>> defaultValues)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var values = context.Arguments.GetArguments(name);
             if (values == null || values.Count == 0)
@@ -243,10 +225,7 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static T Argument<T>(this ICakeContext context, string name, T defaultValue)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var value = context.Arguments.GetArguments(name)?.LastOrDefault();
             return value == null
@@ -281,10 +260,7 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static IDictionary<string, ICollection<string>> Arguments(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Arguments.GetArguments();
         }
 

@@ -25,10 +25,7 @@ namespace Cake.Testing
             where TToolSettings : ToolSettings, new()
             where TFixtureResult : ToolFixtureResult
         {
-            if (fixture == null)
-            {
-                throw new ArgumentNullException(nameof(fixture));
-            }
+            ArgumentNullException.ThrowIfNull(fixture);
             var file = fixture.FileSystem.GetFile(fixture.DefaultToolPath);
             if (file.Exists)
             {
@@ -47,10 +44,7 @@ namespace Cake.Testing
             where TToolSettings : ToolSettings, new()
             where TFixtureResult : ToolFixtureResult
         {
-            if (fixture == null)
-            {
-                throw new ArgumentNullException(nameof(fixture));
-            }
+            ArgumentNullException.ThrowIfNull(fixture);
             if (fixture.Settings.ToolPath != null)
             {
                 var path = fixture.Settings.ToolPath.MakeAbsolute(fixture.Environment);
@@ -69,10 +63,7 @@ namespace Cake.Testing
             where TToolSettings : ToolSettings, new()
             where TFixtureResult : ToolFixtureResult
         {
-            if (fixture == null)
-            {
-                throw new ArgumentNullException(nameof(fixture));
-            }
+            ArgumentNullException.ThrowIfNull(fixture);
             fixture.ProcessRunner.Process = null;
         }
 
@@ -88,10 +79,7 @@ namespace Cake.Testing
             where TToolSettings : ToolSettings, new()
             where TFixtureResult : ToolFixtureResult
         {
-            if (fixture == null)
-            {
-                throw new ArgumentNullException(nameof(fixture));
-            }
+            ArgumentNullException.ThrowIfNull(fixture);
             fixture.ProcessRunner.Process.SetExitCode(exitCode);
         }
     }

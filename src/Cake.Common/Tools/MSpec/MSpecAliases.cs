@@ -38,10 +38,7 @@ namespace Cake.Common.Tools.MSpec
         [CakeMethodAlias]
         public static void MSpec(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
             if (assemblies.Length == 0)
@@ -73,10 +70,7 @@ namespace Cake.Common.Tools.MSpec
         [CakeMethodAlias]
         public static void MSpec(this ICakeContext context, GlobPattern pattern, MSpecSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
             if (assemblies.Length == 0)
@@ -106,10 +100,7 @@ namespace Cake.Common.Tools.MSpec
         [CakeMethodAlias]
         public static void MSpec(this ICakeContext context, IEnumerable<string> assemblies)
         {
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(assemblies);
             var paths = assemblies.Select(p => new FilePath(p));
             MSpec(context, paths, new MSpecSettings());
         }
@@ -156,10 +147,7 @@ namespace Cake.Common.Tools.MSpec
         [CakeMethodAlias]
         public static void MSpec(this ICakeContext context, IEnumerable<string> assemblies, MSpecSettings settings)
         {
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(assemblies);
             var paths = assemblies.Select(p => new FilePath(p));
             MSpec(context, paths, settings);
         }
@@ -185,14 +173,8 @@ namespace Cake.Common.Tools.MSpec
         [CakeMethodAlias]
         public static void MSpec(this ICakeContext context, IEnumerable<FilePath> assemblies, MSpecSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(assemblies);
 
             var runner = new MSpecRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(assemblies, settings);

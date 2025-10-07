@@ -12,10 +12,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, bool criteria)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.AddCriteria(_ => criteria);
             return builder;
@@ -30,10 +27,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, bool criteria, string message)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Target.AddCriteria(_ => criteria, message);
             return builder;
@@ -48,14 +42,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, Func<bool> criteria)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(criteria);
 
             builder.Target.AddCriteria(_ => criteria());
             return builder;
@@ -71,14 +59,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, Func<bool> criteria, string message)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(criteria);
 
             builder.Target.AddCriteria(_ => criteria(), message);
             return builder;
@@ -93,14 +75,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, Func<ICakeContext, bool> criteria)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(criteria);
 
             builder.Target.AddCriteria(criteria);
             return builder;
@@ -116,14 +92,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, Func<ICakeContext, bool> criteria, string message)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(criteria);
 
             builder.Target.AddCriteria(criteria, message);
             return builder;
@@ -139,14 +109,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<TData, bool> criteria) where TData : class
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(criteria);
 
             builder.Target.AddCriteria(context => criteria(context.Data.Get<TData>()));
             return builder;
@@ -163,14 +127,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<TData, bool> criteria, string message) where TData : class
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(criteria);
 
             builder.Target.AddCriteria(context => criteria(context.Data.Get<TData>()), message);
             return builder;
@@ -186,14 +144,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, bool> criteria) where TData : class
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(criteria);
 
             builder.Target.AddCriteria(context => criteria(context, context.Data.Get<TData>()));
             return builder;
@@ -210,14 +162,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, bool> criteria, string message) where TData : class
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (criteria == null)
-            {
-                throw new ArgumentNullException(nameof(criteria));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(criteria);
 
             builder.Target.AddCriteria(context => criteria(context, context.Data.Get<TData>()), message);
             return builder;

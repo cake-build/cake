@@ -59,62 +59,20 @@ namespace Cake.Common.Build
             IAzurePipelinesProvider azurePipelinesProvider,
             IWoodpeckerCIProvider woodpeckerCIProvider)
         {
-            if (appVeyorProvider == null)
-            {
-                throw new ArgumentNullException(nameof(appVeyorProvider));
-            }
-            if (teamCityProvider == null)
-            {
-                throw new ArgumentNullException(nameof(teamCityProvider));
-            }
-            if (myGetProvider == null)
-            {
-                throw new ArgumentNullException(nameof(myGetProvider));
-            }
-            if (bambooProvider == null)
-            {
-                throw new ArgumentNullException(nameof(bambooProvider));
-            }
-            if (continuaCIProvider == null)
-            {
-                throw new ArgumentNullException(nameof(continuaCIProvider));
-            }
-            if (jenkinsProvider == null)
-            {
-                throw new ArgumentNullException(nameof(jenkinsProvider));
-            }
-            if (bitriseProvider == null)
-            {
-                throw new ArgumentNullException(nameof(bitriseProvider));
-            }
-            if (travisCIProvider == null)
-            {
-                throw new ArgumentNullException(nameof(travisCIProvider));
-            }
-            if (bitbucketPipelinesProvider == null)
-            {
-                throw new ArgumentNullException(nameof(bitbucketPipelinesProvider));
-            }
-            if (goCDProvider == null)
-            {
-                throw new ArgumentNullException(nameof(goCDProvider));
-            }
-            if (gitLabCIProvider == null)
-            {
-                throw new ArgumentNullException(nameof(gitLabCIProvider));
-            }
-            if (gitHubActionsProvider == null)
-            {
-                throw new ArgumentNullException(nameof(gitHubActionsProvider));
-            }
-            if (azurePipelinesProvider == null)
-            {
-                throw new ArgumentNullException(nameof(azurePipelinesProvider));
-            }
-            if (woodpeckerCIProvider == null)
-            {
-                throw new ArgumentNullException(nameof(woodpeckerCIProvider));
-            }
+            ArgumentNullException.ThrowIfNull(appVeyorProvider);
+            ArgumentNullException.ThrowIfNull(teamCityProvider);
+            ArgumentNullException.ThrowIfNull(myGetProvider);
+            ArgumentNullException.ThrowIfNull(bambooProvider);
+            ArgumentNullException.ThrowIfNull(continuaCIProvider);
+            ArgumentNullException.ThrowIfNull(jenkinsProvider);
+            ArgumentNullException.ThrowIfNull(bitriseProvider);
+            ArgumentNullException.ThrowIfNull(travisCIProvider);
+            ArgumentNullException.ThrowIfNull(bitbucketPipelinesProvider);
+            ArgumentNullException.ThrowIfNull(goCDProvider);
+            ArgumentNullException.ThrowIfNull(gitLabCIProvider);
+            ArgumentNullException.ThrowIfNull(gitHubActionsProvider);
+            ArgumentNullException.ThrowIfNull(azurePipelinesProvider);
+            ArgumentNullException.ThrowIfNull(woodpeckerCIProvider);
 
             AppVeyor = appVeyorProvider;
             TeamCity = teamCityProvider;

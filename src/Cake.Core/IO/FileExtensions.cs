@@ -21,10 +21,7 @@ namespace Cake.Core.IO
         /// <returns>A <see cref="Stream"/> to the file.</returns>
         public static Stream Open(this IFile file, FileMode mode)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(file);
             return file.Open(mode,
                 mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite,
                 FileShare.None);
@@ -39,10 +36,7 @@ namespace Cake.Core.IO
         /// <returns>A <see cref="Stream"/> to the file.</returns>
         public static Stream Open(this IFile file, FileMode mode, FileAccess access)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(file);
             return file.Open(mode, access, FileShare.None);
         }
 
@@ -53,10 +47,7 @@ namespace Cake.Core.IO
         /// <returns>A <see cref="Stream"/> to the file.</returns>
         public static Stream OpenRead(this IFile file)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(file);
             return file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
@@ -68,10 +59,7 @@ namespace Cake.Core.IO
         /// <returns>A <see cref="Stream"/> to the file.</returns>
         public static Stream OpenWrite(this IFile file)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(file);
             return file.Open(FileMode.Create, FileAccess.Write, FileShare.None);
         }
 
@@ -84,10 +72,7 @@ namespace Cake.Core.IO
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static IEnumerable<string> ReadLines(this IFile file, System.Text.Encoding encoding)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(file);
             using (var stream = file.OpenRead())
             using (var reader = new StreamReader(stream, encoding))
             {

@@ -40,14 +40,8 @@ namespace Cake.Common.IO
         [CakeNamespaceImport("Cake.Common.IO.Paths")]
         public static ConvertableDirectoryPath Directory(this ICakeContext context, string path)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(path);
             return new ConvertableDirectoryPath(new DirectoryPath(path));
         }
 
@@ -73,10 +67,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Delete")]
         public static void DeleteDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, DeleteDirectorySettings settings)
         {
-            if (directories == null)
-            {
-                throw new ArgumentNullException(nameof(directories));
-            }
+            ArgumentNullException.ThrowIfNull(directories);
 
             foreach (var directory in directories)
             {
@@ -106,10 +97,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Delete")]
         public static void DeleteDirectories(this ICakeContext context, IEnumerable<string> directories, DeleteDirectorySettings settings)
         {
-            if (directories == null)
-            {
-                throw new ArgumentNullException(nameof(directories));
-            }
+            ArgumentNullException.ThrowIfNull(directories);
 
             var paths = directories.Select(p => new DirectoryPath(p));
             foreach (var directory in paths)
@@ -263,10 +251,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories)
         {
-            if (directories == null)
-            {
-                throw new ArgumentNullException(nameof(directories));
-            }
+            ArgumentNullException.ThrowIfNull(directories);
             foreach (var directory in directories)
             {
                 CleanDirectory(context, directory);
@@ -290,10 +275,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, IEnumerable<DirectoryPath> directories, CleanDirectorySettings settings)
         {
-            if (directories == null)
-            {
-                throw new ArgumentNullException(nameof(directories));
-            }
+            ArgumentNullException.ThrowIfNull(directories);
             foreach (var directory in directories)
             {
                 CleanDirectory(context, directory, settings);
@@ -319,10 +301,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, IEnumerable<string> directories)
         {
-            if (directories == null)
-            {
-                throw new ArgumentNullException(nameof(directories));
-            }
+            ArgumentNullException.ThrowIfNull(directories);
             var paths = directories.Select(p => new DirectoryPath(p));
             foreach (var directory in paths)
             {
@@ -350,10 +329,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Clean")]
         public static void CleanDirectories(this ICakeContext context, IEnumerable<string> directories, CleanDirectorySettings settings)
         {
-            if (directories == null)
-            {
-                throw new ArgumentNullException(nameof(directories));
-            }
+            ArgumentNullException.ThrowIfNull(directories);
             var paths = directories.Select(p => new DirectoryPath(p));
             foreach (var directory in paths)
             {
@@ -551,20 +527,11 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Copy")]
         public static void CopyDirectory(this ICakeContext context, DirectoryPath source, DirectoryPath destination)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            ArgumentNullException.ThrowIfNull(source);
 
-            if (destination == null)
-            {
-                throw new ArgumentNullException(nameof(destination));
-            }
+            ArgumentNullException.ThrowIfNull(destination);
 
             if (source.IsRelative)
             {
@@ -626,15 +593,9 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Exists")]
         public static bool DirectoryExists(this ICakeContext context, DirectoryPath path)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             return context.FileSystem.GetDirectory(path).Exists;
         }
@@ -654,15 +615,9 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Path")]
         public static DirectoryPath MakeAbsolute(this ICakeContext context, DirectoryPath path)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             return path.MakeAbsolute(context.Environment);
         }
@@ -684,15 +639,9 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Path")]
         public static DirectoryPath MakeRelative(this ICakeContext context, DirectoryPath path, DirectoryPath rootPath = null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             var root = rootPath ?? context.Environment.WorkingDirectory;
             return root.GetRelativePath(path);
@@ -715,15 +664,9 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Path")]
         public static FilePath MakeRelative(this ICakeContext context, FilePath path, DirectoryPath rootPath = null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             var root = rootPath ?? context.Environment.WorkingDirectory;
             return root.GetRelativePath(path);
@@ -762,15 +705,9 @@ namespace Cake.Common.IO
         [CakeAliasCategory("List")]
         public static DirectoryPathCollection GetSubDirectories(this ICakeContext context, DirectoryPath directoryPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (directoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(directoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(directoryPath);
 
             directoryPath = directoryPath.MakeAbsolute(context.Environment);
 
@@ -803,14 +740,8 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Path")]
         public static DirectoryPath ExpandEnvironmentVariables(this ICakeContext context, DirectoryPath directoryPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (directoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(directoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(directoryPath);
 
             return directoryPath.ExpandEnvironmentVariables(context.Environment);
         }

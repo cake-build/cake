@@ -31,18 +31,9 @@ namespace Cake.Core.Tooling
         /// <param name="tools">The tool locator.</param>
         protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolLocator tools)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException(nameof(processRunner));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
+            ArgumentNullException.ThrowIfNull(processRunner);
 
             _fileSystem = fileSystem;
             _environment = environment;

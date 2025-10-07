@@ -42,10 +42,7 @@ namespace Cake.Common.Tools.DotNet.VSTest
         /// <param name="settings">The settings.</param>
         public void Test(IEnumerable<FilePath> testFiles, DotNetVSTestSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (testFiles == null || !testFiles.Any())
             {

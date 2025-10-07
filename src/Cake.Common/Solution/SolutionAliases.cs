@@ -45,10 +45,7 @@ namespace Cake.Common.Solution
         [CakeMethodAlias]
         public static SolutionParserResult ParseSolution(this ICakeContext context, FilePath solutionPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var parser = new SolutionParser(context.FileSystem, context.Environment);
             return parser.Parse(solutionPath);
