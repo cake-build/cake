@@ -17,7 +17,7 @@
     <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     <DebugType>portable</DebugType>
-    <EnforceCodeStyleInBuild Condition="$(IsCakeTestProject) == ''">true</EnforceCodeStyleInBuild>
+    <EnforceCodeStyleInBuild Condition="$(IsCakeTestProject) == '' and $(IsPackable) != 'false'">true</EnforceCodeStyleInBuild>
     
     <!-- 
       While .NET 9 not released don't warn, remove as soon as non RC binaries shipped.
