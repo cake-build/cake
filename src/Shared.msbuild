@@ -17,6 +17,7 @@
     <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     <DebugType>portable</DebugType>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     
     <!-- 
       While .NET 9 not released don't warn, remove as soon as non RC binaries shipped.

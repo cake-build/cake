@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Cake.Common.Build.AppVeyor.Data;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.IO.Arguments;

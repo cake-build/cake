@@ -9,7 +9,6 @@ using Cake.Core.IO.NuGet;
 using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
-using Cake.Core.Scripting.Processors;
 using Cake.Core.Scripting.Processors.Loading;
 using Cake.Core.Tooling;
 
