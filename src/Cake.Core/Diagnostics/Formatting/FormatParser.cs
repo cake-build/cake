@@ -80,7 +80,7 @@ namespace Cake.Core.Diagnostics.Formatting
                     if (parts.Length > 1)
                     {
                         var name = parts[0];
-                        var format = string.Join(string.Empty, parts.Skip(1));
+                        var format = string.Concat(parts.Skip(1));
                         var positional = IsNumeric(name);
                         if (!positional)
                         {
