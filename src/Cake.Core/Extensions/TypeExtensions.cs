@@ -88,12 +88,12 @@ namespace Cake.Core
             if (includeNamespace)
             {
                 builder.Append(type.Namespace);
-                builder.Append(".");
+                builder.Append('.');
             }
             builder.Append(type.Name.Substring(0, type.Name.IndexOf('`')));
-            builder.Append("<");
+            builder.Append('<');
             builder.Append(GetGenericTypeArguments(type, includeNamespace));
-            builder.Append(">");
+            builder.Append('>');
             return builder.ToString();
         }
 

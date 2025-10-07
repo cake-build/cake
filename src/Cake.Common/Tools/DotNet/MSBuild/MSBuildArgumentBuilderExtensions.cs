@@ -259,7 +259,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
             if (!string.IsNullOrWhiteSpace(logger.Class))
             {
                 argumentBuilder.Append(logger.Class);
-                argumentBuilder.Append(",");
+                argumentBuilder.Append(',');
                 argumentBuilder.Append(logger.Assembly);
             }
             else
@@ -269,7 +269,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
 
             if (!string.IsNullOrWhiteSpace(logger.Parameters))
             {
-                argumentBuilder.Append(";");
+                argumentBuilder.Append(';');
                 argumentBuilder.Append(logger.Parameters);
             }
 
