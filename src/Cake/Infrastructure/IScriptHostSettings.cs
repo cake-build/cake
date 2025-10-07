@@ -6,10 +6,19 @@ using Cake.Core.IO;
 
 namespace Cake.Infrastructure
 {
+    /// <summary>
+    /// Represents settings for a script host.
+    /// </summary>
     public interface IScriptHostSettings
     {
+        /// <summary>
+        /// Gets a value indicating whether to run in debug mode.
+        /// </summary>
         bool Debug { get; }
 
+        /// <summary>
+        /// Gets the script file path.
+        /// </summary>
         FilePath Script { get; }
     }
 }

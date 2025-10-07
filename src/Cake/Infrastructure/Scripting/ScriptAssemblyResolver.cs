@@ -12,6 +12,9 @@ using Cake.Core.Diagnostics;
 
 namespace Cake.Infrastructure.Scripting
 {
+    /// <summary>
+    /// Represents a script assembly resolver for Cake.
+    /// </summary>
     public sealed class ScriptAssemblyResolver : IDisposable
     {
         private const string AssemblyResourcesExtension = ".resources";
@@ -23,6 +26,11 @@ namespace Cake.Infrastructure.Scripting
         private readonly Lazy<bool> _shouldTryResolveNeutral;
         private readonly HashSet<string> _resolvedNames = new HashSet<string>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptAssemblyResolver"/> class.
+        /// </summary>
+        /// <param name="environment">The Cake environment.</param>
+        /// <param name="log">The log.</param>
         public ScriptAssemblyResolver(ICakeEnvironment environment, ICakeLog log)
         {
             _environment = environment;
@@ -33,6 +41,9 @@ namespace Cake.Infrastructure.Scripting
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
         }
 
+        /// <summary>
+        /// Disposes the script assembly resolver.
+        /// </summary>
         public void Dispose()
         {
             AppDomain.CurrentDomain.AssemblyResolve -= AssemblyResolve;

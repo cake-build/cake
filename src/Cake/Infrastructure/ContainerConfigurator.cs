@@ -15,12 +15,20 @@ using Cake.DotNetTool.Module;
 using Cake.Infrastructure.Scripting;
 using Cake.NuGet;
 using Spectre.Console;
-using Spectre.Console.Cli;
 
 namespace Cake.Infrastructure
 {
+    /// <summary>
+    /// Represents a container configurator for Cake.
+    /// </summary>
     public sealed class ContainerConfigurator : IContainerConfigurator
     {
+        /// <summary>
+        /// Configures the container with the specified registrar, configuration, and arguments.
+        /// </summary>
+        /// <param name="registrar">The container registrar.</param>
+        /// <param name="configuration">The Cake configuration.</param>
+        /// <param name="arguments">The Cake arguments.</param>
         public void Configure(
             ICakeContainerRegistrar registrar,
             ICakeConfiguration configuration,

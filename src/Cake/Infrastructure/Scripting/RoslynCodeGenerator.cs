@@ -8,8 +8,16 @@ using Cake.Core.Scripting.CodeGen;
 
 namespace Cake.Infrastructure.Scripting
 {
+    /// <summary>
+    /// Represents a Roslyn-based code generator for Cake scripts.
+    /// </summary>
     public sealed class RoslynCodeGenerator
     {
+        /// <summary>
+        /// Generates code from the specified script.
+        /// </summary>
+        /// <param name="script">The script to generate code from.</param>
+        /// <returns>The generated code.</returns>
         public string Generate(Script script)
         {
             var defines = string.Join("\r\n", script.Defines);

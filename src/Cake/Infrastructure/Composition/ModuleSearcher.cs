@@ -16,11 +16,23 @@ using Cake.Core.Reflection;
 
 namespace Cake.Infrastructure.Composition
 {
+    /// <summary>
+    /// Represents a module searcher for finding Cake modules.
+    /// </summary>
     public interface IModuleSearcher
     {
+        /// <summary>
+        /// Finds module types in the specified directory.
+        /// </summary>
+        /// <param name="root">The root directory.</param>
+        /// <param name="configuration">The Cake configuration.</param>
+        /// <returns>A collection of module types.</returns>
         ICollection<Type> FindModuleTypes(DirectoryPath root, ICakeConfiguration configuration);
     }
 
+    /// <summary>
+    /// Represents a module searcher for finding Cake modules.
+    /// </summary>
     public sealed class ModuleSearcher : IModuleSearcher
     {
         private static readonly Dictionary<string, string> _excludedModules = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -32,6 +44,12 @@ namespace Cake.Infrastructure.Composition
         private readonly ICakeEnvironment _environment;
         private readonly ICakeLog _log;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModuleSearcher"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The Cake environment.</param>
+        /// <param name="log">The log.</param>
         public ModuleSearcher(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -42,6 +60,12 @@ namespace Cake.Infrastructure.Composition
             _log = log;
         }
 
+        /// <summary>
+        /// Finds module types in the specified directory.
+        /// </summary>
+        /// <param name="root">The root directory.</param>
+        /// <param name="configuration">The Cake configuration.</param>
+        /// <returns>A collection of module types.</returns>
         public ICollection<Type> FindModuleTypes(DirectoryPath root, ICakeConfiguration configuration)
         {
             var modulePath = _fileSystem.GetDirectory(configuration.GetModulePath(root, _environment));
