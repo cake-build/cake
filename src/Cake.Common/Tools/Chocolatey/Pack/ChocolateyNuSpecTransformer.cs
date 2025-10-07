@@ -55,9 +55,9 @@ namespace Cake.Common.Tools.Chocolatey.Pack
             var namespaceManager = new XmlNamespaceManager(document.NameTable);
             namespaceManager.AddNamespace("nu", ChocolateyNuSpecXsd);
 
-            foreach (var elementName in _mappings.Keys)
+            foreach (var (elementName, element) in _mappings)
             {
-                var content = _mappings[elementName](settings);
+                var content = element(settings);
                 if (content != null)
                 {
                     // Replace the node content.

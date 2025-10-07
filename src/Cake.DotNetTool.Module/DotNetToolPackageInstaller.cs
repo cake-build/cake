@@ -124,9 +124,9 @@ namespace Cake.DotNetTool.Module
                 // what is already installed
                 string requestedVersion = null;
 
-                if (package.Parameters.ContainsKey("version"))
+                if (package.Parameters.TryGetValue("version", out var version))
                 {
-                    requestedVersion = package.Parameters["version"].First();
+                    requestedVersion = version.First();
                 }
 
                 if (requestedVersion == null)
@@ -272,17 +272,17 @@ namespace Cake.DotNetTool.Module
                 }
 
                 // Version
-                if (definition.Parameters.ContainsKey("version"))
+                if (definition.Parameters.TryGetValue("version", out var version))
                 {
                     arguments.Append("--version");
-                    arguments.Append(definition.Parameters["version"].First());
+                    arguments.Append(version.First());
                 }
 
                 // Config File
-                if (definition.Parameters.ContainsKey("configfile"))
+                if (definition.Parameters.TryGetValue("configfile", out var config))
                 {
                     arguments.Append("--configfile");
-                    arguments.AppendQuoted(definition.Parameters["configfile"].First());
+                    arguments.AppendQuoted(config.First());
                 }
 
                 // Whether to ignore failed sources
@@ -292,10 +292,10 @@ namespace Cake.DotNetTool.Module
                 }
 
                 // Framework
-                if (definition.Parameters.ContainsKey("framework"))
+                if (definition.Parameters.TryGetValue("framework", out var framework))
                 {
                     arguments.Append("--framework");
-                    arguments.Append(definition.Parameters["framework"].First());
+                    arguments.Append(framework.First());
                 }
 
                 switch (log.Verbosity)

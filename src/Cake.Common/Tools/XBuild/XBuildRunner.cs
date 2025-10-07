@@ -107,11 +107,11 @@ namespace Cake.Common.Tools.XBuild
 
         private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
         {
-            foreach (var propertyKey in properties.Keys)
+            foreach (var (key, values) in properties)
             {
-                foreach (var propertyValue in properties[propertyKey])
+                foreach (var propertyValue in values)
                 {
-                    yield return string.Concat("/p:", propertyKey.Quote(), "=", propertyValue.Quote());
+                    yield return string.Concat("/p:", key.Quote(), "=", propertyValue.Quote());
                 }
             }
         }

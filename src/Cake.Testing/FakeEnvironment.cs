@@ -92,9 +92,9 @@ namespace Cake.Testing
         /// <inheritdoc/>
         public DirectoryPath GetSpecialPath(SpecialPath path)
         {
-            if (_specialPaths.ContainsKey(path))
+            if (_specialPaths.TryGetValue(path, out var specialPath))
             {
-                return _specialPaths[path];
+                return specialPath;
             }
             const string format = "The special path '{0}' is not supported.";
             throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, format, path));

@@ -133,9 +133,9 @@ namespace Cake.NuGet
 
         private static DirectoryPath GetPackagePath(DirectoryPath root, PackageReference package)
         {
-            if (package.Parameters.ContainsKey("version"))
+            if (package.Parameters.TryGetValue("version", out var versions))
             {
-                var version = package.Parameters["version"].First();
+                var version = versions.First();
                 return root.Combine($"{package.Package}.{version}".ToLowerInvariant());
             }
             return root.Combine(package.Package.ToLowerInvariant());
@@ -215,10 +215,10 @@ namespace Cake.NuGet
             }
 
             // Version
-            if (definition.Parameters.ContainsKey("version"))
+            if (definition.Parameters.TryGetValue("version", out var version))
             {
                 arguments.Append("-Version");
-                arguments.AppendQuoted(definition.Parameters["version"].First());
+                arguments.AppendQuoted(version.First());
             }
 
             // Prerelease
