@@ -75,7 +75,7 @@ namespace Cake.Common.Tools.DotNet.Format
             // Diagnostics
             if (settings.Diagnostics != null && settings.Diagnostics.Any())
             {
-                builder.AppendSwitch("--diagnostics", string.Join(" ", settings.Diagnostics));
+                builder.AppendSwitch("--diagnostics", string.Join(' ', settings.Diagnostics));
             }
 
             // Severity
@@ -100,13 +100,13 @@ namespace Cake.Common.Tools.DotNet.Format
             // Include
             if (settings.Include != null && settings.Include.Any())
             {
-                builder.AppendSwitch("--include", string.Join(" ", settings.Include));
+                builder.AppendSwitch("--include", string.Join(' ', settings.Include));
             }
 
             // Exclude
             if (settings.Exclude != null && settings.Exclude.Any())
             {
-                builder.AppendSwitch("--exclude", string.Join(" ", settings.Exclude));
+                builder.AppendSwitch("--exclude", string.Join(' ', settings.Exclude));
             }
 
             // Include Generated

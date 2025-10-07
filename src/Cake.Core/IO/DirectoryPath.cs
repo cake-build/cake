@@ -99,8 +99,8 @@ namespace Cake.Core.IO
 
             var segments = collapsed.Segments.Take(collapsed.Segments.Length - 1);
             var fullPath = collapsed.IsUNC
-                ? @"\\" + string.Join(Separator.ToString(), segments.Skip(1))
-                : string.Join(Separator.ToString(), segments);
+                ? @"\\" + string.Join(Separator, segments.Skip(1))
+                : string.Join(Separator, segments);
 
             return new DirectoryPath(fullPath);
         }

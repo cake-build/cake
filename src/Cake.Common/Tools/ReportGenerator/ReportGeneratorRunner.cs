@@ -69,7 +69,7 @@ namespace Cake.Common.Tools.ReportGenerator
         {
             var builder = new ProcessArgumentBuilder();
 
-            var joinedReports = string.Join(";", reports.Select(r => r.MakeAbsolute(_environment).FullPath));
+            var joinedReports = string.Join(';', reports.Select(r => r.MakeAbsolute(_environment).FullPath));
             AppendQuoted(builder, "reports", joinedReports);
 
             AppendQuoted(builder, "targetdir", targetDir.MakeAbsolute(_environment).FullPath);
@@ -82,7 +82,7 @@ namespace Cake.Common.Tools.ReportGenerator
 
             if (settings.SourceDirectories != null && settings.SourceDirectories.Any())
             {
-                var joined = string.Join(";", settings.SourceDirectories.Select(d => d.MakeAbsolute(_environment).FullPath));
+                var joined = string.Join(';', settings.SourceDirectories.Select(d => d.MakeAbsolute(_environment).FullPath));
                 AppendQuoted(builder, "sourcedirs", joined);
             }
 
@@ -93,13 +93,13 @@ namespace Cake.Common.Tools.ReportGenerator
 
             if (settings.AssemblyFilters != null && settings.AssemblyFilters.Any())
             {
-                var joined = string.Join(";", settings.AssemblyFilters);
+                var joined = string.Join(';', settings.AssemblyFilters);
                 AppendQuoted(builder, "assemblyfilters", joined);
             }
 
             if (settings.ClassFilters != null && settings.ClassFilters.Any())
             {
-                var joined = string.Join(";", settings.ClassFilters);
+                var joined = string.Join(';', settings.ClassFilters);
                 AppendQuoted(builder, "classfilters", joined);
             }
 

@@ -250,7 +250,7 @@ namespace Cake.Common.Tools.ILMerge
             {
                 result.Add(settings.TargetPlatform.Path.FullPath.Quote());
             }
-            return string.Concat("/targetPlatform:", string.Join(",", result));
+            return string.Concat("/targetPlatform:", string.Join(',', result));
         }
 
         private static string GetTargetPlatformString(TargetPlatformVersion version)

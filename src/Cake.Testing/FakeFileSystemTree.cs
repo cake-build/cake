@@ -290,7 +290,7 @@ namespace Cake.Testing
                 throw new IOException("The destination directory already exists.");
             }
 
-            string destinationParentPathStr = string.Join("/", destination.Segments.Take(destination.Segments.Length - 1).DefaultIfEmpty("/"));
+            string destinationParentPathStr = string.Join('/', destination.Segments.Take(destination.Segments.Length - 1).DefaultIfEmpty("/"));
             DirectoryPath destinationParentPath = new DirectoryPath(destinationParentPathStr == string.Empty ? "/" : destinationParentPathStr);
             if (FindDirectory(destinationParentPath) == null)
             {

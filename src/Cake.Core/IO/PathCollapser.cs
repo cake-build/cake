@@ -58,7 +58,7 @@ namespace Cake.Core.IO
                 }
                 stack.Push(segment);
             }
-            var collapsed = string.Join(path.Separator.ToString(), stack.Reverse());
+            var collapsed = string.Join(path.Separator, stack.Reverse());
             if (collapsed != string.Empty)
             {
                 return collapsed;

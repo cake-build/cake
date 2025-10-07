@@ -110,7 +110,7 @@ namespace Cake.Common.Tools.NuGet.List
             if (settings.Source != null && settings.Source.Count > 0)
             {
                 builder.Append("-Source");
-                builder.AppendQuoted(string.Join(";", settings.Source));
+                builder.AppendQuoted(string.Join(';', settings.Source));
             }
 
             if (settings.ConfigFile != null)

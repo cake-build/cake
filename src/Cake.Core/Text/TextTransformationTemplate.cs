@@ -102,7 +102,7 @@ namespace Cake.Core.Text
                 if (parts.Length > 1)
                 {
                     // Formattable?
-                    var format = string.Join(":", parts.Skip(1).Take(parts.Length - 1)).Trim();
+                    var format = string.Join(':', parts.Skip(1).Take(parts.Length - 1)).Trim();
                     var formattable = _tokens[key] as IFormattable;
                     if (formattable != null)
                     {

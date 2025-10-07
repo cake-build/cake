@@ -49,7 +49,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
                     throw new ArgumentException("Specify the name of the target", nameof(settings.Targets));
                 }
 
-                msBuilder.AppendMSBuildSwitch("target", string.Join(";", settings.Targets));
+                msBuilder.AppendMSBuildSwitch("target", string.Join(';', settings.Targets));
             }
 
             // Got any properties?
@@ -202,7 +202,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
             // set project file extensions to ignore when searching for project file
             if (settings.IgnoreProjectExtensions.Any())
             {
-                msBuilder.AppendMSBuildSwitch("ignoreprojectextensions", string.Join(",", settings.IgnoreProjectExtensions));
+                msBuilder.AppendMSBuildSwitch("ignoreprojectextensions", string.Join(',', settings.IgnoreProjectExtensions));
             }
 
             // detailed summary?
@@ -343,7 +343,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
                 settings.Add($"Encoding={loggerSettings.FileEncoding}");
             }
 
-            return string.Join(";", settings);
+            return string.Join(';', settings);
         }
 
         private static string GetLoggerSettings(MSBuildLoggerSettings loggerSettings)
@@ -418,13 +418,13 @@ namespace Cake.Common.Tools.DotNet.MSBuild
                 settings.Add($"Verbosity={loggerSettings.Verbosity}");
             }
 
-            return string.Join(";", settings);
+            return string.Join(';', settings);
         }
 
         private static string GetWarningCodes(bool shouldApplyToAllWarnings, IList<string> warningCodes)
             => shouldApplyToAllWarnings
                 ? null
-                : string.Join(";", warningCodes);
+                : string.Join(';', warningCodes);
 
         private static void AppendMSBuildSwitch(this ProcessArgumentBuilder builder, string @switch)
             => builder.Append($"/{@switch}");

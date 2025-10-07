@@ -230,7 +230,7 @@ namespace Cake.Common.Tools.NuGet.Pack
                     throw new CakeException("Properties keys can not be null or empty.");
                 }
                 builder.Append("-Properties");
-                builder.AppendQuoted(string.Join(";",
+                builder.AppendQuoted(string.Join(';',
                     settings.Properties.Select(property => string.Concat(property.Key, "=", property.Value))));
             }
 

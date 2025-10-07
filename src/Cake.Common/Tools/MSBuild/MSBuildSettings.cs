@@ -78,7 +78,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <value>The MSBuild target.</value>
         public string Target
         {
-            get => string.Join(";", Targets);
+            get => string.Join(';', Targets);
             set
             {
                 Targets.Clear();
@@ -341,7 +341,7 @@ namespace Cake.Common.Tools.MSBuild
                 return @default;
             }
 
-            var propertyValue = string.Join(";", propertyValues);
+            var propertyValue = string.Join(';', propertyValues);
             return propertyValue;
         }
     }
