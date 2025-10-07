@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.ReportGenerator;
 using Cake.Core;
@@ -192,7 +193,7 @@ namespace Cake.Common.Tests.Unit.Tools.ReportGenerator
                 var result = fixture.Run();
 
                 // Then
-                Assert.True(Enum.IsDefined(typeof(ReportGeneratorReportType), enumValue));
+                Assert.True(Enum.IsDefined<ReportGeneratorReportType>(fixture.Settings.ReportTypes.First()));
                 Assert.Equal($"\"-reports:/Working/report.xml\" \"-targetdir:/Working/output\" \"-reporttypes:{expected}\"", result.Args);
             }
 
