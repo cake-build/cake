@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Cake.Core;
-using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotCover
 {

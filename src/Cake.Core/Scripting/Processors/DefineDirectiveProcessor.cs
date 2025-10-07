@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Linq;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors

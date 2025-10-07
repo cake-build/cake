@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cake.Cli;
 using Cake.Cli.Infrastructure;
 using Cake.Core;
@@ -15,6 +14,9 @@ using Spectre.Console.Cli;
 
 namespace Cake.Commands
 {
+    /// <summary>
+    /// The default command for executing Cake scripts.
+    /// </summary>
     public sealed class DefaultCommand : Command<DefaultCommandSettings>
     {
         private readonly IBuildFeature _builder;
@@ -24,6 +26,15 @@ namespace Cake.Commands
         private readonly IConsole _console;
         private readonly ICakeLog _log;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultCommand"/> class.
+        /// </summary>
+        /// <param name="builder">The build feature.</param>
+        /// <param name="bootstrapper">The bootstrap feature.</param>
+        /// <param name="version">The version feature.</param>
+        /// <param name="info">The info feature.</param>
+        /// <param name="console">The console.</param>
+        /// <param name="log">The log.</param>
         public DefaultCommand(
             IBuildFeature builder,
             IBootstrapFeature bootstrapper,
@@ -40,6 +51,12 @@ namespace Cake.Commands
             _log = log;
         }
 
+        /// <summary>
+        /// Executes the command with the specified context and settings.
+        /// </summary>
+        /// <param name="context">The command context.</param>
+        /// <param name="settings">The command settings.</param>
+        /// <returns>The exit code.</returns>
         public override int Execute(CommandContext context, DefaultCommandSettings settings)
         {
             try

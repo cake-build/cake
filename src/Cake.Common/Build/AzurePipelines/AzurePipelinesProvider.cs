@@ -5,7 +5,6 @@
 using System;
 using Cake.Common.Build.AzurePipelines.Data;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 
 namespace Cake.Common.Build.AzurePipelines
 {

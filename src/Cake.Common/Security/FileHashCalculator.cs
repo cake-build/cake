@@ -4,7 +4,6 @@
 
 using System;
 using System.Globalization;
-using System.Security.Cryptography;
 using Cake.Core;
 using Cake.Core.IO;
 

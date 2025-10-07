@@ -7,16 +7,27 @@ using Cake.Core.Scripting;
 
 namespace Cake.Infrastructure.Scripting
 {
+    /// <summary>
+    /// Represents a reference assembly resolver for Cake scripts.
+    /// </summary>
     public sealed class ReferenceAssemblyResolver : IReferenceAssemblyResolver
     {
         private static readonly Version VersionZero = new Version(0, 0, 0, 0);
         private readonly ICakeLog _log;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReferenceAssemblyResolver"/> class.
+        /// </summary>
+        /// <param name="log">The log.</param>
         public ReferenceAssemblyResolver(ICakeLog log)
         {
             _log = log;
         }
 
+        /// <summary>
+        /// Gets the reference assemblies.
+        /// </summary>
+        /// <returns>An array of reference assemblies.</returns>
         public Assembly[] GetReferenceAssemblies()
         {
             IEnumerable<Assembly> TryGetReferenceAssemblies()

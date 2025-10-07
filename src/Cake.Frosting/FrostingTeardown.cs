@@ -4,7 +4,6 @@
 
 using System;
 using Cake.Core;
-using Cake.Frosting;
 
 namespace Cake.Frosting
 {

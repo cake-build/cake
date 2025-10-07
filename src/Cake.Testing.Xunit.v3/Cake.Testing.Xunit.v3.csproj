@@ -5,6 +5,7 @@
     <PlatformTarget>AnyCpu</PlatformTarget>
     <IsPackable>true</IsPackable>
     <DefineConstants>$(DefineConstants);XUNIT3</DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <!-- Package specific metadata -->
   <PropertyGroup>

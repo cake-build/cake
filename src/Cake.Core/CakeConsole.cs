@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Core

@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
-using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting
 {

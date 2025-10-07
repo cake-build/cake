@@ -11,16 +11,24 @@ using Cake.Core.Configuration;
 using Cake.Core.IO;
 using Cake.Infrastructure;
 using Cake.Infrastructure.Composition;
-using Spectre.Console.Cli;
 
 namespace Cake.Features
 {
+    /// <summary>
+    /// Represents a base feature for Cake.
+    /// </summary>
     public abstract class Feature
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
         private readonly IContainerConfigurator _configurator;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Feature"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The Cake environment.</param>
+        /// <param name="configurator">The container configurator.</param>
         public Feature(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -31,6 +39,13 @@ namespace Cake.Features
             _configurator = configurator;
         }
 
+        /// <summary>
+        /// Creates a container scope with the specified configuration and arguments.
+        /// </summary>
+        /// <param name="configuration">The Cake configuration.</param>
+        /// <param name="arguments">The Cake arguments.</param>
+        /// <param name="action">An optional action to configure the container registrar.</param>
+        /// <returns>A container scope.</returns>
         protected IContainer CreateScope(
             ICakeConfiguration configuration,
             ICakeArguments arguments,
@@ -44,6 +59,12 @@ namespace Cake.Features
             return registrar.BuildContainer();
         }
 
+        /// <summary>
+        /// Reads the Cake configuration from the specified arguments and root directory.
+        /// </summary>
+        /// <param name="arguments">The Cake arguments.</param>
+        /// <param name="root">The root directory.</param>
+        /// <returns>The Cake configuration.</returns>
         protected ICakeConfiguration ReadConfiguration(
             ICakeArguments arguments, DirectoryPath root)
         {

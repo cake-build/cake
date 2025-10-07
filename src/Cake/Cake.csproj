@@ -4,6 +4,7 @@
     <AssemblyName>Cake</AssemblyName>
     <OutputType>Exe</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />

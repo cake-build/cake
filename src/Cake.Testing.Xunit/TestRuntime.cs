@@ -6,10 +6,20 @@ using System;
 
 namespace Cake.Testing.Xunit
 {
+    /// <summary>
+    /// Represents the runtime environment for tests.
+    /// </summary>
     [Flags]
     public enum TestRuntime
     {
+        /// <summary>
+        /// The .NET Framework Common Language Runtime.
+        /// </summary>
         Clr = 1,
+
+        /// <summary>
+        /// The .NET Core Common Language Runtime.
+        /// </summary>
         CoreClr = 2
     }
 }

@@ -9,6 +9,9 @@ using Xunit;
 
 namespace Cake.Testing.Xunit
 {
+    /// <summary>
+    /// Base class for fact attributes that restrict execution to specific platforms.
+    /// </summary>
     public abstract class PlatformRestrictedFactAttribute : FactAttribute
     {
         private static readonly PlatformFamily _family;
@@ -21,6 +24,12 @@ namespace Cake.Testing.Xunit
             _family = EnvironmentHelper.GetPlatformFamily();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlatformRestrictedFactAttribute"/> class.
+        /// </summary>
+        /// <param name="requiredFamily">The required platform family.</param>
+        /// <param name="invert">Whether to invert the platform check.</param>
+        /// <param name="reason">The reason for the platform restriction.</param>
         protected PlatformRestrictedFactAttribute(
             PlatformFamily requiredFamily,
             bool invert,
@@ -49,9 +58,15 @@ namespace Cake.Testing.Xunit
             }
         }
 
+        /// <summary>
+        /// Gets the reason for the platform restriction.
+        /// </summary>
         protected string Reason { get; }
 
 #if !XUNIT3
+        /// <summary>
+        /// Gets or sets the reason for skipping the test.
+        /// </summary>
         public override string Skip
         {
             get => _skip ?? Reason;

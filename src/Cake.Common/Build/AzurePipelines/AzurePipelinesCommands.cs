@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Linq;
 using Cake.Common.Build.AzurePipelines.Data;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Build.AzurePipelines

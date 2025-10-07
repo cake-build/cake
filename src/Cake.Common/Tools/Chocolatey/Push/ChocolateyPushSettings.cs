@@ -4,8 +4,6 @@
 
 namespace Cake.Common.Tools.Chocolatey.Push
 {
-    using System;
-
     /// <summary>
     /// Contains settings used by <see cref="ChocolateyPusher"/>.
     /// </summary>
