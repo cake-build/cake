@@ -250,7 +250,7 @@ namespace Cake.DotNetTool.Module
             var arguments = new ProcessArgumentBuilder();
 
             arguments.Append("tool");
-            arguments.Append(Enum.GetName(typeof(DotNetToolOperation), operation).ToLowerInvariant());
+            arguments.Append(Enum.GetName(operation).ToLowerInvariant());
             arguments.AppendQuoted(definition.Package);
 
             if (definition.Parameters.ContainsKey("global"))

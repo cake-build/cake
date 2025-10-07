@@ -26,7 +26,7 @@ namespace Cake.Common.Tools.NUnit
                     result = "verbose";
                     break;
                 default:
-                    result = Enum.GetName(typeof(NUnitInternalTraceLevel), level)?.ToLowerInvariant();
+                    result = Enum.GetName(level)?.ToLowerInvariant();
                     break;
             }
 
