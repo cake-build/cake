@@ -16,6 +16,7 @@ namespace Cake.Testing.Xunit
         /// The .NET Framework Common Language Runtime.
         /// </summary>
         Clr = 1,
+
         /// <summary>
         /// The .NET Core Common Language Runtime.
         /// </summary>
