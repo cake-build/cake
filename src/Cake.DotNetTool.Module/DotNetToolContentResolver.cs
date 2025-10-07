@@ -73,6 +73,10 @@ namespace Cake.DotNetTool.Module
                         return GetToolFiles(new DirectoryPath(_environment.GetEnvironmentVariable("USERPROFILE")).Combine(".dotnet/tools"), package);
                     }
                 }
+                else if (package.Parameters.ContainsKey("local"))
+                {
+                    return new List<IFile>(); // TODO: implementation
+                }
                 else
                 {
                     return GetToolFiles(_config.GetToolPath(_environment.WorkingDirectory, _environment), package);
