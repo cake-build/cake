@@ -7,9 +7,16 @@ using Cake.Core;
 
 namespace Cake.Testing.Xunit
 {
+    /// <summary>
+    /// Marks a test method as a theory that should only run on non-Windows platforms.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public sealed class NonWindowsTheoryAttribute : PlatformRestrictedTheoryAttribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NonWindowsTheoryAttribute"/> class.
+        /// </summary>
+        /// <param name="reason">The reason why the test is skipped on Windows.</param>
         public NonWindowsTheoryAttribute(string reason = null)
             : base(PlatformFamily.Windows, true, reason)
         {
