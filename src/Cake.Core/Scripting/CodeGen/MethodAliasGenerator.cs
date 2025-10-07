@@ -170,7 +170,7 @@ namespace Cake.Core.Scripting.CodeGen
             {
                 genericArguments.Add(argument.Name);
             }
-            builder.Append(string.Join(", ", genericArguments));
+            builder.AppendJoin(", ", genericArguments);
             builder.Append('>');
         }
 

@@ -41,7 +41,7 @@ namespace Cake.Core
                 signature = isParams ? string.Concat("params ", signature) : signature;
                 parameterList[i] = signature;
             }
-            builder.Append(string.Join(", ", parameterList));
+            builder.AppendJoin(", ", parameterList);
             builder.Append(')');
             return builder.ToString();
         }
