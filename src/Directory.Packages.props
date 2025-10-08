@@ -4,16 +4,16 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
     <PackageVersion Include="Autofac" Version="8.4.0" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.3" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.3" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.3" />
     <PackageVersion Include="Cake.Frosting" Version="3.1.0.0" />
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.14.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-rc.1.25451.107" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.14.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
     <PackageVersion Include="Microsoft.NETCore.Platforms" Version="7.0.4" />
@@ -30,8 +30,8 @@
     <PackageVersion Include="Spectre.Console" Version="0.51.1" />
     <PackageVersion Include="Spectre.Console.Cli" Version="0.51.1" />
     <PackageVersion Include="Spectre.Verify.Extensions" Version="28.16.0" />
-    <PackageVersion Include="System.Collections.Immutable" Version="9.0.9" />
-    <PackageVersion Include="System.Reflection.Metadata" Version="9.0.9" />
+    <PackageVersion Include="System.Collections.Immutable" Version="10.0.0-rc.1.25451.107" />
+    <PackageVersion Include="System.Reflection.Metadata" Version="10.0.0-rc.1.25451.107" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
     <PackageVersion Include="Verify.XunitV3" Version="30.20.1" />
     <PackageVersion Include="xunit" Version="2.9.3" />
@@ -41,7 +41,7 @@
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
 
     <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.9" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.0-rc.1.25451.107" />
   </ItemGroup>
 
 </Project>

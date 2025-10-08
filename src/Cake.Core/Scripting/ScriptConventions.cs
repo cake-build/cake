@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -130,6 +130,9 @@ namespace Cake.Core.Scripting
 
                 case ".NETCoreApp,Version=v9.0":
                     return "NET9_0";
+
+                case ".NETCoreApp,Version=v10.0":
+                    return "NET10_0";
 
                 default:
                     Console.Error.WriteLine(_runtime.BuiltFramework.FullName);
