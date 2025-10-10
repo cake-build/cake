@@ -13,6 +13,7 @@ using Cake.Core.Diagnostics;
 using Cake.Core.Modules;
 using Cake.DotNetTool.Module;
 using Cake.Frosting.Internal;
+using Cake.Frosting.TaskChains;
 using Cake.NuGet;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
@@ -115,6 +116,8 @@ namespace Cake.Frosting
             services.AddSingleton<IVersionResolver, VersionResolver>();
             services.AddSingleton<VersionFeature>();
             services.AddSingleton<InfoFeature>();
+
+            services.AddSingleton<ITaskConfigurator, DefaultTaskConfigurator>();
 
             services.AddSingleton<FrostingRunner>();
             services.AddSingleton<FrostingDryRunner>();
