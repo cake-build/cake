@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Cake.Core.Packaging
 {
@@ -42,6 +43,12 @@ namespace Cake.Core.Packaging
         /// </summary>
         /// <value>The package.</value>
         public string Package { get; }
+
+        /// <summary>
+        /// Gets the package version.
+        /// </summary>
+        /// <value>The package version.</value>
+        public string? Version { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PackageReference"/> class.
@@ -84,11 +91,39 @@ namespace Cake.Core.Packaging
                     nameof(uri));
             }
 
-            Uri address;
-            if (Uri.TryCreate(uri.AbsolutePath, UriKind.Absolute, out address))
+            if (Parameters.TryGetValue("version", out var versionParameters))
+            {
+                if (versionParameters.Count == 1)
+                {
+                    Version = versionParameters.FirstOrDefault();
+                }
+                else if (versionParameters.Count > 1)
+                {
+                    throw new ArgumentException(
+                        "Query string contains more than one parameter 'version'.",
+                        nameof(uri));
+                }
+            }
+
+            if (Uri.TryCreate(uri.AbsolutePath, UriKind.Absolute, out var address))
             {
                 Address = new Uri(address.AbsoluteUri);
             }
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append(Package);
+
+            if (!string.IsNullOrEmpty(Version))
+            {
+                stringBuilder.Append($" v{Version}");
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }
