@@ -470,7 +470,7 @@ Task("GitHubActions-Release")
     {
         throw new Exception("An error occurred during the publishing of Cake.  All publishing tasks have been attempted.");
     }
-});;
+});
 
 Task("Travis")
   .IsDependentOn("Run-Unit-Tests");

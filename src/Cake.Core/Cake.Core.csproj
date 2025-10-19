@@ -4,7 +4,6 @@
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);NU1510</NoWarn>
   </PropertyGroup>
   <!-- Package specific metadata -->
   <PropertyGroup>
@@ -12,9 +11,4 @@
   </PropertyGroup>
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Win32.Registry" />
-    <PackageReference Include="Microsoft.CSharp" />
-  </ItemGroup>
 </Project>
