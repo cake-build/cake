@@ -13,7 +13,7 @@
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.14.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.14.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
     <PackageVersion Include="Microsoft.NETCore.Platforms" Version="7.0.4" />
