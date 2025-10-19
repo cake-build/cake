@@ -13,7 +13,7 @@
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.14.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.14.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
     <PackageVersion Include="Microsoft.NETCore.Platforms" Version="7.0.4" />
@@ -27,13 +27,13 @@
     <PackageVersion Include="NuGet.Protocol" Version="6.14.0" />
     <PackageVersion Include="NuGet.Resolver" Version="6.14.0" />
     <PackageVersion Include="NuGet.Versioning" Version="6.14.0" />
-    <PackageVersion Include="Spectre.Console" Version="0.51.1" />
-    <PackageVersion Include="Spectre.Console.Cli" Version="0.51.1" />
+    <PackageVersion Include="Spectre.Console" Version="0.52.0" />
+    <PackageVersion Include="Spectre.Console.Cli" Version="0.52.0" />
     <PackageVersion Include="Spectre.Verify.Extensions" Version="28.16.0" />
-    <PackageVersion Include="System.Collections.Immutable" Version="9.0.9" />
-    <PackageVersion Include="System.Reflection.Metadata" Version="9.0.9" />
+    <PackageVersion Include="System.Collections.Immutable" Version="9.0.10" />
+    <PackageVersion Include="System.Reflection.Metadata" Version="9.0.10" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
-    <PackageVersion Include="Verify.XunitV3" Version="30.20.1" />
+    <PackageVersion Include="Verify.XunitV3" Version="31.0.2" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.v3" Version="3.1.0" />
     <PackageVersion Include="xunit.v3.assert" Version="3.1.0" />
@@ -41,7 +41,7 @@
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
 
     <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.9" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.10" />
   </ItemGroup>
 
 </Project>
