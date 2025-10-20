@@ -66,5 +66,47 @@ namespace Cake.Common.Tools.DotCover
             settings.ProcessFilters.Add(filter);
             return settings;
         }
+
+        /// <summary>
+        /// Adds an assembly name to exclude from analysis.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="assemblyName">The assembly name to exclude. Wildcards (*) are allowed.</param>
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/>.</typeparam>
+        /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
+        public static T WithExcludeAssembly<T>(this T settings, string assemblyName) where T : DotCoverCoverageSettings
+        {
+            ArgumentNullException.ThrowIfNull(settings);
+            settings.ExcludeAssemblies.Add(assemblyName);
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a fully qualified attribute name to exclude from analysis.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="attributeName">The fully qualified attribute name. Wildcards (*) are allowed.</param>
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/>.</typeparam>
+        /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
+        public static T WithExcludeAttribute<T>(this T settings, string attributeName) where T : DotCoverCoverageSettings
+        {
+            ArgumentNullException.ThrowIfNull(settings);
+            settings.ExcludeAttributes.Add(attributeName);
+            return settings;
+        }
+
+        /// <summary>
+        /// Adds a process name to ignore during analysis.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="processName">The process name to ignore. Wildcards (*) are allowed.</param>
+        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverCoverageSettings"/>.</typeparam>
+        /// <returns>The same <see cref="DotCoverCoverageSettings"/> instance so that multiple calls can be chained.</returns>
+        public static T WithExcludeProcess<T>(this T settings, string processName) where T : DotCoverCoverageSettings
+        {
+            ArgumentNullException.ThrowIfNull(settings);
+            settings.ExcludeProcesses.Add(processName);
+            return settings;
+        }
     }
 }
