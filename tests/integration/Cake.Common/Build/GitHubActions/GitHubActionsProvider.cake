@@ -82,7 +82,8 @@ Task("Cake.Common.Build.GitHubActionsProvider.Commands.SetOutputParameter")
                 value = string.Join(
                                 '_',
                                 Context.Environment.Runtime.CakeVersion.ToString(3),
-                                GitHubActions.Environment.Runner.OS)
+                                GitHubActions.Environment.Runner.OS,
+                                GitHubActions.Environment.Runner.Architecture)
                             .ToUpper();
 
         // When
@@ -201,8 +202,8 @@ if (GitHubActions.Environment.Runtime.IsRuntimeAvailable)
 {
     Setup(context => new GitHubActionsData {
         AssemblyPath = typeof(ICakeContext).GetTypeInfo().Assembly.Location,
-        FileArtifactName = $"File_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}",
-        DirectoryArtifactName = $"Directory_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}"
+        FileArtifactName = $"File_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{GitHubActions.Environment.Runner.Architecture}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}",
+        DirectoryArtifactName = $"Directory_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{GitHubActions.Environment.Runner.Architecture}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}"
     });
 
     gitHubActionsProviderTask

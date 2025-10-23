@@ -1,18 +1,20 @@
 #load "./../../../utilities/xunit.cake"
 
-public record BuildData(string GitVersion, string Path, string OS)
+public record BuildData(string GitVersion, string Path, string OS, string Architecture)
 {
     public string GitVersionAndOS { get; } = string.Join(
                                                 '_',
                                                 GitVersion,
-                                                OS);
+                                                OS,
+                                                Architecture);
 }
 
 Setup(
     context => new BuildData(
                     EnvironmentVariable("GitVersion_MajorMinorPatch") ?? throw new ArgumentNullException("Missing GitVersion Variable.", "GitVersion_MajorMinorPatch"),
                     EnvironmentVariable("PATH") ?? throw new ArgumentNullException("Missing PATH varable.", "PATH"),
-                    GitHubActions.Environment.Runner.OS.ToUpper()
+                    GitHubActions.Environment.Runner.OS.ToUpper(),
+                    GitHubActions.Environment.Runner.Architecture.ToString()
                 )
 );
 
