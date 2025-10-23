@@ -24,7 +24,8 @@ Task("Cake.Core.Scripting.AddinDirective.LoadTargetedAddin")
                                      cake switch
                                      {
                                         FilePath net8_0Path         when net8_0Path.FullPath.Contains("net8.0")                 => "net8.0",
-                                        _ => "net9.0"
+                                        FilePath net9_0Path         when net9_0Path.FullPath.Contains("net9.0")                 => "net9.0",
+                                        _ => "net10.0"
                                      }
                                  );
 
@@ -62,11 +63,12 @@ Task("Cake.Core.Scripting.AddinDirective.CallDuplicatedMethod")
 });
 
 Task("Cake.Core.Scripting.AddinDirective.LoadNativeAssemblies")
+    .WithCriteria(() => GitHubActions.Environment.Runner.Architecture != GitHubActionsArchitecture.ARM64)
     .Does(() =>
 {
     FilePath cakeCore = typeof(ICakeContext).GetTypeInfo().Assembly.Location;
     FilePath cake = cakeCore.GetDirectory().CombineWithFilePath("Cake.dll");
-    var script = @"#addin nuget:?package=Cake.Git&version=4.0.0
+    var script = @"#addin nuget:?package=Cake.Git&version=5.0.1
 
 var repoRoot = GitFindRootFromPath(Context.EnvironmentVariable(""CAKE_TEST_DIR""));
 
