@@ -214,7 +214,7 @@ Task("Upload-GitHubActions-Artifacts")
         static (context, parameters) => context
             .GitHubActions() is var gh && gh != null
                 ?   gh.Commands
-                    .UploadArtifact(parameters.Paths.Directories.NuGetRoot,  $"Artifact_{gh.Environment.Runner.ImageOS ?? gh.Environment.Runner.OS}_{context.Environment.Runtime.BuiltFramework.Identifier}_{context.Environment.Runtime.BuiltFramework.Version}")
+                    .UploadArtifact(parameters.Paths.Directories.NuGetRoot, $"Artifact_{gh.Environment.Runner.ImageOS ?? gh.Environment.Runner.OS}_{gh.Environment.Runner.Architecture}_{context.Environment.Runtime.BuiltFramework.Identifier}_{context.Environment.Runtime.BuiltFramework.Version}")
                 : throw new Exception("GitHubActions not available")
     );
 
