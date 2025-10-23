@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNet.Test;
+using Cake.Common.Tools.DotNet.Test;
 using Cake.Core;
 using Cake.Testing;
 using Xunit;
@@ -159,6 +160,132 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Test
 
                 // Then
                 Assert.Equal("--diagnostics test", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Project_Path_With_Explicit_Project_Type()
+            {
+                // Given
+                var fixture = new DotNetTesterFixture();
+                fixture.Project = "./test/Project.Tests.csproj";
+                fixture.Settings.PathType = DotNetTestPathType.Project;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("test --project \"./test/Project.Tests.csproj\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Add_Solution_Path_With_Explicit_Solution_Type()
+            {
+                // Given
+                var fixture = new DotNetTesterFixture();
+                fixture.Project = "./test/TestSolution.sln";
+                fixture.Settings.PathType = DotNetTestPathType.Solution;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("test --solution \"./test/TestSolution.sln\"", result.Args);
+            }
+
+            [Theory]
+            [InlineData("./test/Project.csproj", "test --project \"./test/Project.csproj\"")]
+            [InlineData("./test/Project.vbproj", "test --project \"./test/Project.vbproj\"")]
+            [InlineData("./test/Project.fsproj", "test --project \"./test/Project.fsproj\"")]
+            [InlineData("./test/Project.vcxproj", "test --project \"./test/Project.vcxproj\"")]
+            public void Should_Auto_Detect_Project_Files(string projectPath, string expected)
+            {
+                // Given
+                var fixture = new DotNetTesterFixture();
+                fixture.Project = projectPath;
+                fixture.Settings.PathType = DotNetTestPathType.Auto;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal(expected, result.Args);
+            }
+
+            [Fact]
+            public void Should_Auto_Detect_Solution_Files()
+            {
+                // Given
+                var fixture = new DotNetTesterFixture();
+                fixture.Project = "./test/TestSolution.sln";
+                fixture.Settings.PathType = DotNetTestPathType.Auto;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("test --solution \"./test/TestSolution.sln\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_Legacy_Behavior_For_Unknown_Extensions_With_Auto()
+            {
+                // Given
+                var fixture = new DotNetTesterFixture();
+                fixture.Project = "./test/UnknownFile.xyz";
+                fixture.Settings.PathType = DotNetTestPathType.Auto;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("test \"./test/UnknownFile.xyz\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_Legacy_Behavior_When_PathType_Is_None()
+            {
+                // Given
+                var fixture = new DotNetTesterFixture();
+                fixture.Project = "./test/Project.csproj";
+                fixture.Settings.PathType = DotNetTestPathType.None;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("test \"./test/Project.csproj\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Use_Legacy_Behavior_When_PathType_Is_Default()
+            {
+                // Given
+                var fixture = new DotNetTesterFixture();
+                fixture.Project = "./test/Project.csproj";
+                // PathType defaults to None
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("test \"./test/Project.csproj\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Combine_PathType_With_Other_Settings()
+            {
+                // Given
+                var fixture = new DotNetTesterFixture();
+                fixture.Project = "./test/Project.csproj";
+                fixture.Settings.PathType = DotNetTestPathType.Project;
+                fixture.Settings.NoBuild = true;
+                fixture.Settings.Configuration = "Release";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("test --project \"./test/Project.csproj\" --configuration Release --no-build", result.Args);
             }
         }
     }
