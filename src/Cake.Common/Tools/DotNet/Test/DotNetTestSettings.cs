@@ -116,5 +116,14 @@ namespace Cake.Common.Tools.DotNet.Test
         /// Gets or sets additional arguments to be passed to MSBuild.
         /// </summary>
         public DotNetMSBuildSettings MSBuildSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path type for the test command.
+        /// When set to <see cref="DotNetTestPathType.Auto"/>, the path type will be automatically detected based on the file extension.
+        /// When set to <see cref="DotNetTestPathType.Project"/>, the path will be treated as a project file.
+        /// When set to <see cref="DotNetTestPathType.Solution"/>, the path will be treated as a solution file.
+        /// This is particularly useful for .NET 10+ where explicit --project or --solution parameters are required.
+        /// </summary>
+        public DotNetTestPathType PathType { get; set; } = DotNetTestPathType.None;
     }
 }
