@@ -56,8 +56,9 @@ namespace Cake.Commands
         /// </summary>
         /// <param name="context">The command context.</param>
         /// <param name="settings">The command settings.</param>
+        /// <param name="cancellationToken">The cancellation token to monitor for cancel requests.</param>
         /// <returns>The exit code.</returns>
-        public override int Execute(CommandContext context, DefaultCommandSettings settings)
+        public override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
         {
             try
             {

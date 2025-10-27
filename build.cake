@@ -416,7 +416,7 @@ Task("Run-Integration-Tests")
                 },
                 ArgumentCustomization = args => args
                     .AppendSwitchQuoted("--target", " ", Argument("integration-tests-target", "Run-All-Tests"))
-                    .AppendSwitchQuoted("--verbosity", " ", "quiet")
+                    .AppendSwitchQuoted("--verbosity", " ", Argument("integration-tests-verbosity", "quiet"))
                     .AppendSwitchQuoted("--platform", " ", parameters.IsRunningOnWindows ? "windows" : "posix")
                     .AppendSwitchQuoted("--customarg", " ", "hello")
                     .AppendSwitchQuoted("--multipleargs", "=", "a")
