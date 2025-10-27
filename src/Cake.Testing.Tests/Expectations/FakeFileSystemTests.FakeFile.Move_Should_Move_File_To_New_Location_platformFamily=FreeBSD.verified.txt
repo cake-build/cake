@@ -1,0 +1,50 @@
+﻿{
+  beforeState: {
+    Source: {
+      Path: /test/file1.txt,
+      Exists: true,
+      Hidden: false,
+      Length: 12,
+      LastWriteTimeUtc: 2014-05-27 19:56:01,
+      CreationTimeUtc: 2014-05-27 19:56:01,
+      LastAccessTimeUtc: 2014-05-27 19:56:01,
+      Attributes: None,
+      UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead
+    },
+    Destination: {
+      Path: /test/moved_file.txt,
+      Exists: false,
+      Hidden: false,
+      Length: 0,
+      LastWriteTimeUtc: null,
+      CreationTimeUtc: null,
+      LastAccessTimeUtc: null,
+      Attributes: None,
+      UnixFileMode: null
+    }
+  },
+  afterState: {
+    Source: {
+      Path: /test/file1.txt,
+      Exists: false,
+      Hidden: false,
+      Length: 0,
+      LastWriteTimeUtc: null,
+      CreationTimeUtc: null,
+      LastAccessTimeUtc: null,
+      Attributes: None,
+      UnixFileMode: null
+    },
+    Destination: {
+      Path: /test/moved_file.txt,
+      Exists: true,
+      Hidden: false,
+      Length: 12,
+      LastWriteTimeUtc: 2014-05-27 19:56:01,
+      CreationTimeUtc: 2014-05-27 19:56:01,
+      LastAccessTimeUtc: 2014-05-27 19:56:01,
+      Attributes: None,
+      UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead
+    }
+  }
+}

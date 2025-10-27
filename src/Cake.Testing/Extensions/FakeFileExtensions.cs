@@ -31,7 +31,7 @@ namespace Cake.Testing
             using (var writer = new StreamWriter(stream))
             {
                 writer.Write(content);
-                file.LastWriteTime = DateTime.Now;
+                file.SetLastWriteNow();
                 return file;
             }
         }

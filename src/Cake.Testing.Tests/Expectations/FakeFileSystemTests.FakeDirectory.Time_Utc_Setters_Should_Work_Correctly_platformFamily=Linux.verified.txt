@@ -1,0 +1,9 @@
+﻿{
+  Exists: true,
+  Hidden: false,
+  LastWriteTimeUtc: 2025-10-25 19:34:05 Utc,
+  CreationTimeUtc: 2025-10-25 18:33:04 Utc,
+  LastAccessTimeUtc: 2025-10-25 20:35:06 Utc,
+  UnixFileMode: OtherExecute, OtherWrite, OtherRead, GroupExecute, GroupWrite, GroupRead, UserExecute, UserWrite, UserRead,
+  Path: /test
+}

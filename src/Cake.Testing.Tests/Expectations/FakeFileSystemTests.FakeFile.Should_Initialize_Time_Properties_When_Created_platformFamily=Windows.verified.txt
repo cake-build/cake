@@ -1,0 +1,12 @@
+﻿{
+  Path: /test/file2.txt,
+  Exists: true,
+  Hidden: false,
+  LastWriteTimeUtc: 2014-05-27 19:56:01,
+  CreationTimeUtc: 2014-05-27 19:56:01,
+  LastAccessTimeUtc: 2014-05-27 19:56:01,
+  UnixFileMode: null,
+  Length: 0,
+  Attributes: None,
+  ContentLength: 0
+}

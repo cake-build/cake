@@ -1,0 +1,25 @@
+﻿{
+  directory: {
+    Exists: true,
+    Hidden: false,
+    LastWriteTimeUtc: 2014-05-27 19:56:01,
+    CreationTimeUtc: 2014-05-27 19:56:01,
+    LastAccessTimeUtc: 2014-05-27 19:56:01,
+    UnixFileMode: null,
+    Path: /test
+  },
+  result: [
+    {
+      Path: /test/file1.txt,
+      Exists: true,
+      Hidden: false,
+      LastWriteTimeUtc: 2014-05-27 19:56:01,
+      CreationTimeUtc: 2014-05-27 19:56:01,
+      LastAccessTimeUtc: 2014-05-27 19:56:01,
+      UnixFileMode: null,
+      Length: 12,
+      Attributes: None,
+      ContentLength: 12
+    }
+  ]
+}

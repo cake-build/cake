@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -18,10 +19,25 @@ namespace Cake.Testing
         /// Initializes a new instance of the <see cref="FakeFileSystem"/> class.
         /// </summary>
         /// <param name="environment">The environment.</param>
-        public FakeFileSystem(ICakeEnvironment environment)
+        public FakeFileSystem(ICakeEnvironment environment) : this(environment, TimeProvider.System)
         {
-            _tree = new FakeFileSystemTree(environment);
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FakeFileSystem"/> class.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        /// <param name="timeProvider">The time provider to use for file system operations.</param>
+        public FakeFileSystem(ICakeEnvironment environment, TimeProvider timeProvider)
+        {
+            TimeProvider = timeProvider;
+            _tree = new FakeFileSystemTree(environment, () => TimeProvider);
+        }
+
+        /// <summary>
+        /// Gets the time provider used for file system operations.
+        /// </summary>
+        public System.TimeProvider TimeProvider { get; init; }
 
         /// <summary>
         /// Gets a <see cref="FakeFile"/> instance representing the specified path.

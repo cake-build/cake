@@ -1,0 +1,22 @@
+﻿{
+  sourceFile: {
+    Path: /test/file1.txt,
+    Exists: true,
+    Hidden: false,
+    LastWriteTimeUtc: 2014-05-27 19:56:01,
+    CreationTimeUtc: 2014-05-27 19:56:01,
+    LastAccessTimeUtc: 2014-05-27 19:56:01,
+    UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead,
+    Length: 12,
+    Attributes: None,
+    ContentLength: 12
+  },
+  result: {
+    $type: IOException,
+    Type: IOException,
+    Message: /test/build/build.cake exists and overwrite is false.,
+    Data: {},
+    InnerException: null,
+    HelpLink: null
+  }
+}

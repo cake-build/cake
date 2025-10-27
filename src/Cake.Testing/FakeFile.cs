@@ -32,7 +32,39 @@ namespace Cake.Testing
         /// Gets the time when this <see cref="IFileSystemInfo"/> was last written to.
         /// </summary>
         /// <value>The last write time.</value>
-        public DateTime LastWriteTime { get; internal set; }
+        public DateTime LastWriteTime { get; private set; }
+
+        /// <summary>
+        /// Gets the date and time, in Coordinated Universal Time (UTC), that the file was last written to.
+        /// </summary>
+        /// <value>
+        /// A <see cref="DateTime"/> value that represents the last write time in UTC, or <c>null</c> if not available.
+        /// </value>
+        public DateTime? LastWriteTimeUtc { get; private set; }
+
+        /// <summary>
+        /// Gets the date and time, in Coordinated Universal Time (UTC), that the file was created.
+        /// </summary>
+        /// <value>
+        /// A <see cref="DateTime"/> value that represents the creation time in UTC, or <c>null</c> if not available.
+        /// </value>
+        public DateTime? CreationTimeUtc { get; private set; }
+
+        /// <summary>
+        /// Gets the date and time, in Coordinated Universal Time (UTC), that the file was last accessed.
+        /// </summary>
+        /// <value>
+        /// A <see cref="DateTime"/> value that represents the last access time in UTC, or <c>null</c> if not available.
+        /// </value>
+        public DateTime? LastAccessTimeUtc { get; private set; }
+
+        /// <summary>
+        /// Gets the Unix file mode of the entry.
+        /// </summary>
+        /// <value>
+        /// A <see cref="UnixFileMode"/> value that represents the Unix file mode of the entry.
+        /// </value>
+        public UnixFileMode? UnixFileMode { get; private set; }
 
         /// <inheritdoc/>
         public long Length { get; private set; }
@@ -58,14 +90,13 @@ namespace Cake.Testing
         /// Gets the content.
         /// </summary>
         /// <value>The content.</value>
-        public byte[] Content { get; internal set; } = new byte[4096];
+        public byte[] Content { get; internal set; }
 
         internal FakeFile(FakeFileSystemTree tree, FilePath path)
         {
             _tree = tree;
             Path = path;
-            Exists = false;
-            Hidden = false;
+            Reset();
         }
 
         /// <inheritdoc/>
@@ -83,8 +114,7 @@ namespace Cake.Testing
         /// <inheritdoc/>
         public Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
         {
-            bool fileWasCreated;
-            var position = GetPosition(fileMode, out fileWasCreated);
+            var position = GetPosition(fileMode, out bool fileWasCreated);
             if (fileWasCreated)
             {
                 _tree.CreateFile(this);
@@ -148,11 +178,15 @@ namespace Cake.Testing
                     case FileMode.OpenOrCreate:
                         fileWasCreated = true;
                         Exists = true;
-                        LastWriteTime = DateTime.Now;
+                        var now = _tree.GetUtcNow();
+                        SetLastWriteTimeUtc(now);
+                        SetLastAccessTimeUtc(now);
+                        SetCreationTimeUtc(now);
+                        UnixFileMode = _tree.DefaultUnixCreateFileMode;
                         return Length;
                     case FileMode.Open:
                     case FileMode.Truncate:
-                        throw new FileNotFoundException();
+                        throw FakeFileSystemTree.ThrowIfNotFound(this);
                 }
             }
             throw new NotSupportedException();
@@ -161,37 +195,86 @@ namespace Cake.Testing
         /// <inheritdoc/>
         public IFile SetCreationTime(DateTime creationTime)
         {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            CreationTimeUtc = creationTime.ToUniversalTime();
             return this;
         }
 
         /// <inheritdoc/>
         public IFile SetCreationTimeUtc(DateTime creationTimeUtc)
         {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            CreationTimeUtc = creationTimeUtc;
             return this;
         }
 
         /// <inheritdoc/>
         public IFile SetLastAccessTime(DateTime lastAccessTime)
         {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            LastAccessTimeUtc = lastAccessTime.ToUniversalTime();
             return this;
         }
 
         /// <inheritdoc/>
         public IFile SetLastAccessTimeUtc(DateTime lastAccessTimeUtc)
         {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            LastAccessTimeUtc = lastAccessTimeUtc;
             return this;
         }
 
         /// <inheritdoc/>
         public IFile SetLastWriteTime(DateTime lastWriteTime)
         {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            LastWriteTime = lastWriteTime;
+            LastWriteTimeUtc = lastWriteTime.ToUniversalTime();
             return this;
         }
 
         /// <inheritdoc/>
         public IFile SetLastWriteTimeUtc(DateTime lastWriteTimeUtc)
         {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            LastWriteTimeUtc = lastWriteTimeUtc;
+            LastWriteTime = lastWriteTimeUtc.ToLocalTime();
             return this;
+        }
+
+        /// <inheritdoc/>
+        public IFile SetUnixFileMode(UnixFileMode unixFileMode)
+        {
+            if (!_tree.IsUnix)
+            {
+                throw new PlatformNotSupportedException("Setting Unix file mode is not supported on Windows platforms.");
+            }
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            UnixFileMode = unixFileMode;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the last write time of the file to the current UTC time.
+        /// </summary>
+        /// <returns>The current <see cref="IFile"/> instance.</returns>
+        public IFile SetLastWriteNow()
+        {
+            return SetLastWriteTimeUtc(_tree.GetUtcNow());
+        }
+
+        internal void Reset()
+        {
+            Exists = false;
+            Hidden = false;
+            LastWriteTime = default;
+            CreationTimeUtc = null;
+            LastAccessTimeUtc = null;
+            LastWriteTimeUtc = null;
+            UnixFileMode = null;
+            ContentLength = 0;
+            Attributes = default;
+            Content = new byte[4096];
         }
     }
 }
