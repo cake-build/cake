@@ -57,19 +57,21 @@ namespace Cake.Infrastructure
 
             // Misc registrations.
             registrar.RegisterType<CakeReportPrinter>().As<ICakeReportPrinter>().Singleton();
-
-            registrar.RegisterInstance(AnsiConsole.Console).As<IAnsiConsole>().Singleton();
-
-            var useSpectreConsoleForConsoleOutputString = configuration.GetValue(Constants.Settings.UseSpectreConsoleForConsoleOutput);
-            var useSpectreConsoleForConsoleOutput = useSpectreConsoleForConsoleOutputString != null && useSpectreConsoleForConsoleOutputString.Equals("true", StringComparison.OrdinalIgnoreCase);
-
-            if (useSpectreConsoleForConsoleOutput)
-            {
-                registrar.RegisterType<CakeSpectreReportPrinter>().As<ICakeReportPrinter>().Singleton();
-            }
+            RegisterSpectreConsole(registrar, configuration);
 
             registrar.RegisterType<CakeConsole>().As<IConsole>().Singleton();
             registrar.RegisterInstance(configuration).As<ICakeConfiguration>().Singleton();
+        }
+
+        private static void RegisterSpectreConsole(ICakeContainerRegistrar registrar, ICakeConfiguration configuration)
+        {
+            registrar.RegisterInstance(AnsiConsole.Console).As<IAnsiConsole>().Singleton();
+
+            var useSpectre = configuration.GetValue(Constants.Settings.UseSpectreConsoleForConsoleOutput) ?? "true";
+            if (useSpectre.Equals("true", StringComparison.OrdinalIgnoreCase))
+            {
+                registrar.RegisterType<CakeSpectreReportPrinter>().As<ICakeReportPrinter>().Singleton();
+            }
         }
     }
 }
