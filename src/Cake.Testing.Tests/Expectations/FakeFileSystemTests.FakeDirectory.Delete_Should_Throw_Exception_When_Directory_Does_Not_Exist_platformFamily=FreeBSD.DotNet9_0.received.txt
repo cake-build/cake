@@ -1,0 +1,13 @@
+﻿{
+  directory: {
+    Exists: false,
+    Hidden: false,
+    LastWriteTime: 0001-01-01,
+    LastWriteTimeUtc: null,
+    CreationTimeUtc: null,
+    LastAccessTimeUtc: null,
+    UnixFileMode: null,
+    Path: /test/nonexistent
+  },
+  result: null
+}

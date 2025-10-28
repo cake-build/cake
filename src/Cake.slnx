@@ -1,0 +1,49 @@
+<Solution>
+  <Folder Name="/Build/">
+    <File Path="../build.cake" />
+    <File Path="../build.ps1" />
+    <File Path="../build.sh" />
+    <File Path="Shared.msbuild" />
+  </Folder>
+  <Folder Name="/Build/build/">
+    <File Path="../build/credentials.cake" />
+    <File Path="../build/packages.cake" />
+    <File Path="../build/parameters.cake" />
+    <File Path="../build/paths.cake" />
+    <File Path="../build/version.cake" />
+  </Folder>
+  <Folder Name="/Build/nuspec/">
+    <File Path="../nuspec/Cake.CoreCLR.nuspec" />
+    <File Path="../nuspec/Cake.nuspec" />
+    <File Path="../nuspec/Cake.Portable.nuspec" />
+  </Folder>
+  <Folder Name="/Meta/">
+    <File Path="../LICENSE" />
+    <File Path="../README.md" />
+    <File Path="../ReleaseNotes.md" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Cake.Common.Tests/Cake.Common.Tests.csproj" />
+    <Project Path="Cake.Core.Tests/Cake.Core.Tests.csproj" />
+    <Project Path="Cake.DotNetTool.Module.Tests/Cake.DotNetTool.Module.Tests.csproj" />
+    <Project Path="Cake.Frosting.Tests/Cake.Frosting.Tests.csproj" />
+    <Project Path="Cake.NuGet.Tests/Cake.NuGet.Tests.csproj" />
+    <Project Path="Cake.Tests/Cake.Tests.csproj" />
+    <Project Path="Cake.Testing.Tests/Cake.Testing.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Utilities/">
+    <Project Path="Cake.Frosting.Tests.Tasks/Cake.Frosting.Tests.Tasks.csproj" />
+    <Project Path="Cake.Testing.Xunit.v3/Cake.Testing.Xunit.v3.csproj" />
+    <Project Path="Cake.Testing.Xunit/Cake.Testing.Xunit.csproj" />
+    <Project Path="Cake.Testing/Cake.Testing.csproj" />
+  </Folder>
+  <Project Path="Cake.Cli/Cake.Cli.csproj" />
+  <Project Path="Cake.Common/Cake.Common.csproj" />
+  <Project Path="Cake.Core/Cake.Core.csproj" />
+  <Project Path="Cake.DotNetTool.Module/Cake.DotNetTool.Module.csproj" />
+  <Project Path="Cake.Frosting.Example/Cake.Frosting.Example.csproj" />
+  <Project Path="Cake.Frosting.Template/Cake.Frosting.Template.csproj" />
+  <Project Path="Cake.Frosting/Cake.Frosting.csproj" />
+  <Project Path="Cake.NuGet/Cake.NuGet.csproj" />
+  <Project Path="Cake/Cake.csproj" />
+</Solution>

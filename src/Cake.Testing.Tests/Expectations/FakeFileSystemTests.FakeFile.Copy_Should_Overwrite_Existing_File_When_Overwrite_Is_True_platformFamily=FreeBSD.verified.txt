@@ -1,0 +1,36 @@
+﻿{
+  sourceFile: {
+    Path: /test/file1.txt,
+    Exists: true,
+    Hidden: false,
+    LastWriteTimeUtc: 2014-05-27 19:56:01,
+    CreationTimeUtc: 2014-05-27 19:56:01,
+    LastAccessTimeUtc: 2014-05-27 19:56:01,
+    UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead,
+    Length: 11,
+    Attributes: None,
+    ContentLength: 11
+  },
+  beforeState: {
+    Path: /test/build/build.cake,
+    Exists: true,
+    Hidden: false,
+    Length: 27,
+    LastWriteTimeUtc: 2014-05-27 19:56:01,
+    CreationTimeUtc: 2014-05-27 19:56:01,
+    LastAccessTimeUtc: 2014-05-27 19:56:01,
+    Attributes: None,
+    UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead
+  },
+  afterState: {
+    Path: /test/build/build.cake,
+    Exists: true,
+    Hidden: false,
+    Length: 11,
+    LastWriteTimeUtc: 2014-05-27 19:56:01,
+    CreationTimeUtc: 2014-05-27 19:56:01,
+    LastAccessTimeUtc: 2014-05-27 19:56:01,
+    Attributes: None,
+    UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead
+  }
+}

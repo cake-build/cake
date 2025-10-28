@@ -28,7 +28,39 @@ namespace Cake.Testing
         /// Gets the time when this <see cref="IFileSystemInfo"/> was last written to.
         /// </summary>
         /// <value>The last write time.</value>
-        public DateTime LastWriteTime { get; internal set; }
+        public DateTime LastWriteTime { get; private set; }
+
+        /// <summary>
+        /// Gets the date and time, in Coordinated Universal Time (UTC), that the directory was last written to.
+        /// </summary>
+        /// <value>
+        /// A <see cref="DateTime"/> value that represents the last write time in UTC, or <c>null</c> if not available.
+        /// </value>
+        public DateTime? LastWriteTimeUtc { get; private set; }
+
+        /// <summary>
+        /// Gets the date and time, in Coordinated Universal Time (UTC), that the directory was created.
+        /// </summary>
+        /// <value>
+        /// A <see cref="DateTime"/> value that represents the creation time in UTC, or <c>null</c> if not available.
+        /// </value>
+        public DateTime? CreationTimeUtc { get; private set; }
+
+        /// <summary>
+        /// Gets the date and time, in Coordinated Universal Time (UTC), that the directory was last accessed.
+        /// </summary>
+        /// <value>
+        /// A <see cref="DateTime"/> value that represents the last access time in UTC, or <c>null</c> if not available.
+        /// </value>
+        public DateTime? LastAccessTimeUtc { get; private set; }
+
+        /// <summary>
+        /// Gets the Unix file mode of the entry.
+        /// </summary>
+        /// <value>
+        /// A <see cref="System.IO.UnixFileMode"/> value that represents the Unix file mode of the entry.
+        /// </value>
+        public System.IO.UnixFileMode? UnixFileMode { get; internal set; }
 
         /// <inheritdoc/>
         public DirectoryPath Path { get; }
@@ -45,6 +77,10 @@ namespace Cake.Testing
             _tree = tree;
             Path = path;
             Content = new FakeDirectoryContent(this, tree.Comparer);
+            CreationTimeUtc = null;
+            LastAccessTimeUtc = null;
+            LastWriteTimeUtc = null;
+            UnixFileMode = null;
         }
 
         /// <inheritdoc/>
@@ -68,7 +104,6 @@ namespace Cake.Testing
         /// <inheritdoc/>
         public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope)
         {
-            var result = new List<IDirectory>();
             var stack = new Stack<FakeDirectory>();
             foreach (var child in Content.Directories.Values)
             {
@@ -89,7 +124,7 @@ namespace Cake.Testing
                 // Is this a match? In that case, add it to the result.
                 if (expression.IsMatch(current.Path.GetDirectoryName()))
                 {
-                    result.Add(current);
+                    yield return current;
                 }
 
                 // Recurse?
@@ -104,14 +139,11 @@ namespace Cake.Testing
                     }
                 }
             }
-
-            return result;
         }
 
         /// <inheritdoc/>
         public IEnumerable<IFile> GetFiles(string filter, SearchScope scope)
         {
-            var result = new List<IFile>();
             var stack = new Stack<FakeDirectory>();
 
             // Rewrite the filter to a regex expression.
@@ -120,7 +152,11 @@ namespace Cake.Testing
             // Just interested in this directory?
             if (scope == SearchScope.Current)
             {
-                return GetFiles(this, expression);
+                foreach (var file in GetFiles(this, expression))
+                {
+                    yield return file;
+                }
+                yield break;
             }
 
             stack.Push(this);
@@ -130,7 +166,10 @@ namespace Cake.Testing
                 var current = stack.Pop();
 
                 // Add all files we can find.
-                result.AddRange(GetFiles(current, expression));
+                foreach (var file in GetFiles(current, expression))
+                {
+                    yield return file;
+                }
 
                 // Recurse?
                 if (scope == SearchScope.Recursive)
@@ -144,12 +183,81 @@ namespace Cake.Testing
                     }
                 }
             }
-            return result;
+        }
+
+        /// <inheritdoc/>
+        public IDirectory SetCreationTime(DateTime creationTime)
+        {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            CreationTimeUtc = creationTime.ToUniversalTime();
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IDirectory SetCreationTimeUtc(DateTime creationTimeUtc)
+        {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            CreationTimeUtc = creationTimeUtc;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IDirectory SetLastAccessTime(DateTime lastAccessTime)
+        {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            LastAccessTimeUtc = lastAccessTime.ToUniversalTime();
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IDirectory SetLastAccessTimeUtc(DateTime lastAccessTimeUtc)
+        {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            LastAccessTimeUtc = lastAccessTimeUtc;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IDirectory SetLastWriteTime(DateTime lastWriteTime)
+        {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            LastWriteTime = lastWriteTime;
+            LastWriteTimeUtc = lastWriteTime.ToUniversalTime();
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IDirectory SetLastWriteTimeUtc(DateTime lastWriteTimeUtc)
+        {
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            LastWriteTimeUtc = lastWriteTimeUtc;
+            LastWriteTime = lastWriteTimeUtc.ToLocalTime();
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public IDirectory SetUnixFileMode(System.IO.UnixFileMode unixFileMode)
+        {
+            if (!_tree.IsUnix)
+            {
+                throw new PlatformNotSupportedException("Setting Unix file mode is not supported on Windows platforms.");
+            }
+            FakeFileSystemTree.ThrowIfNotFound(this);
+            UnixFileMode = unixFileMode;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the last write time of the file to the current UTC time.
+        /// </summary>
+        /// <returns>The current <see cref="IFile"/> instance.</returns>
+        public IDirectory SetLastWriteNow()
+        {
+            return SetLastWriteTimeUtc(_tree.GetUtcNow());
         }
 
         private static IEnumerable<FakeFile> GetFiles(FakeDirectory current, Regex expression)
         {
-            var result = new List<FakeFile>();
             foreach (var file in current.Content.Files)
             {
                 if (file.Value.Exists)
@@ -157,11 +265,10 @@ namespace Cake.Testing
                     // Is this a match? In that case, add it to the result.
                     if (expression.IsMatch(file.Key.GetFilename().FullPath))
                     {
-                        result.Add(current.Content.Files[file.Key]);
+                        yield return current.Content.Files[file.Key];
                     }
                 }
             }
-            return result;
         }
 
         private static Regex CreateRegex(string pattern)

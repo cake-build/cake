@@ -88,7 +88,7 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does<BuildParameters>((context, parameters) =>
 {
-    DotNetRestore("./src/Cake.sln", new DotNetRestoreSettings
+    DotNetRestore("./src/Cake.slnx", new DotNetRestoreSettings
     {
         Verbosity = DotNetVerbosity.Minimal,
         Sources = new [] { "https://api.nuget.org/v3/index.json" },
@@ -101,7 +101,7 @@ Task("Build")
     .Does<BuildParameters>((context, parameters) =>
 {
     // Build the solution.
-    var path = MakeAbsolute(new DirectoryPath("./src/Cake.sln"));
+    var path = MakeAbsolute(new DirectoryPath("./src/Cake.slnx"));
     DotNetBuild(path.FullPath, new DotNetBuildSettings
     {
         Configuration = parameters.Configuration,

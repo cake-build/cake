@@ -1,0 +1,19 @@
+﻿{
+  directory: {
+    Exists: true,
+    Hidden: false,
+    LastWriteTimeUtc: 2014-05-27 19:56:01,
+    CreationTimeUtc: 2014-05-27 19:56:01,
+    LastAccessTimeUtc: 2014-05-27 19:56:01,
+    UnixFileMode: null,
+    Path: /test
+  },
+  result: {
+    $type: PlatformNotSupportedException,
+    Type: PlatformNotSupportedException,
+    Message: Setting Unix file mode is not supported on Windows platforms.,
+    Data: {},
+    InnerException: null,
+    HelpLink: null
+  }
+}

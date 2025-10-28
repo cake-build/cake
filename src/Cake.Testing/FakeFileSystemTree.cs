@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,24 +16,101 @@ namespace Cake.Testing
     internal sealed class FakeFileSystemTree
     {
         private readonly FakeDirectory _root;
+        private readonly Func<TimeProvider> _timeprovider;
 
+        public bool IsUnix { get; }
         public PathComparer Comparer { get; }
+        public UnixFileMode? DefaultUnixCreateDirectoryMode { get; }
 
-        public FakeFileSystemTree(ICakeEnvironment environment)
+        public UnixFileMode? DefaultUnixCreateFileMode { get; }
+        public TimeProvider TimeProvider => _timeprovider();
+        public DateTime GetUtcNow() => TimeProvider.GetUtcNow().DateTime;
+
+        public FakeFileSystemTree(ICakeEnvironment environment, Func<TimeProvider> timeprovider)
         {
             ArgumentNullException.ThrowIfNull(environment);
+            ArgumentNullException.ThrowIfNull(timeprovider);
+
             if (environment.WorkingDirectory == null)
             {
                 throw new ArgumentException("Working directory not set.");
             }
+
             if (environment.WorkingDirectory.IsRelative)
             {
                 throw new ArgumentException("Working directory cannot be relative.");
             }
-            Comparer = new PathComparer(environment.Platform.IsUnix());
 
-            _root = new FakeDirectory(this, "/") { Exists = true, LastWriteTime = DateTime.Now };
+            IsUnix = environment.Platform.IsUnix();
+
+            Comparer = new PathComparer(IsUnix);
+            if (IsUnix)
+            {
+                DefaultUnixCreateDirectoryMode = UnixFileMode.UserRead
+                                                    | UnixFileMode.UserWrite
+                                                    | UnixFileMode.UserExecute
+                                                    | UnixFileMode.GroupRead
+                                                    | UnixFileMode.GroupWrite
+                                                    | UnixFileMode.GroupExecute
+                                                    | UnixFileMode.OtherRead
+                                                    | UnixFileMode.OtherWrite
+                                                    | UnixFileMode.OtherExecute;
+                DefaultUnixCreateFileMode = UnixFileMode.UserRead
+                                                | UnixFileMode.UserWrite
+                                                | UnixFileMode.GroupRead
+                                                | UnixFileMode.GroupWrite
+                                                | UnixFileMode.OtherRead
+                                                | UnixFileMode.OtherWrite;
+            }
+
+            _timeprovider = timeprovider;
+
+            var now = GetUtcNow();
+            _root = new FakeDirectory(this, "/")
+            {
+                Exists = true,
+            };
+            _root.SetLastWriteTimeUtc(now);
+            _root.SetCreationTimeUtc(now);
+            _root.SetLastAccessTimeUtc(now);
             _root.Create();
+        }
+
+        [StackTraceHidden]
+        public static FileNotFoundException ThrowIfNotFound(IFile file)
+        {
+            const string IOFileNotFound = "Could not find the specified file.";
+            const string IOFileNotFoundFileName = "Could not find file '{0}'.";
+
+            var exception = file?.Path == null
+                ? new FileNotFoundException(IOFileNotFound)
+                : new FileNotFoundException(string.Format(IOFileNotFoundFileName, file.Path.FullPath), file.Path.FullPath);
+
+            if (file?.Exists != true)
+            {
+                throw exception;
+            }
+
+            return exception;
+        }
+
+        [StackTraceHidden]
+        public static DirectoryNotFoundException ThrowIfNotFound(IDirectory directory)
+        {
+            const string IODirectoryNotFound = "Could not find the specified directory.";
+            const string IODirectoryNotFoundFileName = "Could not find directory '{0}'.";
+
+            var exception = new DirectoryNotFoundException(
+                directory?.Path == null
+                    ? IODirectoryNotFound
+                    : string.Format(IODirectoryNotFoundFileName, directory.Path.FullPath));
+
+            if (directory?.Exists != true)
+            {
+                throw exception;
+            }
+
+            return exception;
         }
 
         public FakeDirectory CreateDirectory(DirectoryPath path)
@@ -42,6 +120,7 @@ namespace Cake.Testing
 
         public FakeDirectory CreateDirectory(FakeDirectory directory)
         {
+            var now = GetUtcNow();
             var path = directory.Path;
             var queue = new Queue<string>(path.Segments);
 
@@ -70,7 +149,10 @@ namespace Cake.Testing
                 }
 
                 current.Exists = true;
-                current.LastWriteTime = DateTime.Now;
+                current.SetLastWriteTimeUtc(now);
+                current.SetCreationTimeUtc(now);
+                current.SetLastAccessTimeUtc(now);
+                current.UnixFileMode = DefaultUnixCreateDirectoryMode;
                 children = current.Content;
             }
 
@@ -84,14 +166,17 @@ namespace Cake.Testing
             if (directory == null)
             {
                 file.Exists = false;
-                throw new DirectoryNotFoundException(string.Format(CultureInfo.InvariantCulture, "Could not find a part of the path '{0}'.", file.Path.FullPath));
+                ThrowIfNotFound(directory);
             }
 
             if (!directory.Content.Files.ContainsKey(file.Path))
             {
                 // Add the file to the directory.
                 file.Exists = true;
-                file.LastWriteTime = DateTime.Now;
+                var now = GetUtcNow();
+                file.SetLastWriteTimeUtc(now);
+                file.SetCreationTimeUtc(now);
+                file.SetLastAccessTimeUtc(now);
                 directory.Content.Add(file);
             }
         }
@@ -148,10 +233,7 @@ namespace Cake.Testing
 
         public void DeleteFile(FakeFile file)
         {
-            if (!file.Exists)
-            {
-                throw new FileNotFoundException("File does not exist.", file.Path.FullPath);
-            }
+            ThrowIfNotFound(file);
 
             if (file.Attributes.HasFlag(FileAttributes.ReadOnly))
             {
@@ -165,9 +247,7 @@ namespace Cake.Testing
             directory.Content.Remove(file);
 
             // Reset all properties.
-            file.Exists = false;
-            file.Content = null;
-            file.ContentLength = 0;
+            file.Reset();
         }
 
         public FakeDirectory FindDirectory(DirectoryPath path)
@@ -220,10 +300,7 @@ namespace Cake.Testing
 
         public void CopyFile(FakeFile file, FilePath destination, bool overwrite)
         {
-            if (!file.Exists)
-            {
-                throw new FileNotFoundException("File does not exist.");
-            }
+            ThrowIfNotFound(file);
 
             // Already exists?
             var destinationFile = FindFile(destination);
@@ -241,20 +318,21 @@ namespace Cake.Testing
             var directory = FindDirectory(destination.GetDirectory());
             if (directory == null || !directory.Exists)
             {
-                throw new DirectoryNotFoundException("The destination path {0} does not exist.");
+                ThrowIfNotFound(directory);
             }
 
             // Make sure the file exist.
-            if (destinationFile == null)
-            {
-                destinationFile = new FakeFile(this, destination);
-            }
+            destinationFile ??= new FakeFile(this, destination);
 
             // Copy the data from the original file to the destination.
-            using (var input = file.OpenRead())
-            using (var output = destinationFile.OpenWrite())
+            using var input = file.OpenRead();
+            using var output = destinationFile.OpenWrite();
+            input.CopyTo(output);
+            destinationFile.Attributes = file.Attributes;
+            destinationFile.SetCreationTimeUtc(file.CreationTimeUtc ?? GetUtcNow());
+            if (file.UnixFileMode.HasValue)
             {
-                input.CopyTo(output);
+                destinationFile.SetUnixFileMode(file.UnixFileMode.Value);
             }
         }
 
