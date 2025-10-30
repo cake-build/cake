@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Cake.Core.Configuration.Parser;
 using Cake.Core.IO;
@@ -26,14 +25,8 @@ namespace Cake.Core.Configuration
         /// <param name="environment">The environment.</param>
         public CakeConfigurationProvider(IFileSystem fileSystem, ICakeEnvironment environment)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
             _fileSystem = fileSystem;
             _environment = environment;
         }
@@ -56,20 +49,11 @@ namespace Cake.Core.Configuration
         /// <returns>The created configuration.</returns>
         public ICakeConfiguration CreateConfiguration(DirectoryPath path, IEnumerable<KeyValuePair<string, string>> baseConfiguration, IDictionary<string, string> arguments)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
-            if (baseConfiguration == null)
-            {
-                throw new ArgumentNullException(nameof(baseConfiguration));
-            }
+            ArgumentNullException.ThrowIfNull(baseConfiguration);
 
-            if (arguments == null)
-            {
-                throw new ArgumentNullException(nameof(arguments));
-            }
+            ArgumentNullException.ThrowIfNull(arguments);
 
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
@@ -95,16 +79,16 @@ namespace Cake.Core.Configuration
             {
                 var parser = new ConfigurationParser(_fileSystem, _environment);
                 var configuration = parser.Read(configurationPath);
-                foreach (var key in configuration.Keys)
+                foreach (var (key, value) in configuration)
                 {
-                    result[KeyNormalizer.Normalize(key)] = configuration[key];
+                    result[KeyNormalizer.Normalize(key)] = value;
                 }
             }
 
             // Add all arguments.
-            foreach (var key in arguments.Keys)
+            foreach (var (key, value) in arguments)
             {
-                result[KeyNormalizer.Normalize(key)] = arguments[key];
+                result[KeyNormalizer.Normalize(key)] = value;
             }
 
             return new CakeConfiguration(result);

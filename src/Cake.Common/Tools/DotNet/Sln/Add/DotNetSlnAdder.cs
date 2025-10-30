@@ -46,10 +46,7 @@ namespace Cake.Common.Tools.DotNet.Sln.Add
             {
                 throw new ArgumentNullException(nameof(projectPath));
             }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             if (settings.InRoot && settings.SolutionFolder != null)
             {
                 throw new ArgumentException("InRoot and SolutionFolder cannot be used together.");

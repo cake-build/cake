@@ -41,15 +41,9 @@ namespace Cake.Common.Tools.DotNet.Format
         /// <param name="settings">The settings.</param>
         public void Format(string root, string subcommand, DotNetFormatSettings settings)
         {
-            if (root == null)
-            {
-                throw new ArgumentNullException(nameof(root));
-            }
+            ArgumentNullException.ThrowIfNull(root);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(root, subcommand, settings));
         }
@@ -75,7 +69,7 @@ namespace Cake.Common.Tools.DotNet.Format
             // Diagnostics
             if (settings.Diagnostics != null && settings.Diagnostics.Any())
             {
-                builder.AppendSwitch("--diagnostics", string.Join(" ", settings.Diagnostics));
+                builder.AppendSwitch("--diagnostics", string.Join(' ', settings.Diagnostics));
             }
 
             // Severity
@@ -100,13 +94,13 @@ namespace Cake.Common.Tools.DotNet.Format
             // Include
             if (settings.Include != null && settings.Include.Any())
             {
-                builder.AppendSwitch("--include", string.Join(" ", settings.Include));
+                builder.AppendSwitch("--include", string.Join(' ', settings.Include));
             }
 
             // Exclude
             if (settings.Exclude != null && settings.Exclude.Any())
             {
-                builder.AppendSwitch("--exclude", string.Join(" ", settings.Exclude));
+                builder.AppendSwitch("--exclude", string.Join(' ', settings.Exclude));
             }
 
             // Include Generated

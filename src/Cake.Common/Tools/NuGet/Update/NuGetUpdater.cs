@@ -41,14 +41,8 @@ namespace Cake.Common.Tools.NuGet.Update
         /// <param name="settings">The settings.</param>
         public void Update(FilePath targetFile, NuGetUpdateSettings settings)
         {
-            if (targetFile == null)
-            {
-                throw new ArgumentNullException(nameof(targetFile));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(targetFile);
+            ArgumentNullException.ThrowIfNull(settings);
             Run(settings, GetArguments(targetFile, settings));
         }
 
@@ -63,14 +57,14 @@ namespace Cake.Common.Tools.NuGet.Update
             if (settings.Id != null && settings.Id.Count > 0)
             {
                 builder.Append("-Id");
-                builder.AppendQuoted(string.Join(";", settings.Id));
+                builder.AppendQuoted(string.Join(';', settings.Id));
             }
 
             // List of package sources
             if (settings.Source != null && settings.Source.Count > 0)
             {
                 builder.Append("-Source");
-                builder.AppendQuoted(string.Join(";", settings.Source));
+                builder.AppendQuoted(string.Join(';', settings.Source));
             }
 
             // Verbosity?

@@ -11,19 +11,36 @@ using Cake.Core.IO;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Infrastructure;
-using Spectre.Console.Cli;
 
 namespace Cake.Features.Bootstrapping
 {
+    /// <summary>
+    /// Represents a feature for bootstrapping Cake modules.
+    /// </summary>
     public interface IBootstrapFeature
     {
+        /// <summary>
+        /// Runs the bootstrap feature with the specified arguments and settings.
+        /// </summary>
+        /// <param name="arguments">The Cake arguments.</param>
+        /// <param name="settings">The bootstrap feature settings.</param>
+        /// <returns>The exit code.</returns>
         int Run(ICakeArguments arguments, BootstrapFeatureSettings settings);
     }
 
+    /// <summary>
+    /// Represents a feature for bootstrapping Cake modules.
+    /// </summary>
     public sealed class BootstrapFeature : Feature, IBootstrapFeature
     {
         private readonly ICakeEnvironment _environment;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BootstrapFeature"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The Cake environment.</param>
+        /// <param name="configurator">The container configurator.</param>
         public BootstrapFeature(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -32,6 +49,12 @@ namespace Cake.Features.Bootstrapping
             _environment = environment;
         }
 
+        /// <summary>
+        /// Runs the bootstrap feature with the specified arguments and settings.
+        /// </summary>
+        /// <param name="arguments">The Cake arguments.</param>
+        /// <param name="settings">The bootstrap feature settings.</param>
+        /// <returns>The exit code.</returns>
         public int Run(ICakeArguments arguments, BootstrapFeatureSettings settings)
         {
             // Fix the script path.
@@ -77,7 +100,7 @@ namespace Cake.Features.Bootstrapping
             var result = analyzer.Analyze(settings.Script, new ScriptAnalyzerSettings() { Mode = ScriptAnalyzerMode.Modules });
             if (!result.Succeeded)
             {
-                var messages = string.Join("\n", result.Errors.Select(s => $"{root.GetRelativePath(s.File).FullPath}, line #{s.Line}: {s.Message}"));
+                var messages = string.Join('\n', result.Errors.Select(s => $"{root.GetRelativePath(s.File).FullPath}, line #{s.Line}: {s.Message}"));
                 throw new AggregateException($"Bootstrapping failed for '{settings.Script}'.\n{messages}");
             }
 

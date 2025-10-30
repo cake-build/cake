@@ -37,25 +37,13 @@ namespace Cake.DotNetTool.Module
         /// <param name="fileSystem">The file system.</param>
         public DotNetToolPackageInstaller(ICakeEnvironment environment, IProcessRunner processRunner, ICakeLog log, IDotNetToolContentResolver contentResolver, ICakeConfiguration config, IFileSystem fileSystem)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
 
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException(nameof(processRunner));
-            }
+            ArgumentNullException.ThrowIfNull(processRunner);
 
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
+            ArgumentNullException.ThrowIfNull(log);
 
-            if (contentResolver == null)
-            {
-                throw new ArgumentNullException(nameof(contentResolver));
-            }
+            ArgumentNullException.ThrowIfNull(contentResolver);
 
             _environment = environment;
             _processRunner = processRunner;
@@ -73,10 +61,7 @@ namespace Cake.DotNetTool.Module
         /// <returns><c>true</c> if this installer can install the specified resource; otherwise <c>false</c>.</returns>
         public bool CanInstall(PackageReference package, PackageType type)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
+            ArgumentNullException.ThrowIfNull(package);
 
             return package.Scheme.Equals("dotnet", StringComparison.OrdinalIgnoreCase);
         }
@@ -90,15 +75,9 @@ namespace Cake.DotNetTool.Module
         /// <returns>The installed files.</returns>
         public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
+            ArgumentNullException.ThrowIfNull(package);
 
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             // We are going to assume that the default install location is the
             // currently configured location for the Cake Tools Folder
@@ -124,9 +103,9 @@ namespace Cake.DotNetTool.Module
                 // what is already installed
                 string requestedVersion = null;
 
-                if (package.Parameters.ContainsKey("version"))
+                if (package.Parameters.TryGetValue("version", out var version))
                 {
-                    requestedVersion = package.Parameters["version"].First();
+                    requestedVersion = version.First();
                 }
 
                 if (requestedVersion == null)
@@ -250,7 +229,7 @@ namespace Cake.DotNetTool.Module
             var arguments = new ProcessArgumentBuilder();
 
             arguments.Append("tool");
-            arguments.Append(Enum.GetName(typeof(DotNetToolOperation), operation).ToLowerInvariant());
+            arguments.Append(Enum.GetName(operation).ToLowerInvariant());
             arguments.AppendQuoted(definition.Package);
 
             if (definition.Parameters.ContainsKey("global"))
@@ -272,17 +251,17 @@ namespace Cake.DotNetTool.Module
                 }
 
                 // Version
-                if (definition.Parameters.ContainsKey("version"))
+                if (definition.Parameters.TryGetValue("version", out var version))
                 {
                     arguments.Append("--version");
-                    arguments.Append(definition.Parameters["version"].First());
+                    arguments.Append(version.First());
                 }
 
                 // Config File
-                if (definition.Parameters.ContainsKey("configfile"))
+                if (definition.Parameters.TryGetValue("configfile", out var config))
                 {
                     arguments.Append("--configfile");
-                    arguments.AppendQuoted(definition.Parameters["configfile"].First());
+                    arguments.AppendQuoted(config.First());
                 }
 
                 // Whether to ignore failed sources
@@ -292,10 +271,10 @@ namespace Cake.DotNetTool.Module
                 }
 
                 // Framework
-                if (definition.Parameters.ContainsKey("framework"))
+                if (definition.Parameters.TryGetValue("framework", out var framework))
                 {
                     arguments.Append("--framework");
-                    arguments.Append(definition.Parameters["framework"].First());
+                    arguments.Append(framework.First());
                 }
 
                 switch (log.Verbosity)

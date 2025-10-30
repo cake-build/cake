@@ -25,15 +25,9 @@ namespace Cake.Common.Security
         /// <param name="hashAlgorithmBuilder">The hash algorithm builder.</param>
         public DirectoryHashCalculator(ICakeContext context, IHashAlgorithmBuilder hashAlgorithmBuilder)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (hashAlgorithmBuilder == null)
-            {
-                throw new ArgumentNullException(nameof(hashAlgorithmBuilder));
-            }
+            ArgumentNullException.ThrowIfNull(hashAlgorithmBuilder);
 
             _context = context;
             _hashAlgorithmBuilder = hashAlgorithmBuilder;
@@ -59,15 +53,9 @@ namespace Cake.Common.Security
             IEnumerable<GlobPattern> pattern,
             HashAlgorithm hashAlgorithm)
         {
-            if (directoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(directoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(directoryPath);
 
-            if (pattern == null)
-            {
-                throw new ArgumentNullException(nameof(pattern));
-            }
+            ArgumentNullException.ThrowIfNull(pattern);
 
             using (var incrementalDirectoryHash = _hashAlgorithmBuilder.CreateHashAlgorithm(hashAlgorithm))
             {
@@ -123,15 +111,9 @@ namespace Cake.Common.Security
             IEnumerable<string> pattern,
             HashAlgorithm hashAlgorithm)
         {
-            if (directoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(directoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(directoryPath);
 
-            if (pattern == null)
-            {
-                throw new ArgumentNullException(nameof(pattern));
-            }
+            ArgumentNullException.ThrowIfNull(pattern);
 
             return Calculate(
                 directoryPath,
@@ -171,15 +153,9 @@ namespace Cake.Common.Security
             DirectoryPath directoryPath,
             HashAlgorithm hashAlgorithm)
         {
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(filePath);
 
-            if (directoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(directoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(directoryPath);
 
             using (var incrementalFileHash = _hashAlgorithmBuilder.CreateHashAlgorithm(hashAlgorithm))
             {

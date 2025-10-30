@@ -1,9 +1,8 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -126,30 +125,37 @@ namespace Cake.Core.Polyfill
                 return netCoreAppFramwork;
             }
 
-            var assemblyPath = typeof(System.Runtime.GCSettings)?.GetTypeInfo()
-                ?.Assembly
-#if NETCOREAPP3_1
-                ?.CodeBase;
-#else
-#pragma warning disable 0618
+            var assembly = typeof(System.Runtime.GCSettings)?.GetTypeInfo()
+                            ?.Assembly;
+
+            var assemblyPath = assembly
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
                 ?.Location;
-#pragma warning restore 0618
-#endif
+#pragma warning restore IL3000 // Avoid accessing Assembly file path when publishing as a single file
+
             if (string.IsNullOrEmpty(assemblyPath))
             {
-                return NetStandardFramework;
+                if (assembly.GetName().Version is Version assemblyVersion)
+                {
+                    return netCoreAppFramwork = new FrameworkName(".NETCoreApp", new Version(assemblyVersion.Major, assemblyVersion.Minor));
+                }
+
+                return netCoreAppFramwork = NetStandardFramework;
             }
 
             const string microsoftNetCoreApp = "Microsoft.NETCore.App";
-            var runtimeBasePathLength = assemblyPath.IndexOf(microsoftNetCoreApp) + microsoftNetCoreApp.Length + 1;
-            var netCoreAppVersion = string.Concat(assemblyPath.Skip(runtimeBasePathLength).Take(3));
+            const int microsoftNetCoreAppLengthPlusOne = 22;
+            var versionStart = Math.Max(0, assemblyPath.IndexOf(microsoftNetCoreApp) + microsoftNetCoreAppLengthPlusOne);
+            var versionEnd = versionStart + Math.Max(3, assemblyPath.IndexOfAny(['-', '/', '\\'], versionStart) - versionStart);
+            var netCoreAppVersion = assemblyPath[versionStart..versionEnd];
+
             if (string.IsNullOrEmpty(netCoreAppVersion))
             {
-                return NetStandardFramework;
+                return netCoreAppFramwork = NetStandardFramework;
             }
 
             return netCoreAppFramwork = Version.TryParse(netCoreAppVersion, out var version)
-                                            ? new FrameworkName(".NETCoreApp", version)
+                                            ? new FrameworkName(".NETCoreApp", new Version(version.Major, version.Minor))
                                             : NetStandardFramework;
         }
     }

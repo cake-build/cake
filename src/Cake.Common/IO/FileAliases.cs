@@ -39,14 +39,8 @@ namespace Cake.Common.IO
         [CakeNamespaceImport("Cake.Common.IO.Paths")]
         public static ConvertableFilePath File(this ICakeContext context, string path)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(path);
 
             return new ConvertableFilePath(new FilePath(path));
         }
@@ -144,10 +138,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Copy")]
         public static void CopyFiles(this ICakeContext context, IEnumerable<string> filePaths, DirectoryPath targetDirectoryPath)
         {
-            if (filePaths == null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
+            ArgumentNullException.ThrowIfNull(filePaths);
             var paths = filePaths.Select(p => new FilePath(p));
             FileCopier.CopyFiles(context, paths, targetDirectoryPath, false);
         }
@@ -212,10 +203,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Copy")]
         public static void CopyFiles(this ICakeContext context, IEnumerable<string> filePaths, DirectoryPath targetDirectoryPath, bool preserveFolderStructure)
         {
-            if (filePaths == null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
+            ArgumentNullException.ThrowIfNull(filePaths);
             var paths = filePaths.Select(p => new FilePath(p));
             FileCopier.CopyFiles(context, paths, targetDirectoryPath, preserveFolderStructure);
         }
@@ -365,14 +353,8 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Exists")]
         public static bool FileExists(this ICakeContext context, FilePath filePath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePath);
 
             return context.FileSystem.GetFile(filePath.MakeAbsolute(context.Environment)).Exists;
         }
@@ -392,14 +374,8 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Path")]
         public static FilePath MakeAbsolute(this ICakeContext context, FilePath filePath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePath);
 
             return filePath.MakeAbsolute(context.Environment);
         }
@@ -419,14 +395,8 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Exists")]
         public static long FileSize(this ICakeContext context, FilePath filePath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePath);
 
             var file = context.FileSystem.GetFile(filePath.MakeAbsolute(context.Environment));
             if (!file.Exists)
@@ -453,14 +423,8 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Path")]
         public static FilePath ExpandEnvironmentVariables(this ICakeContext context, FilePath filePath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePath);
 
             return filePath.ExpandEnvironmentVariables(context.Environment);
         }

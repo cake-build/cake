@@ -28,14 +28,8 @@ namespace Cake.Common.Tools.Chocolatey
             _fileSystem = fileSystem;
             _environment = environment;
 
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
         }
 
         /// <inheritdoc/>

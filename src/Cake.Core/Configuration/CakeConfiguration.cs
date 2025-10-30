@@ -27,8 +27,7 @@ namespace Cake.Core.Configuration
         public string GetValue(string key)
         {
             key = KeyNormalizer.Normalize(key);
-            return _lookup.ContainsKey(key)
-                ? _lookup[key] : null;
+            return _lookup.GetValueOrDefault(key);
         }
     }
 }

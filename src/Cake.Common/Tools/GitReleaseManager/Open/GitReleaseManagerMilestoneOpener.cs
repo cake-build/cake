@@ -59,10 +59,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Open
                 throw new ArgumentNullException(nameof(milestone));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(token, owner, repository, milestone, settings));
         }

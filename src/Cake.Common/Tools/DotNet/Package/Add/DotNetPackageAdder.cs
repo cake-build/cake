@@ -40,14 +40,8 @@ namespace Cake.Common.Tools.DotNet.Package.Add
         /// <param name="settings">The settings.</param>
         public void Add(string packageName, string project, DotNetPackageAddSettings settings)
         {
-            if (packageName == null)
-            {
-                throw new ArgumentNullException(nameof(packageName));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(packageName);
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(packageName, project, settings));
         }

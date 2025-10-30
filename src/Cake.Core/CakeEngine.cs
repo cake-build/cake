@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Cake.Core.Diagnostics;
@@ -58,10 +57,7 @@ namespace Cake.Core
         /// <param name="log">The log.</param>
         public CakeEngine(ICakeDataService data, ICakeLog log)
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
+            ArgumentNullException.ThrowIfNull(data);
 
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _tasks = new List<CakeTask>();
@@ -138,18 +134,12 @@ namespace Cake.Core
         /// <inheritdoc/>
         public async Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, ExecutionSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             if (settings.Targets.Count() == 0)
             {
                 throw new ArgumentException("No target specified.", nameof(settings));
             }
-            if (strategy == null)
-            {
-                throw new ArgumentNullException(nameof(strategy));
-            }
+            ArgumentNullException.ThrowIfNull(strategy);
 
             // Ensure that registered actions are valid.
             _actions.Validate();
@@ -205,7 +195,8 @@ namespace Cake.Core
             {
                 exceptionWasThrown = true;
                 thrownException = ex;
-                throw;
+
+                throw new CakeReportException(report, ex.Message, ex);
             }
             finally
             {
@@ -351,20 +342,20 @@ namespace Cake.Core
                 PerformTaskTeardown(context, strategy, task, stopWatch.Elapsed, false, taskException);
 
                 _log.Verbose($"Completed in {stopWatch.Elapsed}");
-            }
 
-            // Add the task results to the report
-            if (IsDelegatedTask(task))
-            {
-                report.AddDelegated(task.Name, stopWatch.Elapsed);
-            }
-            else if (taskException is null)
-            {
-                report.Add(task.Name, CakeReportEntryCategory.Task, stopWatch.Elapsed);
-            }
-            else
-            {
-                report.AddFailed(task.Name, stopWatch.Elapsed);
+                // Add the task results to the report
+                if (IsDelegatedTask(task))
+                {
+                    report.AddDelegated(task.Name, stopWatch.Elapsed);
+                }
+                else if (taskException is null)
+                {
+                    report.Add(task.Name, CakeReportEntryCategory.Task, stopWatch.Elapsed);
+                }
+                else
+                {
+                    report.AddFailed(task.Name, stopWatch.Elapsed);
+                }
             }
         }
 

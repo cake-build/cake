@@ -53,10 +53,7 @@ namespace Cake.Frosting
         /// <param name="context">The context.</param>
         public virtual void OnError(Exception exception, T context)
         {
-            if (exception is null)
-            {
-                throw new ArgumentNullException(nameof(exception));
-            }
+            ArgumentNullException.ThrowIfNull(exception);
         }
 
         /// <summary>
@@ -70,10 +67,7 @@ namespace Cake.Frosting
         /// <inheritdoc/>
         Task IFrostingTask.RunAsync(ICakeContext context)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return RunAsync((T)context);
         }
@@ -81,10 +75,7 @@ namespace Cake.Frosting
         /// <inheritdoc/>
         bool IFrostingTask.ShouldRun(ICakeContext context)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return ShouldRun((T)context);
         }
@@ -92,15 +83,9 @@ namespace Cake.Frosting
         /// <inheritdoc/>
         void IFrostingTask.OnError(Exception exception, ICakeContext context)
         {
-            if (exception is null)
-            {
-                throw new ArgumentNullException(nameof(exception));
-            }
+            ArgumentNullException.ThrowIfNull(exception);
 
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             OnError(exception, (T)context);
         }
@@ -108,10 +93,7 @@ namespace Cake.Frosting
         /// <inheritdoc/>
         void IFrostingTask.Finally(ICakeContext context)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             Finally((T)context);
         }

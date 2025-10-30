@@ -35,10 +35,7 @@ namespace Cake.Common.Tools.DotNet.BuildServer
         /// <param name="settings">The settings.</param>
         public void Shutdown(DotNetBuildServerShutdownSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(settings));
         }

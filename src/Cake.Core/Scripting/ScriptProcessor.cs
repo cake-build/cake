@@ -42,22 +42,10 @@ namespace Cake.Core.Scripting
             IEnumerable<IPackageInstaller> installers,
             ICakeConfiguration configuration)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
-            if (installers == null)
-            {
-                throw new ArgumentNullException(nameof(installers));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
+            ArgumentNullException.ThrowIfNull(log);
+            ArgumentNullException.ThrowIfNull(installers);
 
             _environment = environment;
             _log = log;
@@ -72,17 +60,11 @@ namespace Cake.Core.Scripting
             IReadOnlyCollection<PackageReference> addins,
             DirectoryPath installPath)
         {
-            if (addins == null)
-            {
-                throw new ArgumentNullException(nameof(addins));
-            }
-            if (installPath == null)
-            {
-                throw new ArgumentNullException(nameof(installPath));
-            }
+            ArgumentNullException.ThrowIfNull(addins);
+            ArgumentNullException.ThrowIfNull(installPath);
 
             // Make the installation root absolute.
-            installPath = installPath.MakeAbsolute(_environment);
+            installPath = installPath.MakeAbsolute(_environment).ExpandShortPath();
 
             var result = new HashSet<FilePath>(PathComparer.Default);
             if (addins.Count > 0)
@@ -137,14 +119,8 @@ namespace Cake.Core.Scripting
             IReadOnlyCollection<PackageReference> tools,
             DirectoryPath installPath)
         {
-            if (tools == null)
-            {
-                throw new ArgumentNullException(nameof(tools));
-            }
-            if (installPath == null)
-            {
-                throw new ArgumentNullException(nameof(installPath));
-            }
+            ArgumentNullException.ThrowIfNull(tools);
+            ArgumentNullException.ThrowIfNull(installPath);
             InstallPackages(tools, installPath, PackageType.Tool);
         }
 
@@ -153,14 +129,8 @@ namespace Cake.Core.Scripting
             IReadOnlyCollection<PackageReference> modules,
             DirectoryPath installPath)
         {
-            if (modules == null)
-            {
-                throw new ArgumentNullException(nameof(modules));
-            }
-            if (installPath == null)
-            {
-                throw new ArgumentNullException(nameof(installPath));
-            }
+            ArgumentNullException.ThrowIfNull(modules);
+            ArgumentNullException.ThrowIfNull(installPath);
             InstallPackages(modules, installPath, PackageType.Module);
         }
 
@@ -187,7 +157,7 @@ namespace Cake.Core.Scripting
             }
 
             // Make the installation root absolute.
-            installPath = installPath.MakeAbsolute(_environment);
+            installPath = installPath.MakeAbsolute(_environment).ExpandShortPath();
 
             if (modules.Count > 0)
             {

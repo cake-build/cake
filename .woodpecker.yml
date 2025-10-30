@@ -1,0 +1,13 @@
+when:
+  - event: push
+    branch: develop
+  - event: push
+    branch: main
+  - event: manual
+
+steps:
+  - name: build
+    image: mcr.microsoft.com/dotnet/sdk:9.0
+    commands:
+      - git fetch --unshallow || true
+      - ./build.sh --target="Run-Integration-Tests"

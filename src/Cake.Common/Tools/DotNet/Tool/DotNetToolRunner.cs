@@ -43,10 +43,7 @@ namespace Cake.Common.Tools.DotNet.Tool
                 throw new ArgumentNullException(nameof(command));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var processSettings = new ProcessSettings
             {
@@ -60,7 +57,9 @@ namespace Cake.Common.Tools.DotNet.Tool
         {
             var builder = CreateArgumentBuilder(settings);
 
-            builder.Append(command);
+            // Appending quoted to cater for scenarios where the command passed is not a .NET CLI command,
+            // but the path of an application to run that contains whitespace
+            builder.AppendQuoted(command);
 
             // Arguments
             if (!arguments.IsNullOrEmpty())

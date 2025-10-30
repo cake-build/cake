@@ -8,6 +8,9 @@ using Xunit;
 
 namespace Cake.Testing.Xunit
 {
+    /// <summary>
+    /// Marks a test method as a fact that should only run on Windows platforms.
+    /// </summary>
     public sealed class WindowsFactAttribute : FactAttribute
     {
         private static readonly PlatformFamily _family;
@@ -17,6 +20,10 @@ namespace Cake.Testing.Xunit
             _family = EnvironmentHelper.GetPlatformFamily();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WindowsFactAttribute"/> class.
+        /// </summary>
+        /// <param name="reason">The reason why the test is skipped on non-Windows platforms.</param>
         // ReSharper disable once UnusedParameter.Local
         public WindowsFactAttribute(string reason = null)
         {

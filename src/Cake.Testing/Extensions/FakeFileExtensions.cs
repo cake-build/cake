@@ -25,19 +25,13 @@ namespace Cake.Testing
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static FakeFile SetContent(this FakeFile file, string content)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            ArgumentNullException.ThrowIfNull(file);
+            ArgumentNullException.ThrowIfNull(content);
             using (var stream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
             using (var writer = new StreamWriter(stream))
             {
                 writer.Write(content);
-                file.LastWriteTime = DateTime.Now;
+                file.SetLastWriteNow();
                 return file;
             }
         }
@@ -50,10 +44,7 @@ namespace Cake.Testing
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static byte[] GetBinaryContent(this FakeFile file)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(file);
             if (!file.Exists)
             {
                 throw new FileNotFoundException("File could not be found.", file.Path.FullPath);
@@ -86,10 +77,7 @@ namespace Cake.Testing
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static string GetTextContent(this FakeFile file, Encoding encoding)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(file);
             if (!file.Exists)
             {
                 throw new FileNotFoundException("File could not be found.", file.Path.FullPath);
@@ -121,10 +109,7 @@ namespace Cake.Testing
         /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
         public static FakeFile Hide(this FakeFile file)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(file);
             file.Hidden = true;
             return file;
         }

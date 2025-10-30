@@ -31,14 +31,8 @@ namespace Cake.Common
         [CakeAliasCategory("Environment Variables")]
         public static string EnvironmentVariable(this ICakeContext context, string variable)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (variable == null)
-            {
-                throw new ArgumentNullException(nameof(variable));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(variable);
             return context.Environment.GetEnvironmentVariable(variable);
         }
 
@@ -59,14 +53,8 @@ namespace Cake.Common
         [CakeAliasCategory("Environment Variables")]
         public static T EnvironmentVariable<T>(this ICakeContext context, string variable, T defaultValue)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (variable == null)
-            {
-                throw new ArgumentNullException(nameof(variable));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(variable);
             var value = context.Environment.GetEnvironmentVariable(variable);
             return value == null ? defaultValue : Convert<T>(value);
         }
@@ -84,7 +72,7 @@ namespace Cake.Common
         ///     Information("Path: {0}", path);
         /// }
         ///
-        /// foreach(var envVar in envVars)
+        /// foreach (var envVar in envVars)
         /// {
         ///     Information(
         ///         "Key: {0}\tValue: \"{1}\"",
@@ -100,10 +88,7 @@ namespace Cake.Common
         [CakeAliasCategory("Environment Variables")]
         public static IDictionary<string, string> EnvironmentVariables(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Environment.GetEnvironmentVariables();
         }
 
@@ -127,14 +112,8 @@ namespace Cake.Common
         [CakeAliasCategory("Environment Variables")]
         public static bool HasEnvironmentVariable(this ICakeContext context, string variable)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (variable == null)
-            {
-                throw new ArgumentNullException(nameof(variable));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(variable);
             return context.Environment.GetEnvironmentVariable(variable) != null;
         }
 
@@ -157,10 +136,7 @@ namespace Cake.Common
         [CakeAliasCategory("Platform")]
         public static bool IsRunningOnWindows(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Environment.Platform.IsWindows();
         }
 
@@ -183,10 +159,7 @@ namespace Cake.Common
         [CakeAliasCategory("Platform")]
         public static bool IsRunningOnUnix(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Environment.Platform.IsUnix();
         }
 
@@ -209,10 +182,7 @@ namespace Cake.Common
         [CakeAliasCategory("Platform")]
         public static bool IsRunningOnMacOs(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Environment.Platform.IsOSX();
         }
 
@@ -235,10 +205,7 @@ namespace Cake.Common
         [CakeAliasCategory("Platform")]
         public static bool IsRunningOnFreeBSD(this ICakeContext context)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Environment.Platform.IsFreeBSD();
         }
 
@@ -261,10 +228,7 @@ namespace Cake.Common
         [CakeAliasCategory("Platform")]
         public static bool IsRunningOnLinux(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Environment.Platform.IsLinux();
         }
 

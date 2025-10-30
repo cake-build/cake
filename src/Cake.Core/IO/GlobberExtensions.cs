@@ -21,10 +21,7 @@ namespace Cake.Core.IO
         /// <returns>The files matching the specified pattern.</returns>
         public static IEnumerable<FilePath> GetFiles(this IGlobber globber, GlobPattern pattern)
         {
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
+            ArgumentNullException.ThrowIfNull(globber);
             return globber.Match(pattern).OfType<FilePath>();
         }
 
@@ -36,10 +33,7 @@ namespace Cake.Core.IO
         /// <returns>The directories matching the specified pattern.</returns>
         public static IEnumerable<DirectoryPath> GetDirectories(this IGlobber globber, GlobPattern pattern)
         {
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
+            ArgumentNullException.ThrowIfNull(globber);
             return globber.Match(pattern).OfType<DirectoryPath>();
         }
 
@@ -53,10 +47,7 @@ namespace Cake.Core.IO
         /// </returns>
         public static IEnumerable<Path> Match(this IGlobber globber, GlobPattern pattern)
         {
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
+            ArgumentNullException.ThrowIfNull(globber);
             return globber.Match(pattern, new GlobberSettings());
         }
 
@@ -68,10 +59,7 @@ namespace Cake.Core.IO
         /// <returns>The files matching the specified pattern.</returns>
         public static IEnumerable<FilePath> GetFiles(this IGlobber globber, string pattern)
         {
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
+            ArgumentNullException.ThrowIfNull(globber);
             return globber.Match(pattern).OfType<FilePath>();
         }
 
@@ -83,10 +71,7 @@ namespace Cake.Core.IO
         /// <returns>The directories matching the specified pattern.</returns>
         public static IEnumerable<DirectoryPath> GetDirectories(this IGlobber globber, string pattern)
         {
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
+            ArgumentNullException.ThrowIfNull(globber);
             return globber.Match(pattern).OfType<DirectoryPath>();
         }
 
@@ -100,10 +85,7 @@ namespace Cake.Core.IO
         /// </returns>
         public static IEnumerable<Path> Match(this IGlobber globber, string pattern)
         {
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
+            ArgumentNullException.ThrowIfNull(globber);
             return globber.Match(pattern, new GlobberSettings());
         }
     }

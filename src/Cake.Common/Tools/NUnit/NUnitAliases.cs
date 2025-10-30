@@ -38,10 +38,7 @@ namespace Cake.Common.Tools.NUnit
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
             if (assemblies.Length == 0)
@@ -71,10 +68,7 @@ namespace Cake.Common.Tools.NUnit
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, GlobPattern pattern, NUnitSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
             if (assemblies.Length == 0)
@@ -103,10 +97,7 @@ namespace Cake.Common.Tools.NUnit
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, IEnumerable<string> assemblies)
         {
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(assemblies);
             var paths = assemblies.Select(p => new FilePath(p));
             NUnit(context, paths, new NUnitSettings());
         }
@@ -150,10 +141,7 @@ namespace Cake.Common.Tools.NUnit
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, IEnumerable<string> assemblies, NUnitSettings settings)
         {
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(assemblies);
             var paths = assemblies.Select(p => new FilePath(p));
             NUnit(context, paths, settings);
         }
@@ -177,14 +165,8 @@ namespace Cake.Common.Tools.NUnit
         [CakeMethodAlias]
         public static void NUnit(this ICakeContext context, IEnumerable<FilePath> assemblies, NUnitSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(assemblies);
 
             var runner = new NUnitRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(assemblies, settings);

@@ -51,10 +51,7 @@ namespace Cake.Common.Tools.OpenCover
             FilePath outputFile,
             OpenCoverSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             // Create the OpenCover runner.
             var runner = new OpenCoverRunner(

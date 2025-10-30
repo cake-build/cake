@@ -23,10 +23,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithTarget(this MSBuildSettings settings, string target)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Targets.Add(target);
             return settings;
         }
@@ -39,10 +36,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings UseToolVersion(this MSBuildSettings settings, MSBuildToolVersion version)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.ToolVersion = version;
             return settings;
         }
@@ -55,10 +49,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings UseToolVersion(this MSBuildSettings settings, string version)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             // check to see if the version is null/empty or is not a num
             if (string.IsNullOrEmpty(version))
@@ -135,10 +126,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetPlatformTarget(this MSBuildSettings settings, PlatformTarget target)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.PlatformTarget = target;
             return settings;
         }
@@ -151,10 +139,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetPlatformTarget(this MSBuildSettings settings, string target)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.WithProperty("Platform", target);
             return settings;
@@ -168,10 +153,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetMSBuildPlatform(this MSBuildSettings settings, MSBuildPlatform platform)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.MSBuildPlatform = platform;
             return settings;
         }
@@ -185,10 +167,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithProperty(this MSBuildSettings settings, string name, params string[] values)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             IList<string> currentValue;
             currentValue = new List<string>(
@@ -209,14 +188,8 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithGetProperty(this MSBuildSettings settings, string name)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(name);
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException(nameof(name));
@@ -235,14 +208,8 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithGetItem(this MSBuildSettings settings, string name)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(name);
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException(nameof(name));
@@ -261,14 +228,8 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithGetTargetResult(this MSBuildSettings settings, string name)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(name);
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException(nameof(name));
@@ -287,10 +248,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetConfiguration(this MSBuildSettings settings, string configuration)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Configuration = configuration;
             return settings;
         }
@@ -303,10 +261,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetMaxCpuCount(this MSBuildSettings settings, int? maxCpuCount)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             if (maxCpuCount.HasValue)
             {
                 settings.MaxCpuCount = Math.Max(0, maxCpuCount.Value);
@@ -326,10 +281,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetNodeReuse(this MSBuildSettings settings, bool reuse)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.NodeReuse = reuse;
             return settings;
         }
@@ -342,10 +294,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetDetailedSummary(this MSBuildSettings settings, bool detailedSummary)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.DetailedSummary = detailedSummary;
             return settings;
         }
@@ -358,10 +307,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetNoConsoleLogger(this MSBuildSettings settings, bool noConsoleLog)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.NoConsoleLogger = noConsoleLog;
             return settings;
         }
@@ -374,10 +320,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetNoLogo(this MSBuildSettings settings, bool noLogo)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.NoLogo = noLogo;
             return settings;
         }
@@ -469,10 +412,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetContinuousIntegrationBuild(this MSBuildSettings settings, bool? continuousIntegrationBuild = true)
         {
-            if (settings is null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.ContinuousIntegrationBuild = continuousIntegrationBuild;
             return settings;
@@ -486,10 +426,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetNoImplicitTarget(this MSBuildSettings settings, bool noImplicitTarget)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.NoImplicitTarget = noImplicitTarget;
             return settings;
         }
@@ -502,10 +439,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetIncludeSymbols(this MSBuildSettings settings, bool includeSymbols)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.IncludeSymbols = includeSymbols;
             return settings;
         }
@@ -518,10 +452,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetSymbolPackageFormat(this MSBuildSettings settings, string symbolPackageFormat)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.SymbolPackageFormat = symbolPackageFormat;
             return settings;
         }
@@ -534,10 +465,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetVerbosity(this MSBuildSettings settings, Verbosity verbosity)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Verbosity = verbosity;
             return settings;
         }
@@ -552,10 +480,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithLogger(this MSBuildSettings settings, string loggerAssembly, string loggerClass = null, string loggerParameters = null)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             if (string.IsNullOrWhiteSpace(loggerAssembly))
             {
                 throw new ArgumentException(nameof(loggerAssembly));
@@ -593,14 +518,8 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings AddFileLogger(this MSBuildSettings settings, MSBuildFileLogger fileLoggerParameters)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (fileLoggerParameters == null)
-            {
-                throw new ArgumentNullException(nameof(fileLoggerParameters));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(fileLoggerParameters);
             settings.FileLoggers.Add(fileLoggerParameters);
 
             return settings;
@@ -624,10 +543,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings EnableBinaryLogger(this MSBuildSettings settings, MSBuildBinaryLogImports imports)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.BinaryLogger = new MSBuildBinaryLogSettings
             {
@@ -658,10 +574,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings EnableBinaryLogger(this MSBuildSettings settings, string fileName, MSBuildBinaryLogImports imports)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.BinaryLogger = new MSBuildBinaryLogSettings
             {
@@ -681,10 +594,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithWarningsAsError(this MSBuildSettings settings, params string[] codes)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.WarningsAsError = true;
 
@@ -704,10 +614,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithWarningsAsMessage(this MSBuildSettings settings, params string[] codes)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             foreach (var code in codes)
             {
@@ -724,10 +631,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithRestore(this MSBuildSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.Restore = true;
 
@@ -743,10 +647,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings SetRestoreLockedMode(this MSBuildSettings settings, bool restoreLockedMode)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.RestoreLockedMode = restoreLockedMode;
             return settings;
@@ -760,10 +661,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The same <see cref="MSBuildSettings"/> instance so that multiple calls can be chained.</returns>
         public static MSBuildSettings WithConsoleLoggerParameter(this MSBuildSettings settings, string parameter)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.ConsoleLoggerParameters.Add(parameter);
             return settings;

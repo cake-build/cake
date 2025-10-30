@@ -52,18 +52,9 @@ namespace Cake.Common.Tools.InnoSetup
         [CakeMethodAlias]
         public static void InnoSetup(this ICakeContext context, FilePath scriptFile, InnoSetupSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (scriptFile == null)
-            {
-                throw new ArgumentNullException(nameof(scriptFile));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(scriptFile);
+            ArgumentNullException.ThrowIfNull(settings);
 
             var runner = new InnoSetupRunner(context.FileSystem, context.Registry, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(scriptFile, settings);

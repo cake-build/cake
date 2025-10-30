@@ -38,10 +38,7 @@ namespace Cake.Common.Tools.XUnit
         [CakeMethodAlias]
         public static void XUnit2(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
             if (assemblies.Length == 0)
@@ -73,10 +70,7 @@ namespace Cake.Common.Tools.XUnit
         [CakeMethodAlias]
         public static void XUnit2(this ICakeContext context, GlobPattern pattern, XUnit2Settings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
             if (assemblies.Length == 0)
@@ -106,10 +100,7 @@ namespace Cake.Common.Tools.XUnit
         [CakeMethodAlias]
         public static void XUnit2(this ICakeContext context, IEnumerable<string> assemblies)
         {
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(assemblies);
             var paths = assemblies.Select(p => new FilePath(p));
             XUnit2(context, paths, new XUnit2Settings());
         }
@@ -156,10 +147,7 @@ namespace Cake.Common.Tools.XUnit
         [CakeMethodAlias]
         public static void XUnit2(this ICakeContext context, IEnumerable<string> assemblies, XUnit2Settings settings)
         {
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(assemblies);
             var paths = assemblies.Select(p => new FilePath(p));
             XUnit2(context, paths, settings);
         }
@@ -185,14 +173,8 @@ namespace Cake.Common.Tools.XUnit
         [CakeMethodAlias]
         public static void XUnit2(this ICakeContext context, IEnumerable<FilePath> assemblies, XUnit2Settings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(assemblies);
 
             var runner = new XUnit2Runner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(assemblies, settings);

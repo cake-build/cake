@@ -36,10 +36,10 @@ namespace Cake.Common
         /// <example>
         /// <code>
         /// var releaseNotes = ParseAllReleaseNotes("./ReleaseNotes.md");
-        /// foreach(var releaseNote in releaseNotes)
+        /// foreach (var releaseNote in releaseNotes)
         /// {
         ///     Information("Version: {0}", releaseNote.Version);
-        ///     foreach(var note in releaseNote.Notes)
+        ///     foreach (var note in releaseNote.Notes)
         ///     {
         ///         Information("\t{0}", note);
         ///     }
@@ -49,14 +49,8 @@ namespace Cake.Common
         [CakeMethodAlias]
         public static IReadOnlyList<ReleaseNotes> ParseAllReleaseNotes(this ICakeContext context, FilePath filePath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePath);
 
             if (filePath.IsRelative)
             {
@@ -88,7 +82,7 @@ namespace Cake.Common
         /// <code>
         /// var releaseNote = ParseReleaseNotes("./ReleaseNotes.md");
         /// Information("Version: {0}", releaseNote.Version);
-        /// foreach(var note in releaseNote.Notes)
+        /// foreach (var note in releaseNote.Notes)
         /// {
         ///     Information("\t{0}", note);
         /// }

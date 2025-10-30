@@ -16,21 +16,39 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp' ]
+        include:
+          - language:  'csharp'
+            build-mode: 'autobuild'
 
     steps:
+
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
+    - name: Install .NET SDK 8.0.x - 9.0.x
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: |
+          8.0.x
+          9.0.x
+
+    - name: Install .NET SDK (global.json)
+      uses: actions/setup-dotnet@v5
+      with:
+        global-json-file: global.json
+
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
 
     - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
+      uses: github/codeql-action/autobuild@v4
+      env:
+        CAKE_INSTALL_SUPPORTED_SDKS: true
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v4

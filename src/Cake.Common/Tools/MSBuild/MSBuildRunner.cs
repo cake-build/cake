@@ -135,7 +135,7 @@ namespace Cake.Common.Tools.MSBuild
             // Got any targets?
             if (settings.Targets.Count > 0)
             {
-                var targets = string.Join(";", settings.Targets);
+                var targets = string.Join(';', settings.Targets);
                 builder.Append(string.Concat("/target:", targets));
             }
             else
@@ -227,7 +227,7 @@ namespace Cake.Common.Tools.MSBuild
             // Treat errors as warnings?
             if (settings.WarningsAsErrorCodes.Any())
             {
-                var codes = string.Join(";", settings.WarningsAsErrorCodes);
+                var codes = string.Join(';', settings.WarningsAsErrorCodes);
                 builder.Append($"/warnaserror:{codes.Quote()}");
             }
             else if (settings.WarningsAsError)
@@ -238,7 +238,7 @@ namespace Cake.Common.Tools.MSBuild
             // Any warnings to NOT treat as errors?
             if (settings.WarningsAsMessageCodes.Any())
             {
-                var codes = string.Join(";", settings.WarningsAsMessageCodes);
+                var codes = string.Join(';', settings.WarningsAsMessageCodes);
                 builder.Append($"/warnasmessage:{codes.Quote()}");
             }
 
@@ -257,7 +257,7 @@ namespace Cake.Common.Tools.MSBuild
             // Got any console logger parameters?
             if (settings.ConsoleLoggerParameters.Count > 0)
             {
-                var argument = "/clp:" + string.Join(";", settings.ConsoleLoggerParameters);
+                var argument = "/clp:" + string.Join(';', settings.ConsoleLoggerParameters);
                 builder.Append(argument);
             }
 
@@ -291,14 +291,14 @@ namespace Cake.Common.Tools.MSBuild
             if (!string.IsNullOrWhiteSpace(logger.Class))
             {
                 argumentBuilder.Append(logger.Class);
-                argumentBuilder.Append(",");
+                argumentBuilder.Append(',');
             }
 
             argumentBuilder.Append(logger.Assembly.Quote());
 
             if (!string.IsNullOrWhiteSpace(logger.Parameters))
             {
-                argumentBuilder.Append(";");
+                argumentBuilder.Append(';');
                 argumentBuilder.Append(logger.Parameters);
             }
             return argumentBuilder.ToString();
@@ -382,10 +382,7 @@ namespace Cake.Common.Tools.MSBuild
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(MSBuildSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var buildPlatform = settings.MSBuildPlatform;
 

@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <RunWorkingDirectory>$(MSBuildProjectDirectory)..</RunWorkingDirectory>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />

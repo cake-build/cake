@@ -87,8 +87,8 @@ namespace Cake.Common.Build.TeamCity.Data
         {
             get
             {
-                var rootBranchKey = ConfigProperties.Keys.FirstOrDefault(k => k.StartsWith("teamcity.build.vcs.branch."));
-                return !string.IsNullOrWhiteSpace(rootBranchKey) ? ConfigProperties[rootBranchKey] : string.Empty;
+                var (key, value) = ConfigProperties.FirstOrDefault(_ => _.Key.StartsWith("teamcity.build.vcs.branch."));
+                return !string.IsNullOrWhiteSpace(key) ? value : string.Empty;
             }
         }
 

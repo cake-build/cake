@@ -66,14 +66,8 @@ namespace Cake.Core.Scripting
         /// <inheritdoc/>
         public void Run(IScriptHost host, FilePath scriptPath)
         {
-            if (host == null)
-            {
-                throw new ArgumentNullException(nameof(host));
-            }
-            if (scriptPath == null)
-            {
-                throw new ArgumentNullException(nameof(scriptPath));
-            }
+            ArgumentNullException.ThrowIfNull(host);
+            ArgumentNullException.ThrowIfNull(scriptPath);
 
             // Make the script path absolute.
             scriptPath = scriptPath.MakeAbsolute(_environment);
@@ -177,10 +171,10 @@ namespace Cake.Core.Scripting
             var toolPath = _configuration.GetValue(Constants.Paths.Tools);
             if (!string.IsNullOrWhiteSpace(toolPath))
             {
-                return new DirectoryPath(toolPath).MakeAbsolute(_environment);
+                return new DirectoryPath(toolPath).MakeAbsolute(_environment).ExpandShortPath();
             }
 
-            return root.Combine("tools");
+            return root.Combine("tools").ExpandShortPath();
         }
 
         private DirectoryPath GetAddinPath(DirectoryPath root)
@@ -188,10 +182,10 @@ namespace Cake.Core.Scripting
             var addinPath = _configuration.GetValue(Constants.Paths.Addins);
             if (!string.IsNullOrWhiteSpace(addinPath))
             {
-                return new DirectoryPath(addinPath).MakeAbsolute(_environment);
+                return new DirectoryPath(addinPath).MakeAbsolute(_environment).ExpandShortPath();
             }
 
-            var toolPath = GetToolPath(root);
+            var toolPath = GetToolPath(root).ExpandShortPath();
             return toolPath.Combine("Addins").Collapse();
         }
     }

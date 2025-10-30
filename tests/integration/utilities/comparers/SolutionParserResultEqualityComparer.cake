@@ -25,7 +25,7 @@ public class SolutionParserResultEqualityComparer : IEqualityComparer<SolutionPa
         if (projects == null)
             yield break;
 
-        foreach(var project in projects)
+        foreach (var project in projects)
         {
             yield return SolutionProjectEqualityComparer.Comparer.GetHashCode(project);
         }

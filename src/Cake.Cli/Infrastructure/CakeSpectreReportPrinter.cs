@@ -44,7 +44,11 @@ namespace Cake.Cli
             table.AddColumn(
                 new TableColumn(
                     new Text("Duration", rowStyle)).Footer(
-                        new Text(FormatTime(GetTotalTime(report)), rowStyle)));
+                        new Text(FormatTime(GetTotalTime(report)).EscapeMarkup(), rowStyle)));
+
+            table.AddColumn(
+                new TableColumn(
+                    new Text("Status", rowStyle)));
 
             if (includeSkippedReasonColumn)
             {
@@ -57,14 +61,16 @@ namespace Cake.Cli
 
                 if (includeSkippedReasonColumn)
                 {
-                    table.AddRow(new Markup(item.TaskName, itemStyle),
-                                new Markup(FormatDuration(item), itemStyle),
-                                new Markup(item.SkippedMessage, itemStyle));
+                    table.AddRow(new Markup(item.TaskName.EscapeMarkup(), itemStyle),
+                                new Markup(FormatDuration(item).EscapeMarkup(), itemStyle),
+                                new Markup(item.ExecutionStatus.ToString().EscapeMarkup(), itemStyle),
+                                new Markup(item.SkippedMessage.EscapeMarkup(), itemStyle));
                 }
                 else
                 {
-                    table.AddRow(new Markup(item.TaskName, itemStyle),
-                                new Markup(FormatDuration(item), itemStyle));
+                    table.AddRow(new Markup(item.TaskName.EscapeMarkup(), itemStyle),
+                                new Markup(FormatDuration(item).EscapeMarkup(), itemStyle),
+                                new Markup(item.ExecutionStatus.ToString().EscapeMarkup(), itemStyle));
                 }
             }
 
@@ -82,7 +88,7 @@ namespace Cake.Cli
 
             var table = new Table().Border(DoubleBorder.Shared);
             table.Width(100);
-            table.AddColumn(name);
+            table.AddColumn(name.EscapeMarkup());
             _console.Write(new Padder(table).Padding(0, 1, 0, 0));
         }
 
@@ -98,7 +104,7 @@ namespace Cake.Cli
 
             var table = new Table().Border(SingleBorder.Shared);
             table.Width(100);
-            table.AddColumn(name);
+            table.AddColumn(name.EscapeMarkup());
             _console.Write(table);
         }
 
@@ -112,9 +118,12 @@ namespace Cake.Cli
 
             _console.WriteLine();
 
-            var table = new Table().Border(DoubleBorder.Shared);
+            var table = new Table()
+                .Border(DoubleBorder.Shared)
+                .BorderStyle(new Style(ConsoleColor.Gray));
+
             table.Width(100);
-            table.AddColumn(name);
+            table.AddColumn(name.EscapeMarkup());
             _console.Write(table);
         }
 
@@ -122,7 +131,7 @@ namespace Cake.Cli
         {
             if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
             {
-                return "Skipped";
+                return "-";
             }
 
             return FormatTime(item.Duration);

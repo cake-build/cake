@@ -108,10 +108,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Add")]
         public static void DotNetAddPackage(this ICakeContext context, string packageName, string project, DotNetPackageAddSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {
@@ -156,10 +153,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Remove")]
         public static void DotNetRemovePackage(this ICakeContext context, string packageName, string project)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var adder = new DotNetPackageRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             adder.Remove(packageName, project);
@@ -178,7 +172,7 @@ namespace Cake.Common.Tools.DotNet
         ///     AllVersions = false,
         ///     Prerelease = false
         ///     });
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }
@@ -189,10 +183,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Search")]
         public static IEnumerable<DotNetPackageSearchItem> DotNetSearchPackage(this ICakeContext context, string searchTerm, DotNetPackageSearchSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var runner = new DotNetPackageSearcher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return runner.Search(searchTerm, settings);
         }
@@ -209,7 +200,7 @@ namespace Cake.Common.Tools.DotNet
         ///     AllVersions = false,
         ///     Prerelease = false
         ///     });
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }
@@ -220,10 +211,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Search")]
         public static IEnumerable<DotNetPackageSearchItem> DotNetSearchPackage(this ICakeContext context, string searchTerm)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var runner = new DotNetPackageSearcher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return runner.Search(searchTerm, new DotNetPackageSearchSettings());
         }
@@ -240,7 +228,7 @@ namespace Cake.Common.Tools.DotNet
         ///     AllVersions = false,
         ///     Prerelease = false
         ///     });
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }
@@ -251,10 +239,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Search")]
         public static IEnumerable<DotNetPackageSearchItem> DotNetSearchPackage(this ICakeContext context, DotNetPackageSearchSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var runner = new DotNetPackageSearcher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return runner.Search(null, settings);
         }
@@ -318,10 +303,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.List")]
         public static DotNetPackageList DotNetListPackage(this ICakeContext context, string project, DotNetPackageListSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {

@@ -20,14 +20,8 @@ namespace Cake.Core
         /// <returns>Whether or not the <see cref="T:byte[]"/> starts with the specified prefix.</returns>
         public static bool StartsWith(this byte[] value, byte[] prefix)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-            if (prefix == null)
-            {
-                throw new ArgumentNullException(nameof(prefix));
-            }
+            ArgumentNullException.ThrowIfNull(value);
+            ArgumentNullException.ThrowIfNull(prefix);
 
             if (value.Length < prefix.Length)
             {

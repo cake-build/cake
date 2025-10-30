@@ -24,14 +24,11 @@ namespace Cake.Core
         public static string GetSignature(this MethodInfo method,
             bool includeMethodNamespace = true, bool includeParameterNamespace = false)
         {
-            if (method == null)
-            {
-                throw new ArgumentNullException(nameof(method));
-            }
+            ArgumentNullException.ThrowIfNull(method);
 
             var builder = new StringBuilder();
             builder.Append(includeMethodNamespace ? method.GetFullName() : method.Name);
-            builder.Append("(");
+            builder.Append('(');
             var parameters = method.GetParameters();
             var parameterList = new string[parameters.Length];
             for (var i = 0; i < parameterList.Length; i++)
@@ -41,8 +38,8 @@ namespace Cake.Core
                 signature = isParams ? string.Concat("params ", signature) : signature;
                 parameterList[i] = signature;
             }
-            builder.Append(string.Join(", ", parameterList));
-            builder.Append(")");
+            builder.AppendJoin(", ", parameterList);
+            builder.Append(')');
             return builder.ToString();
         }
 

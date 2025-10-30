@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Cake.Core.IO;
@@ -31,18 +30,9 @@ namespace Cake.Core.Tooling
         /// <param name="tools">The tool locator.</param>
         protected Tool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolLocator tools)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (processRunner == null)
-            {
-                throw new ArgumentNullException(nameof(processRunner));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
+            ArgumentNullException.ThrowIfNull(processRunner);
 
             _fileSystem = fileSystem;
             _environment = environment;
@@ -274,7 +264,7 @@ namespace Cake.Core.Tooling
             var toolPath = settings.ToolPath;
             if (toolPath != null)
             {
-                return toolPath.MakeAbsolute(_environment);
+                return toolPath.MakeAbsolute(_environment).ExpandShortPath();
             }
 
             // Look for each possible executable name in various places.
@@ -290,7 +280,7 @@ namespace Cake.Core.Tooling
             {
                 if (_fileSystem.Exist(alternativePath))
                 {
-                    return alternativePath.MakeAbsolute(_environment);
+                    return alternativePath.MakeAbsolute(_environment).ExpandShortPath();
                 }
             }
 

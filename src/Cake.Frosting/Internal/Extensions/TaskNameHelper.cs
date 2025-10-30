@@ -10,20 +10,14 @@ namespace Cake.Frosting.Internal
     {
         public static string GetTaskName(this ITaskDependency dependency)
         {
-            if (dependency is null)
-            {
-                throw new ArgumentNullException(nameof(dependency));
-            }
+            ArgumentNullException.ThrowIfNull(dependency);
 
             return dependency.Task.GetTaskName();
         }
 
         public static string GetTaskName(this IReverseTaskDependency dependency)
         {
-            if (dependency is null)
-            {
-                throw new ArgumentNullException(nameof(dependency));
-            }
+            ArgumentNullException.ThrowIfNull(dependency);
 
             return dependency.Task.GetTaskName();
         }

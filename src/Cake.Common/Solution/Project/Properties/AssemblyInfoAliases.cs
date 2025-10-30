@@ -39,10 +39,7 @@ namespace Cake.Common.Solution.Project.Properties
         [CakeMethodAlias]
         public static void CreateAssemblyInfo(this ICakeContext context, FilePath outputPath, AssemblyInfoSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var creator = new AssemblyInfoCreator(context.FileSystem, context.Environment, context.Log);
             creator.Create(outputPath, settings);
@@ -65,10 +62,7 @@ namespace Cake.Common.Solution.Project.Properties
         [CakeMethodAlias]
         public static AssemblyInfoParseResult ParseAssemblyInfo(this ICakeContext context, FilePath assemblyInfoPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var parser = new AssemblyInfoParser(context.FileSystem, context.Environment);
             return parser.Parse(assemblyInfoPath);

@@ -65,7 +65,7 @@ namespace Cake.Common.Build.ContinuaCI
         /// <inheritdoc/>
         public void WriteMessage(string message, ContinuaCIMessageType status)
         {
-            var name = Enum.GetName(typeof(ContinuaCIMessageType), status);
+            var name = Enum.GetName(status);
             if (name != null)
             {
                 var statusToWrite = name.ToLower();

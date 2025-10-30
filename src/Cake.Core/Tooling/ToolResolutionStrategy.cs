@@ -42,18 +42,9 @@ namespace Cake.Core.Tooling
             ICakeConfiguration configuration,
             ICakeLog log)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (globber == null)
-            {
-                throw new ArgumentNullException(nameof(globber));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
+            ArgumentNullException.ThrowIfNull(globber);
 
             _fileSystem = fileSystem;
             _environment = environment;
@@ -66,14 +57,8 @@ namespace Cake.Core.Tooling
         /// <inheritdoc/>
         public FilePath Resolve(IToolRepository repository, string tool)
         {
-            if (repository == null)
-            {
-                throw new ArgumentNullException(nameof(repository));
-            }
-            if (tool == null)
-            {
-                throw new ArgumentNullException(nameof(tool));
-            }
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(tool);
             if (string.IsNullOrWhiteSpace(tool))
             {
                 throw new ArgumentException("Tool name cannot be empty.", nameof(tool));
@@ -98,14 +83,8 @@ namespace Cake.Core.Tooling
         /// <inheritdoc/>
         public FilePath Resolve(IToolRepository repository, IEnumerable<string> toolExeNames)
         {
-            if (repository == null)
-            {
-                throw new ArgumentNullException(nameof(repository));
-            }
-            if (toolExeNames == null)
-            {
-                throw new ArgumentNullException(nameof(toolExeNames));
-            }
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(toolExeNames);
 
             // Prefer tools with platform affinity
             var toolNames = toolExeNames.OrderByDescending(HasPlatformAffinity).ToArray();
@@ -184,7 +163,7 @@ namespace Cake.Core.Tooling
             var toolPath = _configuration.GetValue(Constants.Paths.Tools);
             if (!string.IsNullOrWhiteSpace(toolPath))
             {
-                return new DirectoryPath(toolPath);
+                return new DirectoryPath(toolPath).ExpandShortPath();
             }
 
             return new DirectoryPath("./tools");

@@ -37,14 +37,8 @@ namespace Cake.Testing.Fixtures
         /// <param name="process">The process settings.</param>
         public ToolFixtureResult(FilePath path, ProcessSettings process)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
-            if (process == null)
-            {
-                throw new ArgumentNullException(nameof(process));
-            }
+            ArgumentNullException.ThrowIfNull(path);
+            ArgumentNullException.ThrowIfNull(process);
             Path = path;
             Args = process.Arguments.Render();
             Process = process;

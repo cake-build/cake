@@ -108,10 +108,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Restore")]
         public static void DotNetRestore(this ICakeContext context, string root, DotNetRestoreSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {

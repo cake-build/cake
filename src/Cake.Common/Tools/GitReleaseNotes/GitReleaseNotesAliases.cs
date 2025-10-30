@@ -53,10 +53,7 @@ namespace Cake.Common.Tools.GitReleaseNotes
         [CakeAliasCategory("GitReleaseNotes")]
         public static void GitReleaseNotes(this ICakeContext context, FilePath outputFile, GitReleaseNotesSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new GitReleaseNotesRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(outputFile, settings);

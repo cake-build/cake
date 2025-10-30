@@ -32,10 +32,7 @@ namespace Cake.Core
         /// <inheritdoc/>
         public void Write(CakeReport report)
         {
-            if (report == null)
-            {
-                throw new ArgumentNullException(nameof(report));
-            }
+            ArgumentNullException.ThrowIfNull(report);
 
             try
             {
@@ -49,13 +46,13 @@ namespace Cake.Core
                 }
 
                 maxTaskNameLength++;
-                string lineFormat = "{0,-" + maxTaskNameLength + "}{1,-20}";
+                string lineFormat = "{0,-" + maxTaskNameLength + "}{1,-20}{2,-20}";
                 _console.ForegroundColor = ConsoleColor.Green;
 
                 // Write header.
                 _console.WriteLine();
-                _console.WriteLine(lineFormat, "Task", "Duration");
-                _console.WriteLine(new string('-', 20 + maxTaskNameLength));
+                _console.WriteLine(lineFormat, "Task", "Duration", "Status");
+                _console.WriteLine(new string('-', 40 + maxTaskNameLength));
 
                 // Write task status.
                 foreach (var item in report)
@@ -63,14 +60,14 @@ namespace Cake.Core
                     if (ShouldWriteTask(item))
                     {
                         _console.ForegroundColor = GetItemForegroundColor(item);
-                        _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item));
+                        _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus);
                     }
                 }
 
                 // Write footer.
                 _console.ForegroundColor = ConsoleColor.Green;
-                _console.WriteLine(new string('-', 20 + maxTaskNameLength));
-                _console.WriteLine(lineFormat, "Total:", FormatTime(GetTotalTime(report)));
+                _console.WriteLine(new string('-', 40 + maxTaskNameLength));
+                _console.WriteLine(lineFormat, "Total:", FormatTime(GetTotalTime(report)), string.Empty);
             }
             finally
             {
@@ -134,7 +131,7 @@ namespace Cake.Core
         {
             if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
             {
-                return "Skipped";
+                return "-";
             }
 
             return FormatTime(item.Duration);

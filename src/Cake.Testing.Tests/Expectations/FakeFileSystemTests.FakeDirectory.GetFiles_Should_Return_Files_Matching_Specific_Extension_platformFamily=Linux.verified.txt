@@ -1,0 +1,25 @@
+﻿{
+  directory: {
+    Exists: true,
+    Hidden: false,
+    LastWriteTimeUtc: 2014-05-27 19:56:01,
+    CreationTimeUtc: 2014-05-27 19:56:01,
+    LastAccessTimeUtc: 2014-05-27 19:56:01,
+    UnixFileMode: OtherExecute, OtherWrite, OtherRead, GroupExecute, GroupWrite, GroupRead, UserExecute, UserWrite, UserRead,
+    Path: /test
+  },
+  result: [
+    {
+      Path: /test/build/build.cake,
+      Exists: true,
+      Hidden: false,
+      LastWriteTimeUtc: 2014-05-27 19:56:01,
+      CreationTimeUtc: 2014-05-27 19:56:01,
+      LastAccessTimeUtc: 2014-05-27 19:56:01,
+      UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead,
+      Length: 27,
+      Attributes: None,
+      ContentLength: 27
+    }
+  ]
+}

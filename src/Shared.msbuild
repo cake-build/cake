@@ -39,6 +39,7 @@
   <!-- Warnings as errors -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild Condition="'$(IsCakeTestProject)' == '' And '$(IsPackable)' != 'false' And '$(IsCakeTestProject)' != 'true'">true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <!-- Attribute generation -->

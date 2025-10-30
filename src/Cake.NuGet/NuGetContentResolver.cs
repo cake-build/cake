@@ -46,10 +46,7 @@ namespace Cake.NuGet
 
         public IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, PackageReference package, PackageType type)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (type == PackageType.Addin || type == PackageType.Module)
             {
@@ -136,9 +133,9 @@ namespace Cake.NuGet
             }
 
             // Include files.
-            if (package.Parameters.ContainsKey("include"))
+            if (package.Parameters.TryGetValue("include", out var includes))
             {
-                foreach (var include in package.Parameters["include"])
+                foreach (var include in includes)
                 {
                     var includePath = string.Concat(path.FullPath, "/", include.TrimStart('/'));
                     collection.Add(_globber.GetFiles(includePath));
@@ -146,9 +143,9 @@ namespace Cake.NuGet
             }
 
             // Exclude files.
-            if (package.Parameters.ContainsKey("exclude"))
+            if (package.Parameters.TryGetValue("exclude", out var excludes))
             {
-                foreach (var exclude in package.Parameters["exclude"])
+                foreach (var exclude in excludes)
                 {
                     var excludePath = string.Concat(path.FullPath, "/", exclude.TrimStart('/'));
                     collection.Remove(_globber.GetFiles(excludePath));

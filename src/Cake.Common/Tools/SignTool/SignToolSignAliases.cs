@@ -47,10 +47,7 @@ namespace Cake.Common.Tools.SignTool
         [CakeMethodAlias]
         public static void Sign(this ICakeContext context, string assembly, SignToolSignSettings settings)
         {
-            if (assembly == null)
-            {
-                throw new ArgumentNullException(nameof(assembly));
-            }
+            ArgumentNullException.ThrowIfNull(assembly);
             Sign(context, new FilePath(assembly), settings);
         }
 
@@ -80,10 +77,7 @@ namespace Cake.Common.Tools.SignTool
         [CakeMethodAlias]
         public static void Sign(this ICakeContext context, FilePath assembly, SignToolSignSettings settings)
         {
-            if (assembly == null)
-            {
-                throw new ArgumentNullException(nameof(assembly));
-            }
+            ArgumentNullException.ThrowIfNull(assembly);
             var paths = new[] { assembly };
             Sign(context, paths, settings);
         }
@@ -114,10 +108,7 @@ namespace Cake.Common.Tools.SignTool
         [CakeMethodAlias]
         public static void Sign(this ICakeContext context, IEnumerable<string> assemblies, SignToolSignSettings settings)
         {
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(assemblies);
             var paths = assemblies.Select(p => new FilePath(p));
             Sign(context, paths, settings);
         }
@@ -148,18 +139,9 @@ namespace Cake.Common.Tools.SignTool
         [CakeMethodAlias]
         public static void Sign(this ICakeContext context, IEnumerable<FilePath> assemblies, SignToolSignSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(assemblies);
+            ArgumentNullException.ThrowIfNull(settings);
 
             var runner = new SignToolSignRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Registry);
             runner.Run(assemblies, settings);

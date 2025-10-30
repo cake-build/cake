@@ -38,10 +38,7 @@ namespace Cake.Common.Tools.Roundhouse
         [CakeMethodAlias]
         public static void RoundhouseMigrate(this ICakeContext context, RoundhouseSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(settings, settings.Drop);
@@ -63,10 +60,7 @@ namespace Cake.Common.Tools.Roundhouse
         [CakeMethodAlias]
         public static void RoundhouseDrop(this ICakeContext context, RoundhouseSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(settings, true);

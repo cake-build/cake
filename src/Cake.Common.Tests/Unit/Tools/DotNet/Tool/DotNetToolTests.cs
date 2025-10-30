@@ -96,6 +96,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Tool
                 // Then
                 AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
             }
+
+            [Fact]
+            public void Should_Wrap_Command_In_Quotes()
+            {
+                // Given
+                var fixture = new DotNetToolFixture();
+                fixture.ProjectPath = "./tests/Cake.Common.Tests/";
+                fixture.Command = "C:\\example\\path with\\spaces";
+                fixture.Settings = new DotNetToolSettings();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"C:\\example\\path with\\spaces\"", result.Args);
+            }
         }
     }
 }

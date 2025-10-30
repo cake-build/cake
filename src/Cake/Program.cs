@@ -18,11 +18,19 @@ using Spectre.Console.Cli;
 
 namespace Cake
 {
+    /// <summary>
+    /// The main program class for Cake.
+    /// </summary>
     public sealed class Program
     {
         private readonly Action<ContainerBuilder> _overrides;
         private readonly bool _propagateExceptions;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Program"/> class.
+        /// </summary>
+        /// <param name="overrides">Optional container builder overrides.</param>
+        /// <param name="propagateExceptions">Whether to propagate exceptions.</param>
         public Program(
             Action<ContainerBuilder> overrides = null,
             bool propagateExceptions = false)
@@ -31,11 +39,21 @@ namespace Cake
             _propagateExceptions = propagateExceptions;
         }
 
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        /// <param name="args">The command line arguments.</param>
+        /// <returns>The exit code.</returns>
         public static async Task<int> Main(string[] args)
         {
             return await new Program().Run(args);
         }
 
+        /// <summary>
+        /// Runs the program with the specified arguments.
+        /// </summary>
+        /// <param name="args">The command line arguments.</param>
+        /// <returns>The exit code.</returns>
         public async Task<int> Run(string[] args)
         {
             var registrar = BuildTypeRegistrar();

@@ -57,19 +57,19 @@ namespace Cake.Core.IO.Globbing
             if (_pathParts.Count > 0 && _pathParts[0] == @"\\")
             {
                 // UNC path
-                var path = string.Concat(@"\\", string.Join(@"\", _pathParts.Skip(1)));
+                var path = string.Concat(@"\\", string.Join('\\', _pathParts.Skip(1)));
                 return new DirectoryPath(path);
             }
             if (_pathParts.Count > 0 && _pathParts[0] == "/")
             {
                 // Unix root path
-                var path = string.Concat("/", string.Join("/", _pathParts.Skip(1)));
+                var path = string.Concat("/", string.Join('/', _pathParts.Skip(1)));
                 return new DirectoryPath(path);
             }
             else
             {
                 // Regular path
-                var path = string.Join("/", _pathParts);
+                var path = string.Join('/', _pathParts);
                 if (string.IsNullOrWhiteSpace(path))
                 {
                     path = "./";

@@ -18,20 +18,11 @@ namespace Cake.Frosting.Internal
 
         public FrostingConfiguration(IEnumerable<FrostingConfigurationValue> values, IFileSystem fileSystem, ICakeEnvironment environment, IRemainingArguments remainingArguments)
         {
-            if (values is null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
+            ArgumentNullException.ThrowIfNull(values);
 
-            if (fileSystem is null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
 
-            if (environment is null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
 
             var baseConfiguration = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var value in values)

@@ -37,10 +37,7 @@ namespace Cake.Common.Text
         public TextTransformation(IFileSystem fileSystem,
             ICakeEnvironment environment, TTemplate template)
         {
-            if (template == null)
-            {
-                throw new ArgumentNullException(nameof(template));
-            }
+            ArgumentNullException.ThrowIfNull(template);
             _fileSystem = fileSystem;
             _environment = environment;
             Template = template;
@@ -63,10 +60,7 @@ namespace Cake.Common.Text
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Stream writer leaves stream open.")]
         public void Save(FilePath path, Encoding encoding)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             // Make the path absolute if necessary.
             path = path.IsRelative ? path.MakeAbsolute(_environment) : path;

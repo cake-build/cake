@@ -1,0 +1,73 @@
+﻿{
+  directory: {
+    Exists: true,
+    Hidden: false,
+    LastWriteTimeUtc: 2014-05-27 19:56:01,
+    CreationTimeUtc: 2014-05-27 19:56:01,
+    LastAccessTimeUtc: 2014-05-27 19:56:01,
+    UnixFileMode: OtherExecute, OtherWrite, OtherRead, GroupExecute, GroupWrite, GroupRead, UserExecute, UserWrite, UserRead,
+    Path: /test
+  },
+  result: [
+    {
+      Path: /test/file1.txt,
+      Exists: true,
+      Hidden: false,
+      LastWriteTimeUtc: 2014-05-27 19:56:01,
+      CreationTimeUtc: 2014-05-27 19:56:01,
+      LastAccessTimeUtc: 2014-05-27 19:56:01,
+      UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead,
+      Length: 12,
+      Attributes: None,
+      ContentLength: 12
+    },
+    {
+      Path: /test/build/build.cake,
+      Exists: true,
+      Hidden: false,
+      LastWriteTimeUtc: 2014-05-27 19:56:01,
+      CreationTimeUtc: 2014-05-27 19:56:01,
+      LastAccessTimeUtc: 2014-05-27 19:56:01,
+      UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead,
+      Length: 27,
+      Attributes: None,
+      ContentLength: 27
+    },
+    {
+      Path: /test/build/helloworld.xml,
+      Exists: true,
+      Hidden: false,
+      LastWriteTimeUtc: 2014-05-27 19:56:01,
+      CreationTimeUtc: 2014-05-27 19:56:01,
+      LastAccessTimeUtc: 2014-05-27 19:56:01,
+      UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead,
+      Length: 20,
+      Attributes: None,
+      ContentLength: 20
+    },
+    {
+      Path: /test/build/global.json,
+      Exists: true,
+      Hidden: false,
+      LastWriteTimeUtc: 2014-05-27 19:56:01,
+      CreationTimeUtc: 2014-05-27 19:56:01,
+      LastAccessTimeUtc: 2014-05-27 19:56:01,
+      UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead,
+      Length: 67,
+      Attributes: None,
+      ContentLength: 67
+    },
+    {
+      Path: /test/build/BuildPackage.cs,
+      Exists: true,
+      Hidden: false,
+      LastWriteTimeUtc: 2014-05-27 19:56:01,
+      CreationTimeUtc: 2014-05-27 19:56:01,
+      LastAccessTimeUtc: 2014-05-27 19:56:01,
+      UnixFileMode: OtherWrite, OtherRead, GroupWrite, GroupRead, UserWrite, UserRead,
+      Length: 60,
+      Attributes: None,
+      ContentLength: 60
+    }
+  ]
+}

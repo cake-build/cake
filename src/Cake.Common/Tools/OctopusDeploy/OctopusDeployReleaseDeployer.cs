@@ -67,10 +67,7 @@ namespace Cake.Common.Tools.OctopusDeploy
                 throw new ArgumentNullException(nameof(releaseNumber));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var argumentBuilder = new DeployReleaseArgumentBuilder(server, apiKey, projectName, deployTo, releaseNumber, settings, Environment);
             Run(settings, argumentBuilder.Get());

@@ -74,10 +74,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         [CakeMethodAlias]
         public static void OctoCreateRelease(this ICakeContext context, string projectName, CreateReleaseSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var packer = new OctopusDeployReleaseCreator(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             packer.CreateRelease(projectName, settings);
@@ -108,15 +105,9 @@ namespace Cake.Common.Tools.OctopusDeploy
         [CakeMethodAlias]
         public static void OctoPush(this ICakeContext context, string server, string apiKey, IEnumerable<FilePath> packagePaths, OctopusPushSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (packagePaths == null)
-            {
-                throw new ArgumentNullException(nameof(packagePaths));
-            }
+            ArgumentNullException.ThrowIfNull(packagePaths);
 
             var pusher = new OctopusDeployPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             pusher.PushPackage(server, apiKey, packagePaths.ToArray(), settings);
@@ -142,15 +133,9 @@ namespace Cake.Common.Tools.OctopusDeploy
         [CakeMethodAlias]
         public static void OctoPack(this ICakeContext context, string id, OctopusPackSettings settings = null)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
+            ArgumentNullException.ThrowIfNull(id);
 
             var packer = new OctopusDeployPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             packer.Pack(id, settings);
@@ -238,10 +223,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         [CakeMethodAlias]
         public static void OctoDeployRelease(this ICakeContext context, string server, string apiKey, string projectName, string[] deployToMultiple, string releaseNumber, OctopusDeployReleaseDeploymentSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var releaseDeployer = new OctopusDeployReleaseDeployer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             releaseDeployer.DeployRelease(server, apiKey, projectName, deployToMultiple, releaseNumber, settings);
@@ -286,10 +268,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         [CakeMethodAlias]
         public static void OctoPromoteRelease(this ICakeContext context, string server, string apiKey, string projectName, string deployFrom, string deployTo, OctopusDeployPromoteReleaseSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var releasePromoter = new OctopusDeployReleasePromoter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             releasePromoter.PromoteRelease(server, apiKey, projectName, deployFrom, deployTo, settings);

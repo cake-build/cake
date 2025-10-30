@@ -19,10 +19,7 @@ namespace Cake.Common.Build.TravisCI
         /// <returns>An <see cref="IDisposable"/>.</returns>
         public static IDisposable Fold(this ITravisCIProvider travisCIProvider, string name)
         {
-            if (travisCIProvider == null)
-            {
-                throw new ArgumentNullException(nameof(travisCIProvider));
-            }
+            ArgumentNullException.ThrowIfNull(travisCIProvider);
             travisCIProvider.WriteStartFold(name);
             return new TravisCIActionDisposable(travisCIProvider, tci => tci.WriteEndFold(name));
         }

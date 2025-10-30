@@ -44,10 +44,7 @@ namespace Cake.Common.Tools.OctopusDeploy
             {
                 throw new ArgumentNullException(nameof(packagePaths));
             }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             if (string.IsNullOrEmpty(server))
             {
                 throw new ArgumentException("No server specified.", nameof(settings));

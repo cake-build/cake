@@ -37,18 +37,9 @@ namespace Cake.Core.IO.NuGet
         /// <param name="tools">The tool locator.</param>
         public NuGetToolResolver(IFileSystem fileSystem, ICakeEnvironment environment, IToolLocator tools)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (tools == null)
-            {
-                throw new ArgumentNullException(nameof(tools));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
+            ArgumentNullException.ThrowIfNull(tools);
             _fileSystem = fileSystem;
             _environment = environment;
             _tools = tools;

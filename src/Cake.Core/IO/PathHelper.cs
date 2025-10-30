@@ -26,14 +26,8 @@ namespace Cake.Core.IO
 
         public static string Combine(string first, string second)
         {
-            if (first == null)
-            {
-                throw new ArgumentNullException(nameof(first));
-            }
-            if (second == null)
-            {
-                throw new ArgumentNullException(nameof(second));
-            }
+            ArgumentNullException.ThrowIfNull(first);
+            ArgumentNullException.ThrowIfNull(second);
 
             // Both empty?
             if (string.IsNullOrWhiteSpace(first) && string.IsNullOrWhiteSpace(second))
@@ -69,10 +63,7 @@ namespace Cake.Core.IO
 
         public static bool HasExtension(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             for (int index = path.FullPath.Length - 1; index >= 0; index--)
             {
@@ -96,10 +87,7 @@ namespace Cake.Core.IO
 
         public static string GetDirectoryName(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (path.Segments.Length == 0)
             {
@@ -121,18 +109,15 @@ namespace Cake.Core.IO
             if (path.IsUNC)
             {
                 var segments = path.Segments.Skip(1).Take(path.Segments.Length - 2);
-                return string.Concat(@"\\", string.Join("\\", segments));
+                return string.Concat(@"\\", string.Join('\\', segments));
             }
 
-            return string.Join("/", path.Segments.Take(path.Segments.Length - 1));
+            return string.Join('/', path.Segments.Take(path.Segments.Length - 1));
         }
 
         public static string GetFileName(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (path.Segments.Length == 0)
             {
@@ -176,10 +161,7 @@ namespace Cake.Core.IO
 
         public static string ChangeExtension(FilePath path, string extension)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (extension == null)
             {
@@ -223,10 +205,7 @@ namespace Cake.Core.IO
 
         public static string RemoveExtension(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             for (int index = path.FullPath.Length - 1; index >= 0; index--)
             {

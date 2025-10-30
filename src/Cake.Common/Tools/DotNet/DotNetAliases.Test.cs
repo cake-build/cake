@@ -57,7 +57,7 @@ namespace Cake.Common.Tools.DotNet
         ///     .Does(() =>
         /// {
         ///     var projectFiles = GetFiles("./test/**/*.csproj");
-        ///     foreach(var file in projectFiles)
+        ///     foreach (var file in projectFiles)
         ///     {
         ///         DotNetTest(file.FullPath);
         ///     }
@@ -103,7 +103,7 @@ namespace Cake.Common.Tools.DotNet
         ///     };
         ///
         ///     var projectFiles = GetFiles("./test/**/*.csproj");
-        ///     foreach(var file in projectFiles)
+        ///     foreach (var file in projectFiles)
         ///     {
         ///         DotNetTest(file.FullPath, settings);
         ///     }
@@ -155,7 +155,7 @@ namespace Cake.Common.Tools.DotNet
         ///     };
         ///
         ///     var projectFiles = GetFiles("./test/**/*.csproj");
-        ///     foreach(var file in projectFiles)
+        ///     foreach (var file in projectFiles)
         ///     {
         ///         DotNetTest(file.FullPath, "MSTest.MapInconclusiveToFailed=true", settings);
         ///     }
@@ -176,10 +176,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Test")]
         public static void DotNetTest(this ICakeContext context, string project, ProcessArgumentBuilder arguments, DotNetTestSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {
@@ -289,10 +286,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.VSTest")]
         public static void DotNetVSTest(this ICakeContext context, IEnumerable<FilePath> testFiles, DotNetVSTestSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {

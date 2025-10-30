@@ -52,10 +52,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
 
         internal Dictionary<string, string> GetProperties(ICakeEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
 
             var properties = new Dictionary<string, string>();
 
@@ -86,7 +83,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
             if (TestResultsFiles != null && TestResultsFiles.Any())
             {
                 properties.Add("resultFiles",
-                    string.Join(",",
+                    string.Join(',',
                         TestResultsFiles.Select(filePath =>
                             filePath
                                 .MakeAbsolute(environment)

@@ -33,10 +33,7 @@ namespace Cake.Common.Tools.VSWhere.Product
         /// <returns>Installation paths for all instances.</returns>
         public DirectoryPathCollection Products(VSWhereProductSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             return RunVSWhere(settings, GetArguments(settings));
         }

@@ -38,10 +38,7 @@ namespace Cake.Common.Tools.TextTransform
         [CakeAliasCategory("T4 Text Templating")]
         public static void TransformTemplate(this ICakeContext context, FilePath sourceFile)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new TextTransformRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(sourceFile, new TextTransformSettings());
@@ -64,10 +61,7 @@ namespace Cake.Common.Tools.TextTransform
         [CakeAliasCategory("T4 Text Templating")]
         public static void TransformTemplate(this ICakeContext context, FilePath sourceFile, TextTransformSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new TextTransformRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(sourceFile, settings ?? new TextTransformSettings());

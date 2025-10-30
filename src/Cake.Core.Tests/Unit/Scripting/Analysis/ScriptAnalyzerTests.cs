@@ -189,7 +189,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
             {
                 // Given
                 var fixture = new ScriptAnalyzerFixture();
-                fixture.GivenScriptExist("/Working/script.cake", "using(new Temp())\n{\n}");
+                fixture.GivenScriptExist("/Working/script.cake", "using (new Temp())\n{\n}");
 
                 // When
                 var result = fixture.Analyze("/Working/script.cake");
@@ -199,7 +199,7 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 Assert.Empty(result.Script.Namespaces);
                 Assert.Equal(4, result.Lines.Count);
                 Assert.Equal(result.Lines[0], "#line 1 \"/Working/script.cake\"");
-                Assert.Equal(result.Lines[1], "using(new Temp())");
+                Assert.Equal(result.Lines[1], "using (new Temp())");
                 Assert.Equal(result.Lines[2], "{");
                 Assert.Equal(result.Lines[3], "}");
             }

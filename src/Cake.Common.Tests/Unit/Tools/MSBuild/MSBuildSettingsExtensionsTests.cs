@@ -184,7 +184,7 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
 
                 // Then
                 Assert.True(settings.Properties.ContainsKey("Platform"));
-                Assert.Equal("Custom", string.Join(string.Empty, settings.Properties["Platform"]));
+                Assert.Equal("Custom", string.Concat(settings.Properties["Platform"]));
             }
 
             [Fact]

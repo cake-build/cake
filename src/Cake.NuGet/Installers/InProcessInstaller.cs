@@ -94,23 +94,14 @@ namespace Cake.NuGet
 
         public bool CanInstall(PackageReference package, PackageType type)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
+            ArgumentNullException.ThrowIfNull(package);
             return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
         }
 
         public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(package);
+            ArgumentNullException.ThrowIfNull(path);
 
             var packageRoot = path.MakeAbsolute(_environment).FullPath;
             var targetFramework = type == PackageType.Addin ? _currentFramework : NuGetFramework.AnyFramework;
@@ -255,9 +246,9 @@ namespace Cake.NuGet
         {
             NuGetVersion version = null;
             VersionRange versionRange = null;
-            if (package.Parameters.ContainsKey("version"))
+            if (package.Parameters.TryGetValue("version", out var versions))
             {
-                var versionString = package.Parameters["version"].First();
+                var versionString = versions.First();
                 if (NuGetVersion.TryParse(versionString, out version))
                 {
                     return version;

@@ -48,14 +48,8 @@ namespace Cake.Common.Tools.NuGet.Push
         /// <param name="settings">The settings.</param>
         public void Push(FilePath packageFilePath, NuGetPushSettings settings)
         {
-            if (packageFilePath == null)
-            {
-                throw new ArgumentNullException(nameof(packageFilePath));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(packageFilePath);
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(packageFilePath, settings));
         }

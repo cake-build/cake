@@ -50,10 +50,7 @@ namespace Cake.Core.Scripting
         /// <param name="namespaces">The namespaces that the alias need to be imported.</param>
         public ScriptAlias(MethodInfo method, ScriptAliasType type, ISet<string> namespaces)
         {
-            if (method == null)
-            {
-                throw new ArgumentNullException(nameof(method));
-            }
+            ArgumentNullException.ThrowIfNull(method);
             Name = method.Name;
             Method = method;
             Type = type;

@@ -32,10 +32,7 @@ namespace Cake.Common.IO
         [CakeMethodAlias]
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var paths = context.GetPaths(string.Concat(rootPath, "/**/*"));
             var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);
@@ -82,10 +79,7 @@ namespace Cake.Common.IO
         [CakeMethodAlias]
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath, IEnumerable<FilePath> filePaths)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);
             zipper.Zip(rootPath, outputPath, filePaths);
@@ -112,10 +106,7 @@ namespace Cake.Common.IO
         [CakeMethodAlias]
         public static void Zip(this ICakeContext context, DirectoryPath rootPath, FilePath outputPath, IEnumerable<string> filePaths)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var paths = filePaths.Select(p => new FilePath(p));
             var zipper = new Zipper(context.FileSystem, context.Environment, context.Log);

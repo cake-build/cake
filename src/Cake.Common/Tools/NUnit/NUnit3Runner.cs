@@ -42,14 +42,8 @@ namespace Cake.Common.Tools.NUnit
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> assemblyPaths, NUnit3Settings settings)
         {
-            if (assemblyPaths == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPaths));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyPaths);
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(assemblyPaths, settings));
         }

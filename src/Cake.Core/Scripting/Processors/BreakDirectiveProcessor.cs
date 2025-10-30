@@ -11,10 +11,7 @@ namespace Cake.Core.Scripting.Processors
     {
         public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             replacement = null;
 

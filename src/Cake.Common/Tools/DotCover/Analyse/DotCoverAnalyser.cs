@@ -44,22 +44,10 @@ namespace Cake.Common.Tools.DotCover.Analyse
             FilePath outputPath,
             DotCoverAnalyseSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-            if (outputPath == null)
-            {
-                throw new ArgumentNullException(nameof(outputPath));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(action);
+            ArgumentNullException.ThrowIfNull(outputPath);
+            ArgumentNullException.ThrowIfNull(settings);
 
             // Run the tool.
             Run(settings, GetArguments(context, action, settings, outputPath));

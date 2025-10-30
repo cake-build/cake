@@ -38,10 +38,7 @@ namespace Cake.Common.Tools.Fixie
         [CakeMethodAlias]
         public static void Fixie(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
             if (assemblies.Length == 0)
@@ -70,10 +67,7 @@ namespace Cake.Common.Tools.Fixie
         [CakeMethodAlias]
         public static void Fixie(this ICakeContext context, GlobPattern pattern, FixieSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var assemblies = context.Globber.GetFiles(pattern).ToArray();
             if (assemblies.Length == 0)
@@ -102,10 +96,7 @@ namespace Cake.Common.Tools.Fixie
         [CakeMethodAlias]
         public static void Fixie(this ICakeContext context, IEnumerable<string> assemblies)
         {
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(assemblies);
             var paths = assemblies.Select(p => new FilePath(p));
             Fixie(context, paths, new FixieSettings());
         }
@@ -148,10 +139,7 @@ namespace Cake.Common.Tools.Fixie
         [CakeMethodAlias]
         public static void Fixie(this ICakeContext context, IEnumerable<string> assemblies, FixieSettings settings)
         {
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(assemblies);
             var paths = assemblies.Select(p => new FilePath(p));
             Fixie(context, paths, settings);
         }
@@ -174,14 +162,8 @@ namespace Cake.Common.Tools.Fixie
         [CakeMethodAlias]
         public static void Fixie(this ICakeContext context, IEnumerable<FilePath> assemblies, FixieSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(assemblies);
 
             var runner = new FixieRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(assemblies, settings);

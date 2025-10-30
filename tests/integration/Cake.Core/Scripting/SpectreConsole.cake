@@ -3,7 +3,7 @@ using Spectre.Console;
 Task("Cake.Core.Scripting.Spectre.Console.FigletText")
     .Does(() =>
 {
-    AnsiConsole.Render(
+    AnsiConsole.Write(
         new FigletText("Cake")
             .LeftJustified()
             .Color(Color.Red));

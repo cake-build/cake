@@ -32,9 +32,9 @@ namespace Cake.Core
             foreach (Match match in matches)
             {
                 string value = match.Groups[1].Value;
-                if (variables.ContainsKey(value))
+                if (variables.TryGetValue(value, out var variable))
                 {
-                    text = text.Replace(match.Value, variables[value]);
+                    text = text.Replace(match.Value, variable);
                 }
             }
 

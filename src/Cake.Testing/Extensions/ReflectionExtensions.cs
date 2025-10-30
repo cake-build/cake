@@ -30,15 +30,9 @@ namespace Cake.Testing.Extensions
         /// </returns>
         public static bool SatisfiesInterfaceDefinition(this Type type, Type interfaceTypeDefinition)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type);
 
-            if (interfaceTypeDefinition == null)
-            {
-                throw new ArgumentNullException(nameof(interfaceTypeDefinition));
-            }
+            ArgumentNullException.ThrowIfNull(interfaceTypeDefinition);
 
             if (!interfaceTypeDefinition.IsInterface)
             {

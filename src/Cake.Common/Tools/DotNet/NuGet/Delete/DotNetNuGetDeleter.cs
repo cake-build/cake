@@ -37,10 +37,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Delete
         /// <param name="settings">The settings.</param>
         public void Delete(string packageName, string version, DotNetNuGetDeleteSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(packageName, version, settings));
         }

@@ -11,6 +11,7 @@ public class BuildParameters
     public bool IsRunningOnUnix { get; }
     public bool IsRunningOnWindows { get; }
     public bool IsRunningOnAppVeyor { get; }
+    public bool IsRunningOnGitHubActions { get; }
     public bool IsPullRequest { get; }
     public bool IsMainCakeRepo { get; }
     public bool IsMainCakeBranch { get; }
@@ -34,17 +35,25 @@ public class BuildParameters
     {
         get
         {
-            return !IsLocalBuild && !IsPullRequest && IsMainCakeRepo
-                && IsMainCakeBranch && IsTagged;
+            return IsRunningOnGitHubActions
+                && IsRunningOnWindows
+                && !IsLocalBuild
+                && !IsPullRequest
+                && IsMainCakeRepo
+                && IsTagged;
         }
     }
 
-    public bool ShouldPublishToMyGet
+    public bool ShouldPublishToAzureDevOps
     {
         get
         {
-            return false; /* !IsLocalBuild && !IsPullRequest && IsMainCakeRepo
-                && (IsTagged || IsDevelopCakeBranch);*/
+            return IsRunningOnGitHubActions
+                && IsRunningOnWindows
+                && !IsLocalBuild
+                && !IsPullRequest
+                && IsMainCakeRepo
+                && (IsTagged || IsDevelopCakeBranch);
         }
     }
 
@@ -76,10 +85,8 @@ public class BuildParameters
         IsRunningOnUnix = context.IsRunningOnUnix();
         IsRunningOnWindows = context.IsRunningOnWindows();
         IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor;
-        IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest;
-        IsMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", buildSystem.AppVeyor.Environment.Repository.Name);
-        IsMainCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("main", buildSystem.AppVeyor.Environment.Repository.Branch);
-        IsDevelopCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch);
+        IsRunningOnGitHubActions = buildSystem.GitHubActions.IsRunningOnGitHubActions;
+        IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest || buildSystem.GitHubActions.Environment.PullRequest.IsPullRequest;
         IsTagged = IsBuildTagged(buildSystem);
         GitHub = BuildCredentials.GetGitHubCredentials(context);
         Twitter = TwitterCredentials.GetTwitterCredentials(context);
@@ -90,6 +97,9 @@ public class BuildParameters
         SkipSigning = StringComparer.OrdinalIgnoreCase.Equals("True", context.Argument("skipsigning", "False"));
         SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION"));
         Version = BuildVersion.Calculate(context, this);
+        IsMainCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("main", buildSystem.AppVeyor.Environment.Repository.Branch) || StringComparer.OrdinalIgnoreCase.Equals("main", Version.BranchName);
+        IsDevelopCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch) || StringComparer.OrdinalIgnoreCase.Equals("develop", Version.BranchName);
+        IsMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", buildSystem.AppVeyor.Environment.Repository.Name) || StringComparer.OrdinalIgnoreCase.Equals("cake-build", buildSystem.GitHubActions.Environment.Workflow.RepositoryOwner);
         Paths = BuildPaths.GetPaths(context, Configuration, Version.SemVersion);
         Packages = BuildPackages.GetPackages(
             Paths.Directories.NuGetRoot,
@@ -99,6 +109,7 @@ public class BuildParameters
                 "Cake.Common",
                 "Cake.Testing",
                 "Cake.Testing.Xunit",
+                "Cake.Testing.Xunit.v3",
                 "Cake.NuGet",
                 "Cake.Tool",
                 "Cake.Frosting",
@@ -135,8 +146,7 @@ public class BuildParameters
 
     private static bool IsBuildTagged(BuildSystem buildSystem)
     {
-        return buildSystem.AppVeyor.Environment.Repository.Tag.IsTag
-            && !string.IsNullOrWhiteSpace(buildSystem.AppVeyor.Environment.Repository.Tag.Name);
+        return buildSystem.GitHubActions.IsRunningOnGitHubActions && buildSystem.GitHubActions.Environment.Workflow.RefType == GitHubActionsRefType.Tag;
     }
 
     private static bool IsReleasing(string target)

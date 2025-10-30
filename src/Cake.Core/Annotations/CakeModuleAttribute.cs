@@ -24,10 +24,7 @@ namespace Cake.Core.Annotations
         /// <param name="moduleType">The module type.</param>
         public CakeModuleAttribute(Type moduleType)
         {
-            if (moduleType == null)
-            {
-                throw new ArgumentNullException(nameof(moduleType));
-            }
+            ArgumentNullException.ThrowIfNull(moduleType);
 
             ModuleType = moduleType;
         }

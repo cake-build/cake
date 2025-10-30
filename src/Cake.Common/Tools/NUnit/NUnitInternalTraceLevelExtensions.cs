@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Cake.Common.Tools.NUnit;
 
 namespace Cake.Common.Tools.NUnit
 {
@@ -26,7 +25,7 @@ namespace Cake.Common.Tools.NUnit
                     result = "verbose";
                     break;
                 default:
-                    result = Enum.GetName(typeof(NUnitInternalTraceLevel), level)?.ToLowerInvariant();
+                    result = Enum.GetName(level)?.ToLowerInvariant();
                     break;
             }
 

@@ -46,10 +46,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Source
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (string.IsNullOrWhiteSpace(settings.Source))
             {
@@ -71,10 +68,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Source
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetDisableSourceArguments(name, settings));
         }
@@ -91,10 +85,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Source
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetEnableSourceArguments(name, settings));
         }
@@ -112,10 +103,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Source
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var sources = ListSource("detailed", settings);
             var matches = Regex.Matches(sources, @"\d+\.\s+(?<name>.+?)\s+\[(?:Enabled|Disabled)\]", RegexOptions.IgnoreCase);
@@ -131,10 +119,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Source
         /// <returns>The NuGet sources.</returns>
         public string ListSource(string format, DotNetNuGetSourceSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             string output = null;
             Run(settings, GetListSourceArguments(format, settings), new ProcessSettings { RedirectStandardOutput = true },
@@ -155,10 +140,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Source
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetRemoveSourceArguments(name, settings));
         }
@@ -175,10 +157,7 @@ namespace Cake.Common.Tools.DotNet.NuGet.Source
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetUpdateSourceArguments(name, settings));
         }

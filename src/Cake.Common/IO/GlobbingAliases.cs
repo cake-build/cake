@@ -22,7 +22,7 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// var files = GetFiles("./**/Cake.*.dll");
-        /// foreach(var file in files)
+        /// foreach (var file in files)
         /// {
         ///     Information("File: {0}", file);
         /// }
@@ -35,10 +35,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Files")]
         public static FilePathCollection GetFiles(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new FilePathCollection(context.Globber.Match(pattern).OfType<FilePath>());
         }
@@ -53,7 +50,7 @@ namespace Cake.Common.IO
         ///         "node_modules", StringComparison.OrdinalIgnoreCase);
         ///
         /// var files = GetFiles("./**/Cake.*.dll", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach(var file in files)
+        /// foreach (var file in files)
         /// {
         ///     Information("File: {0}", file);
         /// }
@@ -67,10 +64,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Files")]
         public static FilePathCollection GetFiles(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new FilePathCollection(context.Globber.Match(pattern, settings).OfType<FilePath>());
         }
@@ -81,7 +75,7 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// var directories = GetDirectories("./src/**/obj/*");
-        /// foreach(var directory in directories)
+        /// foreach (var directory in directories)
         /// {
         ///     Information("Directory: {0}", directory);
         /// }
@@ -94,10 +88,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Directories")]
         public static DirectoryPathCollection GetDirectories(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>());
         }
@@ -112,7 +103,7 @@ namespace Cake.Common.IO
         ///         "node_modules", StringComparison.OrdinalIgnoreCase);
         ///
         /// var directories = GetDirectories("./src/**/obj/*", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach(var directory in directories)
+        /// foreach (var directory in directories)
         /// {
         ///     Information("Directory: {0}", directory);
         /// }
@@ -126,10 +117,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Directories")]
         public static DirectoryPathCollection GetDirectories(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new DirectoryPathCollection(context.Globber.Match(pattern, settings).OfType<DirectoryPath>());
         }
@@ -140,7 +128,7 @@ namespace Cake.Common.IO
         /// <example>
         /// <code>
         /// var paths = GetPaths("./src/**/obj/*");
-        /// foreach(var path in paths)
+        /// foreach (var path in paths)
         /// {
         ///     Information("Path: {0}", path);
         /// }
@@ -153,10 +141,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Paths")]
         public static PathCollection GetPaths(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new PathCollection(context.Globber.Match(pattern));
         }
@@ -171,7 +156,7 @@ namespace Cake.Common.IO
         ///         "node_modules", StringComparison.OrdinalIgnoreCase);
         ///
         /// var paths = GetPaths("./src/**/obj/*", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach(var path in paths)
+        /// foreach (var path in paths)
         /// {
         ///     Information("Path: {0}", path);
         /// }
@@ -185,10 +170,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Paths")]
         public static PathCollection GetPaths(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new PathCollection(context.Globber.Match(pattern, settings));
         }

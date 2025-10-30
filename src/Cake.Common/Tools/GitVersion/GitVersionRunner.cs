@@ -48,17 +48,14 @@ namespace Cake.Common.Tools.GitVersion
         /// <returns>A task with the GitVersion results.</returns>
         public GitVersion Run(GitVersionSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (settings.OutputType != GitVersionOutput.BuildServer)
             {
                 var output = string.Empty;
                 Run(settings, GetArguments(settings), new ProcessSettings { RedirectStandardOutput = true }, process =>
                 {
-                    output = string.Join("\n", process.GetStandardOutput());
+                    output = string.Join('\n', process.GetStandardOutput());
                     if (_log.Verbosity < Verbosity.Diagnostic)
                     {
                         var errors = Regex.Matches(output, @"( *ERROR:? [^\n]*)\n([^\n]*)").Cast<Match>()

@@ -41,10 +41,7 @@ namespace Cake.Common.Tools.DotNet.Test
         /// <param name="settings">The settings.</param>
         public void Test(string project, ProcessArgumentBuilder arguments, DotNetTestSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(project, arguments, settings));
         }
@@ -58,6 +55,17 @@ namespace Cake.Common.Tools.DotNet.Test
             // Specific path?
             if (project != null)
             {
+                // Handle path type for .NET 10+ compatibility
+                switch (DeterminePathType(project, settings.PathType))
+                {
+                    case DotNetTestPathType.Project:
+                        builder.Append("--project");
+                        break;
+                    case DotNetTestPathType.Solution:
+                        builder.Append("--solution");
+                        break;
+                }
+
                 builder.AppendQuoted(project);
             }
 
@@ -193,6 +201,40 @@ namespace Cake.Common.Tools.DotNet.Test
             }
 
             return builder;
+        }
+
+        /// <summary>
+        /// Determines the path type based on the project path and settings.
+        /// </summary>
+        /// <param name="project">The project path.</param>
+        /// <param name="pathType">The configured path type.</param>
+        /// <returns>The determined path type.</returns>
+        private static DotNetTestPathType DeterminePathType(string project, DotNetTestPathType pathType)
+        {
+            return pathType switch
+            {
+                DotNetTestPathType.None => DotNetTestPathType.None,
+                DotNetTestPathType.Project => DotNetTestPathType.Project,
+                DotNetTestPathType.Solution => DotNetTestPathType.Solution,
+                DotNetTestPathType.Auto => AutoDetectPathType(project),
+                _ => DotNetTestPathType.None
+            };
+        }
+
+        /// <summary>
+        /// Auto-detects the path type based on file extension.
+        /// </summary>
+        /// <param name="project">The project path.</param>
+        /// <returns>The detected path type.</returns>
+        private static DotNetTestPathType AutoDetectPathType(string project)
+        {
+            var extension = FilePath.FromString(project).GetExtension().ToLowerInvariant();
+            return extension switch
+            {
+                ".sln" => DotNetTestPathType.Solution,
+                ".csproj" or ".vbproj" or ".fsproj" or ".vcxproj" => DotNetTestPathType.Project,
+                _ => DotNetTestPathType.None // Default to legacy behavior for unknown extensions
+            };
         }
     }
 }

@@ -4,7 +4,6 @@
 
 using System;
 using Cake.Core;
-using Cake.Frosting;
 
 namespace Cake.Frosting
 {
@@ -32,10 +31,7 @@ namespace Cake.Frosting
 
         void IFrostingTeardown.Teardown(ICakeContext context, ITeardownContext info)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             Teardown((TContext)context, info);
         }

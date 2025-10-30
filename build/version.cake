@@ -3,7 +3,8 @@ public record BuildVersion(
     string SemVersion,
     string DotNetAsterix,
     string Milestone,
-    string CakeVersion
+    string CakeVersion,
+    string BranchName
 )
 {
     public static BuildVersion Calculate(ICakeContext context, BuildParameters parameters)
@@ -16,6 +17,7 @@ public record BuildVersion(
         string version = null;
         string semVersion = null;
         string milestone = null;
+        string branchName = null;
 
         if (!parameters.SkipGitVersion)
         {
@@ -58,6 +60,7 @@ public record BuildVersion(
             version = assertedVersions.MajorMinorPatch;
             semVersion = assertedVersions.LegacySemVerPadded;
             milestone = string.Concat("v", version);
+            branchName = assertedVersions.BranchName;
 
             context.Information("Calculated Semantic Version: {0} (Version: {1}, Milestone: {2})", semVersion, version, milestone);
         }
@@ -79,7 +82,8 @@ public record BuildVersion(
             SemVersion: semVersion,
             DotNetAsterix: semVersion.Substring(version.Length).TrimStart('-'),
             Milestone: milestone,
-            CakeVersion: cakeVersion
+            CakeVersion: cakeVersion,
+            BranchName: branchName
         );
     }
 

@@ -98,5 +98,12 @@ namespace Cake.Core.IO
         /// <param name="lastWriteTimeUtc">A <see cref="DateTime"/> containing the value to set for the last access date and time of path. This value is expressed in local time.</param>
         /// <returns>A <see cref="IFile"/> instance representing the specified path.</returns>
         IFile SetLastWriteTimeUtc(DateTime lastWriteTimeUtc) => this;
+
+        /// <summary>
+        /// Sets the Unix file mode for the file.
+        /// </summary>
+        /// <param name="unixFileMode">The <see cref="UnixFileMode"/> to set.</param>
+        /// <returns>A <see cref="IFile"/> instance representing the specified path.</returns>
+        IFile SetUnixFileMode(UnixFileMode unixFileMode) => this;
     }
 }

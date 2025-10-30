@@ -42,10 +42,7 @@ namespace Cake.Common.Tools.DotNet.VSTest
         /// <param name="settings">The settings.</param>
         public void Test(IEnumerable<FilePath> testFiles, DotNetVSTestSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (testFiles == null || !testFiles.Any())
             {
@@ -76,7 +73,7 @@ namespace Cake.Common.Tools.DotNet.VSTest
             // Tests to run
             if (settings.TestsToRun.Any())
             {
-                builder.AppendSwitch("--Tests", ":", string.Join(",", settings.TestsToRun));
+                builder.AppendSwitch("--Tests", ":", string.Join(',', settings.TestsToRun));
             }
 
             // Path to custom test adapter

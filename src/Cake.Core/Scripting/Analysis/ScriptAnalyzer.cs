@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -40,18 +39,9 @@ namespace Cake.Core.Scripting.Analysis
             ICakeLog log,
             IEnumerable<ILoadDirectiveProvider> providers)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
+            ArgumentNullException.ThrowIfNull(log);
 
             _fileSystem = fileSystem;
             _environment = environment;
@@ -80,10 +70,7 @@ namespace Cake.Core.Scripting.Analysis
         /// <inheritdoc/>
         public ScriptAnalyzerResult Analyze(FilePath path, ScriptAnalyzerSettings settings)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             // Make the script path absolute.
             path = path.MakeAbsolute(_environment);
@@ -111,10 +98,7 @@ namespace Cake.Core.Scripting.Analysis
         [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
         private void ModuleAnalyzeCallback(IScriptAnalyzerContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             // Iterate all lines in the script.
             var lines = ReadLines(context.Current.Path);
@@ -133,10 +117,7 @@ namespace Cake.Core.Scripting.Analysis
         [SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
         private void AnalyzeCallback(IScriptAnalyzerContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var path = context.Current.Path;
 

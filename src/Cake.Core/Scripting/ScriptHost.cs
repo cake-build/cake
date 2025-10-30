@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Cake.Core.Diagnostics;
 
 namespace Cake.Core.Scripting
 {

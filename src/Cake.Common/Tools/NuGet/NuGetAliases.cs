@@ -73,10 +73,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
         public static void NuGetPack(this ICakeContext context, FilePath filePath, NuGetPackSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var packer = new NuGetPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Tools, resolver);
@@ -124,10 +121,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
         public static void NuGetPack(this ICakeContext context, IEnumerable<FilePath> filePaths, NuGetPackSettings settings)
         {
-            if (filePaths == null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
+            ArgumentNullException.ThrowIfNull(filePaths);
 
             foreach (var filePath in filePaths)
             {
@@ -174,10 +168,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Pack")]
         public static void NuGetPack(this ICakeContext context, NuGetPackSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var packer = new NuGetPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Tools, resolver);
@@ -193,7 +184,7 @@ namespace Cake.Common.Tools.NuGet
         /// <code>
         ///     var solutions = GetFiles("./**/*.sln");
         ///     // Restore all NuGet packages.
-        ///     foreach(var solution in solutions)
+        ///     foreach (var solution in solutions)
         ///     {
         ///         Information("Restoring {0}", solution);
         ///         NuGetRestore(solution);
@@ -239,7 +230,7 @@ namespace Cake.Common.Tools.NuGet
         /// <code>
         ///     var solutions = GetFiles("./**/*.sln");
         ///     // Restore all NuGet packages.
-        ///     foreach(var solution in solutions)
+        ///     foreach (var solution in solutions)
         ///     {
         ///         Information("Restoring {0}", solution);
         ///         NuGetRestore(solution, new NuGetRestoreSettings { NoCache = true });
@@ -251,10 +242,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
         public static void NuGetRestore(this ICakeContext context, FilePath targetFilePath, NuGetRestoreSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetRestorer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -278,10 +266,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Restore")]
         public static void NuGetRestore(this ICakeContext context, IEnumerable<FilePath> targetFilePaths, NuGetRestoreSettings settings)
         {
-            if (targetFilePaths == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(targetFilePaths);
 
             foreach (var targetFilePath in targetFilePaths)
             {
@@ -314,10 +299,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Push")]
         public static void NuGetPush(this ICakeContext context, FilePath packageFilePath, NuGetPushSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var packer = new NuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver, context.Log);
@@ -349,10 +331,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Push")]
         public static void NuGetPush(this ICakeContext context, IEnumerable<FilePath> packageFilePaths, NuGetPushSettings settings)
         {
-            if (packageFilePaths == null)
-            {
-                throw new ArgumentNullException(nameof(packageFilePaths));
-            }
+            ArgumentNullException.ThrowIfNull(packageFilePaths);
 
             foreach (var packageFilePath in packageFilePaths)
             {
@@ -423,10 +402,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
         public static void NuGetAddSource(this ICakeContext context, string name, string source, NuGetSourcesSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetSources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -496,10 +472,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
         public static void NuGetRemoveSource(this ICakeContext context, string name, string source, NuGetSourcesSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetSources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -575,10 +548,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Sources")]
         public static bool NuGetHasSource(this ICakeContext context, string source, NuGetSourcesSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetSources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -642,10 +612,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
         public static void NuGetInstall(this ICakeContext context, string packageId, NuGetInstallSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -671,10 +638,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
         public static void NuGetInstall(this ICakeContext context, IEnumerable<string> packageIds, NuGetInstallSettings settings)
         {
-            if (packageIds == null)
-            {
-                throw new ArgumentNullException(nameof(packageIds));
-            }
+            ArgumentNullException.ThrowIfNull(packageIds);
 
             foreach (var packageId in packageIds)
             {
@@ -741,10 +705,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
         public static void NuGetInstallFromConfig(this ICakeContext context, FilePath packageConfigPath, NuGetInstallSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -772,10 +733,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Install")]
         public static void NuGetInstallFromConfig(this ICakeContext context, IEnumerable<FilePath> packageConfigPaths, NuGetInstallSettings settings)
         {
-            if (packageConfigPaths == null)
-            {
-                throw new ArgumentNullException(nameof(packageConfigPaths));
-            }
+            ArgumentNullException.ThrowIfNull(packageConfigPaths);
 
             foreach (var packageConfigPath in packageConfigPaths)
             {
@@ -803,10 +761,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.SetApiKey")]
         public static void NuGetSetApiKey(this ICakeContext context, string apiKey, string source, NuGetSetApiKeySettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetSetApiKey(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -853,10 +808,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.SetProxy")]
         public static void NuGetSetProxy(this ICakeContext context, string proxy, string username, string password, NuGetSetProxySettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetSetProxy(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -941,10 +893,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Update")]
         public static void NuGetUpdate(this ICakeContext context, FilePath targetFile, NuGetUpdateSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -971,10 +920,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Update")]
         public static void NuGetUpdate(this ICakeContext context, IEnumerable<FilePath> targetFiles, NuGetUpdateSettings settings)
         {
-            if (targetFiles == null)
-            {
-                throw new ArgumentNullException(nameof(targetFiles));
-            }
+            ArgumentNullException.ThrowIfNull(targetFiles);
 
             foreach (var targetFile in targetFiles)
             {
@@ -998,10 +944,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Add")]
         public static void NuGetAdd(this ICakeContext context, string packageId, string source)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             if (string.IsNullOrWhiteSpace(source))
             {
                 throw new ArgumentNullException(nameof(source));
@@ -1028,14 +971,8 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Add")]
         public static void NuGetAdd(this ICakeContext context, string packageId, NuGetAddSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(settings);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -1058,10 +995,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Init")]
         public static void NuGetInit(this ICakeContext context, string source, string destination)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             if (string.IsNullOrWhiteSpace(source))
             {
                 throw new ArgumentNullException(nameof(source));
@@ -1093,10 +1027,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Init")]
         public static void NuGetInit(this ICakeContext context, string source, string destination, NuGetInitSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetIniter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -1116,7 +1047,7 @@ namespace Cake.Common.Tools.NuGet
         ///     AllVersions = false,
         ///     Prerelease = false
         ///     });
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }
@@ -1127,10 +1058,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.List")]
         public static IEnumerable<NuGetListItem> NuGetList(this ICakeContext context, string packageId, NuGetListSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetList(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             return runner.List(packageId, settings);
@@ -1145,7 +1073,7 @@ namespace Cake.Common.Tools.NuGet
         /// <example>
         /// <code>
         /// var packageList = NuGetList("Cake");
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }
@@ -1156,10 +1084,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.List")]
         public static IEnumerable<NuGetListItem> NuGetList(this ICakeContext context, string packageId)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetList(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             return runner.List(packageId, new NuGetListSettings());
@@ -1177,7 +1102,7 @@ namespace Cake.Common.Tools.NuGet
         ///     AllVersions = false,
         ///     Prerelease = false
         ///     });
-        /// foreach(var package in packageList)
+        /// foreach (var package in packageList)
         /// {
         ///     Information("Found package {0}, version {1}", package.Name, package.Version);
         /// }
@@ -1188,10 +1113,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.List")]
         public static IEnumerable<NuGetListItem> NuGetList(this ICakeContext context, NuGetListSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var runner = new NuGetList(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
             return runner.List(settings);
@@ -1220,10 +1142,7 @@ namespace Cake.Common.Tools.NuGet
         [CakeNamespaceImport("Cake.Common.Tools.NuGet.Delete")]
         public static void NuGetDelete(this ICakeContext context, string packageID, string packageVersion, NuGetDeleteSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new NuGetToolResolver(context.FileSystem, context.Environment, context.Tools);
             var packer = new NuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver, context.Log);

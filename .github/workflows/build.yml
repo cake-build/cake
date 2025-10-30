@@ -24,39 +24,43 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-13, ubuntu-latest]
+        os: [windows-latest, macos-15-intel, ubuntu-latest, macos-latest] 
     steps:
       - name: Get the sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Install .NET SDK 8.0.x - 9.0.x
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
             8.0.x
             9.0.x
 
-      - name: Install .NET Core SDK (global.json)
-        uses: actions/setup-dotnet@v4
+      - name: Install .NET SDK (global.json)
+        uses: actions/setup-dotnet@v5
         with:
           global-json-file: global.json
 
       - name: Run Cake script
         id: build-cake
-        uses: cake-build/cake-action@master
+        uses: cake-build/cake-action@v3.0.1
+        env:
+          AZURE_DEVOPS_NUGET_API_KEY: ${{ secrets.AZURE_DEVOPS_NUGET_API_KEY }}
+          AZURE_DEVOPS_NUGET_API_URL: ${{ secrets.AZURE_DEVOPS_NUGET_API_URL }}
         with:
-          target: Run-Integration-Tests
+          target: GitHubActions
           cake-version: tool-manifest
 
       - name: Validate Integration Tests
         id: validate-cake
-        uses: cake-build/cake-action@master
+        uses: cake-build/cake-action@v3.0.1
         with:
           script-path: tests/integration/Cake.Common/Build/GitHubActions/ValidateGitHubActionsProvider.cake
           cake-version: tool-manifest
           arguments: |
             CAKE_NETCOREAPP_8_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_8_0_VERSION_OS }}
             CAKE_NETCOREAPP_9_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_9_0_VERSION_OS }}
+            CAKE_NETCOREAPP_10_0_VERSION_OS: ${{ steps.build-cake.outputs.CAKE_NETCOREAPP_10_0_VERSION_OS }}
             ValidateGitHubActionsProvider: true

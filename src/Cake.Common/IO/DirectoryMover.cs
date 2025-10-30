@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Cake.Core;
@@ -16,18 +15,9 @@ namespace Cake.Common.IO
     {
         public static void MoveDirectory(ICakeContext context, DirectoryPath directoryPath, DirectoryPath targetDirectoryPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (directoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(directoryPath));
-            }
-            if (targetDirectoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(targetDirectoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(directoryPath);
+            ArgumentNullException.ThrowIfNull(targetDirectoryPath);
 
             directoryPath = directoryPath.MakeAbsolute(context.Environment);
             targetDirectoryPath = targetDirectoryPath.MakeAbsolute(context.Environment);

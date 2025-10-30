@@ -173,10 +173,7 @@ namespace Cake.Core
         // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
         private static void EnsureNotRegistered(object value, string type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type);
             if (value != null)
             {
                 throw new CakeException($"More than one {type.ToLowerInvariant()} action have been registered.");
