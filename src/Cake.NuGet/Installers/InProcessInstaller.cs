@@ -115,7 +115,13 @@ namespace Cake.NuGet
             allRepositories.AddRange(localAndPrimaryRepositories);
             allRepositories.AddRange(sourceRepositoryProvider.Repositories);
 
-            DefaultCredentialServiceUtility.SetupDefaultCredentialService(_nugetLogger, true);
+            var nonInteractiveString = _config.GetValue(Constants.NuGet.NonInteractive) ?? bool.TrueString;
+            if (!bool.TryParse(nonInteractiveString, out bool nonInteractive))
+            {
+                // If there is no explicit preference, use non interactive.
+                nonInteractive = true;
+            }
+            DefaultCredentialServiceUtility.SetupDefaultCredentialService(_nugetLogger, nonInteractive);
 
             var packageIdentity = GetPackageId(package, localAndPrimaryRepositories, targetFramework, _sourceCacheContext, _nugetLogger);
             if (packageIdentity == null)
