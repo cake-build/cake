@@ -1,0 +1,16 @@
+﻿[
+  ,
+  Task                          Duration            Status              ,
+  ----------------------------------------------------------------------,
+  SetupExecuted                 00:00:00.2220000    Succeeded           ,
+  SetupSkipped                  -                   Skipped             ,
+  SetupFailed                   00:00:00.8880000    Failed              ,
+  TaskExecuted                  00:00:00.1110000    Succeeded           ,
+  TaskSkipped                   -                   Skipped             ,
+  TaskFailed                    00:00:00.4440000    Failed              ,
+  TeardownExecuted              00:00:00.3330000    Succeeded           ,
+  TeardownSkipped               -                   Skipped             ,
+  TeardownFailed                00:00:01.3320000    Failed              ,
+  ----------------------------------------------------------------------,
+  Total:                        00:00:06.6600000                        
+]

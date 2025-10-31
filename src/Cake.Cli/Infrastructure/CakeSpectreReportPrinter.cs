@@ -25,6 +25,7 @@ namespace Cake.Cli
         /// <param name="console">The console.</param>
         public CakeSpectreReportPrinter(IAnsiConsole console)
         {
+            ArgumentNullException.ThrowIfNull(console);
             _console = console;
         }
 
@@ -63,14 +64,14 @@ namespace Cake.Cli
                 {
                     table.AddRow(new Markup(item.TaskName.EscapeMarkup(), itemStyle),
                                 new Markup(FormatDuration(item).EscapeMarkup(), itemStyle),
-                                new Markup(item.ExecutionStatus.ToString().EscapeMarkup(), itemStyle),
+                                new Markup(item.ExecutionStatus.ToReportStatus().EscapeMarkup(), itemStyle),
                                 new Markup(item.SkippedMessage.EscapeMarkup(), itemStyle));
                 }
                 else
                 {
                     table.AddRow(new Markup(item.TaskName.EscapeMarkup(), itemStyle),
                                 new Markup(FormatDuration(item).EscapeMarkup(), itemStyle),
-                                new Markup(item.ExecutionStatus.ToString().EscapeMarkup(), itemStyle));
+                                new Markup(item.ExecutionStatus.ToReportStatus().EscapeMarkup(), itemStyle));
                 }
             }
 

@@ -23,6 +23,7 @@
     <File Path="../ReleaseNotes.md" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="Cake.Cli.Tests/Cake.Cli.Tests.csproj" />
     <Project Path="Cake.Common.Tests/Cake.Common.Tests.csproj" />
     <Project Path="Cake.Core.Tests/Cake.Core.Tests.csproj" />
     <Project Path="Cake.DotNetTool.Module.Tests/Cake.DotNetTool.Module.Tests.csproj" />
