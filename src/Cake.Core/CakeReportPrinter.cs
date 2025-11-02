@@ -25,6 +25,8 @@ namespace Cake.Core
         /// <param name="context">The context.</param>
         public CakeReportPrinter(IConsole console, ICakeContext context)
         {
+            ArgumentNullException.ThrowIfNull(console);
+            ArgumentNullException.ThrowIfNull(context);
             _context = context;
             _console = console;
         }
@@ -60,7 +62,7 @@ namespace Cake.Core
                     if (ShouldWriteTask(item))
                     {
                         _console.ForegroundColor = GetItemForegroundColor(item);
-                        _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus);
+                        _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus());
                     }
                 }
 

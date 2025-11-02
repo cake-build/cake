@@ -30,6 +30,7 @@
     <PackageVersion Include="NuGet.Versioning" Version="6.14.0" />
     <PackageVersion Include="Spectre.Console" Version="0.53.0" />
     <PackageVersion Include="Spectre.Console.Cli" Version="0.53.0" />
+    <PackageVersion Include="Spectre.Console.Testing" Version="0.53.0" />
     <PackageVersion Include="Spectre.Verify.Extensions" Version="28.16.0" />
     <PackageVersion Include="System.Collections.Immutable" Version="9.0.10" />
     <PackageVersion Include="System.Reflection.Metadata" Version="9.0.10" />
