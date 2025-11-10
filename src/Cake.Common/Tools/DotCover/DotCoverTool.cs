@@ -49,7 +49,7 @@ namespace Cake.Common.Tools.DotCover
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames()
         {
-            return new[] { "dotCover.exe" };
+            return new[] { "dotCover.exe", "dotCover", "dotcover" };
         }
 
         /// <summary>
