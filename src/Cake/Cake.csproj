@@ -28,10 +28,11 @@
   <!-- Global packages -->
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" />
-    <PackageReference Include="System.Collections.Immutable" />
-    <PackageReference Include="System.Reflection.Metadata"  />
     <PackageReference Include="Autofac" />
     <PackageReference Include="Basic.Reference.Assemblies.Net80" Condition="'$(TargetFramework)' == 'net8.0'" />
     <PackageReference Include="Basic.Reference.Assemblies.Net90" Condition="'$(TargetFramework)' == 'net9.0'" />
+    <!-- Microsoft.Extensions.DependencyInjection with framework-specific versions -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Condition="'$(TargetFramework)' == 'net8.0'" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Condition="'$(TargetFramework)' == 'net9.0'" />
   </ItemGroup>
 </Project>
