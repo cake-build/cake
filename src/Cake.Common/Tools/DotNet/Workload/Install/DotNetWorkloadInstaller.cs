@@ -46,10 +46,7 @@ namespace Cake.Common.Tools.DotNet.Workload.Install
                 throw new ArgumentNullException(nameof(workloadIds));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(workloadIds, settings));
         }
@@ -62,7 +59,7 @@ namespace Cake.Common.Tools.DotNet.Workload.Install
 
             if (workloadIds != null && workloadIds.Any())
             {
-                builder.Append(string.Join(" ", workloadIds));
+                builder.Append(string.Join(' ', workloadIds));
             }
 
             // Config File

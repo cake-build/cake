@@ -19,19 +19,13 @@ namespace Cake.Core.Polyfill
 
         public static Assembly LoadAssembly(AssemblyName assemblyName)
         {
-            if (assemblyName == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyName));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyName);
             return Assembly.Load(assemblyName);
         }
 
         public static Assembly LoadAssembly(ICakeEnvironment environment, IFileSystem fileSystem, ICakeLog log, FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (path.Segments.Length == 1 && !fileSystem.Exist(path))
             {

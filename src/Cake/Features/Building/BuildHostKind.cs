@@ -4,11 +4,29 @@
 
 namespace Cake.Features.Building
 {
+    /// <summary>
+    /// Represents the kind of build host.
+    /// </summary>
     public enum BuildHostKind
     {
+        /// <summary>
+        /// Standard build host.
+        /// </summary>
         Build,
+
+        /// <summary>
+        /// Dry run host.
+        /// </summary>
         DryRun,
+
+        /// <summary>
+        /// Description host.
+        /// </summary>
         Description,
+
+        /// <summary>
+        /// Tree host.
+        /// </summary>
         Tree
     }
 }

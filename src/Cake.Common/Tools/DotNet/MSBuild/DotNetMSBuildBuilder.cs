@@ -41,10 +41,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         /// <param name="standardOutputAction">The action to invoke with the standard output.</param>
         public void Build(string projectOrDirectory, DotNetMSBuildSettings settings, Action<IEnumerable<string>> standardOutputAction)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(
                 settings,

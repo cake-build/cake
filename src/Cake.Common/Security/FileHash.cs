@@ -23,15 +23,9 @@ namespace Cake.Common.Security
         /// <param name="hashAlgorithm">The algorithm used.</param>
         public FileHash(FilePath filePath, byte[] hash, HashAlgorithm hashAlgorithm)
         {
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
+            ArgumentNullException.ThrowIfNull(filePath);
 
-            if (hash == null)
-            {
-                throw new ArgumentNullException(nameof(hash));
-            }
+            ArgumentNullException.ThrowIfNull(hash);
 
             Path = filePath;
             _hash = (byte[])hash.Clone();

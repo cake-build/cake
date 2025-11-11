@@ -38,10 +38,7 @@ namespace Cake.Common.Tools.DotNet.Workload.List
         /// <returns>The list of installed workloads.</returns>
         public IEnumerable<DotNetWorkloadListItem> List(DotNetWorkloadListSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var processSettings = new ProcessSettings
             {

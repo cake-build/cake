@@ -41,14 +41,8 @@ namespace Cake.Common.Tools.Fixie
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> assemblyPaths, FixieSettings settings)
         {
-            if (assemblyPaths == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPaths));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyPaths);
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(assemblyPaths, settings));
         }

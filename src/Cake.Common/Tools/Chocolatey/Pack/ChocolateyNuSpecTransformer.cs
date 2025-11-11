@@ -55,9 +55,9 @@ namespace Cake.Common.Tools.Chocolatey.Pack
             var namespaceManager = new XmlNamespaceManager(document.NameTable);
             namespaceManager.AddNamespace("nu", ChocolateyNuSpecXsd);
 
-            foreach (var elementName in _mappings.Keys)
+            foreach (var (elementName, element) in _mappings)
             {
-                var content = _mappings[elementName](settings);
+                var content = element(settings);
                 if (content != null)
                 {
                     // Replace the node content.
@@ -185,7 +185,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         private static string ToCommaSeparatedString(ICollection<string> values)
         {
             return values != null && values.Count != 0
-                ? string.Join(",", values)
+                ? string.Join(',', values)
                 : null;
         }
 
@@ -199,7 +199,7 @@ namespace Cake.Common.Tools.Chocolatey.Pack
         private static string ToSpaceSeparatedString(ICollection<string> values)
         {
             return values != null && values.Count != 0
-                ? string.Join(" ", values.Select(x => x.Replace(" ", "-")))
+                ? string.Join(' ', values.Select(x => x.Replace(" ", "-")))
                 : null;
         }
     }

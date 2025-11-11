@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Globalization;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -39,10 +38,7 @@ namespace Cake.Common.Tools.Chocolatey.Pin
         /// <param name="settings">The settings.</param>
         public void Pin(string name, ChocolateyPinSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             if (string.IsNullOrWhiteSpace(name))
             {

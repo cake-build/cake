@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Cake.Common.Build.AppVeyor.Data;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.IO.Arguments;
@@ -48,14 +47,8 @@ namespace Cake.Common.Tools.InnoSetup
         /// <param name="settings">The settings.</param>
         public void Run(FilePath scriptFile, InnoSetupSettings settings)
         {
-            if (scriptFile == null)
-            {
-                throw new ArgumentNullException(nameof(scriptFile));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(scriptFile);
+            ArgumentNullException.ThrowIfNull(settings);
             Run(settings, GetArguments(scriptFile, settings));
         }
 

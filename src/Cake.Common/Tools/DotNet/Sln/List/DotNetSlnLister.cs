@@ -42,10 +42,7 @@ namespace Cake.Common.Tools.DotNet.Sln.List
         /// <returns>The list of project-to-project references.</returns>
         public IEnumerable<string> List(FilePath solution, DotNetSlnListSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var processSettings = new ProcessSettings
             {

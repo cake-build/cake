@@ -268,8 +268,7 @@ namespace Cake.Common.Tools.DotNet.MSBuild
                 return @default;
             }
 
-            var propertyValue = string.Join(";", propertyValues);
-            return propertyValue;
+            return string.Join(';', propertyValues);
         }
     }
 }

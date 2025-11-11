@@ -45,22 +45,10 @@ namespace Cake.Common.Tools.SpecFlow.TestExecutionReport
             FilePath projectFile,
             SpecFlowTestExecutionReportSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-            if (projectFile == null)
-            {
-                throw new ArgumentNullException(nameof(projectFile));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(action);
+            ArgumentNullException.ThrowIfNull(projectFile);
+            ArgumentNullException.ThrowIfNull(settings);
 
             // Run the tool using the interceptor.
             var interceptor = InterceptAction(context, action);

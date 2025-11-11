@@ -16,31 +16,16 @@ namespace Cake.Common.IO
     {
         public static void MoveFileToDirectory(ICakeContext context, FilePath filePath, DirectoryPath targetDirectoryPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
-            if (targetDirectoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(targetDirectoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePath);
+            ArgumentNullException.ThrowIfNull(targetDirectoryPath);
             MoveFile(context, filePath, targetDirectoryPath.GetFilePath(filePath));
         }
 
         public static void MoveFiles(ICakeContext context, GlobPattern pattern, DirectoryPath targetDirectoryPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (pattern == null)
-            {
-                throw new ArgumentNullException(nameof(pattern));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(pattern);
 
             var files = context.GetFiles(pattern);
             if (files.Count == 0)
@@ -54,18 +39,9 @@ namespace Cake.Common.IO
 
         public static void MoveFiles(this ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePaths == null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
-            if (targetDirectoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(targetDirectoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePaths);
+            ArgumentNullException.ThrowIfNull(targetDirectoryPath);
 
             targetDirectoryPath = targetDirectoryPath.MakeAbsolute(context.Environment);
 
@@ -86,18 +62,9 @@ namespace Cake.Common.IO
 
         public static void MoveFile(ICakeContext context, FilePath filePath, FilePath targetFilePath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
-            if (targetFilePath == null)
-            {
-                throw new ArgumentNullException(nameof(targetFilePath));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(filePath);
+            ArgumentNullException.ThrowIfNull(targetFilePath);
 
             filePath = filePath.MakeAbsolute(context.Environment);
             targetFilePath = targetFilePath.MakeAbsolute(context.Environment);

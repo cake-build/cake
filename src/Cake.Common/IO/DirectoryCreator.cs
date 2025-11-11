@@ -13,14 +13,8 @@ namespace Cake.Common.IO
     {
         public static void Create(ICakeContext context, DirectoryPath path)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(path);
 
             if (path.IsRelative)
             {

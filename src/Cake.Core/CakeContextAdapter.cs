@@ -23,10 +23,7 @@ namespace Cake.Core
         /// <param name="context">The Cake Context.</param>
         protected CakeContextAdapter(ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             _context = context;
         }

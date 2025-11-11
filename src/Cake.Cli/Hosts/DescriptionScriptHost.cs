@@ -67,9 +67,9 @@ namespace Cake.Cli
             _console.WriteLine();
             _console.WriteLine(lineFormat, "Task", "Description");
             _console.WriteLine(new String('=', maxTaskNameLength + 50));
-            foreach (var key in _descriptions.Keys)
+            foreach (var (key, value) in _descriptions)
             {
-                _console.WriteLine(lineFormat, key, _descriptions[key]);
+                _console.WriteLine(lineFormat, key, value);
             }
         }
      }

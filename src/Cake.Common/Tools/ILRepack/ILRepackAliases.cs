@@ -43,10 +43,7 @@ namespace Cake.Common.Tools.ILRepack
             FilePath primaryAssembly,
             IEnumerable<FilePath> assemblyPaths)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths);
@@ -78,10 +75,7 @@ namespace Cake.Common.Tools.ILRepack
             IEnumerable<FilePath> assemblyPaths,
             ILRepackSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var merger = new ILRepackRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             merger.Merge(outputFile, primaryAssembly, assemblyPaths, settings);

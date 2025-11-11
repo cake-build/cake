@@ -72,7 +72,7 @@ namespace Cake.Common.Tools.XBuild
             // Got any targets?
             if (settings.Targets.Count > 0)
             {
-                var targets = string.Join(";", settings.Targets);
+                var targets = string.Join(';', settings.Targets);
                 builder.Append(string.Concat("/t:", targets));
             }
             else
@@ -107,11 +107,11 @@ namespace Cake.Common.Tools.XBuild
 
         private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
         {
-            foreach (var propertyKey in properties.Keys)
+            foreach (var (key, values) in properties)
             {
-                foreach (var propertyValue in properties[propertyKey])
+                foreach (var propertyValue in values)
                 {
-                    yield return string.Concat("/p:", propertyKey.Quote(), "=", propertyValue.Quote());
+                    yield return string.Concat("/p:", key.Quote(), "=", propertyValue.Quote());
                 }
             }
         }
@@ -141,10 +141,7 @@ namespace Cake.Common.Tools.XBuild
         /// <returns>The default tool path.</returns>
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(XBuildSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var path = XBuildResolver.GetXBuildPath(_fileSystem, _environment, settings.ToolVersion);
 

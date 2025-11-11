@@ -39,14 +39,8 @@ namespace Cake.Common.Tools.DotNet.Clean
         /// <param name="settings">The settings.</param>
         public void Clean(string project, DotNetCleanSettings settings)
         {
-            if (project == null)
-            {
-                throw new ArgumentNullException(nameof(project));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(project);
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(project, settings));
         }

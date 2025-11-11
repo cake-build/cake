@@ -39,10 +39,7 @@ namespace Cake.Core.Scripting.CodeGen
         /// <returns>The generated code.</returns>
         public static string Generate(MethodInfo method, out string hash)
         {
-            if (method == null)
-            {
-                throw new ArgumentNullException(nameof(method));
-            }
+            ArgumentNullException.ThrowIfNull(method);
 
             var builder = new StringBuilder();
             var parameters = method.GetParameters()[1..];
@@ -170,7 +167,7 @@ namespace Cake.Core.Scripting.CodeGen
             {
                 genericArguments.Add(argument.Name);
             }
-            builder.Append(string.Join(", ", genericArguments));
+            builder.AppendJoin(", ", genericArguments);
             builder.Append('>');
         }
 

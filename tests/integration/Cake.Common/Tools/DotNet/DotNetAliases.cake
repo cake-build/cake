@@ -34,7 +34,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuild")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net9.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net10.0/hwapp.dll");
 
     // When
     DotNetBuild(project.FullPath);
@@ -61,7 +61,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetVSTest")
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
-    var assembly = path.CombineWithFilePath("hwapp.tests/bin/Debug/net9.0/hwapp.tests.dll");
+    var assembly = path.CombineWithFilePath("hwapp.tests/bin/Debug/net10.0/hwapp.tests.dll");
 
     // When
     DotNetVSTest(assembly.FullPath);
@@ -184,7 +184,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetExecute")
 {
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net9.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net10.0/hwapp.dll");
 
     // When
     DotNetExecute(assembly);
@@ -197,7 +197,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetClean")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net9.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net10.0/hwapp.dll");
     Assert.True(System.IO.File.Exists(assembly.FullPath));
 
     // When
@@ -214,7 +214,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net9.0/hwapp.dll");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net10.0/hwapp.dll");
 
     // When
     DotNetMSBuild(project.FullPath);
@@ -245,7 +245,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild.Results")
     // Then
     Assert.NotNull(result);
     Assert.Equal("1.0.0", result.RootElement.GetProperty("Properties").GetProperty("Version").GetString());
-    Assert.Equal("net9.0", result.RootElement.GetProperty("Properties").GetProperty("TargetFramework").GetString());
+    Assert.Equal("net10.0", result.RootElement.GetProperty("Properties").GetProperty("TargetFramework").GetString());
     Assert.Equal(1, result.RootElement.GetProperty("Items").GetProperty("ProjectReference").GetArrayLength());
     Assert.Equal("Success", result.RootElement.GetProperty("TargetResults").GetProperty("Build").GetProperty("Result").GetString());
     Assert.Equal("Success", result.RootElement.GetProperty("TargetResults").GetProperty("Compile").GetProperty("Result").GetString());
@@ -344,7 +344,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var package = "grok.net";
+    var package = "Cake.Core";
 
     // When
     DotNetAddPackage(package, project.FullPath);
@@ -365,7 +365,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemovePackage")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var package = "grok.net";
+    var package = "Cake.Core";
     var value = XmlPeek(
         project.FullPath,
         $"/Project/ItemGroup/PackageReference[@Include='{package}']/@Include"
@@ -410,11 +410,11 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListReference")
     // Given
     var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
-    var projectReference = "..\\hwapp.common\\hwapp.common.csproj";
+    var projectReference = FilePath.FromString("../hwapp.common/hwapp.common.csproj");
     // When
     var result = DotNetListReference(project.FullPath);
     // Then
-    Assert.Contains(result, item => item == projectReference);
+    Assert.Contains(result, item => FilePath.FromString(item) == projectReference);
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemoveReference")

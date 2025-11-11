@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Linq;
 using Cake.Common.Build.AzurePipelines.Data;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 namespace Cake.Common.Build.AzurePipelines
@@ -220,10 +219,7 @@ namespace Cake.Common.Build.AzurePipelines
         /// <inheritdoc/>
         public void UploadArtifactDirectory(DirectoryPath directory)
         {
-            if (directory == null)
-            {
-                throw new ArgumentNullException(nameof(directory));
-            }
+            ArgumentNullException.ThrowIfNull(directory);
 
             UploadArtifactDirectory(directory, directory.GetDirectoryName());
         }
@@ -231,15 +227,9 @@ namespace Cake.Common.Build.AzurePipelines
         /// <inheritdoc/>
         public void UploadArtifactDirectory(DirectoryPath directory, string artifactName)
         {
-            if (directory == null)
-            {
-                throw new ArgumentNullException(nameof(directory));
-            }
+            ArgumentNullException.ThrowIfNull(directory);
 
-            if (artifactName == null)
-            {
-                throw new ArgumentNullException(nameof(artifactName));
-            }
+            ArgumentNullException.ThrowIfNull(artifactName);
 
             WriteLoggingCommand("artifact.upload", new Dictionary<string, string>
             {
@@ -283,10 +273,7 @@ namespace Cake.Common.Build.AzurePipelines
         /// <inheritdoc/>
         public void PublishCodeCoverage(FilePath summaryFilePath, AzurePipelinesPublishCodeCoverageData data)
         {
-            if (summaryFilePath == null)
-            {
-                throw new ArgumentNullException(nameof(summaryFilePath));
-            }
+            ArgumentNullException.ThrowIfNull(summaryFilePath);
 
             var properties = data.GetProperties(_environment, summaryFilePath);
             WriteLoggingCommand("codecoverage.publish", properties, string.Empty);
@@ -295,10 +282,7 @@ namespace Cake.Common.Build.AzurePipelines
         /// <inheritdoc/>
         public void PublishCodeCoverage(FilePath summaryFilePath, Action<AzurePipelinesPublishCodeCoverageData> action)
         {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+            ArgumentNullException.ThrowIfNull(action);
 
             var data = new AzurePipelinesPublishCodeCoverageData();
             action(data);
@@ -318,7 +302,7 @@ namespace Cake.Common.Build.AzurePipelines
 
         private void WriteLoggingCommand(string actionName, Dictionary<string, string> properties, string value)
         {
-            var props = string.Join(string.Empty, properties.Select(pair =>
+            var props = string.Concat(properties.Select(pair =>
             {
                 return string.Format(CultureInfo.InvariantCulture, "{0}={1};", pair.Key, pair.Value);
             }));

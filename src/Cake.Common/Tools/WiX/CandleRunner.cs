@@ -32,10 +32,7 @@ namespace Cake.Common.Tools.WiX
             IProcessRunner processRunner,
             IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
             _environment = environment;
         }
 
@@ -46,10 +43,7 @@ namespace Cake.Common.Tools.WiX
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> sourceFiles, CandleSettings settings)
         {
-            if (sourceFiles == null)
-            {
-                throw new ArgumentNullException(nameof(sourceFiles));
-            }
+            ArgumentNullException.ThrowIfNull(sourceFiles);
 
             var sourceFilesArray = sourceFiles as FilePath[] ?? sourceFiles.ToArray();
             if (!sourceFilesArray.Any())
@@ -57,10 +51,7 @@ namespace Cake.Common.Tools.WiX
                 throw new ArgumentException("No source files specified.", nameof(sourceFiles));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(sourceFilesArray, settings));
         }

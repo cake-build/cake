@@ -51,10 +51,7 @@ namespace Cake.Common.Xml
         [CakeMethodAlias]
         public static string XmlTransform(this ICakeContext context, string xsl, string xml)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return XmlTransformation.Transform(xsl, xml);
         }
@@ -89,10 +86,7 @@ namespace Cake.Common.Xml
         [CakeMethodAlias]
         public static string XmlTransform(this ICakeContext context, string xsl, string xml, XmlTransformationSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return XmlTransformation.Transform(xsl, xml, settings);
         }
@@ -154,10 +148,7 @@ namespace Cake.Common.Xml
         [CakeMethodAlias]
         public static void XmlTransform(this ICakeContext context, FilePath xslPath, FilePath xmlPath, FilePath resultPath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var settings = new XmlTransformationSettings();
             XmlTransformation.Transform(context.FileSystem, xslPath, xmlPath, resultPath, settings);
@@ -223,10 +214,7 @@ namespace Cake.Common.Xml
         [CakeMethodAlias]
         public static void XmlTransform(this ICakeContext context, FilePath xslPath, FilePath xmlPath, FilePath resultPath, XmlTransformationSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             XmlTransformation.Transform(context.FileSystem, xslPath, xmlPath, resultPath, settings);
         }

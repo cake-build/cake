@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Linq;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors
@@ -12,10 +11,7 @@ namespace Cake.Core.Scripting.Processors
     {
         public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             replacement = null;
 

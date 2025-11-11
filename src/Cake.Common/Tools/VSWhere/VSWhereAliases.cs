@@ -64,15 +64,9 @@ namespace Cake.Common.Tools.VSWhere
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.Legacy")]
         public static DirectoryPathCollection VSWhereLegacy(this ICakeContext context, VSWhereLegacySettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var legacy = new VSWhereLegacy(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return legacy.Legacy(settings);
@@ -113,10 +107,7 @@ namespace Cake.Common.Tools.VSWhere
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.Latest")]
         public static DirectoryPath VSWhereLatest(this ICakeContext context, VSWhereLatestSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var latest = new VSWhereLatest(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return latest.Latest(settings);
         }
@@ -156,15 +147,9 @@ namespace Cake.Common.Tools.VSWhere
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.All")]
         public static DirectoryPathCollection VSWhereAll(this ICakeContext context, VSWhereAllSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var all = new VSWhereAll(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return all.All(settings);
@@ -207,20 +192,14 @@ namespace Cake.Common.Tools.VSWhere
         [CakeNamespaceImport("Cake.Common.Tools.VSWhere.Product")]
         public static DirectoryPathCollection VSWhereProducts(this ICakeContext context, string products, VSWhereProductSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (string.IsNullOrWhiteSpace(products))
             {
                 throw new ArgumentNullException(nameof(products));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             settings.Products = products;
             var product = new VSWhereProduct(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return product.Products(settings);

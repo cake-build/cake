@@ -66,14 +66,8 @@ namespace Cake.Common.Tools.SignTool
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> assemblyPaths, SignToolSignSettings settings)
         {
-            if (assemblyPaths == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPaths));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyPaths);
+            ArgumentNullException.ThrowIfNull(settings);
 
             var absoluteAssemblyPaths = assemblyPaths.Select(p => p.IsRelative ? p.MakeAbsolute(_environment) : p).ToArray();
 

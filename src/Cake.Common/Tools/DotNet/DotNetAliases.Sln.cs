@@ -97,10 +97,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.List")]
         public static IEnumerable<string> DotNetSlnList(this ICakeContext context, FilePath solution, DotNetSlnListSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {
@@ -194,10 +191,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Add")]
         public static void DotNetSlnAdd(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnAddSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {
@@ -267,10 +261,7 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
         public static void DotNetSlnRemove(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnRemoveSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (settings is null)
             {

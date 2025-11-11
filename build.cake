@@ -88,7 +88,7 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does<BuildParameters>((context, parameters) =>
 {
-    DotNetRestore("./src/Cake.sln", new DotNetRestoreSettings
+    DotNetRestore("./src/Cake.slnx", new DotNetRestoreSettings
     {
         Verbosity = DotNetVerbosity.Minimal,
         Sources = new [] { "https://api.nuget.org/v3/index.json" },
@@ -101,7 +101,7 @@ Task("Build")
     .Does<BuildParameters>((context, parameters) =>
 {
     // Build the solution.
-    var path = MakeAbsolute(new DirectoryPath("./src/Cake.sln"));
+    var path = MakeAbsolute(new DirectoryPath("./src/Cake.slnx"));
     DotNetBuild(path.FullPath, new DotNetBuildSettings
     {
         Configuration = parameters.Configuration,
@@ -116,7 +116,7 @@ Task("Run-Unit-Tests")
         () => GetFiles("./src/**/*.Tests.csproj"),
         (parameters, project, context) =>
 {
-    foreach (var framework in new[] { "net8.0", "net9.0" })
+    foreach (var framework in new[] { "net8.0", "net9.0", "net10.0" })
     {
         FilePath testResultsPath = MakeAbsolute(parameters.Paths.Directories.TestResults
             .CombineWithFilePath($"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.xml"));
@@ -207,6 +207,17 @@ Task("Upload-AppVeyor-Artifacts")
     }
 });
 
+Task("Upload-GitHubActions-Artifacts")
+    .IsDependentOn("Package")
+    .WithCriteria(BuildSystem.IsRunningOnGitHubActions, nameof(BuildSystem.IsRunningOnGitHubActions))
+    .Does<BuildParameters>(
+        static (context, parameters) => context
+            .GitHubActions() is var gh && gh != null
+                ?   gh.Commands
+                    .UploadArtifact(parameters.Paths.Directories.NuGetRoot, $"Artifact_{gh.Environment.Runner.ImageOS ?? gh.Environment.Runner.OS}_{gh.Environment.Runner.Architecture}_{context.Environment.Runtime.BuiltFramework.Identifier}_{context.Environment.Runtime.BuiltFramework.Version}")
+                : throw new Exception("GitHubActions not available")
+    );
+
 Task("Publish-AzureDevOps")
     .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Package")
@@ -252,9 +263,8 @@ Task("Publish-AzureDevOps")
 })
 .OnError<BuildParameters>((exception, parameters) =>
 {
+    // Azure Artifacts not critical
     Information("Publish-AzureDevOps Task failed, but continuing with next Task...");
-    // Temp fix already published to Azure Artifacts
-    // parameters.PublishingError = true;
 });
 
 Task("Publish-NuGet")
@@ -390,7 +400,8 @@ Task("Run-Integration-Tests")
     .DoesForEach<BuildParameters, FilePath>(
         parameters => new[] {
             GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net8.0/**/Cake.dll").Single(),
-            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net9.0/**/Cake.dll").Single()
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net9.0/**/Cake.dll").Single(),
+            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net10.0/**/Cake.dll").Single()
         },
         (parameters, cakeAssembly, context) =>
 {
@@ -406,7 +417,7 @@ Task("Run-Integration-Tests")
                 },
                 ArgumentCustomization = args => args
                     .AppendSwitchQuoted("--target", " ", Argument("integration-tests-target", "Run-All-Tests"))
-                    .AppendSwitchQuoted("--verbosity", " ", "quiet")
+                    .AppendSwitchQuoted("--verbosity", " ", Argument("integration-tests-verbosity", "quiet"))
                     .AppendSwitchQuoted("--platform", " ", parameters.IsRunningOnWindows ? "windows" : "posix")
                     .AppendSwitchQuoted("--customarg", " ", "hello")
                     .AppendSwitchQuoted("--multipleargs", "=", "a")
@@ -444,10 +455,12 @@ Task("AppVeyor")
 
 
 Task("GitHubActions")
+  .IsDependentOn("Upload-GitHubActions-Artifacts")
   .IsDependentOn("Run-Integration-Tests")
   .IsDependentOn("Publish-AzureDevOps");
 
 Task("GitHubActions-Release")
+  .IsDependentOn("Upload-GitHubActions-Artifacts")
   .IsDependentOn("Publish-AzureDevOps")
   .IsDependentOn("Publish-NuGet")
   .IsDependentOn("Publish-GitHub-Release")
@@ -457,7 +470,7 @@ Task("GitHubActions-Release")
     {
         throw new Exception("An error occurred during the publishing of Cake.  All publishing tasks have been attempted.");
     }
-});;
+});
 
 Task("Travis")
   .IsDependentOn("Run-Unit-Tests");

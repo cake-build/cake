@@ -38,15 +38,9 @@ namespace Cake.Common.Solution.Project.XmlDoc
         [CakeMethodAlias]
         public static IEnumerable<XmlDocExampleCode> ParseXmlDocExampleCode(this ICakeContext context, FilePath xmlFilePath)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (xmlFilePath == null)
-            {
-                throw new ArgumentNullException(nameof(xmlFilePath));
-            }
+            ArgumentNullException.ThrowIfNull(xmlFilePath);
 
             var parser = new XmlDocExampleCodeParser(context.FileSystem, context.Globber, context.Log);
             return parser.Parse(xmlFilePath);
@@ -74,10 +68,7 @@ namespace Cake.Common.Solution.Project.XmlDoc
         [CakeMethodAlias]
         public static IEnumerable<XmlDocExampleCode> ParseXmlDocFilesExampleCode(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (string.IsNullOrWhiteSpace(pattern?.Pattern))
             {

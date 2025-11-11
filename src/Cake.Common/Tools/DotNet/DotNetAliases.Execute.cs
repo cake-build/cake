@@ -79,15 +79,9 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Execute")]
         public static void DotNetExecute(this ICakeContext context, FilePath assemblyPath, ProcessArgumentBuilder arguments, DotNetExecuteSettings settings)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
-            if (assemblyPath is null)
-            {
-                throw new ArgumentNullException(nameof(assemblyPath));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyPath);
 
             if (settings is null)
             {

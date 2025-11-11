@@ -29,20 +29,11 @@ namespace Cake.Common.Security
             HashAlgorithm hashAlgorithm,
             IEnumerable<FileHash> fileHashList)
         {
-            if (directoryPath == null)
-            {
-                throw new ArgumentNullException(nameof(directoryPath));
-            }
+            ArgumentNullException.ThrowIfNull(directoryPath);
 
-            if (hash == null)
-            {
-                throw new ArgumentNullException(nameof(hash));
-            }
+            ArgumentNullException.ThrowIfNull(hash);
 
-            if (fileHashList == null)
-            {
-                throw new ArgumentNullException(nameof(fileHashList));
-            }
+            ArgumentNullException.ThrowIfNull(fileHashList);
 
             Path = directoryPath;
             _hash = (byte[])hash.Clone();

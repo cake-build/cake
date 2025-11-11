@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>Cake</AssemblyName>
     <OutputType>Exe</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
@@ -27,10 +28,9 @@
   <!-- Global packages -->
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" />
-    <PackageReference Include="System.Collections.Immutable" />
-    <PackageReference Include="System.Reflection.Metadata"  />
     <PackageReference Include="Autofac" />
     <PackageReference Include="Basic.Reference.Assemblies.Net80" Condition="'$(TargetFramework)' == 'net8.0'" />
     <PackageReference Include="Basic.Reference.Assemblies.Net90" Condition="'$(TargetFramework)' == 'net9.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net100" Condition="'$(TargetFramework)' == 'net10.0'" />
   </ItemGroup>
 </Project>

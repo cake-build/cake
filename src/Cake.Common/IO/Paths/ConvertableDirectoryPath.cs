@@ -39,10 +39,7 @@ namespace Cake.Common.IO.Paths
         /// <param name="path">The path.</param>
         internal ConvertableDirectoryPath(DirectoryPath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
             Path = path;
         }
 
@@ -55,14 +52,8 @@ namespace Cake.Common.IO.Paths
         /// <returns>A new directory path representing a combination of the two provided paths.</returns>
         public static ConvertableDirectoryPath operator +(ConvertableDirectoryPath left, ConvertableDirectoryPath right)
         {
-            if (left == null)
-            {
-                throw new ArgumentNullException(nameof(left));
-            }
-            if (right == null)
-            {
-                throw new ArgumentNullException(nameof(right));
-            }
+            ArgumentNullException.ThrowIfNull(left);
+            ArgumentNullException.ThrowIfNull(right);
             return new ConvertableDirectoryPath(left.Path.Combine(right.Path));
         }
 
@@ -75,15 +66,9 @@ namespace Cake.Common.IO.Paths
         /// <returns>A new directory path representing a combination of the two provided paths.</returns>
         public static ConvertableDirectoryPath operator +(DirectoryPath left, ConvertableDirectoryPath right)
         {
-            if (left is null)
-            {
-                throw new ArgumentNullException(nameof(left));
-            }
+            ArgumentNullException.ThrowIfNull(left);
 
-            if (right is null)
-            {
-                throw new ArgumentNullException(nameof(right));
-            }
+            ArgumentNullException.ThrowIfNull(right);
 
             return new ConvertableDirectoryPath(left.Combine(right));
         }
@@ -97,14 +82,8 @@ namespace Cake.Common.IO.Paths
         /// <returns>A new directory path representing a combination of the two provided paths.</returns>
         public static ConvertableDirectoryPath operator +(ConvertableDirectoryPath left, DirectoryPath right)
         {
-            if (left == null)
-            {
-                throw new ArgumentNullException(nameof(left));
-            }
-            if (right == null)
-            {
-                throw new ArgumentNullException(nameof(right));
-            }
+            ArgumentNullException.ThrowIfNull(left);
+            ArgumentNullException.ThrowIfNull(right);
             return new ConvertableDirectoryPath(left.Path.Combine(right));
         }
 
@@ -117,14 +96,8 @@ namespace Cake.Common.IO.Paths
         /// <returns>A new file path representing a combination of the two provided paths.</returns>
         public static ConvertableFilePath operator +(ConvertableDirectoryPath directory, ConvertableFilePath file)
         {
-            if (directory == null)
-            {
-                throw new ArgumentNullException(nameof(directory));
-            }
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(directory);
+            ArgumentNullException.ThrowIfNull(file);
             return new ConvertableFilePath(directory.Path.CombineWithFilePath(file.Path));
         }
 
@@ -137,14 +110,8 @@ namespace Cake.Common.IO.Paths
         /// <returns>A new file path representing a combination of the two provided paths.</returns>
         public static ConvertableFilePath operator +(ConvertableDirectoryPath directory, FilePath file)
         {
-            if (directory == null)
-            {
-                throw new ArgumentNullException(nameof(directory));
-            }
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(directory);
+            ArgumentNullException.ThrowIfNull(file);
             return new ConvertableFilePath(directory.Path.CombineWithFilePath(file));
         }
 

@@ -24,15 +24,9 @@ namespace Cake.Common.Tools.TextTransform
         /// <param name="settings">The settings.</param>
         public void Run(FilePath sourceFile, TextTransformSettings settings)
         {
-            if (sourceFile == null)
-            {
-                throw new ArgumentNullException(nameof(sourceFile));
-            }
+            ArgumentNullException.ThrowIfNull(sourceFile);
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(sourceFile, settings));
         }

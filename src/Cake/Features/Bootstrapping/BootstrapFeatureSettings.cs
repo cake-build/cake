@@ -7,9 +7,19 @@ using Cake.Core.IO;
 
 namespace Cake.Features.Bootstrapping
 {
+    /// <summary>
+    /// Settings for the bootstrap feature.
+    /// </summary>
     public class BootstrapFeatureSettings
     {
+        /// <summary>
+        /// Gets or sets the script file path.
+        /// </summary>
         public FilePath Script { get; set; }
+
+        /// <summary>
+        /// Gets or sets the verbosity level.
+        /// </summary>
         public Verbosity Verbosity { get; set; }
     }
 }

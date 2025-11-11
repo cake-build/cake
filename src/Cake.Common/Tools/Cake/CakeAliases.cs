@@ -45,10 +45,7 @@ namespace Cake.Common.Tools.Cake
         [CakeMethodAlias]
         public static void CakeExecuteScript(this ICakeContext context, FilePath cakeScriptPath, CakeSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var cakeRunner = new CakeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner, context.Tools);
             cakeRunner.ExecuteScript(cakeScriptPath, settings);
@@ -89,10 +86,7 @@ namespace Cake.Common.Tools.Cake
         [CakeMethodAlias]
         public static void CakeExecuteExpression(this ICakeContext context, string cakeExpression, CakeSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var cakeRunner = new CakeRunner(context.FileSystem, context.Environment, context.Globber, context.ProcessRunner, context.Tools);
             cakeRunner.ExecuteExpression(cakeExpression, settings);

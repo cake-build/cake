@@ -41,10 +41,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <returns>A list of Octopus Deployments.</returns>
         public IEnumerable<OctopusDeployment> QueryOctopusDeployments(string server, string apiKey, OctopusDeploymentQuerySettings querySettings)
         {
-            if (querySettings == null)
-            {
-                throw new ArgumentNullException(nameof(querySettings));
-            }
+            ArgumentNullException.ThrowIfNull(querySettings);
             if (string.IsNullOrEmpty(server))
             {
                 throw new ArgumentException("No server specified.", nameof(server));

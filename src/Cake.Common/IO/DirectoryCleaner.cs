@@ -29,14 +29,8 @@ namespace Cake.Common.IO
 
         public static void Clean(ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate, CleanDirectorySettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(path);
 
             if (path.IsRelative)
             {

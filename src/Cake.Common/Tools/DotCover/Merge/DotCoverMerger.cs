@@ -49,14 +49,8 @@ namespace Cake.Common.Tools.DotCover.Merge
             {
                 throw new ArgumentNullException("sourceFiles");
             }
-            if (outputFile == null)
-            {
-                throw new ArgumentNullException("outputFile");
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
+            ArgumentNullException.ThrowIfNull(outputFile);
+            ArgumentNullException.ThrowIfNull(settings);
 
             // Run the tool.
             Run(settings, GetArguments(sourceFiles, outputFile, settings));
@@ -75,7 +69,7 @@ namespace Cake.Common.Tools.DotCover.Merge
             GetConfigurationFileArgument(settings).CopyTo(builder);
 
             // Set the Source files.
-            var source = string.Join(";", sourceFiles.Select(s => s.MakeAbsolute(_environment).FullPath));
+            var source = string.Join(';', sourceFiles.Select(s => s.MakeAbsolute(_environment).FullPath));
             builder.AppendSwitch("/Source", "=", source.Quote());
 
             // Set the Output file.

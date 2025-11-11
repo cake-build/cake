@@ -43,18 +43,9 @@ namespace Cake.Common.Tools.DotCover.Report
             FilePath outputFile,
             DotCoverReportSettings settings)
         {
-            if (sourceFile == null)
-            {
-                throw new ArgumentNullException("sourceFile");
-            }
-            if (outputFile == null)
-            {
-                throw new ArgumentNullException("outputFile");
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
+            ArgumentNullException.ThrowIfNull(sourceFile);
+            ArgumentNullException.ThrowIfNull(outputFile);
+            ArgumentNullException.ThrowIfNull(settings);
 
             // Run the tool.
             Run(settings, GetArguments(sourceFile, outputFile, settings));

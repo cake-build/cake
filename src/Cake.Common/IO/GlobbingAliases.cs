@@ -35,10 +35,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Files")]
         public static FilePathCollection GetFiles(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new FilePathCollection(context.Globber.Match(pattern).OfType<FilePath>());
         }
@@ -67,10 +64,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Files")]
         public static FilePathCollection GetFiles(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new FilePathCollection(context.Globber.Match(pattern, settings).OfType<FilePath>());
         }
@@ -94,10 +88,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Directories")]
         public static DirectoryPathCollection GetDirectories(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>());
         }
@@ -126,10 +117,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Directories")]
         public static DirectoryPathCollection GetDirectories(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new DirectoryPathCollection(context.Globber.Match(pattern, settings).OfType<DirectoryPath>());
         }
@@ -153,10 +141,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Paths")]
         public static PathCollection GetPaths(this ICakeContext context, GlobPattern pattern)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new PathCollection(context.Globber.Match(pattern));
         }
@@ -185,10 +170,7 @@ namespace Cake.Common.IO
         [CakeAliasCategory("Paths")]
         public static PathCollection GetPaths(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return new PathCollection(context.Globber.Match(pattern, settings));
         }

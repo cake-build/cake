@@ -19,10 +19,7 @@ namespace Cake.Core.IO
         /// <returns>Whether or not the specified file exist.</returns>
         public static bool Exist(this IFileSystem fileSystem, FilePath path)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
             var file = fileSystem.GetFile(path);
             return file != null && file.Exists;
         }
@@ -35,10 +32,7 @@ namespace Cake.Core.IO
         /// <returns>Whether or not the specified directory exist.</returns>
         public static bool Exist(this IFileSystem fileSystem, DirectoryPath path)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
             var directory = fileSystem.GetDirectory(path);
             return directory != null && directory.Exists;
         }

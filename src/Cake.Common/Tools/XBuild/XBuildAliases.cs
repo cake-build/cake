@@ -52,14 +52,8 @@ namespace Cake.Common.Tools.XBuild
         [CakeMethodAlias]
         public static void XBuild(this ICakeContext context, FilePath solution, Action<XBuildSettings> configurator)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (configurator == null)
-            {
-                throw new ArgumentNullException(nameof(configurator));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(configurator);
 
             var settings = new XBuildSettings();
             configurator(settings);
@@ -86,14 +80,8 @@ namespace Cake.Common.Tools.XBuild
         [CakeMethodAlias]
         public static void XBuild(this ICakeContext context, FilePath solution, XBuildSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(settings);
 
             var runner = new XBuildRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(solution, settings);

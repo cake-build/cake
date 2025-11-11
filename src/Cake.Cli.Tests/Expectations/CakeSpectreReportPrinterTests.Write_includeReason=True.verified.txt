@@ -1,0 +1,18 @@
+﻿                                                                                
+  Task                          Duration            Status      Skip Reason     
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SetupExecuted                 00:00:00.2220000    Succeeded                   
+  SetupSkipped                  -                   Skipped     Skipped reason  
+  SetupFailed                   00:00:00.8880000    Failed                      
+  SetupDelegated                00:00:00.4440000    Succeeded                   
+  TaskExecuted                  00:00:00.1110000    Succeeded                   
+  TaskSkipped                   -                   Skipped     Skipped reason  
+  TaskFailed                    00:00:00.4440000    Failed                      
+  TaskDelegated                 00:00:00.2220000    Succeeded                   
+  TeardownExecuted              00:00:00.3330000    Succeeded                   
+  TeardownSkipped               -                   Skipped     Skipped reason  
+  TeardownFailed                00:00:01.3320000    Failed                      
+  TeardownDelegated             00:00:00.6660000    Succeeded                   
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Total:                        00:00:06.6600000                                
+                                                                                

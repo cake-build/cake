@@ -40,14 +40,8 @@ namespace Cake.Common.Tools.DotNet.Workload.Restore
         /// <param name="settings">The settings.</param>
         public void Restore(string project, DotNetWorkloadRestoreSettings settings)
         {
-            if (project == null)
-            {
-                throw new ArgumentNullException(nameof(project));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(project);
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(project, settings));
         }

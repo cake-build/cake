@@ -83,10 +83,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Pack")]
         public static void ChocolateyPack(this ICakeContext context, FilePath nuspecFilePath, ChocolateyPackSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Tools, resolver);
@@ -143,10 +140,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Pack")]
         public static void ChocolateyPack(this ICakeContext context, IEnumerable<FilePath> filePaths, ChocolateyPackSettings settings)
         {
-            if (filePaths == null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
+            ArgumentNullException.ThrowIfNull(filePaths);
 
             foreach (var filePath in filePaths)
             {
@@ -202,10 +196,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Pack")]
         public static void ChocolateyPack(this ICakeContext context, ChocolateyPackSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyPacker(context.FileSystem, context.Environment, context.ProcessRunner, context.Log, context.Tools, resolver);
@@ -272,10 +263,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Install")]
         public static void ChocolateyInstall(this ICakeContext context, string packageId, ChocolateyInstallSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -342,10 +330,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Install")]
         public static void ChocolateyInstallFromConfig(this ICakeContext context, FilePath packageConfigPath, ChocolateyInstallSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyInstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -485,10 +470,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Uninstall")]
         public static void ChocolateyUninstall(this ICakeContext context, IEnumerable<string> packageIds, ChocolateyUninstallSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyUninstaller(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -521,10 +503,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Pin")]
         public static void ChocolateyPin(this ICakeContext context, string name, ChocolateyPinSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyPinner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -557,10 +536,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.ApiKey")]
         public static void ChocolateyApiKey(this ICakeContext context, string source, ChocolateyApiKeySettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyApiKeySetter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -593,10 +569,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Config")]
         public static void ChocolateyConfig(this ICakeContext context, string name, string value, ChocolateyConfigSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyConfigSetter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -646,10 +619,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Features")]
         public static void ChocolateyEnableFeature(this ICakeContext context, string name, ChocolateyFeatureSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyFeatureToggler(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -699,10 +669,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Features")]
         public static void ChocolateyDisableFeature(this ICakeContext context, string name, ChocolateyFeatureSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyFeatureToggler(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -757,10 +724,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
         public static void ChocolateyAddSource(this ICakeContext context, string name, string source, ChocolateySourcesSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -810,10 +774,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
         public static void ChocolateyRemoveSource(this ICakeContext context, string name, ChocolateySourcesSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -863,10 +824,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
         public static void ChocolateyEnableSource(this ICakeContext context, string name, ChocolateySourcesSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -916,10 +874,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Sources")]
         public static void ChocolateyDisableSource(this ICakeContext context, string name, ChocolateySourcesSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateySources(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -958,10 +913,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Push")]
         public static void ChocolateyPush(this ICakeContext context, FilePath packageFilePath, ChocolateyPushSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var packer = new ChocolateyPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -1000,10 +952,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Push")]
         public static void ChocolateyPush(this ICakeContext context, IEnumerable<FilePath> packageFilePaths, ChocolateyPushSettings settings)
         {
-            if (packageFilePaths == null)
-            {
-                throw new ArgumentNullException(nameof(packageFilePaths));
-            }
+            ArgumentNullException.ThrowIfNull(packageFilePaths);
 
             foreach (var packageFilePath in packageFilePaths)
             {
@@ -1026,10 +975,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Upgrade")]
         public static void ChocolateyUpgrade(this ICakeContext context, string packageId)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyUpgrader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -1078,10 +1024,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Upgrade")]
         public static void ChocolateyUpgrade(this ICakeContext context, string packageId, ChocolateyUpgradeSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyUpgrader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -1135,10 +1078,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.New")]
         public static void ChocolateyNew(this ICakeContext context, string packageId, ChocolateyNewSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyScaffolder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -1197,10 +1137,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Download")]
         public static void ChocolateyDownload(this ICakeContext context, string packageId, ChocolateyDownloadSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyDownloader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);
@@ -1244,10 +1181,7 @@ namespace Cake.Common.Tools.Chocolatey
         [CakeNamespaceImport("Cake.Common.Tools.Chocolatey.Export")]
         public static void ChocolateyExport(this ICakeContext context, ChocolateyExportSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var resolver = new ChocolateyToolResolver(context.FileSystem, context.Environment);
             var runner = new ChocolateyExporter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, resolver);

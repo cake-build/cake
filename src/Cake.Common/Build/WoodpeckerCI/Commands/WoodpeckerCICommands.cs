@@ -63,9 +63,9 @@ namespace Cake.Common.Build.WoodpeckerCI.Commands
                 using var stream = file.Open(FileMode.Append, FileAccess.Write, FileShare.None);
                 using var writer = new StreamWriter(stream);
                 writer.Write(name);
-                writer.Write("=");
+                writer.Write('=');
                 writer.Write(value);
-                writer.Write("\n");
+                writer.Write('\n');
             }
         }
 

@@ -85,10 +85,7 @@ namespace Cake.Core.IO
         /// </returns>
         public int GetHashCode(Path obj)
         {
-            if (obj == null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
+            ArgumentNullException.ThrowIfNull(obj);
 
             return _stringComparer.GetHashCode(obj.FullPath);
         }

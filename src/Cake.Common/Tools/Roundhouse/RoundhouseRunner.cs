@@ -37,10 +37,7 @@ namespace Cake.Common.Tools.Roundhouse
         /// <param name="drop">Will drop/delete the database if set to <c>true</c>.</param>
         public void Run(RoundhouseSettings settings, bool drop = false)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             settings.Drop |= drop;
             Run(settings, GetArguments(settings));

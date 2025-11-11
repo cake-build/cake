@@ -40,15 +40,9 @@ namespace Cake.Common.Tools.GitLink
         /// <param name="settings">The settings.</param>
         public void Run(FilePath pdbFile, GitLink3Settings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
-            if (pdbFile == null)
-            {
-                throw new ArgumentNullException(nameof(pdbFile));
-            }
+            ArgumentNullException.ThrowIfNull(pdbFile);
 
             Run(settings, GetArguments(pdbFile, settings));
         }
@@ -60,15 +54,9 @@ namespace Cake.Common.Tools.GitLink
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> pdbFiles, GitLink3Settings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
-            if (pdbFiles == null)
-            {
-                throw new ArgumentNullException(nameof(pdbFiles));
-            }
+            ArgumentNullException.ThrowIfNull(pdbFiles);
 
             foreach (var pdbFile in pdbFiles)
             {

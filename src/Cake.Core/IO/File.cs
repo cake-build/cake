@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.Versioning;
 
 namespace Cake.Core.IO
 {
@@ -21,6 +22,10 @@ namespace Cake.Core.IO
 
         public DateTime LastWriteTime => _file.LastWriteTime;
 
+        public DateTime? LastWriteTimeUtc => _file.LastWriteTimeUtc;
+        public DateTime? CreationTimeUtc => _file.CreationTimeUtc;
+        public DateTime? LastAccessTimeUtc => _file.LastAccessTimeUtc;
+
         public long Length => _file.Length;
 
         public FileAttributes Attributes
@@ -28,6 +33,8 @@ namespace Cake.Core.IO
             get { return _file.Attributes; }
             set { _file.Attributes = value; }
         }
+
+        public UnixFileMode? UnixFileMode => _file.UnixFileMode;
 
         public File(FilePath path)
         {
@@ -37,19 +44,13 @@ namespace Cake.Core.IO
 
         public void Copy(FilePath destination, bool overwrite)
         {
-            if (destination == null)
-            {
-                throw new ArgumentNullException(nameof(destination));
-            }
+            ArgumentNullException.ThrowIfNull(destination);
             _file.CopyTo(destination.FullPath, overwrite);
         }
 
         public void Move(FilePath destination)
         {
-            if (destination == null)
-            {
-                throw new ArgumentNullException(nameof(destination));
-            }
+            ArgumentNullException.ThrowIfNull(destination);
             _file.MoveTo(destination.FullPath);
         }
 
@@ -67,6 +68,7 @@ namespace Cake.Core.IO
         public IFile SetCreationTime(DateTime creationTime)
         {
             System.IO.File.SetCreationTime(Path.FullPath, creationTime);
+            _file.Refresh();
             return this;
         }
 
@@ -74,6 +76,7 @@ namespace Cake.Core.IO
         public IFile SetCreationTimeUtc(DateTime creationTimeUtc)
         {
             System.IO.File.SetCreationTimeUtc(Path.FullPath, creationTimeUtc);
+            _file.Refresh();
             return this;
         }
 
@@ -81,6 +84,7 @@ namespace Cake.Core.IO
         public IFile SetLastAccessTime(DateTime lastAccessTime)
         {
             System.IO.File.SetLastAccessTime(Path.FullPath, lastAccessTime);
+            _file.Refresh();
             return this;
         }
 
@@ -88,6 +92,7 @@ namespace Cake.Core.IO
         public IFile SetLastAccessTimeUtc(DateTime lastAccessTimeUtc)
         {
             System.IO.File.SetLastAccessTimeUtc(Path.FullPath, lastAccessTimeUtc);
+            _file.Refresh();
             return this;
         }
 
@@ -95,6 +100,7 @@ namespace Cake.Core.IO
         public IFile SetLastWriteTime(DateTime lastWriteTime)
         {
             System.IO.File.SetLastWriteTime(Path.FullPath, lastWriteTime);
+            _file.Refresh();
             return this;
         }
 
@@ -102,6 +108,16 @@ namespace Cake.Core.IO
         public IFile SetLastWriteTimeUtc(DateTime lastWriteTimeUtc)
         {
             System.IO.File.SetLastWriteTimeUtc(Path.FullPath, lastWriteTimeUtc);
+            _file.Refresh();
+            return this;
+        }
+
+        /// <inheritdoc/>
+        [UnsupportedOSPlatform("windows")]
+        public IFile SetUnixFileMode(UnixFileMode unixFileMode)
+        {
+            _file.UnixFileMode = unixFileMode;
+            _file.Refresh();
             return this;
         }
     }

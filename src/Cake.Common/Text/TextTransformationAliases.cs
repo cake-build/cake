@@ -63,18 +63,9 @@ namespace Cake.Common.Text
             string leftPlaceholder,
             string rightPlaceholder)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (leftPlaceholder == null)
-            {
-                throw new ArgumentNullException(nameof(leftPlaceholder));
-            }
-            if (rightPlaceholder == null)
-            {
-                throw new ArgumentNullException(nameof(rightPlaceholder));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(leftPlaceholder);
+            ArgumentNullException.ThrowIfNull(rightPlaceholder);
 
             // Create the placeholder.
             var placeholder = new Tuple<string, string>(leftPlaceholder, rightPlaceholder);
@@ -132,22 +123,10 @@ namespace Cake.Common.Text
             string leftPlaceholder,
             string rightPlaceholder)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
-            if (leftPlaceholder == null)
-            {
-                throw new ArgumentNullException(nameof(leftPlaceholder));
-            }
-            if (rightPlaceholder == null)
-            {
-                throw new ArgumentNullException(nameof(rightPlaceholder));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(path);
+            ArgumentNullException.ThrowIfNull(leftPlaceholder);
+            ArgumentNullException.ThrowIfNull(rightPlaceholder);
 
             // Make the path absolute if necessary.
             path = path.IsRelative ? path.MakeAbsolute(context.Environment) : path;

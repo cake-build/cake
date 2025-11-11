@@ -1,0 +1,24 @@
+﻿{
+  file: {
+    Path: /test/nonexistent.txt,
+    Exists: false,
+    Hidden: false,
+    LastWriteTimeUtc: null,
+    CreationTimeUtc: null,
+    LastAccessTimeUtc: null,
+    UnixFileMode: null,
+    Length: 0,
+    Attributes: None,
+    ContentLength: 0
+  },
+  result: {
+    $type: FileNotFoundException,
+    Type: FileNotFoundException,
+    Message: Could not find file '/test/nonexistent.txt'.,
+    FileName: /test/nonexistent.txt,
+    FusionLog: null,
+    Data: {},
+    InnerException: null,
+    HelpLink: null
+  }
+}

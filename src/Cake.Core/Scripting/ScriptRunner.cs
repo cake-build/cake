@@ -66,14 +66,8 @@ namespace Cake.Core.Scripting
         /// <inheritdoc/>
         public void Run(IScriptHost host, FilePath scriptPath)
         {
-            if (host == null)
-            {
-                throw new ArgumentNullException(nameof(host));
-            }
-            if (scriptPath == null)
-            {
-                throw new ArgumentNullException(nameof(scriptPath));
-            }
+            ArgumentNullException.ThrowIfNull(host);
+            ArgumentNullException.ThrowIfNull(scriptPath);
 
             // Make the script path absolute.
             scriptPath = scriptPath.MakeAbsolute(_environment);

@@ -42,10 +42,7 @@ namespace Cake.Common.Tools.DotNet.Reference.List
         /// <returns>The list of project-to-project references.</returns>
         public IEnumerable<string> List(string project, DotNetReferenceListSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             var processSettings = new ProcessSettings
             {

@@ -34,10 +34,7 @@ namespace Cake.Common.Tools.VSWhere.Latest
         /// <returns>Installation path of the newest or last install.</returns>
         public DirectoryPath Latest(VSWhereLatestSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             return RunVSWhere(settings, GetArguments(settings)).FirstOrDefault();
         }

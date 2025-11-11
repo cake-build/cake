@@ -37,18 +37,9 @@ namespace Cake.Common.IO
         /// <param name="log">The log.</param>
         public Zipper(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException(nameof(fileSystem));
-            }
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
-            if (log == null)
-            {
-                throw new ArgumentNullException(nameof(log));
-            }
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            ArgumentNullException.ThrowIfNull(environment);
+            ArgumentNullException.ThrowIfNull(log);
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
@@ -64,18 +55,9 @@ namespace Cake.Common.IO
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public void Zip(DirectoryPath rootPath, FilePath outputPath, IEnumerable<Path> paths)
         {
-            if (rootPath == null)
-            {
-                throw new ArgumentNullException(nameof(rootPath));
-            }
-            if (outputPath == null)
-            {
-                throw new ArgumentNullException(nameof(outputPath));
-            }
-            if (paths == null)
-            {
-                throw new ArgumentNullException(nameof(paths));
-            }
+            ArgumentNullException.ThrowIfNull(rootPath);
+            ArgumentNullException.ThrowIfNull(outputPath);
+            ArgumentNullException.ThrowIfNull(paths);
 
             // Make root path and output file path absolute.
             rootPath = rootPath.MakeAbsolute(_environment);
@@ -137,18 +119,9 @@ namespace Cake.Common.IO
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public void Zip(DirectoryPath rootPath, FilePath outputPath, IEnumerable<FilePath> filePaths)
         {
-            if (rootPath == null)
-            {
-                throw new ArgumentNullException(nameof(rootPath));
-            }
-            if (outputPath == null)
-            {
-                throw new ArgumentNullException(nameof(outputPath));
-            }
-            if (filePaths == null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
+            ArgumentNullException.ThrowIfNull(rootPath);
+            ArgumentNullException.ThrowIfNull(outputPath);
+            ArgumentNullException.ThrowIfNull(filePaths);
 
             // Make root path and output file path absolute.
             rootPath = rootPath.MakeAbsolute(_environment);

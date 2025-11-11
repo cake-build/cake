@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 
 namespace Cake.Core
@@ -38,10 +37,7 @@ namespace Cake.Core
         /// <param name="environment">The environment.</param>
         public CakeConsole(ICakeEnvironment environment)
         {
-            if (environment == null)
-            {
-                throw new ArgumentNullException(nameof(environment));
-            }
+            ArgumentNullException.ThrowIfNull(environment);
 
             _supportAnsiEscapeCodes = new Lazy<bool>(() => AnsiDetector.SupportsAnsi(environment));
         }

@@ -15,21 +15,40 @@ using Cake.Core.Scripting;
 using Cake.Infrastructure;
 using Cake.Infrastructure.Composition;
 using Cake.Infrastructure.Scripting;
-using Spectre.Console.Cli;
 
 namespace Cake.Features.Building
 {
+    /// <summary>
+    /// Represents a feature for building Cake scripts.
+    /// </summary>
     public interface IBuildFeature
     {
+        /// <summary>
+        /// Runs the build feature with the specified arguments and settings.
+        /// </summary>
+        /// <param name="arguments">The Cake arguments.</param>
+        /// <param name="settings">The build feature settings.</param>
+        /// <returns>The exit code.</returns>
         int Run(ICakeArguments arguments, BuildFeatureSettings settings);
     }
 
+    /// <summary>
+    /// Represents a feature for building Cake scripts.
+    /// </summary>
     public sealed class BuildFeature : Feature, IBuildFeature
     {
         private readonly ICakeEnvironment _environment;
         private readonly IModuleSearcher _searcher;
         private readonly ICakeLog _log;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BuildFeature"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="environment">The Cake environment.</param>
+        /// <param name="configurator">The container configurator.</param>
+        /// <param name="searcher">The module searcher.</param>
+        /// <param name="log">The log.</param>
         public BuildFeature(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -42,6 +61,12 @@ namespace Cake.Features.Building
             _log = log;
         }
 
+        /// <summary>
+        /// Runs the build feature with the specified arguments and settings.
+        /// </summary>
+        /// <param name="arguments">The Cake arguments.</param>
+        /// <param name="settings">The build feature settings.</param>
+        /// <returns>The exit code.</returns>
         public int Run(ICakeArguments arguments, BuildFeatureSettings settings)
         {
             using (new ScriptAssemblyResolver(_environment, _log))

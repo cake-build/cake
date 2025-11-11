@@ -68,10 +68,7 @@ namespace Cake.Common.Tools.InspectCode
         [CakeAliasCategory("InspectCode")]
         public static void InspectCode(this ICakeContext context, FilePath solution, InspectCodeSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new InspectCodeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             runner.Run(solution, settings);
@@ -91,10 +88,7 @@ namespace Cake.Common.Tools.InspectCode
         [CakeAliasCategory("InspectCode")]
         public static void InspectCodeFromConfig(this ICakeContext context, FilePath configFile)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new InspectCodeRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log);
             runner.RunFromConfig(configFile);

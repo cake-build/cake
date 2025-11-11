@@ -37,10 +37,7 @@ namespace Cake.Common.Tools.ReportGenerator
         [CakeMethodAlias]
         public static void ReportGenerator(this ICakeContext context, GlobPattern pattern, DirectoryPath targetDir)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var reports = context.Globber.GetFiles(pattern);
             ReportGenerator(context, reports, targetDir);
         }
@@ -62,10 +59,7 @@ namespace Cake.Common.Tools.ReportGenerator
         [CakeMethodAlias]
         public static void ReportGenerator(this ICakeContext context, GlobPattern pattern, DirectoryPath targetDir, ReportGeneratorSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             var reports = context.Globber.GetFiles(pattern);
             ReportGenerator(context, reports, targetDir, settings);
         }
@@ -141,10 +135,7 @@ namespace Cake.Common.Tools.ReportGenerator
         [CakeMethodAlias]
         public static void ReportGenerator(this ICakeContext context, IEnumerable<FilePath> reports, DirectoryPath targetDir, ReportGeneratorSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             var runner = new ReportGeneratorRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             runner.Run(reports, targetDir, settings);

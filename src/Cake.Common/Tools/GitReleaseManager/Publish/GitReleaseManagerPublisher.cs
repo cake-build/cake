@@ -65,10 +65,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Publish
                 throw new ArgumentNullException(nameof(tagName));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(userName, password, owner, repository, tagName, settings));
         }
@@ -103,10 +100,7 @@ namespace Cake.Common.Tools.GitReleaseManager.Publish
                 throw new ArgumentNullException(nameof(tagName));
             }
 
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             Run(settings, GetArguments(token, owner, repository, tagName, settings));
         }

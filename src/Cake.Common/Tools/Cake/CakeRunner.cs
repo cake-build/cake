@@ -65,10 +65,7 @@ namespace Cake.Common.Tools.Cake
         /// <param name="settings">optional cake settings.</param>
         public void ExecuteScript(FilePath scriptPath, CakeSettings settings = null)
         {
-            if (scriptPath == null)
-            {
-                throw new ArgumentNullException(nameof(scriptPath));
-            }
+            ArgumentNullException.ThrowIfNull(scriptPath);
 
             scriptPath = scriptPath.MakeAbsolute(_environment);
             if (!_fileSystem.GetFile(scriptPath).Exists)

@@ -49,22 +49,10 @@ namespace Cake.Common.Tools.OpenCover
             FilePath outputPath,
             OpenCoverSettings settings)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-            if (outputPath == null)
-            {
-                throw new ArgumentNullException(nameof(outputPath));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(action);
+            ArgumentNullException.ThrowIfNull(outputPath);
+            ArgumentNullException.ThrowIfNull(settings);
 
             // Run the tool using the interceptor.
             var interceptor = InterceptAction(context, action);
@@ -110,21 +98,21 @@ namespace Cake.Common.Tools.OpenCover
             // Filters
             if (settings.Filters.Count > 0)
             {
-                var filters = string.Join(" ", settings.Filters);
+                var filters = string.Join(' ', settings.Filters);
                 builder.AppendSwitch("-filter", ":", filters.Quote());
             }
 
             // Exclude by attribute
             if (settings.ExcludedAttributeFilters.Count > 0)
             {
-                var filters = string.Join(";", settings.ExcludedAttributeFilters);
+                var filters = string.Join(';', settings.ExcludedAttributeFilters);
                 builder.AppendSwitch("-excludebyattribute", ":", filters.Quote());
             }
 
             // Exclude by file
             if (settings.ExcludedFileFilters.Count > 0)
             {
-                var filters = string.Join(";", settings.ExcludedFileFilters);
+                var filters = string.Join(';', settings.ExcludedFileFilters);
                 builder.AppendSwitch("-excludebyfile", ":", filters.Quote());
             }
 
@@ -162,7 +150,7 @@ namespace Cake.Common.Tools.OpenCover
             // Exclude directories
             if (settings.ExcludeDirectories.Count > 0)
             {
-                var excludeDirs = string.Join(";", settings.ExcludeDirectories.Select(d => d.MakeAbsolute(_environment).FullPath));
+                var excludeDirs = string.Join(';', settings.ExcludeDirectories.Select(d => d.MakeAbsolute(_environment).FullPath));
                 builder.AppendSwitch("-excludedirs", ":", excludeDirs.Quote());
             }
 
@@ -201,7 +189,7 @@ namespace Cake.Common.Tools.OpenCover
             // Search directories
             if (settings.SearchDirectories.Count > 0)
             {
-                var excludeDirs = string.Join(";", settings.SearchDirectories.Select(d => d.MakeAbsolute(_environment).FullPath));
+                var excludeDirs = string.Join(';', settings.SearchDirectories.Select(d => d.MakeAbsolute(_environment).FullPath));
                 builder.AppendSwitch("-searchdirs", ":", excludeDirs.Quote());
             }
 

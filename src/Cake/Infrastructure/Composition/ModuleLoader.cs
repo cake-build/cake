@@ -11,15 +11,27 @@ using Cake.Core.Composition;
 
 namespace Cake.Infrastructure.Composition
 {
+    /// <summary>
+    /// Represents a module loader for Cake modules.
+    /// </summary>
     public sealed class ModuleLoader
     {
         private readonly IContainer _container;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModuleLoader"/> class.
+        /// </summary>
+        /// <param name="container">The container.</param>
         public ModuleLoader(IContainer container)
         {
             _container = container;
         }
 
+        /// <summary>
+        /// Loads modules from the specified types.
+        /// </summary>
+        /// <param name="types">The module types to load.</param>
+        /// <returns>An enumerable of loaded modules.</returns>
         public IEnumerable<ICakeModule> LoadModules(IEnumerable<Type> types)
         {
             foreach (var type in types)
@@ -34,10 +46,7 @@ namespace Cake.Infrastructure.Composition
 
         private ICakeModule LoadModule(Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type);
 
             var constructor = GetGreediestConstructor(type);
             var parameters = constructor.GetParameters();

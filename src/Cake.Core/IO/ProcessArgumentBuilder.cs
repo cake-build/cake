@@ -86,7 +86,7 @@ namespace Cake.Core.IO
         /// <returns>A string representation of the arguments.</returns>
         public string Render()
         {
-            return string.Join(" ", _tokens.Select(t => t.Render()));
+            return string.Join(' ', _tokens.Select(t => t.Render()));
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Cake.Core.IO
         /// <returns>A safe string representation of the arguments.</returns>
         public string RenderSafe()
         {
-            return string.Join(" ", _tokens.Select(t => t.RenderSafe()));
+            return string.Join(' ', _tokens.Select(t => t.RenderSafe()));
         }
 
         /// <summary>

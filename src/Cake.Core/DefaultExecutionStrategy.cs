@@ -43,10 +43,7 @@ namespace Cake.Core
         /// <inheritdoc/>
         public void PerformTeardown(Action<ITeardownContext> action, ITeardownContext teardownContext)
         {
-            if (teardownContext == null)
-            {
-                throw new ArgumentNullException(nameof(teardownContext));
-            }
+            ArgumentNullException.ThrowIfNull(teardownContext);
             if (action != null)
             {
                 _reportPrinter.WriteLifeCycleStep("TearDown", _log.Verbosity);
@@ -122,10 +119,7 @@ namespace Cake.Core
         /// <inheritdoc/>
         public void PerformTaskSetup(Action<ITaskSetupContext> action, ITaskSetupContext taskSetupContext)
         {
-            if (taskSetupContext == null)
-            {
-                throw new ArgumentNullException(nameof(taskSetupContext));
-            }
+            ArgumentNullException.ThrowIfNull(taskSetupContext);
             if (action != null)
             {
                 _log.Debug("Executing custom task setup action ({0})...", taskSetupContext.Task.Name);
@@ -136,10 +130,7 @@ namespace Cake.Core
         /// <inheritdoc/>
         public void PerformTaskTeardown(Action<ITaskTeardownContext> action, ITaskTeardownContext taskTeardownContext)
         {
-            if (taskTeardownContext == null)
-            {
-                throw new ArgumentNullException(nameof(taskTeardownContext));
-            }
+            ArgumentNullException.ThrowIfNull(taskTeardownContext);
             if (action != null)
             {
                 _log.Debug("Executing custom task teardown action ({0})...", taskTeardownContext.Task.Name);

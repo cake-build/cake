@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -22,6 +21,9 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 
 namespace Cake.Infrastructure.Scripting
 {
+    /// <summary>
+    /// Represents a Roslyn-based script session for Cake.
+    /// </summary>
     public sealed class RoslynScriptSession : IScriptSession
     {
         private readonly IScriptHost _host;
@@ -35,12 +37,29 @@ namespace Cake.Infrastructure.Scripting
         private readonly bool _regenerateCache;
         private readonly DirectoryPath _scriptCachePath;
 
+        /// <summary>
+        /// Gets the reference paths.
+        /// </summary>
         public HashSet<FilePath> ReferencePaths { get; }
 
+        /// <summary>
+        /// Gets the references.
+        /// </summary>
         public HashSet<Assembly> References { get; }
 
+        /// <summary>
+        /// Gets the namespaces.
+        /// </summary>
         public HashSet<string> Namespaces { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RoslynScriptSession"/> class.
+        /// </summary>
+        /// <param name="host">The script host.</param>
+        /// <param name="loader">The assembly loader.</param>
+        /// <param name="configuration">The Cake configuration.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="settings">The script host settings.</param>
         public RoslynScriptSession(
             IScriptHost host,
             IAssemblyLoader loader,
@@ -65,27 +84,33 @@ namespace Cake.Infrastructure.Scripting
             _scriptCachePath = configuration.GetScriptCachePath(settings.Script.GetDirectory(), host.Context.Environment);
         }
 
+        /// <summary>
+        /// Adds an assembly reference.
+        /// </summary>
+        /// <param name="assembly">The assembly to add.</param>
         public void AddReference(Assembly assembly)
         {
-            if (assembly == null)
-            {
-                throw new ArgumentNullException(nameof(assembly));
-            }
+            ArgumentNullException.ThrowIfNull(assembly);
             _log.Debug("Adding assembly reference to {0}...", new FilePath(assembly.Location).GetFilename().FullPath);
             References.Add(assembly);
         }
 
+        /// <summary>
+        /// Adds a reference from the specified file path.
+        /// </summary>
+        /// <param name="path">The file path to add as a reference.</param>
         public void AddReference(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             _log.Debug("Adding reference to {0}...", path.GetFilename().FullPath);
             References.Add(_loader.Load(path, true));
         }
 
+        /// <summary>
+        /// Imports a namespace.
+        /// </summary>
+        /// <param name="namespace">The namespace to import.</param>
         public void ImportNamespace(string @namespace)
         {
             if (!string.IsNullOrWhiteSpace(@namespace) && !Namespaces.Contains(@namespace))
@@ -95,6 +120,10 @@ namespace Cake.Infrastructure.Scripting
             }
         }
 
+        /// <summary>
+        /// Executes the specified script.
+        /// </summary>
+        /// <param name="script">The script to execute.</param>
         public void Execute(Script script)
         {
             var scriptName = _settings.Script.GetFilename();
@@ -216,6 +245,11 @@ namespace Cake.Infrastructure.Scripting
                     GetScriptHash(script),
                     "dll"));
 
+        /// <summary>
+        /// Gets the hash for the specified script.
+        /// </summary>
+        /// <param name="script">The script to get the hash for.</param>
+        /// <returns>The script hash.</returns>
         public string GetScriptHash(Script script)
         {
             // Remove specific lines that could cause the same files to generate different

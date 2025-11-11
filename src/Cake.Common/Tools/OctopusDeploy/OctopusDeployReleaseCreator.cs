@@ -37,14 +37,8 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <param name="settings">The settings.</param>
         public void CreateRelease(string projectName, CreateReleaseSettings settings)
         {
-            if (projectName == null)
-            {
-                throw new ArgumentNullException(nameof(projectName));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(projectName);
+            ArgumentNullException.ThrowIfNull(settings);
             if (string.IsNullOrEmpty(settings.Server))
             {
                 throw new ArgumentException("No server specified.", nameof(settings));

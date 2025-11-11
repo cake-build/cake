@@ -51,10 +51,7 @@ namespace Cake.Common.Tools.NuGet.SetApiKey
             {
                 throw new ArgumentNullException(nameof(source));
             }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             // Read but do not validate redirected standard output.
             // Process wrapper logs redacted output at diagnostic verbosity.

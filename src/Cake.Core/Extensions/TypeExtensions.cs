@@ -22,10 +22,7 @@ namespace Cake.Core
         /// <returns>Whether or not the specified type is static.</returns>
         public static bool IsStatic(this Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type);
 
             var typeInfo = type.GetTypeInfo();
 
@@ -40,10 +37,7 @@ namespace Cake.Core
         /// <returns>The full name of a type.</returns>
         public static string GetFullName(this Type type, bool includeNamespace = true)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type);
             if (type.IsGenericParameter)
             {
                 return type.Name;
@@ -88,12 +82,12 @@ namespace Cake.Core
             if (includeNamespace)
             {
                 builder.Append(type.Namespace);
-                builder.Append(".");
+                builder.Append('.');
             }
             builder.Append(type.Name.Substring(0, type.Name.IndexOf('`')));
-            builder.Append("<");
+            builder.Append('<');
             builder.Append(GetGenericTypeArguments(type, includeNamespace));
-            builder.Append(">");
+            builder.Append('>');
             return builder.ToString();
         }
 

@@ -121,10 +121,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <param name="path">The directory path.</param>
         public void AddPath(DirectoryPath path)
         {
-            if (path is null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (_actionsEnvironment.Runtime.SystemPath == null)
             {
@@ -149,10 +146,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             if (_actionsEnvironment.Runtime.EnvPath == null)
             {
@@ -180,10 +174,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             if (_actionsEnvironment.Runtime.OutputPath == null)
             {
@@ -194,7 +185,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
             using var stream = file.Open(FileMode.Append, FileAccess.Write, FileShare.None);
             using var writer = new StreamWriter(stream);
             writer.Write(key);
-            writer.Write("=");
+            writer.Write('=');
             writer.WriteLine(value);
         }
 
@@ -285,7 +276,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
 
         internal void WriteCommand(string command, Dictionary<string, string> parameters, string message)
         {
-            var parameterString = parameters?.Count > 0 ? string.Concat(" ", string.Join(",", parameters.Select(pair => $"{pair.Key}={EscapeCommandParameter(pair.Value)}"))) : string.Empty;
+            var parameterString = parameters?.Count > 0 ? string.Concat(" ", string.Join(',', parameters.Select(pair => $"{pair.Key}={EscapeCommandParameter(pair.Value)}"))) : string.Empty;
 
             _writer.Write("::{0}{1}::{2}", command, parameterString, EscapeCommandMessage(message));
         }

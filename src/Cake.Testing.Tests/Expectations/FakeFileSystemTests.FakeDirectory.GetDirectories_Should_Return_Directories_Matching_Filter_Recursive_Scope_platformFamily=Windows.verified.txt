@@ -1,0 +1,22 @@
+﻿{
+  directory: {
+    Exists: true,
+    Hidden: false,
+    LastWriteTimeUtc: 2014-05-27 19:56:01,
+    CreationTimeUtc: 2014-05-27 19:56:01,
+    LastAccessTimeUtc: 2014-05-27 19:56:01,
+    UnixFileMode: null,
+    Path: /test
+  },
+  result: [
+    {
+      Exists: true,
+      Hidden: false,
+      LastWriteTimeUtc: 2014-05-27 19:56:01,
+      CreationTimeUtc: 2014-05-27 19:56:01,
+      LastAccessTimeUtc: 2014-05-27 19:56:01,
+      UnixFileMode: null,
+      Path: /test/build
+    }
+  ]
+}

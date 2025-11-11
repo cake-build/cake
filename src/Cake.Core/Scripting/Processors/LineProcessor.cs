@@ -31,10 +31,7 @@ namespace Cake.Core.Scripting.Processors
         /// <returns>The parts that make up the line.</returns>
         protected static string[] Split(string line)
         {
-            if (line == null)
-            {
-                throw new ArgumentNullException(nameof(line));
-            }
+            ArgumentNullException.ThrowIfNull(line);
 
             return QuoteAwareStringSplitter.Split(line).ToArray();
         }

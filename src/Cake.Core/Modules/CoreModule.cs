@@ -9,7 +9,6 @@ using Cake.Core.IO.NuGet;
 using Cake.Core.Reflection;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
-using Cake.Core.Scripting.Processors;
 using Cake.Core.Scripting.Processors.Loading;
 using Cake.Core.Tooling;
 
@@ -24,10 +23,7 @@ namespace Cake.Core.Modules
         /// <inheritdoc/>
         public void Register(ICakeContainerRegistrar registrar)
         {
-            if (registrar == null)
-            {
-                throw new ArgumentNullException(nameof(registrar));
-            }
+            ArgumentNullException.ThrowIfNull(registrar);
 
             // Execution
             registrar.RegisterType<CakeEngine>().As<ICakeEngine>().Singleton();

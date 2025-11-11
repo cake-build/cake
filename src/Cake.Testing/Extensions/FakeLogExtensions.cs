@@ -20,10 +20,7 @@ namespace Cake.Testing.Extensions
         /// <returns>Log messages as <see cref="System.String"/>.</returns>
         public static string AggregateLogMessages(this FakeLog fakeLog)
         {
-            if (fakeLog == null)
-            {
-                throw new ArgumentNullException(nameof(fakeLog));
-            }
+            ArgumentNullException.ThrowIfNull(fakeLog);
 
             return fakeLog.Entries.Aggregate(
                 new StringBuilder(),

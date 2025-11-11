@@ -42,14 +42,8 @@ namespace Cake.Common.Tools.WiX
         /// <param name="settings">The settings.</param>
         public void Run(IEnumerable<FilePath> objectFiles, LightSettings settings)
         {
-            if (objectFiles == null)
-            {
-                throw new ArgumentNullException(nameof(objectFiles));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(objectFiles);
+            ArgumentNullException.ThrowIfNull(settings);
 
             var objectFilesArray = objectFiles as FilePath[] ?? objectFiles.ToArray();
             if (!objectFilesArray.Any())

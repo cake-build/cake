@@ -52,10 +52,7 @@ namespace Cake.Core.Scripting.Analysis
 
         public void Analyze(FilePath path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             // Get the absolute path to the script and make
             // sure that it exists.

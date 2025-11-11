@@ -11,10 +11,7 @@ namespace Cake.Frosting.Internal
     {
         public static string GetTaskName(this Type task)
         {
-            if (task is null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
+            ArgumentNullException.ThrowIfNull(task);
 
             var attribute = task.GetCustomAttribute<TaskNameAttribute>();
             return attribute != null ? attribute.Name : task.Name;

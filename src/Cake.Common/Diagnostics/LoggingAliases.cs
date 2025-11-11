@@ -30,10 +30,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Error")]
         public static void Error(this ICakeContext context, string format, params object[] args)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Error(format, args);
         }
 
@@ -52,10 +49,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Error")]
         public static void Error(this ICakeContext context, LogAction logAction)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Error(logAction);
         }
 
@@ -73,10 +67,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Error")]
         public static void Error(this ICakeContext context, object value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Error(value);
         }
 
@@ -94,10 +85,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Error")]
         public static void Error(this ICakeContext context, string value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Error(value);
         }
 
@@ -116,10 +104,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Warning")]
         public static void Warning(this ICakeContext context, string format, params object[] args)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Warning(format, args);
         }
 
@@ -138,10 +123,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Warning")]
         public static void Warning(this ICakeContext context, LogAction logAction)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Warning(logAction);
         }
 
@@ -159,10 +141,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Warning")]
         public static void Warning(this ICakeContext context, object value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Warning(value);
         }
 
@@ -180,10 +159,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Warning")]
         public static void Warning(this ICakeContext context, string value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Warning(value);
         }
 
@@ -202,10 +178,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Information")]
         public static void Information(this ICakeContext context, string format, params object[] args)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Information(format, args);
         }
 
@@ -224,10 +197,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Information")]
         public static void Information(this ICakeContext context, LogAction logAction)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Information(logAction);
         }
 
@@ -245,10 +215,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Information")]
         public static void Information(this ICakeContext context, object value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Information(value);
         }
 
@@ -266,10 +233,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Information")]
         public static void Information(this ICakeContext context, string value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Information(value);
         }
 
@@ -288,10 +252,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Verbose")]
         public static void Verbose(this ICakeContext context, string format, params object[] args)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Verbose(format, args);
         }
 
@@ -310,10 +271,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Verbose")]
         public static void Verbose(this ICakeContext context, LogAction logAction)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Verbose(logAction);
         }
 
@@ -331,10 +289,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Verbose")]
         public static void Verbose(this ICakeContext context, object value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Verbose(value);
         }
 
@@ -352,10 +307,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Verbose")]
         public static void Verbose(this ICakeContext context, string value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Verbose(value);
         }
 
@@ -374,10 +326,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Debug")]
         public static void Debug(this ICakeContext context, string format, params object[] args)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Debug(format, args);
         }
 
@@ -396,10 +345,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Debug")]
         public static void Debug(this ICakeContext context, LogAction logAction)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Debug(logAction);
         }
 
@@ -417,10 +363,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Debug")]
         public static void Debug(this ICakeContext context, object value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Debug(value);
         }
 
@@ -438,10 +381,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Debug")]
         public static void Debug(this ICakeContext context, string value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.Log.Debug(value);
         }
 
@@ -466,10 +406,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Verbosity")]
         public static IDisposable QuietVerbosity(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Log.QuietVerbosity();
         }
 
@@ -494,10 +431,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Verbosity")]
         public static IDisposable MinimalVerbosity(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Log.MinimalVerbosity();
         }
 
@@ -522,10 +456,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Verbosity")]
         public static IDisposable NormalVerbosity(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Log.NormalVerbosity();
         }
 
@@ -550,10 +481,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Verbosity")]
         public static IDisposable VerboseVerbosity(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Log.VerboseVerbosity();
         }
 
@@ -578,10 +506,7 @@ namespace Cake.Common.Diagnostics
         [CakeAliasCategory("Verbosity")]
         public static IDisposable DiagnosticVerbosity(this ICakeContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             return context.Log.DiagnosticVerbosity();
         }
     }

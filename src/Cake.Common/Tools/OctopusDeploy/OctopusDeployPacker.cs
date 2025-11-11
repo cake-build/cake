@@ -36,10 +36,7 @@ namespace Cake.Common.Tools.OctopusDeploy
         /// <param name="settings">The settings.</param>
         public void Pack(string id, OctopusPackSettings settings)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
+            ArgumentNullException.ThrowIfNull(id);
 
             var arguments = GetArguments(id, settings);
             Run(settings, arguments);

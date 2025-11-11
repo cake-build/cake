@@ -11,7 +11,6 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Packaging;
-using NuGet.Versioning;
 
 using IFileSystem = Cake.Core.IO.IFileSystem;
 using PackageReference = Cake.Core.Packaging.PackageReference;
@@ -49,23 +48,14 @@ namespace Cake.NuGet
 
         public bool CanInstall(PackageReference package, PackageType type)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
+            ArgumentNullException.ThrowIfNull(package);
             return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
         }
 
         public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException(nameof(package));
-            }
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(package);
+            ArgumentNullException.ThrowIfNull(path);
 
             // Create the addin directory if it doesn't exist.
             path = GetPackagePath(path.MakeAbsolute(_environment), package);
@@ -133,9 +123,9 @@ namespace Cake.NuGet
 
         private static DirectoryPath GetPackagePath(DirectoryPath root, PackageReference package)
         {
-            if (package.Parameters.ContainsKey("version"))
+            if (package.Parameters.TryGetValue("version", out var versions))
             {
-                var version = package.Parameters["version"].First();
+                var version = versions.First();
                 return root.Combine($"{package.Package}.{version}".ToLowerInvariant());
             }
             return root.Combine(package.Package.ToLowerInvariant());
@@ -215,10 +205,10 @@ namespace Cake.NuGet
             }
 
             // Version
-            if (definition.Parameters.ContainsKey("version"))
+            if (definition.Parameters.TryGetValue("version", out var version))
             {
                 arguments.Append("-Version");
-                arguments.AppendQuoted(definition.Parameters["version"].First());
+                arguments.AppendQuoted(version.First());
             }
 
             // Prerelease

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,16 +7,27 @@ using Cake.Core.Scripting;
 
 namespace Cake.Infrastructure.Scripting
 {
+    /// <summary>
+    /// Represents a reference assembly resolver for Cake scripts.
+    /// </summary>
     public sealed class ReferenceAssemblyResolver : IReferenceAssemblyResolver
     {
         private static readonly Version VersionZero = new Version(0, 0, 0, 0);
         private readonly ICakeLog _log;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReferenceAssemblyResolver"/> class.
+        /// </summary>
+        /// <param name="log">The log.</param>
         public ReferenceAssemblyResolver(ICakeLog log)
         {
             _log = log;
         }
 
+        /// <summary>
+        /// Gets the reference assemblies.
+        /// </summary>
+        /// <returns>An array of reference assemblies.</returns>
         public Assembly[] GetReferenceAssemblies()
         {
             IEnumerable<Assembly> TryGetReferenceAssemblies()
@@ -24,8 +35,10 @@ namespace Cake.Infrastructure.Scripting
                 foreach (var reference in
 #if NET8_0
             Basic.Reference.Assemblies.Net80.References.All)
-#else
+#elif NET9_0
             Basic.Reference.Assemblies.Net90.References.All)
+#else
+            Basic.Reference.Assemblies.Net100.References.All)
 #endif
                 {
                     Assembly assembly;

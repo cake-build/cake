@@ -49,10 +49,7 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <param name="settings">The settings.</param>
         public void Pack(NuGetPackSettings settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
             if (settings.OutputDirectory == null || !_fileSystem.Exist(settings.OutputDirectory))
             {
                 throw new CakeException("Required setting OutputDirectory not specified or doesn't exists.");
@@ -88,14 +85,8 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <param name="settings">The settings.</param>
         public void Pack(FilePath filePath, NuGetPackSettings settings)
         {
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(filePath);
+            ArgumentNullException.ThrowIfNull(settings);
 
             string extension = filePath.GetExtension();
             if (extension == ".csproj"
@@ -230,7 +221,7 @@ namespace Cake.Common.Tools.NuGet.Pack
                     throw new CakeException("Properties keys can not be null or empty.");
                 }
                 builder.Append("-Properties");
-                builder.AppendQuoted(string.Join(";",
+                builder.AppendQuoted(string.Join(';',
                     settings.Properties.Select(property => string.Concat(property.Key, "=", property.Value))));
             }
 

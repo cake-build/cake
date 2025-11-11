@@ -46,10 +46,7 @@ namespace Cake.Common.Tools.DotNet.Sln.Remove
             {
                 throw new ArgumentNullException(nameof(projectPath));
             }
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            ArgumentNullException.ThrowIfNull(settings);
 
             RunCommand(settings, GetArguments(solution, projectPath, settings));
         }
