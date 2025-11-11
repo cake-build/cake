@@ -11,9 +11,4 @@
   </PropertyGroup>
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Win32.Registry" />
-    <PackageReference Include="Microsoft.CSharp" />
-  </ItemGroup>
 </Project>

@@ -56,6 +56,8 @@ Task("Cake.Core.Scripting.DefineDirective.Runtime")
                     "8.0",
 #elif NET9_0
                     "9.0",
+#elif NET10_0
+                    "10.0",
 #endif
                     context.Environment.Runtime.BuiltFramework.FullName);
 });
@@ -138,6 +140,22 @@ Task("Cake.Core.Scripting.DefineDirective.C#13")
 });
 #endif
 
+#if NET10_0
+Task("Cake.Core.Scripting.DefineDirective.C#14")
+    .Does(() =>
+{
+    // Given - Test C# 14 unbound generic types with nameof
+    var listName = nameof(List<>);
+    var dictionaryName = nameof(Dictionary<,>);
+    var tupleName = nameof(Tuple<,,>);
+
+    // When & Then
+    Assert.Equal("List", listName);
+    Assert.Equal("Dictionary", dictionaryName);
+    Assert.Equal("Tuple", tupleName);
+});
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
@@ -147,6 +165,9 @@ Task("Cake.Core.Scripting.DefineDirective")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#12")
 #if NET9_0
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#13")
+#endif
+#if NET10_0
+    .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#14")
 #endif
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Defined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.NotDefined")
