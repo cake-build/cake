@@ -35,11 +35,11 @@
     <PackageVersion Include="System.Collections.Immutable" Version="9.0.10" />
     <PackageVersion Include="System.Reflection.Metadata" Version="9.0.10" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
-    <PackageVersion Include="Verify.XunitV3" Version="31.0.4" />
+    <PackageVersion Include="Verify.XunitV3" Version="31.5.3" />
     <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.v3" Version="3.1.0" />
-    <PackageVersion Include="xunit.v3.assert" Version="3.1.0" />
-    <PackageVersion Include="xunit.v3.extensibility.core" Version="3.1.0" />
+    <PackageVersion Include="xunit.v3" Version="3.2.0" />
+    <PackageVersion Include="xunit.v3.assert" Version="3.2.0" />
+    <PackageVersion Include="xunit.v3.extensibility.core" Version="3.2.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
 
     <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
