@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
@@ -125,11 +126,21 @@ namespace Cake.Frosting.Internal
                         cakeTask.Does(task.RunAsync);
                     }
 
-                    // Is the criteria method overridden?
-                    if (task.IsShouldRunOverridden(_context))
+                    // Check if and criteria added to ShouldRunCriteria?
+                    if (task.ShouldRunCriteria.Any())
+                    {
+                        foreach (var criteria in task.ShouldRunCriteria)
+                        {
+                            cakeTask.WithCriteria(criteria.Predicate, criteria.Message);
+                        }
+                    }
+                    // Check to see if obsoleted ShouldRun is overridden?  Done to not break old projects.
+#pragma warning disable CS0618 // Type or member is obsolete
+                    else if (task.IsShouldRunOverridden(_context))
                     {
                         cakeTask.WithCriteria(task.ShouldRun, task.SkippedMessage);
                     }
+#pragma warning restore CS0618 // Type or member is obsolete
 
                     // Continue on error?
                     if (task.IsContinueOnError())
