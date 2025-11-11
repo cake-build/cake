@@ -1,6 +1,29 @@
-### New in 5.1.0 (Released 2025/10/04)
+### New in 6.0.0 (Released 2025/11/11)
 
-Feature
+* #4639 Make CakeSpectreReportPrinter the default ICakeReportPrinter.
+* #4638 Update Spectre.Console to 0.53.0.
+* #4593 Update LatestPotentialBreakingChange to 6.0.0.
+* #4534 Azure Pipleines Environement Agent Info uses FilePath instead of DirectoryPath.
+* #4592 C# 14 Scripting Support.
+* #4576 Add .NET 10 (net10.0) TFM.
+* #4642 Display Delegated/Executed status as Succeded in Cake task summary.
+* #4636 Enhance file system abstraction with timestamps, Unix modes, and performance improvements.
+* #4627 .NET Test Platform Requires --project `<PROJECT_PATH>` / --solution `<SOLUTION_PATH>` to be specified.
+* #4624 Update System.* to 9.0.10.
+* #4623 Update Microsoft.Extensions.DependencyInjection to 9.0.10.
+* #4622 Update Spectre.Console to 0.52.0.
+* #4616 Replace using with await using for IAsyncDisposable resources.
+* #4615 Replace manual null checks with ArgumentNullException.ThrowIfNull().
+* #4614 Modernize Enum.GetName calls to use generic overload.
+* #4613 Use char literals instead of string literals for single characters in StreamWriter.Write.
+* #4612 Replace StringBuilder.Append(string.Join()) with StringBuilder.AppendJoin() for better performance.
+* #4611 Use char literals instead of string literals for single characters in StringBuilder.Append.
+* #4610 Replace string.Join with string.Concat for empty separator cases.
+* #4609 Optimize string.Join calls to use char separators instead of string separators.
+* #4608 Modernize dictionary access patterns with TryGetValue and deconstruction.
+* #4603 Fix .NET framework version detection.
+
+### New in 5.1.0 (Released 2025/10/04)
 
 * #4539 Add Woodpecker CI Support.
 * #4436 Add support for capturing MSBuild properties, items and target results.
