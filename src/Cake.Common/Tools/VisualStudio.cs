@@ -23,7 +23,8 @@ namespace Cake.Common.Tools
         {
             internal static ICollection<string> Preview { get; } = new[]
             {
-                "Preview"
+                "Preview",
+                "Insiders"
             };
 
             internal static ICollection<string> Stable { get; } = new[]
@@ -49,6 +50,8 @@ namespace Cake.Common.Tools
         {
             var programFiles = (year, edition) switch
             {
+                ("18", "BuildTools") => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
+                ("18", _) => environment.GetSpecialPath(SpecialPath.ProgramFiles),
                 ("2022", "BuildTools") => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
                 ("2022", _) => environment.GetSpecialPath(SpecialPath.ProgramFiles),
                 (_, _) => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),

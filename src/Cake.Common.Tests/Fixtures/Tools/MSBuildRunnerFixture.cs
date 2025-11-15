@@ -40,6 +40,8 @@ namespace Cake.Common.Tests.Fixtures.Tools
                 "/Program86/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/amd64/MSBuild.exe",
                 "/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/MSBuild.exe",
                 "/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/amd64/MSBuild.exe",
+                "/Program/Microsoft Visual Studio/18/Enterprise/MSBuild/Current/Bin/MSBuild.exe",
+                "/Program/Microsoft Visual Studio/18/Enterprise/MSBuild/Current/Bin/amd64/MSBuild.exe",
                 "/usr/bin/msbuild",
                 "/Library/Frameworks/Mono.framework/Versions/Current/Commands/msbuild"
             };
