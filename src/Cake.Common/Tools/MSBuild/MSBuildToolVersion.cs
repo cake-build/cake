@@ -112,6 +112,11 @@ namespace Cake.Common.Tools.MSBuild
         /// <summary>
         /// MSBuild tool version: <c>Visual Studio 2022</c>
         /// </summary>
-        VS2022 = 10
+        VS2022 = 10,
+
+        /// <summary>
+        /// MSBuild tool version: <c>Visual Studio 2026</c>
+        /// </summary>
+        VS2026 = 11
     }
 }
