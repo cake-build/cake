@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Cake.Core.Configuration;
@@ -69,6 +70,8 @@ namespace Cake.Core.Scripting
             ArgumentNullException.ThrowIfNull(host);
             ArgumentNullException.ThrowIfNull(scriptPath);
 
+            var preparationStopwatch = Stopwatch.StartNew();
+
             // Make the script path absolute.
             scriptPath = scriptPath.MakeAbsolute(_environment);
 
@@ -76,8 +79,13 @@ namespace Cake.Core.Scripting
             _environment.WorkingDirectory = scriptPath.GetDirectory();
 
             // Analyze the script file.
+            var analyzeStopwatch = Stopwatch.StartNew();
+
             _log.Verbose("Analyzing build script...");
             var result = _analyzer.Analyze(scriptPath.GetFilename(), new ScriptAnalyzerSettings());
+
+            analyzeStopwatch.Stop();
+            _log.Verbose("Analyzed build script in {0}", analyzeStopwatch.Elapsed);
 
             // Log all errors and throw
             if (!result.Succeeded)
@@ -92,16 +100,28 @@ namespace Cake.Core.Scripting
 
             // Install tools.
             _log.Verbose("Processing build script...");
+
+            var toolsStopwatch = Stopwatch.StartNew();
+
             var toolsPath = GetToolPath(scriptPath.GetDirectory());
             _processor.InstallTools(result.Tools, toolsPath);
 
+            toolsStopwatch.Stop();
+            _log.Verbose("Installed tools in {0}", toolsStopwatch.Elapsed);
+
             // Install addins.
+
+            var addingsStopwatch = Stopwatch.StartNew();
+
             var addinRoot = GetAddinPath(scriptPath.GetDirectory());
             var addinReferences = _processor.InstallAddins(result.Addins, addinRoot);
             foreach (var addinReference in addinReferences)
             {
                 result.References.Add(addinReference.FullPath);
             }
+
+            addingsStopwatch.Stop();
+            _log.Verbose("Installed addins in {0}", addingsStopwatch.Elapsed);
 
             // Create and prepare the session.
             var session = _engine.CreateSession(host);
@@ -160,6 +180,9 @@ namespace Cake.Core.Scripting
 
             var defines = new HashSet<string>(result.Defines, StringComparer.Ordinal);
             defines.AddRange(_conventions.GetDefaultDefines());
+
+            preparationStopwatch.Stop();
+            _log.Verbose("Preparation took {0}, going to execute the script", preparationStopwatch.Elapsed);
 
             // Execute the script.
             var script = new Script(result.Namespaces, result.Lines, aliases, result.UsingAliases, result.UsingStaticDirectives, defines);
