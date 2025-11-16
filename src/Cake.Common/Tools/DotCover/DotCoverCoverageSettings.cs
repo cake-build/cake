@@ -17,10 +17,13 @@ namespace Cake.Common.Tools.DotCover
         private readonly HashSet<string> _filters;
         private readonly HashSet<string> _processFilters;
         private readonly HashSet<string> _attributeFilters;
+        private readonly HashSet<string> _excludeAssemblies;
+        private readonly HashSet<string> _excludeAttributes;
+        private readonly HashSet<string> _excludeProcesses;
 
         /// <summary>
         /// Gets or sets program working directory
-        /// This represents the <c>/TargetWorkingDir</c> option.
+        /// This represents the <c>--target-working-directory</c> option for Cover command, <c>/TargetWorkingDir</c> for others.
         /// </summary>
         public DirectoryPath TargetWorkingDir { get; set; }
 
@@ -66,6 +69,34 @@ namespace Cake.Common.Tools.DotCover
         }
 
         /// <summary>
+        /// Gets assembly names to exclude from analysis. Wildcards (*) allowed.
+        /// This represents the <c>--exclude-assemblies</c> option.
+        /// </summary>
+        public ISet<string> ExcludeAssemblies
+        {
+            get { return _excludeAssemblies; }
+        }
+
+        /// <summary>
+        /// Gets fully qualified attribute names to exclude from analysis. Wildcards (*) allowed.
+        /// Code marked with these attributes will be excluded from coverage.
+        /// This represents the <c>--exclude-attributes</c> option.
+        /// </summary>
+        public ISet<string> ExcludeAttributes
+        {
+            get { return _excludeAttributes; }
+        }
+
+        /// <summary>
+        /// Gets process names to ignore during analysis. Wildcards (*) allowed.
+        /// This represents the <c>--exclude-processes</c> option.
+        /// </summary>
+        public ISet<string> ExcludeProcesses
+        {
+            get { return _excludeProcesses; }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the default (automatically added) filters should be disabled
         /// This represents the <c>/DisableDefaultFilters</c> option.
         /// </summary>
@@ -80,6 +111,9 @@ namespace Cake.Common.Tools.DotCover
             _filters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _attributeFilters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _processFilters = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _excludeAssemblies = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _excludeAttributes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _excludeProcesses = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
     }
 }
