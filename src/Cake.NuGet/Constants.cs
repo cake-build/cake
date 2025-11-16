@@ -27,6 +27,11 @@ namespace Cake.NuGet
             /// The config key name for overriding the default NuGet config file.
             /// </summary>
             public const string ConfigFile = "NuGet_ConfigFile";
+
+            /// <summary>
+            /// The config key name for non-interactive mode.
+            /// </summary>
+            public const string NonInteractive = "NuGet_NonInteractive";
         }
 
         public static class Paths

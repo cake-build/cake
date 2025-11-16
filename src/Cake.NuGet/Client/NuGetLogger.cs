@@ -50,23 +50,23 @@ namespace Cake.NuGet
             _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
-        public void LogDebug(string data) => _log.Debug(data);
+        public void LogDebug(string data) => _log.Debug("{0}", data);
 
-        public void LogVerbose(string data) => _log.Debug(data);
+        public void LogVerbose(string data) => _log.Debug("{0}", data);
 
-        public void LogInformation(string data) => _log.Debug(data);
+        public void LogInformation(string data) => _log.Debug("{0}", data);
 
-        public void LogMinimal(string data) => _log.Information(data);
+        public void LogMinimal(string data) => _log.Information("{0}", data);
 
-        public void LogWarning(string data) => _log.Warning(data);
+        public void LogWarning(string data) => _log.Warning("{0}", data);
 
-        public void LogError(string data) => _log.Error(data);
+        public void LogError(string data) => _log.Error("{0}", data);
 
-        public void LogInformationSummary(string data) => _log.Information(data);
+        public void LogInformationSummary(string data) => _log.Information("{0}", data);
 
-        public void LogErrorSummary(string data) => _log.Error(data);
+        public void LogErrorSummary(string data) => _log.Error("{0}", data);
 
-        public void Log(LogLevel level, string data) => _log.Write(GetVerbosity(level), GetLogLevel(level), data);
+        public void Log(LogLevel level, string data) => _log.Write(GetVerbosity(level), GetLogLevel(level), "{0}", data);
 
         public Task LogAsync(LogLevel level, string data)
         {
