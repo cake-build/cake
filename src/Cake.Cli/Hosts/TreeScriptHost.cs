@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Graph;
 using Cake.Core.Scripting;
+using ThreadingTask = System.Threading.Tasks.Task;
 
 namespace Cake.Cli
 {
@@ -31,7 +32,7 @@ namespace Cake.Cli
         /// <param name="console">The console.</param>
         public TreeScriptHost(ICakeEngine engine, ICakeContext context, IConsole console)
             : base(engine, context)
-        {
+            {
             _console = console ?? throw new ArgumentNullException(nameof(console));
         }
 
@@ -39,43 +40,51 @@ namespace Cake.Cli
         public override Task<CakeReport> RunTargetAsync(string target)
         {
             PrintTaskTree();
-
-            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
+            return ThreadingTask.FromResult<CakeReport>(null);
         }
 
         /// <inheritdoc/>
         public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
         {
             PrintTaskTree();
-
-            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
+            return ThreadingTask.FromResult<CakeReport>(null);
         }
 
         private void PrintTaskTree()
         {
-            var topLevelTasks = GetTopLevelTasks();
+            // Build the full graph once (includes Dependencies + Dependees)
+            var graph = CakeGraphBuilder.Build(Tasks);
+            var topLevelTasks = GetTopLevelTasks(graph);
+
             _console.WriteLine();
 
-            foreach (ICakeTaskInfo task in topLevelTasks)
+            foreach (var task in topLevelTasks)
             {
-                PrintTask(task, string.Empty, false, 0);
+                // root tasks start at depth 0, no branch characters yet
+                PrintTask(task, graph, string.Empty, isLast: false, depth: 0);
                 _console.WriteLine();
             }
         }
 
-        private List<ICakeTaskInfo> GetTopLevelTasks()
+        private List<ICakeTaskInfo> GetTopLevelTasks(CakeGraph graph)
         {
             // Display "Default" first, then alphabetical
-            var graph = CakeGraphBuilder.Build(Tasks);
-            return Tasks.Where(task => !graph.Edges.Any(
-                edge => edge.Start.Equals(task.Name, StringComparison.OrdinalIgnoreCase)))
+            // Top-level = tasks that never appear as Start (no outgoing edges)
+            return Tasks
+                .Where(task => !graph.Edges.Any(
+                    edge => edge.Start.Equals(task.Name, StringComparison.OrdinalIgnoreCase)))
                 .OrderByDescending(task => task.Name.Equals("Default", StringComparison.OrdinalIgnoreCase))
                 .ThenBy(task => task.Name, StringComparer.OrdinalIgnoreCase)
                 .ToList();
         }
 
-        private void PrintTask(ICakeTaskInfo task, string indent, bool isLast, int depth)
-        {
+        private void PrintTask(
+            ICakeTaskInfo task,
+            CakeGraph graph,
+            string indent,
+            bool isLast,
+            int depth)
+            {
             // Builds ASCII graph
             _console.Write(indent);
             if (isLast)
@@ -96,14 +105,23 @@ namespace Cake.Cli
                 return;
             }
 
-            for (var i = 0; i < task.Dependencies.Count; i++)
-            {
-                // First() is safe as CakeGraphBuilder has already validated graph is valid
-                var childTask = Tasks
-                    .Where(x => x.Name.Equals(task.Dependencies[i].Name, StringComparison.OrdinalIgnoreCase))
-                    .First();
+            // Children = all tasks that have an edge Start -> End = current task.
+            // This respects both IsDependentOn and IsDependeeOf,
+            // because CakeGraphBuilder already encoded both into the graph.
+            var childTasks = graph.Edges
+                .Where(edge => edge.End.Equals(task.Name, StringComparison.OrdinalIgnoreCase))
+                .Select(edge => Tasks.First(t =>
+                    t.Name.Equals(edge.Start, StringComparison.OrdinalIgnoreCase)))
+                .Distinct()
+                .OrderBy(t => t.Name, StringComparer.OrdinalIgnoreCase)
+                .ToList();
 
-                PrintTask(childTask, indent, i == (task.Dependencies.Count - 1), depth + 1);
+            for (var i = 0; i < childTasks.Count; i++)
+                {
+                var childTask = childTasks[i];
+                var childIsLast = i == childTasks.Count - 1;
+
+                PrintTask(childTask, graph, indent, childIsLast, depth + 1);
             }
         }
 
@@ -112,12 +130,12 @@ namespace Cake.Cli
             var originalColor = _console.ForegroundColor;
 
             if (depth == 0)
-            {
+                {
                 _console.ForegroundColor = ConsoleColor.Cyan;
             }
             else if (task is CakeTask cakeTask &&
-                (cakeTask.Actions.Any() || cakeTask.DelayedActions.Any()))
-            {
+                       (cakeTask.Actions.Any() || cakeTask.DelayedActions.Any()))
+                       {
                 _console.ForegroundColor = ConsoleColor.Green;
             }
             else
