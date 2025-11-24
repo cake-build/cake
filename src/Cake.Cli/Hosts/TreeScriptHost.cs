@@ -11,13 +11,11 @@ using Cake.Core.Graph;
 using Cake.Core.Scripting;
 using ThreadingTask = System.Threading.Tasks.Task;
 
-namespace Cake.Cli
-{
+namespace Cake.Cli {
     /// <summary>
     /// The script host used for showing task descriptions.
     /// </summary>
-    public sealed class TreeScriptHost : ScriptHost
-    {
+    public sealed class TreeScriptHost : ScriptHost {
         private const int _maxDepth = 0;
         private const string _cross = "├─";
         private const string _corner = "└─";
@@ -37,15 +35,13 @@ namespace Cake.Cli
         }
 
         /// <inheritdoc/>
-        public override Task<CakeReport> RunTargetAsync(string target)
-        {
+        public override Task<CakeReport> RunTargetAsync(string target) {
             PrintTaskTree();
             return ThreadingTask.FromResult<CakeReport>(null);
         }
 
         /// <inheritdoc/>
-        public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
-        {
+        public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets) {
             PrintTaskTree();
             return ThreadingTask.FromResult<CakeReport>(null);
         }
@@ -87,21 +83,17 @@ namespace Cake.Cli
             {
             // Builds ASCII graph
             _console.Write(indent);
-            if (isLast)
-            {
+            if (isLast) {
                 _console.Write(_corner);
                 indent += "   ";
-            }
-            else if (depth > 0)
-            {
+            } else if (depth > 0) {
                 _console.Write(_cross);
                 indent += _vertical;
             }
 
             PrintName(task, depth);
 
-            if ((_maxDepth > 0) && (depth >= _maxDepth))
-            {
+            if ((_maxDepth > 0) && (depth >= _maxDepth)) {
                 return;
             }
 
@@ -125,8 +117,7 @@ namespace Cake.Cli
             }
         }
 
-        private void PrintName(ICakeTaskInfo task, int depth)
-        {
+        private void PrintName(ICakeTaskInfo task, int depth) {
             var originalColor = _console.ForegroundColor;
 
             if (depth == 0)
@@ -137,9 +128,7 @@ namespace Cake.Cli
                        (cakeTask.Actions.Any() || cakeTask.DelayedActions.Any()))
                        {
                 _console.ForegroundColor = ConsoleColor.Green;
-            }
-            else
-            {
+            } else {
                 _console.ForegroundColor = ConsoleColor.Gray;
             }
 
