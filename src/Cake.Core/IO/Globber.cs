@@ -54,6 +54,7 @@ namespace Cake.Core.IO
                 .Select(x => x.Path)
                 .Distinct(_comparer);
         }
+
         /// <inheritdoc/>
         public IEnumerable<IFileSystemInfo> GetFileSystemInfos(string pattern)
         {
