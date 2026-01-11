@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+
 namespace Cake.Core.IO
 {
     /// <summary>
@@ -34,5 +36,51 @@ namespace Cake.Core.IO
         /// </code>
         /// </example>
         IDirectory GetDirectory(DirectoryPath path);
+
+        /// <summary>
+        /// Gets a <see cref="IFileSystemInfo"/> for the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// A <see cref="IDirectory"/> when the path exists as a directory; otherwise an <see cref="IFile"/>,
+        /// including when the path does not exist.
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// var info = context.FileSystem.GetFileSystemInfo(context.Environment.WorkingDirectory);
+        /// Information("{0} is a directory: {1}", info.Path, info is IDirectory);
+        /// </code>
+        /// </example>
+        IFileSystemInfo GetFileSystemInfo(Path path)
+        {
+            ArgumentNullException.ThrowIfNull(path);
+
+            return GetFileSystemInfo(path.FullPath);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IFileSystemInfo"/> for the specified path, when it is not known
+        /// whether the path refers to a file or a directory.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// A <see cref="IDirectory"/> when the path exists as a directory; otherwise an <see cref="IFile"/>,
+        /// including when the path does not exist.
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// var info = context.FileSystem.GetFileSystemInfo("./artifacts");
+        /// Information("{0} exists: {1}, is a directory: {2}", info.Path, info.Exists, info is IDirectory);
+        /// </code>
+        /// </example>
+        IFileSystemInfo GetFileSystemInfo(string path)
+        {
+            ArgumentNullException.ThrowIfNull(path);
+
+            var directory = GetDirectory(new DirectoryPath(path));
+            return directory.Exists
+                ? directory
+                : GetFile(new FilePath(path));
+        }
     }
 }

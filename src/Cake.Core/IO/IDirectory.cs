@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Cake.Core.IO
 {
@@ -94,6 +95,27 @@ namespace Cake.Core.IO
         /// </code>
         /// </example>
         IEnumerable<IFile> GetFiles(string filter, SearchScope scope);
+
+        /// <summary>
+        /// Gets all file system entries in the directory.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <param name="scope">The search scope.</param>
+        /// <returns>The file system entries.</returns>
+        /// <example>
+        /// <code>
+        /// var dir = context.FileSystem.GetDirectory("./artifacts");
+        /// foreach (var entry in dir.GetFileSystemInfos("*", SearchScope.Current))
+        /// {
+        ///     Information("{0}: {1}", entry is IDirectory ? "Directory" : "File", entry.Path);
+        /// }
+        /// </code>
+        /// </example>
+        IEnumerable<IFileSystemInfo> GetFileSystemInfos(string filter, SearchScope scope)
+        {
+            return GetDirectories(filter, scope).Cast<IFileSystemInfo>()
+                .Concat(GetFiles(filter, scope));
+        }
 
         /// <summary>
         /// Sets the date and time that the file was created.

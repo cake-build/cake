@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
 using NSubstitute;
@@ -36,6 +37,76 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "environment");
+            }
+        }
+
+        public sealed class TheGetFileSystemInfosMethod
+        {
+            [Fact]
+            public void Should_Return_Empty_Result_If_Pattern_Is_Empty()
+            {
+                // Given
+                var fixture = GlobberFixture.UnixLike();
+                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+
+                // When
+                var result = globber.GetFileSystemInfos(fixture.FileSystem, new GlobPattern(string.Empty));
+
+                // Then
+                Assert.Empty(result);
+            }
+
+            [Fact]
+            public void Should_Use_The_Same_Case_Sensitivity_As_Match()
+            {
+                // Given
+                var fixture = GlobberFixture.UnixLike();
+                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+                var pattern = new GlobPattern("/working/*");
+
+                // When
+                var matches = globber.Match(pattern, new GlobberSettings()).ToList();
+                var result = globber.GetFileSystemInfos(fixture.FileSystem, pattern).Select(info => info.Path).ToList();
+
+                // Then
+                Assert.Equal(matches, result);
+            }
+
+            [Fact]
+            public void Should_Return_Matching_Files_And_Directories()
+            {
+                // Given
+                var fixture = GlobberFixture.UnixLike();
+                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+
+                // When
+                var result = globber.GetFileSystemInfos(fixture.FileSystem, new GlobPattern("/Working/*")).ToList();
+
+                // Then
+                Assert.Equal(9, result.Count);
+                Assert.Equal(6, result.OfType<IFile>().Count());
+                Assert.Equal(3, result.OfType<IDirectory>().Count());
+            }
+
+            [Fact]
+            public void Should_Apply_Settings_And_Predicates()
+            {
+                // Given
+                var fixture = GlobberFixture.UnixLike();
+                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+                var settings = new GlobberSettings
+                {
+                    Predicate = info => info.Path.FullPath == "/Working" || info.Path.FullPath.EndsWith("/Foo", StringComparison.Ordinal),
+                    FilePredicate = file => file.Path.FullPath.EndsWith("/foobar.rs", StringComparison.Ordinal)
+                };
+
+                // When
+                var result = globber.GetFileSystemInfos(fixture.FileSystem, new GlobPattern("/Working/*"), settings).ToList();
+
+                // Then
+                Assert.Equal(2, result.Count);
+                Assert.Contains(result, entry => entry.Path.FullPath == "/Working/Foo");
+                Assert.Contains(result, entry => entry.Path.FullPath == "/Working/foobar.rs");
             }
         }
 
