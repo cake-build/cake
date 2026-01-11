@@ -70,7 +70,7 @@ namespace Cake.Testing
         {
             return GetFile(path);
         }
-
+        /// <inheritdoc/>
         public IFileSystemInfo GetFileSystemInfo(DirectoryPath path)
         {
             if (path == null)

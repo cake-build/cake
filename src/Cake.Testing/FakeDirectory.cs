@@ -278,6 +278,7 @@ namespace Cake.Testing
             return new Regex(pattern, RegexOptions.Singleline | RegexOptions.Compiled);
         }
 
+        /// <inheritdoc/>
         public IEnumerable<IFileSystemInfo> GetFileSystemInfos(string filter, SearchScope scope)
         {
             // بنجمع المجلدات والملفات الوهمية
