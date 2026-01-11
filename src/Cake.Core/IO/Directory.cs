@@ -121,5 +121,12 @@ namespace Cake.Core.IO
             _directory.Refresh();
             return this;
         }
+
+        public IEnumerable<IFileSystemInfo> GetFileSystemInfos(string filter, SearchScope scope)
+        {
+            var directories = GetDirectories(filter, scope).Cast<IFileSystemInfo>();
+            var files = GetFiles(filter, scope).Cast<IFileSystemInfo>();
+            return directories.Concat(files);
+        }
     }
 }
