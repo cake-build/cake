@@ -26,7 +26,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The project ID.
         /// </value>
-        public int Id => GetEnvironmentInteger("CI_PROJECT_ID");
+        public long Id => GetEnvironmentLong("CI_PROJECT_ID");
 
         /// <summary>
         /// Gets the project name that is currently being built.

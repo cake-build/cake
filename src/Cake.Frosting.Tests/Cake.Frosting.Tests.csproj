@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Cake.Frosting\Cake.Frosting.csproj" />
     <ProjectReference Include="..\Cake.Testing\Cake.Testing.csproj" />
+    <ProjectReference Include="..\Cake.Testing.Xunit.v3\Cake.Testing.Xunit.v3.csproj" />
     <ProjectReference Include="..\Cake.Frosting.Tests.Tasks\Cake.Frosting.Tests.Tasks.csproj" />
   </ItemGroup>
 

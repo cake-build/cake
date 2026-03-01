@@ -5,7 +5,6 @@
     <AssemblyName>Cake.Frosting.Template</AssemblyName>
     <Title>Cake.Frosting templates for the .NET SDK.</Title>
     <Description>Cake.Frosting templates for the .NET SDK.</Description>
-    <TargetFramework>net8.0</TargetFramework>
     <IncludeContentInPack>true</IncludeContentInPack>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <ContentTargetFolders>content</ContentTargetFolders>
@@ -21,7 +20,7 @@
     <Compile Remove="**\*" />
   </ItemGroup>
 
-  <Target Name="VersionBuild" BeforeTargets="PrepareForBuild" Condition="'$(TemplateVersion)'!=''">
+  <Target Name="VersionBuild" BeforeTargets="DispatchToInnerBuilds" Condition="'$(TemplateVersion)'!=''">
    <XmlPoke XmlInputPath="templates\cakefrosting\build\Build.csproj" Query="Project/ItemGroup/PackageReference/@Version" Value="$(TemplateVersion)" />
   </Target>
 

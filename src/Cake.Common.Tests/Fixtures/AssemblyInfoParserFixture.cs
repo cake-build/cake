@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -27,6 +27,7 @@ namespace Cake.Common.Tests.Fixtures
         public string Guid { get; set; }
         public string InformationalVersion { get; set; }
         public List<string> InternalsVisibleTo { get; set; }
+        public List<string> SupportedOSPlatform { get; set; }
         public string Product { get; set; }
         public string Title { get; set; }
         public string Trademark { get; set; }
@@ -100,6 +101,10 @@ namespace Cake.Common.Tests.Fixtures
             if (InternalsVisibleTo != null)
             {
                 settings.InternalsVisibleTo = InternalsVisibleTo;
+            }
+            if (SupportedOSPlatform != null)
+            {
+                settings.SupportedOSPlatform = SupportedOSPlatform;
             }
             if (Product != null)
             {

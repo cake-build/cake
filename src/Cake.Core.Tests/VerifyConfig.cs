@@ -12,8 +12,12 @@ namespace Cake.Core.Tests
         public static void Init()
         {
             EmptyFiles.FileExtensions.AddTextExtension(Extensions.Cake);
-            DerivePathInfo(Expectations.Initialize);
-            VerifyDiffPlex.Initialize(OutputType.Compact);
+
+            if (!VerifyDiffPlex.Initialized)
+            {
+                VerifyDiffPlex.Initialize(OutputType.Compact);
+                DerivePathInfo(Expectations.Initialize);
+            }
         }
 
         public static class Extensions

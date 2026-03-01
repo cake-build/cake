@@ -2,7 +2,7 @@ using Cake.Common;
 using Cake.Common.Diagnostics;
 using Cake.Frosting;
 
-[TaskName("Hello")]
+[TaskName(nameof(Hello))]
 public sealed class Hello : FrostingTask<Context>
 {
     public override void Run(Context context)

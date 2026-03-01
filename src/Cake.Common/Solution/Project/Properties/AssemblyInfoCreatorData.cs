@@ -17,6 +17,7 @@ namespace Cake.Common.Solution.Project.Properties
         private readonly Dictionary<string, string> _metadatattributes;
         private readonly HashSet<string> _namespaces;
         private readonly HashSet<string> _internalVisibleTo;
+        private readonly HashSet<string> _supportedOSPlatform;
         private readonly string _trueStringValue;
         private readonly string _falseStringValue;
 
@@ -30,6 +31,8 @@ namespace Cake.Common.Solution.Project.Properties
 
         public ISet<string> InternalVisibleTo => _internalVisibleTo;
 
+        public ISet<string> SupportedOSPlatform => _supportedOSPlatform;
+
         public AssemblyInfoCreatorData(AssemblyInfoSettings settings, bool isVisualBasicAssemblyInfoFile)
         {
             _dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -37,6 +40,7 @@ namespace Cake.Common.Solution.Project.Properties
             _metadatattributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _namespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             _internalVisibleTo = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _supportedOSPlatform = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             _falseStringValue = isVisualBasicAssemblyInfoFile ? "False" : "false";
             _trueStringValue = isVisualBasicAssemblyInfoFile ? "True" : "true";
@@ -66,6 +70,18 @@ namespace Cake.Common.Solution.Project.Properties
                 if (_internalVisibleTo.Count > 0)
                 {
                     _namespaces.Add("System.Runtime.CompilerServices");
+                }
+            }
+            if (settings.SupportedOSPlatform != null)
+            {
+                foreach (var item in settings.SupportedOSPlatform.Where(item => item != null))
+                {
+                    _supportedOSPlatform.Add(string.Concat("SupportedOSPlatform(\"", item.UnQuote(), "\")"));
+                }
+
+                if (_supportedOSPlatform.Count > 0)
+                {
+                    _namespaces.Add("System.Runtime.Versioning");
                 }
             }
             if (settings.CustomAttributes != null)

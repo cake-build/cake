@@ -26,7 +26,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The build ID.
         /// </value>
-        public int Id => GetEnvironmentInteger("CI_JOB_ID", "CI_BUILD_ID");
+        public long Id => GetEnvironmentLong("CI_JOB_ID", "CI_BUILD_ID");
 
         /// <summary>
         /// Gets the commit revision for which project is built.
@@ -106,7 +106,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The unique build ID.
         /// </value>
-        public int PipelineId => GetEnvironmentInteger("CI_PIPELINE_ID");
+        public long PipelineId => GetEnvironmentLong("CI_PIPELINE_ID");
 
         /// <summary>
         /// Gets the unique id of the current pipeline scoped to the project.
@@ -114,7 +114,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The unique build ID.
         /// </value>
-        public int PipelineIId => GetEnvironmentInteger("CI_PIPELINE_IID");
+        public long PipelineIId => GetEnvironmentLong("CI_PIPELINE_IID");
 
         /// <summary>
         /// Gets the id of the user who started the build.
@@ -122,7 +122,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The user ID.
         /// </value>
-        public int UserId => GetEnvironmentInteger("GITLAB_USER_ID");
+        public long UserId => GetEnvironmentLong("GITLAB_USER_ID");
 
         /// <summary>
         /// Gets the email of the user who started the build.

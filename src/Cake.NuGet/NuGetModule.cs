@@ -3,10 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Core.Annotations;
 using Cake.Core.Composition;
 using Cake.Core.Packaging;
 using Cake.Core.Scripting.Processors.Loading;
+using Cake.NuGet;
 
+[assembly: CakeModule(typeof(NuGetModule))]
 namespace Cake.NuGet
 {
     /// <summary>

@@ -90,6 +90,12 @@ namespace Cake.Common.Solution.Project.Properties
         public ICollection<string> InternalsVisibleTo { get; set; }
 
         /// <summary>
+        /// Gets or sets the operating system(s) or platform(s) which this assembly supports.
+        /// </summary>
+        /// <value>The name(s), and optional version(s), of the supported platform(s).</value>
+        public ICollection<string> SupportedOSPlatform { get; set; }
+
+        /// <summary>
         /// Gets or sets the configuration of the assembly.
         /// </summary>
         /// <value>The configuration.</value>

@@ -70,6 +70,7 @@ namespace Cake.Common.Tools.MSBuild
         {
             var versions = new[]
             {
+                MSBuildVersion.MSBuild18,
                 MSBuildVersion.MSBuild17,
                 MSBuildVersion.MSBuild16,
                 MSBuildVersion.MSBuild15,
@@ -101,6 +102,8 @@ namespace Cake.Common.Tools.MSBuild
         {
             switch (version)
             {
+                case MSBuildVersion.MSBuild18:
+                    return GetVisualStudio2026Path(fileSystem, environment, buildPlatform, allowPreview);
                 case MSBuildVersion.MSBuild17:
                     return GetVisualStudio2022Path(fileSystem, environment, buildPlatform, allowPreview);
                 case MSBuildVersion.MSBuild16:
@@ -234,6 +237,37 @@ namespace Cake.Common.Tools.MSBuild
             }
 
             return VisualStudio.GetYearAndEditionRootPath(environment, "2022", "Professional").Combine("MSBuild/Current/Bin");
+        }
+
+        private static DirectoryPath GetVisualStudio2026Path(IFileSystem fileSystem, ICakeEnvironment environment,
+            MSBuildPlatform buildPlatform, bool allowPreviewVersion)
+        {
+            foreach (var edition in allowPreviewVersion
+                         ? VisualStudio.Editions.All
+                         : VisualStudio.Editions.Stable)
+            {
+                // Get the bin path.
+                var binPath = VisualStudio.GetYearAndEditionRootPath(environment, "18", edition).Combine("MSBuild/Current/Bin");
+                if (fileSystem.Exist(binPath))
+                {
+                    if (buildPlatform == MSBuildPlatform.Automatic)
+                    {
+                        if (environment.Platform.Is64Bit)
+                        {
+                            binPath = binPath.Combine("amd64");
+                        }
+                    }
+
+                    if (buildPlatform == MSBuildPlatform.x64)
+                    {
+                        binPath = binPath.Combine("amd64");
+                    }
+
+                    return binPath;
+                }
+            }
+
+            return VisualStudio.GetYearAndEditionRootPath(environment, "18", "Professional").Combine("MSBuild/Current/Bin");
         }
 
         private static DirectoryPath GetFrameworkPath(ICakeEnvironment environment, MSBuildPlatform buildPlatform, string version)

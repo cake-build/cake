@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -88,7 +88,8 @@ namespace Cake.Common.Solution.Project.Properties
                     ParseSingle(quotedPattern, "AssemblyTitle", content),
                     ParseSingle(quotedPattern, "AssemblyTrademark", content),
                     ParseSingle(quotedPattern, "AssemblyVersion", content) ?? DefaultVersion,
-                    ParseMultiple(quotedPattern, "InternalsVisibleTo", content));
+                    ParseMultiple(quotedPattern, "InternalsVisibleTo", content),
+                    ParseMultiple(quotedPattern, "SupportedOSPlatform", content));
             }
         }
 

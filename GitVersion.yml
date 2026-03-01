@@ -1,18 +1,8 @@
+workflow: GitFlow/v1
 next-version: 6.0.0
 branches:
-  master:
-    regex: main
-    mode: ContinuousDelivery
-    tag:
-    increment: Patch
-    prevent-increment-of-merged-branch-version: true
-    track-merge-target: false
-  develop:
-    mode: ContinuousDeployment
-    tag: alpha
-    increment: Minor
-    prevent-increment-of-merged-branch-version: false
-    track-merge-target: true
+  main:
+    label: beta
 ignore:
   sha:
     - 2a4757b270f7946122ba6622e3d2e72b2b2808a7

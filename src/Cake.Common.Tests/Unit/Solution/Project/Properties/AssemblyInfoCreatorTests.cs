@@ -318,6 +318,38 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
             }
 
             [Fact]
+            public void Should_Add_SupportedOSPlatform_Attribute_If_Set()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture();
+                fixture.Settings.SupportedOSPlatform = new List<string> { "windows" };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("using System.Runtime.Versioning;", result);
+                Assert.Contains("[assembly: SupportedOSPlatform(\"windows\")]", result);
+            }
+
+            [Fact]
+            public void Should_Add_Multiple_SupportedOSPlatform_Attribute_If_Set()
+            {
+                // Given
+                var fixture = new AssemblyInfoFixture();
+                fixture.Settings.SupportedOSPlatform = new Collection<string> { "windows", "linux", "macos" };
+
+                // When
+                var result = fixture.CreateAndReturnContent();
+
+                // Then
+                Assert.Contains("using System.Runtime.Versioning;", result);
+                Assert.Contains("[assembly: SupportedOSPlatform(\"windows\")]", result);
+                Assert.Contains("[assembly: SupportedOSPlatform(\"linux\")]", result);
+                Assert.Contains("[assembly: SupportedOSPlatform(\"macos\")]", result);
+            }
+
+            [Fact]
             public void Should_Add_Configuration_Attribute_If_Set()
             {
                 // Given

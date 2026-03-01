@@ -20,6 +20,22 @@ var logActionMethods = new [] {
     new { Name = "Debug", Action = new Action<LogAction>(Debug), Verbosity = Verbosity.Diagnostic }
 };
 
+var logFormattableStringMethods = new [] {
+    new { Name = "Error", Action = new Action<FormattableString>(Error)},
+    new { Name = "Warning", Action = new Action<FormattableString>(Warning)},
+    new { Name = "Information", Action = new Action<FormattableString>(Information)},
+    new { Name = "Verbose", Action = new Action<FormattableString>(Verbose)},
+    new { Name = "Debug", Action = new Action<FormattableString>(Debug)}
+};
+
+var logFormattableLogActionMethods = new [] {
+    new { Name = "Error", Action = new Action<FormattableLogAction>(Error), Verbosity = Verbosity.Quiet },
+    new { Name = "Warning", Action = new Action<FormattableLogAction>(Warning), Verbosity = Verbosity.Minimal },
+    new { Name = "Information", Action = new Action<FormattableLogAction>(Information), Verbosity = Verbosity.Normal },
+    new { Name = "Verbose", Action = new Action<FormattableLogAction>(Verbose), Verbosity = Verbosity.Verbose },
+    new { Name = "Debug", Action = new Action<FormattableLogAction>(Debug), Verbosity = Verbosity.Diagnostic }
+};
+
 var logStringMethods = new [] {
     new { Name = "Error", Action = new Action<string>(Error)},
     new { Name = "Warning", Action = new Action<string>(Warning)},
@@ -47,18 +63,11 @@ Array.ForEach(
                                     Task(string.Format("Cake.Common.Diagnostics.LoggingAliases.StringFormat.{0}.{1}", verbosity, logStringFormatMethod.Name))
                                         .Does(() =>
                                     {
-                                        var originalVerbosity = Context.Log.Verbosity;
-                                        try
+                                        // Given
+                                        using (Context.WithVerbosity(verbosity))
                                         {
-                                            // Given
-                                            Context.Log.Verbosity = verbosity;
-
                                             // When
                                             logStringFormatMethod.Action("Cake.Common.Diagnostics.LoggingAliases.StringFormat.{0}.{1}", new object[] { verbosity, logStringFormatMethod.Name });
-                                        }
-                                        finally
-                                        {
-                                            Context.Log.Verbosity = originalVerbosity;
                                         }
                                     }).Task.Name
                         ))
@@ -72,11 +81,9 @@ Array.ForEach(
                                     Task(string.Format("Cake.Common.Diagnostics.LoggingAliases.LogAction.{0}.{1}", verbosity, logActionMethod.Name))
                                         .Does(() =>
                                     {
-                                        var originalVerbosity = Context.Log.Verbosity;
-                                        try
+                                        // Given
+                                        using (Context.WithVerbosity(verbosity))
                                         {
-                                            // Given
-                                            Context.Log.Verbosity = verbosity;
                                             bool called = false;
                                             LogAction action = entry=>{
                                                 called = true;
@@ -87,10 +94,6 @@ Array.ForEach(
 
                                             // Then
                                             Assert.True(called || verbosity<logActionMethod.Verbosity);
-                                        }
-                                        finally
-                                        {
-                                            Context.Log.Verbosity = originalVerbosity;
                                         }
                                     }).Task.Name
                         ))
@@ -104,18 +107,11 @@ Array.ForEach(
                                     Task(string.Format("Cake.Common.Diagnostics.LoggingAliases.String.{0}.{1}", verbosity, logStringMethod.Name))
                                         .Does(() =>
                                     {
-                                        var originalVerbosity = Context.Log.Verbosity;
-                                        try
+                                        // Given
+                                        using (Context.WithVerbosity(verbosity))
                                         {
-                                            // Given
-                                            Context.Log.Verbosity = verbosity;
-
                                             // When
                                             logStringMethod.Action(string.Format("Cake.Common.Diagnostics.LoggingAliases.String.{0}.{1}: {2}", verbosity, logStringMethod.Name, "{Bon}jour"));
-                                        }
-                                        finally
-                                        {
-                                            Context.Log.Verbosity = originalVerbosity;
                                         }
                                     }).Task.Name
                         ))
@@ -129,18 +125,55 @@ Array.ForEach(
                                     Task(string.Format("Cake.Common.Diagnostics.LoggingAliases.Object.{0}.{1}", verbosity, logObjectMethod.Name))
                                         .Does(() =>
                                     {
-                                        var originalVerbosity = Context.Log.Verbosity;
-                                        try
+                                        // Given
+                                        using (Context.WithVerbosity(verbosity))
                                         {
-                                            // Given
-                                            Context.Log.Verbosity = verbosity;
-
                                             // When
                                             logObjectMethod.Action(new { Test = "Cake.Common.Diagnostics.LoggingAliases.Object", Verbosity = verbosity, Name = logObjectMethod.Name });
                                         }
-                                        finally
+                                    }).Task.Name
+                        ))
+);
+
+Array.ForEach(
+    verbosities,
+    verbosity => Array.ForEach(
+                            logFormattableStringMethods,
+                            logFormattableStringMethod => loggingAliasesTask.IsDependentOn(
+                                    Task(string.Format("Cake.Common.Diagnostics.LoggingAliases.FormattableString.{0}.{1}", verbosity, logFormattableStringMethod.Name))
+                                        .Does(() =>
+                                    {
+                                        // Given
+                                        using (Context.WithVerbosity(verbosity))
                                         {
-                                            Context.Log.Verbosity = originalVerbosity;
+                                            // When
+                                            logFormattableStringMethod.Action($"Cake.Common.Diagnostics.LoggingAliases.FormattableString.{verbosity}.{logFormattableStringMethod.Name}: {"Bon"}jour");
+                                        }
+                                    }).Task.Name
+                        ))
+);
+
+Array.ForEach(
+    verbosities,
+    verbosity => Array.ForEach(
+                            logFormattableLogActionMethods,
+                            logFormattableLogActionMethod => loggingAliasesTask.IsDependentOn(
+                                    Task(string.Format("Cake.Common.Diagnostics.LoggingAliases.FormattableLogAction.{0}.{1}", verbosity, logFormattableLogActionMethod.Name))
+                                        .Does(() =>
+                                    {
+                                        // Given
+                                        using (Context.WithVerbosity(verbosity))
+                                        {
+                                            bool called = false;
+                                            FormattableLogAction action = entry => {
+                                                called = true;
+                                            };
+
+                                            // When
+                                            logFormattableLogActionMethod.Action(action);
+
+                                            // Then
+                                            Assert.True(called || verbosity < logFormattableLogActionMethod.Verbosity);
                                         }
                                     }).Task.Name
                         ))

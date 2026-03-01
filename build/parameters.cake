@@ -30,6 +30,7 @@ public class BuildParameters
     public bool PublishingError { get; set; }
     public DotNetMSBuildSettings MSBuildSettings { get; }
     public CodeSigningCredentials CodeSigning { get; }
+    public CommandSettings SignCommandSettings { get; }
 
     public bool ShouldPublish
     {
@@ -101,6 +102,11 @@ public class BuildParameters
         IsDevelopCakeBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch) || StringComparer.OrdinalIgnoreCase.Equals("develop", Version.BranchName);
         IsMainCakeRepo = StringComparer.OrdinalIgnoreCase.Equals("cake-build/cake", buildSystem.AppVeyor.Environment.Repository.Name) || StringComparer.OrdinalIgnoreCase.Equals("cake-build", buildSystem.GitHubActions.Environment.Workflow.RepositoryOwner);
         Paths = BuildPaths.GetPaths(context, Configuration, Version.SemVersion);
+        SignCommandSettings = new CommandSettings{
+            ToolExecutableNames = new [] { "sign", "sign.exe" },
+            ToolName = "sign",
+            ToolPath = Paths.SignClientPath?.FullPath
+        };
         Packages = BuildPackages.GetPackages(
             Paths.Directories.NuGetRoot,
             Version.SemVersion,

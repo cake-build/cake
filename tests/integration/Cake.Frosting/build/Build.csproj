@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\src\Cake.Frosting\Cake.Frosting.csproj" />
+    <PackageReference Include="xunit.v3.assert" Version="3.2.1" />
   </ItemGroup>
 
 </Project>

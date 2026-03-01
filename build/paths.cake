@@ -39,13 +39,29 @@ public record BuildPaths(
             nugetRoot,
             integrationTestsBinTool);
 
-        var signClientPath = context.Tools.Resolve("sign.exe")
-                                ?? context.Tools.Resolve("sign")
-                                ?? (
-                                    context.IsRunningOnWindows()
-                                        ? throw new Exception("Failed to locate sign tool")
-                                        : null
-                                    );
+        FilePath signClientPath = null;
+        if (context.IsRunningOnWindows())
+        {
+            signClientPath = context.Tools.Resolve("sign.exe");
+
+            if (signClientPath == null)
+            {
+                context.Information("Installing sign tool...");
+                context.CakeExecuteScript(
+                    "./build/signtool.cake",
+                    new CakeSettings {
+                        Verbosity = Verbosity.Quiet,
+                        EnvironmentVariables = {
+                            ["CAKE_PATHS_TOOLS"] = context.MakeAbsolute(context.Directory("./tools")).FullPath
+                        }
+                    }
+                );
+                
+                signClientPath = context.Tools.Resolve("sign.exe")
+                                    ?? throw new Exception("Failed to locate sign tool");
+
+            }
+        }
 
         var signFilterPath = context.MakeAbsolute(context.File("./build/signclient.filter"));
 

@@ -98,7 +98,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
 
                     // Then
                     Assert.Single(console.Messages);
-                    Assert.Equal("Hello World", console.Messages[0]);
+                    Assert.Equal("\u001b[37;1mHello World\u001b[0m", console.Messages[0]);
                 }
 
                 [Theory]

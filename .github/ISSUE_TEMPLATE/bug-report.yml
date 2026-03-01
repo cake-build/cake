@@ -15,6 +15,7 @@ body:
     options:
       - Cake .NET Tool
       - Cake Frosting
+      - Cake SDK
     multiple: true
   validations:
     required: true

@@ -126,6 +126,14 @@ namespace Cake.Common.Solution.Project.Properties
                     writer.WriteLine();
                 }
 
+                if (data.SupportedOSPlatform.Count > 0)
+                {
+                    foreach (var attribute in data.SupportedOSPlatform)
+                    {
+                        writer.WriteLine(string.Format(attributeFormat, attribute));
+                    }
+                }
+
                 if (data.CustomAttributes.Count > 0)
                 {
                     writer.WriteLine(comment + " Custom Attributes");

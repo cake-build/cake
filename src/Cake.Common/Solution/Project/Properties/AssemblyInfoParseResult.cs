@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,6 +13,7 @@ namespace Cake.Common.Solution.Project.Properties
     public sealed class AssemblyInfoParseResult
     {
         private readonly List<string> _internalsVisibleTo;
+        private readonly List<string> _supportedOSPlatform;
 
         /// <summary>
         /// Gets a value indicating whether the assembly is CLS compliant.
@@ -103,6 +104,12 @@ namespace Cake.Common.Solution.Project.Properties
         public ICollection<string> InternalsVisibleTo => _internalsVisibleTo;
 
         /// <summary>
+        /// Gets the operating system(s) or platform(s) which this assembly supports.
+        /// </summary>
+        /// <value>The name(s), and optional version(s), of the supported platform(s).</value>
+        public ICollection<string> SupportedOSPlatform => _supportedOSPlatform;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyInfoParseResult"/> class.
         /// </summary>
         /// <param name="clsCompliant">Whether the assembly is CLS compliant.</param>
@@ -119,6 +126,7 @@ namespace Cake.Common.Solution.Project.Properties
         /// <param name="trademark">The assembly trademark attribute.</param>
         /// <param name="assemblyVersion">The assembly version.</param>
         /// <param name="internalsVisibleTo">The assemblies that internals are visible to.</param>
+        /// <param name="supportedOSPlatform">The operating system(s) or platform(s) which this assembly supports.</param>
         public AssemblyInfoParseResult(string clsCompliant,
             string company,
             string comVisible,
@@ -132,7 +140,8 @@ namespace Cake.Common.Solution.Project.Properties
             string title,
             string trademark,
             string assemblyVersion,
-            IEnumerable<string> internalsVisibleTo)
+            IEnumerable<string> internalsVisibleTo,
+            IEnumerable<string> supportedOSPlatform)
         {
             ClsCompliant = !string.IsNullOrWhiteSpace(clsCompliant) && bool.Parse(clsCompliant);
             Company = company ?? string.Empty;
@@ -148,6 +157,7 @@ namespace Cake.Common.Solution.Project.Properties
             Trademark = trademark ?? string.Empty;
             AssemblyVersion = assemblyVersion ?? string.Empty;
             _internalsVisibleTo = new List<string>(internalsVisibleTo ?? Enumerable.Empty<string>());
+            _supportedOSPlatform = new List<string>(supportedOSPlatform ?? Enumerable.Empty<string>());
         }
     }
 }

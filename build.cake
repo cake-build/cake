@@ -1,10 +1,10 @@
 // Install addins.
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=5.0.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=6.0.0"
 
 // Install .NET Core Global tools.
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.12.0"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=6.6.0"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.20.0"
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=sign&version=0.9.1-beta.25379.1&prerelease"
+
 
 // Load other scripts.
 #load "./build/parameters.cake"
@@ -37,9 +37,22 @@ Setup<BuildParameters>(context =>
         parameters.IsPullRequest
         );
 
-    if (parameters.ShouldSignPackages && !parameters.CodeSigning.HasCredentials)
+
+    if (parameters.ShouldSignPackages)
     {
-        throw new CakeException("Code signing credentials are missing.");
+        if (!parameters.CodeSigning.HasCredentials)
+        {
+            throw new CakeException("Code signing credentials are missing.");
+        }
+
+        context.Command(
+                parameters.SignCommandSettings,
+                out var standardOutput,
+                new ProcessArgumentBuilder()
+                    .Append("--version")
+            );
+            
+        Information("Sign tool version: {0}", standardOutput);
     }
 
     foreach (var assemblyInfo in GetFiles("./src/**/AssemblyInfo.cs"))
@@ -163,11 +176,6 @@ Task("Sign-Binaries")
 {
     // Get the files to sign.
     var files = context.GetFiles(string.Concat(parameters.Paths.Directories.NuGetRoot, "/", "*.nupkg"));
-    var commandSettings = new CommandSettings{
-        ToolExecutableNames = new [] { "sign", "sign.exe" },
-        ToolName = "sign",
-        ToolPath = parameters.Paths.SignClientPath.FullPath
-    };
 
     Parallel.ForEach(
         files,
@@ -188,7 +196,7 @@ Task("Sign-Binaries")
             .AppendSwitchQuotedSecret("--azure-key-vault-url", parameters.CodeSigning.SignKeyVaultUrl);
 
         context.Command(
-            commandSettings,
+            parameters.SignCommandSettings,
             arguments
         );
 
@@ -373,14 +381,19 @@ Task("Frosting-Integration-Tests")
 
         DotNetRun(test.Project.FullPath,
             new ProcessArgumentBuilder()
-                .AppendSwitchQuoted("--verbosity", "=", "quiet")
-                .AppendSwitchQuoted("--name", "=", "world"),
+                .AppendSwitchQuoted("--verbosity", "=", Argument("integration-tests-verbosity", "quiet"))
+                .AppendSwitchQuoted("--name", "=", "World")
+                .AppendSwitchQuoted("--IntegrationTest_Argument", "=", bool.TrueString),
             new DotNetRunSettings
             {
                 Configuration = parameters.Configuration,
                 Framework = test.Framework,
                 NoRestore = true,
-                NoBuild = true
+                NoBuild = true,
+                EnvironmentVariables = new Dictionary<string, string>
+                {
+                    ["CAKE_INTEGRATIONTEST_ENVIRONMENT"] = bool.TrueString,
+                }
             });
     }
     catch(Exception ex)

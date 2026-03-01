@@ -1,4 +1,4 @@
-﻿# Cake
+# Cake
 
 Cake (C# Make) is a build automation system with a C# DSL to do things like compiling code, copy files/folders, running unit tests, compress files and build NuGet packages.
 
@@ -29,9 +29,10 @@ Make sure you've read the [contribution guidelines](https://cakebuild.net/docs/c
 
 ## Get in touch
 
-[![Follow @cakebuildnet](https://img.shields.io/badge/Twitter-Follow%20%40cakebuildnet-blue.svg)](https://twitter.com/intent/follow?screen_name=cakebuildnet)
+[![Follow @cakebuild on Mastodon](https://img.shields.io/badge/Mastodon-Follow%20%40cakebuild-6364FF?style=flat&logo=mastodon&logoColor=white)](https://dotnet.social/@cakebuild)
+[![Follow @cakebuild.net on Bluesky](https://img.shields.io/badge/Bluesky-Follow%20%40cakebuild.net-0085FF?style=flat&logo=bluesky&logoColor=white)](https://bsky.app/profile/cakebuild.net)
 
-[![Join the chat at https://github.com/cake-build/cake/discussions](https://img.shields.io/badge/discussions-join%20chat-brightgreen)](https://github.com/cake-build/cake/discussions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://github.com/cake-build/cake/discussions](https://img.shields.io/badge/discussions-join%20chat-brightgreen?style=flat&logo=github&logoColor=white)](https://github.com/cake-build/cake/discussions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## License
 

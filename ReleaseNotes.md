@@ -1,3 +1,33 @@
+### New in 6.1.0 (Released 2026/03/01)
+
+* #4656 Gitlab CI_PIPELINE_ID has exceeded the int limits on gitlab.com and the variable should be changed to a long.
+* #4698 Add FormattableString Support to Logging Methods.
+* #4520 add slnx support.
+* #4071 Unable to set multiple of the same attribute CustomAttributes in AssemblyInfo creator.
+* #3517 NuGet Pack Should support new readme file.
+* #2028 In-Process NuGet doesn't support authentication.
+* #4740 Add CakeModule assemmbly attribute to NuGetModule.
+* #4737 Update Microsoft.Extensions.DependencyInjection to 9.0.13 & 10.0.3 (net9.0&net10.0).
+* #4735 Update Microsoft.IdentityModel.JsonWebTokens to 8.16.0.
+* #4733 Update NuGet.* to 7.3.0.
+* #4715 Update System.Security.Cryptography.Pkcs to 9.0.12 & 10.0.2 (net9.0&net10.0).
+* #4713 Update Microsoft.Extensions.DependencyInjection to 9.0.12 & 10.0.2 (net9.0&net10.0).
+* #4694 Update Autofac to 9.0.0.
+* #4692 Update System.Security.Cryptography.Pkcs to 10.0.1 for net10.0.
+* #4688 Update Microsoft.IdentityModel.JsonWebTokens to 8.15.0.
+* #4685 Update Microsoft.Extensions.DependencyInjection to 10.0.1 for net10.0.
+* #4683 Update Microsoft.CodeAnalysis.CSharp.Scripting to 5.0.0.
+* #4679 Update Basic.Reference.Assemblies.* to 1.8.4.
+* #4677 Update NuGet.* to 7.0.1.
+* #4675 Update Spectre.Console & Spectre.Console.Cli to 0.54.0 & 0.53.1.
+* #4658 Add support for MSBuild 18 and VS2026.
+* #4635 DotCover no longer works with version 2025.2+ of JetBrains.dotCover.CommandLineTools.
+* #4720 Use non-boolean self-contained arguments for dotnet publish.
+* #4706 Add support for .slnx files in dotnet test PathType autodetection.
+* #4687 Cake Frosting FrostingConfiguration Command Line parameters are not parsed correctly.
+* #4667 DotNetSlnList hardcodes English output.
+* #4662 Colorization of console log output.
+
 ### New in 6.0.0 (Released 2025/11/11)
 
 * #4639 Make CakeSpectreReportPrinter the default ICakeReportPrinter.

@@ -99,10 +99,7 @@ namespace Cake.Common.Tools.DotNet
         {
             ArgumentNullException.ThrowIfNull(context);
 
-            if (settings is null)
-            {
-                settings = new DotNetSlnListSettings();
-            }
+            settings ??= new DotNetSlnListSettings();
 
             var lister = new DotNetSlnLister(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             return lister.List(solution, settings);

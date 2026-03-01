@@ -1,0 +1,72 @@
+﻿{
+  Version: Format Version 12.00,
+  VisualStudioVersion: 14.0.25123.0,
+  MinimumVisualStudioVersion: 10.0.40219.1,
+  Projects: [
+    {
+      Items: [
+        {
+          Id: Guid_1,
+          Name: dummy,
+          Path: /Working/src/dummy/dummy.csproj,
+          Type: Guid_2
+        }
+      ],
+      Id: Guid_3,
+      Name: src,
+      Path: /Working/src,
+      Type: Guid_4,
+      Parent: null
+    },
+    {
+      Items: [
+        {
+          Id: Guid_5,
+          Name: dummy.Tests,
+          Path: /Working/test/dummy.Tests/dummy.Tests.csproj,
+          Type: Guid_2
+        }
+      ],
+      Id: Guid_6,
+      Name: test,
+      Path: /Working/test,
+      Type: Guid_4,
+      Parent: null
+    },
+    {
+      Id: Guid_1,
+      Name: dummy,
+      Path: /Working/src/dummy/dummy.csproj,
+      Type: Guid_2,
+      Parent: {
+        Items: [],
+        Id: Guid_3,
+        Name: src,
+        Path: /Working/src,
+        Type: Guid_4,
+        Parent: null
+      }
+    },
+    {
+      Id: Guid_5,
+      Name: dummy.Tests,
+      Path: /Working/test/dummy.Tests/dummy.Tests.csproj,
+      Type: Guid_2,
+      Parent: {
+        Items: [],
+        Id: Guid_6,
+        Name: test,
+        Path: /Working/test,
+        Type: Guid_4,
+        Parent: null
+      }
+    },
+    {
+      Id: Guid_7,
+      Name: executable,
+      Path: /Working/executable/executable.csproj,
+      Type: Guid_2,
+      Parent: null
+    }
+  ]
+}

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -46,7 +47,7 @@ namespace Cake.Common.Solution
                 solutionPath = solutionPath.MakeAbsolute(_environment);
             }
 
-            // Get the release notes file.
+            // Get solution file.
             var file = _fileSystem.GetFile(solutionPath);
             if (!file.Exists)
             {
@@ -55,6 +56,18 @@ namespace Cake.Common.Solution
                 throw new CakeException(message);
             }
 
+            var fileExtension = file.Path.GetExtension().ToLowerInvariant();
+
+            return fileExtension switch
+            {
+                ".sln" => ParseSlnSolution(file),
+                ".slnx" => ParseSlnxSolution(file),
+                _ => throw new CakeException($"Unknown file extension {fileExtension} for solution file '{solutionPath.FullPath}'."),
+            };
+        }
+
+        private static SolutionParserResult ParseSlnSolution(IFile file)
+        {
             string
                 version = null,
                 visualStudioVersion = null,
@@ -181,6 +194,115 @@ namespace Cake.Common.Solution
 
             parent.Items.Add(child);
             child.Parent = parent;
+        }
+
+        private static SolutionParserResult ParseSlnxSolution(IFile file)
+        {
+            var xmlReaderSettings = new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Prohibit, // Prevent XXE
+                XmlResolver = null, // Disable external entity resolution
+            };
+            using var xmlContentStream = file.OpenRead();
+            var xmlDocument = new XmlDocument();
+
+            using var xmlReader = XmlReader.Create(xmlContentStream, xmlReaderSettings);
+            xmlDocument.Load(xmlReader);
+
+            var root = xmlDocument.DocumentElement;
+            if (root == null)
+            {
+                throw new CakeException($"Solution file '{file.Path.FullPath}' does not contain a root element.");
+            }
+
+            var projects = new List<SolutionProject>();
+            foreach (var xmlElement in root.ChildNodes.OfType<XmlElement>())
+            {
+                var projectsFromElement = ParseSlnxElement(xmlElement, file);
+                projects.AddRange(projectsFromElement);
+            }
+
+            // the new SLNX has no information about the file format version, VS version and minimal VS version, so it's omitted.
+            return new SolutionParserResult(string.Empty, string.Empty, string.Empty, projects.AsReadOnly());
+        }
+
+        private static List<SolutionProject> ParseSlnxElement(XmlElement xmlElement, IFile solutionFile)
+        {
+            return xmlElement.Name switch
+            {
+                "Folder" => ParseSlnxFolder(xmlElement, solutionFile),
+                "Project" => ParseSlnxProject(xmlElement, solutionFile),
+                _ =>[],
+            };
+        }
+
+        private static List<SolutionProject> ParseSlnxFolder(XmlElement xmlElement, IFile solutionFile)
+        {
+            var folderName = xmlElement.GetAttribute("Name");
+            if (string.IsNullOrWhiteSpace(folderName))
+            {
+                throw new CakeException($"Could not find solution folder name attribute in solution file '{solutionFile.Path.FullPath}'.");
+            }
+
+            // the name of the folder is also its path. And it always has a starting and trailing "/", which break the check if its relative, so they are removed.
+            var folderPath = new FilePath(folderName.Trim('/'));
+            var folderFullPath = folderPath.IsRelative ?
+                solutionFile.Path.GetDirectory().CombineWithFilePath(folderPath) :
+                folderPath;
+
+            var actualFolderName = folderName.Split('/', StringSplitOptions.RemoveEmptyEntries).Last();
+
+            // elements in the SLNX file don't have any IDs anymore, so it's omitted.
+            var solutionFolder = new SolutionFolder(string.Empty, actualFolderName, folderFullPath);
+            var projects = new List<SolutionProject>
+            {
+                solutionFolder,
+            };
+
+            foreach (var childElement in xmlElement.ChildNodes.OfType<XmlElement>())
+            {
+                var childProjects = ParseSlnxElement(childElement, solutionFile);
+                foreach (var childProject in childProjects)
+                {
+                    childProject.Parent = solutionFolder;
+                    solutionFolder.Items.Add(childProject);
+                    projects.Add(childProject);
+                }
+            }
+
+            return projects;
+        }
+
+        private static List<SolutionProject> ParseSlnxProject(XmlElement xmlElement, IFile solutionFile)
+        {
+            const string defaultProjectTypeId = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}";
+
+            var projectPath = xmlElement.GetAttribute("Path");
+            if (string.IsNullOrWhiteSpace(projectPath))
+            {
+                throw new CakeException($"Could not find solution project path attribute in solution file '{solutionFile.Path.FullPath}'.");
+            }
+
+            var projectTypeId = xmlElement.GetAttribute("Type");
+            projectTypeId = string.IsNullOrWhiteSpace(projectTypeId)
+                ? defaultProjectTypeId
+                // the new project type id notation does not quite fit the known format, so it is adjusted.
+                : $"{{{projectTypeId.ToUpper()}}}";
+
+            var projectFilePath = new FilePath(projectPath);
+            var projectFileFullPath = projectFilePath.IsRelative ?
+                solutionFile.Path.GetDirectory().CombineWithFilePath(projectFilePath) :
+                projectFilePath;
+
+            // the project name is part of its path.
+            var actualProjectName = projectFilePath.GetFilenameWithoutExtension().FullPath;
+
+            // elements in the SLNX file don't have any IDs anymore, so it's omitted.
+            var solutionProject = new SolutionProject(string.Empty, actualProjectName, projectFileFullPath, projectTypeId);
+            return
+            [
+                solutionProject,
+            ];
         }
     }
 }

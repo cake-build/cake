@@ -44,7 +44,11 @@ public record BuildVersion(
                 });
 
                 version = context.EnvironmentVariable("GitVersion_MajorMinorPatch");
-                semVersion = context.EnvironmentVariable("GitVersion_LegacySemVerPadded");
+                var preReleaseNumberStr = context.EnvironmentVariable("GitVersion_PreReleaseNumber");
+                semVersion = GetLegacySemVerPadded(
+                    context.EnvironmentVariable("GitVersion_MajorMinorPatch"),
+                    context.EnvironmentVariable("GitVersion_PreReleaseLabel"),
+                    !string.IsNullOrEmpty(preReleaseNumberStr) && int.TryParse(preReleaseNumberStr, out int num) ? num : (int?)null);
                 milestone = string.Concat("v", version);
             }
 
@@ -58,7 +62,10 @@ public record BuildVersion(
             });
 
             version = assertedVersions.MajorMinorPatch;
-            semVersion = assertedVersions.LegacySemVerPadded;
+            semVersion = GetLegacySemVerPadded(
+                assertedVersions.MajorMinorPatch,
+                assertedVersions.PreReleaseLabel,
+                assertedVersions.PreReleaseNumber);
             milestone = string.Concat("v", version);
             branchName = assertedVersions.BranchName;
 
@@ -85,6 +92,28 @@ public record BuildVersion(
             CakeVersion: cakeVersion,
             BranchName: branchName
         );
+    }
+
+    /// <summary>
+    /// Constructs the LegacySemVerPadded format that was removed in GitVersion 6.0.0.
+    /// Format: {MajorMinorPatch}-{PreReleaseLabel}{PreReleaseNumber:D4}
+    /// Example: 6.1.0-alpha-0041
+    /// </summary>
+    private static string GetLegacySemVerPadded(string majorMinorPatch, string preReleaseLabel, int? preReleaseNumber)
+    {
+        if (string.IsNullOrEmpty(majorMinorPatch))
+        {
+            return string.Empty;
+        }
+
+        // If no pre-release label or number, return just the version
+        if (string.IsNullOrEmpty(preReleaseLabel) || !preReleaseNumber.HasValue)
+        {
+            return majorMinorPatch;
+        }
+
+        // Format with 4-digit padding
+        return $"{majorMinorPatch}-{preReleaseLabel}{preReleaseNumber.Value:D4}";
     }
 
     public static string ReadSolutionInfoVersion(ICakeContext context)

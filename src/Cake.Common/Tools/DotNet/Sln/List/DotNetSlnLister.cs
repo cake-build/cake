@@ -46,7 +46,11 @@ namespace Cake.Common.Tools.DotNet.Sln.List
 
             var processSettings = new ProcessSettings
             {
-                RedirectStandardOutput = true
+                RedirectStandardOutput = true,
+                EnvironmentVariables = new Dictionary<string, string>(settings.EnvironmentVariables)
+                                        {
+                                            { "DOTNET_CLI_UI_LANGUAGE",  "en" }
+                                        }
             };
 
             IEnumerable<string> result = null;

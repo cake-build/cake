@@ -8,7 +8,6 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.IO;
-using Spectre.Console.Cli;
 
 namespace Cake.Frosting.Internal
 {
@@ -16,13 +15,15 @@ namespace Cake.Frosting.Internal
     {
         private readonly ICakeConfiguration _cakeConfiguration;
 
-        public FrostingConfiguration(IEnumerable<FrostingConfigurationValue> values, IFileSystem fileSystem, ICakeEnvironment environment, IRemainingArguments remainingArguments)
+        public FrostingConfiguration(IEnumerable<FrostingConfigurationValue> values, IFileSystem fileSystem, ICakeEnvironment environment, ICakeArguments arguments)
         {
             ArgumentNullException.ThrowIfNull(values);
 
             ArgumentNullException.ThrowIfNull(fileSystem);
 
             ArgumentNullException.ThrowIfNull(environment);
+
+            ArgumentNullException.ThrowIfNull(arguments);
 
             var baseConfiguration = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var value in values)
@@ -31,7 +32,7 @@ namespace Cake.Frosting.Internal
             }
 
             var provider = new CakeConfigurationProvider(fileSystem, environment);
-            var args = remainingArguments.Parsed.ToDictionary(x => x.Key, x => x.FirstOrDefault() ?? string.Empty);
+            var args = arguments.GetArguments().ToDictionary(x => x.Key, x => x.Value?.FirstOrDefault() ?? string.Empty);
 
             _cakeConfiguration = provider.CreateConfiguration(environment.WorkingDirectory, baseConfiguration, args);
         }

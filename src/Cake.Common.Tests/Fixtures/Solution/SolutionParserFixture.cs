@@ -26,5 +26,11 @@ namespace Cake.Common.Tests.Fixtures.Solution
             var file = FileSystem.CreateFile("/Working/dummySolution.sln").SetContent(slnContent);
             return file.Path;
         }
+
+        public FilePath WithXmlSolutionFile(string slnxContent)
+        {
+            var file = FileSystem.CreateFile("/Working/dummySolution.slnx").SetContent(slnxContent);
+            return file.Path;
+        }
     }
 }

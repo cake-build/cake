@@ -34,6 +34,35 @@ namespace Cake.Common.Tools.DotCover
         }
 
         /// <summary>
+        /// Get arguments from the target executable for Cover command (using new format).
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="action">The action to run DotCover for.</param>
+        /// <returns>The process arguments.</returns>
+        protected ProcessArgumentBuilder GetCoverTargetArguments(ICakeContext context, Action<ICakeContext> action)
+        {
+            // Run the tool using the interceptor.
+            var targetContext = InterceptAction(context, action);
+
+            var builder = new ProcessArgumentBuilder();
+            // The target application to call.
+            builder.AppendSwitch("--target-executable", targetContext.FilePath.FullPath.Quote());
+
+            // The arguments to the target application.
+            if (targetContext.Settings != null && targetContext.Settings.Arguments != null)
+            {
+                var arguments = targetContext.Settings.Arguments.Render();
+                if (!string.IsNullOrWhiteSpace(arguments))
+                {
+                    arguments = arguments.Replace("\"", "\\\"");
+                    builder.AppendSwitch("--target-arguments", arguments.Quote());
+                }
+            }
+
+            return builder;
+        }
+
+        /// <summary>
         /// Get arguments from the target executable.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -99,7 +128,7 @@ namespace Cake.Common.Tools.DotCover
                 builder.AppendSwitch("/AttributeFilters", "=", attributeFilters.Quote());
             }
 
-            // Filters
+            // ProcessFilters
             if (settings.ProcessFilters.Count > 0)
             {
                 var processFilters = string.Join(';', settings.ProcessFilters);

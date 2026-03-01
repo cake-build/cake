@@ -14,7 +14,10 @@ public static class VerifyConfig
     [ModuleInitializer]
     public static void Init()
     {
-        DerivePathInfo(Expectations.Initialize);
-        VerifyDiffPlex.Initialize(OutputType.Compact);
+        if (!VerifyDiffPlex.Initialized)
+        {
+            VerifyDiffPlex.Initialize(OutputType.Compact);
+            DerivePathInfo(Expectations.Initialize);
+        }
     }
 }

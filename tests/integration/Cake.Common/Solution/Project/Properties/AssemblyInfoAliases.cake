@@ -28,7 +28,8 @@ Task("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.ParseAssemblyI
                             "Miny",
                             "Moe",
                             "Spacey"
-                       }
+                       },
+                       supportedOSPlatform: new string[] { }
                 );
 
     // When
@@ -49,6 +50,7 @@ Task("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.ParseAssemblyI
     Assert.Equal(expect.Trademark, result.Trademark);
     Assert.Equal(expect.AssemblyVersion, result.AssemblyVersion);
     Assert.Equal(expect.InternalsVisibleTo, result.InternalsVisibleTo);
+    Assert.Equal(expect.SupportedOSPlatform, result.SupportedOSPlatform);
 });
 
 Task("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssemblyInfo")
@@ -89,6 +91,58 @@ Task("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssembly
     Assert.True(FileHashEquals(expectFile, file));
 });
 
+Task("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssemblyInfoWithSupportedOSPlatform")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Solution/Project/Properties/SupportedOSPlatform");
+    var file = path.CombineWithFilePath("AssemblyInfoWithSupportedOSPlatform.cs");
+    EnsureDirectoryExist(path);
+    var settings = new AssemblyInfoSettings {
+        Company = "The Company",
+        Product = "The Product",
+        Version = "1.0",
+        SupportedOSPlatform = new [] { "windows" }
+    };
+
+    // When
+    CreateAssemblyInfo(file, settings);
+
+    // Then
+    Assert.True(System.IO.File.Exists(file.FullPath));
+    var content = System.IO.File.ReadAllText(file.FullPath);
+    Assert.Contains("using System.Runtime.Versioning;", content);
+    Assert.Contains("[assembly: SupportedOSPlatform(\"windows\")]", content);
+});
+
+Task("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssemblyInfoWithMultipleSupportedOSPlatform")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Solution/Project/Properties/MultipleSupportedOSPlatform");
+    var file = path.CombineWithFilePath("AssemblyInfoWithMultipleSupportedOSPlatform.cs");
+    EnsureDirectoryExist(path);
+    var settings = new AssemblyInfoSettings {
+        Company = "The Company",
+        Product = "The Product",
+        Version = "1.0",
+        SupportedOSPlatform = new [] { "windows", "linux", "macos" }
+    };
+
+    // When
+    CreateAssemblyInfo(file, settings);
+
+    // Then
+    Assert.True(System.IO.File.Exists(file.FullPath));
+    var content = System.IO.File.ReadAllText(file.FullPath);
+    Assert.Contains("using System.Runtime.Versioning;", content);
+    Assert.Contains("[assembly: SupportedOSPlatform(\"windows\")]", content);
+    Assert.Contains("[assembly: SupportedOSPlatform(\"linux\")]", content);
+    Assert.Contains("[assembly: SupportedOSPlatform(\"macos\")]", content);
+});
+
 Task("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases")
     .IsDependentOn("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.ParseAssemblyInfo")
-    .IsDependentOn("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssemblyInfo");
+    .IsDependentOn("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssemblyInfo")
+    .IsDependentOn("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssemblyInfoWithSupportedOSPlatform")
+    .IsDependentOn("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases.CreateAssemblyInfoWithMultipleSupportedOSPlatform");

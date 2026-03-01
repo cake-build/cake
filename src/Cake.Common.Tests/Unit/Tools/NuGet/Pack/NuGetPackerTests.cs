@@ -899,6 +899,42 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Pack
                         Resources.Nuspec_Metadata_WithoutNamespaces_WithTargetFramworkDependencies.NormalizeLineEndings(),
                         result.NuspecContent.NormalizeLineEndings());
                 }
+
+                [Fact]
+                public void Should_Add_ReadMe_Element_To_Nuspec_If_Missing()
+                {
+                    // Given
+                    var fixture = new NuGetPackerWithNuSpecFixture();
+                    fixture.WithNuSpecXml(Resources.Nuspec_NoMetadataElement);
+
+                    fixture.Settings.Id = "The ID";
+                    fixture.Settings.Version = "The version";
+                    fixture.Settings.Title = "The title";
+                    fixture.Settings.Authors = new[] { "Author #1", "Author #2" };
+                    fixture.Settings.Owners = new[] { "Owner #1", "Owner #2" };
+                    fixture.Settings.Description = "The description";
+                    fixture.Settings.Summary = "The summary";
+                    fixture.Settings.LicenseUrl = new Uri("https://license.com");
+                    fixture.Settings.ProjectUrl = new Uri("https://project.com");
+                    fixture.Settings.Icon = @"images\icon.png";
+                    fixture.Settings.IconUrl = new Uri("https://icon.com");
+                    fixture.Settings.DevelopmentDependency = true;
+                    fixture.Settings.RequireLicenseAcceptance = true;
+                    fixture.Settings.Copyright = "The copyright";
+                    fixture.Settings.ReleaseNotes = new[] { "Line #1", "Line #2", "Line #3" };
+                    fixture.Settings.Tags = new[] { "Tag1", "Tag2", "Tag3" };
+                    fixture.Settings.Language = "en-us";
+                    fixture.Settings.Serviceable = true;
+                    fixture.Settings.ReadMe = "NuGet.org.md";
+
+                    // When
+                    var result = fixture.Run();
+
+                    // Then
+                    Assert.Equal(
+                        Resources.Nuspec_ReadMe.NormalizeLineEndings(),
+                        result.NuspecContent.NormalizeLineEndings());
+                }
             }
 
             public sealed class WithProjectFile

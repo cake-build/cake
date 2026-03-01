@@ -231,7 +231,7 @@ namespace Cake.Common.Tools.DotNet.Test
             var extension = FilePath.FromString(project).GetExtension().ToLowerInvariant();
             return extension switch
             {
-                ".sln" => DotNetTestPathType.Solution,
+                ".sln" or ".slnx" => DotNetTestPathType.Solution,
                 ".csproj" or ".vbproj" or ".fsproj" or ".vcxproj" => DotNetTestPathType.Project,
                 _ => DotNetTestPathType.None // Default to legacy behavior for unknown extensions
             };

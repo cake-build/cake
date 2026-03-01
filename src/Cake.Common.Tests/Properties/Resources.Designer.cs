@@ -19,7 +19,7 @@ namespace Cake.Common.Tests.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -328,7 +328,7 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
-        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        ///    &lt;icon&gt;i [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_FrameworkAssemblies {
             get {
@@ -347,7 +347,7 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
-        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        ///    &lt;icon&gt;i [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_License {
             get {
@@ -366,7 +366,7 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
-        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        ///    &lt;icon&gt;i [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Metadata {
             get {
@@ -405,7 +405,7 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
-        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        ///    &lt;icon&gt;i [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Metadata_WithDependencies {
             get {
@@ -424,10 +424,10 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;icon&gt;images\icon.png&lt;/icon&gt;
         ///    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
         ///    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
-        ///    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
-        ///    &lt;descriptio [rest of string was truncated]&quot;;.
+        ///    &lt;developmentDependency&gt;true&lt;/devel [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Metadata_WithoutNamespaces {
             get {
@@ -446,10 +446,10 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;icon&gt;images\icon.png&lt;/icon&gt;
         ///    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
         ///    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
-        ///    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
-        ///    &lt;descriptio [rest of string was truncated]&quot;;.
+        ///    &lt;developmentDependency&gt;true&lt;/devel [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Metadata_WithoutNamespaces_WithDependencies {
             get {
@@ -468,10 +468,10 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;icon&gt;images\icon.png&lt;/icon&gt;
         ///    &lt;iconUrl&gt;https://icon.com&lt;/iconUrl&gt;
         ///    &lt;requireLicenseAcceptance&gt;true&lt;/requireLicenseAcceptance&gt;
-        ///    &lt;developmentDependency&gt;true&lt;/developmentDependency&gt;
-        ///    &lt;descriptio [rest of string was truncated]&quot;;.
+        ///    &lt;developmentDependency&gt;true&lt;/devel [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Metadata_WithoutNamespaces_WithTargetFramworkDependencies {
             get {
@@ -490,7 +490,7 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
-        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        ///    &lt;icon&gt;i [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Metadata_WithTargetFrameworkDependencies {
             get {
@@ -562,7 +562,7 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
-        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        ///    &lt;icon&gt;i [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_PackageTypes {
             get {
@@ -598,7 +598,26 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
-        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        ///    &lt;icon&gt;i [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Nuspec_ReadMe {
+            get {
+                return ResourceManager.GetString("Nuspec_ReadMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;package xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;metadata xmlns=&quot;http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd&quot;&gt;
+        ///    &lt;id&gt;The ID&lt;/id&gt;
+        ///    &lt;version&gt;The version&lt;/version&gt;
+        ///    &lt;title&gt;The title&lt;/title&gt;
+        ///    &lt;authors&gt;Author #1,Author #2&lt;/authors&gt;
+        ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
+        ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
+        ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
+        ///    &lt;icon&gt;i [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_References {
             get {
@@ -617,7 +636,7 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
-        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        ///    &lt;icon&gt;i [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_References_WithTargetFramework {
             get {
@@ -636,7 +655,7 @@ namespace Cake.Common.Tests.Properties {
         ///    &lt;owners&gt;Owner #1,Owner #2&lt;/owners&gt;
         ///    &lt;licenseUrl&gt;https://license.com&lt;/licenseUrl&gt;
         ///    &lt;projectUrl&gt;https://project.com&lt;/projectUrl&gt;
-        ///    &lt;iconUr [rest of string was truncated]&quot;;.
+        ///    &lt;icon&gt;i [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Nuspec_Repository {
             get {
@@ -660,7 +679,7 @@ namespace Cake.Common.Tests.Properties {
                 return ResourceManager.GetString("Solution_WithProjectsAndFolders", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Microsoft Visual Studio Solution File, Format Version 12.00
         ///# Visual Studio 14
@@ -695,6 +714,94 @@ namespace Cake.Common.Tests.Properties {
         public static string Solution_WithProjectUsingAbsolutePath {
             get {
                 return ResourceManager.GetString("Solution_WithProjectUsingAbsolutePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Solution&gt;
+        ///  &lt;Folder Name=&quot;/SolutionFolder1/&quot;&gt;
+        ///  &lt;/Folder&gt;
+        ///  &lt;Folder Name=&quot;/SolutionFolder1/NestedSolutionFolder/&quot;&gt;
+        ///    &lt;Project Path=&quot;ClassLibraryNestedSolutionFolder/ClassLibraryNestedSolutionFolder.csproj&quot; /&gt;
+        ///  &lt;/Folder&gt;
+        ///&lt;/Solution&gt;
+        ///.
+        /// </summary>
+        public static string SolutionXml_WithNestedSolutionFolders {
+            get {
+                return ResourceManager.GetString("SolutionXml_WithNestedSolutionFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Solution&gt;
+        ///  &lt;Folder Name=&quot;/src/&quot;&gt;
+        ///    &lt;Project Path=&quot;src/dummy/dummy.csproj&quot; /&gt;
+        ///  &lt;/Folder&gt;
+        ///  &lt;Folder Name=&quot;/test/&quot;&gt;
+        ///    &lt;Project Path=&quot;test/dummy.Tests/dummy.Tests.csproj&quot; /&gt;
+        ///  &lt;/Folder&gt;
+        ///  &lt;Project Path=&quot;executable/executable.csproj&quot; /&gt;
+        ///&lt;/Solution&gt;
+        ///.
+        /// </summary>
+        public static string SolutionXml_WithProjectsAndFolders {
+            get {
+                return ResourceManager.GetString("SolutionXml_WithProjectsAndFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Solution&gt;
+        ///  &lt;Folder Name=&quot;/src/&quot;&gt;
+        ///    &lt;Project Path=&quot;src/dummy/dummy.csproj&quot; /&gt;
+        ///  &lt;/Folder&gt;
+        ///
+        ///
+        ///
+        ///  &lt;Folder Name=&quot;/test/&quot;&gt;
+        ///    &lt;Project Path=&quot;test/dummy.Tests/dummy.Tests.csproj&quot; /&gt;
+        ///  &lt;/Folder&gt;
+        ///
+        ///
+        ///
+        ///  &lt;Project Path=&quot;executable/executable.csproj&quot; /&gt;
+        ///
+        ///
+        ///
+        ///  
+        ///&lt;/Solution&gt;
+        ///.
+        /// </summary>
+        public static string SolutionXml_WithProjectsAndFoldersAndAdditionalLines {
+            get {
+                return ResourceManager.GetString("SolutionXml_WithProjectsAndFoldersAndAdditionalLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Solution&gt;
+        ///  &lt;Project Path=&quot;C:/project/dummy/src/dummy/dummy.csproj&quot; /&gt;
+        ///&lt;/Solution&gt;
+        ///.
+        /// </summary>
+        public static string SolutionXml_WithProjectUsingAbsolutePath {
+            get {
+                return ResourceManager.GetString("SolutionXml_WithProjectUsingAbsolutePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Solution&gt;
+        ///  &lt;Project Path=&quot;WebApplication/WebApplication.csproj&quot; Type=&quot;e6fdf86b-f3d1-11d4-8576-0002a516ece8&quot;&gt;
+        ///    &lt;Platform Project=&quot;AnyCPU&quot; /&gt;
+        ///  &lt;/Project&gt;
+        ///&lt;/Solution&gt;
+        ///.
+        /// </summary>
+        public static string SolutionXml_WithProjectWithDifferentTypeId {
+            get {
+                return ResourceManager.GetString("SolutionXml_WithProjectWithDifferentTypeId", resourceCulture);
             }
         }
         

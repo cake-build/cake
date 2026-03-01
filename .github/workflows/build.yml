@@ -47,6 +47,7 @@ jobs:
         id: build-cake
         uses: cake-build/cake-action@v3.0.1
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AZURE_DEVOPS_NUGET_API_KEY: ${{ secrets.AZURE_DEVOPS_NUGET_API_KEY }}
           AZURE_DEVOPS_NUGET_API_URL: ${{ secrets.AZURE_DEVOPS_NUGET_API_URL }}
         with:

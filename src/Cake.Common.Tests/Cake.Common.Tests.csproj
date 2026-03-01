@@ -3,6 +3,7 @@
     <AssemblyName>Cake.Common.Tests</AssemblyName>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <IsCakeTestProject>true</IsCakeTestProject>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
@@ -17,6 +18,9 @@
   <!-- Global packages -->
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Spectre.Verify.Extensions" />
+    <PackageReference Include="Verify.DiffPlex" />
+    <PackageReference Include="Verify.XunitV3" />
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
@@ -47,5 +51,9 @@
     <EmbeddedResource Update="Properties\Resources2.resx">
       <Generator></Generator>
     </EmbeddedResource>
+  </ItemGroup>
+    
+  <ItemGroup>
+    <Folder Include="Expectations\" />
   </ItemGroup>
 </Project>

@@ -145,5 +145,34 @@ namespace Cake.Common.Build.GitLabCI
 
             return null;
         }
+
+        /// <summary>
+        /// Gets an environment variable as a <see cref="System.Int64"/>.
+        /// </summary>
+        /// <param name="variable">The environment variable name.</param>
+        /// <returns>The environment variable.</returns>
+        protected long GetEnvironmentLong(string variable)
+        {
+            var value = GetEnvironmentString(variable);
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                if (long.TryParse(value, out long result))
+                {
+                    return result;
+                }
+            }
+            return 0;
+        }
+
+        /// <summary>
+        /// Gets an environment variable as a <see cref="System.Int64"/>.
+        /// </summary>
+        /// <param name="primaryVariable">The primary environment variable name.</param>
+        /// <param name="secondaryVariable">The secondary environment variable name.</param>
+        /// <returns>The environment variable.</returns>
+        protected long GetEnvironmentLong(string primaryVariable, string secondaryVariable)
+        {
+            return GetEnvironmentLong(primaryVariable) != 0 ? GetEnvironmentLong(primaryVariable) : GetEnvironmentLong(secondaryVariable);
+        }
     }
 }

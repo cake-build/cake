@@ -1,0 +1,44 @@
+﻿{
+  Version: ,
+  VisualStudioVersion: ,
+  MinimumVisualStudioVersion: ,
+  Projects: [
+    {
+      Items: [],
+      Id: ,
+      Name: SolutionFolder1,
+      Path: /Working/SolutionFolder1,
+      Type: Guid_1,
+      Parent: null
+    },
+    {
+      Items: [
+        {
+          Id: ,
+          Name: ClassLibraryNestedSolutionFolder,
+          Path: /Working/ClassLibraryNestedSolutionFolder/ClassLibraryNestedSolutionFolder.csproj,
+          Type: Guid_2
+        }
+      ],
+      Id: ,
+      Name: NestedSolutionFolder,
+      Path: /Working/SolutionFolder1/NestedSolutionFolder,
+      Type: Guid_1,
+      Parent: null
+    },
+    {
+      Id: ,
+      Name: ClassLibraryNestedSolutionFolder,
+      Path: /Working/ClassLibraryNestedSolutionFolder/ClassLibraryNestedSolutionFolder.csproj,
+      Type: Guid_2,
+      Parent: {
+        Items: [],
+        Id: ,
+        Name: NestedSolutionFolder,
+        Path: /Working/SolutionFolder1/NestedSolutionFolder,
+        Type: Guid_1,
+        Parent: null
+      }
+    }
+  ]
+}

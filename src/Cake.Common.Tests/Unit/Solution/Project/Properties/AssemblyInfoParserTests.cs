@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -299,6 +299,44 @@ namespace Cake.Common.Tests.Unit.Solution.Project.Properties
                 Assert.Equal(2, result.InternalsVisibleTo.Count);
                 Assert.Equal("Cake.Core.Tests", result.InternalsVisibleTo.ElementAt(0));
                 Assert.Equal("Cake.Common.Tests", result.InternalsVisibleTo.ElementAt(1));
+            }
+
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Read_SupportedOSPlatform(bool extraWhiteSpaces)
+            {
+                // Given
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
+                fixture.SupportedOSPlatform = new List<string> { "windows" };
+
+                // When
+                var result = fixture.Parse();
+
+                // Then
+                Assert.Single(result.SupportedOSPlatform, x => x == "windows");
+            }
+
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public void Should_Read_Multiple_SupportedOSPlatform(bool extraWhiteSpaces)
+            {
+                // Given
+                var fixture = new AssemblyInfoParserFixture();
+                fixture.ExtraWhiteSpaces = extraWhiteSpaces;
+                fixture.SupportedOSPlatform = new List<string> { "windows", "linux", "macos" };
+
+                // When
+                var result = fixture.Parse();
+
+                // Then
+                Assert.Collection(
+                    result.SupportedOSPlatform,
+                    item => Assert.Equal("windows", item),
+                    item => Assert.Equal("linux", item),
+                    item => Assert.Equal("macos", item));
             }
 
             [Theory]

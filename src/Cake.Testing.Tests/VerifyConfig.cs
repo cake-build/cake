@@ -9,9 +9,14 @@ namespace Cake.Testing.Tests
         [ModuleInitializer]
         public static void Init()
         {
-            DerivePathInfo(Expectations.Initialize);
             EmptyFiles.FileExtensions.AddTextExtension("cake");
-            VerifyDiffPlex.Initialize(OutputType.Compact);
+
+            if (!VerifyDiffPlex.Initialized)
+            {
+                VerifyDiffPlex.Initialize(OutputType.Compact);
+                DerivePathInfo(Expectations.Initialize);
+            }
+
             VerifierSettings.DontScrubDateTimes();
             VerifierSettings.IgnoreMember<FakeFile>(x => x.Content);
             VerifierSettings.IgnoreMember("LastWriteTime");

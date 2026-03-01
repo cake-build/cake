@@ -34,7 +34,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         ///   The pull request id.
         /// </value>
-        public int Id => GetEnvironmentInteger("CI_MERGE_REQUEST_ID");
+        public long Id => GetEnvironmentLong("CI_MERGE_REQUEST_ID");
 
         /// <summary>
         /// Gets the pull request id scoped to the project.
@@ -42,7 +42,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         ///   The pull request id.
         /// </value>
-        public int IId => GetEnvironmentInteger("CI_MERGE_REQUEST_IID");
+        public long IId => GetEnvironmentLong("CI_MERGE_REQUEST_IID");
 
         /// <summary>
         /// Gets the source branch of the pull request.

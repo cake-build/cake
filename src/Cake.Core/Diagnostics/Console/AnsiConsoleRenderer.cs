@@ -68,37 +68,25 @@ namespace Cake.Core.Diagnostics
         public void Render(LogLevel level, string format, params object[] args)
         {
             var palette = _palette[level];
-            var tokens = FormatParser.Parse(format);
-
-            var colorize = !"{0}".Equals(format, StringComparison.Ordinal);
+            var (tokens, tokenArgs) = "{0}".Equals(format, StringComparison.Ordinal)
+                            ? ([
+                                    new LiteralToken(string.Format(format, args))
+                                ],
+                                [])
+                            : (FormatParser.Parse(format), args);
 
             foreach (var token in tokens)
             {
-                if (colorize)
-                {
-                    var colorEscapeCode = GetColorEscapeCode(token, palette);
-                    var content = token.Render(args);
+                var colorEscapeCode = GetColorEscapeCode(token, palette);
+                var content = token.Render(tokenArgs);
 
-                    if (level > LogLevel.Error)
-                    {
-                        _console.Write("{0}", $"{colorEscapeCode}{content}{ResetEscapeCode}");
-                    }
-                    else
-                    {
-                        _console.WriteError("{0}", $"{colorEscapeCode}{content}{ResetEscapeCode}");
-                    }
+                if (level > LogLevel.Error)
+                {
+                    _console.Write("{0}", $"{colorEscapeCode}{content}{ResetEscapeCode}");
                 }
                 else
                 {
-                    // Render without colorization.
-                    if (level > LogLevel.Error)
-                    {
-                        _console.Write("{0}", token.Render(args));
-                    }
-                    else
-                    {
-                        _console.WriteError("{0}", token.Render(args));
-                    }
+                    _console.WriteError("{0}", $"{colorEscapeCode}{content}{ResetEscapeCode}");
                 }
             }
 

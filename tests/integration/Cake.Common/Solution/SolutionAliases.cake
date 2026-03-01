@@ -13,7 +13,7 @@ Task("Cake.Common.Solution.SolutionAliases.ParseSolution")
         version: "Format Version 12.00",
         visualStudioVersion: "14.0.25420.1",
         minimumVisualStudioVersion: "10.0.40219.1",
-        projects: new System.Collections.ObjectModel.ReadOnlyCollection<SolutionProject>(new [] {
+        projects: new System.Collections.ObjectModel.ReadOnlyCollection<SolutionProject>(new[] {
                 new SolutionProject(
                     id: "{4147F50A-8743-4393-A414-EFC707D4BA2C}",
                     name: "Project",
@@ -38,6 +38,78 @@ Task("Cake.Common.Solution.SolutionAliases.ParseSolution")
     Assert.Equal(expect, result, SolutionParserResultEqualityComparer.Comparer);
 });
 
+Task("Cake.Common.Solution.SolutionAliases.ParseXmlSolution")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Resources.Combine("./Cake.Common/Solution");
+    var file = path.CombineWithFilePath("./XmlSolution.slnx");
+    var expect = new SolutionParserResult(
+        version: string.Empty,
+        visualStudioVersion: string.Empty,
+        minimumVisualStudioVersion: string.Empty,
+        projects: new System.Collections.ObjectModel.ReadOnlyCollection<SolutionProject>(new[] {
+                new SolutionProject(
+                    id: string.Empty,
+                    name: "Project",
+                    path: path.CombineWithFilePath("Project/Project.csproj"),
+                    type: "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                ),
+                new SolutionProject(
+                    id: string.Empty,
+                    name: "ReferenceProject",
+                    path: path.CombineWithFilePath("ReferenceProject/ReferenceProject.csproj"),
+                    type: "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                )
+            })
+        );
+
+    // When
+    var result = ParseSolution(file);
+
+    // Then
+    Assert.NotNull(result);
+    Assert.Equal(expect.Projects, result.Projects, SolutionProjectEqualityComparer.Comparer);
+    Assert.Equal(expect, result, SolutionParserResultEqualityComparer.Comparer);
+});
+
+Task("Cake.Common.Solution.SolutionAliases.ParseXmlSolutionWithProjectWithTypeId")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Resources.Combine("./Cake.Common/Solution");
+    var file = path.CombineWithFilePath("./XmlSolutionWithProjectWithTypeId.slnx");
+    var expect = new SolutionParserResult(
+        version: string.Empty,
+        visualStudioVersion: string.Empty,
+        minimumVisualStudioVersion: string.Empty,
+        projects: new System.Collections.ObjectModel.ReadOnlyCollection<SolutionProject>(new[] {
+                new SolutionProject(
+                    id: string.Empty,
+                    name: "Project",
+                    path: path.CombineWithFilePath("Project/Project.csproj"),
+                    type: "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                ),
+                new SolutionProject(
+                    id: string.Empty,
+                    name: "ReferenceProject",
+                    path: path.CombineWithFilePath("ReferenceProject/ReferenceProject.csproj"),
+                    type: "{E6FDF86B-F3D1-11D4-8576-0002A516ECE8}"
+                )
+            })
+        );
+
+    // When
+    var result = ParseSolution(file);
+
+    // Then
+    Assert.NotNull(result);
+    Assert.Equal(expect.Projects, result.Projects, SolutionProjectEqualityComparer.Comparer);
+    Assert.Equal(expect, result, SolutionParserResultEqualityComparer.Comparer);
+});
+
 
 Task("Cake.Common.Solution.SolutionAliases")
-    .IsDependentOn("Cake.Common.Solution.SolutionAliases.ParseSolution");
+    .IsDependentOn("Cake.Common.Solution.SolutionAliases.ParseSolution")
+    .IsDependentOn("Cake.Common.Solution.SolutionAliases.ParseXmlSolution")
+    .IsDependentOn("Cake.Common.Solution.SolutionAliases.ParseXmlSolutionWithProjectWithTypeId");

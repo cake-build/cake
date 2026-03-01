@@ -1,0 +1,14 @@
+﻿{
+  Version: ,
+  VisualStudioVersion: ,
+  MinimumVisualStudioVersion: ,
+  Projects: [
+    {
+      Id: ,
+      Name: dummy,
+      Path: C:/project/dummy/src/dummy/dummy.csproj,
+      Type: Guid_1,
+      Parent: null
+    }
+  ]
+}

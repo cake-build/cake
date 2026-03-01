@@ -37,7 +37,8 @@ namespace Cake.Infrastructure.Composition
     {
         private static readonly Dictionary<string, string> _excludedModules = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "Cake.DotNetTool.Module", "Cake.DotNetTool.Module is now included with Cake, so should no longer be installed separately to module directory or using #module directive" }
+                { "Cake.DotNetTool.Module", "Cake.DotNetTool.Module is now included with Cake, so should no longer be installed separately to module directory or using #module directive" },
+                { "Cake.NuGet", "Cake.NuGet is included with Cake, so should not be installed separately to module directory or using #module directive" }
             };
 
         private readonly IFileSystem _fileSystem;

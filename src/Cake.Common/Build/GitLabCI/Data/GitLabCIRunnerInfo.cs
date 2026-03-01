@@ -27,7 +27,7 @@ namespace Cake.Common.Build.GitLabCI.Data
         /// <value>
         /// The unique id of runner being used.
         /// </value>
-        public int Id => GetEnvironmentInteger("CI_RUNNER_ID");
+        public long Id => GetEnvironmentLong("CI_RUNNER_ID");
 
         /// <summary>
         /// Gets the description of the runner as saved in GitLab.

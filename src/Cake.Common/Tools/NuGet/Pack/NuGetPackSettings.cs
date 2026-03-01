@@ -272,5 +272,14 @@ namespace Cake.Common.Tools.NuGet.Pack
         /// <c>true</c> if the output should be placed in the tool folder inside the NuGet package; otherwise <c>false</c>.
         /// </value>
         public bool OutputToToolFolder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path to the readme file in the package.
+        /// The file needs to be part of the package files.
+        /// </summary>
+        /// <value>
+        /// The path to a file included in the package, relative to the root of the package.
+        /// </value>
+        public FilePath ReadMe { get; set; }
     }
 }

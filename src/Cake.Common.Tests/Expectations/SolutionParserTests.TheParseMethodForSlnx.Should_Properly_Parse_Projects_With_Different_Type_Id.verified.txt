@@ -1,0 +1,14 @@
+﻿{
+  Version: ,
+  VisualStudioVersion: ,
+  MinimumVisualStudioVersion: ,
+  Projects: [
+    {
+      Id: ,
+      Name: WebApplication,
+      Path: /Working/WebApplication/WebApplication.csproj,
+      Type: Guid_1,
+      Parent: null
+    }
+  ]
+}

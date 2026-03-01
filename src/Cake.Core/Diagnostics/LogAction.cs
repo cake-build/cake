@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+
 namespace Cake.Core.Diagnostics
 {
     /// <summary>
@@ -16,4 +18,16 @@ namespace Cake.Core.Diagnostics
     /// <param name="format">A composite format string.</param>
     /// <param name="args">An array of objects to write using format.</param>
     public delegate void LogActionEntry(string format, params object[] args);
+
+    /// <summary>
+    /// Delegate representing lazy formattable log action.
+    /// </summary>
+    /// <param name="actionEntry">Proxy to log.</param>
+    public delegate void FormattableLogAction(FormattableLogActionEntry actionEntry);
+
+    /// <summary>
+    /// Delegate representing lazy formattable log entry.
+    /// </summary>
+    /// <param name="formattable">The string to be formatted.</param>
+    public delegate void FormattableLogActionEntry(FormattableString formattable);
 }
