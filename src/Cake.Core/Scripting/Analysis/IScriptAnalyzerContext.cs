@@ -23,6 +23,12 @@ namespace Cake.Core.Scripting.Analysis
         IScriptInformation Current { get; }
 
         /// <summary>
+        /// Gets a value indicating whether warnings for missing scripts referenced by
+        /// <c>#load</c> should be suppressed.
+        /// </summary>
+        bool SuppressMissingLoadScriptWarnings { get; }
+
+        /// <summary>
         /// Processes the specified script path using the same context.
         /// </summary>
         /// <param name="scriptPath">The script path to process.</param>

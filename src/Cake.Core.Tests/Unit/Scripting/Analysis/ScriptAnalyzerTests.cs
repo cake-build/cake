@@ -3,8 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Linq;
+using Cake.Core.Diagnostics;
 using Cake.Core.Scripting.Processors.Loading;
 using Cake.Core.Tests.Fixtures;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Scripting.Analysis
@@ -398,6 +400,38 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 // Then
                 Assert.Single(result.Script.Defines);
                 Assert.Equal("#define FOO", result.Script.Defines.ElementAt(0));
+            }
+
+            [Fact]
+            public void Should_Not_Warn_When_Missing_Load_Target_In_Modules_Mode()
+            {
+                // Given
+                var log = new FakeLog();
+                var fixture = new ScriptAnalyzerFixture { Log = log };
+                fixture.AddFileLoadDirectiveProvider();
+                fixture.GivenScriptExist("/Working/build.cake", "#load \"optional.cake\"");
+
+                // When
+                fixture.AnalyzeModules("/Working/build.cake");
+
+                // Then
+                Assert.DoesNotContain(log.Entries, entry => entry.Level == LogLevel.Warning);
+            }
+
+            [Fact]
+            public void Should_Warn_When_Missing_Load_Target_In_Everything_Mode()
+            {
+                // Given
+                var log = new FakeLog();
+                var fixture = new ScriptAnalyzerFixture { Log = log };
+                fixture.AddFileLoadDirectiveProvider();
+                fixture.GivenScriptExist("/Working/build.cake", "#load \"optional.cake\"");
+
+                // When
+                fixture.Analyze("/Working/build.cake");
+
+                // Then
+                Assert.Contains(log.Entries, entry => entry.Message.Contains("No scripts found at"));
             }
         }
     }

@@ -83,7 +83,8 @@ namespace Cake.Core.Scripting.Analysis
             // Create a new context.
             var context = new ScriptAnalyzerContext(
                 _fileSystem, _environment,
-                _log, callback, path);
+                _log, callback, path,
+                settings.Mode == ScriptAnalyzerMode.Modules);
 
             // Analyze the script.
             context.Analyze(path);
@@ -104,7 +105,7 @@ namespace Cake.Core.Scripting.Analysis
             var lines = ReadLines(context.Current.Path);
             foreach (var line in lines)
             {
-                foreach (var processor in _defaultProcessors)
+                foreach (var processor in _moduleProcessors)
                 {
                     if (processor.Process(context, _environment.ExpandEnvironmentVariables(line), out var _))
                     {
