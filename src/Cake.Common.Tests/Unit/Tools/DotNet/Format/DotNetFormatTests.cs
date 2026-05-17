@@ -89,6 +89,23 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Format
             }
 
             [Fact]
+            public void Should_Resolve_Format_Paths_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetFormatterFixture();
+                fixture.Root = "./src/project";
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+                fixture.Settings.BinaryLog = "./temp/b.log";
+                fixture.Settings.Report = "./temp/report.json";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("format \"./src/project\" --binarylog \"/Working/source/MyProject/temp/b.log\" --report \"/Working/source/MyProject/temp/report.json\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Additional_Arguments()
             {
                 // Given

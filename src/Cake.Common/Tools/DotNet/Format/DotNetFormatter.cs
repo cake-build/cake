@@ -112,13 +112,15 @@ namespace Cake.Common.Tools.DotNet.Format
             // Binary Log
             if (settings.BinaryLog != null)
             {
-                builder.AppendSwitchQuoted($"--binarylog", settings.BinaryLog.MakeAbsolute(_environment).FullPath);
+                var binaryLog = GetAbsoluteFilePath(settings.BinaryLog, settings, _environment);
+                builder.AppendSwitchQuoted($"--binarylog", binaryLog.MakeAbsolute(_environment).FullPath);
             }
 
             // Report
             if (settings.Report != null)
             {
-                builder.AppendSwitchQuoted($"--report", settings.Report.MakeAbsolute(_environment).FullPath);
+                var report = GetAbsoluteFilePath(settings.Report, settings, _environment);
+                builder.AppendSwitchQuoted($"--report", report.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;
