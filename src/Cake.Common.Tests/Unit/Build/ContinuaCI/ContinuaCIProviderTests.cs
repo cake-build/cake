@@ -67,22 +67,153 @@ namespace Cake.Common.Tests.Unit.Build.ContinuaCI
                 // Then
                 Assert.False(result);
             }
+        }
 
-            public sealed class TheEnvironmentProperty
+        public sealed class TheEnvironmentProperty
+        {
+            [Fact]
+            public void Should_Return_Non_Null_Reference()
             {
-                [Fact]
-                public void Should_Return_Non_Null_Reference()
-                {
-                    // Given
-                    var fixture = new ContinuaCIFixture();
-                    var continuaCI = fixture.CreateContinuaCIService();
+                // Given
+                var fixture = new ContinuaCIFixture();
+                var continuaCI = fixture.CreateContinuaCIService();
 
-                    // When
-                    var result = continuaCI.Environment;
+                // When
+                var result = continuaCI.Environment;
 
-                    // Then
-                    Assert.NotNull(result);
-                }
+                // Then
+                Assert.NotNull(result);
+            }
+        }
+
+        public sealed class TheWriteMessageMethod
+        {
+            [Fact]
+            public void Should_Write_Service_Message_With_Status()
+            {
+                // Given
+                var fixture = new ContinuaCIFixture();
+                var continuaCI = fixture.CreateContinuaCIService();
+
+                // When
+                continuaCI.WriteMessage("Hello", ContinuaCIMessageType.Information);
+
+                // Then
+                Assert.Single(fixture.Writer.Entries);
+                Assert.Equal("@@continua[message text='Hello' status='information']", fixture.Writer.Entries[0]);
+            }
+
+            [Fact]
+            public void Should_Sanitize_Message_Text()
+            {
+                // Given
+                var fixture = new ContinuaCIFixture();
+                var continuaCI = fixture.CreateContinuaCIService();
+
+                // When
+                continuaCI.WriteMessage("line1\nline2's", ContinuaCIMessageType.Warning);
+
+                // Then
+                Assert.Equal("@@continua[message text='line1\\nline2\\'s' status='warning']", fixture.Writer.Entries[0]);
+            }
+        }
+
+        public sealed class TheWriteStartGroupMethod
+        {
+            [Fact]
+            public void Should_Write_Start_Group_Message()
+            {
+                // Given
+                var fixture = new ContinuaCIFixture();
+                var continuaCI = fixture.CreateContinuaCIService();
+
+                // When
+                continuaCI.WriteStartGroup("Build");
+
+                // Then
+                Assert.Equal("@@continua[startGroup  name='Build']", fixture.Writer.Entries[0]);
+            }
+        }
+
+        public sealed class TheWriteEndBlockMethod
+        {
+            [Fact]
+            public void Should_Write_End_Group_Message()
+            {
+                // Given
+                var fixture = new ContinuaCIFixture();
+                var continuaCI = fixture.CreateContinuaCIService();
+
+                // When
+                continuaCI.WriteEndBlock("Build");
+
+                // Then
+                Assert.Equal("@@continua[endGroup name='Build']", fixture.Writer.Entries[0]);
+            }
+        }
+
+        public sealed class TheSetVariableMethod
+        {
+            [Fact]
+            public void Should_Write_Set_Parameter_Message()
+            {
+                // Given
+                var fixture = new ContinuaCIFixture();
+                var continuaCI = fixture.CreateContinuaCIService();
+
+                // When
+                continuaCI.SetVariable("Version", "1.2.3", skipIfNotDefined: false);
+
+                // Then
+                Assert.Equal("@@continua[setParameter name='Version' value='1.2.3' skipIfNotDefined='False']", fixture.Writer.Entries[0]);
+            }
+
+            [Fact]
+            public void Should_Sanitize_Variable_Value()
+            {
+                // Given
+                var fixture = new ContinuaCIFixture();
+                var continuaCI = fixture.CreateContinuaCIService();
+
+                // When
+                continuaCI.SetVariable("Name", "foo'bar");
+
+                // Then
+                Assert.Equal("@@continua[setParameter name='Name' value='foo\\'bar' skipIfNotDefined='True']", fixture.Writer.Entries[0]);
+            }
+        }
+
+        public sealed class TheSetBuildVersionMethod
+        {
+            [Fact]
+            public void Should_Write_Set_Build_Version_Message()
+            {
+                // Given
+                var fixture = new ContinuaCIFixture();
+                var continuaCI = fixture.CreateContinuaCIService();
+
+                // When
+                continuaCI.SetBuildVersion("2.0.0");
+
+                // Then
+                Assert.Equal("@@continua[setBuildVersion value='2.0.0']", fixture.Writer.Entries[0]);
+            }
+        }
+
+        public sealed class TheSetBuildStatusMethod
+        {
+            [Fact]
+            public void Should_Write_Set_Build_Status_Message()
+            {
+                // Given
+                var fixture = new ContinuaCIFixture();
+                var continuaCI = fixture.CreateContinuaCIService();
+
+                // When
+                continuaCI.SetBuildStatus("Succeeded");
+
+                // Then
+                Assert.Equal("@@continua[setBuildStatus value='Succeeded']", fixture.Writer.Entries[0]);
             }
         }
     }
