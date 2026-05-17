@@ -127,5 +127,47 @@ namespace Cake.Common.Tools.DotNet
 
             return builder;
         }
+
+        /// <summary>
+        /// Resolves a relative directory path against <see cref="ToolSettings.WorkingDirectory"/> when set.
+        /// </summary>
+        protected static DirectoryPath GetAbsoluteDirectoryPath(DirectoryPath path, DotNetSettings settings, ICakeEnvironment environment)
+        {
+            ArgumentNullException.ThrowIfNull(path);
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(environment);
+
+            if (settings.WorkingDirectory != null && path.IsRelative)
+            {
+                return settings.WorkingDirectory.MakeAbsolute(environment).Combine(path);
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// Resolves a relative file path against <see cref="ToolSettings.WorkingDirectory"/> when set.
+        /// </summary>
+        protected static FilePath GetAbsoluteFilePath(FilePath path, DotNetSettings settings, ICakeEnvironment environment)
+        {
+            ArgumentNullException.ThrowIfNull(path);
+            ArgumentNullException.ThrowIfNull(settings);
+            ArgumentNullException.ThrowIfNull(environment);
+
+            if (settings.WorkingDirectory != null && path.IsRelative)
+            {
+                return settings.WorkingDirectory.MakeAbsolute(environment).CombineWithFilePath(path);
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// Resolves a relative output directory against <see cref="ToolSettings.WorkingDirectory"/> when set.
+        /// </summary>
+        protected static DirectoryPath GetAbsoluteOutputDirectory(DirectoryPath outputDirectory, DotNetSettings settings, ICakeEnvironment environment)
+        {
+            return GetAbsoluteDirectoryPath(outputDirectory, settings, environment);
+        }
     }
 }

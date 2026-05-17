@@ -73,7 +73,8 @@ namespace Cake.Common.Tools.DotNet.Test
             if (settings.Settings != null)
             {
                 builder.Append("--settings");
-                builder.AppendQuoted(settings.Settings.MakeAbsolute(_environment).FullPath);
+                var settingsFile = GetAbsoluteFilePath(settings.Settings, settings, _environment);
+                builder.AppendQuoted(settingsFile.MakeAbsolute(_environment).FullPath);
             }
 
             // Filter
@@ -87,7 +88,8 @@ namespace Cake.Common.Tools.DotNet.Test
             if (settings.TestAdapterPath != null)
             {
                 builder.Append("--test-adapter-path");
-                builder.AppendQuoted(settings.TestAdapterPath.MakeAbsolute(_environment).FullPath);
+                var testAdapterPath = GetAbsoluteDirectoryPath(settings.TestAdapterPath, settings, _environment);
+                builder.AppendQuoted(testAdapterPath.MakeAbsolute(_environment).FullPath);
             }
 
             // Loggers
@@ -104,7 +106,8 @@ namespace Cake.Common.Tools.DotNet.Test
             if (settings.OutputDirectory != null)
             {
                 builder.Append("--output");
-                builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
+                var outputDirectory = GetAbsoluteOutputDirectory(settings.OutputDirectory, settings, _environment);
+                builder.AppendQuoted(outputDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // Frameworks
@@ -135,7 +138,8 @@ namespace Cake.Common.Tools.DotNet.Test
             if (settings.DiagnosticFile != null)
             {
                 builder.Append("--diag");
-                builder.AppendQuoted(settings.DiagnosticFile.MakeAbsolute(_environment).FullPath);
+                var diagnosticFile = GetAbsoluteFilePath(settings.DiagnosticFile, settings, _environment);
+                builder.AppendQuoted(diagnosticFile.MakeAbsolute(_environment).FullPath);
             }
 
             // No Build
@@ -159,12 +163,14 @@ namespace Cake.Common.Tools.DotNet.Test
             if (settings.ResultsDirectory != null)
             {
                 builder.Append("--results-directory");
-                builder.AppendQuoted(settings.ResultsDirectory.MakeAbsolute(_environment).FullPath);
+                var resultsDirectory = GetAbsoluteDirectoryPath(settings.ResultsDirectory, settings, _environment);
+                builder.AppendQuoted(resultsDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             if (settings.VSTestReportPath != null)
             {
-                builder.AppendSwitchQuoted($"--logger trx;LogFileName", "=", settings.VSTestReportPath.MakeAbsolute(_environment).FullPath);
+                var vsTestReportPath = GetAbsoluteFilePath(settings.VSTestReportPath, settings, _environment);
+                builder.AppendSwitchQuoted($"--logger trx;LogFileName", "=", vsTestReportPath.MakeAbsolute(_environment).FullPath);
             }
 
             if (!string.IsNullOrEmpty(settings.Runtime))
