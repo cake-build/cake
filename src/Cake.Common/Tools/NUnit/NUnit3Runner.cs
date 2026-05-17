@@ -248,6 +248,12 @@ namespace Cake.Common.Tools.NUnit
             return new[] { "nunit3-console.exe" };
         }
 
+        /// <inheritdoc />
+        protected override void ProcessExitCode(IProcess process)
+        {
+            ProcessExitCode(process.GetExitCode());
+        }
+
         /// <summary>
         /// Customized NUnit 3 exit code handling.
         /// Throws <see cref="CakeException"/> on non-zero exit code.

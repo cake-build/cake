@@ -71,7 +71,7 @@ namespace Cake.Common.Tools.OctopusDeploy
                 process.WaitForExit();
             }
 
-            ProcessExitCode(process.GetExitCode());
+            ProcessExitCode(process);
             var parser = new DeploymentQueryResultParser();
             return parser.ParseResults(process.GetStandardOutput());
         }

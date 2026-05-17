@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Linq;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
 using Cake.Testing;
@@ -100,7 +101,27 @@ namespace Cake.Core.Tests.Unit.Tooling
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsCakeException(result, "dummy: Process returned an error (exit code 11).");
+                var exception = Assert.IsType<CakeProcessException>(result);
+                Assert.Equal("dummy: Process returned an error (exit code 11).", exception.Message);
+                Assert.Equal(11, exception.ExitCode);
+            }
+
+            [Fact]
+            public void Should_Include_Standard_Output_And_Error_On_NonZero_ExitCode()
+            {
+                // Given
+                var fixture = new DummyToolFixture();
+                fixture.GivenProcessExitsWithCode(1);
+                fixture.ProcessRunner.Process.SetStandardOutput(new[] { "stdout-line" });
+                fixture.ProcessRunner.Process.SetStandardError(new[] { "stderr-line" });
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                var exception = Assert.IsType<CakeProcessException>(result);
+                Assert.Equal("stdout-line", exception.StandardOutput.Single());
+                Assert.Equal("stderr-line", exception.StandardError.Single());
             }
 
             [Fact]

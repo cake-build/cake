@@ -28,14 +28,14 @@ namespace Cake.Core.Tests.Stubs
             Run(settings, new ProcessArgumentBuilder().Append("--foo"), new ProcessSettings(), null);
         }
 
-        protected override void ProcessExitCode(int exitCode)
+        protected override void ProcessExitCode(IProcess process)
         {
             if (_exitCodeValidation == null)
             {
-                base.ProcessExitCode(exitCode);
+                base.ProcessExitCode(process);
                 return;
             }
-            _exitCodeValidation(exitCode);
+            _exitCodeValidation(process.GetExitCode());
         }
 
         protected override string GetToolName()
