@@ -38,7 +38,7 @@ namespace Cake.Core.Diagnostics
                 { LogLevel.Warning, new ConsolePalette(background, ConsoleColor.Yellow, background, ConsoleColor.Yellow) },
                 { LogLevel.Information, new ConsolePalette(background, ConsoleColor.White, ConsoleColor.DarkBlue, ConsoleColor.White) },
                 { LogLevel.Verbose, new ConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
-                { LogLevel.Debug, new ConsolePalette(background, ConsoleColor.DarkGray, background, ConsoleColor.Gray) }
+                { LogLevel.Debug, new ConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) }
             };
         }
     }
