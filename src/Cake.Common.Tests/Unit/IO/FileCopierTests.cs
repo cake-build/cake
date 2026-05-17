@@ -147,6 +147,23 @@ namespace Cake.Common.Tests.Unit.IO
             }
 
             [Fact]
+            public void Should_Preserve_Subdirectory_Structure_When_Only_Subdirectory_Files_Match_Glob()
+            {
+                const string dstPath = "./dst";
+
+                // Given
+                var fixture = new FileCopierFixture();
+                fixture.EnsureFileExists("./src/sub/file3.dat");
+                fixture.EnsureDirectoryExists(dstPath);
+
+                // When
+                FileCopier.CopyFiles(fixture.Context, "./src/**/*.dat", new DirectoryPath(dstPath), true);
+
+                // Then
+                Assert.True(fixture.ExistsFile($"{dstPath}/sub/file3.dat"));
+            }
+
+            [Fact]
             public void Should_Throw_If_Context_Is_Null()
             {
                 // When
