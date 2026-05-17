@@ -60,7 +60,17 @@ namespace Cake.Common.IO
             var directories = root.GetDirectories("*", SearchScope.Current);
             foreach (var directory in directories)
             {
-                if (!CleanDirectory(directory, predicate, level + 1, settings))
+                if (!directory.Exists)
+                {
+                    if (!TryDeleteDirectoryEntry(directory, predicate, level))
+                    {
+                        shouldDeleteRoot = false;
+                    }
+
+                    continue;
+                }
+
+                if (!TryCleanChildDirectory(directory, predicate, level + 1, settings))
                 {
                     // Since the child directory reported it shouldn't be
                     // removed, we should not remove the current directory either.
@@ -72,17 +82,33 @@ namespace Cake.Common.IO
             var files = root.GetFiles("*", SearchScope.Current);
             foreach (var file in files)
             {
-                if (predicate(file))
+                if (!predicate(file))
                 {
-                    if (settings.Force)
+                    shouldDeleteRoot = false;
+                    continue;
+                }
+
+                if (!file.Exists)
+                {
+                    if (!TryDeleteFileEntry(file))
                     {
-                        // Remove the ReadOnly attribute on file (if set)
-                        file.Attributes &= ~FileAttributes.ReadOnly;
+                        shouldDeleteRoot = false;
                     }
 
+                    continue;
+                }
+
+                if (settings.Force)
+                {
+                    // Remove the ReadOnly attribute on file (if set)
+                    file.Attributes &= ~FileAttributes.ReadOnly;
+                }
+
+                try
+                {
                     file.Delete();
                 }
-                else
+                catch (IOException)
                 {
                     shouldDeleteRoot = false;
                 }
@@ -98,6 +124,53 @@ namespace Cake.Common.IO
 
             // We did not delete this directory.
             return false;
+        }
+
+        private static bool TryCleanChildDirectory(IDirectory directory, Func<IFileSystemInfo, bool> predicate, int level, CleanDirectorySettings settings)
+        {
+            try
+            {
+                return CleanDirectory(directory, predicate, level, settings);
+            }
+            catch (DirectoryNotFoundException)
+            {
+                return TryDeleteDirectoryEntry(directory, predicate, level);
+            }
+            catch (IOException)
+            {
+                return TryDeleteDirectoryEntry(directory, predicate, level);
+            }
+        }
+
+        private static bool TryDeleteDirectoryEntry(IDirectory directory, Func<IFileSystemInfo, bool> predicate, int level)
+        {
+            if (!predicate(directory) || level <= 0)
+            {
+                return false;
+            }
+
+            try
+            {
+                directory.Delete(false);
+                return true;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+        }
+
+        private static bool TryDeleteFileEntry(IFile file)
+        {
+            try
+            {
+                file.Delete();
+                return true;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
         }
     }
 }
