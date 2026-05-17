@@ -103,6 +103,23 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Restore
             }
 
             [Fact]
+            public void Should_Resolve_Restore_Paths_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetRestorerFixture();
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+                fixture.Settings.PackagesDirectory = "./packages/";
+                fixture.Settings.ConfigFile = "./NuGet.config";
+                fixture.Settings.LockFilePath = "./obj/packages.lock.json";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("restore --packages \"/Working/source/MyProject/packages\" --configfile \"/Working/source/MyProject/NuGet.config\" --lock-file-path \"/Working/source/MyProject/obj/packages.lock.json\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Settings()
             {
                 // Given

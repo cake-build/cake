@@ -71,7 +71,8 @@ namespace Cake.Common.Tools.DotNet.Restore
             if (settings.PackagesDirectory != null)
             {
                 builder.Append("--packages");
-                builder.AppendQuoted(settings.PackagesDirectory.MakeAbsolute(_environment).FullPath);
+                var packagesDirectory = GetAbsoluteDirectoryPath(settings.PackagesDirectory, settings, _environment);
+                builder.AppendQuoted(packagesDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // Sources
@@ -88,7 +89,8 @@ namespace Cake.Common.Tools.DotNet.Restore
             if (settings.ConfigFile != null)
             {
                 builder.Append("--configfile");
-                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+                var configFile = GetAbsoluteFilePath(settings.ConfigFile, settings, _environment);
+                builder.AppendQuoted(configFile.MakeAbsolute(_environment).FullPath);
             }
 
             // Ignore failed sources
@@ -142,7 +144,8 @@ namespace Cake.Common.Tools.DotNet.Restore
             // Lock file path
             if (settings.LockFilePath != null)
             {
-                builder.AppendSwitchQuoted("--lock-file-path", " ", settings.LockFilePath.MakeAbsolute(_environment).FullPath);
+                var lockFilePath = GetAbsoluteFilePath(settings.LockFilePath, settings, _environment);
+                builder.AppendSwitchQuoted("--lock-file-path", " ", lockFilePath.MakeAbsolute(_environment).FullPath);
             }
 
             // Force Evaluate
