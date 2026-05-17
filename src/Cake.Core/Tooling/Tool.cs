@@ -180,6 +180,16 @@ namespace Cake.Core.Tooling
             // Want to opt out of using a working directory?
             info.NoWorkingDirectory = settings.NoWorkingDirectory;
 
+            if (settings.RedirectStandardOutput is bool redirectStandardOutput)
+            {
+                info.RedirectStandardOutput = redirectStandardOutput;
+            }
+
+            if (settings.RedirectStandardError is bool redirectStandardError)
+            {
+                info.RedirectStandardError = redirectStandardError;
+            }
+
             // Configure process settings
             settings.SetupProcessSettings?.Invoke(info);
 

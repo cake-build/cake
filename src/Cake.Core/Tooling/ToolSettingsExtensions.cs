@@ -133,6 +133,28 @@ namespace Cake.Core.Tooling
             => toolSettings.WithToolSettings(toolSettings => toolSettings.SetupProcessSettings = setupProcessSettings);
 
         /// <summary>
+        /// Sets whether the tool process redirects standard output.
+        /// </summary>
+        /// <typeparam name="T">The ToolSettings type.</typeparam>
+        /// <param name="toolSettings">The tools settings.</param>
+        /// <param name="redirect">Whether to redirect standard output.</param>
+        /// <returns>The tools settings.</returns>
+        public static T WithRedirectStandardOutput<T>(this T toolSettings, bool redirect = true)
+               where T : ToolSettings
+            => toolSettings.WithToolSettings(toolSettings => toolSettings.RedirectStandardOutput = redirect);
+
+        /// <summary>
+        /// Sets whether the tool process redirects standard error.
+        /// </summary>
+        /// <typeparam name="T">The ToolSettings type.</typeparam>
+        /// <param name="toolSettings">The tools settings.</param>
+        /// <param name="redirect">Whether to redirect standard error.</param>
+        /// <returns>The tools settings.</returns>
+        public static T WithRedirectStandardError<T>(this T toolSettings, bool redirect = true)
+               where T : ToolSettings
+            => toolSettings.WithToolSettings(toolSettings => toolSettings.RedirectStandardError = redirect);
+
+        /// <summary>
         /// Sets expected exit code using <see cref="WithHandleExitCode{T}(T, Func{int, bool})"/>.
         /// </summary>
         /// <typeparam name="T">The ToolSettings type.</typeparam>

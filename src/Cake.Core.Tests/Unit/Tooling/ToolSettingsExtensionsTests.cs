@@ -168,6 +168,36 @@ namespace Cake.Core.Tests.Unit.Tooling
         }
 
         [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Should_Set_RedirectStandardOutput(bool redirect)
+        {
+            // Given
+            var fixture = new DummyToolFixture();
+
+            // When
+            fixture.Settings.WithRedirectStandardOutput(redirect);
+
+            // Then
+            Assert.Equal(redirect, fixture.Settings.RedirectStandardOutput);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Should_Set_RedirectStandardError(bool redirect)
+        {
+            // Given
+            var fixture = new DummyToolFixture();
+
+            // When
+            fixture.Settings.WithRedirectStandardError(redirect);
+
+            // Then
+            Assert.Equal(redirect, fixture.Settings.RedirectStandardError);
+        }
+
+        [Theory]
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]

@@ -179,6 +179,23 @@ namespace Cake.Core.Tests.Unit.Tooling
             }
 
             [Fact]
+            public void Should_Apply_Redirect_Standard_Output_And_Error_From_ToolSettings()
+            {
+                // Given
+                var fixture = new DummyToolFixture();
+                fixture.Settings.RedirectStandardOutput = true;
+                fixture.Settings.RedirectStandardError = true;
+                fixture.GivenProcessExitsWithCode(0);
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.True(result.Process.RedirectStandardOutput);
+                Assert.True(result.Process.RedirectStandardError);
+            }
+
+            [Fact]
             public void Executes_SetupProcessSettings()
             {
                 var wasExecuted = false;
