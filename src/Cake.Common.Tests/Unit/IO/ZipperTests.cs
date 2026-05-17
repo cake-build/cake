@@ -197,6 +197,33 @@ namespace Cake.Common.Tests.Unit.IO
                 Assert.True(archive.GetEntry("Dir2/Dir3/File5.txt")?.Length == 5);
             }
 
+            [Fact]
+            public void Should_Preserve_Unix_File_Permissions_In_Zip()
+            {
+                // Given
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                var executableMode = UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute
+                    | UnixFileMode.GroupRead | UnixFileMode.GroupExecute
+                    | UnixFileMode.OtherRead | UnixFileMode.OtherExecute;
+                fileSystem.CreateFile("/d/test.sh")
+                    .SetContent("#!/bin/bash")
+                    .SetUnixFileMode(executableMode);
+                var log = Substitute.For<ICakeLog>();
+                var zipper = new Zipper(fileSystem, environment, log);
+
+                // When
+                zipper.Zip("/d", "/out.zip", new FilePath[] { "/d/test.sh" });
+
+                // Then
+                var archive = new ZipArchive(fileSystem.GetFile("/out.zip").Open(FileMode.Open, FileAccess.Read, FileShare.Read));
+                var entry = archive.GetEntry("test.sh");
+                Assert.NotNull(entry);
+                const int UnixRegularFileType = 0x8000;
+                int expectedAttributes = ((int)executableMode & 0x1FF | UnixRegularFileType) << 16;
+                Assert.Equal(expectedAttributes, entry.ExternalAttributes);
+            }
+
             [WindowsFact("Investigate why this fail on Mono 4.2.1.")]
             public void Zipped_File_Should_Contain_Correct_Content()
             {

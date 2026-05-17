@@ -87,6 +87,7 @@ namespace Cake.Common.IO
                         var directory = _fileSystem.GetDirectory(absoluteDirectoryPath);
                         var entry = archive.CreateEntry(relativeDirectoryPath + "/");
                         entry.LastWriteTime = (directory as Directory)?.LastWriteTime ?? DateTimeOffset.Now;
+                        ApplyUnixEntryAttributes(entry, directory);
                         directories.Add(relativeDirectoryPath);
                     }
 
@@ -99,6 +100,7 @@ namespace Cake.Common.IO
                         {
                             var entry = archive.CreateEntry(relativeFilePath);
                             entry.LastWriteTime = (file as File)?.LastWriteTime ?? DateTimeOffset.Now;
+                            ApplyUnixEntryAttributes(entry, file);
                             using (var entryStream = entry.Open())
                             {
                                 fileStream.CopyTo(entryStream);
@@ -151,6 +153,7 @@ namespace Cake.Common.IO
                         var directory = _fileSystem.GetDirectory(absoluteDirectoryPath);
                         var entry = archive.CreateEntry(relativeDirectoryPath + "/");
                         entry.LastWriteTime = GetValidZipDateTimeOffset((directory as Directory)?.LastWriteTime);
+                        ApplyUnixEntryAttributes(entry, directory);
                         directories.Add(relativeDirectoryPath);
                     }
 
@@ -161,6 +164,7 @@ namespace Cake.Common.IO
                     {
                         var entry = archive.CreateEntry(relativeFilePath);
                         entry.LastWriteTime = GetValidZipDateTimeOffset((file as File)?.LastWriteTime);
+                        ApplyUnixEntryAttributes(entry, file);
                         using (var entryStream = entry.Open())
                         {
                             fileStream.CopyTo(entryStream);
@@ -217,6 +221,39 @@ namespace Cake.Common.IO
             }
 
             return InvalidZipDateIndicator;
+        }
+
+        private void ApplyUnixEntryAttributes(ZipArchiveEntry entry, IFileSystemInfo fileSystemInfo)
+        {
+            if (!_environment.Platform.IsUnix())
+            {
+                return;
+            }
+
+            bool isDirectory = entry.FullName.EndsWith("/", StringComparison.Ordinal);
+            UnixFileMode mode = fileSystemInfo.UnixFileMode ?? GetDefaultUnixFileMode(isDirectory);
+            entry.ExternalAttributes = GetUnixExternalAttributes(mode, isDirectory);
+        }
+
+        private static UnixFileMode GetDefaultUnixFileMode(bool isDirectory)
+        {
+            if (isDirectory)
+            {
+                return UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute
+                    | UnixFileMode.GroupRead | UnixFileMode.GroupExecute
+                    | UnixFileMode.OtherRead | UnixFileMode.OtherExecute;
+            }
+
+            return UnixFileMode.UserRead | UnixFileMode.UserWrite
+                | UnixFileMode.GroupRead | UnixFileMode.OtherRead;
+        }
+
+        private static int GetUnixExternalAttributes(UnixFileMode mode, bool isDirectory)
+        {
+            const int UnixRegularFileType = 0x8000;
+            const int UnixDirectoryFileType = 0x4000;
+            int fileType = isDirectory ? UnixDirectoryFileType : UnixRegularFileType;
+            return ((int)mode & 0x1FF | fileType) << 16;
         }
     }
 }
