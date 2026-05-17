@@ -67,7 +67,8 @@ namespace Cake.Common.Tools.DotNet.VSTest
             // Settings
             if (settings.Settings != null)
             {
-                builder.AppendSwitchQuoted("--Settings", ":", settings.Settings.MakeAbsolute(_environment).FullPath);
+                var settingsFile = GetAbsoluteFilePath(settings.Settings, settings, _environment);
+                builder.AppendSwitchQuoted("--Settings", ":", settingsFile.MakeAbsolute(_environment).FullPath);
             }
 
             // Tests to run
@@ -79,7 +80,8 @@ namespace Cake.Common.Tools.DotNet.VSTest
             // Path to custom test adapter
             if (settings.TestAdapterPath != null)
             {
-                builder.AppendSwitchQuoted("--TestAdapterPath", ":", settings.TestAdapterPath.MakeAbsolute(_environment).FullPath);
+                var testAdapterPath = GetAbsoluteDirectoryPath(settings.TestAdapterPath, settings, _environment);
+                builder.AppendSwitchQuoted("--TestAdapterPath", ":", testAdapterPath.MakeAbsolute(_environment).FullPath);
             }
 
             // Platform architecture to execute tests on
@@ -127,13 +129,15 @@ namespace Cake.Common.Tools.DotNet.VSTest
             // Write to Diagnostic file?
             if (settings.DiagnosticFile != null)
             {
-                builder.AppendSwitchQuoted("--Diag", ":", settings.DiagnosticFile.MakeAbsolute(_environment).FullPath);
+                var diagnosticFile = GetAbsoluteFilePath(settings.DiagnosticFile, settings, _environment);
+                builder.AppendSwitchQuoted("--Diag", ":", diagnosticFile.MakeAbsolute(_environment).FullPath);
             }
 
             // Path to output test results
             if (settings.ResultsDirectory != null)
             {
-                builder.AppendSwitchQuoted("--ResultsDirectory", ":", settings.ResultsDirectory.MakeAbsolute(_environment).FullPath);
+                var resultsDirectory = GetAbsoluteDirectoryPath(settings.ResultsDirectory, settings, _environment);
+                builder.AppendSwitchQuoted("--ResultsDirectory", ":", resultsDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // Extra arguments

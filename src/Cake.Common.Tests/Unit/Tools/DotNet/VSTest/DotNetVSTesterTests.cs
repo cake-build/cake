@@ -109,6 +109,30 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.VSTest
             }
 
             [Fact]
+            public void Should_Resolve_VSTest_Paths_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetVSTesterFixture
+                {
+                    TestFiles = new[] { (FilePath)"./test/unit.tests.csproj" },
+                    Settings = new DotNetVSTestSettings
+                    {
+                        WorkingDirectory = "./source/MyProject",
+                        Settings = "./demo.runsettings",
+                        TestAdapterPath = "./custom-test-adapter",
+                        DiagnosticFile = "./artifacts/diagnostics.txt",
+                        ResultsDirectory = "./test-results"
+                    }
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("vstest \"/Working/test/unit.tests.csproj\" --Settings:\"/Working/source/MyProject/demo.runsettings\" --TestAdapterPath:\"/Working/source/MyProject/custom-test-adapter\" --Diag:\"/Working/source/MyProject/artifacts/diagnostics.txt\" --ResultsDirectory:\"/Working/source/MyProject/test-results\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Settings_Argument()
             {
                 // Given
