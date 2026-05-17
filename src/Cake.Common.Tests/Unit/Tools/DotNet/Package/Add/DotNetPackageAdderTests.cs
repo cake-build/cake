@@ -90,6 +90,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.Add
             }
 
             [Fact]
+            public void Should_Resolve_PackageDirectory_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetPackageAdderFixture();
+                fixture.PackageName = "Newtonsoft.Json";
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+                fixture.Settings.PackageDirectory = "./packages";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("add package Newtonsoft.Json --package-directory \"/Working/source/MyProject/packages\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Additional_Arguments()
             {
                 // Given

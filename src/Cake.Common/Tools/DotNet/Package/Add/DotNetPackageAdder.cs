@@ -83,7 +83,8 @@ namespace Cake.Common.Tools.DotNet.Package.Add
             if (settings.PackageDirectory != null)
             {
                 builder.Append("--package-directory");
-                builder.AppendQuoted(settings.PackageDirectory.MakeAbsolute(_environment).FullPath);
+                var packageDirectory = GetAbsoluteDirectoryPath(settings.PackageDirectory, settings, _environment);
+                builder.AppendQuoted(packageDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // Prerelease
