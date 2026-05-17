@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Core.Polyfill;
 
 namespace Cake.Core.IO
 {
@@ -64,7 +65,11 @@ namespace Cake.Core.IO
                 separatorToReplace = '/';
             }
 
-            FullPath = path.Replace(separatorToReplace, separatorToReplaceWith).Trim();
+            // On Unix, backslash is a valid filename character; do not treat it as a path separator (#2494).
+            var preserveBackslash = EnvironmentHelper.IsUnix() && !IsUNC;
+            FullPath = preserveBackslash
+                ? path.Trim()
+                : path.Replace(separatorToReplace, separatorToReplaceWith).Trim();
 
             // Relative paths are considered empty.
             FullPath = FullPath == "./" ? string.Empty : FullPath;
@@ -78,7 +83,9 @@ namespace Cake.Core.IO
             // Remove trailing slashes.
             if (FullPath.Length > 1)
             {
-                FullPath = FullPath.TrimEnd(Separator);
+                FullPath = preserveBackslash
+                    ? FullPath.TrimEnd('/', '\\')
+                    : FullPath.TrimEnd(Separator);
                 if (IsUNC && string.IsNullOrWhiteSpace(FullPath))
                 {
                     FullPath = @"\\";

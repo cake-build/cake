@@ -34,14 +34,27 @@ namespace Cake.Core.Tests.Unit.IO
                 Assert.Equal(string.Empty, path.FullPath);
             }
 
-            [Fact]
-            public void Will_Normalize_Path_Separators()
+            [WindowsTheory]
+            [InlineData("shaders\\basic", "shaders/basic")]
+            public void Will_Normalize_Path_Separators_On_Windows(string input, string expected)
             {
                 // Given, When
-                var path = new TestingPath("shaders\\basic");
+                var path = new TestingPath(input);
 
                 // Then
-                Assert.Equal("shaders/basic", path.FullPath);
+                Assert.Equal(expected, path.FullPath);
+            }
+
+            [NonWindowsTheory]
+            [InlineData("/users/source/bad\\file.txt", "/users/source/bad\\file.txt")]
+            [InlineData("shaders\\basic", "shaders\\basic")]
+            public void Will_Preserve_Backslash_In_Path_On_Unix(string input, string expected)
+            {
+                // Given, When
+                var path = new TestingPath(input);
+
+                // Then
+                Assert.Equal(expected, path.FullPath);
             }
 
             [Fact]
@@ -80,14 +93,24 @@ namespace Cake.Core.Tests.Unit.IO
 
             [Theory]
             [InlineData("/Hello/World/", "/Hello/World")]
-            [InlineData("\\Hello\\World\\", "/Hello/World")]
             [InlineData("file.txt/", "file.txt")]
-            [InlineData("file.txt\\", "file.txt")]
             [InlineData("Temp/file.txt/", "Temp/file.txt")]
-            [InlineData("Temp\\file.txt\\", "Temp/file.txt")]
             [InlineData(@"\\foo\bar\", @"\\foo\bar")]
             [InlineData(@"\\foo\bar/", @"\\foo\bar")]
             public void Should_Remove_Trailing_Slashes(string value, string expected)
+            {
+                // Given, When
+                var path = new TestingPath(value);
+
+                // Then
+                Assert.Equal(expected, path.FullPath);
+            }
+
+            [WindowsTheory]
+            [InlineData("\\Hello\\World\\", "/Hello/World")]
+            [InlineData("file.txt\\", "file.txt")]
+            [InlineData("Temp\\file.txt\\", "Temp/file.txt")]
+            public void Should_Remove_Trailing_Slashes_And_Normalize_Backslashes_On_Windows(string value, string expected)
             {
                 // Given, When
                 var path = new TestingPath(value);
