@@ -90,7 +90,28 @@ namespace Cake.Core.Tooling
             var exitCode = process.GetExitCode();
             if (!settings.HandleExitCode?.Invoke(exitCode) ?? true)
             {
-                ProcessExitCode(process.GetExitCode());
+                ProcessExitCode(process);
+            }
+        }
+
+        /// <summary>
+        /// Customized exit code handling.
+        /// Standard behavior is to fail when non zero.
+        /// </summary>
+        /// <param name="process">The process that was run.</param>
+        protected virtual void ProcessExitCode(IProcess process)
+        {
+            ArgumentNullException.ThrowIfNull(process);
+
+            var exitCode = process.GetExitCode();
+            if (exitCode != 0)
+            {
+                const string message = "{0}: Process returned an error (exit code {1}).";
+                throw new CakeProcessException(
+                    exitCode,
+                    string.Format(CultureInfo.InvariantCulture, message, GetToolName(), exitCode),
+                    process.GetStandardOutput(),
+                    process.GetStandardError());
             }
         }
 
@@ -179,6 +200,16 @@ namespace Cake.Core.Tooling
 
             // Want to opt out of using a working directory?
             info.NoWorkingDirectory = settings.NoWorkingDirectory;
+
+            if (info.RedirectedStandardOutputHandler == null && settings.RedirectedStandardOutputHandler != null)
+            {
+                info.RedirectedStandardOutputHandler = settings.RedirectedStandardOutputHandler;
+            }
+
+            if (info.RedirectedStandardErrorHandler == null && settings.RedirectedStandardErrorHandler != null)
+            {
+                info.RedirectedStandardErrorHandler = settings.RedirectedStandardErrorHandler;
+            }
 
             // Configure process settings
             settings.SetupProcessSettings?.Invoke(info);

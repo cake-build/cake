@@ -119,5 +119,17 @@ namespace Cake.Core.Tooling
         /// Gets or sets a delegate to configure the process settings.
         /// </summary>
         public Action<ProcessSettings> SetupProcessSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets a function that intercepts the error output before being redirected.
+        /// Use in conjunction with <see cref="ProcessSettings.RedirectStandardError"/> on the started process.
+        /// </summary>
+        public Func<string, string> RedirectedStandardErrorHandler { get; set; }
+
+        /// <summary>
+        /// Gets or sets a function that intercepts the standard output before being redirected.
+        /// Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/> on the started process.
+        /// </summary>
+        public Func<string, string> RedirectedStandardOutputHandler { get; set; }
     }
 }
