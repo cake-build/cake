@@ -101,6 +101,21 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Publish
             }
 
             [Fact]
+            public void Should_Resolve_OutputDirectory_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetPublisherFixture();
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+                fixture.Settings.OutputDirectory = "./obj/Docker/publish";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("publish --output \"/Working/source/MyProject/obj/Docker/publish\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Settings()
             {
                 // Given
