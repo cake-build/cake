@@ -61,7 +61,8 @@ namespace Cake.Common.Tools.DotNet.Clean
             if (settings.OutputDirectory != null)
             {
                 builder.Append("--output");
-                builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
+                var outputDirectory = GetAbsoluteOutputDirectory(settings.OutputDirectory, settings, _environment);
+                builder.AppendQuoted(outputDirectory.MakeAbsolute(_environment).FullPath);
             }
 
             // Framework

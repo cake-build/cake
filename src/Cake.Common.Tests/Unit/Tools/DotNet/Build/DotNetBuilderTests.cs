@@ -125,6 +125,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Build
                 Assert.Equal("build \"./src/*\" --output \"/Working/artifacts\"", result.Args);
             }
 
+            [Fact]
+            public void Should_Resolve_OutputDirectory_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetBuilderFixture();
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+                fixture.Settings.OutputDirectory = "./obj/Docker/publish";
+                fixture.Project = "./src/*";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("build \"./src/*\" --output \"/Working/source/MyProject/obj/Docker/publish\"", result.Args);
+            }
+
             [Theory]
             [InlineData("./src/*", "build \"./src/*\"")]
             [InlineData("./src/cake build/", "build \"./src/cake build/\"")]
