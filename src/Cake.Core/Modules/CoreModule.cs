@@ -41,7 +41,14 @@ namespace Cake.Core.Modules
             registrar.RegisterType<Globber>().As<IGlobber>().Singleton();
             registrar.RegisterType<ProcessRunner>().As<IProcessRunner>().Singleton();
             registrar.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().Singleton();
-            registrar.RegisterType<WindowsRegistry>().As<IRegistry>().Singleton();
+            if (OperatingSystem.IsWindows())
+            {
+                registrar.RegisterType<WindowsRegistry>().As<IRegistry>().Singleton();
+            }
+            else
+            {
+                registrar.RegisterType<NullRegistry>().As<IRegistry>().Singleton();
+            }
 
             // Reflection
             registrar.RegisterType<AssemblyLoader>().As<IAssemblyLoader>().Singleton();
