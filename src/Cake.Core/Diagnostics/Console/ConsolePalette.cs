@@ -31,6 +31,21 @@ namespace Cake.Core.Diagnostics
                 background = Constants.DefaultConsoleColor;
             }
 
+            if (IsTeamCityBuild())
+            {
+                return CreateTeamCityLookup(background);
+            }
+
+            return CreateDefaultLookup(background);
+        }
+
+        private static bool IsTeamCityBuild()
+        {
+            return !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TEAMCITY_VERSION"));
+        }
+
+        private static Dictionary<LogLevel, ConsolePalette> CreateDefaultLookup(ConsoleColor background)
+        {
             return new Dictionary<LogLevel, ConsolePalette>
             {
                 { LogLevel.Fatal, new ConsolePalette(ConsoleColor.Magenta, ConsoleColor.White, ConsoleColor.DarkMagenta, ConsoleColor.White) },
@@ -38,7 +53,20 @@ namespace Cake.Core.Diagnostics
                 { LogLevel.Warning, new ConsolePalette(background, ConsoleColor.Yellow, background, ConsoleColor.Yellow) },
                 { LogLevel.Information, new ConsolePalette(background, ConsoleColor.White, ConsoleColor.DarkBlue, ConsoleColor.White) },
                 { LogLevel.Verbose, new ConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
-                { LogLevel.Debug, new ConsolePalette(background, ConsoleColor.DarkGray, background, ConsoleColor.Gray) }
+                { LogLevel.Debug, new ConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) }
+            };
+        }
+
+        private static Dictionary<LogLevel, ConsolePalette> CreateTeamCityLookup(ConsoleColor background)
+        {
+            return new Dictionary<LogLevel, ConsolePalette>
+            {
+                { LogLevel.Fatal, new ConsolePalette(ConsoleColor.Magenta, ConsoleColor.White, ConsoleColor.DarkMagenta, ConsoleColor.White) },
+                { LogLevel.Error, new ConsolePalette(ConsoleColor.DarkRed, ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White) },
+                { LogLevel.Warning, new ConsolePalette(background, ConsoleColor.DarkYellow, background, ConsoleColor.DarkYellow) },
+                { LogLevel.Information, new ConsolePalette(background, ConsoleColor.Black, ConsoleColor.DarkBlue, ConsoleColor.White) },
+                { LogLevel.Verbose, new ConsolePalette(background, ConsoleColor.DarkGray, background, ConsoleColor.Black) },
+                { LogLevel.Debug, new ConsolePalette(background, ConsoleColor.DarkGray, background, ConsoleColor.Black) }
             };
         }
     }

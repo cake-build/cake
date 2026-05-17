@@ -105,7 +105,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 [InlineData(LogLevel.Warning, "\u001b[33;1mHello, \u001b[0m\u001b[33;1mWorld\u001b[0m")]
                 [InlineData(LogLevel.Information, "\u001b[37;1mHello, \u001b[0m\u001b[44m\u001b[37;1mWorld\u001b[0m")]
                 [InlineData(LogLevel.Verbose, "\u001b[37mHello, \u001b[0m\u001b[37;1mWorld\u001b[0m")]
-                [InlineData(LogLevel.Debug, "\u001b[30;1mHello, \u001b[0m\u001b[37mWorld\u001b[0m")]
+                [InlineData(LogLevel.Debug, "\u001b[37mHello, \u001b[0m\u001b[37;1mWorld\u001b[0m")]
                 public void Should_Colorize_Tokens_Correctly(LogLevel level, string expected)
                 {
                     // Given
@@ -230,7 +230,7 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 [InlineData(LogLevel.Warning, "#[Black|Yellow]Hello, [/]#[Black|Yellow]World[/]")]
                 [InlineData(LogLevel.Information, "#[Black|White]Hello, [/]#[DarkBlue|White]World[/]")]
                 [InlineData(LogLevel.Verbose, "#[Black|Gray]Hello, [/]#[Black|White]World[/]")]
-                [InlineData(LogLevel.Debug, "#[Black|DarkGray]Hello, [/]#[Black|Gray]World[/]")]
+                [InlineData(LogLevel.Debug, "#[Black|Gray]Hello, [/]#[Black|White]World[/]")]
                 public void Should_Colorize_Tokens_Correctly(LogLevel level, string expected)
                 {
                     // Given
@@ -265,8 +265,8 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                 }
 
                 [Theory]
-                [InlineData(false, "#[Black|DarkGray]Executing: if ($LASTEXITCODE -gt 0) { throw \"script failed with exit code $LASTEXITCODE\" }[/]")]
-                [InlineData(true, "\u001b[30;1mExecuting: if ($LASTEXITCODE -gt 0) { throw \"script failed with exit code $LASTEXITCODE\" }\u001b[0m")]
+                [InlineData(false, "#[Black|Gray]Executing: if ($LASTEXITCODE -gt 0) { throw \"script failed with exit code $LASTEXITCODE\" }[/]")]
+                [InlineData(true, "\u001b[37mExecuting: if ($LASTEXITCODE -gt 0) { throw \"script failed with exit code $LASTEXITCODE\" }\u001b[0m")]
                 public void Should_Output_Escaped_Tokens_Correctly(bool ansi, string expected)
                 {
                     // Given
@@ -285,6 +285,56 @@ namespace Cake.Core.Tests.Unit.Diagnostics
                     // Then
                     Assert.Single(console.Messages);
                     Assert.Equal(expected, console.Messages[0]);
+                }
+            }
+
+            public sealed class TeamCityConsolePalette
+            {
+                [Theory]
+                [InlineData(LogLevel.Information, "\u001b[30mHello, \u001b[0m\u001b[44m\u001b[37;1mWorld\u001b[0m")]
+                [InlineData(LogLevel.Debug, "\u001b[30;1mHello, \u001b[0m\u001b[30mWorld\u001b[0m")]
+                public void Should_Colorize_Tokens_For_TeamCity(LogLevel level, string expected)
+                {
+                    var previousTeamCityVersion = Environment.GetEnvironmentVariable("TEAMCITY_VERSION");
+                    try
+                    {
+                        Environment.SetEnvironmentVariable("TEAMCITY_VERSION", "2024.1");
+
+                        var console = FakeConsole.CreateAnsiConsole();
+                        var log = new CakeBuildLog(console, Verbosity.Diagnostic);
+
+                        log.Write(Verbosity.Diagnostic, level, "Hello, {0}", "World");
+
+                        Assert.Single(console.Messages);
+                        Assert.Equal(expected, console.Messages[0]);
+                    }
+                    finally
+                    {
+                        Environment.SetEnvironmentVariable("TEAMCITY_VERSION", previousTeamCityVersion);
+                    }
+                }
+
+                [Theory]
+                [InlineData(LogLevel.Information, "#[Black|Black]Hello, [/]#[DarkBlue|White]World[/]")]
+                public void Should_Colorize_Tokens_For_TeamCity_On_System_Console(LogLevel level, string expected)
+                {
+                    var previousTeamCityVersion = Environment.GetEnvironmentVariable("TEAMCITY_VERSION");
+                    try
+                    {
+                        Environment.SetEnvironmentVariable("TEAMCITY_VERSION", "2024.1");
+
+                        var console = new FakeConsole { OutputConsoleColor = true };
+                        var log = new CakeBuildLog(console, Verbosity.Diagnostic);
+
+                        log.Write(Verbosity.Diagnostic, level, "Hello, {0}", "World");
+
+                        Assert.Single(console.Messages);
+                        Assert.Equal(expected, console.Messages[0]);
+                    }
+                    finally
+                    {
+                        Environment.SetEnvironmentVariable("TEAMCITY_VERSION", previousTeamCityVersion);
+                    }
                 }
             }
         }
