@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -129,23 +129,22 @@ namespace Cake.Core.IO.Globbing
             }
             else
             {
-                if (node.Segments.Count > 1)
+                // Match using pattern (wildcards, brace expansion, bracket wildcards, etc.),
+                // including when the path segment is only a single non-literal segment (e.g. "{package.json}").
+                var path = context.FileSystem.GetDirectory(context.Path);
+                if (path.Exists)
                 {
-                    var path = context.FileSystem.GetDirectory(context.Path);
-                    if (path.Exists)
+                    foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
                     {
-                        foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
+                        if (node.Next != null)
                         {
-                            if (node.Next != null)
-                            {
-                                context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
-                                node.Next.Accept(this, context);
-                                context.Pop();
-                            }
-                            else
-                            {
-                                context.AddResult(candidate);
-                            }
+                            context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
+                            node.Next.Accept(this, context);
+                            context.Pop();
+                        }
+                        else
+                        {
+                            context.AddResult(candidate);
                         }
                     }
                 }

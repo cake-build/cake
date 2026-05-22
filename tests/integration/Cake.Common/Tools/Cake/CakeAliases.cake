@@ -98,6 +98,12 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.CakeException.Cus
 });
 
 Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets")
+    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.Default")
+    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.Exclusive")
+    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.UnifiedDependencyGraph")
+    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.LegacyDependencyGraph");
+
+Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.Default")
     .Does(() =>
 {
     // Given
@@ -111,7 +117,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets")
                                 .AppendSwitchQuoted("--target", "=", "B")
                                 .AppendSwitchQuoted("--target", "=", "C")
                                 .AppendSwitchQuoted("--target", "=", "D")
-                                .AppendSwitchQuoted("--expected", "=", "A,B,C,E,D")
+                                .AppendSwitchQuoted("--expected", "=", "F,A,F,B,F,C,E,D")
      });
 });
 
@@ -134,6 +140,50 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.Exclusive"
      });
 });
 
+Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.UnifiedDependencyGraph")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Resources.Combine("./Cake.Common/Tools/Cake");
+    var file = path.CombineWithFilePath("./targets.cake");
+
+    // When: run with CAKE_SETTINGS_UNIFIEDDEPENDENCYGRAPHFORMULTIPLETARGETS = true
+    CakeExecuteScript(file, new CakeSettings
+    {
+        ArgumentCustomization = args => args
+                                .AppendSwitchQuoted("--target", "=", "A")
+                                .AppendSwitchQuoted("--target", "=", "B")
+                                .AppendSwitchQuoted("--target", "=", "C")
+                                .AppendSwitchQuoted("--expected", "=", "F,A,B,C"),
+        EnvironmentVariables = new Dictionary<string, string>
+                                {
+                                    { "CAKE_SETTINGS_UNIFIEDDEPENDENCYGRAPHFORMULTIPLETARGETS", "true" }
+                                }
+    });
+});
+
+Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.LegacyDependencyGraph")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Resources.Combine("./Cake.Common/Tools/Cake");
+    var file = path.CombineWithFilePath("./targets.cake");
+
+    // When: run with CAKE_SETTINGS_UNIFIEDDEPENDENCYGRAPHFORMULTIPLETARGETS = false
+    CakeExecuteScript(file, new CakeSettings
+    {
+        ArgumentCustomization = args => args
+                                .AppendSwitchQuoted("--target", "=", "A")
+                                .AppendSwitchQuoted("--target", "=", "B")
+                                .AppendSwitchQuoted("--target", "=", "C")
+                                .AppendSwitchQuoted("--expected", "=", "F,A,F,B,F,C"),
+        EnvironmentVariables = new Dictionary<string, string>
+                                {
+                                    { "CAKE_SETTINGS_UNIFIEDDEPENDENCYGRAPHFORMULTIPLETARGETS", "false" }
+                                }
+    });
+});
+
 Task("Cake.Common.Tools.Cake.CakeAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.Settings.Ok")
@@ -142,5 +192,4 @@ Task("Cake.Common.Tools.Cake.CakeAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.Ok")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.Settings.NotOk")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteExpression.CakeException.CustomExitCode")
-    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets")
-    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.Exclusive");
+    .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets");

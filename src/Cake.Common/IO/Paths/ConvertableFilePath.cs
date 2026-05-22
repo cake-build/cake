@@ -58,5 +58,21 @@ namespace Cake.Common.IO.Paths
         {
             return Path.FullPath;
         }
+
+        /// <summary>
+        /// Combines the directory path and file path with the separator.
+        /// </summary>
+        /// <param name="dir">DirectoryPath.</param>
+        /// <param name="file">ConvertableFilePath.</param>
+        /// <returns>
+        /// A <see cref="ConvertableFilePath" /> that represents this instance.
+        /// </returns>
+        public static ConvertableFilePath operator +(DirectoryPath dir, ConvertableFilePath file)
+        {
+            ArgumentNullException.ThrowIfNull(dir);
+            ArgumentNullException.ThrowIfNull(file);
+
+            return new ConvertableFilePath(dir.CombineWithFilePath(file));
+        }
     }
 }

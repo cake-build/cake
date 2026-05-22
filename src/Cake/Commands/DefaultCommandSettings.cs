@@ -102,5 +102,12 @@ namespace Cake.Commands
         [CommandOption("--" + Infrastructure.Constants.Cache.InvalidateScriptCache)]
         [Description("Forces the script to be recompiled if caching is enabled.")]
         public bool Recompile { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to display report summary at the end of Cake execution.
+        /// </summary>
+        [CommandOption("--" + Infrastructure.Constants.CakeExecution.NoReport)]
+        [Description("Prevent the display of the summary report at the end of Cake Execution.")]
+        public bool NoReport { get; set; }
     }
 }

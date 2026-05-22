@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -19,6 +19,7 @@ namespace Cake.Core
             public const string SkipPackageVersionCheck = "Settings_SkipPackageVersionCheck";
             public const string NoMonoCoersion = "Settings_NoMonoCoersion";
             public const string ShowProcessCommandLine = "Settings_ShowProcessCommandLine";
+            public const string UnifiedDependencyGraphForMultipleTargets = "Settings_UnifiedDependencyGraphForMultipleTargets";
         }
 
         public static class Paths

@@ -14,6 +14,7 @@ using Cake.Common.Build.GitLabCI;
 using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
+using Cake.Common.Build.Rwx;
 using Cake.Common.Build.TeamCity;
 using Cake.Common.Build.TravisCI;
 using Cake.Common.Build.WoodpeckerCI;
@@ -43,6 +44,7 @@ namespace Cake.Common.Build
         /// <param name="gitHubActionsProvider">The GitHub Actions provider.</param>
         /// <param name="azurePipelinesProvider">The Azure Pipelines provider.</param>
         /// <param name="woodpeckerCIProvider">The WoodpeckerCI provider.</param>
+        /// <param name="rwxProvider">The RWX provider.</param>
         public BuildSystem(
             IAppVeyorProvider appVeyorProvider,
             ITeamCityProvider teamCityProvider,
@@ -57,7 +59,8 @@ namespace Cake.Common.Build
             IGitLabCIProvider gitLabCIProvider,
             IGitHubActionsProvider gitHubActionsProvider,
             IAzurePipelinesProvider azurePipelinesProvider,
-            IWoodpeckerCIProvider woodpeckerCIProvider)
+            IWoodpeckerCIProvider woodpeckerCIProvider,
+            IRwxProvider rwxProvider)
         {
             ArgumentNullException.ThrowIfNull(appVeyorProvider);
             ArgumentNullException.ThrowIfNull(teamCityProvider);
@@ -73,6 +76,7 @@ namespace Cake.Common.Build
             ArgumentNullException.ThrowIfNull(gitHubActionsProvider);
             ArgumentNullException.ThrowIfNull(azurePipelinesProvider);
             ArgumentNullException.ThrowIfNull(woodpeckerCIProvider);
+            ArgumentNullException.ThrowIfNull(rwxProvider);
 
             AppVeyor = appVeyorProvider;
             TeamCity = teamCityProvider;
@@ -88,6 +92,7 @@ namespace Cake.Common.Build
             GitHubActions = gitHubActionsProvider;
             AzurePipelines = azurePipelinesProvider;
             WoodpeckerCI = woodpeckerCIProvider;
+            Rwx = rwxProvider;
 
             Provider = (AppVeyor.IsRunningOnAppVeyor ? BuildProvider.AppVeyor : BuildProvider.Local)
                 | (TeamCity.IsRunningOnTeamCity ? BuildProvider.TeamCity : BuildProvider.Local)
@@ -102,7 +107,8 @@ namespace Cake.Common.Build
                 | (GitLabCI.IsRunningOnGitLabCI ? BuildProvider.GitLabCI : BuildProvider.Local)
                 | (GitHubActions.IsRunningOnGitHubActions ? BuildProvider.GitHubActions : BuildProvider.Local)
                 | (AzurePipelines.IsRunningOnAzurePipelines ? BuildProvider.AzurePipelines : BuildProvider.Local)
-                | (WoodpeckerCI.IsRunningOnWoodpeckerCI ? BuildProvider.WoodpeckerCI : BuildProvider.Local);
+                | (WoodpeckerCI.IsRunningOnWoodpeckerCI ? BuildProvider.WoodpeckerCI : BuildProvider.Local)
+                | (Rwx.IsRunningOnRwx ? BuildProvider.Rwx : BuildProvider.Local);
 
             IsLocalBuild = Provider == BuildProvider.Local;
 
@@ -557,6 +563,37 @@ namespace Cake.Common.Build
         /// </code>
         /// </example>
         public IWoodpeckerCIProvider WoodpeckerCI { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is running on RWX.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.IsRunningOnRwx)
+        /// {
+        ///     // Get the run identifier.
+        ///     var runId = BuildSystem.Rwx.Environment.Run.Id;
+        /// }
+        /// </code>
+        /// </example>
+        /// <value>
+        /// <c>true</c> if this instance is running on RWX; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunningOnRwx => Rwx.IsRunningOnRwx;
+
+        /// <summary>
+        /// Gets the RWX Provider.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.IsRunningOnRwx)
+        /// {
+        ///     // Get the run URL.
+        ///     var runUrl = BuildSystem.Rwx.Environment.Run.Url;
+        /// }
+        /// </code>
+        /// </example>
+        public IRwxProvider Rwx { get; }
 
         /// <summary>
         /// Gets the current build provider.

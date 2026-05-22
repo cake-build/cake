@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -88,6 +88,7 @@ namespace Cake.Core.Tests.Fixtures
             filesystem.CreateDirectory("/Working/Foo");
             filesystem.CreateDirectory("/Working/Foo/Bar");
             filesystem.CreateDirectory("/Working/Bar");
+            filesystem.CreateDirectory("/Working/Project");
             filesystem.CreateDirectory("/Foo/Bar");
             filesystem.CreateDirectory("/Foo (Bar)");
             filesystem.CreateDirectory("/Foo@Bar/");
@@ -113,6 +114,10 @@ namespace Cake.Core.Tests.Fixtures
             filesystem.CreateFile("/Working/foobar.rs");
             filesystem.CreateFile("/Working/foobaz.rs");
             filesystem.CreateFile("/Working/foobax.rs");
+            filesystem.CreateFile("/Working/Project/package.json");
+            filesystem.CreateFile("/Working/Project/package-lock.json");
+            filesystem.CreateFile("/Working/Project/tsconfig.json");
+            filesystem.CreateFile("/Working/Project/.npmrc");
 
             return new GlobberFixture(filesystem, environment);
         }

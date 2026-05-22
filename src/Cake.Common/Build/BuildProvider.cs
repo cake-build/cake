@@ -85,6 +85,11 @@ namespace Cake.Common.Build
         /// <summary>
         /// WoodpeckerCI build provider.
         /// </summary>
-        WoodpeckerCI = 16384
+        WoodpeckerCI = 16384,
+
+        /// <summary>
+        /// RWX build provider.
+        /// </summary>
+        Rwx = 32768
     }
 }

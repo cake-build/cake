@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -171,22 +171,49 @@ namespace Cake.Core
 
             try
             {
-                for (int i = 0; i < settings.Targets.Count(); i++)
-                {
-                    var target = settings.Targets.ElementAt(i);
+                var targetsList = settings.Targets.ToList();
 
-                    // Get all nodes to traverse in the correct order.
+                if (targetsList.Count == 1)
+                {
+                    var target = targetsList[0];
                     var orderedTasks = graph.Traverse(target)
                         .Select(y => _tasks.FirstOrDefault(x =>
-                            x.Name.Equals(y, StringComparison.OrdinalIgnoreCase))).ToArray();
-
-                    // Execute setup once, even if multiple run targets have been specified.
-                    if (i == 0)
-                    {
-                        PerformSetup(context, strategy, orderedTasks, target, stopWatch, report);
-                    }
-
+                            x.Name.Equals(y, StringComparison.OrdinalIgnoreCase)))
+                        .Where(t => t != null)
+                        .ToArray();
+                    PerformSetup(context, strategy, orderedTasks, target, stopWatch, report);
                     await RunTarget(context, strategy, orderedTasks, target, settings.Exclusive, stopWatch, report);
+                }
+                else if (settings.UnifiedDependencyGraphForMultipleTargets)
+                {
+                    // Opt-in: single traversal for all targets so shared dependencies run only once.
+                    var orderedTasks = graph.Traverse(settings.Targets)
+                        .Select(y => _tasks.FirstOrDefault(x =>
+                            x.Name.Equals(y, StringComparison.OrdinalIgnoreCase)))
+                        .Where(t => t != null)
+                        .ToArray();
+                    var targetNamesSet = new HashSet<string>(targetsList, StringComparer.OrdinalIgnoreCase);
+                    PerformSetup(context, strategy, orderedTasks, targetsList[0], stopWatch, report);
+                    await RunTargets(context, strategy, orderedTasks, targetNamesSet, settings.Exclusive, stopWatch, report);
+                }
+                else
+                {
+                    // Legacy: each target traversed separately (shared dependencies may run multiple times).
+                    for (int i = 0; i < targetsList.Count; i++)
+                    {
+                        var target = targetsList[i];
+                        var orderedTasks = graph.Traverse(target)
+                            .Select(y => _tasks.FirstOrDefault(x =>
+                                x.Name.Equals(y, StringComparison.OrdinalIgnoreCase)))
+                            .Where(t => t != null)
+                            .ToArray();
+                        if (i == 0)
+                        {
+                            PerformSetup(context, strategy, orderedTasks, target, stopWatch, report);
+                        }
+
+                        await RunTarget(context, strategy, orderedTasks, target, settings.Exclusive, stopWatch, report);
+                    }
                 }
 
                 return report;
@@ -222,11 +249,28 @@ namespace Cake.Core
             }
         }
 
+        private async Task RunTargets(ICakeContext context, IExecutionStrategy strategy, CakeTask[] orderedTasks, HashSet<string> targetNames, bool exclusive, Stopwatch stopWatch, CakeReport report)
+        {
+            foreach (var task in orderedTasks)
+            {
+                if (exclusive && !targetNames.Contains(task.Name))
+                {
+                    continue;
+                }
+
+                var isTarget = targetNames.Contains(task.Name);
+                await RunTask(context, strategy, task, isTarget, stopWatch, report);
+            }
+        }
+
         private async Task RunTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, string target, Stopwatch stopWatch, CakeReport report)
         {
-            // Is this the current target?
             var isTarget = task.Name.Equals(target, StringComparison.OrdinalIgnoreCase);
+            await RunTask(context, strategy, task, isTarget, stopWatch, report);
+        }
 
+        private async Task RunTask(ICakeContext context, IExecutionStrategy strategy, CakeTask task, bool isTarget, Stopwatch stopWatch, CakeReport report)
+        {
             // Should we execute the task?
             var skipped = false;
             foreach (var criteria in task.Criterias)

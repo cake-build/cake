@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -135,7 +135,7 @@ namespace Cake.Common.Tools.DotNet.Package.Search
                 {
                     foreach (var package in searchResult.Packages)
                     {
-                        yield return new DotNetPackageSearchItem { Name = package.Id, Version = package.LatestVersion };
+                        yield return new DotNetPackageSearchItem { Name = package.Id, Version = package.LatestVersion ?? package.Version };
                     }
                 }
             }
@@ -153,9 +153,14 @@ namespace Cake.Common.Tools.DotNet.Package.Search
 
         private sealed class Package
         {
+            /// <summary>Gets or sets the package identifier.</summary>
             public string Id { get; set; }
 
+            /// <summary>Gets or sets the latest version. Used when not using --exact-match; one entry per package with latest version.</summary>
             public string LatestVersion { get; set; }
+
+            /// <summary>Gets or sets the version. Used when using --exact-match; one entry per package version (property name "version" in JSON).</summary>
+            public string Version { get; set; }
         }
     }
 }

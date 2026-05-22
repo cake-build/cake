@@ -4,8 +4,10 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cake.Core.Graph;
 using Xunit;
+using static VerifyXunit.Verifier;
 
 namespace Cake.Core.Tests.Unit.Graph
 {
@@ -14,59 +16,59 @@ namespace Cake.Core.Tests.Unit.Graph
         public sealed class TheBuildMethod
         {
             [Fact]
-            public void Should_Add_All_Tasks_As_Nodes_In_Graph()
+            public async Task Should_Add_All_Tasks_As_Nodes_In_Graph()
             {
                 // Given, When
-                var tasks = new List<CakeTask> { new CakeTask("A"), new CakeTask("B") };
-                var graph = CakeGraphBuilder.Build(tasks);
+                var graph = CakeGraphBuilder.Build(
+                                [
+                                    new CakeTask("A"),
+                                    new CakeTask("B")
+                                ]);
 
                 // Then
-                Assert.Equal(2, graph.Nodes.Count);
+                await Verify(graph.Nodes);
             }
 
             [Fact]
-            public void Should_Create_Edges_Between_Dependencies()
+            public async Task Should_Create_Edges_Between_Dependencies()
             {
                 // Given
                 var task1 = new CakeTask("A");
                 var task2 = new CakeTask("B");
                 task2.AddDependency("A");
 
-                var tasks = new List<CakeTask>
-                {
-                    task1, task2
-                };
-                var graph = CakeGraphBuilder.Build(tasks);
+                var graph = CakeGraphBuilder.Build(
+                                [
+                                    task1,
+                                    task2
+                                ]);
 
                 // When
                 var result = graph.Edges.SingleOrDefault();
 
                 // Then
-                Assert.NotNull(result);
-                Assert.Equal("A", result.Start);
-                Assert.Equal("B", result.End);
+                await Verify(result);
             }
 
             [Fact]
-            public void Should_Create_Edges_Between_Reversed_Dependencies()
+            public async Task Should_Create_Edges_Between_Reversed_Dependencies()
             {
                 // Given
                 var task1 = new CakeTask("A");
                 var task2 = new CakeTask("B");
                 task2.AddDependee("A");
 
-                var graph = CakeGraphBuilder.Build(new List<CakeTask>
-                {
-                    task1, task2
-                });
+                var graph = CakeGraphBuilder.Build(
+                                [
+                                    task1,
+                                    task2
+                                ]);
 
                 // When
                 var result = graph.Edges.SingleOrDefault();
 
                 // Then
-                Assert.NotNull(result);
-                Assert.Equal("B", result.Start);
-                Assert.Equal("A", result.End);
+                await Verify(result);
             }
 
             [Fact]
@@ -75,10 +77,9 @@ namespace Cake.Core.Tests.Unit.Graph
                 // Given
                 var task = new CakeTask("A");
                 task.AddDependency("C");
-                var tasks = new List<CakeTask> { task };
 
                 // When
-                var result = Record.Exception(() => CakeGraphBuilder.Build(tasks));
+                var result = Record.Exception(() => CakeGraphBuilder.Build([task]));
 
                 // Then
                 Assert.NotNull(result);
@@ -91,10 +92,9 @@ namespace Cake.Core.Tests.Unit.Graph
                 // Given
                 var task = new CakeTask("A");
                 task.AddDependency("C", false);
-                var tasks = new List<CakeTask> { task };
 
                 // When
-                var result = Record.Exception(() => CakeGraphBuilder.Build(tasks));
+                var result = Record.Exception(() => CakeGraphBuilder.Build([task]));
 
                 // Then
                 Assert.Null(result);
@@ -106,10 +106,9 @@ namespace Cake.Core.Tests.Unit.Graph
                 // Given
                 var task = new CakeTask("A");
                 task.AddDependee("C");
-                var tasks = new List<CakeTask> { task };
 
                 // When
-                var result = Record.Exception(() => CakeGraphBuilder.Build(tasks));
+                var result = Record.Exception(() => CakeGraphBuilder.Build([task]));
 
                 // Then
                 Assert.NotNull(result);
@@ -122,10 +121,9 @@ namespace Cake.Core.Tests.Unit.Graph
                 // Given
                 var task = new CakeTask("A");
                 task.AddDependee("C", required: false);
-                var tasks = new List<CakeTask> { task };
 
                 // When
-                var result = Record.Exception(() => CakeGraphBuilder.Build(tasks));
+                var result = Record.Exception(() => CakeGraphBuilder.Build([task]));
 
                 // Then
                 Assert.Null(result);

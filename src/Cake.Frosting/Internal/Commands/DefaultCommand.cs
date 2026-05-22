@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -24,7 +24,7 @@ namespace Cake.Frosting.Internal
             _services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
-        public override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
+        protected override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
         {
             // Register arguments
             var arguments = CreateCakeArguments(context.Remaining, settings);
@@ -81,7 +81,7 @@ namespace Cake.Frosting.Internal
 
         private static CakeArguments CreateCakeArguments(IRemainingArguments remainingArguments, DefaultCommandSettings settings)
         {
-            return remainingArguments.ToCakeArguments(settings.Targets);
+            return remainingArguments.ToCakeArguments(settings.NoReport, settings.Targets);
         }
 
         private void InstallTools(ServiceProvider provider)

@@ -5,7 +5,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Cake.Common.IO.Paths;
 using Cake.Core.IO;
-using Xunit;
+using NSubstitute;
 
 namespace Cake.Common.Tests.Unit.IO.Paths
 {
@@ -69,6 +69,65 @@ namespace Cake.Common.Tests.Unit.IO.Paths
 
                     // Then
                     Assert.Null(result);
+                }
+
+                [Fact]
+                [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
+                public void Should_Return_Null_Exception_If_Convertable_Directory_Path_Is_Null()
+                {
+                    // Given
+                    DirectoryPath dirPath = null;
+
+                    // When
+                    var filePath = new ConvertableFilePath("file.txt");
+                    // Then
+                    var ex = Assert.Throws<ArgumentNullException>(() => (dirPath + filePath).ToString());
+                }
+
+                [Fact]
+                [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
+                public void Should_Return_Null_Exception_If_Convertable_FilePath_Is_Null()
+                {
+                    // Given
+                    DirectoryPath dirPath = new DirectoryPath("X");
+
+                    // When
+                    ConvertableFilePath filePath = null;
+                    // Then
+                    var ex = Assert.Throws<ArgumentNullException>(() => (dirPath + filePath).ToString());
+                }
+
+                [Fact]
+                [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
+                public void Should_Return_Combined_Directorypath_FilePath_Including_Separator()
+                {
+                    // Given
+                    DirectoryPath dirPath = new DirectoryPath("X");
+                    var filePath = new ConvertableFilePath("file.txt");
+
+                    // When
+                    string result = dirPath + filePath;
+
+                    // Then
+                    Assert.Equal("X/file.txt", result);
+                }
+
+                [Fact]
+                [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
+                public void Should_Return_Combined_RootPath_Directorypath_FilePath_Including_Separator()
+                {
+                    // Given
+                    var contextcake = Substitute.For<Core.ICakeContext>();
+
+                    DirectoryPath dirPath = new ConvertableDirectoryPath(new DirectoryPath("X"));
+                    var filePath = new ConvertableFilePath(new FilePath("file.txt"));
+                    var rootdir = new ConvertableDirectoryPath(new DirectoryPath(".."));
+
+                    // When
+                    var result = (rootdir + dirPath + filePath).ToString();
+
+                    // Then
+                    Assert.Equal("../X/file.txt", result);
                 }
             }
 

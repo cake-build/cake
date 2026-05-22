@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -35,7 +35,7 @@ namespace Cake.Cli
             // Create a table
             var table = new Table().Border(TableBorder.SimpleHeavy);
             table.Width(100);
-            table.BorderStyle(new Style().Foreground(ConsoleColor.Green));
+            table.BorderStyle(default(Style).Foreground(ConsoleColor.Green));
 
             var includeSkippedReasonColumn = report.Any(r => !string.IsNullOrEmpty(r.SkippedMessage));
             var rowStyle = new Style(ConsoleColor.Green);

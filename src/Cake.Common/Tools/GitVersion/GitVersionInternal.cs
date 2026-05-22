@@ -3,242 +3,244 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Globalization;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Cake.Common.Tools.GitVersion
 {
-    [DataContract(Name = "GitVersion")]
+    /// <summary>
+    /// Internal DTO for deserializing GitVersion JSON output. Property names match GitVersion CLI output (PascalCase).
+    /// </summary>
     internal class GitVersionInternal
     {
         private GitVersion _gitVersion;
 
         internal GitVersion GitVersion => _gitVersion ?? (_gitVersion = new GitVersion());
 
-        [DataMember]
+        [JsonPropertyName("Major")]
         public string Major
         {
             get => ToString(GitVersion.Major);
             set => GitVersion.Major = ToInt(value);
         }
 
-        [DataMember]
+        [JsonPropertyName("Minor")]
         public string Minor
         {
             get => ToString(GitVersion.Minor);
             set => GitVersion.Minor = ToInt(value);
         }
 
-        [DataMember]
+        [JsonPropertyName("Patch")]
         public string Patch
         {
             get => ToString(GitVersion.Patch);
             set => GitVersion.Patch = ToInt(value);
         }
 
-        [DataMember]
+        [JsonPropertyName("PreReleaseTag")]
         public string PreReleaseTag
         {
             get => GitVersion.PreReleaseTag;
             set => GitVersion.PreReleaseTag = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("PreReleaseTagWithDash")]
         public string PreReleaseTagWithDash
         {
             get => GitVersion.PreReleaseTagWithDash;
             set => GitVersion.PreReleaseTagWithDash = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("PreReleaseLabel")]
         public string PreReleaseLabel
         {
             get => GitVersion.PreReleaseLabel;
             set => GitVersion.PreReleaseLabel = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("PreReleaseLabelWithDash")]
         public string PreReleaseLabelWithDash
         {
             get => GitVersion.PreReleaseLabelWithDash;
             set => GitVersion.PreReleaseLabelWithDash = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("PreReleaseNumber")]
         public string PreReleaseNumber
         {
             get => ToString(GitVersion.PreReleaseNumber);
             set => GitVersion.PreReleaseNumber = ToNullableInt(value);
         }
 
-        [DataMember]
+        [JsonPropertyName("WeightedPreReleaseNumber")]
         public string WeightedPreReleaseNumber
         {
             get => ToString(GitVersion.WeightedPreReleaseNumber);
             set => GitVersion.WeightedPreReleaseNumber = ToNullableInt(value);
         }
 
-        [DataMember]
+        [JsonPropertyName("BuildMetaData")]
         public string BuildMetaData
         {
             get => GitVersion.BuildMetaData;
             set => GitVersion.BuildMetaData = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("BuildMetaDataPadded")]
         public string BuildMetaDataPadded
         {
             get => GitVersion.BuildMetaDataPadded;
             set => GitVersion.BuildMetaDataPadded = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("FullBuildMetaData")]
         public string FullBuildMetaData
         {
             get => GitVersion.FullBuildMetaData;
             set => GitVersion.FullBuildMetaData = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("MajorMinorPatch")]
         public string MajorMinorPatch
         {
             get => GitVersion.MajorMinorPatch;
             set => GitVersion.MajorMinorPatch = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("SemVer")]
         public string SemVer
         {
             get => GitVersion.SemVer;
             set => GitVersion.SemVer = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("LegacySemVer")]
         public string LegacySemVer
         {
             get => GitVersion.LegacySemVer;
             set => GitVersion.LegacySemVer = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("LegacySemVerPadded")]
         public string LegacySemVerPadded
         {
             get => GitVersion.LegacySemVerPadded;
             set => GitVersion.LegacySemVerPadded = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("AssemblySemVer")]
         public string AssemblySemVer
         {
             get => GitVersion.AssemblySemVer;
             set => GitVersion.AssemblySemVer = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("AssemblySemFileVer")]
         public string AssemblySemFileVer
         {
             get => GitVersion.AssemblySemFileVer;
             set => GitVersion.AssemblySemFileVer = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("FullSemVer")]
         public string FullSemVer
         {
             get => GitVersion.FullSemVer;
             set => GitVersion.FullSemVer = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("InformationalVersion")]
         public string InformationalVersion
         {
             get => GitVersion.InformationalVersion;
             set => GitVersion.InformationalVersion = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("BranchName")]
         public string BranchName
         {
             get => GitVersion.BranchName;
             set => GitVersion.BranchName = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("EscapedBranchName")]
         public string EscapedBranchName
         {
             get => GitVersion.EscapedBranchName;
             set => GitVersion.EscapedBranchName = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("Sha")]
         public string Sha
         {
             get => GitVersion.Sha;
             set => GitVersion.Sha = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("ShortSha")]
         public string ShortSha
         {
             get => GitVersion.ShortSha;
             set => GitVersion.ShortSha = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("NuGetVersionV2")]
         public string NuGetVersionV2
         {
             get => GitVersion.NuGetVersionV2;
             set => GitVersion.NuGetVersionV2 = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("NuGetVersion")]
         public string NuGetVersion
         {
             get => GitVersion.NuGetVersion;
             set => GitVersion.NuGetVersion = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("NuGetPreReleaseTagV2")]
         public string NuGetPreReleaseTagV2
         {
             get => GitVersion.NuGetPreReleaseTagV2;
             set => GitVersion.NuGetPreReleaseTagV2 = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("NuGetPreReleaseTag")]
         public string NuGetPreReleaseTag
         {
             get => GitVersion.NuGetPreReleaseTag;
             set => GitVersion.NuGetPreReleaseTag = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("VersionSourceSha")]
         public string VersionSourceSha
         {
             get => GitVersion.VersionSourceSha;
             set => GitVersion.VersionSourceSha = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("CommitsSinceVersionSource")]
         public string CommitsSinceVersionSource
         {
             get => ToString(GitVersion.CommitsSinceVersionSource);
             set => GitVersion.CommitsSinceVersionSource = ToNullableInt(value);
         }
 
-        [DataMember]
+        [JsonPropertyName("CommitsSinceVersionSourcePadded")]
         public string CommitsSinceVersionSourcePadded
         {
             get => GitVersion.CommitsSinceVersionSourcePadded;
             set => GitVersion.CommitsSinceVersionSourcePadded = value;
         }
 
-        [DataMember]
+        [JsonPropertyName("UncommittedChanges")]
         public string UncommittedChanges
         {
             get => ToString(GitVersion.UncommittedChanges);
             set => GitVersion.UncommittedChanges = ToNullableInt(value);
         }
 
-        [DataMember]
+        [JsonPropertyName("CommitDate")]
         public string CommitDate
         {
             get => GitVersion.CommitDate;

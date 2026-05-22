@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -41,6 +41,12 @@ namespace Cake.Common.Tools.DotNet.MSBuild
 
             var msBuilder = new ProcessArgumentBuilder();
 
+            // Verbosity: use MSBuild /verbosity switch (dotnet msbuild does not support --verbosity; it forwards to MSBuild which expects /verbosity:x)
+            if (settings.Verbosity.HasValue)
+            {
+                msBuilder.AppendMSBuildSwitch("verbosity", GetMSBuildVerbosityValue(settings.Verbosity.Value));
+            }
+
             // Got any targets?
             if (settings.Targets.Any())
             {
@@ -55,9 +61,9 @@ namespace Cake.Common.Tools.DotNet.MSBuild
             // Got any properties?
             foreach (var property in settings.Properties)
             {
-                if (property.Value == null || property.Value.All(string.IsNullOrWhiteSpace))
+                if (property.Value == null || property.Value.All(value => value == null))
                 {
-                    throw new ArgumentException("A property must have at least one non-empty value", nameof(settings.Properties));
+                    throw new ArgumentException("A property must have at least one non-null value", nameof(settings.Properties));
                 }
 
                 msBuilder.AppendMSBuildSwitch("property", $"{property.Key}={property.BuildMSBuildPropertyParameterString()}");
@@ -287,6 +293,20 @@ namespace Cake.Common.Tools.DotNet.MSBuild
             var counter = index == 0 ? string.Empty : index.ToString();
             return $"/fileLogger{counter} /fileloggerparameters{counter}:{parameters}";
         }
+
+        /// <summary>
+        /// Maps <see cref="DotNet.DotNetVerbosity"/> to MSBuild verbosity string (quiet, minimal, normal, detailed, diagnostic).
+        /// </summary>
+        private static string GetMSBuildVerbosityValue(DotNet.DotNetVerbosity verbosity)
+            => verbosity switch
+            {
+                DotNet.DotNetVerbosity.Quiet => "quiet",
+                DotNet.DotNetVerbosity.Minimal => "minimal",
+                DotNet.DotNetVerbosity.Normal => "normal",
+                DotNet.DotNetVerbosity.Detailed => "detailed",
+                DotNet.DotNetVerbosity.Diagnostic => "diagnostic",
+                _ => throw new ArgumentOutOfRangeException(nameof(verbosity), verbosity, "Invalid value"),
+            };
 
         private static string GetToolVersionValue(MSBuildVersion toolVersion)
         {

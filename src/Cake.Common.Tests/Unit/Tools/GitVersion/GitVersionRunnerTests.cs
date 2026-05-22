@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -504,6 +504,46 @@ namespace Cake.Common.Tests.Unit.Tools.GitVersion
                 Assert.Equal(expect.CommitsSinceVersionSourcePadded, result.CommitsSinceVersionSourcePadded);
                 Assert.Equal(expect.UncommittedChanges, result.UncommittedChanges);
                 Assert.Equal(expect.CommitDate, result.CommitDate);
+            }
+
+            [Fact]
+            public void Should_Populate_Legacy_Properties_When_Not_Returned_By_GitVersion_6()
+            {
+                // GitVersion 6+ omits legacy output variables; Cake best-effort populates them from remaining properties.
+                var fixture = new GitVersionRunnerFixture(
+                    new[]
+                    {
+                        "{",
+                        "  \"Major\":6,",
+                        "  \"Minor\":1,",
+                        "  \"Patch\":0,",
+                        "  \"PreReleaseTag\":\"alpha.41\",",
+                        "  \"PreReleaseTagWithDash\":\"-alpha.41\",",
+                        "  \"PreReleaseLabel\":\"alpha\",",
+                        "  \"PreReleaseLabelWithDash\":\"-alpha\",",
+                        "  \"PreReleaseNumber\":\"41\",",
+                        "  \"BuildMetaData\":\"41.Branch.feature.Sha.abc123\",",
+                        "  \"MajorMinorPatch\":\"6.1.0\",",
+                        "  \"SemVer\":\"6.1.0-alpha.41\",",
+                        "  \"FullSemVer\":\"6.1.0-alpha.41+41\",",
+                        "  \"BranchName\":\"feature/gh-4575\",",
+                        "  \"Sha\":\"abc123def456\",",
+                        "  \"CommitsSinceVersionSource\":\"41\"",
+                        "}"
+                    });
+                fixture.Settings.OutputType = GitVersionOutput.Json;
+
+                var result = fixture.RunGitVersion();
+
+                Assert.Equal("6.1.0", result.MajorMinorPatch);
+                Assert.Equal("0041", result.CommitsSinceVersionSourcePadded);
+                Assert.Equal("0041", result.BuildMetaDataPadded);
+                Assert.Equal("6.1.0-alpha41", result.LegacySemVer);
+                Assert.Equal("6.1.0-alpha0041", result.LegacySemVerPadded);
+                Assert.Equal("6.1.0-alpha0041", result.NuGetVersionV2);
+                Assert.Equal("6.1.0-alpha0041", result.NuGetVersion);
+                Assert.Equal("-alpha", result.NuGetPreReleaseTagV2);
+                Assert.Equal("-alpha", result.NuGetPreReleaseTag);
             }
 
             [Theory]

@@ -1,3 +1,27 @@
+### New in 6.2.0 (Released 2026/05/22)
+
+* #4840 Add RWX as a build provider.
+* #4832 Update Microsoft.Extensions.DependencyInjection to 9.0.16 (net9.0) & 10.0.8 (net10.0).
+* #4830 Update Microsoft.IdentityModel.JsonWebTokens to 8.18.0.
+* #4822 Update Spectre.Console to 0.55.2.
+* #4820 Update Basic.Reference.Assemblies.* to 1.8.8.
+* #4794 Update NuGet.* packages dependencies to avoid transitive package vulnerable warnings.
+* #4784 Update Spectre.Console.* to 0.55.0.
+* #4776 Microsoft.IdentityModel.JsonWebTokens to 8.17.0.
+* #4771 Update System.Security.Cryptography.Pkcs to 9.0.14 & 10.0.5 (net9.0&net10.0).
+* #4769 Update Microsoft.Extensions.DependencyInjection to 9.0.14 & 10.0.5 (net9.0&net10.0).
+* #4765 Update Autofac to 9.1.0.
+* #4763 Update Microsoft.CodeAnalysis.CSharp.Scripting to 5.3.0.
+* #4442 Frosting DirectoryPath + ConvertableFilePath combines strings instead of paths.
+* #4158 Cannot specify empty properties when using DotNetBuild.
+* #2101 CakeReportPrinter should be disabled in Verbosity = Quiet.
+* #4834 .NET Tool installer switch from --add-source to --source for .NET 9 & 10.
+* #4456 DotNetMSBuild alias generates extra verbosity argument.
+* #4454 Impossible to retrieve package versions list with DotNetSearchPackage.
+* #4324 When running multiple targets, common dependent tasks are executed twice.
+* #4066 SetupContext.TasksToExecute only lists tasks related to first target when calling RunTargets.
+* #2666 GetFiles() using Glob curly braces gives empty result.
+
 ### New in 6.1.0 (Released 2026/03/01)
 
 * #4656 Gitlab CI_PIPELINE_ID has exceeded the int limits on gitlab.com and the variable should be changed to a long.

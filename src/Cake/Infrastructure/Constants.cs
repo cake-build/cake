@@ -10,6 +10,7 @@ namespace Cake.Infrastructure
         {
             public const string EnableScriptCache = "Settings_EnableScriptCache";
             public const string UseSpectreConsoleForConsoleOutput = "Settings_UseSpectreConsoleForConsoleOutput";
+            public const string NoReport = "Settings_NoReport";
         }
 
         public static class Paths
@@ -20,6 +21,11 @@ namespace Cake.Infrastructure
         public static class Cache
         {
             public const string InvalidateScriptCache = "invalidate-script-cache";
+        }
+
+        public static class CakeExecution
+        {
+            public const string NoReport = "no-report";
         }
     }
 }

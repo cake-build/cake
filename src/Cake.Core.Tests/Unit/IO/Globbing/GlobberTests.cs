@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -126,7 +126,7 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
                     var result = fixture.Match("./**/*.*", directoryPredicate, filePredicate);
 
                     // Then
-                    Assert.Equal(10, result.Length);
+                    Assert.Equal(14, result.Length);
                     AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
                     AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
                     AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
@@ -137,6 +137,10 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
                     AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
                     AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
                     AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
+                    AssertEx.ContainsFilePath(result, "/Working/Project/package.json");
+                    AssertEx.ContainsFilePath(result, "/Working/Project/package-lock.json");
+                    AssertEx.ContainsFilePath(result, "/Working/Project/tsconfig.json");
+                    AssertEx.ContainsFilePath(result, "/Working/Project/.npmrc");
                 }
             }
 
@@ -314,12 +318,13 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
                 var result = fixture.Match("/Working/**/*");
 
                 // Then
-                Assert.Equal(18, result.Length);
+                Assert.Equal(23, result.Length);
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Baz");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Bar");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Project");
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
@@ -333,6 +338,10 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
                 AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
                 AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
                 AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
+                AssertEx.ContainsFilePath(result, "/Working/Project/package.json");
+                AssertEx.ContainsFilePath(result, "/Working/Project/package-lock.json");
+                AssertEx.ContainsFilePath(result, "/Working/Project/tsconfig.json");
+                AssertEx.ContainsFilePath(result, "/Working/Project/.npmrc");
             }
 
             [Fact]
@@ -423,13 +432,14 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
                 var result = fixture.Match("/Working/**");
 
                 // Then
-                Assert.Equal(6, result.Length);
+                Assert.Equal(7, result.Length);
                 AssertEx.ContainsDirectoryPath(result, "/Working");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Baz");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
                 AssertEx.ContainsDirectoryPath(result, "/Working/Bar");
+                AssertEx.ContainsDirectoryPath(result, "/Working/Project");
             }
 
             [Theory]
@@ -579,6 +589,37 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
                 Assert.Equal(2, result.Length);
                 AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
                 AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
+            }
+
+            [Fact]
+            public void Should_Return_File_When_Brace_Expansion_Is_Only_Segment_Single_Alternative()
+            {
+                // Given (reproduces GitHub issue #2666: GetFiles with glob curly braces gave empty result)
+                var fixture = GlobberFixture.UnixLike();
+
+                // When
+                var result = fixture.Match("/Working/Project/{package.json}");
+
+                // Then
+                Assert.Single(result);
+                AssertEx.ContainsFilePath(result, "/Working/Project/package.json");
+            }
+
+            [Fact]
+            public void Should_Return_Files_When_Brace_Expansion_Is_Only_Segment_Multiple_Alternatives()
+            {
+                // Given (reproduces GitHub issue #2666: GetFiles with glob curly braces gave empty result)
+                var fixture = GlobberFixture.UnixLike();
+
+                // When
+                var result = fixture.Match("/Working/Project/{package.json,package-lock.json,tsconfig.json,.npmrc}");
+
+                // Then
+                Assert.Equal(4, result.Length);
+                AssertEx.ContainsFilePath(result, "/Working/Project/package.json");
+                AssertEx.ContainsFilePath(result, "/Working/Project/package-lock.json");
+                AssertEx.ContainsFilePath(result, "/Working/Project/tsconfig.json");
+                AssertEx.ContainsFilePath(result, "/Working/Project/.npmrc");
             }
 
             [Fact]

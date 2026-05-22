@@ -52,7 +52,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
     var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
 
     // When
-    DotNetTest(project.FullPath);
+    DotNetTest(project.FullPath, new DotNetTestSettings { PathType = DotNetTestPathType.Project });
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetVSTest")
@@ -216,8 +216,8 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild")
     var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
     var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net10.0/hwapp.dll");
 
-    // When
-    DotNetMSBuild(project.FullPath);
+    // When (Verbosity.Quiet exercises MSBuild /verbosity, not dotnet --verbosity; see https://github.com/cake-build/cake/issues/4456)
+    DotNetMSBuild(project.FullPath, new DotNetMSBuildSettings { Verbosity = DotNetVerbosity.Quiet });
 
     // Then
     Assert.True(System.IO.File.Exists(assembly.FullPath));
@@ -251,6 +251,23 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuild.Results")
     Assert.Equal("Success", result.RootElement.GetProperty("TargetResults").GetProperty("Compile").GetProperty("Result").GetString());
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetMSBuildEmptyParametersAllowed")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetClean")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var project = path.CombineWithFilePath("hwapp/hwapp.csproj");
+    var assembly = path.CombineWithFilePath("hwapp/bin/Debug/net10.0/hwapp.dll");
+
+    // When - empty string property value is allowed
+    DotNetMSBuild(project.FullPath, new DotNetMSBuildSettings()
+        .WithProperty("APropertyIWantTobeBlank", ""));
+
+    // Then
+    Assert.True(System.IO.File.Exists(assembly.FullPath));
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest")
     .Does(() =>
@@ -267,7 +284,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     // Then
     Assert.NotNull(exception);
     Assert.IsType<CakeException>(exception);
-    Assert.Equal(exception.Message, ".NET CLI: Process returned an error (exit code 1).");
+    Assert.Equal(".NET CLI: Process returned an error (exit code 2).",exception.Message);
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
@@ -359,7 +376,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemovePackage")
-    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     .Does(() =>
 {
     // Given
@@ -373,7 +390,13 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemovePackage")
     Assert.Equal(package, value);
 
     // When
-    DotNetRemovePackage(package, project.FullPath);
+
+    DotNetRemovePackage(
+        package, project.GetFilename().FullPath,
+        // Workaround for SDK regression https://github.com/NuGet/Home/issues/14801
+        new DotNetPackageRemoveSettings { 
+            WorkingDirectory = project.GetDirectory().FullPath
+         });
 
     value = XmlPeek(
         project.FullPath,
@@ -448,6 +471,27 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSearchPackage")
     // Then
     Assert.NotNull(result);
     Assert.Contains(package, result.Select(x => x.Name));
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSearchPackage.ExactMatch")
+    .Does(() =>
+{
+    // Given: exact-match returns "version" in JSON (not "latestVersion"); see issue #4454
+    var package = "Refit.Newtonsoft.Json";
+
+    // When
+    var result = DotNetSearchPackage(package, new DotNetPackageSearchSettings { ExactMatch = true });
+
+    // Then: every item must have non-null Version (fix for dotnet package search --exact-match --format json)
+    Assert.NotNull(result);
+    var list = result.ToList();
+    Assert.NotEmpty(list);
+    foreach (var item in list)
+    {
+        Assert.NotNull(item.Name);
+        Assert.NotNull(item.Version);
+        Assert.Equal(package, item.Name);
+    }
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListPackage")
@@ -528,6 +572,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemovePackage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSearchPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSearchPackage.ExactMatch")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListPackage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRemoveReference")

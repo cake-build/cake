@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -106,6 +106,63 @@ namespace Cake.Core.Graph
             }
             var result = new List<string>();
             Traverse(target, result);
+            return result;
+        }
+
+        /// <summary>
+        /// Traverses the graph for multiple targets, returning a single dependency-ordered sequence
+        /// where each node appears only once. Shared dependencies of the targets are executed once.
+        /// </summary>
+        /// <param name="targets">The targets to traverse.</param>
+        /// <returns>A list of nodes in dependency order, with no duplicates.</returns>
+        public IEnumerable<string> Traverse(IEnumerable<string> targets)
+        {
+            var targetsList = targets?.Where(t => !string.IsNullOrWhiteSpace(t)).ToList() ?? new List<string>();
+            if (targetsList.Count == 0)
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            var nodeSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var target in targetsList)
+            {
+                if (!Exist(target))
+                {
+                    continue;
+                }
+
+                foreach (var node in Traverse(target))
+                {
+                    nodeSet.Add(node);
+                }
+            }
+
+            return TopologicalSort(nodeSet);
+        }
+
+        private IEnumerable<string> TopologicalSort(ISet<string> nodeSet)
+        {
+            var result = new List<string>();
+            var remaining = new HashSet<string>(nodeSet, StringComparer.OrdinalIgnoreCase);
+
+            while (remaining.Count > 0)
+            {
+                var next = remaining
+                    .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+                    .FirstOrDefault(n =>
+                        !_edges.Any(e =>
+                            e.End.Equals(n, StringComparison.OrdinalIgnoreCase) &&
+                            remaining.Contains(e.Start)));
+
+                if (next == null)
+                {
+                    throw new CakeException("Graph contains circular references.");
+                }
+
+                result.Add(next);
+                remaining.Remove(next);
+            }
+
             return result;
         }
 

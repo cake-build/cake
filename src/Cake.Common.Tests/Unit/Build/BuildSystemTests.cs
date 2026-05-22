@@ -14,6 +14,7 @@ using Cake.Common.Build.GitLabCI;
 using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
+using Cake.Common.Build.Rwx;
 using Cake.Common.Build.TeamCity;
 using Cake.Common.Build.TravisCI;
 using Cake.Common.Build.WoodpeckerCI;
@@ -44,9 +45,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(null, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(null, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "appVeyorProvider");
@@ -69,9 +71,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, null, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, null, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "teamCityProvider");
@@ -94,9 +97,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, null, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, null, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "myGetProvider");
@@ -119,9 +123,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, null, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, null, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "bambooProvider");
@@ -144,9 +149,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, null, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, null, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "continuaCIProvider");
@@ -169,9 +175,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, null, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, null, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "jenkinsProvider");
@@ -194,9 +201,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, null, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, null, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "bitriseProvider");
@@ -219,9 +227,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, null, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, null, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "travisCIProvider");
@@ -244,9 +253,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, null, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, null, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "bitbucketPipelinesProvider");
@@ -269,9 +279,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, null, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, null, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "goCDProvider");
@@ -294,9 +305,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, null, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, null, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "gitLabCIProvider");
@@ -319,9 +331,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitLabCIProvider = Substitute.For<IGitLabCIProvider>();
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, null, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, null, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "azurePipelinesProvider");
@@ -344,9 +357,10 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitLabCIProvider = Substitute.For<IGitLabCIProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, null, azurePipelinesProvider, woodpeckerCIProvider));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, null, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "gitHubActionsProvider");
@@ -369,12 +383,39 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitLabCIProvider = Substitute.For<IGitLabCIProvider>();
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 // When
-                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, null));
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, null, rwxProvider));
 
                 // Then
                 AssertEx.IsArgumentNullException(result, "woodpeckerCIProvider");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Rwx_Is_Null()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
+                var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+                var jenkinsProvider = Substitute.For<IJenkinsProvider>();
+                var bitriseProvider = Substitute.For<IBitriseProvider>();
+                var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
+                var goCDProvider = Substitute.For<IGoCDProvider>();
+                var gitLabCIProvider = Substitute.For<IGitLabCIProvider>();
+                var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
+                var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
+                var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+
+                // When
+                var result = Record.Exception(() => new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "rwxProvider");
             }
         }
 
@@ -399,12 +440,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 appVeyorProvider.IsRunningOnAppVeyor.Returns(true);
                 appVeyorProvider.Environment.Returns(appVeyorEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnAppVeyor);
@@ -432,12 +474,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 teamCityProvider.IsRunningOnTeamCity.Returns(true);
                 teamCityProvider.Environment.Returns(teamCityEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnTeamCity);
@@ -464,11 +507,12 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 myGetProvider.IsRunningOnMyGet.Returns(true);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnMyGet);
@@ -495,11 +539,12 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 bambooProvider.IsRunningOnBamboo.Returns(true);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnBamboo);
@@ -526,11 +571,12 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 continuaCIProvider.IsRunningOnContinuaCI.Returns(true);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnContinuaCI);
@@ -558,12 +604,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 jenkinsProvider.IsRunningOnJenkins.Returns(true);
                 jenkinsProvider.Environment.Returns(jenkinsEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnJenkins);
@@ -591,12 +638,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 bitriseProvider.IsRunningOnBitrise.Returns(true);
                 bitriseProvider.Environment.Returns(bitriseEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnBitrise);
@@ -624,12 +672,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 travisCIProvider.IsRunningOnTravisCI.Returns(true);
                 travisCIProvider.Environment.Returns(travisCIEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnTravisCI);
@@ -657,12 +706,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 bitbucketPipelinesProvider.IsRunningOnBitbucketPipelines.Returns(true);
                 bitbucketPipelinesProvider.Environment.Returns(bitbucketPipelinesEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnBitbucketPipelines);
@@ -689,11 +739,12 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 goCDProvider.IsRunningOnGoCD.Returns(true);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnGoCD);
@@ -721,12 +772,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 gitLabCIProvider.IsRunningOnGitLabCI.Returns(true);
                 gitLabCIProvider.Environment.Returns(gitLabCIEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnGitLabCI);
@@ -754,12 +806,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var azurePipelinesEnvironment = new AzurePipelinesInfoFixture().CreateEnvironmentInfo();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 azurePipelinesProvider.IsRunningOnAzurePipelines.Returns(true);
                 azurePipelinesProvider.Environment.Returns(azurePipelinesEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnAzurePipelines);
@@ -787,12 +840,13 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var gitHubActionsEnvironment = new GitHubActionsInfoFixture().CreateEnvironmentInfo();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
 
                 gitHubActionsProvider.IsRunningOnGitHubActions.Returns(true);
                 gitHubActionsProvider.Environment.Returns(gitHubActionsEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnGitHubActions);
@@ -802,22 +856,23 @@ namespace Cake.Common.Tests.Unit.Build
         public sealed class TheProviderProperty
         {
             [Theory]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.Local)]
-            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.AppVeyor)]
-            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.TeamCity)]
-            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.MyGet)]
-            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, BuildProvider.Bamboo)]
-            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, BuildProvider.ContinuaCI)]
-            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, BuildProvider.Jenkins)]
-            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, BuildProvider.Bitrise)]
-            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, BuildProvider.TravisCI)]
-            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, BuildProvider.BitbucketPipelines)]
-            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, BuildProvider.GoCD)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, BuildProvider.GitLabCI)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, BuildProvider.AzurePipelines)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, BuildProvider.GitHubActions)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, BuildProvider.WoodpeckerCI)]
-            public void Should_Return_Provider_If_Running_On_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool azurePipelines, bool gitHubActions, bool woodpeckerCI, BuildProvider provider)
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.Local)]
+            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.AppVeyor)]
+            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.TeamCity)]
+            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.MyGet)]
+            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, BuildProvider.Bamboo)]
+            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, BuildProvider.ContinuaCI)]
+            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, BuildProvider.Jenkins)]
+            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, BuildProvider.Bitrise)]
+            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, BuildProvider.TravisCI)]
+            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, BuildProvider.BitbucketPipelines)]
+            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, BuildProvider.GoCD)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, BuildProvider.GitLabCI)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, BuildProvider.AzurePipelines)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, BuildProvider.GitHubActions)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, BuildProvider.WoodpeckerCI)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, BuildProvider.Rwx)]
+            public void Should_Return_Provider_If_Running_On_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool azurePipelines, bool gitHubActions, bool woodpeckerCI, bool rwx, BuildProvider provider)
             {
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
@@ -866,12 +921,16 @@ namespace Cake.Common.Tests.Unit.Build
                 azurePipelinesProvider.IsRunningOnAzurePipelines.Returns(azurePipelines);
                 azurePipelinesProvider.Environment.Returns(azurePipelinesEnvironment);
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
                 var woodpeckerCIEnvironment = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
                 woodpeckerCIProvider.IsRunningOnWoodpeckerCI.Returns(woodpeckerCI);
                 woodpeckerCIProvider.Environment.Returns(woodpeckerCIEnvironment);
+                var rwxEnvironment = new RwxInfoFixture().CreateEnvironmentInfo();
+                rwxProvider.IsRunningOnRwx.Returns(rwx);
+                rwxProvider.Environment.Returns(rwxEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.Equal(provider, buildSystem.Provider);
@@ -881,22 +940,23 @@ namespace Cake.Common.Tests.Unit.Build
         public sealed class TheIsLocalBuildProperty
         {
             [Theory]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)]
-            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, false)]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, false)]
-            public void Should_Return_Whether_Or_Not_Running_On_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool azurePipelines, bool gitHubActions, bool woodpeckerCI, bool isLocalBuild)
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)]
+            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false)]
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false)]
+            public void Should_Return_Whether_Or_Not_Running_On_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool azurePipelines, bool gitHubActions, bool woodpeckerCI, bool rwx, bool isLocalBuild)
             {
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
@@ -945,13 +1005,17 @@ namespace Cake.Common.Tests.Unit.Build
                 azurePipelinesProvider.IsRunningOnAzurePipelines.Returns(azurePipelines);
                 azurePipelinesProvider.Environment.Returns(azurePipelinesEnvironment);
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
                 var woodpeckerCIEnvironment = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
                 woodpeckerCIProvider.IsRunningOnWoodpeckerCI.Returns(woodpeckerCI);
                 woodpeckerCIProvider.Environment.Returns(woodpeckerCIEnvironment);
+                var rwxEnvironment = new RwxInfoFixture().CreateEnvironmentInfo();
+                rwxProvider.IsRunningOnRwx.Returns(rwx);
+                rwxProvider.Environment.Returns(rwxEnvironment);
 
                 // When
                 System.Console.WriteLine(jenkinsProvider);
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.Equal(isLocalBuild, buildSystem.IsLocalBuild);
@@ -978,38 +1042,74 @@ namespace Cake.Common.Tests.Unit.Build
                 var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
                 var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
                 var woodpeckerCIEnvironment = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
 
                 woodpeckerCIProvider.IsRunningOnWoodpeckerCI.Returns(true);
                 woodpeckerCIProvider.Environment.Returns(woodpeckerCIEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.True(buildSystem.IsRunningOnWoodpeckerCI);
             }
         }
 
+        public sealed class TheIsRunningOnRwxProperty
+        {
+            [Fact]
+            public void Should_Return_True_If_Running_On_Rwx()
+            {
+                // Given
+                var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
+                var teamCityProvider = Substitute.For<ITeamCityProvider>();
+                var myGetProvider = Substitute.For<IMyGetProvider>();
+                var bambooProvider = Substitute.For<IBambooProvider>();
+                var continuaCIProvider = Substitute.For<IContinuaCIProvider>();
+                var jenkinsProvider = Substitute.For<IJenkinsProvider>();
+                var bitriseProvider = Substitute.For<IBitriseProvider>();
+                var travisCIProvider = Substitute.For<ITravisCIProvider>();
+                var bitbucketPipelinesProvider = Substitute.For<IBitbucketPipelinesProvider>();
+                var goCDProvider = Substitute.For<IGoCDProvider>();
+                var gitLabCIProvider = Substitute.For<IGitLabCIProvider>();
+                var gitHubActionsProvider = Substitute.For<IGitHubActionsProvider>();
+                var azurePipelinesProvider = Substitute.For<IAzurePipelinesProvider>();
+                var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
+                var rwxEnvironment = new RwxInfoFixture().CreateEnvironmentInfo();
+
+                rwxProvider.IsRunningOnRwx.Returns(true);
+                rwxProvider.Environment.Returns(rwxEnvironment);
+
+                // When
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
+
+                // Then
+                Assert.True(buildSystem.IsRunningOnRwx);
+            }
+        }
+
         public sealed class TheIsPullRequestProperty
         {
             [Theory]
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)] // none
-            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, true)] // appveyor
-            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, true)] // teamcity
-            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)] // myget
-            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)] // bamboo
-            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false)] // continua
-            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, true)] // jenkins
-            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, true)] // bitrise
-            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, true)] // travis
-            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, true)] // bitbucket
-            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false)] // gocd
-            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, true)] // gitlab
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, true)] // az pipelines
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, true)] // gh actions
-            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, true)] // woodpecker
-            public void Should_Return_True_If_Running_On_Supported_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool azurePipelines, bool gitHubActions, bool woodpeckerCI, bool isPullRequest)
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)] // none
+            [InlineData(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)] // appveyor
+            [InlineData(false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true)] // teamcity
+            [InlineData(false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false)] // myget
+            [InlineData(false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)] // bamboo
+            [InlineData(false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)] // continua
+            [InlineData(false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, true)] // jenkins
+            [InlineData(false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true)] // bitrise
+            [InlineData(false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true)] // travis
+            [InlineData(false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, true)] // bitbucket
+            [InlineData(false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false)] // gocd
+            [InlineData(false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, true)] // gitlab
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, true)] // az pipelines
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, true)] // gh actions
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true)] // woodpecker
+            [InlineData(false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false)] // rwx (no PR identifier exposed)
+            public void Should_Return_True_If_Running_On_Supported_Provider(bool appVeyor, bool teamCity, bool myGet, bool bamboo, bool continuaCI, bool jenkins, bool bitrise, bool travisCI, bool bitbucketPipelines, bool goCD, bool gitLabCI, bool azurePipelines, bool gitHubActions, bool woodpeckerCI, bool rwx, bool isPullRequest)
             {
                 // Given
                 var appVeyorProvider = Substitute.For<IAppVeyorProvider>();
@@ -1058,12 +1158,16 @@ namespace Cake.Common.Tests.Unit.Build
                 azurePipelinesProvider.IsRunningOnAzurePipelines.Returns(azurePipelines);
                 azurePipelinesProvider.Environment.Returns(azurePipelinesEnvironment);
                 var woodpeckerCIProvider = Substitute.For<IWoodpeckerCIProvider>();
+                var rwxProvider = Substitute.For<IRwxProvider>();
                 var woodpeckerCIEnvironment = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
                 woodpeckerCIProvider.IsRunningOnWoodpeckerCI.Returns(woodpeckerCI);
                 woodpeckerCIProvider.Environment.Returns(woodpeckerCIEnvironment);
+                var rwxEnvironment = new RwxInfoFixture().CreateEnvironmentInfo();
+                rwxProvider.IsRunningOnRwx.Returns(rwx);
+                rwxProvider.Environment.Returns(rwxEnvironment);
 
                 // When
-                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+                var buildSystem = new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
 
                 // Then
                 Assert.Equal(isPullRequest, buildSystem.IsPullRequest);

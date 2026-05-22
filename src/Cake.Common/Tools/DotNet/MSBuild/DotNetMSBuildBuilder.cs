@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,6 +13,10 @@ namespace Cake.Common.Tools.DotNet.MSBuild
     /// <summary>
     /// .NET Core project builder.
     /// </summary>
+    /// <remarks>
+    /// Verbosity is passed as MSBuild /verbosity (not dotnet --verbosity) because dotnet msbuild forwards
+    /// arguments to MSBuild, which does not accept the dotnet CLI --verbosity form and fails with MSB1016.
+    /// </remarks>
     public sealed class DotNetMSBuildBuilder : DotNetTool<DotNetMSBuildSettings>
     {
         private readonly ICakeEnvironment _environment;
@@ -39,13 +43,18 @@ namespace Cake.Common.Tools.DotNet.MSBuild
         /// <param name="projectOrDirectory">The target project path.</param>
         /// <param name="settings">The settings.</param>
         /// <param name="standardOutputAction">The action to invoke with the standard output.</param>
+        /// <remarks>
+        /// Calls Run directly so that dotnet --verbosity is not appended (it would cause MSB1016);
+        /// verbosity is passed as MSBuild /verbosity in the arguments instead.
+        /// </remarks>
         public void Build(string projectOrDirectory, DotNetMSBuildSettings settings, Action<IEnumerable<string>> standardOutputAction)
         {
             ArgumentNullException.ThrowIfNull(settings);
 
-            RunCommand(
+            var arguments = GetArguments(projectOrDirectory, settings);
+            Run(
                 settings,
-                GetArguments(projectOrDirectory, settings),
+                arguments,
                 standardOutputAction == null ? null : new ProcessSettings { RedirectStandardOutput = true },
                 standardOutputAction == null ? null : new Action<IProcess>(process => standardOutputAction(process.GetStandardOutput())));
         }

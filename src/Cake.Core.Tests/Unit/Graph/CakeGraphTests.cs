@@ -1,11 +1,13 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Cake.Core.Graph;
 using Xunit;
+using static VerifyXunit.Verifier;
 
 namespace Cake.Core.Tests.Unit.Graph
 {
@@ -227,7 +229,7 @@ namespace Cake.Core.Tests.Unit.Graph
             }
 
             [Fact]
-            public void Should_Traverse_Graph_In_Correct_Order()
+            public async Task Should_Traverse_Graph_In_Correct_Order()
             {
                 // Given
                 var graph = new CakeGraph();
@@ -239,15 +241,11 @@ namespace Cake.Core.Tests.Unit.Graph
                 var result = graph.Traverse("D").ToArray();
 
                 // Then
-                Assert.Equal(4, result.Length);
-                Assert.Equal("A", result[0]);
-                Assert.Equal("B", result[1]);
-                Assert.Equal("C", result[2]);
-                Assert.Equal("D", result[3]);
+                await Verify(result);
             }
 
             [Fact]
-            public void Should_Traverse_Graph_In_Correct_Order_Regardless_Of_Casing_Of_Root()
+            public async Task Should_Traverse_Graph_In_Correct_Order_Regardless_Of_Casing_Of_Root()
             {
                 // Given
                 var graph = new CakeGraph();
@@ -259,15 +257,11 @@ namespace Cake.Core.Tests.Unit.Graph
                 var result = graph.Traverse("d").ToArray();
 
                 // Then
-                Assert.Equal(4, result.Length);
-                Assert.Equal("A", result[0]);
-                Assert.Equal("B", result[1]);
-                Assert.Equal("C", result[2]);
-                Assert.Equal("d", result[3]);
+                await Verify(result);
             }
 
             [Fact]
-            public void Should_Skip_Nodes_That_Are_Not_On_The_Way_To_The_Target()
+            public async Task Should_Skip_Nodes_That_Are_Not_On_The_Way_To_The_Target()
             {
                 // Given
                 var graph = new CakeGraph();
@@ -280,11 +274,7 @@ namespace Cake.Core.Tests.Unit.Graph
                 var result = graph.Traverse("E").ToArray();
 
                 // Then
-                Assert.Equal(4, result.Length);
-                Assert.Equal("A", result[0]);
-                Assert.Equal("B", result[1]);
-                Assert.Equal("D", result[2]);
-                Assert.Equal("E", result[3]);
+                await Verify(result);
             }
 
             [Fact]
@@ -296,6 +286,46 @@ namespace Cake.Core.Tests.Unit.Graph
                 graph.Connect("C", "A");
 
                 var result = Record.Exception(() => graph.Traverse("C"));
+
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Graph contains circular references.", result?.Message);
+            }
+        }
+
+        public sealed class TheTraverseMultipleMethod
+        {
+            [Fact]
+            public void Should_Return_Empty_When_No_Targets()
+            {
+                var graph = new CakeGraph();
+                graph.Connect("A", "B");
+
+                var result = graph.Traverse(Array.Empty<string>()).ToArray();
+
+                Assert.Empty(result);
+            }
+
+            [Fact]
+            public async Task Should_Return_Union_Of_All_Targets_With_Shared_Dependencies_Once()
+            {
+                var graph = new CakeGraph();
+                graph.Connect("A", "B");
+                graph.Connect("A", "C");
+
+                var result = graph.Traverse(["B", "C"]).ToArray();
+
+                await Verify(result);
+            }
+
+            [Fact]
+            public void Should_Throw_When_Circular_Reference_In_Combined_Graph()
+            {
+                var graph = new CakeGraph();
+                graph.Connect("A", "B");
+                graph.Connect("B", "C");
+                graph.Connect("C", "A");
+
+                var result = Record.Exception(() => graph.Traverse(["B", "C"]).ToArray());
 
                 Assert.IsType<CakeException>(result);
                 Assert.Equal("Graph contains circular references.", result?.Message);

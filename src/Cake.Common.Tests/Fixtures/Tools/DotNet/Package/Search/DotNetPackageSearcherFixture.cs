@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -41,6 +41,35 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Package.Search
                 "        {",
                 "          \"id\": \"Cake.CoreCLR\",",
                 "          \"latestVersion\": \"0.22.2\"",
+                "        }",
+                "      ]",
+                "    }",
+                "  ]",
+                "}",
+            });
+        }
+
+        /// <summary>
+        /// Sets standard output to exact-match format (uses "version" instead of "latestVersion" per package).
+        /// </summary>
+        internal void GivenExactMatchPackageResult()
+        {
+            ProcessRunner.Process.SetStandardOutput(new string[]
+            {
+                "{",
+                "  \"version\": 2,",
+                "  \"problems\": [],",
+                "  \"searchResult\": [",
+                "    {",
+                "      \"sourceName\": \"nuget.org\",",
+                "      \"packages\": [",
+                "        {",
+                "          \"id\": \"Refit.Newtonsoft.Json\",",
+                "          \"version\": \"7.0.0\"",
+                "        },",
+                "        {",
+                "          \"id\": \"Refit.Newtonsoft.Json\",",
+                "          \"version\": \"6.3.0\"",
                 "        }",
                 "      ]",
                 "    }",

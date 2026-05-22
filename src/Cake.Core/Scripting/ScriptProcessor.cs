@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -51,8 +51,7 @@ namespace Cake.Core.Scripting
             _log = log;
             _tools = tools;
             _installers = new List<IPackageInstaller>(installers);
-            var skip = configuration.GetValue(Constants.Settings.SkipPackageVersionCheck);
-            _skipPackageVersionCheck = skip != null && skip.Equals("true", StringComparison.OrdinalIgnoreCase);
+            _skipPackageVersionCheck = configuration.GetBoolValue(Constants.Settings.SkipPackageVersionCheck);
         }
 
         /// <inheritdoc/>

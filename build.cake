@@ -2,7 +2,7 @@
 #addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Twitter&version=6.0.0"
 
 // Install .NET Core Global tools.
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=6.6.0"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=6.7.0"
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitReleaseManager.Tool&version=0.20.0"
 
 
@@ -131,16 +131,20 @@ Task("Run-Unit-Tests")
 {
     foreach (var framework in new[] { "net8.0", "net9.0", "net10.0" })
     {
-        FilePath testResultsPath = MakeAbsolute(parameters.Paths.Directories.TestResults
-            .CombineWithFilePath($"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.xml"));
+        var trxFileName = $"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.trx";
 
         DotNetTest(project.FullPath, new DotNetTestSettings
         {
             Framework = framework,
+            PathType = DotNetTestPathType.Project,
             NoBuild = true,
             NoRestore = true,
             Configuration = parameters.Configuration,
-            ArgumentCustomization = args=>args.Append($"--logger trx;LogFileName=\"{testResultsPath}\"")
+            ResultsDirectory = parameters.Paths.Directories.TestResults,
+            ArgumentCustomization = args => args
+                .Append("--report-trx")
+                .Append("--report-trx-filename")
+                .AppendQuoted(trxFileName)
         });
     }
 });
@@ -487,6 +491,9 @@ Task("GitHubActions-Release")
 
 Task("Travis")
   .IsDependentOn("Run-Unit-Tests");
+
+Task("Rwx")
+  .IsDependentOn("Run-Integration-Tests");
 
 Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");

@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1924,6 +1924,72 @@ namespace Cake.Core.Tests.Unit
 
                 Assert.Equal("Teardown", report.ElementAt(5).TaskName);
                 Assert.Equal(CakeReportEntryCategory.Teardown, report.ElementAt(5).Category);
+            }
+
+            [Fact]
+            public async Task Should_Execute_Shared_Dependency_Only_Once_When_UnifiedDependencyGraph_Is_Enabled()
+            {
+                // Reproduces issue #4324: with opt-in, common dependent tasks run once.
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings()
+                    .SetTargets(new string[] { "B", "C" })
+                    .UseUnifiedDependencyGraphForMultipleTargets();
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("A").Does(() => result.Add("B"));
+                engine.RegisterTask("C").IsDependentOn("A").Does(() => result.Add("C"));
+
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
+
+                Assert.Equal(3, result.Count);
+                Assert.Equal("A", result[0]);
+                Assert.Equal("B", result[1]);
+                Assert.Equal("C", result[2]);
+                Assert.Single(result, x => x == "A");
+            }
+
+            [Fact]
+            public async Task Should_Execute_Shared_Dependency_Twice_When_UnifiedDependencyGraph_Is_Disabled()
+            {
+                // Legacy behavior: without opt-in, each target is traversed separately.
+                var result = new List<string>();
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings().SetTargets(new string[] { "B", "C" });
+                var engine = fixture.CreateEngine();
+                engine.RegisterTask("A").Does(() => result.Add("A"));
+                engine.RegisterTask("B").IsDependentOn("A").Does(() => result.Add("B"));
+                engine.RegisterTask("C").IsDependentOn("A").Does(() => result.Add("C"));
+
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
+
+                Assert.Equal(4, result.Count);
+                Assert.Equal("A", result[0]);
+                Assert.Equal("B", result[1]);
+                Assert.Equal("A", result[2]);
+                Assert.Equal("C", result[3]);
+            }
+
+            [Fact]
+            public async Task Should_Expose_All_Tasks_To_Execute_In_Setup_When_UnifiedDependencyGraph_Is_Enabled()
+            {
+                // Reproduces issue #4066: with opt-in, SetupContext.TasksToExecute lists all tasks.
+                IReadOnlyCollection<ICakeTaskInfo> capturedTasks = null;
+                var fixture = new CakeEngineFixture();
+                var settings = new ExecutionSettings()
+                    .SetTargets(new string[] { "A", "B" })
+                    .UseUnifiedDependencyGraphForMultipleTargets();
+                var engine = fixture.CreateEngine();
+                engine.RegisterSetupAction(ctx => capturedTasks = ctx.TasksToExecute);
+                engine.RegisterTask("A").Does(() => { });
+                engine.RegisterTask("B").Does(() => { });
+
+                await engine.RunTargetAsync(fixture.Context, fixture.ExecutionStrategy, settings);
+
+                Assert.NotNull(capturedTasks);
+                Assert.Equal(2, capturedTasks.Count);
+                var names = capturedTasks.Select(t => t.Name).OrderBy(n => n).ToList();
+                Assert.Equal(new[] { "A", "B" }, names);
             }
         }
 

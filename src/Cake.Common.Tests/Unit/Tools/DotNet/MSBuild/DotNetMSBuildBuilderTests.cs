@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -191,9 +191,8 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.MSBuild
             [Theory]
             [InlineData(null)]
             [InlineData(new object[] { new string[] { } })]
-            [InlineData(new object[] { new[] { "" } })]
-            [InlineData(new object[] { new[] { "          " } })]
-            public void Should_Throw_If_Property_Has_No_Value(string[] propertyValues)
+            [InlineData(new object[] { new string[] { null } })]
+            public void Should_Throw_If_Property_Has_Null_ValueOrIsEmpty(string[] propertyValues)
             {
                 // Given
                 var fixture = new DotNetMSBuildBuilderFixture();
@@ -203,7 +202,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.MSBuild
                 var result = Record.Exception(() => fixture.Run());
 
                 // Then
-                AssertEx.IsArgumentException(result, "Properties", "A property must have at least one non-empty value");
+                AssertEx.IsArgumentException(result, "Properties", "A property must have at least one non-null value");
             }
 
             [Fact]
@@ -909,6 +908,26 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.MSBuild
 
                 // Then
                 Assert.Equal("--diagnostics msbuild", result.Args);
+            }
+
+            [Theory]
+            [InlineData(DotNetVerbosity.Quiet, "/verbosity:quiet")]
+            [InlineData(DotNetVerbosity.Minimal, "/verbosity:minimal")]
+            [InlineData(DotNetVerbosity.Normal, "/verbosity:normal")]
+            [InlineData(DotNetVerbosity.Detailed, "/verbosity:detailed")]
+            [InlineData(DotNetVerbosity.Diagnostic, "/verbosity:diagnostic")]
+            public void Should_Use_MSBuild_Verbosity_Not_DotNet_Verbosity_When_Verbosity_Is_Specified(DotNetVerbosity verbosity, string expectedMsBuildVerbosity)
+            {
+                // Given: DotNetMSBuildSettings.Verbosity (not ConsoleLoggerSettings) causes MSB1016 if passed as dotnet --verbosity
+                var fixture = new DotNetMSBuildBuilderFixture();
+                fixture.Settings.Verbosity = verbosity;
+
+                // When
+                var result = fixture.Run();
+
+                // Then: must use MSBuild /verbosity switch, not dotnet --verbosity (see https://github.com/cake-build/cake/issues/4456)
+                Assert.Contains(expectedMsBuildVerbosity, result.Args);
+                Assert.DoesNotContain("--verbosity", result.Args);
             }
 
             [Fact]

@@ -153,10 +153,33 @@ namespace Cake.Common.Tools.DotNet
         [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Remove")]
         public static void DotNetRemovePackage(this ICakeContext context, string packageName, string project)
         {
-            ArgumentNullException.ThrowIfNull(context);
+            context.DotNetRemovePackage(packageName, project, null);
+        }
 
-            var adder = new DotNetPackageRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            adder.Remove(packageName, project);
+        /// <summary>
+        /// Removes package reference from a project file.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="packageName">The package reference to remove.</param>
+        /// <param name="project">The target project file path.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// DotNetRemovePackage(
+        ///     "Cake.FileHelper",
+        ///     "ToDo.csproj",
+        ///     new DotNetPackageRemoveSettings { WorkingDirectory = "./src" });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Package")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Remove")]
+        public static void DotNetRemovePackage(this ICakeContext context, string packageName, string project, DotNetPackageRemoveSettings settings)
+        {
+            ArgumentNullException.ThrowIfNull(context);
+            settings ??= new DotNetPackageRemoveSettings();
+            var remover = new DotNetPackageRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            remover.Remove(packageName, project, settings);
         }
 
         /// <summary>

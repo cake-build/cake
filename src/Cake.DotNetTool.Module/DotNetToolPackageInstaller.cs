@@ -246,7 +246,11 @@ namespace Cake.DotNetTool.Module
             {
                 if (definition.Address != null)
                 {
+#if NET9_0_OR_GREATER
+                    arguments.Append("--source");
+#else
                     arguments.Append("--add-source");
+#endif
                     arguments.AppendQuoted(definition.Address.AbsoluteUri);
                 }
 

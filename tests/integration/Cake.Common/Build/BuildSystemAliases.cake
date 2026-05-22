@@ -1,6 +1,7 @@
 #load "GitHubActions/GitHubActionsProvider.cake"
 #load "AzurePipelines/AzurePipelinesProvider.cake"
 #load "WoodpeckerCI/WoodpeckerCIProvider.cake"
+#load "Rwx/RwxProvider.cake"
 
 Task("Cake.Common.Build.BuildSystemAliases.BuildProvider")
     .DoesForEach(
@@ -14,4 +15,5 @@ Task("Cake.Common.Build.BuildSystemAliases")
     .IsDependentOn("Cake.Common.Build.BuildSystemAliases.BuildProvider")
     .IsDependentOn("Cake.Common.Build.GitHubActionsProvider")
     .IsDependentOn("Cake.Common.Build.AzurePipelinesProvider")
-    .IsDependentOn("Cake.Common.Build.WoodpeckerCIProvider");
+    .IsDependentOn("Cake.Common.Build.WoodpeckerCIProvider")
+    .IsDependentOn("Cake.Common.Build.RwxProvider");

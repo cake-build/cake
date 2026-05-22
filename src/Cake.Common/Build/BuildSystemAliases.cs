@@ -14,6 +14,7 @@ using Cake.Common.Build.GitLabCI;
 using Cake.Common.Build.GoCD;
 using Cake.Common.Build.Jenkins;
 using Cake.Common.Build.MyGet;
+using Cake.Common.Build.Rwx;
 using Cake.Common.Build.TeamCity;
 using Cake.Common.Build.TravisCI;
 using Cake.Common.Build.WoodpeckerCI;
@@ -58,8 +59,9 @@ namespace Cake.Common.Build
             var gitHubActionsProvider = new GitHubActionsProvider(context.Environment, context.FileSystem, new BuildSystemServiceMessageWriter());
             var azurePipelinesProvider = new AzurePipelinesProvider(context.Environment, new BuildSystemServiceMessageWriter());
             var woodpeckerCIProvider = new WoodpeckerCIProvider(context.Environment, context.FileSystem);
+            var rwxProvider = new RwxProvider(context.Environment, context.FileSystem);
 
-            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider);
+            return new BuildSystem(appVeyorProvider, teamCityProvider, myGetProvider, bambooProvider, continuaCIProvider, jenkinsProvider, bitriseProvider, travisCIProvider, bitbucketPipelinesProvider, goCDProvider, gitLabCIProvider, gitHubActionsProvider, azurePipelinesProvider, woodpeckerCIProvider, rwxProvider);
         }
 
         /// <summary>
@@ -366,6 +368,28 @@ namespace Cake.Common.Build
 
             var buildSystem = context.BuildSystem();
             return buildSystem.WoodpeckerCI;
+        }
+
+        /// <summary>
+        /// Gets an <see cref="RwxProvider"/> instance that can be used to
+        /// obtain information from the RWX environment.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var isRwxBuild = Rwx.IsRunningOnRwx;
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <returns>A <see cref="Build.Rwx"/> instance.</returns>
+        [CakePropertyAlias(Cache = true)]
+        [CakeNamespaceImport("Cake.Common.Build.Rwx")]
+        [CakeNamespaceImport("Cake.Common.Build.Rwx.Data")]
+        public static IRwxProvider Rwx(this ICakeContext context)
+        {
+            ArgumentNullException.ThrowIfNull(context);
+
+            var buildSystem = context.BuildSystem();
+            return buildSystem.Rwx;
         }
     }
 }

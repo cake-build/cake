@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -40,10 +40,8 @@ namespace Cake.Core.IO
             _tools = tools ?? throw new ArgumentNullException(nameof(tools));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
-            var noMonoCoersion = configuration.GetValue(Constants.Settings.NoMonoCoersion);
-            _noMonoCoersion = noMonoCoersion != null && noMonoCoersion.Equals("true", StringComparison.OrdinalIgnoreCase);
-            var showCommandLine = configuration.GetValue(Constants.Settings.ShowProcessCommandLine);
-            _showCommandLine = showCommandLine != null && showCommandLine.Equals("true", StringComparison.OrdinalIgnoreCase);
+            _noMonoCoersion = configuration.GetBoolValue(Constants.Settings.NoMonoCoersion);
+            _showCommandLine = configuration.GetBoolValue(Constants.Settings.ShowProcessCommandLine);
         }
 
         /// <inheritdoc/>

@@ -5,50 +5,53 @@
   </PropertyGroup>
   <ItemGroup>
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
-    <PackageVersion Include="Autofac" Version="9.0.0" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.4" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.4" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.4" />
+    <PackageVersion Include="Autofac" Version="9.1.0" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.8" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.8" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.8" />
     <PackageVersion Include="Cake.Frosting" Version="3.1.0.0" />
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
-    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.3.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="5.0.0" />
-    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.16.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageVersion Include="coverlet.collector" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.6.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="5.3.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.18.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
     <PackageVersion Include="Microsoft.NETCore.Platforms" Version="7.0.4" />
-    <PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="18.3.0" />
+    <PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="18.5.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
-    <PackageVersion Include="NuGet.Common" Version="7.3.0" />
-    <PackageVersion Include="NuGet.Frameworks" Version="7.3.0" />
-    <PackageVersion Include="NuGet.Packaging" Version="7.3.0" />
-    <PackageVersion Include="NuGet.Protocol" Version="7.3.0" />
-    <PackageVersion Include="NuGet.Resolver" Version="7.3.0" />
-    <PackageVersion Include="NuGet.Versioning" Version="7.3.0" />
-    <PackageVersion Include="NuGet.Credentials" Version="7.3.0" />
-    <PackageVersion Include="Spectre.Console" Version="0.54.0" />
-    <PackageVersion Include="Spectre.Console.Cli" Version="0.53.1" />
-    <PackageVersion Include="Spectre.Console.Testing" Version="0.54.0" />
+    <PackageVersion Include="NuGet.Common" Version="7.6.0" />
+    <PackageVersion Include="NuGet.Frameworks" Version="7.6.0" />
+    <PackageVersion Include="NuGet.Packaging" Version="7.6.0" />
+    <PackageVersion Include="NuGet.Protocol" Version="7.6.0" />
+    <PackageVersion Include="NuGet.Resolver" Version="7.6.0" />
+    <PackageVersion Include="NuGet.Versioning" Version="7.6.0" />
+    <PackageVersion Include="NuGet.Credentials" Version="7.6.0" />
+    <PackageVersion Include="Spectre.Console" Version="0.55.2" />
+    <PackageVersion Include="Spectre.Console.Cli" Version="0.55.0" />
+    <PackageVersion Include="Spectre.Console.Testing" Version="0.55.2" />
     <PackageVersion Include="Spectre.Verify.Extensions" Version="28.16.0" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
-    <PackageVersion Include="Verify.XunitV3" Version="31.13.2" />
+    <PackageVersion Include="Verify.XunitV3" Version="31.17.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.v3" Version="3.2.2" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
     <PackageVersion Include="xunit.v3.assert" Version="3.2.2" />
     <PackageVersion Include="xunit.v3.extensibility.core" Version="3.2.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.7.0" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.2.3" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.8" />
     <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.3" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.8" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.16" />
     <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.13" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.16" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">

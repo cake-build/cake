@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -58,7 +58,7 @@ namespace Cake.Commands
         /// <param name="settings">The command settings.</param>
         /// <param name="cancellationToken">The cancellation token to monitor for cancel requests.</param>
         /// <returns>The exit code.</returns>
-        public override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
+        protected override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
         {
             try
             {
@@ -144,14 +144,16 @@ namespace Cake.Commands
         private static CakeArguments CreateCakeArguments(IRemainingArguments remainingArguments, DefaultCommandSettings settings)
         {
             return remainingArguments.ToCakeArguments(
+                settings.NoReport,
                 preProcessArgs: arguments =>
                 {
                     // Fixes #4157, We have to add arguments manually which are defined within the DefaultCommandSettings type. Those are not considered "as remaining" because they could be parsed
                     const string recompileArgumentName = Infrastructure.Constants.Cache.InvalidateScriptCache;
-                    if (settings.Recompile && !arguments.ContainsKey(recompileArgumentName))
+                    if (settings.Recompile)
                     {
-                        arguments[recompileArgumentName] = new List<string>();
-                        arguments[recompileArgumentName].Add(true.ToString());
+                        arguments.TryAdd(
+                            recompileArgumentName,
+                            [true.ToString()]);
                     }
                 });
         }

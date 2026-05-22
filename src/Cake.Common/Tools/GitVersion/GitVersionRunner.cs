@@ -1,13 +1,11 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Json;
-using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using Cake.Core;
 using Cake.Core.Diagnostics;
@@ -67,11 +65,9 @@ namespace Cake.Common.Tools.GitVersion
                     }
                 });
 
-                var jsonSerializer = new DataContractJsonSerializer(typeof(GitVersionInternal));
-                using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(output)))
-                {
-                    return (jsonSerializer.ReadObject(jsonStream) as GitVersionInternal)?.GitVersion;
-                }
+                var result = JsonSerializer.Deserialize(output, GitVersionJsonContext.DefaultWithConverter.GitVersionInternal)?.GitVersion;
+                GitVersionLegacyCompat.PopulateLegacyProperties(result);
+                return result;
             }
 
             Run(settings, GetArguments(settings));

@@ -24,12 +24,20 @@ namespace Cake.Core
         public bool Exclusive { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether multiple targets should use a unified dependency graph
+        /// (shared dependencies run once). When <c>false</c>, each target is traversed separately
+        /// and common dependencies may run multiple times. Controlled via <see cref="Constants.Settings.UnifiedDependencyGraphForMultipleTargets"/>.
+        /// </summary>
+        public bool UnifiedDependencyGraphForMultipleTargets { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ExecutionSettings"/> class.
         /// </summary>
         public ExecutionSettings()
         {
             Targets = Array.Empty<string>();
             Exclusive = false;
+            UnifiedDependencyGraphForMultipleTargets = false;
         }
 
         /// <summary>
@@ -63,6 +71,18 @@ namespace Cake.Core
         public ExecutionSettings UseExclusiveTarget()
         {
             Exclusive = true;
+            return this;
+        }
+
+        /// <summary>
+        /// When running multiple targets, use a unified dependency graph so that shared dependencies run only once.
+        /// When not set, each target is executed in isolation and common dependencies may run multiple times.
+        /// </summary>
+        /// <param name="value">Whether to use the unified dependency graph; default is <c>true</c>.</param>
+        /// <returns>The same <see cref="ExecutionSettings"/> instance so that multiple calls can be chained.</returns>
+        public ExecutionSettings UseUnifiedDependencyGraphForMultipleTargets(bool value = true)
+        {
+            UnifiedDependencyGraphForMultipleTargets = value;
             return this;
         }
     }

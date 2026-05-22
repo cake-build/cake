@@ -291,6 +291,54 @@ Task("Cake.Common.IO.GlobbingAliases.GetPaths.BraceExpansion")
     paths.AssertPaths(foobaa, foobau, foobar, foobax);
 });
 
+Task("Cake.Common.IO.GlobbingAliases.GetFiles.BraceExpansionOnlySegment")
+    .Does(() =>
+{
+    // Given (GitHub issue #2666: GetFiles with glob curly braces as only path segment)
+    var root = EnsureDirectoryExist($"{Paths.Temp}/Cake.Common.IO.GlobbingAliases/braceexpansiononlysegment");
+    var packageJson = EnsureFileExist(root.CombineWithFilePath("package.json"));
+    var packageLock = EnsureFileExist(root.CombineWithFilePath("package-lock.json"));
+    var tsconfig = EnsureFileExist(root.CombineWithFilePath("tsconfig.json"));
+
+    // When
+    var files = GetFiles($"{root}/{{package.json,package-lock.json,tsconfig.json}}");
+
+    // Then
+    files.AssertFiles(packageJson, packageLock, tsconfig);
+});
+
+Task("Cake.Common.IO.GlobbingAliases.GetDirectories.BraceExpansionOnlySegment")
+    .Does(() =>
+{
+    // Given (GitHub issue #2666: GetDirectories with glob curly braces as only path segment)
+    var root = EnsureDirectoryExist($"{Paths.Temp}/Cake.Common.IO.GlobbingAliases/braceexpansiononlysegment");
+    var dir1 = EnsureDirectoryExist(root.Combine("config"));
+    var dir2 = EnsureDirectoryExist(root.Combine("src"));
+    var dir3 = EnsureDirectoryExist(root.Combine("tools"));
+
+    // When
+    var directories = GetDirectories($"{root}/{{config,src}}");
+
+    // Then
+    directories.AssertDirectories(dir1, dir2);
+});
+
+Task("Cake.Common.IO.GlobbingAliases.GetPaths.BraceExpansionOnlySegment")
+    .Does(() =>
+{
+    // Given (GitHub issue #2666: GetPaths with glob curly braces as only path segment)
+    var root = EnsureDirectoryExist($"{Paths.Temp}/Cake.Common.IO.GlobbingAliases/braceexpansiononlysegment");
+    var readme = EnsureFileExist(root.CombineWithFilePath("README.md"));
+    var license = EnsureFileExist(root.CombineWithFilePath("LICENSE"));
+    var docs = EnsureDirectoryExist(root.Combine("docs"));
+
+    // When
+    var paths = GetPaths($"{root}/{{README.md,LICENSE,docs}}");
+
+    // Then
+    paths.AssertPaths(readme, license, docs);
+});
+
 Task("Cake.Common.IO.GlobbingAliases.GetFiles.BraceExpansionNegation")
     .Does(() =>
 {
@@ -360,6 +408,9 @@ Task("Cake.Common.IO.GlobbingAliases")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetFiles.BraceExpansion")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetDirectories.BraceExpansion")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetPaths.BraceExpansion")
+    .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetFiles.BraceExpansionOnlySegment")
+    .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetDirectories.BraceExpansionOnlySegment")
+    .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetPaths.BraceExpansionOnlySegment")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetFiles.BraceExpansionNegation")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetDirectories.BraceExpansionNegation")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetPaths.BraceExpansionNegation");

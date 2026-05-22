@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -166,6 +166,32 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.Search
                     {
                         Assert.Equal(item.Name, "Cake.CoreCLR");
                         Assert.Equal(item.Version, "0.22.2");
+                    });
+            }
+
+            [Fact]
+            public void Should_Return_Versions_When_ExactMatch_Json_Uses_Version_Property()
+            {
+                // Given: dotnet package search --exact-match --format json returns "version" not "latestVersion"
+                var fixture = new DotNetPackageSearcherFixture();
+                fixture.SearchTerm = "Refit.Newtonsoft.Json";
+                fixture.Settings.ExactMatch = true;
+                fixture.GivenExactMatchPackageResult();
+
+                // When
+                fixture.Run();
+
+                // Then: Version must be populated from "version" property (issue #4454)
+                Assert.Collection(fixture.Result,
+                    item =>
+                    {
+                        Assert.Equal("Refit.Newtonsoft.Json", item.Name);
+                        Assert.Equal("7.0.0", item.Version);
+                    },
+                    item =>
+                    {
+                        Assert.Equal("Refit.Newtonsoft.Json", item.Name);
+                        Assert.Equal("6.3.0", item.Version);
                     });
             }
         }

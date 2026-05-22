@@ -1,5 +1,9 @@
 #load "../../../../utilities/xunit.cake"
 
+Setup(context => {
+    Information($"Tasks to run: {string.Join(", ", context.TasksToExecute.Select(x => x.Name))}");
+});
+
 Setup(ctx => new List<string>());
 
 Teardown<List<string>>((ctx, data)=>{
@@ -11,19 +15,25 @@ Teardown<List<string>>((ctx, data)=>{
 TaskTeardown<List<string>>((ctx, data) => data.Add(ctx.Task.Name));
 
 Task("A")
-    .Does(_=>{});
+    .Does(_=>{})
+    .IsDependentOn("F");
 
 Task("B")
-    .Does(_=>{});
+    .Does(_=>{})
+    .IsDependentOn("F");
 
 Task("C")
-    .Does(_=>{});
+    .Does(_=>{})
+    .IsDependentOn("F");
 
 Task("D")
     .Does(_=>{})
     .IsDependentOn("E");
 
 Task("E")
+    .Does(_=>{});
+
+Task("F")
     .Does(_=>{});
 
 Task("Default");
