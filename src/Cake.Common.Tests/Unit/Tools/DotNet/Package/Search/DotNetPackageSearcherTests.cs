@@ -123,6 +123,23 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.Search
             }
 
             [Fact]
+            public void Should_Resolve_ConfigFile_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetPackageSearcherFixture();
+                fixture.SearchTerm = "Cake";
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+                fixture.Settings.ConfigFile = "./NuGet.config";
+                fixture.GivenNormalPackageResult();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("package search \"Cake\" --configfile \"/Working/source/MyProject/NuGet.config\" --verbosity normal --format json", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_ConfigFile_To_Arguments_If_Set()
             {
                 // Given
