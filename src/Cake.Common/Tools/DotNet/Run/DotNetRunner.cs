@@ -56,7 +56,16 @@ namespace Cake.Common.Tools.DotNet.Run
             if (project != null)
             {
                 builder.Append("--project");
-                builder.AppendQuoted(project);
+                var projectPath = new FilePath(project);
+                if (settings.WorkingDirectory != null && projectPath.IsRelative)
+                {
+                    projectPath = GetAbsoluteFilePath(projectPath, settings, _environment);
+                    builder.AppendQuoted(projectPath.MakeAbsolute(_environment).FullPath);
+                }
+                else
+                {
+                    builder.AppendQuoted(project);
+                }
             }
 
             // Framework

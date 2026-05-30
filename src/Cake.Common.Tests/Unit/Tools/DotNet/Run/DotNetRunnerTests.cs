@@ -60,6 +60,21 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Run
             }
 
             [Fact]
+            public void Should_Resolve_Project_Path_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetRunnerFixture();
+                fixture.Project = "./src/MyApp/MyApp.csproj";
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("run --project \"/Working/source/MyProject/src/MyApp/MyApp.csproj\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Mandatory_Arguments()
             {
                 // Given
