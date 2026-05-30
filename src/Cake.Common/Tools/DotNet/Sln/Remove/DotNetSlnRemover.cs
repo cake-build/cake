@@ -60,7 +60,8 @@ namespace Cake.Common.Tools.DotNet.Sln.Remove
             // Solution path
             if (solution != null)
             {
-                builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
+                var solutionPath = GetAbsoluteFilePath(solution, settings, _environment);
+                builder.AppendQuoted(solutionPath.MakeAbsolute(_environment).FullPath);
             }
 
             builder.Append("remove");
@@ -68,7 +69,8 @@ namespace Cake.Common.Tools.DotNet.Sln.Remove
             // Project path
             foreach (var project in projectPath)
             {
-                builder.AppendQuoted(project.MakeAbsolute(_environment).FullPath);
+                var projectFile = GetAbsoluteFilePath(project, settings, _environment);
+                builder.AppendQuoted(projectFile.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;

@@ -88,6 +88,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Sln.Remove
             }
 
             [Fact]
+            public void Should_Resolve_SlnRemove_Paths_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetSlnRemoverFixture();
+                fixture.Solution = (FilePath)"./test.sln";
+                fixture.ProjectPath = new[] { (FilePath)"./lib1.csproj", (FilePath)"./lib2.csproj" };
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("sln \"/Working/source/MyProject/test.sln\" remove \"/Working/source/MyProject/lib1.csproj\" \"/Working/source/MyProject/lib2.csproj\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Solution_Argument()
             {
                 // Given
