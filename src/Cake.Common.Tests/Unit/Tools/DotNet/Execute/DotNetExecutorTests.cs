@@ -65,6 +65,24 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Execute
             }
 
             [Fact]
+            public void Should_Resolve_Assembly_Path_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetExecutorFixture();
+                fixture.AssemblyPath = "./bin/Debug/app.dll";
+                fixture.Settings = new DotNetExecuteSettings
+                {
+                    WorkingDirectory = "./source/MyProject"
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("\"/Working/source/MyProject/bin/Debug/app.dll\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Mandatory_Arguments()
             {
                 // Given

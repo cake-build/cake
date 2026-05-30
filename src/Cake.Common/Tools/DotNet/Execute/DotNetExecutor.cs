@@ -56,7 +56,7 @@ namespace Cake.Common.Tools.DotNet.Execute
                 builder.Append(settings.FrameworkVersion);
             }
 
-            builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
+            builder.AppendQuoted(GetAbsoluteFilePath(assemblyPath, settings, _environment).MakeAbsolute(_environment).FullPath);
 
             if (!arguments.IsNullOrEmpty())
             {
