@@ -296,7 +296,8 @@ namespace Cake.Common.Tools.DotNet.NuGet.Source
             if (settings.ConfigFile != null)
             {
                 builder.Append("--configfile");
-                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+                var configFile = GetAbsoluteFilePath(settings.ConfigFile, settings, _environment);
+                builder.AppendQuoted(configFile.MakeAbsolute(_environment).FullPath);
             }
         }
     }
