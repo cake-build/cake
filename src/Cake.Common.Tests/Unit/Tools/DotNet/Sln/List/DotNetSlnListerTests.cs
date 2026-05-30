@@ -57,6 +57,21 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Sln.List
             }
 
             [Fact]
+            public void Should_Resolve_SlnList_Solution_Path_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetSlnListerFixture();
+                fixture.Solution = "./ToDo.sln";
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("sln \"/Working/source/MyProject/ToDo.sln\" list", result.Args);
+            }
+
+            [Fact]
             public void Should_Not_Add_Solution_Argument()
             {
                 // Given

@@ -69,7 +69,8 @@ namespace Cake.Common.Tools.DotNet.Sln.List
             // Solution path
             if (solution != null)
             {
-                builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
+                var solutionPath = GetAbsoluteFilePath(solution, settings, _environment);
+                builder.AppendQuoted(solutionPath.MakeAbsolute(_environment).FullPath);
             }
 
             builder.Append("list");
