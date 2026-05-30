@@ -15,7 +15,7 @@ namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Package.Remove
         protected override void RunTool()
         {
             var tool = new DotNetPackageRemover(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Remove(PackageName, Project);
+            tool.Remove(PackageName, Project, Settings);
         }
     }
 }

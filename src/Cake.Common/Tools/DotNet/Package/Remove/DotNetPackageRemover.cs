@@ -57,7 +57,16 @@ namespace Cake.Common.Tools.DotNet.Package.Remove
             // Project path
             if (project != null)
             {
-                builder.AppendQuoted(project);
+                var projectPath = new FilePath(project);
+                if (settings.WorkingDirectory != null && projectPath.IsRelative)
+                {
+                    projectPath = GetAbsoluteFilePath(projectPath, settings, environment);
+                    builder.AppendQuoted(projectPath.MakeAbsolute(environment).FullPath);
+                }
+                else
+                {
+                    builder.AppendQuoted(project);
+                }
             }
 
             // Package Name

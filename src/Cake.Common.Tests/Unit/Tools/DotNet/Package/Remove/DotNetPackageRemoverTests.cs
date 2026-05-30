@@ -59,6 +59,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.Remove
             }
 
             [Fact]
+            public void Should_Resolve_Project_Path_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetPackageRemoverFixture();
+                fixture.PackageName = "Microsoft.AspNetCore.StaticFiles";
+                fixture.Project = "./ToDo.csproj";
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("remove \"/Working/source/MyProject/ToDo.csproj\" package Microsoft.AspNetCore.StaticFiles", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Project_Argument()
             {
                 // Given
