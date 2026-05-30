@@ -60,14 +60,24 @@ namespace Cake.Common.Tools.DotNet.Reference.Remove
             // Project path
             if (!string.IsNullOrWhiteSpace(project))
             {
-                builder.AppendQuoted(project);
+                var projectPath = new FilePath(project);
+                if (settings.WorkingDirectory != null && projectPath.IsRelative)
+                {
+                    projectPath = GetAbsoluteFilePath(projectPath, settings, _environment);
+                    builder.AppendQuoted(projectPath.MakeAbsolute(_environment).FullPath);
+                }
+                else
+                {
+                    builder.AppendQuoted(project);
+                }
             }
 
             // References
             builder.Append("reference");
             foreach (var reference in projectReferences)
             {
-                builder.AppendQuoted(reference.MakeAbsolute(_environment).FullPath);
+                var referencePath = GetAbsoluteFilePath(reference, settings, _environment);
+                builder.AppendQuoted(referencePath.MakeAbsolute(_environment).FullPath);
             }
 
             // Framework
