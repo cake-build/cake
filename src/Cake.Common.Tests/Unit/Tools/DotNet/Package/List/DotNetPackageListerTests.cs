@@ -72,6 +72,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.List
             }
 
             [Fact]
+            public void Should_Resolve_ConfigFile_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetPackageListerFixture();
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+                fixture.Settings.ConfigFile = "./NuGet.config";
+                fixture.GivenPackgeListResult();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("list package --config \"/Working/source/MyProject/NuGet.config\" --format json --output-version 1", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Additional_Arguments()
             {
                 // Given

@@ -73,7 +73,8 @@ namespace Cake.Common.Tools.DotNet.Package.List
             // Config File
             if (settings.ConfigFile != null)
             {
-                builder.AppendSwitchQuoted("--config", settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+                var configFile = GetAbsoluteFilePath(settings.ConfigFile, settings, _environment);
+                builder.AppendSwitchQuoted("--config", configFile.MakeAbsolute(_environment).FullPath);
             }
 
             // Deprecated
