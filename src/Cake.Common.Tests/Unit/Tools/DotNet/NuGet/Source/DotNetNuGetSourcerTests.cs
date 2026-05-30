@@ -106,6 +106,25 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.NuGet.Source
             }
 
             [Fact]
+            public void Should_Resolve_ConfigFile_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetNuGetAddSourceFixture();
+                fixture.Settings = new DotNetNuGetSourceSettings
+                {
+                    Source = "source",
+                    WorkingDirectory = "./source/MyProject",
+                    ConfigFile = "./NuGet.config"
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("nuget add source \"source\" --name \"name\" --configfile \"/Working/source/MyProject/NuGet.config\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Additional_Arguments()
             {
                 // Given
