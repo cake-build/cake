@@ -64,7 +64,8 @@ namespace Cake.Common.Tools.DotNet.Sln.Add
             // Solution path
             if (solution != null)
             {
-                builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
+                var solutionPath = GetAbsoluteFilePath(solution, settings, _environment);
+                builder.AppendQuoted(solutionPath.MakeAbsolute(_environment).FullPath);
             }
 
             builder.Append("add");
@@ -72,7 +73,8 @@ namespace Cake.Common.Tools.DotNet.Sln.Add
             // Solution folder
             if (settings.SolutionFolder != null)
             {
-                builder.AppendSwitchQuoted("--solution-folder", settings.SolutionFolder.MakeAbsolute(_environment).FullPath);
+                var solutionFolder = GetAbsoluteDirectoryPath(settings.SolutionFolder, settings, _environment);
+                builder.AppendSwitchQuoted("--solution-folder", solutionFolder.MakeAbsolute(_environment).FullPath);
             }
 
             // In root
@@ -84,7 +86,8 @@ namespace Cake.Common.Tools.DotNet.Sln.Add
             // Project path
             foreach (var project in projectPath)
             {
-                builder.AppendQuoted(project.MakeAbsolute(_environment).FullPath);
+                var projectFile = GetAbsoluteFilePath(project, settings, _environment);
+                builder.AppendQuoted(projectFile.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;

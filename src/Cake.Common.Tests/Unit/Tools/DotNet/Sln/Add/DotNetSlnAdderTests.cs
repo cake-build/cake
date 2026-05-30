@@ -184,6 +184,23 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Sln.Add
             }
 
             [Fact]
+            public void Should_Resolve_SlnAdd_Paths_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetSlnAdderFixture();
+                fixture.Solution = (FilePath)"./test.sln";
+                fixture.ProjectPath = new[] { (FilePath)"./lib1.csproj" };
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+                fixture.Settings.SolutionFolder = "./folders/mylibs";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("sln \"/Working/source/MyProject/test.sln\" add --solution-folder \"/Working/source/MyProject/folders/mylibs\" \"/Working/source/MyProject/lib1.csproj\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_SolutionFolder_Argument()
             {
                 // Given
