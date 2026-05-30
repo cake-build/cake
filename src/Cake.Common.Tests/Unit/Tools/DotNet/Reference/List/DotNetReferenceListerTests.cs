@@ -57,6 +57,21 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Reference.List
             }
 
             [Fact]
+            public void Should_Resolve_Project_Path_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetReferenceListerFixture();
+                fixture.Project = "./ToDo.csproj";
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("list \"/Working/source/MyProject/ToDo.csproj\" reference", result.Args);
+            }
+
+            [Fact]
             public void Should_Not_Add_Project_Argument()
             {
                 // Given

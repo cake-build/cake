@@ -65,7 +65,16 @@ namespace Cake.Common.Tools.DotNet.Reference.List
             // Project path
             if (!string.IsNullOrWhiteSpace(project))
             {
-                builder.AppendQuoted(project);
+                var projectPath = new FilePath(project);
+                if (settings.WorkingDirectory != null && projectPath.IsRelative)
+                {
+                    projectPath = GetAbsoluteFilePath(projectPath, settings, _environment);
+                    builder.AppendQuoted(projectPath.MakeAbsolute(_environment).FullPath);
+                }
+                else
+                {
+                    builder.AppendQuoted(project);
+                }
             }
 
             builder.Append("reference");
