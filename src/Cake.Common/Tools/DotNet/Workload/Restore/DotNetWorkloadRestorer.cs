@@ -61,7 +61,8 @@ namespace Cake.Common.Tools.DotNet.Workload.Restore
             // Config File
             if (settings.ConfigFile != null)
             {
-                builder.AppendSwitchQuoted("--configfile", settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+                var configFile = GetAbsoluteFilePath(settings.ConfigFile, settings, _environment);
+                builder.AppendSwitchQuoted("--configfile", configFile.MakeAbsolute(_environment).FullPath);
             }
 
             // Disable Parallel
@@ -112,7 +113,8 @@ namespace Cake.Common.Tools.DotNet.Workload.Restore
             // Temp Dir
             if (settings.TempDir != null)
             {
-                builder.AppendSwitchQuoted("--temp-dir", settings.TempDir.MakeAbsolute(_environment).FullPath);
+                var tempDir = GetAbsoluteDirectoryPath(settings.TempDir, settings, _environment);
+                builder.AppendSwitchQuoted("--temp-dir", tempDir.MakeAbsolute(_environment).FullPath);
             }
 
             return builder;

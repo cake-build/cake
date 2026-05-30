@@ -101,6 +101,23 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Workload.Install
             }
 
             [Fact]
+            public void Should_Resolve_Workload_Paths_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetWorkloadInstallerFixture();
+                fixture.WorkloadIds = new string[] { "maui" };
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+                fixture.Settings.ConfigFile = "./NuGet.config";
+                fixture.Settings.TempDir = "./temp/workload";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("workload install maui --configfile \"/Working/source/MyProject/NuGet.config\" --temp-dir \"/Working/source/MyProject/temp/workload\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Add_Additional_Arguments()
             {
                 // Given
