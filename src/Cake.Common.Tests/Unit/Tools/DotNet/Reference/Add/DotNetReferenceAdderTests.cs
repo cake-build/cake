@@ -92,6 +92,22 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Reference.Add
             }
 
             [Fact]
+            public void Should_Resolve_ReferenceAdd_Paths_Relative_To_WorkingDirectory()
+            {
+                // Given
+                var fixture = new DotNetReferenceAdderFixture();
+                fixture.Project = "./ToDo.csproj";
+                fixture.ProjectReferences = new[] { (FilePath)"./lib1.csproj", (FilePath)"./lib2/lib2.csproj" };
+                fixture.Settings.WorkingDirectory = "./source/MyProject";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("add \"/Working/source/MyProject/ToDo.csproj\" reference \"/Working/source/MyProject/lib1.csproj\" \"/Working/source/MyProject/lib2/lib2.csproj\"", result.Args);
+            }
+
+            [Fact]
             public void Should_Not_Add_Project_Argument()
             {
                 // Given
