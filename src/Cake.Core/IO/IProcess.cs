@@ -18,7 +18,7 @@ namespace Cake.Core.IO
         void WaitForExit();
 
         /// <summary>
-        /// Waits for the process to exit with possible timeout for command.
+        /// Waits for the process to exit.
         /// </summary>
         /// <param name="milliseconds">The amount of time, in milliseconds, to wait for the associated process to exit. The maximum is the largest possible value of a 32-bit integer, which represents infinity to the operating system.</param>
         /// <returns>true if the associated process has exited; otherwise, false.</returns>

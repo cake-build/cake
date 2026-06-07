@@ -53,7 +53,7 @@ namespace Cake.Core.IO
         public Func<string, string> RedirectedStandardOutputHandler { get; set; }
 
         /// <summary>
-        /// Gets or sets optional timeout, in milliseconds, to wait for the associated process to exit. The maximum is the largest possible value of a 32-bit integer, which represents infinity to the operating system.
+        /// Gets or sets optional timeout, in milliseconds, to wait for the associated process to exit before the process is stopped. The maximum is the largest possible value of a 32-bit integer, which represents infinity to the operating system.
         /// </summary>
         public int? Timeout { get; set; }
 
