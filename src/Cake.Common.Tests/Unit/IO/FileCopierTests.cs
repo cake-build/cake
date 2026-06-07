@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cake.Common.IO;
@@ -144,6 +144,32 @@ namespace Cake.Common.Tests.Unit.IO
                 // Then
                 Assert.True(fixture.ExistsFile($"{dstPath}/a/a.txt"));
                 Assert.True(fixture.ExistsFile($"{dstPath}/b/b.txt"));
+            }
+
+            [Fact]
+            public void Should_Copy_Glob_Matches_In_Subdirectory_With_Folder_Structure()
+            {
+                const string dstPath = "./dst";
+
+                // Given
+                var fixture = new FileCopierFixture();
+                fixture.EnsureFileExists("./src/file.txt");
+                fixture.EnsureFileExists("./src/sub/file1.dat");
+                fixture.EnsureFileExists("./src/sub/file2.dat");
+                fixture.EnsureDirectoryExists(dstPath);
+
+                // When
+                FileCopier.CopyFiles(
+                    fixture.Context,
+                    "./src/**/*.dat",
+                    new DirectoryPath(dstPath),
+                    true);
+
+                // Then
+                Assert.True(fixture.ExistsFile($"{dstPath}/sub/file1.dat"));
+                Assert.True(fixture.ExistsFile($"{dstPath}/sub/file2.dat"));
+                Assert.False(fixture.ExistsFile($"{dstPath}/file1.dat"));
+                Assert.False(fixture.ExistsFile($"{dstPath}/file2.dat"));
             }
 
             [Fact]

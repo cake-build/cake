@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
@@ -26,7 +26,7 @@ namespace Cake.Common.Tests.Fixtures.IO
         public bool ExistsFile(FilePath path)
         {
             var file = _fileSystem.GetFile(path.MakeAbsolute(Context.Environment));
-            return file != null;
+            return file.Exists;
         }
 
         public FilePath MakeAbsolute(FilePath inputPath)
