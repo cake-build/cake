@@ -146,6 +146,40 @@ namespace Cake.Common.Tests.Unit.IO
                 Assert.Empty(fixture.FileSystem.GetDirectory(directory).GetDirectories("*", SearchScope.Recursive));
             }
 
+            [NonWindowsFact("Requires directory symbolic link support.")]
+            public void Should_Delete_Directory_Symlinks_Without_Cleaning_Target()
+            {
+                // Given
+                var root = System.IO.Directory.CreateTempSubdirectory("cake-clean-symlink-");
+                var cleanDirectoryPath = System.IO.Path.Combine(root.FullName, "clean");
+                var targetDirectoryPath = System.IO.Path.Combine(root.FullName, "target");
+                var linkPath = System.IO.Path.Combine(cleanDirectoryPath, "Current");
+                var targetFilePath = System.IO.Path.Combine(targetDirectoryPath, "payload.txt");
+
+                try
+                {
+                    System.IO.Directory.CreateDirectory(cleanDirectoryPath);
+                    System.IO.Directory.CreateDirectory(targetDirectoryPath);
+                    System.IO.File.WriteAllText(targetFilePath, "keep");
+                    System.IO.Directory.CreateSymbolicLink(linkPath, targetDirectoryPath);
+
+                    var context = Substitute.For<ICakeContext>();
+                    context.FileSystem.Returns(new Cake.Core.IO.FileSystem());
+
+                    // When
+                    DirectoryAliases.CleanDirectory(context, new DirectoryPath(cleanDirectoryPath));
+
+                    // Then
+                    Assert.True(System.IO.Directory.Exists(cleanDirectoryPath));
+                    Assert.False(System.IO.Directory.Exists(linkPath));
+                    Assert.True(System.IO.File.Exists(targetFilePath));
+                }
+                finally
+                {
+                    root.Delete(true);
+                }
+            }
+
             [Fact]
             public void Should_Throw_When_Deleting_Readonly_Files_In_Provided_Directory_If_Not_Forced()
             {
