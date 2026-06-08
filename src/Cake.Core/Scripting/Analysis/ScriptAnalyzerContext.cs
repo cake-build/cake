@@ -28,6 +28,8 @@ namespace Cake.Core.Scripting.Analysis
 
         public IScriptInformation Current => _current;
 
+        public ScriptAnalyzerMode Mode { get; }
+
         public IReadOnlyList<string> Lines => _lines;
 
         public IReadOnlyList<ScriptAnalyzerError> Errors => _errors;
@@ -37,13 +39,15 @@ namespace Cake.Core.Scripting.Analysis
             ICakeEnvironment environment,
             ICakeLog log,
             Action<IScriptAnalyzerContext> callback,
-            FilePath script)
+            FilePath script,
+            ScriptAnalyzerMode mode)
         {
             _fileSystem = fileSystem;
             _environment = environment;
             _log = log;
             _callback = callback;
             _script = script.MakeAbsolute(_environment);
+            Mode = mode;
             _processedScripts = new HashSet<FilePath>(new PathComparer(_environment));
             _stack = new Stack<ScriptInformation>();
             _lines = new List<string>();

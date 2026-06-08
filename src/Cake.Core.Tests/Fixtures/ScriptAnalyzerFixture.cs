@@ -46,6 +46,11 @@ namespace Cake.Core.Tests.Fixtures
             return CreateAnalyzer().Analyze(script, new ScriptAnalyzerSettings());
         }
 
+        public ScriptAnalyzerResult AnalyzeModules(FilePath script)
+        {
+            return CreateAnalyzer().Analyze(script, new ScriptAnalyzerSettings { Mode = ScriptAnalyzerMode.Modules });
+        }
+
         public void GivenScriptExist(FilePath path, string content)
         {
             FileSystem.CreateFile(path).SetContent(content);

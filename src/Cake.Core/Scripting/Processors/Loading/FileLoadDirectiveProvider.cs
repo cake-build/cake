@@ -67,7 +67,11 @@ namespace Cake.Core.Scripting.Processors.Loading
             if (files.Length == 0)
             {
                 // No scripts found.
-                _log.Warning("No scripts found at {0}.", path);
+                if (context is not ScriptAnalyzerContext { Mode: ScriptAnalyzerMode.Modules })
+                {
+                    _log.Warning("No scripts found at {0}.", path);
+                }
+
                 return;
             }
 
