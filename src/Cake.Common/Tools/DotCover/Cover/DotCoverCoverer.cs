@@ -165,41 +165,6 @@ namespace Cake.Common.Tools.DotCover.Cover
                 builder.AppendSwitch("--exclude-processes", excludeProcesses.Quote());
             }
 
-            // Legacy filtering options (maintain backward compatibility with old format)
-            // Scope
-            if (settings.Scope.Count > 0)
-            {
-                var scope = string.Join(';', settings.Scope);
-                builder.AppendSwitch("/Scope", "=", scope.Quote());
-            }
-
-            // Filters
-            if (settings.Filters.Count > 0)
-            {
-                var filters = string.Join(';', settings.Filters);
-                builder.AppendSwitch("/Filters", "=", filters.Quote());
-            }
-
-            // AttributeFilters
-            if (settings.AttributeFilters.Count > 0)
-            {
-                var attributeFilters = string.Join(';', settings.AttributeFilters);
-                builder.AppendSwitch("/AttributeFilters", "=", attributeFilters.Quote());
-            }
-
-            // ProcessFilters
-            if (settings.ProcessFilters.Count > 0)
-            {
-                var processFilters = string.Join(';', settings.ProcessFilters);
-                builder.AppendSwitch("/ProcessFilters", "=", processFilters.Quote());
-            }
-
-            // DisableDefaultFilters
-            if (settings.DisableDefaultFilters)
-            {
-                builder.Append("/DisableDefaultFilters");
-            }
-
             return builder;
         }
 

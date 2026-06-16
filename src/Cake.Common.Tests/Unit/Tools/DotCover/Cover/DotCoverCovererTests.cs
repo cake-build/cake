@@ -9,7 +9,6 @@ using Cake.Common.Tools.NUnit;
 using Cake.Common.Tools.XUnit;
 using Cake.Core.IO;
 using Cake.Testing;
-using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
 {
@@ -147,12 +146,12 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
             }
 
             [Fact]
-            public void Should_Append_Scope()
+            public void Should_Not_Append_Scope()
             {
                 // Given
                 var fixture = new DotCoverCovererFixture();
                 fixture.Settings.WithScope("/Working/*.dll")
-                    .WithScope("/Some/**/Other/*.dll");
+                       .WithScope("/Some/**/Other/*.dll");
 
                 // When
                 var result = fixture.Run();
@@ -160,17 +159,16 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 // Then
                 Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                              "--target-arguments \"-argument\" " +
-                             "--snapshot-output \"/Working/result.dcvr\" " +
-                             "/Scope=\"/Working/*.dll;/Some/**/Other/*.dll\"", result.Args);
+                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
             }
 
             [Fact]
-            public void Should_Append_Filters()
+            public void Should_Not_Append_Filters()
             {
                 // Given
                 var fixture = new DotCoverCovererFixture();
                 fixture.Settings.WithFilter("+:module=Test.*")
-                    .WithFilter("-:myassembly");
+                       .WithFilter("-:myassembly");
 
                 // When
                 var result = fixture.Run();
@@ -178,17 +176,16 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 // Then
                 Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                              "--target-arguments \"-argument\" " +
-                             "--snapshot-output \"/Working/result.dcvr\" " +
-                             "/Filters=\"+:module=Test.*;-:myassembly\"", result.Args);
+                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
             }
 
             [Fact]
-            public void Should_Append_AttributeFilters()
+            public void Should_Not_Append_AttributeFilters()
             {
                 // Given
                 var fixture = new DotCoverCovererFixture();
                 fixture.Settings.WithAttributeFilter("filter1")
-                    .WithAttributeFilter("filter2");
+                       .WithAttributeFilter("filter2");
 
                 // When
                 var result = fixture.Run();
@@ -196,12 +193,11 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 // Then
                 Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                              "--target-arguments \"-argument\" " +
-                             "--snapshot-output \"/Working/result.dcvr\" " +
-                             "/AttributeFilters=\"filter1;filter2\"", result.Args);
+                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
             }
 
             [Fact]
-            public void Should_Append_DisableDefaultFilters()
+            public void Should_Not_Append_DisableDefaultFilters()
             {
                 // Given
                 var fixture = new DotCoverCovererFixture();
@@ -213,17 +209,16 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 // Then
                 Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                              "--target-arguments \"-argument\" " +
-                             "--snapshot-output \"/Working/result.dcvr\" " +
-                             "/DisableDefaultFilters", result.Args);
+                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
             }
 
             [Fact]
-            public void Should_Append_ProcessFilters()
+            public void Should_Not_Append_ProcessFilters()
             {
                 // Given
                 var fixture = new DotCoverCovererFixture();
                 fixture.Settings.WithProcessFilter("+:test.exe")
-                    .WithProcessFilter("-:sqlservr.exe");
+                       .WithProcessFilter("-:sqlservr.exe");
 
                 // When
                 var result = fixture.Run();
@@ -231,8 +226,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 // Then
                 Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                              "--target-arguments \"-argument\" " +
-                             "--snapshot-output \"/Working/result.dcvr\" " +
-                             "/ProcessFilters=\"+:test.exe;-:sqlservr.exe\"", result.Args);
+                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
             }
 
             [Fact]
@@ -301,7 +295,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 // Given
                 var fixture = new DotCoverCovererFixture();
                 fixture.Settings.WithExcludeAssembly("*.Tests")
-                    .WithExcludeAssembly("Test.*");
+                       .WithExcludeAssembly("Test.*");
 
                 // When
                 var result = fixture.Run();
@@ -319,7 +313,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 // Given
                 var fixture = new DotCoverCovererFixture();
                 fixture.Settings.WithExcludeAttribute("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute")
-                    .WithExcludeAttribute("Custom.*Attribute");
+                       .WithExcludeAttribute("Custom.*Attribute");
 
                 // When
                 var result = fixture.Run();
@@ -337,7 +331,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 // Given
                 var fixture = new DotCoverCovererFixture();
                 fixture.Settings.WithExcludeProcess("test.exe")
-                    .WithExcludeProcess("*.vshost.exe");
+                       .WithExcludeProcess("*.vshost.exe");
 
                 // When
                 var result = fixture.Run();
@@ -506,8 +500,8 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 // Given
                 var fixture = new DotCoverCovererFixture();
                 fixture.Settings.WithLegacySyntax()
-                    .WithJsonReportOutput(new FilePath("/Working/report.json"))
-                    .WithExcludeAssembly("*.Tests");
+                       .WithJsonReportOutput(new FilePath("/Working/report.json"))
+                       .WithExcludeAssembly("*.Tests");
 
                 // When
                 var result = fixture.Run();
@@ -526,7 +520,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 // Given
                 var fixture = new DotCoverCovererFixture();
                 fixture.Settings.WithJsonReportOutput(new FilePath("/Working/report.json"))
-                    .WithExcludeAssembly("*.Tests");
+                       .WithExcludeAssembly("*.Tests");
 
                 // When
                 var result = fixture.Run();
