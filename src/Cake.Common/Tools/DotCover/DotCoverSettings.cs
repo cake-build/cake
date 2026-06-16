@@ -24,7 +24,7 @@ public abstract class DotCoverSettings : ToolSettings
     /// to specifying all parameters in-line or having them in a batch file.
     /// </summary>
     public FilePath ConfigFile { get; set; }
-     
+
     /// <summary>
     /// Gets or sets a value indicating whether to use the legacy command syntax.
     /// When true, uses old format like '/TargetExecutable="/path"'.
