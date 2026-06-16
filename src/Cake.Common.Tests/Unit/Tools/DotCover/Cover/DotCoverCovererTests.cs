@@ -10,7 +10,6 @@ using Cake.Common.Tools.XUnit;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
-using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover;
 
