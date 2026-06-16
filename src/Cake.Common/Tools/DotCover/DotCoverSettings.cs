@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -24,4 +24,12 @@ public abstract class DotCoverSettings : ToolSettings
     /// to specifying all parameters in-line or having them in a batch file.
     /// </summary>
     public FilePath ConfigFile { get; set; }
+     
+    /// <summary>
+    /// Gets or sets a value indicating whether to use the legacy command syntax.
+    /// When true, uses old format like '/TargetExecutable="/path"'.
+    /// When false, uses new format like '--target-executable "/path"'.
+    /// Default is false (new format).
+    /// </summary>
+    public bool UseLegacySyntax { get; set; }
 }
