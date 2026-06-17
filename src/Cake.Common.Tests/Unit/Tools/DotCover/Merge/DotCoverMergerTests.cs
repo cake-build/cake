@@ -2,10 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Cake.Common.Tests.Fixtures.Tools.DotCover.Merge;
 using Cake.Common.Tools.DotCover;
 using Cake.Core.IO;
-
+using Xunit;
 namespace Cake.Common.Tests.Unit.Tools.DotCover.Merge
 {
     public sealed class DotCoverMergerTests
