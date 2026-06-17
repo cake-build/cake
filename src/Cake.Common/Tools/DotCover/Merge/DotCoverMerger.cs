@@ -49,8 +49,11 @@ namespace Cake.Common.Tools.DotCover.Merge
             {
                 throw new ArgumentNullException("sourceFiles");
             }
-            ArgumentNullException.ThrowIfNull(outputFile);
             ArgumentNullException.ThrowIfNull(settings);
+            if (settings.UseLegacySyntax)
+            {
+                ArgumentNullException.ThrowIfNull(outputFile);
+            }
 
             // Run the tool.
             Run(settings, GetArguments(sourceFiles, outputFile, settings));
@@ -91,8 +94,11 @@ namespace Cake.Common.Tools.DotCover.Merge
             builder.AppendSwitch("--snapshot-source", source.Quote());
 
             // Set the Output file.
-            outputFile = outputFile.MakeAbsolute(_environment);
-            builder.AppendSwitch("--snapshot-output", outputFile.FullPath.Quote());
+            if (outputFile != null)
+            {
+                outputFile = outputFile.MakeAbsolute(_environment);
+                builder.AppendSwitch("--snapshot-output", outputFile.FullPath.Quote());
+            }
 
             // Set the Temporary directory.
             if (settings.TemporaryDirectory != null)
