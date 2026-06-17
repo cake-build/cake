@@ -241,6 +241,7 @@ public sealed class DotCoverAnalyserTests
             // Given
             var fixture = new DotCoverAnalyserFixture();
             fixture.Settings.LogFile = "./logfile.log";
+            fixture.Settings.UseLegacySyntax = true;
 
             // When
             var result = fixture.Run();

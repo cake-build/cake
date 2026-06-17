@@ -98,7 +98,6 @@ public sealed class DotCoverReporterTests
                          "--json-report-covering-tests-scope \"" + reportScopeString + "\"", result.Args);
         }
 
-
         [Fact]
         public void Should_Append_XmlReportOutput()
         {
