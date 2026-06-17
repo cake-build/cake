@@ -63,11 +63,47 @@ namespace Cake.Common.Tools.DotCover.Merge
         {
             var builder = new ProcessArgumentBuilder();
 
-            builder.Append("Merge");
+            // Command name - always lowercase 'merge' for both formats
+            builder.Append("merge");
 
             // Set configuration file if exists.
             GetConfigurationFileArgument(settings).CopyTo(builder);
 
+            if (settings.UseLegacySyntax)
+            {
+                BuildLegacyArguments(sourceFiles, outputFile, builder);
+            }
+            else
+            {
+                BuildNewArguments(sourceFiles, outputFile, builder, settings);
+            }
+
+            // Get Global settings
+            GetArguments(settings).CopyTo(builder);
+
+            return builder;
+        }
+
+        private void BuildNewArguments(IEnumerable<FilePath> sourceFiles, FilePath outputFile, ProcessArgumentBuilder builder, DotCoverMergeSettings settings)
+        {
+            // Set the Source files.
+            var source = string.Join(',', sourceFiles.Select(s => s.MakeAbsolute(_environment).FullPath));
+            builder.AppendSwitch("--snapshot-source", source.Quote());
+
+            // Set the Output file.
+            outputFile = outputFile.MakeAbsolute(_environment);
+            builder.AppendSwitch("--snapshot-output", outputFile.FullPath.Quote());
+
+            // Set the Temporary directory.
+            if (settings.TemporaryDirectory != null)
+            {
+                settings.TemporaryDirectory = settings.TemporaryDirectory.MakeAbsolute(_environment);
+                builder.AppendSwitch("--temporary-directory", settings.TemporaryDirectory.FullPath.Quote());
+            }
+        }
+
+        private void BuildLegacyArguments(IEnumerable<FilePath> sourceFiles, FilePath outputFile, ProcessArgumentBuilder builder)
+        {
             // Set the Source files.
             var source = string.Join(';', sourceFiles.Select(s => s.MakeAbsolute(_environment).FullPath));
             builder.AppendSwitch("/Source", "=", source.Quote());
@@ -75,11 +111,6 @@ namespace Cake.Common.Tools.DotCover.Merge
             // Set the Output file.
             outputFile = outputFile.MakeAbsolute(_environment);
             builder.AppendSwitch("/Output", "=", outputFile.FullPath.Quote());
-
-            // Get Global settings
-            GetArguments(settings).CopyTo(builder);
-
-            return builder;
         }
     }
 }
