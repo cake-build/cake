@@ -60,6 +60,7 @@ public sealed class DotCoverMerger : DotCoverTool<DotCoverMergeSettings>
         {
             throw new ArgumentNullException("sourceFiles");
         }
+
         ArgumentNullException.ThrowIfNull(settings);
         if (settings.UseLegacySyntax)
         {
@@ -130,4 +131,3 @@ public sealed class DotCoverMerger : DotCoverTool<DotCoverMergeSettings>
         builder.AppendSwitch("/Output", "=", outputFile.FullPath.Quote());
     }
 }
-

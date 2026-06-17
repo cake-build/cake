@@ -66,8 +66,16 @@ public abstract class DotCoverTool<TSettings> : Tool<TSettings>
         {
             if (settings.UseLegacySyntax)
             {
-                var logFilePath = settings.LogFile.MakeAbsolute(_environment);
-                builder.AppendSwitch("/LogFile", "=", logFilePath.FullPath.Quote());
+                if (settings.UseLegacySyntax)
+                {
+                    var logFilePath = settings.LogFile.MakeAbsolute(_environment);
+                    builder.AppendSwitch("/LogFile", "=", logFilePath.FullPath.Quote());
+                }
+                else
+                {
+                    var logFilePath = settings.LogFile.MakeAbsolute(_environment);
+                    builder.AppendSwitch("--log-file", logFilePath.FullPath.Quote());
+                }
             }
             else
             {
