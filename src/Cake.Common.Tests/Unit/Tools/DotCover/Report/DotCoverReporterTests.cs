@@ -5,6 +5,7 @@
 using Cake.Common.Tests.Fixtures.Tools.DotCover.Report;
 using Cake.Common.Tools.DotCover;
 using Cake.Core.IO;
+using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.DotCover.Report
 {
@@ -97,7 +98,6 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Report
                              "--json-report-output \"/Working/coverage.json\" " +
                              "--json-report-covering-tests-scope \"" + reportScopeString + "\"", result.Args);
             }
-
 
             [Fact]
             public void Should_Append_XmlReportOutput()
