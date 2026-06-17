@@ -35,6 +35,17 @@ namespace Cake.Common.Tools.DotCover.Merge
         }
 
         /// <summary>
+        /// Runs DotCover Merge with the new parameter Syntax.
+        /// </summary>
+        /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
+        /// <param name="settings">The settings.</param>
+        /// <param name="outputFile">The merged output file (optional).</param>
+        public void Merge(IEnumerable<FilePath> sourceFiles, DotCoverMergeSettings settings, FilePath outputFile = null)
+        {
+            Merge(sourceFiles, outputFile, settings);
+        }
+
+        /// <summary>
         /// Runs DotCover Merge with the specified settings.
         /// </summary>
         /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
