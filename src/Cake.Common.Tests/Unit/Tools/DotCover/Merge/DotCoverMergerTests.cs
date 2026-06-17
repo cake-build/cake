@@ -105,41 +105,6 @@ public sealed class DotCoverMergerTests
                          "--temporary-directory \"/Working/temp\"", result.Args);
         }
 
-        #region New Parameter Syntax
-
-        [Fact]
-        public void Should_Set_Correct_Arguments()
-        {
-            // Given
-            var fixture = new DotCoverMergerFixture();
-            fixture.SourceFiles = new List<FilePath> { new("/Working/result1.dcvr"), new("/Working/result2.dcvr") };
-            fixture.OutputFile = new FilePath("/Working/output.dcvr");
-            // When
-            var result = fixture.Run();
-
-            // Then
-            Assert.Equal("merge " +
-                         "--snapshot-source \"/Working/result1.dcvr,/Working/result2.dcvr\" " +
-                         "--snapshot-output \"/Working/output.dcvr\"", result.Args);
-        }
-
-        [Fact]
-        public void Should_Append_TemporaryDirectory()
-        {
-            // Given
-            var fixture = new DotCoverMergerFixture();
-            fixture.Settings.TemporaryDirectory = new DirectoryPath("/Working/temp");
-
-            // When
-            var result = fixture.Run();
-
-            // Then
-            Assert.Equal("merge " +
-                         "--snapshot-source \"/Working/result1.dcvr,/Working/result2.dcvr\" " +
-                         "--snapshot-output \"/Working/result.dcvr\" " +
-                         "--temporary-directory \"/Working/temp\"", result.Args);
-        }
-
         [Fact]
         public void Should_Not_Append_Null_TemporaryDirectory()
         {
@@ -196,7 +161,7 @@ public sealed class DotCoverMergerTests
         }
 
         [Fact]
-        public void Should_Append_ConfigurationFile()
+        public void Should_Append_ConfigurationFile_LegacySyntax()
         {
             // Given
             var fixture = new DotCoverMergerFixture();
@@ -210,6 +175,21 @@ public sealed class DotCoverMergerTests
             Assert.Equal("merge \"/Working/config.xml\" " +
                          "/Source=\"/Working/result1.dcvr;/Working/result2.dcvr\" " +
                          "/Output=\"/Working/result.dcvr\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Throw_If_Output_File_Is_Null_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverMergerFixture();
+            fixture.OutputFile = null;
+            fixture.Settings.UseLegacySyntax = true;
+
+            // When
+            var result = Record.Exception(() => fixture.Run());
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "outputFile");
         }
 
         #endregion
