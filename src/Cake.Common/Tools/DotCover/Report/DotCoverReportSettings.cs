@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Core.IO;
+
 namespace Cake.Common.Tools.DotCover.Report
 {
     /// <summary>
@@ -15,5 +17,29 @@ namespace Cake.Common.Tools.DotCover.Report
         /// The Default value is <see cref="DotCoverReportType.XML"/>.
         /// </summary>
         public DotCoverReportType ReportType { get; set; }
+
+        /// <summary>
+        /// Gets the path to save a formatted JSON report.
+        /// This represents the <c>--json-report-output</c> option.
+        /// </summary>
+        public FilePath JsonReportOutput { get; set; }
+
+        /// <summary>
+        /// Gets granularity for including covering tests in JSON reports: [none|assembly|type|method|statement]
+        /// This represents the <c>--json-report-covering-tests-scope</c> option.
+        /// </summary>
+        public DotCoverReportScope? JsonReportCoveringTestsScope { get; set; }
+
+        /// <summary>
+        /// Gets the path to save a formatted JSON report.
+        /// This represents the <c>--xml-report-output</c> option.
+        /// </summary>
+        public FilePath XmlReportOutput { get; set; }
+
+        /// <summary>
+        /// Gets granularity for including covering tests in JSON reports: [none|assembly|type|method|statement]
+        /// This represents the <c>--xml-report-covering-tests-scope</c> option.
+        /// </summary>
+        public DotCoverReportScope? XmlReportCoveringTestsScope { get; set; }
     }
 }
