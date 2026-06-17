@@ -27,20 +27,6 @@ public sealed class DotCoverReporterTests
         }
 
         [Fact]
-        public void Should_Throw_If_Output_File_Is_Null()
-        {
-            // Given
-            var fixture = new DotCoverReporterFixture();
-            fixture.OutputFile = null;
-
-            // When
-            var result = Record.Exception(() => fixture.Run());
-
-            // Then
-            AssertEx.IsArgumentNullException(result, "outputFile");
-        }
-
-        [Fact]
         public void Should_Throw_If_Settings_Are_Null()
         {
             // Given
@@ -54,6 +40,125 @@ public sealed class DotCoverReporterTests
             AssertEx.IsArgumentNullException(result, "settings");
         }
 
+        #region New Parameter Syntax
+
+        [Fact]
+        public void Should_Ignore_Output_File_If_Null()
+        {
+            // Given
+            var fixture = new DotCoverReporterFixture();
+            fixture.OutputFile = null;
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("report " +
+                         "--snapshot-source \"/Working/result.dcvr\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Append_JsonReportOutput()
+        {
+            // Given
+            var fixture = new DotCoverReporterFixture();
+            fixture.OutputFile = null;
+            fixture.Settings.JsonReportOutput = new FilePath("/Working/coverage.json");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("report " +
+                         "--snapshot-source \"/Working/result.dcvr\" " +
+                         "--json-report-output \"/Working/coverage.json\"", result.Args);
+        }
+
+        [Theory]
+        [InlineData(DotCoverReportScope.None, "none")]
+        [InlineData(DotCoverReportScope.Assembly, "assembly")]
+        [InlineData(DotCoverReportScope.Type, "type")]
+        [InlineData(DotCoverReportScope.Method, "method")]
+        [InlineData(DotCoverReportScope.Statement, "statement")]
+        public void Should_Append_JsonReportScope(DotCoverReportScope reportScope, string reportScopeString)
+        {
+            // Given
+            var fixture = new DotCoverReporterFixture();
+            fixture.OutputFile = null;
+            fixture.Settings.JsonReportOutput = new FilePath("/Working/coverage.json");
+            fixture.Settings.JsonReportCoveringTestsScope = reportScope;
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("report " +
+                         "--snapshot-source \"/Working/result.dcvr\" " +
+                         "--json-report-output \"/Working/coverage.json\" " +
+                         "--json-report-covering-tests-scope \"" + reportScopeString + "\"", result.Args);
+        }
+
+
+        [Fact]
+        public void Should_Append_XmlReportOutput()
+        {
+            // Given
+            var fixture = new DotCoverReporterFixture();
+            fixture.OutputFile = null;
+            fixture.Settings.XmlReportOutput = new FilePath("/Working/coverage.json");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("report " +
+                         "--snapshot-source \"/Working/result.dcvr\" " +
+                         "--xml-report-output \"/Working/coverage.json\"", result.Args);
+        }
+
+        [Theory]
+        [InlineData(DotCoverReportScope.None, "none")]
+        [InlineData(DotCoverReportScope.Assembly, "assembly")]
+        [InlineData(DotCoverReportScope.Type, "type")]
+        [InlineData(DotCoverReportScope.Method, "method")]
+        [InlineData(DotCoverReportScope.Statement, "statement")]
+        public void Should_Append_XmlReportScope(DotCoverReportScope reportScope, string reportScopeString)
+        {
+            // Given
+            var fixture = new DotCoverReporterFixture();
+            fixture.OutputFile = null;
+            fixture.Settings.XmlReportOutput = new FilePath("/Working/coverage.json");
+            fixture.Settings.XmlReportCoveringTestsScope = reportScope;
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("report " +
+                         "--snapshot-source \"/Working/result.dcvr\" " +
+                         "--xml-report-output \"/Working/coverage.json\" " +
+                         "--xml-report-covering-tests-scope \"" + reportScopeString + "\"", result.Args);
+        }
+
+        #endregion
+
+        #region Legacy Parameter Syntax
+
+        [Fact]
+        public void Should_Throw_If_Output_File_Is_Null()
+        {
+            // Given
+            var fixture = new DotCoverReporterFixture();
+            fixture.OutputFile = null;
+            fixture.Settings.UseLegacySyntax = true;
+
+            // When
+            var result = Record.Exception(() => fixture.Run());
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "outputFile");
+        }
+
         [Theory]
         [InlineData(DotCoverReportType.DetailedXML, "DetailedXML")]
         [InlineData(DotCoverReportType.HTML, "HTML")]
@@ -64,12 +169,13 @@ public sealed class DotCoverReporterTests
             // Given
             var fixture = new DotCoverReporterFixture();
             fixture.Settings.ReportType = reportType;
+            fixture.Settings.UseLegacySyntax = true;
 
             // When
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("Report " +
+            Assert.Equal("report " +
                          "/Source=\"/Working/result.dcvr\" " +
                          "/Output=\"/Working/result.xml\" " +
                          "/ReportType=" + reportTypeString, result.Args);
@@ -81,12 +187,13 @@ public sealed class DotCoverReporterTests
             // Given
             var fixture = new DotCoverReporterFixture();
             fixture.Settings.LogFile = "./logfile.log";
+            fixture.Settings.UseLegacySyntax = true;
 
             // When
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("Report " +
+            Assert.Equal("report " +
                          "/Source=\"/Working/result.dcvr\" " +
                          "/Output=\"/Working/result.xml\" " +
                          "/LogFile=\"/Working/logfile.log\"", result.Args);
@@ -98,14 +205,17 @@ public sealed class DotCoverReporterTests
             // Given
             var fixture = new DotCoverReporterFixture();
             fixture.Settings.WithConfigFile(new FilePath("./config.xml"));
+            fixture.Settings.UseLegacySyntax = true;
 
             // When
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("Report \"/Working/config.xml\" " +
+            Assert.Equal("report \"/Working/config.xml\" " +
                          "/Source=\"/Working/result.dcvr\" " +
                          "/Output=\"/Working/result.xml\"", result.Args);
         }
+
+        #endregion
     }
 }
