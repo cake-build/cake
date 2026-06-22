@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -54,10 +54,18 @@ namespace Cake.Common.IO
                 return;
             }
 
-            CopyFiles(context, files, targetDirectoryPath, preserverFolderStructure);
+            var commonPath = preserverFolderStructure
+                ? GetGlobBaseDirectory(context, pattern).FullPath
+                : null;
+            CopyFiles(context, files, targetDirectoryPath, preserverFolderStructure, commonPath);
         }
 
         public static void CopyFiles(ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath, bool preserverFolderStructure)
+        {
+            CopyFiles(context, filePaths, targetDirectoryPath, preserverFolderStructure, null);
+        }
+
+        private static void CopyFiles(ICakeContext context, IEnumerable<FilePath> filePaths, DirectoryPath targetDirectoryPath, bool preserverFolderStructure, string commonPath)
         {
             ArgumentNullException.ThrowIfNull(context);
             ArgumentNullException.ThrowIfNull(filePaths);
@@ -78,42 +86,45 @@ namespace Cake.Common.IO
 
             if (preserverFolderStructure)
             {
-                var commonPath = string.Empty;
-                var separatedPath = absoluteFilePaths
-                    .First(str => str.ToString().Length == absoluteFilePaths.Max(st2 => st2.ToString().Length)).ToString()
-                    .Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries)
-                    .ToList();
-
-                foreach (string pathSegment in separatedPath)
+                if (commonPath == null)
                 {
-                    if (commonPath.Length == 0 && absoluteFilePaths.All(str => str.ToString().StartsWith(pathSegment)))
-                    {
-                        commonPath = pathSegment;
-                    }
-                    else if (absoluteFilePaths.All(str => str.ToString().StartsWith(commonPath + "/" + pathSegment)))
-                    {
-                        commonPath += "/" + pathSegment;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                    commonPath = string.Empty;
+                    var separatedPath = absoluteFilePaths
+                        .First(str => str.ToString().Length == absoluteFilePaths.Max(st2 => st2.ToString().Length)).ToString()
+                        .Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries)
+                        .ToList();
 
-                if (absoluteFilePaths.Count == 1 && absoluteFilePaths.First().FullPath.Contains(context.Environment.WorkingDirectory.FullPath))
-                {
-                    var relativePath = absoluteFilePaths.First().FullPath.Remove(0, context.Environment.WorkingDirectory.FullPath.Length + 1);
-                    var relativePathParts = relativePath.Split('/').ToList();
-
-                    if (relativePathParts.Count > 2)
+                    foreach (string pathSegment in separatedPath)
                     {
-                        relativePathParts.RemoveAt(0);
-                        var workdirRelativeStructurePath = string.Join("/", relativePathParts.ToArray());
+                        if (commonPath.Length == 0 && absoluteFilePaths.All(str => str.ToString().StartsWith(pathSegment)))
+                        {
+                            commonPath = pathSegment;
+                        }
+                        else if (absoluteFilePaths.All(str => str.ToString().StartsWith(commonPath + "/" + pathSegment)))
+                        {
+                            commonPath += "/" + pathSegment;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
 
-                        var index = commonPath.IndexOf(workdirRelativeStructurePath, StringComparison.Ordinal);
-                        commonPath = index < 0
-                            ? commonPath
-                            : commonPath.Remove(index, workdirRelativeStructurePath.Length);
+                    if (absoluteFilePaths.Count == 1 && absoluteFilePaths.First().FullPath.Contains(context.Environment.WorkingDirectory.FullPath))
+                    {
+                        var relativePath = absoluteFilePaths.First().FullPath.Remove(0, context.Environment.WorkingDirectory.FullPath.Length + 1);
+                        var relativePathParts = relativePath.Split('/').ToList();
+
+                        if (relativePathParts.Count > 2)
+                        {
+                            relativePathParts.RemoveAt(0);
+                            var workdirRelativeStructurePath = string.Join("/", relativePathParts.ToArray());
+
+                            var index = commonPath.IndexOf(workdirRelativeStructurePath, StringComparison.Ordinal);
+                            commonPath = index < 0
+                                ? commonPath
+                                : commonPath.Remove(index, workdirRelativeStructurePath.Length);
+                        }
                     }
                 }
 
@@ -139,6 +150,27 @@ namespace Cake.Common.IO
             }
         }
 
+        private static DirectoryPath GetGlobBaseDirectory(ICakeContext context, GlobPattern pattern)
+        {
+            var wildcardIndex = pattern.Pattern.IndexOfAny(new[] { '*', '?', '[', '{' });
+            if (wildcardIndex < 0)
+            {
+                return new FilePath(pattern.Pattern).GetDirectory().MakeAbsolute(context.Environment);
+            }
+
+            var prefix = pattern.Pattern.Substring(0, wildcardIndex);
+            var separatorIndex = prefix.LastIndexOfAny(new[] { '/', '\\' });
+            if (separatorIndex < 0)
+            {
+                return context.Environment.WorkingDirectory;
+            }
+
+            var directory = separatorIndex == 0
+                ? prefix.Substring(0, 1)
+                : prefix.Substring(0, separatorIndex);
+            return new DirectoryPath(directory).MakeAbsolute(context.Environment);
+        }
+
         private static void CopyFileCore(ICakeContext context, FilePath filePath, FilePath targetFilePath, string commonPath)
         {
             var absoluteFilePath = filePath.MakeAbsolute(context.Environment);
@@ -159,7 +191,9 @@ namespace Cake.Common.IO
             {
                 // Get the parent folder structure and create it.
                 var newRelativeFolderPath = context.Directory(commonPath).Path.GetRelativePath(filePath.GetDirectory());
-                var newTargetPath = targetFilePath.GetDirectory().Combine(newRelativeFolderPath);
+                var newTargetPath = newRelativeFolderPath.FullPath == "."
+                    ? targetFilePath.GetDirectory()
+                    : targetFilePath.GetDirectory().Combine(newRelativeFolderPath);
                 var newAbsoluteTargetPath = newTargetPath.CombineWithFilePath(filePath.GetFilename());
                 context.Log.Verbose("Copying file {0} to {1}", absoluteFilePath.GetFilename(), newAbsoluteTargetPath);
 
