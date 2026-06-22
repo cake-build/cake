@@ -53,6 +53,11 @@ namespace Cake.Core.IO
 
         public IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope)
         {
+            if (IsReparsePoint())
+            {
+                return Enumerable.Empty<IDirectory>();
+            }
+
             var option = scope == SearchScope.Current ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories;
             return _directory.EnumerateDirectories(filter, option)
                 .Select(directory => new Directory(directory.FullName));
@@ -60,9 +65,19 @@ namespace Cake.Core.IO
 
         public IEnumerable<IFile> GetFiles(string filter, SearchScope scope)
         {
+            if (IsReparsePoint())
+            {
+                return Enumerable.Empty<IFile>();
+            }
+
             var option = scope == SearchScope.Current ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories;
             return _directory.EnumerateFiles(filter, option)
                 .Select(file => new File(file.FullName));
+        }
+
+        private bool IsReparsePoint()
+        {
+            return (_directory.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint;
         }
 
         /// <inheritdoc/>
