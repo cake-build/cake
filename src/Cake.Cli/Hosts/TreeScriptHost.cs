@@ -53,20 +53,20 @@ namespace Cake.Cli
 
         private void PrintTaskTree()
         {
-            var topLevelTasks = GetTopLevelTasks();
+            var graph = CakeGraphBuilder.Build(Tasks);
+            var topLevelTasks = GetTopLevelTasks(graph);
             _console.WriteLine();
 
             foreach (ICakeTaskInfo task in topLevelTasks)
             {
-                PrintTask(task, string.Empty, false, 0);
+                PrintTask(task, graph, string.Empty, false, 0);
                 _console.WriteLine();
             }
         }
 
-        private List<ICakeTaskInfo> GetTopLevelTasks()
+        private List<ICakeTaskInfo> GetTopLevelTasks(CakeGraph graph)
         {
             // Display "Default" first, then alphabetical
-            var graph = CakeGraphBuilder.Build(Tasks);
             return Tasks.Where(task => !graph.Edges.Any(
                 edge => edge.Start.Equals(task.Name, StringComparison.OrdinalIgnoreCase)))
                 .OrderByDescending(task => task.Name.Equals("Default", StringComparison.OrdinalIgnoreCase))
@@ -74,7 +74,7 @@ namespace Cake.Cli
                 .ToList();
         }
 
-        private void PrintTask(ICakeTaskInfo task, string indent, bool isLast, int depth)
+        private void PrintTask(ICakeTaskInfo task, CakeGraph graph, string indent, bool isLast, int depth)
         {
             // Builds ASCII graph
             _console.Write(indent);
@@ -96,15 +96,39 @@ namespace Cake.Cli
                 return;
             }
 
-            for (var i = 0; i < task.Dependencies.Count; i++)
+            var dependencies = GetDependencies(task, graph);
+            for (var i = 0; i < dependencies.Count; i++)
             {
-                // First() is safe as CakeGraphBuilder has already validated graph is valid
-                var childTask = Tasks
-                    .Where(x => x.Name.Equals(task.Dependencies[i].Name, StringComparison.OrdinalIgnoreCase))
-                    .First();
-
-                PrintTask(childTask, indent, i == (task.Dependencies.Count - 1), depth + 1);
+                PrintTask(dependencies[i], graph, indent, i == (dependencies.Count - 1), depth + 1);
             }
+        }
+
+        private List<ICakeTaskInfo> GetDependencies(ICakeTaskInfo task, CakeGraph graph)
+        {
+            var dependencies = new List<ICakeTaskInfo>();
+
+            foreach (var dependency in task.Dependencies)
+            {
+                if (graph.Edges.Any(edge =>
+                    edge.Start.Equals(dependency.Name, StringComparison.OrdinalIgnoreCase) &&
+                    edge.End.Equals(task.Name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    dependencies.Add(Tasks.First(x =>
+                        x.Name.Equals(dependency.Name, StringComparison.OrdinalIgnoreCase)));
+                }
+            }
+
+            foreach (var edge in graph.Edges.Where(edge =>
+                edge.End.Equals(task.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                if (!dependencies.Any(dependency => dependency.Name.Equals(edge.Start, StringComparison.OrdinalIgnoreCase)))
+                {
+                    dependencies.Add(Tasks.First(x =>
+                        x.Name.Equals(edge.Start, StringComparison.OrdinalIgnoreCase)));
+                }
+            }
+
+            return dependencies;
         }
 
         private void PrintName(ICakeTaskInfo task, int depth)
