@@ -3,8 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Linq;
+using Cake.Core.Diagnostics;
 using Cake.Core.Scripting.Processors.Loading;
 using Cake.Core.Tests.Fixtures;
+using Cake.Testing;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit.Scripting.Analysis
@@ -368,6 +370,57 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
                 Assert.Equal("/Working/script2.cake", result.Errors[0].File.FullPath);
                 Assert.Equal(2, result.Errors[0].Line);
                 Assert.Equal("Query string for #load contains more than one parameter 'path'.", result.Errors[0].Message);
+            }
+
+            [Fact]
+            public void Should_Not_Log_Missing_Load_Warning_In_Modules_Mode()
+            {
+                // Given
+                var log = new FakeLog();
+                var fixture = new ScriptAnalyzerFixture { Log = log };
+                fixture.AddFileLoadDirectiveProvider();
+                fixture.GivenScriptExist("/Working/script.cake", "#load \"optional.cake\"");
+
+                // When
+                fixture.AnalyzeModules("/Working/script.cake");
+
+                // Then
+                Assert.DoesNotContain(log.Entries, entry => entry.Level == LogLevel.Warning);
+            }
+
+            [Fact]
+            public void Should_Log_Missing_Load_Warning_In_Default_Mode()
+            {
+                // Given
+                var log = new FakeLog();
+                var fixture = new ScriptAnalyzerFixture { Log = log };
+                fixture.AddFileLoadDirectiveProvider();
+                fixture.GivenScriptExist("/Working/script.cake", "#load \"optional.cake\"");
+
+                // When
+                fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Contains(log.Entries, entry =>
+                    entry.Level == LogLevel.Warning &&
+                    entry.Message == "No scripts found at /Working/optional.cake.");
+            }
+
+            [Fact]
+            public void Should_Process_Modules_From_Loaded_Scripts_In_Modules_Mode()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.AddFileLoadDirectiveProvider();
+                fixture.GivenScriptExist("/Working/script.cake", "#load \"modules.cake\"");
+                fixture.GivenScriptExist("/Working/modules.cake", "#module \"nuget:?package=Cake.Module\"");
+
+                // When
+                var result = fixture.AnalyzeModules("/Working/script.cake");
+
+                // Then
+                Assert.Single(result.Modules);
+                Assert.Equal("nuget:?package=Cake.Module", result.Modules.Single().OriginalString);
             }
 
             [Fact]
