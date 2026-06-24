@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Common.Tests.Fixtures;
 using Cake.Core;
 using Cake.Core.IO;
@@ -228,6 +229,27 @@ namespace Cake.Common.Tests.Unit
 
                     // Then
                     Assert.Equal(12, result);
+                }
+
+                [Fact]
+                public void Should_Kill_Process_And_Throw_If_Timeout_Expires()
+                {
+                    // Given
+                    var fixture = new ProcessFixture();
+                    const string fileName = "hello.exe";
+                    var settings = new ProcessSettings
+                    {
+                        Timeout = 1
+                    };
+
+                    fixture.Process.WaitForExit(settings.Timeout.Value).Returns(false);
+
+                    // When
+                    var result = Record.Exception(() => fixture.Start(fileName, settings));
+
+                    // Then
+                    Assert.IsType<TimeoutException>(result);
+                    fixture.Process.Received(1).Kill();
                 }
             }
 

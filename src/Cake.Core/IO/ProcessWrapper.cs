@@ -41,16 +41,7 @@ namespace Cake.Core.IO
 
         public bool WaitForExit(int milliseconds)
         {
-            if (_process.WaitForExit(milliseconds))
-            {
-                return true;
-            }
-            _process.Refresh();
-            if (!_process.HasExited)
-            {
-                _process.Kill();
-            }
-            return false;
+            return _process.WaitForExit(milliseconds);
         }
 
         public int GetExitCode()
@@ -108,7 +99,11 @@ namespace Cake.Core.IO
 
         public void Kill()
         {
-            _process.Kill();
+            _process.Refresh();
+            if (!_process.HasExited)
+            {
+                _process.Kill();
+            }
             _process.WaitForExit();
         }
 

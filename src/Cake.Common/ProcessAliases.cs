@@ -110,23 +110,7 @@ namespace Cake.Common
         {
             var process = StartAndReturnProcess(context, fileName, settings);
 
-            // Wait for the process to stop.
-            if (settings.Timeout.HasValue)
-            {
-                if (!process.WaitForExit(settings.Timeout.Value))
-                {
-                    throw new TimeoutException(
-                        string.Format(
-                            CultureInfo.InvariantCulture,
-                            "Process TimeOut ({0}): {1}",
-                            settings.Timeout.Value,
-                            fileName));
-                }
-            }
-            else
-            {
-                process.WaitForExit();
-            }
+            WaitForExit(process, fileName, settings);
 
             redirectedStandardOutput = settings.RedirectStandardOutput
                 ? process.GetStandardOutput()
@@ -189,23 +173,7 @@ namespace Cake.Common
         {
             var process = StartAndReturnProcess(context, fileName, settings);
 
-            // Wait for the process to stop.
-            if (settings.Timeout.HasValue)
-            {
-                if (!process.WaitForExit(settings.Timeout.Value))
-                {
-                    throw new TimeoutException(
-                        string.Format(
-                            CultureInfo.InvariantCulture,
-                            "Process TimeOut ({0}): {1}",
-                            settings.Timeout.Value,
-                            fileName));
-                }
-            }
-            else
-            {
-                process.WaitForExit();
-            }
+            WaitForExit(process, fileName, settings);
 
             redirectedStandardOutput = settings.RedirectStandardOutput
                 ? process.GetStandardOutput()
@@ -282,6 +250,28 @@ namespace Cake.Common
         public static IProcess StartAndReturnProcess(this ICakeContext context, FilePath fileName)
         {
             return StartAndReturnProcess(context, fileName, new ProcessSettings());
+        }
+
+        private static void WaitForExit(IProcess process, FilePath fileName, ProcessSettings settings)
+        {
+            if (!settings.Timeout.HasValue)
+            {
+                process.WaitForExit();
+                return;
+            }
+
+            if (process.WaitForExit(settings.Timeout.Value))
+            {
+                return;
+            }
+
+            process.Kill();
+            throw new TimeoutException(
+                string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Process TimeOut ({0}): {1}",
+                    settings.Timeout.Value,
+                    fileName));
         }
     }
 }
