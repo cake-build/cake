@@ -27,9 +27,9 @@
     <PackageVersion Include="NuGet.Resolver" Version="7.6.0" />
     <PackageVersion Include="NuGet.Versioning" Version="7.6.0" />
     <PackageVersion Include="NuGet.Credentials" Version="7.6.0" />
-    <PackageVersion Include="Spectre.Console" Version="0.57.1" />
+    <PackageVersion Include="Spectre.Console" Version="0.57.2" />
     <PackageVersion Include="Spectre.Console.Cli" Version="0.55.0" />
-    <PackageVersion Include="Spectre.Console.Testing" Version="0.57.1" />
+    <PackageVersion Include="Spectre.Console.Testing" Version="0.57.2" />
     <PackageVersion Include="Spectre.Verify.Extensions" Version="28.16.0" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.2.0" />
     <PackageVersion Include="Verify.XunitV3" Version="31.20.0" />
