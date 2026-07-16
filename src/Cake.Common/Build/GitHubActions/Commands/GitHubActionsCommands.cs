@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Cake.Common.Build.GitHubActions.Commands.Artifact;
+using Cake.Common.Build.GitHubActions.Commands.NuGet;
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Core;
 using Cake.Core.IO;
@@ -25,6 +27,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
         private readonly IBuildSystemServiceMessageWriter _writer;
         private readonly GitHubActionsEnvironmentInfo _actionsEnvironment;
         private readonly GitHubActionsArtifactService _artifactsService;
+        private readonly GitHubNuGetLoginService _nuGetLoginService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GitHubActionsCommands"/> class.
@@ -47,7 +50,9 @@ namespace Cake.Common.Build.GitHubActions.Commands
             _actionsEnvironment = actionsEnvironment ?? throw new ArgumentNullException(nameof(actionsEnvironment));
             // Internal service class, keeping public API unchanged,
             // introduced in pr https://github.com/cake-build/cake/pull/4350
-            _artifactsService = new GitHubActionsArtifactService(environment, fileSystem, actionsEnvironment, createHttpClient ?? throw new ArgumentNullException(nameof(createHttpClient)));
+            var createClient = createHttpClient ?? throw new ArgumentNullException(nameof(createHttpClient));
+            _artifactsService = new GitHubActionsArtifactService(environment, fileSystem, actionsEnvironment, createClient);
+            _nuGetLoginService = new GitHubNuGetLoginService(environment, createClient, SetSecret);
         }
 
         /// <summary>
@@ -390,6 +395,75 @@ namespace Cake.Common.Build.GitHubActions.Commands
             }
 
             await _artifactsService.DownloadArtifactFiles(artifactName, directory.Path);
+        }
+
+        /// <summary>
+        /// Exchanges a GitHub Actions OIDC identity token for a short-lived NuGet.org API key (trusted publishing).
+        /// Default token service URL is <c>https://www.nuget.org/api/v2/token</c> and default OIDC audience is <c>https://www.nuget.org</c>.
+        /// Requires <c>permissions: id-token: write</c> in the GitHub Actions workflow.
+        /// OIDC tokens and the returned API key are automatically masked in the build log.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var nuGetUserName = EnvironmentVariable("NUGET_USERNAME");
+        /// var apiKey = await GitHubActions.Commands.NuGetLogin(nuGetUserName);
+        ///
+        /// var settings = new DotNetNuGetPushSettings
+        /// {
+        ///     ApiKey = apiKey,
+        ///     Source = "https://api.nuget.org/v3/index.json"
+        /// };
+        ///
+        /// foreach (var packageFilePath in GetFiles("./*.nupkg"))
+        /// {
+        ///     DotNetNuGetPush(packageFilePath, settings);
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="userName">The NuGet.org account user name.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The NuGet API key.</returns>
+        public Task<string> NuGetLogin(string userName, CancellationToken cancellationToken = default)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(userName);
+
+            return NuGetLogin(new GitHubNuGetLoginSettings(userName), cancellationToken);
+        }
+
+        /// <summary>
+        /// Exchanges a GitHub Actions OIDC identity token for a NuGet API key using the specified token service URL and audience.
+        /// Requires <c>permissions: id-token: write</c> in the GitHub Actions workflow.
+        /// OIDC tokens and the returned API key are automatically masked in the build log.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var loginSettings = new GitHubNuGetLoginSettings(
+        ///     userName: "myorg",
+        ///     tokenServiceUrl: "https://www.nuget.org/api/v2/token",
+        ///     audience: "https://www.nuget.org");
+        ///
+        /// var apiKey = await GitHubActions.Commands.NuGetLogin(loginSettings);
+        ///
+        /// var settings = new DotNetNuGetPushSettings
+        /// {
+        ///     ApiKey = apiKey,
+        ///     Source = EnvironmentVariable("NUGET_API_URL")
+        /// };
+        ///
+        /// foreach (var packageFilePath in GetFiles("./*.nupkg"))
+        /// {
+        ///     DotNetNuGetPush(packageFilePath, settings);
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="settings">The user name, token service URL, and OIDC audience.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The NuGet API key.</returns>
+        public Task<string> NuGetLogin(GitHubNuGetLoginSettings settings, CancellationToken cancellationToken = default)
+        {
+            ArgumentNullException.ThrowIfNull(settings);
+
+            return _nuGetLoginService.LoginAsync(settings, cancellationToken);
         }
 
         internal void WriteCommand(string command, string message = null)
