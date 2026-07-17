@@ -2,6 +2,10 @@
 #load "./../../../utilities/paths.cake"
 #load "./../../../utilities/io.cake"
 
+using System.Net;
+using System.Net.Http;
+using System.Text.Json;
+
 Task("Cake.Common.Build.GitHubActionsProvider.Provider")
     .Does(() => {
         Assert.Equal(BuildProvider.GitHubActions, BuildSystem.Provider);
@@ -179,6 +183,24 @@ Task("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact.Previous
         Assert.Equal("Cake Integration Tests\n", System.IO.File.ReadAllText(targetArtifactPath.FullPath));
 });
 
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.NuGetLogin")
+    .WithCriteria<GitHubActionsData>((context, data) => !string.IsNullOrWhiteSpace(data.NuGetUserName))
+    .Does<GitHubActionsData>(async data => {
+        // When (trusted publishing: OIDC from ACTIONS_ID_TOKEN_REQUEST_* → NuGet API key)
+        var apiKey = await GitHubActions.Commands.NuGetLogin(data.NuGetUserName);
+
+        // Then
+        Assert.True(!string.IsNullOrWhiteSpace(apiKey));
+
+        if (!string.IsNullOrWhiteSpace(data.NuGetPackageId))
+        {
+            // Validate the API key against nuget.org using the verify-scope protocol:
+            // https://learn.microsoft.com/en-us/nuget/api/nuget-protocols#api-to-request-a-verify-scope-key
+            var expires = await NuGetVerifyScopeValidator.ValidateApiKeyAsync(apiKey, data.NuGetPackageId, data.NuGetPackageVersion);
+            Information("NuGet verify-scope key expires: {0}", expires);
+        }
+});
+
 Task("Cake.Common.Build.GitHubActionsProvider.Environment.Runner.Architecture")
     .Does(() => {
         // Given / When
@@ -226,17 +248,21 @@ if (GitHubActions.IsRunningOnGitHubActions)
 
 if (GitHubActions.Environment.Runtime.IsRuntimeAvailable)
 {
-    Setup(context => new GitHubActionsData {
+    Setup<GitHubActionsData>(context => new GitHubActionsData {
         AssemblyPath = typeof(ICakeContext).GetTypeInfo().Assembly.Location,
         FileArtifactName = $"File_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{GitHubActions.Environment.Runner.Architecture}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}",
-        DirectoryArtifactName = $"Directory_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{GitHubActions.Environment.Runner.Architecture}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}"
+        DirectoryArtifactName = $"Directory_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{GitHubActions.Environment.Runner.Architecture}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}",
+        NuGetUserName = EnvironmentVariable("CAKE_INTEGRATIONTEST_NUGET_USERNAME") ?? string.Empty,
+        NuGetPackageId = EnvironmentVariable("CAKE_INTEGRATIONTEST_NUGET_PACKAGE_ID") ?? string.Empty,
+        NuGetPackageVersion = EnvironmentVariable("CAKE_INTEGRATIONTEST_NUGET_PACKAGE_VERSION") ?? string.Empty
     });
 
     gitHubActionsProviderTask
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.File")
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.Directory")
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact")
-        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact.PreviousJob");
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact.PreviousJob")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.NuGetLogin");
 }
 
 public class GitHubActionsData
@@ -244,4 +270,73 @@ public class GitHubActionsData
     public FilePath AssemblyPath { get; set; }
     public string FileArtifactName { get; set; }
     public string DirectoryArtifactName { get; set; }
+    public string NuGetUserName { get; set; }
+    public string NuGetPackageId { get; set; }
+    public string NuGetPackageVersion { get; set; }
 }
+
+/// <summary>
+/// Validates a NuGet.org API key using the verify-scope protocol (nuget.org protocol 4.1.0).
+/// </summary>
+public static class NuGetVerifyScopeValidator
+{
+    private const string NuGetOrgBaseUrl = "https://www.nuget.org";
+
+    /// <summary>
+    /// Requests a verify-scope key with the API key, then verifies it, proving the API key is accepted by nuget.org.
+    /// </summary>
+    /// <param name="apiKey">The NuGet API key to validate.</param>
+    /// <param name="packageId">A package ID owned by the NuGet account.</param>
+    /// <param name="packageVersion">An optional package version.</param>
+    /// <returns>The verify-scope key expiration from the create-verification-key response.</returns>
+    public static async System.Threading.Tasks.Task<string> ValidateApiKeyAsync(string apiKey, string packageId, string packageVersion = null)
+    {
+        using var client = new HttpClient();
+
+        var createVerificationKeyUrl = BuildVerifyScopeUrl(
+            "/api/v2/package/create-verification-key",
+            packageId,
+            packageVersion);
+
+        using var createRequest = new HttpRequestMessage(HttpMethod.Post, createVerificationKeyUrl);
+        createRequest.Headers.Add("X-NuGet-ApiKey", apiKey);
+
+        using var createResponse = await client.SendAsync(createRequest);
+        var createBody = await createResponse.Content.ReadAsStringAsync();
+
+        Assert.True(
+            createResponse.IsSuccessStatusCode,
+            $"create-verification-key failed ({(int)createResponse.StatusCode} {createResponse.StatusCode}): {createBody}");
+
+        using var createJson = JsonDocument.Parse(createBody);
+        var verifyScopeKey = createJson.RootElement.GetProperty("Key").GetString();
+        var expires = createJson.RootElement.GetProperty("Expires").GetString();
+
+        Assert.False(string.IsNullOrWhiteSpace(verifyScopeKey), "create-verification-key response did not contain \"Key\".");
+        Assert.False(string.IsNullOrWhiteSpace(expires), "create-verification-key response did not contain \"Expires\".");
+
+        var verifyKeyUrl = BuildVerifyScopeUrl("/api/v2/verifykey", packageId, packageVersion);
+
+        using var verifyRequest = new HttpRequestMessage(HttpMethod.Get, verifyKeyUrl);
+        verifyRequest.Headers.Add("X-NuGet-ApiKey", verifyScopeKey);
+
+        using var verifyResponse = await client.SendAsync(verifyRequest);
+
+        Assert.Equal(HttpStatusCode.OK, verifyResponse.StatusCode);
+
+        return expires;
+    }
+
+    private static string BuildVerifyScopeUrl(string pathPrefix, string packageId, string packageVersion)
+    {
+        var encodedId = Uri.EscapeDataString(packageId);
+
+        if (string.IsNullOrWhiteSpace(packageVersion))
+        {
+            return $"{NuGetOrgBaseUrl}{pathPrefix}/{encodedId}";
+        }
+
+        return $"{NuGetOrgBaseUrl}{pathPrefix}/{encodedId}/{Uri.EscapeDataString(packageVersion)}";
+    }
+}
+
