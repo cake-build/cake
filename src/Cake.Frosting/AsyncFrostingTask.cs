@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cake.Core;
 
@@ -24,6 +25,9 @@ namespace Cake.Frosting
     public abstract class AsyncFrostingTask<T> : IFrostingTask
         where T : ICakeContext
     {
+        /// <inheritdoc/>
+        public virtual List<CakeTaskCriteria> ShouldRunCriteria => new List<CakeTaskCriteria>();
+
         /// <summary>
         /// Runs the task using the specified context.
         /// </summary>
@@ -41,6 +45,7 @@ namespace Cake.Frosting
         /// <returns>
         ///   <c>true</c> if the task should run; otherwise <c>false</c>.
         /// </returns>
+        [Obsolete("ShouldRun method will be removed in a future version")]
         public virtual bool ShouldRun(T context)
         {
             return true;
@@ -73,6 +78,7 @@ namespace Cake.Frosting
         }
 
         /// <inheritdoc/>
+        [Obsolete("ShouldRun method will be removed in a future version")]
         bool IFrostingTask.ShouldRun(ICakeContext context)
         {
             ArgumentNullException.ThrowIfNull(context);
