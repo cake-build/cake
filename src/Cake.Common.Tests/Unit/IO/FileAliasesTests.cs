@@ -1279,5 +1279,75 @@ namespace Cake.Common.Tests.Unit.IO
                 Assert.Equal("/bar/baz.qux", result.FullPath);
             }
         }
+
+        public sealed class TheFindFilesInDirectory
+        {
+            [Fact]
+            public void Should_Throw_If_Context_Is_Null()
+            {
+                // Given
+                var directory = new DirectoryPath("./tests");
+
+                // when
+                var result = Record.Exception(() =>
+                    FileAliases.FindFilesInDirectory(null, directory, "*.csproj"));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "context");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Directory_Path_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+
+                // When
+                var result = Record.Exception(() =>
+                    FileAliases.FindFilesInDirectory(context, null, "*.csproj"));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "directoryPath");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Pattern_Is_Null()
+            {
+                // Given
+                var context = Substitute.For<ICakeContext>();
+                var directory = new DirectoryPath("./tests");
+
+                // When
+                var result = Record.Exception(() =>
+                    FileAliases.FindFilesInDirectory(context, directory, null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "pattern");
+            }
+
+            [Fact]
+            public void Should_Return_Files_Matching_Pattern()
+            {
+                // Given
+                var environment = FakeEnvironment.CreateUnixEnvironment();
+                var fileSystem = new FakeFileSystem(environment);
+                fileSystem.CreateFile("/Working/tests/project.csproj");
+                fileSystem.CreateFile("/Working/tests/other.txt");
+
+                var context = Substitute.For<ICakeContext>();
+                context.FileSystem.Returns(fileSystem);
+                context.Environment.Returns(environment);
+
+                // When
+                var result = FileAliases.FindFilesInDirectory(
+                    context,
+                    new DirectoryPath("/Working/tests"),
+                    "*.csproj").ToList();
+
+                // Then
+                Assert.Single(result);
+                Assert.Equal("/Working/tests/project.csproj", result[0].FullPath);
+            }
+        }
     }
 }
