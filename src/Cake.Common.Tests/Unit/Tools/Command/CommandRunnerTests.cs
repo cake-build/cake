@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Common.Tests.Fixtures.Tools.Command;
+using Cake.Core.Tooling;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.Command
@@ -136,12 +137,12 @@ namespace Cake.Common.Tests.Unit.Tools.Command
             const int expectedExitCode = 1337;
 
             var fixture = new CommandRunnerStandardOutputFixture
-                            {
-                                Settings =
-                                                {
-                                                    HandleExitCode = exitCode => exitCode == expectedExitCode
-                                                }
-                            }
+            {
+                Settings =
+                {
+                    HandleExitCode = exitCode => exitCode == expectedExitCode
+                }
+            }
                             .GivenStandardOutput(expectedStandardOutput);
 
             fixture.ProcessRunner.Process.SetExitCode(expectedExitCode);
@@ -184,12 +185,12 @@ namespace Cake.Common.Tests.Unit.Tools.Command
             const int expectedExitCode = 1337;
 
             var fixture = new CommandRunnerStandardErrorFixture
-                            {
-                                Settings =
-                                {
-                                    HandleExitCode = exitCode => exitCode == expectedExitCode
-                                }
-                            }
+            {
+                Settings =
+                {
+                    HandleExitCode = exitCode => exitCode == expectedExitCode
+                }
+            }
                             .GivenStandardError(expectedStandardError)
                             .GivenStandardOutput(expectedStandardOutput);
 
@@ -202,6 +203,31 @@ namespace Cake.Common.Tests.Unit.Tools.Command
             Assert.Equal(expectedStandardOutput, fixture.StandardOutput);
             Assert.Equal(expectedStandardError, fixture.StandardError);
             Assert.Equal(expectedExitCode, fixture.ExitCode);
+        }
+
+        [Fact]
+        // This unit test demonstrates the problem reported in GH-4013.
+        // The command's exit code is zero and the expected exit code is any non-zero value (I used '1234' for demonstration purposes).
+        // In this scenario, I expect Cake to throw an exception because the exit code does not match the expected value.
+        // Currently this unit test fails because Cake does not throw the expected exception.
+        // The reason why Cake currently does not throw an exception is because zero is hard-coded on line 115 in Cake.Core/Tooling.Tol.cs
+        // Zero is hard coded to mean that the command was successful, and the expected exit code is completely disregarded.
+        public void Exception_Thrown_when_command_exit_code_is_zero_and_expected_value_is_non_zero()
+        {
+            // Given
+            const int actualExitCode = 0;
+            const int expectedExitCode = 1234;
+
+            var fixture = new CommandRunnerFixture();
+
+            fixture.Settings.WithExpectedExitCode(expectedExitCode);
+            fixture.ProcessRunner.Process.SetExitCode(actualExitCode);
+
+            // When
+            var result = Record.Exception(() => fixture.Run());
+
+            // Then
+            AssertEx.IsCakeException(result, "dotnet: Process returned an error (exit code 0).");
         }
     }
 }
