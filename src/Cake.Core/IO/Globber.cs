@@ -18,6 +18,7 @@ namespace Cake.Core.IO
         private readonly GlobVisitor _visitor;
         private readonly PathComparer _comparer;
         private readonly ICakeEnvironment _environment;
+        private readonly IFileSystem _fileSystem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Globber"/> class.
@@ -33,6 +34,7 @@ namespace Cake.Core.IO
             _parser = new GlobParser(environment);
             _visitor = new GlobVisitor(fileSystem, environment);
             _comparer = new PathComparer(environment.Platform.IsUnix());
+            _fileSystem = fileSystem;
         }
 
         /// <inheritdoc/>
@@ -51,6 +53,22 @@ namespace Cake.Core.IO
             return _visitor.Walk(root, settings)
                 .Select(x => x.Path)
                 .Distinct(_comparer);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<IFileSystemInfo> GetFileSystemInfos(string pattern)
+        {
+            if (pattern is null)
+            {
+                throw new ArgumentNullException(nameof(pattern));
+            }
+
+            var glob = _parser.Parse(pattern, new GlobberSettings
+            {
+                IsCaseSensitive = !_comparer.IsCaseSensitive
+            });
+            var settings = new GlobberSettings { IsCaseSensitive = !_comparer.IsCaseSensitive };
+            return _visitor.Walk(glob, settings);
         }
     }
 }

@@ -22,5 +22,12 @@ namespace Cake.Core.IO
         /// <param name="path">The path.</param>
         /// <returns>A <see cref="IDirectory"/> instance representing the specified path.</returns>
         IDirectory GetDirectory(DirectoryPath path);
+
+        /// <summary>
+        /// Gets a <see cref="IFileSystemInfo"/> for the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>A <see cref="IFileSystemInfo"/> for the specified path.</returns>
+        IFileSystemInfo GetFileSystemInfo(DirectoryPath path);
     }
 }
