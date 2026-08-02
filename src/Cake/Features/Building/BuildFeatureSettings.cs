@@ -25,8 +25,9 @@ namespace Cake.Features.Building
 
         /// <summary>
         /// Gets or sets the verbosity level.
+        /// When unset, verbosity is taken from configuration (environment, cake.config, remaining arguments).
         /// </summary>
-        public Verbosity Verbosity { get; set; }
+        public Verbosity? Verbosity { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to run in debug mode.

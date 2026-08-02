@@ -33,7 +33,7 @@ namespace Cake.Tests.Unit
                     settings.Debug == false &&
                     settings.Exclusive == false &&
                     settings.Script.FullPath == "build.cake" &&
-                    settings.Verbosity == Verbosity.Normal &&
+                    settings.Verbosity == null &&
                     settings.NoBootstrapping == false));
         }
 
@@ -129,6 +129,63 @@ namespace Cake.Tests.Unit
 
             // Then
             feature.Received(1).Run(fixture.Console);
+        }
+
+        [Fact]
+        public async Task Should_Leave_Verbosity_Unset_When_Not_Specified_On_Command_Line()
+        {
+            // Given
+            var fixture = new ProgramFixture();
+            var feature = Substitute.For<IBuildFeature>();
+            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+            // When
+            await fixture.Run();
+
+            // Then
+            feature.Received(1).Run(
+                Arg.Any<ICakeArguments>(),
+                Arg.Is<BuildFeatureSettings>(settings =>
+                    settings.Verbosity == null));
+        }
+
+        [Fact]
+        public async Task Should_Prefer_Command_Line_Verbosity_Over_Environment()
+        {
+            // Given
+            var fixture = new ProgramFixture();
+            var feature = Substitute.For<IBuildFeature>();
+            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+            // When
+            await fixture.Run("--verbosity", "quiet");
+
+            // Then
+            feature.Received(1).Run(
+                Arg.Any<ICakeArguments>(),
+                Arg.Is<BuildFeatureSettings>(settings =>
+                    settings.Verbosity == Verbosity.Quiet));
+        }
+
+        [Fact]
+        public async Task Should_Prefer_Explicit_Normal_Verbosity_Over_Environment()
+        {
+            // Given
+            var fixture = new ProgramFixture();
+            var feature = Substitute.For<IBuildFeature>();
+            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+            // When
+            await fixture.Run("--verbosity", "normal");
+
+            // Then
+            feature.Received(1).Run(
+                Arg.Any<ICakeArguments>(),
+                Arg.Is<BuildFeatureSettings>(settings =>
+                    settings.Verbosity == Verbosity.Normal));
         }
     }
 }

@@ -249,7 +249,7 @@ if (GitHubActions.IsRunningOnGitHubActions)
 if (GitHubActions.Environment.Runtime.IsRuntimeAvailable)
 {
     Setup<GitHubActionsData>(context => new GitHubActionsData {
-        AssemblyPath = typeof(ICakeContext).GetTypeInfo().Assembly.Location,
+        AssemblyPath = Paths.CakeCore.FullPath,
         FileArtifactName = $"File_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{GitHubActions.Environment.Runner.Architecture}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}",
         DirectoryArtifactName = $"Directory_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{GitHubActions.Environment.Runner.Architecture}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}",
         NuGetUserName = EnvironmentVariable("CAKE_INTEGRATIONTEST_NUGET_USERNAME") ?? string.Empty,

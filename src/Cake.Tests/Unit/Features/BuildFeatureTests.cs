@@ -1,6 +1,7 @@
 ﻿using System;
 using Cake.Cli;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Features.Building;
 using Cake.Tests.Fixtures;
 using Xunit;
@@ -55,6 +56,39 @@ namespace Cake.Tests.Unit.Features
             // Then
             Assert.NotNull(fixture.ScriptEngine.ScriptHost);
             Assert.IsType(expected, fixture.ScriptEngine.ScriptHost);
+        }
+
+        [Fact]
+        public void Should_Use_Verbosity_From_Environment_When_Not_Specified()
+        {
+            // Given
+            var fixture = new BuildFeatureFixture();
+            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+            // When
+            fixture.Run(new BuildFeatureSettings(BuildHostKind.Build));
+
+            // Then
+            Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
+            Assert.Equal(Verbosity.Diagnostic, fixture.ScopedLog.Verbosity);
+        }
+
+        [Fact]
+        public void Should_Prefer_Command_Line_Verbosity_Over_Environment()
+        {
+            // Given
+            var fixture = new BuildFeatureFixture();
+            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+            // When
+            fixture.Run(new BuildFeatureSettings(BuildHostKind.Build)
+            {
+                Verbosity = Verbosity.Quiet
+            });
+
+            // Then
+            Assert.Equal(Verbosity.Quiet, fixture.Log.Verbosity);
+            Assert.Equal(Verbosity.Quiet, fixture.ScopedLog.Verbosity);
         }
     }
 }

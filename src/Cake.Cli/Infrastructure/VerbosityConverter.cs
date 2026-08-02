@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using Cake.Core;
@@ -16,26 +15,10 @@ namespace Cake.Cli
     /// </summary>
     public sealed class VerbosityConverter : TypeConverter
     {
-        private readonly Dictionary<string, Verbosity> _lookup;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VerbosityConverter"/> class.
-        /// </summary>
-        public VerbosityConverter()
+        /// <inheritdoc/>
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            _lookup = new Dictionary<string, Verbosity>(StringComparer.OrdinalIgnoreCase)
-            {
-                { "q", Verbosity.Quiet },
-                { "quiet", Verbosity.Quiet },
-                { "m", Verbosity.Minimal },
-                { "minimal", Verbosity.Minimal },
-                { "n", Verbosity.Normal },
-                { "normal", Verbosity.Normal },
-                { "v", Verbosity.Verbose },
-                { "verbose", Verbosity.Verbose },
-                { "d", Verbosity.Diagnostic },
-                { "diagnostic", Verbosity.Diagnostic }
-            };
+            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
         }
 
         /// <inheritdoc/>
@@ -43,8 +26,7 @@ namespace Cake.Cli
         {
             if (value is string stringValue)
             {
-                var result = _lookup.TryGetValue(stringValue, out var verbosity);
-                if (!result)
+                if (!VerbosityParser.TryParse(stringValue, out var verbosity))
                 {
                     const string format = "The value '{0}' is not a valid verbosity.";
                     var message = string.Format(CultureInfo.InvariantCulture, format, value);

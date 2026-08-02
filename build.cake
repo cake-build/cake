@@ -384,21 +384,59 @@ Task("Frosting-Integration-Tests")
     {
         Information("Testing: {0}", test.Framework);
 
-        DotNetRun(test.Project.FullPath,
+        void RunFrosting(ProcessArgumentBuilder arguments, Dictionary<string, string> environmentVariables)
+        {
+            DotNetRun(test.Project.FullPath,
+                arguments,
+                new DotNetRunSettings
+                {
+                    Configuration = parameters.Configuration,
+                    Framework = test.Framework,
+                    NoRestore = true,
+                    NoBuild = true,
+                    EnvironmentVariables = environmentVariables
+                });
+        }
+
+        var baseEnvironment = new Dictionary<string, string>
+        {
+            ["CAKE_INTEGRATIONTEST_ENVIRONMENT"] = bool.TrueString,
+        };
+
+        RunFrosting(
             new ProcessArgumentBuilder()
                 .AppendSwitchQuoted("--verbosity", "=", Argument("integration-tests-verbosity", defaultVerbosity))
                 .AppendSwitchQuoted("--name", "=", "World")
                 .AppendSwitchQuoted("--IntegrationTest_Argument", "=", bool.TrueString),
-            new DotNetRunSettings
+            baseEnvironment);
+
+        RunFrosting(
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--target", "=", "Verbosity")
+                .AppendSwitchQuoted("--expected", "=", "Minimal"),
+            new Dictionary<string, string>(baseEnvironment)
             {
-                Configuration = parameters.Configuration,
-                Framework = test.Framework,
-                NoRestore = true,
-                NoBuild = true,
-                EnvironmentVariables = new Dictionary<string, string>
-                {
-                    ["CAKE_INTEGRATIONTEST_ENVIRONMENT"] = bool.TrueString,
-                }
+                ["CAKE_SETTINGS_VERBOSITY"] = "Minimal"
+            });
+
+        RunFrosting(
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--target", "=", "Verbosity")
+                .AppendSwitchQuoted("--verbosity", "=", "quiet")
+                .AppendSwitchQuoted("--expected", "=", "Quiet"),
+            new Dictionary<string, string>(baseEnvironment)
+            {
+                ["CAKE_SETTINGS_VERBOSITY"] = "Diagnostic"
+            });
+
+        RunFrosting(
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--target", "=", "Verbosity")
+                .AppendSwitchQuoted("--verbosity", "=", "normal")
+                .AppendSwitchQuoted("--expected", "=", "Normal"),
+            new Dictionary<string, string>(baseEnvironment)
+            {
+                ["CAKE_SETTINGS_VERBOSITY"] = "Diagnostic"
             });
     }
     catch(Exception ex)

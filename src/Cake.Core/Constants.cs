@@ -20,6 +20,7 @@ namespace Cake.Core
             public const string NoMonoCoersion = "Settings_NoMonoCoersion";
             public const string ShowProcessCommandLine = "Settings_ShowProcessCommandLine";
             public const string UnifiedDependencyGraphForMultipleTargets = "Settings_UnifiedDependencyGraphForMultipleTargets";
+            public const string Verbosity = "Settings_Verbosity";
         }
 
         public static class Paths

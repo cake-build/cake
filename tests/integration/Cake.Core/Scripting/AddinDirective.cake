@@ -1,14 +1,12 @@
 #addin nuget:?package=Cake.Kudu.Client&version=2.0.0
 #load "./../../utilities/paths.cake"
 #load "./../../utilities/xunit.cake"
-using System.Reflection;
 
 (FilePath Cake, string Version) PackScriptingTestAddin()
 {
     CleanDirectories($"{Paths.Resources}/Cake.Core/Scripting/addin/{{bin,obj}}");
 
-    FilePath cakeCore = typeof(ICakeContext).GetTypeInfo().Assembly.Location;
-    FilePath cake = cakeCore.GetDirectory().CombineWithFilePath("Cake.dll");
+    FilePath cake = Paths.CakeTool;
 
     var msBuildSettings = new DotNetMSBuildSettings
                                 {
@@ -19,7 +17,7 @@ using System.Reflection;
                                                     (DateTime.Now.Hour << 4) + DateTime.Now.Minute
                                                 ),
                                 }
-                                 .WithProperty("CakeCorePath", typeof(ICakeContext).GetTypeInfo().Assembly.Location)
+                                 .WithProperty("CakeCorePath", Paths.CakeCore.FullPath)
                                  .SetTargetFramework(
                                      cake switch
                                      {
@@ -165,8 +163,7 @@ Task("Cake.Core.Scripting.AddinDirective.LoadNativeAssemblies")
     .WithCriteria(() => GitHubActions.Environment.Runner.Architecture != GitHubActionsArchitecture.ARM64)
     .Does(() =>
 {
-    FilePath cakeCore = typeof(ICakeContext).GetTypeInfo().Assembly.Location;
-    FilePath cake = cakeCore.GetDirectory().CombineWithFilePath("Cake.dll");
+    FilePath cake = Paths.CakeTool;
     var script =
         $$"""
         {{"#"}}addin nuget:?package=Cake.Git&version=5.0.1

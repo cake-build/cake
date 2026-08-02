@@ -84,6 +84,10 @@ namespace Cake.Features.Building
             // Read the configuration.
             var configuration = ReadConfiguration(arguments, settings.Script.GetDirectory());
 
+            // Set log verbosity.
+            var verbosity = configuration.GetVerbosity(settings.Verbosity);
+            _log.Verbosity = verbosity;
+
             // Define the callback for modifying the scope.
             void ModifyScope(ICakeContainerRegistrar registrar)
             {
@@ -118,7 +122,7 @@ namespace Cake.Features.Building
 
                 // Set log verbosity for log in new scope.
                 var log = scope.Resolve<ICakeLog>();
-                log.Verbosity = settings.Verbosity;
+                log.Verbosity = verbosity;
 
                 // Create the script host.
                 var host = CreateScriptHost(settings, scope);

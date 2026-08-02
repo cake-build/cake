@@ -1,6 +1,7 @@
 using System;
 
 using Cake.Core.Configuration;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
@@ -63,6 +64,27 @@ namespace Cake.Core
             }
             var toolPath = configuration.GetToolPath(defaultRoot, environment).ExpandShortPath();
             return toolPath.Combine("Modules").Collapse();
+        }
+
+        /// <summary>
+        /// Gets the verbosity level from an explicit command-line value, falling back to configuration.
+        /// </summary>
+        /// <param name="configuration">The Cake configuration.</param>
+        /// <param name="commandLineVerbosity">The verbosity specified on the command line, if any.</param>
+        /// <param name="defaultValue">The value to return when the command line is unset and the configuration key is missing or invalid.</param>
+        /// <returns>
+        /// <paramref name="commandLineVerbosity"/> when it has a value; otherwise the configured verbosity,
+        /// or <paramref name="defaultValue"/> if not found or invalid.
+        /// </returns>
+        public static Verbosity GetVerbosity(this ICakeConfiguration configuration, Verbosity? commandLineVerbosity, Verbosity defaultValue = Verbosity.Normal)
+        {
+            if (commandLineVerbosity.HasValue)
+            {
+                return commandLineVerbosity.Value;
+            }
+
+            var verbosity = configuration?.GetValue(Constants.Settings.Verbosity);
+            return VerbosityParser.TryParse(verbosity, out var result) ? result : defaultValue;
         }
     }
 }
