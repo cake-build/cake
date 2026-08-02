@@ -102,7 +102,15 @@ namespace Cake.Frosting
         {
             var services = new ServiceCollection();
 
-            services.AddSingleton<ICakeLog, CakeBuildLog>();
+            services.AddSingleton<ICakeLog>(sp =>
+                {
+                    var cakeSettingsVerbosity = global::System.Environment.GetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY");
+                    if (!Enum.TryParse<Verbosity>(cakeSettingsVerbosity, true, out var verbosity))
+                    {
+                        verbosity = Verbosity.Normal;
+                    }
+                    return ActivatorUtilities.CreateInstance<CakeBuildLog>(sp, verbosity);
+                });
             services.AddSingleton<IConsole, CakeConsole>();
             services.AddSingleton<ICakeReportPrinter, CakeReportPrinter>();
             services.AddSingleton<ICakeConfiguration, FrostingConfiguration>();
