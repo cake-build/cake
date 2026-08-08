@@ -225,7 +225,17 @@ namespace Cake.Common.Tools.InspectCode
         /// <returns>The tool executable name.</returns>
         protected override IEnumerable<string> GetToolExecutableNames(InspectCodeSettings settings)
         {
-            return new[] { settings != null && settings.UseX86Tool ? "inspectcode.x86.exe" : "inspectcode.exe" };
+            if (_environment.Platform.Family == PlatformFamily.Windows)
+            {
+                return new[] { settings != null && settings.UseX86Tool ? "inspectcode.x86.exe" : "inspectcode.exe" };
+            }
+
+            if (settings != null && settings.UseX86Tool)
+            {
+                return new[] { "inspectcode.x86.exe", "inspectcode.sh", "inspectcode.exe" };
+            }
+
+            return new[] { "inspectcode.sh", "inspectcode.exe" };
         }
 
         /// <summary>
