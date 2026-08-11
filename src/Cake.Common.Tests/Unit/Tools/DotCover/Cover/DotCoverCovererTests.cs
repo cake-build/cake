@@ -10,7 +10,10 @@ using Cake.Common.Tools.XUnit;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
+using NSubstitute;
 using Xunit;
+using LogLevel = Cake.Core.Diagnostics.LogLevel;
+using Verbosity = Cake.Core.Diagnostics.Verbosity;
 
 namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover;
 
@@ -159,11 +162,12 @@ public sealed class DotCoverCovererTests
             // When
             var result = fixture.Run();
 
-            // Then
-            Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
-                         "--target-arguments \"-argument\" " +
-                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
-        }
+                // Then
+                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "Scope parameter is not supported in new DotCover format");
+                Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
+                             "--target-arguments \"-argument\" " +
+                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
+            }
 
         [Fact]
         public void Should_Not_Append_Filters()
@@ -176,11 +180,12 @@ public sealed class DotCoverCovererTests
             // When
             var result = fixture.Run();
 
-            // Then
-            Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
-                         "--target-arguments \"-argument\" " +
-                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
-        }
+                // Then
+                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "Filters parameter is not supported in new DotCover format");
+                Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
+                             "--target-arguments \"-argument\" " +
+                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
+            }
 
         [Fact]
         public void Should_Not_Append_AttributeFilters()
@@ -193,11 +198,12 @@ public sealed class DotCoverCovererTests
             // When
             var result = fixture.Run();
 
-            // Then
-            Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
-                         "--target-arguments \"-argument\" " +
-                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
-        }
+                // Then
+                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "AttributeFilters parameter is not supported in new DotCover format");
+                Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
+                             "--target-arguments \"-argument\" " +
+                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
+            }
 
         [Fact]
         public void Should_Not_Append_DisableDefaultFilters()
@@ -209,11 +215,12 @@ public sealed class DotCoverCovererTests
             // When
             var result = fixture.Run();
 
-            // Then
-            Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
-                         "--target-arguments \"-argument\" " +
-                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
-        }
+                // Then
+                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "DisableDefaultFilters parameter is not supported in new DotCover format");
+                Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
+                             "--target-arguments \"-argument\" " +
+                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
+            }
 
         [Fact]
         public void Should_Not_Append_ProcessFilters()
@@ -226,11 +233,12 @@ public sealed class DotCoverCovererTests
             // When
             var result = fixture.Run();
 
-            // Then
-            Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
-                         "--target-arguments \"-argument\" " +
-                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
-        }
+                // Then
+                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "ProcessFilters parameter is not supported in new DotCover format");
+                Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
+                             "--target-arguments \"-argument\" " +
+                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
+            }
 
         [Fact]
         public void Should_Capture_XUnit()

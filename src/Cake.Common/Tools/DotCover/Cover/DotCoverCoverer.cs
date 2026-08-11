@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -40,9 +41,9 @@ public sealed class DotCoverCoverer : DotCoverCoverageTool<DotCoverCoverSettings
     /// <param name="outputPath">The output file path.</param>
     /// <param name="settings">The settings.</param>
     public void Cover(ICakeContext context,
-        Action<ICakeContext> action,
-        FilePath outputPath,
-        DotCoverCoverSettings settings)
+                      Action<ICakeContext> action,
+                      FilePath outputPath,
+                      DotCoverCoverSettings settings)
     {
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(action);
@@ -122,6 +123,31 @@ public sealed class DotCoverCoverer : DotCoverCoverageTool<DotCoverCoverSettings
             if (settings.NoNGen)
             {
                 builder.Append("--no-ngen");
+            }
+
+            if (settings.Filters is { Count: > 0 })
+            {
+                context.Log.Warning("Filters parameter is not supported in new DotCover format");
+            }
+
+            if (settings.Scope is { Count: > 0 })
+            {
+                context.Log.Warning("Scope parameter is not supported in new DotCover format");
+            }
+
+            if (settings.AttributeFilters is { Count: > 0 })
+            {
+                context.Log.Warning("AttributeFilters parameter is not supported in new DotCover format");
+            }
+
+            if (settings.ProcessFilters is { Count: > 0 })
+            {
+                context.Log.Warning("ProcessFilters parameter is not supported in new DotCover format");
+            }
+
+            if (settings.DisableDefaultFilters is true)
+            {
+                context.Log.Warning("DisableDefaultFilters parameter is not supported in new DotCover format");
             }
 
             // Get base arguments - new format
