@@ -5,10 +5,10 @@
   </PropertyGroup>
   <ItemGroup>
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
-    <PackageVersion Include="Autofac" Version="9.1.0" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.8" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.8" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.8" />
+    <PackageVersion Include="Autofac" Version="9.3.0" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.9" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.9" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.9" />
     <PackageVersion Include="Cake.Frosting" Version="3.1.0.0" />
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
@@ -32,7 +32,7 @@
     <PackageVersion Include="Spectre.Console.Testing" Version="0.57.0" />
     <PackageVersion Include="Spectre.Verify.Extensions" Version="28.16.0" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.2.0" />
-    <PackageVersion Include="Verify.XunitV3" Version="31.19.1" />
+    <PackageVersion Include="Verify.XunitV3" Version="31.20.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
     <PackageVersion Include="xunit.v3.assert" Version="3.2.2" />

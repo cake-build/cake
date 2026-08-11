@@ -103,7 +103,33 @@ Task("Cake.Common.Build.GitHubActionsProvider.Commands.SetStepSummary")
 {Context.Environment.Runtime.CakeVersion.ToString(3)}
 
 ## Runner OS
-{GitHubActions.Environment.Runner.OS}";
+{GitHubActions.Environment.Runner.OS}
+
+## Runner Environment
+{GitHubActions.Environment.Runner.Environment}
+
+## Runner Architecture
+{GitHubActions.Environment.Runner.Architecture}
+
+## Runner Debug
+{GitHubActions.Environment.Runner.IsDebug}
+
+## Action Repository
+{GitHubActions.Environment.Workflow.ActionRepository}
+
+## Actor / Triggering Actor
+{GitHubActions.Environment.Workflow.Actor} / {GitHubActions.Environment.Workflow.TriggeringActor}
+
+## Repository
+{GitHubActions.Environment.Workflow.Repository} ({GitHubActions.Environment.Workflow.RepositoryId})
+
+## Workflow Ref / SHA
+{GitHubActions.Environment.Workflow.WorkflowRef}
+
+{GitHubActions.Environment.Workflow.WorkflowSha}
+
+## Retention Days
+{GitHubActions.Environment.Workflow.RetentionDays}";
 
         // When
         GitHubActions.Commands.SetStepSummary(summary);

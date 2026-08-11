@@ -54,6 +54,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// Write debug message to the build log.
         /// </summary>
         /// <param name="message">The message.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.Debug("This is a debug message");
+        /// }
+        /// </code>
+        /// </example>
         public void Debug(string message)
         {
             WriteCommand("debug", message);
@@ -64,6 +72,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="annotation">The annotation.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.Notice("This is a notice message");
+        /// }
+        /// </code>
+        /// </example>
         public void Notice(string message, GitHubActionsAnnotation annotation = null)
         {
             WriteCommand("notice", annotation?.GetParameters(), message);
@@ -74,6 +90,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="annotation">The annotation.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.Warning("This is a warning message");
+        /// }
+        /// </code>
+        /// </example>
         public void Warning(string message, GitHubActionsAnnotation annotation = null)
         {
             WriteCommand("warning", annotation?.GetParameters(), message);
@@ -84,6 +108,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="annotation">The annotation.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.Error("This is an error message");
+        /// }
+        /// </code>
+        /// </example>
         public void Error(string message, GitHubActionsAnnotation annotation = null)
         {
             WriteCommand("error", annotation?.GetParameters(), message);
@@ -93,6 +125,16 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// Start a group in the build log.
         /// </summary>
         /// <param name="title">The title.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.StartGroup("Cake group");
+        ///     Information("This is inside a group");
+        ///     GitHubActions.Commands.EndGroup();
+        /// }
+        /// </code>
+        /// </example>
         public void StartGroup(string title)
         {
             WriteCommand("group", title);
@@ -101,6 +143,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <summary>
         /// End a group in the build log.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.EndGroup();
+        /// }
+        /// </code>
+        /// </example>
         public void EndGroup()
         {
             WriteCommand("endgroup");
@@ -110,6 +160,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// Registers a secret which will get masked in the build log.
         /// </summary>
         /// <param name="secret">The secret.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.SetSecret(Guid.NewGuid().ToString());
+        /// }
+        /// </code>
+        /// </example>
         public void SetSecret(string secret)
         {
             WriteCommand("add-mask", secret);
@@ -119,6 +177,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// Prepends a directory to the system PATH variable and automatically makes it available to all subsequent actions in the current job.
         /// </summary>
         /// <param name="path">The directory path.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.AddPath(toolsPath);
+        /// }
+        /// </code>
+        /// </example>
         public void AddPath(DirectoryPath path)
         {
             ArgumentNullException.ThrowIfNull(path);
@@ -139,6 +205,16 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="value">The Value.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.SetEnvironmentVariable(
+        ///         "CAKE_VERSION",
+        ///         Context.Environment.Runtime.CakeVersion.ToString(3));
+        /// }
+        /// </code>
+        /// </example>
         public void SetEnvironmentVariable(string key, string value)
         {
             if (string.IsNullOrEmpty(key))
@@ -167,6 +243,20 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="value">The Value.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.SetOutputParameter(
+        ///         "CAKE_VERSION_OS",
+        ///         string.Join(
+        ///             '_',
+        ///             Context.Environment.Runtime.CakeVersion.ToString(3),
+        ///             GitHubActions.Environment.Runner.OS,
+        ///             GitHubActions.Environment.Runner.Architecture));
+        /// }
+        /// </code>
+        /// </example>
         public void SetOutputParameter(string key, string value)
         {
             if (string.IsNullOrEmpty(key))
@@ -193,6 +283,15 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// Creates or updates the step summary for a GitHub workflow.
         /// </summary>
         /// <param name="summary">The step summary.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.SetStepSummary(
+        ///         $"## Cake Version\n{Context.Environment.Runtime.CakeVersion.ToString(3)}");
+        /// }
+        /// </code>
+        /// </example>
         public void SetStepSummary(string summary)
         {
             if (string.IsNullOrEmpty(summary))
@@ -217,6 +316,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <param name="path">Path to the local file.</param>
         /// <param name="artifactName">The artifact name.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     await GitHubActions.Commands.UploadArtifact(artifactPath, "my-artifact");
+        /// }
+        /// </code>
+        /// </example>
         public async Task UploadArtifact(FilePath path, string artifactName)
         {
             var file = _fileSystem.GetFile(ValidateArtifactParameters(path, artifactName));
@@ -235,6 +342,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <param name="path">Path to the local directory.</param>
         /// <param name="artifactName">The artifact name.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     await GitHubActions.Commands.UploadArtifact(artifactDirectory, "my-artifact");
+        /// }
+        /// </code>
+        /// </example>
         public async Task UploadArtifact(DirectoryPath path, string artifactName)
         {
             var directory = _fileSystem.GetDirectory(ValidateArtifactParameters(path, artifactName));
@@ -257,6 +372,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <param name="artifactName">The artifact name.</param>
         /// <param name="path">Path to the local directory.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     await GitHubActions.Commands.DownloadArtifact("cake-integration-tests", targetPath);
+        /// }
+        /// </code>
+        /// </example>
         public async Task DownloadArtifact(string artifactName, DirectoryPath path)
         {
             var directory = _fileSystem.GetDirectory(ValidateArtifactParameters(path, artifactName));

@@ -13,6 +13,9 @@ namespace Cake.Common.Tools.InnoSetup
         InnoSetup5 = 5,
 
         /// <summary>Version 6.x</summary>
-        InnoSetup6 = 6
+        InnoSetup6 = 6,
+
+        /// <summary>Version 7.x</summary>
+        InnoSetup7 = 7
     }
 }

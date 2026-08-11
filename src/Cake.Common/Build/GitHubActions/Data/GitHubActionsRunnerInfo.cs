@@ -27,6 +27,24 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The name of the runner executing the job.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Name: {0}", BuildSystem.GitHubActions.Environment.Runner.Name);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Name: {0}", GitHubActions.Environment.Runner.Name);
+        /// }
+        /// </code>
+        /// </example>
         public string Name => GetEnvironmentString("RUNNER_NAME");
 
         /// <summary>
@@ -35,6 +53,24 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The operating system of the runner executing the job.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner OS: {0}", BuildSystem.GitHubActions.Environment.Runner.OS);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner OS: {0}", GitHubActions.Environment.Runner.OS);
+        /// }
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public string OS => GetEnvironmentString("RUNNER_OS");
 
@@ -45,6 +81,24 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// The path of the temporary directory for the runner.
         /// This directory is guaranteed to be empty at the start of each job, even on self-hosted runners.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Temp: {0}", BuildSystem.GitHubActions.Environment.Runner.Temp);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Temp: {0}", GitHubActions.Environment.Runner.Temp);
+        /// }
+        /// </code>
+        /// </example>
         public DirectoryPath Temp => GetEnvironmentDirectoryPath("RUNNER_TEMP");
 
         /// <summary>
@@ -53,6 +107,24 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The path of the directory containing some of the pre-installed tools for GitHub-hosted runners.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner ToolCache: {0}", BuildSystem.GitHubActions.Environment.Runner.ToolCache);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner ToolCache: {0}", GitHubActions.Environment.Runner.ToolCache);
+        /// }
+        /// </code>
+        /// </example>
         public DirectoryPath ToolCache => GetEnvironmentDirectoryPath("RUNNER_TOOL_CACHE");
 
         /// <summary>
@@ -61,6 +133,24 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The runner workspace directory path.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Workspace: {0}", BuildSystem.GitHubActions.Environment.Runner.Workspace);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Workspace: {0}", GitHubActions.Environment.Runner.Workspace);
+        /// }
+        /// </code>
+        /// </example>
         public DirectoryPath Workspace => GetEnvironmentDirectoryPath("RUNNER_WORKSPACE");
 
         /// <summary>
@@ -69,6 +159,28 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The runner image OS on hosted agents.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     var imageOs = BuildSystem.GitHubActions.Environment.Runner.ImageOS
+        ///         ?? BuildSystem.GitHubActions.Environment.Runner.OS;
+        ///     Information(@"Runner ImageOS: {0}", imageOs);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     var imageOs = GitHubActions.Environment.Runner.ImageOS
+        ///         ?? GitHubActions.Environment.Runner.OS;
+        ///     Information(@"Runner ImageOS: {0}", imageOs);
+        /// }
+        /// </code>
+        /// </example>
         public string ImageOS => GetEnvironmentString("ImageOS");
 
         /// <summary>
@@ -77,6 +189,24 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The runner image version on hosted agents.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner ImageVersion: {0}", BuildSystem.GitHubActions.Environment.Runner.ImageVersion);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner ImageVersion: {0}", GitHubActions.Environment.Runner.ImageVersion);
+        /// }
+        /// </code>
+        /// </example>
         public string ImageVersion => GetEnvironmentString("ImageVersion");
 
         /// <summary>
@@ -85,6 +215,24 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The runner user name.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner User: {0}", BuildSystem.GitHubActions.Environment.Runner.User);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner User: {0}", GitHubActions.Environment.Runner.User);
+        /// }
+        /// </code>
+        /// </example>
         public string User => GetEnvironmentString("RUNNER_USER");
 
         /// <summary>
@@ -93,6 +241,24 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         /// The runner architecture of the runner executing the job. Possible values are X86, X64, ARM, and ARM64.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Architecture: {0}", BuildSystem.GitHubActions.Environment.Runner.Architecture);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Architecture: {0}", GitHubActions.Environment.Runner.Architecture);
+        /// }
+        /// </code>
+        /// </example>
         public GitHubActionsArchitecture Architecture => GetEnvironmentString("RUNNER_ARCH")
                                                             ?.ToUpperInvariant() switch
                                                             {
@@ -101,6 +267,64 @@ namespace Cake.Common.Build.GitHubActions.Data
                                                                 "ARM" => GitHubActionsArchitecture.ARM,
                                                                 "ARM64" => GitHubActionsArchitecture.ARM64,
                                                                 _ => GitHubActionsArchitecture.Unknown
+                                                            };
+
+        /// <summary>
+        /// Gets a value indicating whether debug logging is enabled for the runner.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if debug logging is enabled; otherwise, <c>false</c>.
+        /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Debug: {0}", BuildSystem.GitHubActions.Environment.Runner.IsDebug);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Debug: {0}", GitHubActions.Environment.Runner.IsDebug);
+        /// }
+        /// </code>
+        /// </example>
+        public bool IsDebug => GetEnvironmentString("RUNNER_DEBUG") == "1";
+
+        /// <summary>
+        /// Gets the environment of the runner executing the job.
+        /// </summary>
+        /// <value>
+        /// The environment of the runner executing the job.
+        /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Environment: {0}", BuildSystem.GitHubActions.Environment.Runner.Environment);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"Runner Environment: {0}", GitHubActions.Environment.Runner.Environment);
+        /// }
+        /// </code>
+        /// </example>
+        public GitHubActionsRunnerEnvironment Environment => GetEnvironmentString("RUNNER_ENVIRONMENT")
+                                                            ?.ToLowerInvariant() switch
+                                                            {
+                                                                "github-hosted" => GitHubActionsRunnerEnvironment.GitHubHosted,
+                                                                "self-hosted" => GitHubActionsRunnerEnvironment.SelfHosted,
+                                                                _ => GitHubActionsRunnerEnvironment.Unknown
                                                             };
     }
 }

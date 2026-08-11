@@ -42,6 +42,22 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
             }
         }
 
+        public sealed class TheActionRepositoryProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.ActionRepository;
+
+                // Then
+                Assert.Equal("actions/checkout", result);
+            }
+        }
+
         public sealed class TheActorProperty
         {
             [Fact]
@@ -55,6 +71,22 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
 
                 // Then
                 Assert.Equal("dependabot", result);
+            }
+        }
+
+        public sealed class TheActorIdProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.ActorId;
+
+                // Then
+                Assert.Equal("1234567", result);
             }
         }
 
@@ -202,6 +234,22 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
             }
         }
 
+        public sealed class TheRepositoryIdProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.RepositoryId;
+
+                // Then
+                Assert.Equal("123456789", result);
+            }
+        }
+
         public sealed class TheRepositoryOwnerProperty
         {
             [Fact]
@@ -215,6 +263,38 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
 
                 // Then
                 Assert.Equal("cake-build", result);
+            }
+        }
+
+        public sealed class TheRepositoryOwnerIdProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.RepositoryOwnerId;
+
+                // Then
+                Assert.Equal("9876543", result);
+            }
+        }
+
+        public sealed class TheRetentionDaysProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.RetentionDays;
+
+                // Then
+                Assert.Equal(90, result);
             }
         }
 
@@ -282,6 +362,22 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
             }
         }
 
+        public sealed class TheTriggeringActorProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.TriggeringActor;
+
+                // Then
+                Assert.Equal("octocat", result);
+            }
+        }
+
         public sealed class TheWorkflowProperty
         {
             [Fact]
@@ -295,6 +391,38 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
 
                 // Then
                 Assert.Equal("Build", result);
+            }
+        }
+
+        public sealed class TheWorkflowRefProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.WorkflowRef;
+
+                // Then
+                Assert.Equal("cake-build/cake/.github/workflows/build.yml@refs/heads/main", result);
+            }
+        }
+
+        public sealed class TheWorkflowShaProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateWorkflowInfo();
+
+                // When
+                var result = info.WorkflowSha;
+
+                // Then
+                Assert.Equal("a1b2c3d4e5f6789012345678901234567890abcd", result);
             }
         }
 

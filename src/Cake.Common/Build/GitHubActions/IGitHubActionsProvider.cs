@@ -18,6 +18,32 @@ namespace Cake.Common.Build.GitHubActions
         /// <value>
         /// <c>true</c> if the current build is running on GitHub Actions; otherwise, <c>false</c>.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information("Running on GitHub Actions");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitHub Actions");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.Debug("Running on GitHub Actions");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitHub Actions");
+        /// }
+        /// </code>
+        /// </example>
         bool IsRunningOnGitHubActions { get; }
 
         /// <summary>
@@ -26,6 +52,60 @@ namespace Cake.Common.Build.GitHubActions
         /// <value>
         /// The GitHub Actions environment.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(
+        ///         @"Workflow:
+        ///         Workflow: {0}
+        ///         Repository: {1}
+        ///         Actor: {2}
+        ///         Runner OS: {3}
+        ///         Runner Environment: {4}
+        ///         Runner Architecture: {5}",
+        ///         BuildSystem.GitHubActions.Environment.Workflow.Workflow,
+        ///         BuildSystem.GitHubActions.Environment.Workflow.Repository,
+        ///         BuildSystem.GitHubActions.Environment.Workflow.Actor,
+        ///         BuildSystem.GitHubActions.Environment.Runner.OS,
+        ///         BuildSystem.GitHubActions.Environment.Runner.Environment,
+        ///         BuildSystem.GitHubActions.Environment.Runner.Architecture
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitHub Actions");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(
+        ///         @"Workflow:
+        ///         Workflow: {0}
+        ///         Repository: {1}
+        ///         Actor: {2}
+        ///         Runner OS: {3}
+        ///         Runner Environment: {4}
+        ///         Runner Architecture: {5}",
+        ///         GitHubActions.Environment.Workflow.Workflow,
+        ///         GitHubActions.Environment.Workflow.Repository,
+        ///         GitHubActions.Environment.Workflow.Actor,
+        ///         GitHubActions.Environment.Runner.OS,
+        ///         GitHubActions.Environment.Runner.Environment,
+        ///         GitHubActions.Environment.Runner.Architecture
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitHub Actions");
+        /// }
+        /// </code>
+        /// </example>
         GitHubActionsEnvironmentInfo Environment { get; }
 
         /// <summary>
@@ -34,6 +114,42 @@ namespace Cake.Common.Build.GitHubActions
         /// <value>
         /// The GitHub Actions commands.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     BuildSystem.GitHubActions.Commands.Notice("Build started");
+        ///     BuildSystem.GitHubActions.Commands.SetOutputParameter(
+        ///         "cake_version",
+        ///         Context.Environment.Runtime.CakeVersion.ToString(3));
+        ///     BuildSystem.GitHubActions.Commands.SetStepSummary("## Cake Version\n" +
+        ///         Context.Environment.Runtime.CakeVersion.ToString(3));
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitHub Actions");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.Notice("Build started");
+        ///     GitHubActions.Commands.SetOutputParameter(
+        ///         "cake_version",
+        ///         Context.Environment.Runtime.CakeVersion.ToString(3));
+        ///     GitHubActions.Commands.SetStepSummary("## Cake Version\n" +
+        ///         Context.Environment.Runtime.CakeVersion.ToString(3));
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitHub Actions");
+        /// }
+        /// </code>
+        /// </example>
         public GitHubActionsCommands Commands { get; }
     }
 }

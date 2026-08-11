@@ -29,10 +29,10 @@ namespace Cake.Common.Tests.Fixtures.Tools
             Registry.LocalMachine.Returns(hklm);
         }
 
-        public void GivenToolIsInstalled(bool is64Bit, InnoSetupVersion version)
+        public void GivenToolIsInstalled(bool is64BitPlatform, bool is64Bit, InnoSetupVersion version)
         {
-            Environment.Platform.Is64Bit = is64Bit;
-            ConfigureInstalledLocation(is64Bit, version);
+            Environment.Platform.Is64Bit = is64BitPlatform;
+            ConfigureInstalledLocation(is64BitPlatform, is64Bit, version);
         }
 
         protected override void RunTool()
@@ -41,10 +41,12 @@ namespace Cake.Common.Tests.Fixtures.Tools
             tool.Run(ScriptPath, Settings);
         }
 
-        private void ConfigureInstalledLocation(bool is64Bit, InnoSetupVersion version)
+        private void ConfigureInstalledLocation(bool is64BitPlatform, bool is64Bit, InnoSetupVersion version)
         {
-            var registryKeyPath = GetRegistryKeyPath(is64Bit, version);
-            var installLocation = GetInstallLocation(is64Bit, version);
+            var useWow6432 = is64BitPlatform && !is64Bit;
+
+            var registryKeyPath = GetRegistryKeyPathForVersion(useWow6432, is64Bit, version);
+            var installLocation = GetInstallLocation(useWow6432, version);
 
             var installedToolPath = installLocation.CombineWithFilePath("iscc.exe");
             InstalledToolPaths.Add(version, installLocation.CombineWithFilePath("iscc.exe"));
@@ -58,25 +60,37 @@ namespace Cake.Common.Tests.Fixtures.Tools
             FileSystem.CreateFile(installedToolPath);
         }
 
-        private static string GetRegistryKeyPath(bool is64Bit, InnoSetupVersion version)
+        private static string GetRegistryKeyPathForVersion(bool useWow6432, bool is64Bit, InnoSetupVersion version)
         {
-            var softwareKeyPath = is64Bit ? @"SOFTWARE\Wow6432Node\" : @"SOFTWARE\";
             switch (version)
             {
+                case InnoSetupVersion.InnoSetup7 when !is64Bit:
+                    return GetRegistryKeyPath(useWow6432, "Inno Setup 7 (32-bit)_is1");
+                case InnoSetupVersion.InnoSetup7:
+                    return GetRegistryKeyPath(useWow6432, "Inno Setup 7_is1");
                 case InnoSetupVersion.InnoSetup6:
-                    return $@"{softwareKeyPath}Microsoft\Windows\CurrentVersion\Uninstall\Inno Setup 6_is1";
+                    return GetRegistryKeyPath(useWow6432, "Inno Setup 6_is1");
                 case InnoSetupVersion.InnoSetup5:
-                    return $@"{softwareKeyPath}Microsoft\Windows\CurrentVersion\Uninstall\Inno Setup 5_is1";
+                    return GetRegistryKeyPath(useWow6432, "Inno Setup 5_is1");
                 default:
                     return null;
             }
         }
 
-        private static DirectoryPath GetInstallLocation(bool is64Bit, InnoSetupVersion version)
+        private static string GetRegistryKeyPath(bool useWow6432, string relativePath)
         {
-            var programFiles = is64Bit ? "/Program Files (x86)/" : "/Program Files/";
+            // On 64-bit Windows, the registry key for Inno Setup (32-bit) will be accessible under Wow6432Node
+            var softwareKeyPath = useWow6432 ? @"SOFTWARE\Wow6432Node\" : @"SOFTWARE\";
+            return $@"{softwareKeyPath}Microsoft\Windows\CurrentVersion\Uninstall\{relativePath}";
+        }
+
+        private static DirectoryPath GetInstallLocation(bool useWow6432, InnoSetupVersion version)
+        {
+            var programFiles = useWow6432 ? "/Program Files (x86)/" : "/Program Files/";
             switch (version)
             {
+                case InnoSetupVersion.InnoSetup7:
+                    return $@"{programFiles}Inno Setup 7";
                 case InnoSetupVersion.InnoSetup6:
                     return $@"{programFiles}Inno Setup 6";
                 case InnoSetupVersion.InnoSetup5:
