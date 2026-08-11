@@ -132,9 +132,9 @@ namespace Cake.Common.Tools.DotCover
         /// <example>
         /// <code>
         /// DotCoverReport(new FilePath("./result.dcvr"),
-        ///   new FilePath("./result.html"),
+        ///   new FilePath("./result.xml"),
         ///   new DotCoverReportSettings {
-        ///     ReportType = DotCoverReportType.HTML
+        ///     ReportType = DotCoverReportType.XML
         ///   });
         /// </code>
         /// </example>
@@ -174,7 +174,7 @@ namespace Cake.Common.Tools.DotCover
         /// <code>
         /// DotCoverReport(new FilePath("./result.dcvr"),
         ///   new DotCoverReportSettings {
-        ///     ReportType = DotCoverReportType.HTML
+        ///     ReportType = DotCoverReportType.Xml
         ///   });
         /// </code>
         /// </example>
