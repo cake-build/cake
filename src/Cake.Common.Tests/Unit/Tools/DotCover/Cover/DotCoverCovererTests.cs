@@ -9,7 +9,10 @@ using Cake.Common.Tools.NUnit;
 using Cake.Common.Tools.XUnit;
 using Cake.Core.IO;
 using Cake.Testing;
+using NSubstitute;
 using Xunit;
+using LogLevel = Cake.Core.Diagnostics.LogLevel;
+using Verbosity = Cake.Core.Diagnostics.Verbosity;
 
 namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
 {
@@ -158,6 +161,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = fixture.Run();
 
                 // Then
+                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "Scope parameter is not supported in new DotCover format");
                 Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                              "--target-arguments \"-argument\" " +
                              "--snapshot-output \"/Working/result.dcvr\"", result.Args);
@@ -175,6 +179,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = fixture.Run();
 
                 // Then
+                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "Filters parameter is not supported in new DotCover format");
                 Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                              "--target-arguments \"-argument\" " +
                              "--snapshot-output \"/Working/result.dcvr\"", result.Args);
@@ -192,6 +197,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = fixture.Run();
 
                 // Then
+                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "AttributeFilters parameter is not supported in new DotCover format");
                 Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                              "--target-arguments \"-argument\" " +
                              "--snapshot-output \"/Working/result.dcvr\"", result.Args);
@@ -208,6 +214,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = fixture.Run();
 
                 // Then
+                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "DisableDefaultFilters parameter is not supported in new DotCover format");
                 Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                              "--target-arguments \"-argument\" " +
                              "--snapshot-output \"/Working/result.dcvr\"", result.Args);
@@ -225,6 +232,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 var result = fixture.Run();
 
                 // Then
+                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "ProcessFilters parameter is not supported in new DotCover format");
                 Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                              "--target-arguments \"-argument\" " +
                              "--snapshot-output \"/Working/result.dcvr\"", result.Args);

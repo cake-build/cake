@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -122,6 +123,31 @@ namespace Cake.Common.Tools.DotCover.Cover
                 if (settings.NoNGen)
                 {
                     builder.Append("--no-ngen");
+                }
+
+                if (settings.Filters is { Count: > 0 })
+                {
+                    context.Log.Warning("Filters parameter is not supported in new DotCover format");
+                }
+
+                if (settings.Scope is { Count: > 0 })
+                {
+                    context.Log.Warning("Scope parameter is not supported in new DotCover format");
+                }
+
+                if (settings.AttributeFilters is { Count: > 0 })
+                {
+                    context.Log.Warning("AttributeFilters parameter is not supported in new DotCover format");
+                }
+
+                if (settings.ProcessFilters is { Count: > 0 })
+                {
+                    context.Log.Warning("ProcessFilters parameter is not supported in new DotCover format");
+                }
+
+                if (settings.DisableDefaultFilters is true)
+                {
+                    context.Log.Warning("DisableDefaultFilters parameter is not supported in new DotCover format");
                 }
 
                 // Get base arguments - new format
