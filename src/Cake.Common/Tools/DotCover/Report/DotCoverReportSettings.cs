@@ -31,13 +31,13 @@ namespace Cake.Common.Tools.DotCover.Report
         public DotCoverReportScope? JsonReportCoveringTestsScope { get; set; }
 
         /// <summary>
-        /// Gets or sets the path to save a formatted JSON report.
+        /// Gets or sets the path to save a formatted XML report.
         /// This represents the <c>--xml-report-output</c> option.
         /// </summary>
         public FilePath XmlReportOutput { get; set; }
 
         /// <summary>
-        /// Gets or sets granularity for including covering tests in JSON reports: [none|assembly|type|method|statement]
+        /// Gets or sets granularity for including covering tests in XML reports: [none|assembly|type|method|statement]
         /// This represents the <c>--xml-report-covering-tests-scope</c> option.
         /// </summary>
         public DotCoverReportScope? XmlReportCoveringTestsScope { get; set; }

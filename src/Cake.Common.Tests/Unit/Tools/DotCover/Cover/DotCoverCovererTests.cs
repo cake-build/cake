@@ -90,7 +90,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
                 AssertEx.IsCakeException(result, "No tool was started.");
             }
 
-            #region New Paramter Syntax
+            #region New Parameter Syntax
 
             [Fact]
             public void Should_Capture_Tool_And_Arguments_From_Action()
@@ -542,7 +542,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover
 
             #endregion
 
-            #region Legacy Paramter Syntax
+            #region Legacy Parameter Syntax
 
             [Fact]
             public void Should_Capture_Tool_And_Arguments_From_Action_LegacySyntax()

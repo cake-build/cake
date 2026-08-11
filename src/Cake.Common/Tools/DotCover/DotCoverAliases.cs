@@ -273,5 +273,56 @@ namespace Cake.Common.Tools.DotCover
             // Run DotCover report.
             merger.Merge(sourceFiles, outputFile, settings);
         }
+
+        /// <summary>
+        /// Runs <see href="https://www.jetbrains.com/dotcover/help/dotCover__Console_Runner_Commands.html#merge">DotCover Merge</see>
+        /// for the specified action and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
+        /// <example>
+        /// <code>
+        /// DotCoverMerge(new[] {
+        ///     new FilePath("./result1.dcvr"),
+        ///     new FilePath("./result2.dcvr")
+        ///   });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Merge")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotCover.Merge")]
+        public static void DotCoverMerge(
+            this ICakeContext context,
+            IEnumerable<FilePath> sourceFiles)
+        {
+            DotCoverMerge(context, sourceFiles, new DotCoverMergeSettings());
+        }
+
+        /// <summary>
+        /// Runs <see href="https://www.jetbrains.com/dotcover/help/dotCover__Console_Runner_Commands.html#merge">DotCover Merge</see>
+        /// for the specified action and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// DotCoverMerge(new[] {
+        ///     new FilePath("./result1.dcvr"),
+        ///     new FilePath("./result2.dcvr")
+        ///   },
+        ///   new DotCoverMergeSettings());
+        /// </code>
+        /// </example>
+        public static void DotCoverMerge(
+            this ICakeContext context,
+            IEnumerable<FilePath> sourceFiles,
+            DotCoverMergeSettings settings)
+        {
+            var merger = new DotCoverMerger(
+                context.FileSystem, context.Environment,
+                context.ProcessRunner, context.Tools);
+            merger.Merge(sourceFiles, settings);
+        }
     }
 }
