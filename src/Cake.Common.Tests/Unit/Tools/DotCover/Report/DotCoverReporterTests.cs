@@ -59,6 +59,40 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Report
             }
 
             [Fact]
+            public void Should_Not_Ignore_Output_File_With_New_Syntax()
+            {
+                // Given
+                var fixture = new DotCoverReporterFixture();
+                fixture.OutputFile = "myoutputfile.xml";
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("report " +
+                             "--snapshot-source \"/Working/result.dcvr\" " +
+                             "--xml-report-output \"/Working/myoutputfile.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Not_Ignore_Output_File_With_New_Syntax_Json()
+            {
+                // Given
+                var fixture = new DotCoverReporterFixture();
+                fixture.OutputFile = "myoutputfile.json";
+                fixture.Settings.ReportType = DotCoverReportType.JSON;
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("report " +
+                             "--snapshot-source \"/Working/result.dcvr\" " +
+                             "--json-report-output \"/Working/myoutputfile.json\"", result.Args);
+            }
+
+
+            [Fact]
             public void Should_Append_JsonReportOutput()
             {
                 // Given

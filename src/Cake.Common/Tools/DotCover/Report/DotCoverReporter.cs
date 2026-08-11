@@ -51,6 +51,23 @@ namespace Cake.Common.Tools.DotCover.Report
                 ArgumentNullException.ThrowIfNull(outputFile);
             }
 
+            if (!settings.UseLegacySyntax && outputFile != null)
+            {
+                // map outputFile to new syntax parameters. Otherwise input is ignored
+                switch (settings.ReportType)
+                {
+                    case DotCoverReportType.XML:
+                        settings.XmlReportOutput = outputFile;
+                        break;
+                    case DotCoverReportType.JSON:
+                        settings.JsonReportOutput = outputFile;
+                        break;
+                    default:
+                        settings.XmlReportOutput = outputFile;
+                        break;
+                }
+            }
+
             // Run the tool.
             Run(settings, GetArguments(sourceFile, settings, outputFile));
         }
