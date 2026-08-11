@@ -33,7 +33,7 @@ public sealed class DotCoverReporter : DotCoverTool<DotCoverReportSettings>
     }
 
     /// <summary>
-    /// Runs DotCover Cover with the specified settings.
+    /// Runs DotCover Report with the specified settings.
     /// </summary>
     /// <param name="sourceFile">The DotCover coverage snapshot file name.</param>
     /// <param name="outputFile">The DotCover output file.</param>
@@ -73,7 +73,7 @@ public sealed class DotCoverReporter : DotCoverTool<DotCoverReportSettings>
     }
 
     /// <summary>
-    /// Runs DotCover Cover with the specified settings.
+    /// Runs DotCover Report with the specified settings.
     /// </summary>
     /// <param name="sourceFile">The DotCover coverage snapshot file name.</param>
     /// <param name="settings">The settings.</param>

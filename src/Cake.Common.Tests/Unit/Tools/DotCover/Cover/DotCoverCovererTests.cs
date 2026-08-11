@@ -91,9 +91,8 @@ public sealed class DotCoverCovererTests
             AssertEx.IsCakeException(result, "No tool was started.");
         }
 
-        #region New Paramter Syntax
+        #region New Parameter Syntax
 
-          
         [Fact]
         public void Should_Capture_Tool_And_Arguments_From_Action()
         {
@@ -162,12 +161,12 @@ public sealed class DotCoverCovererTests
             // When
             var result = fixture.Run();
 
-                // Then
-                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "Scope parameter is not supported in new DotCover format");
-                Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
-                             "--target-arguments \"-argument\" " +
-                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
-            }
+            // Then
+            fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "Scope parameter is not supported in new DotCover format");
+            Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
+                         "--target-arguments \"-argument\" " +
+                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
+        }
 
         [Fact]
         public void Should_Not_Append_Filters()
@@ -180,12 +179,12 @@ public sealed class DotCoverCovererTests
             // When
             var result = fixture.Run();
 
-                // Then
-                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "Filters parameter is not supported in new DotCover format");
-                Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
-                             "--target-arguments \"-argument\" " +
-                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
-            }
+            // Then
+            fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "Filters parameter is not supported in new DotCover format");
+            Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
+                         "--target-arguments \"-argument\" " +
+                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
+        }
 
         [Fact]
         public void Should_Not_Append_AttributeFilters()
@@ -198,12 +197,12 @@ public sealed class DotCoverCovererTests
             // When
             var result = fixture.Run();
 
-                // Then
-                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "AttributeFilters parameter is not supported in new DotCover format");
-                Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
-                             "--target-arguments \"-argument\" " +
-                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
-            }
+            // Then
+            fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "AttributeFilters parameter is not supported in new DotCover format");
+            Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
+                         "--target-arguments \"-argument\" " +
+                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
+        }
 
         [Fact]
         public void Should_Not_Append_DisableDefaultFilters()
@@ -215,12 +214,12 @@ public sealed class DotCoverCovererTests
             // When
             var result = fixture.Run();
 
-                // Then
-                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "DisableDefaultFilters parameter is not supported in new DotCover format");
-                Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
-                             "--target-arguments \"-argument\" " +
-                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
-            }
+            // Then
+            fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "DisableDefaultFilters parameter is not supported in new DotCover format");
+            Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
+                         "--target-arguments \"-argument\" " +
+                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
+        }
 
         [Fact]
         public void Should_Not_Append_ProcessFilters()
@@ -233,12 +232,12 @@ public sealed class DotCoverCovererTests
             // When
             var result = fixture.Run();
 
-                // Then
-                fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "ProcessFilters parameter is not supported in new DotCover format");
-                Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
-                             "--target-arguments \"-argument\" " +
-                             "--snapshot-output \"/Working/result.dcvr\"", result.Args);
-            }
+            // Then
+            fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "ProcessFilters parameter is not supported in new DotCover format");
+            Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
+                         "--target-arguments \"-argument\" " +
+                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
+        }
 
         [Fact]
         public void Should_Capture_XUnit()
@@ -274,8 +273,8 @@ public sealed class DotCoverCovererTests
                     new ProcessSettings
                     {
                         Arguments = new ProcessArgumentBuilder()
-                            .AppendQuoted("/Working/A.dll")
-                            .AppendQuoted("/Working/B.dll")
+                                    .AppendQuoted("/Working/A.dll")
+                                    .AppendQuoted("/Working/B.dll")
                     });
             };
 
@@ -350,7 +349,7 @@ public sealed class DotCoverCovererTests
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithExcludeAttribute("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute")
-                .WithExcludeAttribute("Custom.*Attribute");
+                   .WithExcludeAttribute("Custom.*Attribute");
 
             // When
             var result = fixture.Run();
@@ -368,7 +367,7 @@ public sealed class DotCoverCovererTests
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithExcludeProcess("test.exe")
-                .WithExcludeProcess("*.vshost.exe");
+                   .WithExcludeProcess("*.vshost.exe");
 
             // When
             var result = fixture.Run();
@@ -537,8 +536,8 @@ public sealed class DotCoverCovererTests
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithLegacySyntax()
-                .WithJsonReportOutput(new FilePath("/Working/report.json"))
-                .WithExcludeAssembly("*.Tests");
+                   .WithJsonReportOutput(new FilePath("/Working/report.json"))
+                   .WithExcludeAssembly("*.Tests");
 
             // When
             var result = fixture.Run();
@@ -557,7 +556,7 @@ public sealed class DotCoverCovererTests
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithJsonReportOutput(new FilePath("/Working/report.json"))
-                .WithExcludeAssembly("*.Tests");
+                   .WithExcludeAssembly("*.Tests");
 
             // When
             var result = fixture.Run();
@@ -570,7 +569,7 @@ public sealed class DotCoverCovererTests
 
         #endregion
 
-        #region Legacy Paramter Syntax
+        #region Legacy Parameter Syntax
 
         [Fact]
         public void Should_Capture_Tool_And_Arguments_From_Action_LegacySyntax()
@@ -791,4 +790,3 @@ public sealed class DotCoverCovererTests
         #endregion
     }
 }
-
