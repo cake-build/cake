@@ -1,9 +1,0 @@
-image: cakebuild/cake:sdk-7.0
-stages:
-- build
-
-build_job:
-  stage: build
-  script:
-  - git fetch --unshallow || true
-  - ./build.sh --target="Run-Unit-Tests"

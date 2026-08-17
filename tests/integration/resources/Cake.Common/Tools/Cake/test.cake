@@ -1,1 +1,0 @@
-System.Environment.Exit((Argument<string>("ok", "no")=="yes") ? 0 : 1);

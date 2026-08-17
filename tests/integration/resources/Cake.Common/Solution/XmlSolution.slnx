@@ -1,4 +1,0 @@
-<Solution>
-  <Project Path="Project/Project.csproj" />
-  <Project Path="ReferenceProject/ReferenceProject.csproj" />
-</Solution>

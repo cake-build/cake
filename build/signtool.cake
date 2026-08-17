@@ -1,1 +1,0 @@
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=sign&version=0.9.1-beta.26102.1&prerelease"

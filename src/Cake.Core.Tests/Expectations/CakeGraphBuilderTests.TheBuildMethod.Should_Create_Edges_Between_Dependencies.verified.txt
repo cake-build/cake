@@ -1,4 +1,0 @@
-﻿{
-  Start: A,
-  End: B
-}

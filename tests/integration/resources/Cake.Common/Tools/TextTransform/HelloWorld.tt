@@ -1,3 +1,0 @@
-<#@ parameter name='FirstName' #>
-<#@ parameter name='LastName' #>
-Hello <#=FirstName#> <#=LastName#>!
