@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
-    <PackageVersion Include="Autofac" Version="9.3.1" />
+    <PackageVersion Include="Autofac" Version="9.3.2" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.9" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.9" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.9" />
