@@ -132,9 +132,9 @@ namespace Cake.Common.Tools.DotCover
         /// <example>
         /// <code>
         /// DotCoverReport(new FilePath("./result.dcvr"),
-        ///   new FilePath("./result.html"),
+        ///   new FilePath("./result.xml"),
         ///   new DotCoverReportSettings {
-        ///     ReportType = DotCoverReportType.HTML
+        ///     ReportType = DotCoverReportType.XML
         ///   });
         /// </code>
         /// </example>
@@ -161,6 +161,45 @@ namespace Cake.Common.Tools.DotCover
 
             // Run DotCover report.
             reporter.Report(sourceFile, outputFile, settings);
+        }
+
+        /// <summary>
+        /// Runs <see href="https://www.jetbrains.com/dotcover/help/dotCover__Console_Runner_Commands.html#report">DotCover Report</see>
+        /// for the specified action and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="sourceFile">The DotCover coverage snapshot file name.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// DotCoverReport(new FilePath("./result.dcvr"),
+        ///   new DotCoverReportSettings {
+        ///     ReportType = DotCoverReportType.Xml
+        ///   });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Report")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotCover.Report")]
+        public static void DotCoverReport(
+            this ICakeContext context,
+            FilePath sourceFile,
+            DotCoverReportSettings settings)
+        {
+            ArgumentNullException.ThrowIfNull(context);
+
+            if (settings == null)
+            {
+                settings = new DotCoverReportSettings();
+            }
+
+            // Create the DotCover reporter.
+            var reporter = new DotCoverReporter(
+                context.FileSystem, context.Environment,
+                context.ProcessRunner, context.Tools);
+
+            // Run DotCover report.
+            reporter.Report(sourceFile, settings);
         }
 
         /// <summary>
@@ -233,6 +272,57 @@ namespace Cake.Common.Tools.DotCover
 
             // Run DotCover report.
             merger.Merge(sourceFiles, outputFile, settings);
+        }
+
+        /// <summary>
+        /// Runs <see href="https://www.jetbrains.com/dotcover/help/dotCover__Console_Runner_Commands.html#merge">DotCover Merge</see>
+        /// for the specified action and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
+        /// <example>
+        /// <code>
+        /// DotCoverMerge(new[] {
+        ///     new FilePath("./result1.dcvr"),
+        ///     new FilePath("./result2.dcvr")
+        ///   });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Merge")]
+        [CakeNamespaceImport("Cake.Common.Tools.DotCover.Merge")]
+        public static void DotCoverMerge(
+            this ICakeContext context,
+            IEnumerable<FilePath> sourceFiles)
+        {
+            DotCoverMerge(context, sourceFiles, new DotCoverMergeSettings());
+        }
+
+        /// <summary>
+        /// Runs <see href="https://www.jetbrains.com/dotcover/help/dotCover__Console_Runner_Commands.html#merge">DotCover Merge</see>
+        /// for the specified action and settings.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
+        /// <param name="settings">The settings.</param>
+        /// <example>
+        /// <code>
+        /// DotCoverMerge(new[] {
+        ///     new FilePath("./result1.dcvr"),
+        ///     new FilePath("./result2.dcvr")
+        ///   },
+        ///   new DotCoverMergeSettings());
+        /// </code>
+        /// </example>
+        public static void DotCoverMerge(
+            this ICakeContext context,
+            IEnumerable<FilePath> sourceFiles,
+            DotCoverMergeSettings settings)
+        {
+            var merger = new DotCoverMerger(
+                context.FileSystem, context.Environment,
+                context.ProcessRunner, context.Tools);
+            merger.Merge(sourceFiles, settings);
         }
     }
 }
