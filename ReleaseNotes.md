@@ -1,3 +1,38 @@
+### New in 6.3.0 (Released 2026/09/14)
+
+* #4991 Add support for verbosity via configuration.
+* #4945 Add GitHub Actions NuGetLogin for OIDC trusted publishing.
+* #4890 Add typed Cake aliases for dotnet tool subcommands.
+* #4979 Update Microsoft.IdentityModel.JsonWebTokens to 8.22.0.
+* #4976 Update Microsoft.Extensions.DependencyInjection to 9.0.20 (net9.0) & 10.0.12 (net10.0).
+* #4968 Update Microsoft.CodeAnalysis.CSharp.Scripting ro 5.9.0.
+* #4966 Update Basic.Reference.Assemblies.* to 1.8.11.
+* #4964 Update Autofac to 9.3.2.
+* #4958 Update NuGet.* to 7.9.0.
+* #4956 Update .NET SDK to 10.0.401.
+* #4931 Update Spectre.Console to 0.57.2.
+* #4929 Update System.Security.Cryptography.Pkcs to 9.0.18 (net9.0) & 10.0.10 (net10.0).
+* #4925 Update Microsoft.CodeAnalysis.CSharp.Scripting to 5.6.0.
+* #4923 Update Autofac to 9.3.1.
+* #4921 Update Microsoft.Extensions.DependencyInjection to 9.0.18 (net9.0) & 10.0.10 (net10.0).
+* #4919 Update Microsoft.IdentityModel.JsonWebTokens to 8.19.2.
+* #4917 Update .NET SDK to 10.0.302.
+* #4916 Add format command support to IAzurePipelinesCommands.
+* #4909 Update Spectre.Console to 0.57.1.
+* #4904 Update Basic.Reference.Assemblies.* to 1.8.9.
+* #4902 Update Autofac to 9.3.0.
+* #4900 Add support for Inno Setup 7.
+* #4897 Update Autofac to 9.2.0.
+* #4893 Update Spectre.Console to 0.57.0.
+* #4891 Add missing GitHub Actions default environment variables to GitHubActions provider.
+* #4888 Update System.Security.Cryptography.Pkcs to 9.0.17 (net9.0) & 10.0.9 (net10.0).
+* #4882 Update Microsoft.Extensions.DependencyInjection to 9.0.17 (net9.0) & 10.0.9 (net10.0).
+* #4876 Update Spectre.Console to 0.56.0.
+* #4867 Update Microsoft.IdentityModel.JsonWebTokens to 8.19.1.
+* #4985 CakeExecuteScript/CakeExecuteExpression silently ignore several CakeSettings when running via Cake.Tool.
+* #4977 CS8632 when Cake.Tool generates aliases from nullable-enabled addins.
+* #4870 Report table rendering breaks in terminals without a black background.
+
 ### New in 6.2.0 (Released 2026/05/22)
 
 * #4840 Add RWX as a build provider.
