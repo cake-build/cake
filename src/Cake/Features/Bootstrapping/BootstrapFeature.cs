@@ -34,6 +34,7 @@ namespace Cake.Features.Bootstrapping
     public sealed class BootstrapFeature : Feature, IBootstrapFeature
     {
         private readonly ICakeEnvironment _environment;
+        private readonly ICakeLog _log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BootstrapFeature"/> class.
@@ -41,12 +42,15 @@ namespace Cake.Features.Bootstrapping
         /// <param name="fileSystem">The file system.</param>
         /// <param name="environment">The Cake environment.</param>
         /// <param name="configurator">The container configurator.</param>
+        /// <param name="log">The log.</param>
         public BootstrapFeature(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
-            IContainerConfigurator configurator) : base(fileSystem, environment, configurator)
+            IContainerConfigurator configurator,
+            ICakeLog log) : base(fileSystem, environment, configurator)
         {
             _environment = environment;
+            _log = log;
         }
 
         /// <summary>
@@ -64,6 +68,10 @@ namespace Cake.Features.Bootstrapping
             // Read the configuration.
             var configuration = ReadConfiguration(arguments, settings.Script.GetDirectory());
 
+            // Set log verbosity.
+            var verbosity = configuration.GetVerbosity(settings.Verbosity);
+            _log.Verbosity = verbosity;
+
             // Create the scope where we will perform the bootstrapping.
             using (var scope = CreateScope(configuration, arguments))
             {
@@ -72,7 +80,7 @@ namespace Cake.Features.Bootstrapping
 
                 // Set log verbosity for log in new scope.
                 var log = scope.Resolve<ICakeLog>();
-                log.Verbosity = settings.Verbosity;
+                log.Verbosity = verbosity;
 
                 // Get the root directory.
                 var root = settings.Script.GetDirectory();

@@ -47,12 +47,12 @@ namespace Cake.Commands
 
         /// <summary>
         /// Gets or sets the verbosity level for logging.
+        /// When omitted, the verbosity is taken from configuration, defaulting to <see cref="Verbosity.Normal"/>.
         /// </summary>
         [CommandOption("--verbosity|-v <VERBOSITY>")]
-        [Description("Specifies the amount of information to be displayed.\n(Quiet, Minimal, Normal, Verbose, Diagnostic)")]
+        [Description("Specifies the amount of information to be displayed.\n(Quiet, Minimal, Normal, Verbose, Diagnostic).\nWhen omitted, taken from configuration (defaults to Normal).")]
         [TypeConverter(typeof(VerbosityConverter))]
-        [DefaultValue(Verbosity.Normal)]
-        public Verbosity Verbosity { get; set; }
+        public Verbosity? Verbosity { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show descriptions for each task.

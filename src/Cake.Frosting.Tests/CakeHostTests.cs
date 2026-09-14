@@ -49,6 +49,56 @@ namespace Cake.Frosting.Tests
         }
 
         [Fact]
+        public void Should_Set_Command_Line_Verbosity_Before_Setting_Working_Directory()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.Host.UseWorkingDirectory("./Foo");
+
+            // When
+            var result = fixture.Run("--target", "dummytask", "--verbosity", "diagnostic");
+
+            // Then
+            Assert.Equal(-1, result);
+            Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
+        }
+
+        [Fact]
+        public void Should_Read_Verbosity_From_Cake_Config_In_Working_Directory()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.FileSystem.CreateDirectory("/Working/Foo");
+            fixture.FileSystem.CreateFile("/Working/Foo/cake.config").SetContent("[Settings]\nVerbosity=Diagnostic");
+            fixture.Host.UseWorkingDirectory("./Foo");
+
+            // When
+            fixture.Run("--target", "dummytask");
+
+            // Then
+            Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
+        }
+
+        [Fact]
+        public void Should_Not_Read_Verbosity_From_Cake_Config_Outside_Working_Directory()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.FileSystem.CreateDirectory("/Working/Foo");
+            fixture.FileSystem.CreateFile("/Working/cake.config").SetContent("[Settings]\nVerbosity=Diagnostic");
+            fixture.Host.UseWorkingDirectory("./Foo");
+
+            // When
+            fixture.Run("--target", "dummytask");
+
+            // Then
+            Assert.Equal(Verbosity.Normal, fixture.Log.Verbosity);
+        }
+
+        [Fact]
         public void Should_Call_Setup_On_Registered_Setup_Lifetime()
         {
             // Given
@@ -357,6 +407,51 @@ namespace Cake.Frosting.Tests
                 fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task1), Arg.Any<ICakeContext>());
                 fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task2), Arg.Any<ICakeContext>());
             });
+        }
+
+        [Fact]
+        public void Should_Use_Verbosity_From_Environment_When_Not_Specified()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+            // When
+            fixture.Run("--target", "dummytask");
+
+            // Then
+            Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
+        }
+
+        [Fact]
+        public void Should_Prefer_Command_Line_Verbosity_Over_Environment()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+            // When
+            fixture.Run("--target", "dummytask", "--verbosity", "quiet");
+
+            // Then
+            Assert.Equal(Verbosity.Quiet, fixture.Log.Verbosity);
+        }
+
+        [Fact]
+        public void Should_Prefer_Explicit_Normal_Verbosity_Over_Environment()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+            // When
+            fixture.Run("--target", "dummytask", "--verbosity", "normal");
+
+            // Then
+            Assert.Equal(Verbosity.Normal, fixture.Log.Verbosity);
         }
     }
 }
