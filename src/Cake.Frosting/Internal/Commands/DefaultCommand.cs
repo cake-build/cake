@@ -7,6 +7,7 @@ using System.Linq;
 using Cake.Cli;
 using Cake.Cli.Infrastructure;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
@@ -50,12 +51,17 @@ namespace Cake.Frosting.Internal
                     return 0;
                 }
 
-                // Set the log verbosity
+                // Set the log verbosity from the command line so that failures
+                // while setting the working directory are logged accordingly.
                 var log = provider.GetRequiredService<ICakeLog>();
-                log.Verbosity = settings.Verbosity;
+                log.Verbosity = settings.Verbosity ?? Verbosity.Normal;
 
                 // Set the working directory
                 SetWorkingDirectory(provider, settings);
+
+                // Set the log verbosity, now that configuration can be read from the working directory
+                var configuration = provider.GetRequiredService<ICakeConfiguration>();
+                log.Verbosity = configuration.GetVerbosity(settings.Verbosity);
 
                 // Run
                 var runner = GetFrostingEngine(provider, settings);

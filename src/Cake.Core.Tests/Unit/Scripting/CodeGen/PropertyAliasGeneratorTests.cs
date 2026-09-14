@@ -116,6 +116,7 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [Theory]
             [InlineData("NonCached_Value_Type")]
             [InlineData("NonCached_Dynamic_Type")]
+            [InlineData("NonCached_NotNull_Type")]
             public Task Should_Return_Correct_Generated_Code_For_Non_Cached_Properties(string name)
             {
                 // Given / When

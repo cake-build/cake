@@ -5,7 +5,6 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -49,9 +48,10 @@ namespace Cake.Core.Scripting.CodeGen
             var attribute = method.GetCustomAttribute<CakePropertyAliasAttribute>();
 
             // Generate code.
-            return attribute.Cache
+            var code = attribute.Cache
                 ? GenerateCachedCode(method, out hash)
                     : GenerateCode(method, out hash);
+            return NullableAnnotationContext.WrapIfRequired(method, code);
         }
 
         private static void ValidateMethod(MethodInfo method)
@@ -218,11 +218,7 @@ namespace Cake.Core.Scripting.CodeGen
 
         private static string GetReturnType(MethodInfo method)
         {
-            var isDynamic = method.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(DynamicAttribute), true).Any();
-            var isNullable = method.ReturnTypeCustomAttributes.GetCustomAttributes(true).Any(attr => attr.GetType().FullName == "System.Runtime.CompilerServices.NullableAttribute");
-            return string.Concat(
-                isDynamic ? "dynamic" : method.ReturnType.GetFullName(),
-                isNullable ? "?" : string.Empty);
+            return NullableAnnotationContext.FormatReturn(method);
         }
     }
 }

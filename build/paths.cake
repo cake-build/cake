@@ -40,7 +40,7 @@ public record BuildPaths(
             integrationTestsBinTool);
 
         FilePath signClientPath = null;
-        if (context.IsRunningOnWindows())
+        if (context.IsRunningOnWindows() && context.GitHubActions().IsRunningOnGitHubActions)
         {
             signClientPath = context.Tools.Resolve("sign.exe");
 

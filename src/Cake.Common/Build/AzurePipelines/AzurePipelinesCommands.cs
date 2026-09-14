@@ -82,6 +82,12 @@ namespace Cake.Common.Build.AzurePipelines
         }
 
         /// <inheritdoc/>
+        public void Command(string commandLine)
+        {
+            WriteFormatCommand("command", commandLine);
+        }
+
+        /// <inheritdoc/>
         public void Section(string name)
         {
             WriteFormatCommand("section", name);

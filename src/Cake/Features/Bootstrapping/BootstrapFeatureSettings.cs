@@ -19,7 +19,8 @@ namespace Cake.Features.Bootstrapping
 
         /// <summary>
         /// Gets or sets the verbosity level.
+        /// When unset, verbosity is taken from configuration (environment, cake.config, remaining arguments).
         /// </summary>
-        public Verbosity Verbosity { get; set; }
+        public Verbosity? Verbosity { get; set; }
     }
 }

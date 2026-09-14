@@ -98,30 +98,50 @@ namespace Cake.Common.Tools.InnoSetup
         {
             if (version != null)
             {
-                return new[] { GetRegistryKeyPathForVersion(version.Value) };
+                return GetRegistryKeyPathsForVersion(version.Value);
             }
 
             var versionsToConsider = new[]
             {
+                InnoSetupVersion.InnoSetup7,
                 InnoSetupVersion.InnoSetup6,
                 InnoSetupVersion.InnoSetup5
             };
-            return versionsToConsider.Select(GetRegistryKeyPathForVersion);
+
+            return versionsToConsider.SelectMany(GetRegistryKeyPathsForVersion);
         }
 
-        private string GetRegistryKeyPathForVersion(InnoSetupVersion version)
+        private static IEnumerable<string> GetRegistryKeyPathsForVersion(InnoSetupVersion version)
         {
-            // On 64-bit Windows, the registry key for Inno Setup will be accessible under Wow6432Node
-            var softwareKeyPath = _environment.Platform.Is64Bit ? @"SOFTWARE\Wow6432Node\" : @"SOFTWARE\";
+            foreach (var keyName in GetRegistryKeyNamesForVersion(version))
+            {
+                // Inno Setup (64-bit) on 64-bit Windows and/or Inno Setup (32-bit) on 32-bit Windows.
+                yield return GetRegistryKeyPath(false, keyName);
+                // Inno Setup (32-bit) on 64-bit Windows.
+                yield return GetRegistryKeyPath(true, keyName);
+            }
+        }
+
+        private static string[] GetRegistryKeyNamesForVersion(InnoSetupVersion version)
+        {
             switch (version)
             {
+                case InnoSetupVersion.InnoSetup7:
+                    return new[] { "Inno Setup 7_is1", "Inno Setup 7 (32-bit)_is1", };
                 case InnoSetupVersion.InnoSetup6:
-                    return $@"{softwareKeyPath}Microsoft\Windows\CurrentVersion\Uninstall\Inno Setup 6_is1";
+                    return new[] { "Inno Setup 6_is1", };
                 case InnoSetupVersion.InnoSetup5:
-                    return $@"{softwareKeyPath}Microsoft\Windows\CurrentVersion\Uninstall\Inno Setup 5_is1";
+                    return new[] { "Inno Setup 5_is1", };
                 default:
                     throw new ArgumentOutOfRangeException(nameof(version), version, "Missing switch case");
             }
+        }
+
+        private static string GetRegistryKeyPath(bool useWow6432, string relativePath)
+        {
+            // On 64-bit Windows, the registry key for Inno Setup (32-bit) will be accessible under Wow6432Node
+            var softwareKeyPath = useWow6432 ? @"SOFTWARE\Wow6432Node\" : @"SOFTWARE\";
+            return $@"{softwareKeyPath}Microsoft\Windows\CurrentVersion\Uninstall\{relativePath}";
         }
 
         private ProcessArgumentBuilder GetArguments(FilePath scriptFile, InnoSetupSettings settings)

@@ -26,6 +26,24 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <value>
         ///   <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"IsPullRequest: {0}", BuildSystem.GitHubActions.Environment.PullRequest.IsPullRequest);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitHubActions.</para>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(@"IsPullRequest: {0}", GitHubActions.Environment.PullRequest.IsPullRequest);
+        /// }
+        /// </code>
+        /// </example>
         public bool IsPullRequest => GetEnvironmentString("GITHUB_EVENT_NAME") == "pull_request";
     }
 }

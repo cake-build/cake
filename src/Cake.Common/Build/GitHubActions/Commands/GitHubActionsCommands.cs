@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Cake.Common.Build.GitHubActions.Commands.Artifact;
+using Cake.Common.Build.GitHubActions.Commands.NuGet;
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Core;
 using Cake.Core.IO;
@@ -25,6 +27,7 @@ namespace Cake.Common.Build.GitHubActions.Commands
         private readonly IBuildSystemServiceMessageWriter _writer;
         private readonly GitHubActionsEnvironmentInfo _actionsEnvironment;
         private readonly GitHubActionsArtifactService _artifactsService;
+        private readonly GitHubNuGetLoginService _nuGetLoginService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GitHubActionsCommands"/> class.
@@ -47,13 +50,23 @@ namespace Cake.Common.Build.GitHubActions.Commands
             _actionsEnvironment = actionsEnvironment ?? throw new ArgumentNullException(nameof(actionsEnvironment));
             // Internal service class, keeping public API unchanged,
             // introduced in pr https://github.com/cake-build/cake/pull/4350
-            _artifactsService = new GitHubActionsArtifactService(environment, fileSystem, actionsEnvironment, createHttpClient ?? throw new ArgumentNullException(nameof(createHttpClient)));
+            var createClient = createHttpClient ?? throw new ArgumentNullException(nameof(createHttpClient));
+            _artifactsService = new GitHubActionsArtifactService(environment, fileSystem, actionsEnvironment, createClient);
+            _nuGetLoginService = new GitHubNuGetLoginService(environment, createClient, SetSecret);
         }
 
         /// <summary>
         /// Write debug message to the build log.
         /// </summary>
         /// <param name="message">The message.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.Debug("This is a debug message");
+        /// }
+        /// </code>
+        /// </example>
         public void Debug(string message)
         {
             WriteCommand("debug", message);
@@ -64,6 +77,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="annotation">The annotation.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.Notice("This is a notice message");
+        /// }
+        /// </code>
+        /// </example>
         public void Notice(string message, GitHubActionsAnnotation annotation = null)
         {
             WriteCommand("notice", annotation?.GetParameters(), message);
@@ -74,6 +95,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="annotation">The annotation.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.Warning("This is a warning message");
+        /// }
+        /// </code>
+        /// </example>
         public void Warning(string message, GitHubActionsAnnotation annotation = null)
         {
             WriteCommand("warning", annotation?.GetParameters(), message);
@@ -84,6 +113,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="annotation">The annotation.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.Error("This is an error message");
+        /// }
+        /// </code>
+        /// </example>
         public void Error(string message, GitHubActionsAnnotation annotation = null)
         {
             WriteCommand("error", annotation?.GetParameters(), message);
@@ -93,6 +130,16 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// Start a group in the build log.
         /// </summary>
         /// <param name="title">The title.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.StartGroup("Cake group");
+        ///     Information("This is inside a group");
+        ///     GitHubActions.Commands.EndGroup();
+        /// }
+        /// </code>
+        /// </example>
         public void StartGroup(string title)
         {
             WriteCommand("group", title);
@@ -101,6 +148,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <summary>
         /// End a group in the build log.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.EndGroup();
+        /// }
+        /// </code>
+        /// </example>
         public void EndGroup()
         {
             WriteCommand("endgroup");
@@ -110,6 +165,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// Registers a secret which will get masked in the build log.
         /// </summary>
         /// <param name="secret">The secret.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.SetSecret(Guid.NewGuid().ToString());
+        /// }
+        /// </code>
+        /// </example>
         public void SetSecret(string secret)
         {
             WriteCommand("add-mask", secret);
@@ -119,6 +182,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// Prepends a directory to the system PATH variable and automatically makes it available to all subsequent actions in the current job.
         /// </summary>
         /// <param name="path">The directory path.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.AddPath(toolsPath);
+        /// }
+        /// </code>
+        /// </example>
         public void AddPath(DirectoryPath path)
         {
             ArgumentNullException.ThrowIfNull(path);
@@ -139,6 +210,16 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="value">The Value.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.SetEnvironmentVariable(
+        ///         "CAKE_VERSION",
+        ///         Context.Environment.Runtime.CakeVersion.ToString(3));
+        /// }
+        /// </code>
+        /// </example>
         public void SetEnvironmentVariable(string key, string value)
         {
             if (string.IsNullOrEmpty(key))
@@ -167,6 +248,20 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="value">The Value.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.SetOutputParameter(
+        ///         "CAKE_VERSION_OS",
+        ///         string.Join(
+        ///             '_',
+        ///             Context.Environment.Runtime.CakeVersion.ToString(3),
+        ///             GitHubActions.Environment.Runner.OS,
+        ///             GitHubActions.Environment.Runner.Architecture));
+        /// }
+        /// </code>
+        /// </example>
         public void SetOutputParameter(string key, string value)
         {
             if (string.IsNullOrEmpty(key))
@@ -193,6 +288,15 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// Creates or updates the step summary for a GitHub workflow.
         /// </summary>
         /// <param name="summary">The step summary.</param>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     GitHubActions.Commands.SetStepSummary(
+        ///         $"## Cake Version\n{Context.Environment.Runtime.CakeVersion.ToString(3)}");
+        /// }
+        /// </code>
+        /// </example>
         public void SetStepSummary(string summary)
         {
             if (string.IsNullOrEmpty(summary))
@@ -217,6 +321,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <param name="path">Path to the local file.</param>
         /// <param name="artifactName">The artifact name.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     await GitHubActions.Commands.UploadArtifact(artifactPath, "my-artifact");
+        /// }
+        /// </code>
+        /// </example>
         public async Task UploadArtifact(FilePath path, string artifactName)
         {
             var file = _fileSystem.GetFile(ValidateArtifactParameters(path, artifactName));
@@ -235,6 +347,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <param name="path">Path to the local directory.</param>
         /// <param name="artifactName">The artifact name.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     await GitHubActions.Commands.UploadArtifact(artifactDirectory, "my-artifact");
+        /// }
+        /// </code>
+        /// </example>
         public async Task UploadArtifact(DirectoryPath path, string artifactName)
         {
             var directory = _fileSystem.GetDirectory(ValidateArtifactParameters(path, artifactName));
@@ -257,6 +377,14 @@ namespace Cake.Common.Build.GitHubActions.Commands
         /// <param name="artifactName">The artifact name.</param>
         /// <param name="path">Path to the local directory.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <example>
+        /// <code>
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     await GitHubActions.Commands.DownloadArtifact("cake-integration-tests", targetPath);
+        /// }
+        /// </code>
+        /// </example>
         public async Task DownloadArtifact(string artifactName, DirectoryPath path)
         {
             var directory = _fileSystem.GetDirectory(ValidateArtifactParameters(path, artifactName));
@@ -267,6 +395,75 @@ namespace Cake.Common.Build.GitHubActions.Commands
             }
 
             await _artifactsService.DownloadArtifactFiles(artifactName, directory.Path);
+        }
+
+        /// <summary>
+        /// Exchanges a GitHub Actions OIDC identity token for a short-lived NuGet.org API key (trusted publishing).
+        /// Default token service URL is <c>https://www.nuget.org/api/v2/token</c> and default OIDC audience is <c>https://www.nuget.org</c>.
+        /// Requires <c>permissions: id-token: write</c> in the GitHub Actions workflow.
+        /// OIDC tokens and the returned API key are automatically masked in the build log.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var nuGetUserName = EnvironmentVariable("NUGET_USERNAME");
+        /// var apiKey = await GitHubActions.Commands.NuGetLogin(nuGetUserName);
+        ///
+        /// var settings = new DotNetNuGetPushSettings
+        /// {
+        ///     ApiKey = apiKey,
+        ///     Source = "https://api.nuget.org/v3/index.json"
+        /// };
+        ///
+        /// foreach (var packageFilePath in GetFiles("./*.nupkg"))
+        /// {
+        ///     DotNetNuGetPush(packageFilePath, settings);
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="userName">The NuGet.org account user name.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The NuGet API key.</returns>
+        public Task<string> NuGetLogin(string userName, CancellationToken cancellationToken = default)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(userName);
+
+            return NuGetLogin(new GitHubNuGetLoginSettings(userName), cancellationToken);
+        }
+
+        /// <summary>
+        /// Exchanges a GitHub Actions OIDC identity token for a NuGet API key using the specified token service URL and audience.
+        /// Requires <c>permissions: id-token: write</c> in the GitHub Actions workflow.
+        /// OIDC tokens and the returned API key are automatically masked in the build log.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var loginSettings = new GitHubNuGetLoginSettings(
+        ///     userName: "myorg",
+        ///     tokenServiceUrl: "https://www.nuget.org/api/v2/token",
+        ///     audience: "https://www.nuget.org");
+        ///
+        /// var apiKey = await GitHubActions.Commands.NuGetLogin(loginSettings);
+        ///
+        /// var settings = new DotNetNuGetPushSettings
+        /// {
+        ///     ApiKey = apiKey,
+        ///     Source = EnvironmentVariable("NUGET_API_URL")
+        /// };
+        ///
+        /// foreach (var packageFilePath in GetFiles("./*.nupkg"))
+        /// {
+        ///     DotNetNuGetPush(packageFilePath, settings);
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="settings">The user name, token service URL, and OIDC audience.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The NuGet API key.</returns>
+        public Task<string> NuGetLogin(GitHubNuGetLoginSettings settings, CancellationToken cancellationToken = default)
+        {
+            ArgumentNullException.ThrowIfNull(settings);
+
+            return _nuGetLoginService.LoginAsync(settings, cancellationToken);
         }
 
         internal void WriteCommand(string command, string message = null)

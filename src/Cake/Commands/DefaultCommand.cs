@@ -63,7 +63,9 @@ namespace Cake.Commands
             try
             {
                 // Set log verbosity.
-                _log.Verbosity = settings.Verbosity;
+                _log.Verbosity = settings.Verbosity ?? Verbosity.Normal;
+
+                var arguments = CreateCakeArguments(context.Remaining, settings);
 
                 if (settings.ShowVersion)
                 {
@@ -82,14 +84,12 @@ namespace Cake.Commands
                 // Run the bootstrapper?
                 if (!settings.SkipBootstrap || settings.Bootstrap)
                 {
-                    int bootstrapperResult = PerformBootstrapping(context, settings, host);
+                    int bootstrapperResult = PerformBootstrapping(arguments, settings, host);
                     if (bootstrapperResult != 0 || settings.Bootstrap)
                     {
                         return bootstrapperResult;
                     }
                 }
-
-                var arguments = CreateCakeArguments(context.Remaining, settings);
 
                 // Run the build feature.
                 return _builder.Run(arguments, new BuildFeatureSettings(host)
@@ -125,14 +125,12 @@ namespace Cake.Commands
             return BuildHostKind.Build;
         }
 
-        private int PerformBootstrapping(CommandContext context, DefaultCommandSettings settings, BuildHostKind host)
+        private int PerformBootstrapping(ICakeArguments arguments, DefaultCommandSettings settings, BuildHostKind host)
         {
             if (host != BuildHostKind.Build && host != BuildHostKind.DryRun)
             {
                 return 0;
             }
-
-            var arguments = CreateCakeArguments(context.Remaining, settings);
 
             return _bootstrapper.Run(arguments, new BootstrapFeatureSettings
             {

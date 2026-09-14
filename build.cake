@@ -379,25 +379,64 @@ Task("Frosting-Integration-Tests")
         },
         (parameters, test, context) =>
 {
+    string defaultVerbosity = EnvironmentVariable("RUNNER_DEBUG", "0") == "1" ? "diagnostic" : "quiet";
     try
     {
         Information("Testing: {0}", test.Framework);
 
-        DotNetRun(test.Project.FullPath,
+        void RunFrosting(ProcessArgumentBuilder arguments, Dictionary<string, string> environmentVariables)
+        {
+            DotNetRun(test.Project.FullPath,
+                arguments,
+                new DotNetRunSettings
+                {
+                    Configuration = parameters.Configuration,
+                    Framework = test.Framework,
+                    NoRestore = true,
+                    NoBuild = true,
+                    EnvironmentVariables = environmentVariables
+                });
+        }
+
+        var baseEnvironment = new Dictionary<string, string>
+        {
+            ["CAKE_INTEGRATIONTEST_ENVIRONMENT"] = bool.TrueString,
+        };
+
+        RunFrosting(
             new ProcessArgumentBuilder()
-                .AppendSwitchQuoted("--verbosity", "=", Argument("integration-tests-verbosity", "quiet"))
+                .AppendSwitchQuoted("--verbosity", "=", Argument("integration-tests-verbosity", defaultVerbosity))
                 .AppendSwitchQuoted("--name", "=", "World")
                 .AppendSwitchQuoted("--IntegrationTest_Argument", "=", bool.TrueString),
-            new DotNetRunSettings
+            baseEnvironment);
+
+        RunFrosting(
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--target", "=", "Verbosity")
+                .AppendSwitchQuoted("--expected", "=", "Minimal"),
+            new Dictionary<string, string>(baseEnvironment)
             {
-                Configuration = parameters.Configuration,
-                Framework = test.Framework,
-                NoRestore = true,
-                NoBuild = true,
-                EnvironmentVariables = new Dictionary<string, string>
-                {
-                    ["CAKE_INTEGRATIONTEST_ENVIRONMENT"] = bool.TrueString,
-                }
+                ["CAKE_SETTINGS_VERBOSITY"] = "Minimal"
+            });
+
+        RunFrosting(
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--target", "=", "Verbosity")
+                .AppendSwitchQuoted("--verbosity", "=", "quiet")
+                .AppendSwitchQuoted("--expected", "=", "Quiet"),
+            new Dictionary<string, string>(baseEnvironment)
+            {
+                ["CAKE_SETTINGS_VERBOSITY"] = "Diagnostic"
+            });
+
+        RunFrosting(
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--target", "=", "Verbosity")
+                .AppendSwitchQuoted("--verbosity", "=", "normal")
+                .AppendSwitchQuoted("--expected", "=", "Normal"),
+            new Dictionary<string, string>(baseEnvironment)
+            {
+                ["CAKE_SETTINGS_VERBOSITY"] = "Diagnostic"
             });
     }
     catch(Exception ex)
@@ -414,16 +453,21 @@ Task("Run-Integration-Tests")
     .IsDependentOn("Prepare-Integration-Tests")
     .IsDependentOn("Frosting-Integration-Tests")
     .DeferOnError()
-    .DoesForEach<BuildParameters, FilePath>(
-        parameters => new[] {
-            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net8.0/**/Cake.dll").Single(),
-            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net9.0/**/Cake.dll").Single(),
-            GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net10.0/**/Cake.dll").Single()
+    .DoesForEach<BuildParameters, (FilePath CakeAssembly, string Verbosity)>(
+        parameters => {
+            string defaultVerbosity = EnvironmentVariable("RUNNER_DEBUG", "0") == "1" ? "diagnostic" : "quiet";
+            return [
+                (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net8.0/**/Cake.dll").Single(), defaultVerbosity),
+                (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net9.0/**/Cake.dll").Single(), defaultVerbosity),
+                (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net10.0/**/Cake.dll").Single(), defaultVerbosity)
+            ];
         },
-        (parameters, cakeAssembly, context) =>
+        (parameters, test, context) =>
 {
+    var (cakeAssembly, verbosity) = test;
     try
     {
+        
         Information("Testing: {0}", cakeAssembly);
         CakeExecuteScript("./tests/integration/build.cake",
             new CakeSettings {
@@ -434,7 +478,7 @@ Task("Run-Integration-Tests")
                 },
                 ArgumentCustomization = args => args
                     .AppendSwitchQuoted("--target", " ", Argument("integration-tests-target", "Run-All-Tests"))
-                    .AppendSwitchQuoted("--verbosity", " ", Argument("integration-tests-verbosity", "quiet"))
+                    .AppendSwitchQuoted("--verbosity", " ", Argument("integration-tests-verbosity", verbosity))
                     .AppendSwitchQuoted("--platform", " ", parameters.IsRunningOnWindows ? "windows" : "posix")
                     .AppendSwitchQuoted("--customarg", " ", "hello")
                     .AppendSwitchQuoted("--multipleargs", "=", "a")

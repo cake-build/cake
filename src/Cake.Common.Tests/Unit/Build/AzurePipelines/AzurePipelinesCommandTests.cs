@@ -156,6 +156,20 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
             }
 
             [Fact]
+            public void Should_Command_With_CommandLine()
+            {
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+
+                // When
+                service.Commands.Command("Example Command");
+
+                // Then
+                Assert.Contains(fixture.Writer.Entries, m => m == $"##[command]Example Command");
+            }
+
+            [Fact]
             public void Should_Section_With_Name()
             {
                 // Given

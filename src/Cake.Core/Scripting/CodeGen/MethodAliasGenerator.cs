@@ -5,9 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using Cake.Core.Annotations;
 
@@ -95,7 +93,7 @@ namespace Cake.Core.Scripting.CodeGen
 
                     // End method.
                     builder.AppendLine();
-                    return builder.ToString();
+                    return NullableAnnotationContext.WrapIfRequired(method, builder.ToString());
                 }
             }
 
@@ -120,21 +118,12 @@ namespace Cake.Core.Scripting.CodeGen
             // End method.
             builder.AppendLine();
 
-            return builder.ToString();
+            return NullableAnnotationContext.WrapIfRequired(method, builder.ToString());
         }
 
         private static string GetReturnType(MethodInfo method)
         {
-            if (method.ReturnType == typeof(void))
-            {
-                return "void";
-            }
-
-            var isDynamic = method.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(DynamicAttribute), true).Any();
-            var isNullable = method.ReturnTypeCustomAttributes.GetCustomAttributes(true).Any(attr => attr.GetType().FullName == "System.Runtime.CompilerServices.NullableAttribute");
-            return string.Concat(
-                isDynamic ? "dynamic" : method.ReturnType.GetFullName(),
-                isNullable ? "?" : string.Empty);
+            return NullableAnnotationContext.FormatReturn(method);
         }
 
         private static IEnumerable<string> GetProxyParameters(IEnumerable<ParameterInfo> parameters, bool includeType)

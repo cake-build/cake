@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Cake.Core.Annotations;
 
 namespace Cake.Core.Tests.Data
@@ -258,6 +259,175 @@ namespace Cake.Core.Tests.Data
         [CakeMethodAlias]
 #nullable enable
         public static string? NonGeneric_ExtensionMethodWithNullableReturnValue(this ICakeContext context)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static string NonGeneric_ExtensionMethodWithNotNullReturnValue(this ICakeContext context)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void NonGeneric_ExtensionMethodWithNotNullParameter(this ICakeContext context, string parameter)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void NonGeneric_ExtensionMethodWithNotNullAndNullableParameters(this ICakeContext context, string notNull, string? nullable)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+        public static void NonGeneric_ExtensionMethodWithNotNullParameterInDisabledContext(
+            this ICakeContext context,
+#nullable enable
+            string parameter)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void NonGeneric_ExtensionMethodWithNullableArrayElements(this ICakeContext context, string?[] values)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+#pragma warning disable SA1011
+        public static void NonGeneric_ExtensionMethodWithNullableArray(this ICakeContext context, string[]? values)
+#pragma warning restore SA1011
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+#pragma warning disable SA1011
+        public static void NonGeneric_ExtensionMethodWithNullableArrayAndElements(this ICakeContext context, string?[]? values)
+#pragma warning restore SA1011
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void NonGeneric_ExtensionMethodWithNullableGenericArgument(this ICakeContext context, IList<string?> values)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void NonGeneric_ExtensionMethodWithNullableGenericType(this ICakeContext context, IList<string>? values)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static IList<string?> NonGeneric_ExtensionMethodWithNullableGenericReturn(this ICakeContext context)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void NonGeneric_ExtensionMethodWithNullableTaskResult(this ICakeContext context, Task<string?> task)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void NonGeneric_ExtensionMethodWithNullableDictionaryValues(this ICakeContext context, Dictionary<string, string?> values)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void NonGeneric_ExtensionMethodWithNullableParamsArray(this ICakeContext context, params string?[] values)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void Generic_ExtensionMethodWithUnconstrainedTypeParameter<TTest>(this ICakeContext context, TTest value)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static TTest Generic_ExtensionMethodWithUnconstrainedTypeParameterReturn<TTest>(this ICakeContext context, TTest value)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void Generic_ExtensionMethodWithNullableTypeParameter<TTest>(this ICakeContext context, TTest? value)
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void Generic_ExtensionMethodWithNullableClassConstraint<TTest>(this ICakeContext context, TTest value)
+            where TTest : class?
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void Generic_ExtensionMethodWithNotNullAndNewConstraints<TTest>(this ICakeContext context, TTest value)
+            where TTest : notnull, new()
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void Generic_ExtensionMethodWithNullableTypeParameterArgument<TTest>(this ICakeContext context, IList<TTest?> values)
+            where TTest : class
+#nullable disable
+        {
+            throw new NotImplementedException();
+        }
+
+        [CakeMethodAlias]
+#nullable enable
+        public static void Generic_ExtensionMethodWithUnconstrainedTypeParameterArgument<TTest>(this ICakeContext context, IList<TTest> values)
 #nullable disable
         {
             throw new NotImplementedException();

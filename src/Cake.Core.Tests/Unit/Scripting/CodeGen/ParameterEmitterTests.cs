@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Cake.Core.Scripting.CodeGen;
+using Cake.Core.Tests.Data;
 using Xunit;
 // ReSharper disable UnusedMember.Local
 // ReSharper disable UnusedParameter.Local
@@ -543,6 +544,70 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
 
             // Then
             Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void Should_Emit_Question_Mark_For_Nullable_Reference_Parameter()
+        {
+            // Given
+            var method = typeof(MethodAliasGeneratorData).GetMethod(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNullableParameter));
+            var parameter = method.GetParameters()[1];
+
+            // When
+            var result = ParameterEmitter.Emit(parameter, true);
+
+            // Then
+            Assert.Equal("System.String? parameter", result);
+        }
+
+        [Fact]
+        public void Should_Not_Emit_Question_Mark_For_NotNull_Reference_Parameter()
+        {
+            // Given
+            var method = typeof(MethodAliasGeneratorData).GetMethod(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNotNullParameter));
+            var parameter = method.GetParameters()[1];
+
+            // When
+            var result = ParameterEmitter.Emit(parameter, true);
+
+            // Then
+            Assert.Equal("System.String parameter", result);
+        }
+
+        [Theory]
+        [InlineData(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNullableArrayElements), "System.String?[] values")]
+        [InlineData(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNullableArray), "System.String[]? values")]
+        [InlineData(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNullableArrayAndElements), "System.String?[]? values")]
+        [InlineData(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNullableGenericArgument), "System.Collections.Generic.IList<System.String?> values")]
+        [InlineData(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNullableGenericType), "System.Collections.Generic.IList<System.String>? values")]
+        [InlineData(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNullableTaskResult), "System.Threading.Tasks.Task<System.String?> task")]
+        [InlineData(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNullableDictionaryValues), "System.Collections.Generic.Dictionary<System.String, System.String?> values")]
+        [InlineData(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNullableParamsArray), "params System.String?[] values")]
+        public void Should_Emit_Inner_Nullable_Reference_Annotations(string methodName, string expected)
+        {
+            // Given
+            var method = typeof(MethodAliasGeneratorData).GetMethod(methodName);
+            var parameter = method.GetParameters()[1];
+
+            // When
+            var result = ParameterEmitter.Emit(parameter, true);
+
+            // Then
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void Should_Not_Emit_Question_Mark_For_NotNull_Parameter_In_Disabled_Context()
+        {
+            // Given
+            var method = typeof(MethodAliasGeneratorData).GetMethod(nameof(MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNotNullParameterInDisabledContext));
+            var parameter = method.GetParameters()[1];
+
+            // When
+            var result = ParameterEmitter.Emit(parameter, true);
+
+            // Then
+            Assert.Equal("System.String parameter", result);
         }
     }
 }

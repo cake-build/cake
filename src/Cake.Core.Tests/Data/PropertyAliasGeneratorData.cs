@@ -131,5 +131,13 @@ namespace Cake.Core.Tests.Data
         {
             throw new NotImplementedException();
         }
+
+        [CakePropertyAlias]
+#nullable enable
+        public static string NonCached_NotNull_Type(this ICakeContext context)
+#nullable disable
+        {
+            return "Hello World";
+        }
     }
 }

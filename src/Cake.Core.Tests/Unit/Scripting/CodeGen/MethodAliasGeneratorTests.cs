@@ -61,6 +61,19 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("ExtensionMethodWithDynamicReturnValue")]
             [InlineData("ExtensionMethodWithNullableParameter")]
             [InlineData("ExtensionMethodWithNullableReturnValue")]
+            [InlineData("ExtensionMethodWithNotNullReturnValue")]
+            [InlineData("ExtensionMethodWithNotNullParameter")]
+            [InlineData("ExtensionMethodWithNotNullAndNullableParameters")]
+            [InlineData("ExtensionMethodWithNotNullParameterInDisabledContext")]
+            [InlineData("ExtensionMethodWithNullableArrayElements")]
+            [InlineData("ExtensionMethodWithNullableArray")]
+            [InlineData("ExtensionMethodWithNullableArrayAndElements")]
+            [InlineData("ExtensionMethodWithNullableGenericArgument")]
+            [InlineData("ExtensionMethodWithNullableGenericType")]
+            [InlineData("ExtensionMethodWithNullableGenericReturn")]
+            [InlineData("ExtensionMethodWithNullableTaskResult")]
+            [InlineData("ExtensionMethodWithNullableDictionaryValues")]
+            [InlineData("ExtensionMethodWithNullableParamsArray")]
             public Task Should_Return_Correct_Generated_Code_For_Non_Generic_Methods(string name)
             {
                 // Given / When
@@ -76,6 +89,13 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             [InlineData("Generic_ExtensionMethodWithParameter")]
             [InlineData("Generic_ExtensionMethodWithGenericReturnValue")]
             [InlineData("Generic_ExtensionMethodWithGenericReturnValueAndTypeParamConstraints")]
+            [InlineData("Generic_ExtensionMethodWithUnconstrainedTypeParameter")]
+            [InlineData("Generic_ExtensionMethodWithUnconstrainedTypeParameterReturn")]
+            [InlineData("Generic_ExtensionMethodWithNullableTypeParameter")]
+            [InlineData("Generic_ExtensionMethodWithNullableClassConstraint")]
+            [InlineData("Generic_ExtensionMethodWithNotNullAndNewConstraints")]
+            [InlineData("Generic_ExtensionMethodWithNullableTypeParameterArgument")]
+            [InlineData("Generic_ExtensionMethodWithUnconstrainedTypeParameterArgument")]
             public Task Should_Return_Correct_Generated_Code_For_Generic_Methods(string name)
             {
                 // Given / When

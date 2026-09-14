@@ -6,6 +6,7 @@ on:
       - main
       - develop
       - hotfix/*
+  workflow_dispatch:
 jobs:
   prepare:
     name: Prepare integration tests

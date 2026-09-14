@@ -139,5 +139,105 @@ namespace Cake.Common.Tests.Unit.Tools.Cake
                              "--configuration=\"Debug\"", result.Args);
             }
         }
+
+        public sealed class TheExecuteScriptMethodViaTheDotNetHost
+        {
+            [Fact]
+            public void Should_Execute_Cake_Dll_Through_The_DotNet_Host()
+            {
+                // Given
+                var fixture = new CakeRunnerCoreFixture();
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("/Working/tools/dotnet.exe", result.Path.FullPath);
+                Assert.Equal("\"/Working/tools/Cake.dll\" \"/Working/build.cake\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Call_Settings_PostAction()
+            {
+                // Given
+                var called = false;
+                var fixture = new CakeRunnerCoreFixture
+                {
+                    Settings = { PostAction = _ => called = true }
+                };
+
+                // When
+                fixture.Run();
+
+                // Then
+                Assert.True(called, "Settings PostAction not called");
+            }
+
+            [Fact]
+            public void Should_Use_Settings_HandleExitCode()
+            {
+                // Given
+                const int expectedExitCode = 1337;
+                var handledExitCode = 0;
+                var fixture = new CakeRunnerCoreFixture
+                {
+                    Settings = { HandleExitCode = exitCode => (handledExitCode = exitCode) == expectedExitCode }
+                };
+                fixture.ProcessRunner.Process.SetExitCode(expectedExitCode);
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                Assert.Null(result);
+                Assert.Equal(expectedExitCode, handledExitCode);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Exit_Code_Is_Not_Handled()
+            {
+                // Given
+                var fixture = new CakeRunnerCoreFixture();
+                fixture.ProcessRunner.Process.SetExitCode(1337);
+
+                // When
+                var result = Record.Exception(() => fixture.Run());
+
+                // Then
+                AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1337).");
+            }
+
+            [Fact]
+            public void Should_Call_Settings_SetupProcessSettings()
+            {
+                // Given
+                var fixture = new CakeRunnerCoreFixture
+                {
+                    Settings = { SetupProcessSettings = process => process.RedirectStandardOutput = true }
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.True(result.Process.RedirectStandardOutput, "Settings SetupProcessSettings not called");
+            }
+
+            [Fact]
+            public void Should_Use_Settings_NoWorkingDirectory()
+            {
+                // Given
+                var fixture = new CakeRunnerCoreFixture
+                {
+                    Settings = { NoWorkingDirectory = true }
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.True(result.Process.NoWorkingDirectory);
+            }
+        }
     }
 }

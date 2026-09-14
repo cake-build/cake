@@ -4,9 +4,14 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Cake.Common.Build;
 using Cake.Common.Build.GitHubActions.Commands;
+using Cake.Common.Build.GitHubActions.Commands.NuGet;
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
@@ -756,6 +761,271 @@ CAKEEOF
                 // Then
                 Assert.True(file.Exists, $"{filePath.FullPath} doesn't exist.");
                 Assert.Equal("Cake", file.GetTextContent());
+            }
+        }
+
+        /// <summary>
+        /// Tests for <see cref="GitHubActionsCommands.NuGetLogin(string, System.Threading.CancellationToken)"/> and
+        /// <see cref="GitHubActionsCommands.NuGetLogin(GitHubNuGetLoginSettings, System.Threading.CancellationToken)"/>.
+        /// </summary>
+        public sealed class TheNuGetLoginMethod
+        {
+            [Fact]
+            public async Task Should_Return_Api_Key_When_Login_With_UserName_Only()
+            {
+                // Given
+                var fixture = new GitHubNuGetLoginCommandsFixture();
+                var commands = fixture.CreateGitHubActionsCommands();
+
+                // When
+                var apiKey = await commands.NuGetLogin("testuser", TestContext.Current.CancellationToken);
+
+                // Then
+                Assert.Equal("expected-api-key-default-url", apiKey);
+            }
+
+            [Fact]
+            public async Task Should_Mask_Sensitive_Values()
+            {
+                // Given
+                var fixture = new GitHubNuGetLoginCommandsFixture();
+                var commands = fixture.CreateGitHubActionsCommands();
+
+                // When
+                var apiKey = await commands.NuGetLogin("testuser", TestContext.Current.CancellationToken);
+
+                // Then
+                Assert.Equal("expected-api-key-default-url", apiKey);
+                Assert.Equal(3, fixture.Writer.Entries.Count);
+                Assert.Contains($"::add-mask::{GitHubNuGetLoginCommandsFixture.ActionsIdTokenRequestToken}", fixture.Writer.Entries);
+                Assert.Contains("::add-mask::mock-oidc-jwt", fixture.Writer.Entries);
+                Assert.Contains("::add-mask::expected-api-key-default-url", fixture.Writer.Entries);
+            }
+
+            [Fact]
+            public async Task Should_Return_Api_Key_When_Settings_Use_Custom_Token_Service_Url()
+            {
+                // Given
+                var fixture = new GitHubNuGetLoginCommandsFixture();
+                var commands = fixture.CreateGitHubActionsCommands();
+                var settings = new GitHubNuGetLoginSettings(
+                    "testuser",
+                    GitHubNuGetLoginCommandsFixture.TokenServiceUrl,
+                    GitHubNuGetLoginCommandsFixture.DefaultAudience);
+
+                // When
+                var apiKey = await commands.NuGetLogin(settings, TestContext.Current.CancellationToken);
+
+                // Then
+                Assert.Equal("expected-api-key", apiKey);
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Settings_Is_Null()
+            {
+                // Given
+                var commands = new GitHubNuGetLoginCommandsFixture().CreateGitHubActionsCommands();
+                GitHubNuGetLoginSettings settings = null;
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin(settings, TestContext.Current.CancellationToken));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "settings");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_UserName_Is_Null()
+            {
+                // Given
+                var commands = new GitHubNuGetLoginCommandsFixture().CreateGitHubActionsCommands();
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin((string)null, TestContext.Current.CancellationToken));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "userName");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_UserName_Is_Whitespace()
+            {
+                // Given
+                var commands = new GitHubNuGetLoginCommandsFixture().CreateGitHubActionsCommands();
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin("  ", TestContext.Current.CancellationToken));
+
+                // Then
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("userName", ((ArgumentException)result).ParamName);
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Settings_UserName_Is_Whitespace()
+            {
+                // Given
+                var commands = new GitHubNuGetLoginCommandsFixture().CreateGitHubActionsCommands();
+                var settings = new GitHubNuGetLoginSettings("  ");
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin(settings, TestContext.Current.CancellationToken));
+
+                // Then
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("userName", ((ArgumentException)result).ParamName);
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Token_Service_Url_Is_Null()
+            {
+                // Given
+                var commands = new GitHubNuGetLoginCommandsFixture().CreateGitHubActionsCommands();
+                var settings = new GitHubNuGetLoginSettings("user", null);
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin(settings, TestContext.Current.CancellationToken));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "tokenServiceUrl");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Token_Service_Url_Is_Whitespace()
+            {
+                // Given
+                var commands = new GitHubNuGetLoginCommandsFixture().CreateGitHubActionsCommands();
+                var settings = new GitHubNuGetLoginSettings("user", "  ");
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin(settings, TestContext.Current.CancellationToken));
+
+                // Then
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("tokenServiceUrl", ((ArgumentException)result).ParamName);
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Audience_Is_Null()
+            {
+                // Given
+                var commands = new GitHubNuGetLoginCommandsFixture().CreateGitHubActionsCommands();
+                var settings = new GitHubNuGetLoginSettings("user", GitHubNuGetLoginCommandsFixture.DefaultTokenServiceUrl, null);
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin(settings, TestContext.Current.CancellationToken));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "audience");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Audience_Is_Whitespace()
+            {
+                // Given
+                var commands = new GitHubNuGetLoginCommandsFixture().CreateGitHubActionsCommands();
+                var settings = new GitHubNuGetLoginSettings("user", GitHubNuGetLoginCommandsFixture.DefaultTokenServiceUrl, "  ");
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin(settings, TestContext.Current.CancellationToken));
+
+                // Then
+                Assert.IsType<ArgumentException>(result);
+                Assert.Equal("audience", ((ArgumentException)result).ParamName);
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Missing_Oidc_Request_Token()
+            {
+                // Given
+                var fixture = new GitHubNuGetLoginCommandsFixture();
+                fixture.Environment.GetEnvironmentVariable("ACTIONS_ID_TOKEN_REQUEST_TOKEN").Returns((string)null);
+                var commands = fixture.CreateGitHubActionsCommands();
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin("user", TestContext.Current.CancellationToken));
+
+                // Then
+                AssertEx.IsCakeException(result, "Missing GitHub OIDC request environment variables.");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Missing_Oidc_Request_Url()
+            {
+                // Given
+                var fixture = new GitHubNuGetLoginCommandsFixture();
+                fixture.Environment.GetEnvironmentVariable("ACTIONS_ID_TOKEN_REQUEST_URL").Returns((string)null);
+                var commands = fixture.CreateGitHubActionsCommands();
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin("user", TestContext.Current.CancellationToken));
+
+                // Then
+                AssertEx.IsCakeException(result, "Missing GitHub OIDC request environment variables.");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Oidc_Request_Fails()
+            {
+                // Given
+                var fixture = new BrokenOidcGitHubNuGetLoginFixture();
+                var commands = fixture.CreateGitHubActionsCommands();
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin("user", TestContext.Current.CancellationToken));
+
+                // Then
+                AssertEx.IsCakeException(result, "Failed to retrieve OIDC token from GitHub (401 Unauthorized): oidc-failed");
+            }
+
+            [Fact]
+            public async Task Should_Throw_If_Token_Exchange_Fails_With_Json_Error()
+            {
+                // Given
+                var fixture = new FailingTokenExchangeGitHubNuGetLoginFixture();
+                var commands = fixture.CreateGitHubActionsCommands();
+                var settings = new GitHubNuGetLoginSettings(
+                    "user",
+                    GitHubNuGetLoginCommandsFixture.TokenServiceUrl,
+                    GitHubNuGetLoginCommandsFixture.DefaultAudience);
+
+                // When
+                var result = await Record.ExceptionAsync(() => commands.NuGetLogin(settings, TestContext.Current.CancellationToken));
+
+                // Then
+                AssertEx.IsCakeException(result, "Token exchange failed (422 UnprocessableEntity): invalid_grant");
+            }
+
+            private sealed class BrokenOidcGitHubNuGetLoginFixture : GitHubNuGetLoginCommandsFixture
+            {
+                protected override Task<HttpResponseMessage> HandleAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+                {
+                    if (request.Method == HttpMethod.Get && request.RequestUri?.AbsoluteUri == ExpectedOidcGetUriDefaultAudience)
+                    {
+                        return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                        {
+                            Content = new StringContent("oidc-failed", Encoding.UTF8, "text/plain")
+                        });
+                    }
+
+                    return base.HandleAsync(request, cancellationToken);
+                }
+            }
+
+            private sealed class FailingTokenExchangeGitHubNuGetLoginFixture : GitHubNuGetLoginCommandsFixture
+            {
+                protected override Task<HttpResponseMessage> HandleAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+                {
+                    if (request.Method == HttpMethod.Post && request.RequestUri?.AbsoluteUri == TokenServiceUrl)
+                    {
+                        return Task.FromResult(new HttpResponseMessage(HttpStatusCode.UnprocessableEntity)
+                        {
+                            Content = new StringContent("""{"error":"invalid_grant"}""", Encoding.UTF8, "application/json")
+                        });
+                    }
+
+                    return base.HandleAsync(request, cancellationToken);
+                }
             }
         }
     }

@@ -101,6 +101,55 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             {
                 throw new NotImplementedException();
             }
+
+#nullable enable
+            public static void Test_TIn_TIn_Is_notnull<TIn>(TIn obj)
+                where TIn : notnull
+            {
+                throw new NotImplementedException();
+            }
+
+            public static void Test_TIn_TIn_Is_nullable_class<TIn>(TIn obj)
+                where TIn : class?
+            {
+                throw new NotImplementedException();
+            }
+
+            public static void Test_TIn_TIn_Is_class_In_Enabled_Context<TIn>(TIn obj)
+                where TIn : class
+            {
+                throw new NotImplementedException();
+            }
+
+            public static void Test_TIn_TIn_Is_Unconstrained_In_Enabled_Context<TIn>(TIn obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static void Test_TIn_TIn_Is_IFakeInterface_In_Enabled_Context<TIn>(TIn obj)
+                where TIn : IFakeInterface
+            {
+                throw new NotImplementedException();
+            }
+
+            public static void Test_TIn_TIn_Is_notnull_and_DefaultCtor<TIn>(TIn obj)
+                where TIn : notnull, new()
+            {
+                throw new NotImplementedException();
+            }
+
+            public static void Test_TIn_TIn_Is_notnull_and_IFakeInterface<TIn>(TIn obj)
+                where TIn : notnull, IFakeInterface
+            {
+                throw new NotImplementedException();
+            }
+
+            public static void Test_TIn_TIn_Is_notnull_and_FakeClass_and_DefaultCtor<TIn>(TIn obj)
+                where TIn : notnull, FakeClass, new()
+            {
+                throw new NotImplementedException();
+            }
+#nullable disable
         }
 
         [Theory]
@@ -118,6 +167,18 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("Test_TOut_TIn_TIn_is_FakeClass_and_IFakeInterface_and_TOut_IsIFakeInterface", "where TIn : Cake.Core.Tests.Unit.Scripting.CodeGen.GenericParameterConstraintEmitterTests.FakeClass, Cake.Core.Tests.Unit.Scripting.CodeGen.GenericParameterConstraintEmitterTests.IFakeInterface\r\nwhere TOut : Cake.Core.Tests.Unit.Scripting.CodeGen.GenericParameterConstraintEmitterTests.IFakeInterface")]
         [InlineData("Test_TIn_TIn_is_NestedFakeClass_and_NestedFakeInterface", "where TIn : Cake.Core.Tests.Unit.Scripting.CodeGen.GenericConstraintFakes.FakeClass, Cake.Core.Tests.Unit.Scripting.CodeGen.GenericConstraintFakes.IFakeInterface")]
         [InlineData("Test_TIn_TIn_Is_IEnumerable_int", "where TIn : System.Collections.Generic.IEnumerable<System.Int32>")]
+        [InlineData("Test_TIn_TIn_Is_notnull", "where TIn : notnull")]
+        [InlineData("Test_TIn_TIn_Is_nullable_class", "where TIn : class?")]
+        [InlineData("Test_TIn_TIn_Is_class_In_Enabled_Context", "where TIn : class")]
+        [InlineData("Test_TIn_TIn_Is_Unconstrained_In_Enabled_Context", "")]
+        [InlineData("Test_TIn_TIn_Is_IFakeInterface_In_Enabled_Context", "where TIn : Cake.Core.Tests.Unit.Scripting.CodeGen.GenericParameterConstraintEmitterTests.IFakeInterface")]
+
+        // `new()` doesn't imply non-nullability, so `notnull` has to be emitted alongside it
+        [InlineData("Test_TIn_TIn_Is_notnull_and_DefaultCtor", "where TIn : notnull, new()")]
+
+        // a type constraint does imply non-nullability, so `notnull` is redundant
+        [InlineData("Test_TIn_TIn_Is_notnull_and_IFakeInterface", "where TIn : Cake.Core.Tests.Unit.Scripting.CodeGen.GenericParameterConstraintEmitterTests.IFakeInterface")]
+        [InlineData("Test_TIn_TIn_Is_notnull_and_FakeClass_and_DefaultCtor", "where TIn : Cake.Core.Tests.Unit.Scripting.CodeGen.GenericParameterConstraintEmitterTests.FakeClass, new()")]
         public void Should_Return_Correct_Generated_Code_For_Generic_Method_Parameter_Constraints(string methodName, string expected)
         {
             // Given

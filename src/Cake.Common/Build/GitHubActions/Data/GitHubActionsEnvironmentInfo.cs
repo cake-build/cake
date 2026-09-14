@@ -213,13 +213,43 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// <para>Via BuildSystem.</para>
         /// <example>
         /// <code>
-        /// // TODO
+        /// if (BuildSystem.GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(
+        ///         @"Runtime:
+        ///         IsRuntimeAvailable: {0}
+        ///         OutputPath: {1}
+        ///         StepSummary: {2}",
+        ///         BuildSystem.GitHubActions.Environment.Runtime.IsRuntimeAvailable,
+        ///         BuildSystem.GitHubActions.Environment.Runtime.OutputPath,
+        ///         BuildSystem.GitHubActions.Environment.Runtime.StepSummary
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitHubActions");
+        /// }
         /// </code>
         /// </example>
         /// <para>Via GitHubActions.</para>
         /// <example>
         /// <code>
-        /// // TODO
+        /// if (GitHubActions.IsRunningOnGitHubActions)
+        /// {
+        ///     Information(
+        ///         @"Runtime:
+        ///         IsRuntimeAvailable: {0}
+        ///         OutputPath: {1}
+        ///         StepSummary: {2}",
+        ///         GitHubActions.Environment.Runtime.IsRuntimeAvailable,
+        ///         GitHubActions.Environment.Runtime.OutputPath,
+        ///         GitHubActions.Environment.Runtime.StepSummary
+        ///         );
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on GitHubActions");
+        /// }
         /// </code>
         /// </example>
         public GitHubActionsRuntimeInfo Runtime { get; }

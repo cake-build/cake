@@ -45,7 +45,6 @@ namespace Cake.Core.Scripting.CodeGen
             }
             if (includeType)
             {
-                var isNullable = false;
                 if (parameter.IsDefined(typeof(ParamArrayAttribute)))
                 {
                     yield return "params ";
@@ -60,7 +59,6 @@ namespace Cake.Core.Scripting.CodeGen
                         var attributeType = item.AttributeType.GetFullName();
                         if (item.AttributeType.FullName == "System.Runtime.CompilerServices.NullableAttribute")
                         {
-                            isNullable = true;
                             continue;
                         }
                         if (item.AttributeType.Name.EndsWith("Attribute", StringComparison.OrdinalIgnoreCase))
@@ -97,21 +95,7 @@ namespace Cake.Core.Scripting.CodeGen
                     }
                 }
 
-                // if the parameter is 'out' (or implicitly, by ref),
-                // use GetElementType to get the correct value for codegen (instead of IDisposable& or similar)
-                if (parameter.ParameterType.IsByRef)
-                {
-                    yield return parameter.ParameterType.GetElementType().GetFullName();
-                }
-                else
-                {
-                    yield return parameter.ParameterType.GetFullName();
-                }
-
-                if (isNullable)
-                {
-                    yield return "?";
-                }
+                yield return NullableAnnotationContext.Format(parameter);
                 yield return " ";
             }
 

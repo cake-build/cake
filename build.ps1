@@ -84,9 +84,9 @@ if ($IsMacOS -or $IsLinux) {
         Write-Host "Installing .NET 9.0 SDK..."
         & bash $ScriptPath --channel 9.0 --install-dir "$InstallPath" --no-path --skip-non-versioned-files
         
-        # Install .NET 10.0 SDK (preview quality)
-        Write-Host "Installing .NET 10.0 SDK (preview)..."
-        & bash $ScriptPath --channel 10.0 --quality preview --install-dir "$InstallPath" --no-path --skip-non-versioned-files
+        # Future Install .NET 11.0 SDK (preview quality)
+        # Write-Host "Installing .NET 11.0 SDK (preview)..."
+        # & bash $ScriptPath --channel 11.0 --quality preview --install-dir "$InstallPath" --no-path --skip-non-versioned-files
     }
     
     # Install SDK from global.json

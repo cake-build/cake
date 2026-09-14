@@ -24,6 +24,7 @@ namespace Cake.Tests.Fixtures
         public FakeScriptEngine ScriptEngine { get; set; }
         public FakeDebugger Debugger { get; set; }
         public FakeLog Log { get; set; }
+        public FakeLog ScopedLog { get; set; }
         public FakeConsole Console { get; set; }
         public IModuleSearcher ModuleSearcher { get; set; }
         public IScriptProcessor Processor { get; set; }
@@ -42,6 +43,7 @@ namespace Cake.Tests.Fixtures
             ScriptEngine = new FakeScriptEngine();
             Debugger = new FakeDebugger();
             Log = log ?? new FakeLog();
+            ScopedLog = new FakeLog();
             Console = console ?? new FakeConsole();
             ModuleSearcher = moduleSearcher ?? Substitute.For<IModuleSearcher>();
             Processor = Substitute.For<IScriptProcessor>();
@@ -58,7 +60,7 @@ namespace Cake.Tests.Fixtures
                 registrar.RegisterInstance(Environment).As<ICakeEnvironment>();
                 registrar.RegisterInstance(ScriptEngine).As<IScriptEngine>();
                 registrar.RegisterInstance(Debugger).As<ICakeDebugger>();
-                registrar.RegisterInstance(Log).As<ICakeLog>();
+                registrar.RegisterInstance(ScopedLog).As<ICakeLog>();
                 registrar.RegisterInstance(Processor).As<IScriptProcessor>();
             });
         }

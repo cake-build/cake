@@ -1,0 +1,6 @@
+﻿#nullable enable
+[System.Diagnostics.DebuggerStepThrough]
+public void NonGeneric_ExtensionMethodWithNullableParamsArray(params System.String?[] values)
+    => Cake.Core.Tests.Data.MethodAliasGeneratorData.NonGeneric_ExtensionMethodWithNullableParamsArray(Context, values);
+
+#nullable restore

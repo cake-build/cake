@@ -159,5 +159,43 @@ namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
                 Assert.Equal(expected, result);
             }
         }
+
+        public sealed class TheIsDebugProperty
+        {
+            [Theory]
+            [InlineData("1", true)]
+            [InlineData("", false)]
+            [InlineData("true", false)]
+            public void Should_Return_Correct_Value(string value, bool expected)
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateRunnerInfo(debug: value);
+
+                // When
+                var result = info.IsDebug;
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+        }
+
+        public sealed class TheEnvironmentProperty
+        {
+            [Theory]
+            [InlineData("github-hosted", GitHubActionsRunnerEnvironment.GitHubHosted)]
+            [InlineData("self-hosted", GitHubActionsRunnerEnvironment.SelfHosted)]
+            [InlineData("", GitHubActionsRunnerEnvironment.Unknown)]
+            public void Should_Return_Correct_Value(string value, GitHubActionsRunnerEnvironment expected)
+            {
+                // Given
+                var info = new GitHubActionsInfoFixture().CreateRunnerInfo(environment: value);
+
+                // When
+                var result = info.Environment;
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+        }
     }
 }

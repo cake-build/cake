@@ -51,6 +51,12 @@ namespace Cake.Common.Build.AzurePipelines
         public void EndGroup();
 
         /// <summary>
+        /// Log command.
+        /// </summary>
+        /// <param name="commandLine">The command-line being run.</param>
+        public void Command(string commandLine);
+
+        /// <summary>
         /// Log section.
         /// </summary>
         /// <param name="name">The name of the section.</param>

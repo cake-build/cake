@@ -84,6 +84,10 @@ namespace Cake.Common.Tools.Cake
                     {
                         ArgumentCustomization = settings.ArgumentCustomization,
                         EnvironmentVariables = settings.EnvironmentVariables,
+                        HandleExitCode = settings.HandleExitCode,
+                        NoWorkingDirectory = settings.NoWorkingDirectory,
+                        PostAction = settings.PostAction,
+                        SetupProcessSettings = settings.SetupProcessSettings,
                         ToolTimeout = settings.ToolTimeout,
                         WorkingDirectory = settings.WorkingDirectory
                     });

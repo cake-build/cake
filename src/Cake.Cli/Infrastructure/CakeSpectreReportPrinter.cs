@@ -35,7 +35,7 @@ namespace Cake.Cli
             // Create a table
             var table = new Table().Border(TableBorder.SimpleHeavy);
             table.Width(100);
-            table.BorderStyle(default(Style).Foreground(ConsoleColor.Green));
+            table.BorderStyle(Style.Plain.Foreground(ConsoleColor.Green));
 
             var includeSkippedReasonColumn = report.Any(r => !string.IsNullOrEmpty(r.SkippedMessage));
             var rowStyle = new Style(ConsoleColor.Green);
