@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -136,12 +136,12 @@ namespace Cake.Common.Tests.Unit.Tools.Command
             const int expectedExitCode = 1337;
 
             var fixture = new CommandRunnerStandardOutputFixture
-                            {
-                                Settings =
+            {
+                Settings =
                                                 {
                                                     HandleExitCode = exitCode => exitCode == expectedExitCode
                                                 }
-                            }
+            }
                             .GivenStandardOutput(expectedStandardOutput);
 
             fixture.ProcessRunner.Process.SetExitCode(expectedExitCode);
@@ -184,12 +184,12 @@ namespace Cake.Common.Tests.Unit.Tools.Command
             const int expectedExitCode = 1337;
 
             var fixture = new CommandRunnerStandardErrorFixture
-                            {
-                                Settings =
+            {
+                Settings =
                                 {
                                     HandleExitCode = exitCode => exitCode == expectedExitCode
                                 }
-                            }
+            }
                             .GivenStandardError(expectedStandardError)
                             .GivenStandardOutput(expectedStandardOutput);
 

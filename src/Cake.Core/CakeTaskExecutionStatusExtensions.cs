@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -20,11 +20,12 @@ public static class CakeTaskExecutionStatusExtensions
     /// or the string representation of the status as fallback.
     /// </returns>
     public static string ToReportStatus(this CakeTaskExecutionStatus status)
-        => status switch {
-                CakeTaskExecutionStatus.Executed => "Succeeded",
-                CakeTaskExecutionStatus.Delegated => "Succeeded",
-                CakeTaskExecutionStatus.Skipped => "Skipped",
-                CakeTaskExecutionStatus.Failed => "Failed",
-                _ => status.ToString("F")
-            };
+        => status switch
+        {
+            CakeTaskExecutionStatus.Executed => "Succeeded",
+            CakeTaskExecutionStatus.Delegated => "Succeeded",
+            CakeTaskExecutionStatus.Skipped => "Skipped",
+            CakeTaskExecutionStatus.Failed => "Failed",
+            _ => status.ToString("F")
+        };
 }

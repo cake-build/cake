@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -232,8 +232,8 @@ namespace Cake.Common.Tools.NUnit
         /// <value>
         /// List of parameters (key/value) which are passed to the runner.
         /// </value>
+        // Case-sensitive. https://github.com/nunit/docs/wiki/Console-Command-Line#options
         public IDictionary<string, string> Params { get; set; } =
-            // “Case-sensitive.” https://github.com/nunit/docs/wiki/Console-Command-Line#options
             new Dictionary<string, string>(StringComparer.Ordinal);
 
         /// <summary>
@@ -242,8 +242,8 @@ namespace Cake.Common.Tools.NUnit
         /// <value>
         /// List of test parameters (key/value) which are passed to the runner.
         /// </value>
+        // Case-sensitive. https://github.com/nunit/docs/wiki/Console-Command-Line#options
         public IDictionary<string, string> TestParams { get; set; } =
-            // “Case-sensitive.” https://github.com/nunit/docs/wiki/Console-Command-Line#options
             new Dictionary<string, string>(StringComparer.Ordinal);
 
         /// <summary>

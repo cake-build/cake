@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -249,16 +249,16 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
                 Assert.Equal(3, results.Count());
 
                 var expected = new OctopusDeployment
-                                {
-                                    Assembled = DateTimeOffset.Parse("11/2/2017 12:53:34 -04:00"),
-                                    Channel = "Default",
-                                    Created = DateTimeOffset.Parse("11/2/2017 12:53:35 -04:00"),
-                                    Environment = "Staging",
-                                    PackageVersions = "Package A 0.9.104; Package B 0.9.104",
-                                    ProjectName = "Project A",
-                                    ReleaseNotesHtml = "<h1> Project A </h1>",
-                                    Version = "0.9.104"
-                                };
+                {
+                    Assembled = DateTimeOffset.Parse("11/2/2017 12:53:34 -04:00"),
+                    Channel = "Default",
+                    Created = DateTimeOffset.Parse("11/2/2017 12:53:35 -04:00"),
+                    Environment = "Staging",
+                    PackageVersions = "Package A 0.9.104; Package B 0.9.104",
+                    ProjectName = "Project A",
+                    ReleaseNotesHtml = "<h1> Project A </h1>",
+                    Version = "0.9.104"
+                };
                 var actual = results.First();
                 Assert.Equal(expected.Environment, actual.Environment);
                 Assert.Equal(expected.Assembled, actual.Assembled);

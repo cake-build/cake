@@ -1,4 +1,4 @@
-﻿using Cake.Common.Build.AzurePipelines;
+using Cake.Common.Build.AzurePipelines;
 using Cake.Common.Tests.Fakes;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;

@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -91,16 +91,16 @@ namespace Cake.Common.Tools.XBuild
         {
             switch (verbosity)
             {
-            case Verbosity.Quiet:
-                return "quiet";
-            case Verbosity.Minimal:
-                return "minimal";
-            case Verbosity.Normal:
-                return "normal";
-            case Verbosity.Verbose:
-                return "detailed";
-            case Verbosity.Diagnostic:
-                return "diagnostic";
+                case Verbosity.Quiet:
+                    return "quiet";
+                case Verbosity.Minimal:
+                    return "minimal";
+                case Verbosity.Normal:
+                    return "normal";
+                case Verbosity.Verbose:
+                    return "detailed";
+                case Verbosity.Diagnostic:
+                    return "diagnostic";
             }
             throw new CakeException("Encountered unknown XBuild build log verbosity.");
         }

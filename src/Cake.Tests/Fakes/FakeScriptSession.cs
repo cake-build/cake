@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using Cake.Core.IO;
 using Cake.Core.Scripting;

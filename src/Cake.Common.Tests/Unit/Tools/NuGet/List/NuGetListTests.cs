@@ -1,4 +1,4 @@
-﻿using Cake.Common.Tests.Fixtures.Tools.NuGet.List;
+using Cake.Common.Tests.Fixtures.Tools.NuGet.List;
 using Cake.Testing;
 using Cake.Testing.Xunit;
 using Xunit;

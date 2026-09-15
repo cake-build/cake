@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cake.Core.Diagnostics.Formatting;
 using Xunit;
 

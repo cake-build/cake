@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -22,7 +22,7 @@ namespace Cake.Core.Scripting
         /// <summary>
         /// Gets the namespaces flagged to be excluded by code generation and affected aliases.
         /// </summary>
-        public IDictionary<string, IList<string>> ExcludedNamespaces { get;  }
+        public IDictionary<string, IList<string>> ExcludedNamespaces { get; }
 
         /// <summary>
         /// Gets the script lines.

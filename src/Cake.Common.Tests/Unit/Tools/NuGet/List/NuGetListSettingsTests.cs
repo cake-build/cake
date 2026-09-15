@@ -1,4 +1,4 @@
-﻿using Cake.Common.Tools.NuGet.List;
+using Cake.Common.Tools.NuGet.List;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.NuGet.List

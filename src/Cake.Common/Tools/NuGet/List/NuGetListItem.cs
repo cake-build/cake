@@ -1,4 +1,4 @@
-﻿namespace Cake.Common.Tools.NuGet.List
+namespace Cake.Common.Tools.NuGet.List
 {
     /// <summary>
     /// An item as returned by <see cref="NuGetList"/>.

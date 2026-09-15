@@ -1,4 +1,4 @@
-﻿using Cake.Cli;
+using Cake.Cli;
 
 namespace Cake.Tests.Fakes
 {

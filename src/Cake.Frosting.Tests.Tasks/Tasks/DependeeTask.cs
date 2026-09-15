@@ -1,4 +1,4 @@
-﻿using Cake.Core;
+using Cake.Core;
 
 namespace Cake.Frosting.Tests
 {

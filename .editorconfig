@@ -13,7 +13,91 @@ indent_size = 2
 [*.cs]
 indent_style = space
 indent_size = 4
+tab_width = 4
+charset = utf-8
+
+# Usings (stylecop.json)
+csharp_using_directive_placement = outside_namespace:warning
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
 dotnet_diagnostic.IDE0005.severity = error
+dotnet_diagnostic.IDE0065.severity = warning
+
+# Qualification / predefined types (SA1101/SA1121 currently off)
+dotnet_style_qualification_for_field = false:silent
+dotnet_style_qualification_for_property = false:silent
+dotnet_style_qualification_for_method = false:silent
+dotnet_style_qualification_for_event = false:silent
+dotnet_style_predefined_type_for_locals_parameters_members = true:silent
+dotnet_style_predefined_type_for_member_access = true:silent
+
+# Accessibility (SA1400)
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
+
+# Braces / expression / default
+csharp_prefer_braces = true:warning
+csharp_style_prefer_default_literal = true:suggestion
+csharp_prefer_trailing_comma = true:silent
+csharp_style_namespace_declarations = block_scoped:silent
+csharp_style_prefer_top_level_statements = false:silent
+csharp_style_prefer_pattern_matching = true:suggestion
+csharp_style_prefer_switch_expression = true:suggestion
+csharp_style_prefer_not_pattern = true:suggestion
+csharp_style_prefer_extended_property_pattern = true:suggestion
+csharp_style_prefer_primary_constructors = true:suggestion
+dotnet_style_prefer_collection_expression = when_types_exactly_match:suggestion
+csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_prefer_method_group_conversion = true:suggestion
+csharp_style_prefer_local_over_anonymous_function = true:suggestion
+csharp_style_var_elsewhere = true:silent
+csharp_style_var_for_built_in_types = true:silent
+csharp_style_var_when_type_is_apparent = true:silent
+
+# Naming: _camelCase fields (SA1309 off)
+dotnet_naming_rule.instance_fields_should_be_camel_case.severity = suggestion
+dotnet_naming_rule.instance_fields_should_be_camel_case.symbols = instance_fields
+dotnet_naming_rule.instance_fields_should_be_camel_case.style = underscore_camel_case
+dotnet_naming_symbols.instance_fields.applicable_kinds = field
+dotnet_naming_symbols.instance_fields.applicable_accessibilities = private, private_protected
+dotnet_naming_style.underscore_camel_case.required_prefix = _
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+
+dotnet_naming_rule.types_and_members_pascal.severity = suggestion
+dotnet_naming_rule.types_and_members_pascal.symbols = pascal_symbols
+dotnet_naming_rule.types_and_members_pascal.style = pascal_case
+dotnet_naming_symbols.pascal_symbols.applicable_kinds = class, struct, interface, enum, method, property, event, namespace, type_parameter
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+# Build-visible style: only rules that match former StyleCop enforcement.
+# category-Style defaults to suggestion so IDE still surfaces modern C#.
+dotnet_analyzer_diagnostic.category-Style.severity = suggestion
+dotnet_diagnostic.IDE0005.severity = error
+dotnet_diagnostic.IDE0011.severity = warning
+dotnet_diagnostic.IDE0065.severity = warning
+dotnet_diagnostic.IDE1006.severity = suggestion
+dotnet_diagnostic.IDE0055.severity = warning
+dotnet_diagnostic.IDE0007.severity = none
+dotnet_diagnostic.IDE0008.severity = none
+dotnet_diagnostic.IDE0010.severity = suggestion
+dotnet_diagnostic.IDE0019.severity = suggestion
+dotnet_diagnostic.IDE0027.severity = none
+dotnet_diagnostic.IDE0028.severity = suggestion
+dotnet_diagnostic.IDE0040.severity = suggestion
+dotnet_diagnostic.IDE0046.severity = none
+dotnet_diagnostic.IDE0058.severity = none
+dotnet_diagnostic.IDE0061.severity = none
+dotnet_diagnostic.IDE0072.severity = suggestion
+dotnet_diagnostic.IDE0100.severity = none
+dotnet_diagnostic.IDE0130.severity = none
+dotnet_diagnostic.IDE0290.severity = suggestion
+dotnet_diagnostic.IDE0300.severity = suggestion
+dotnet_diagnostic.IDE0301.severity = suggestion
+dotnet_diagnostic.IDE0302.severity = suggestion
+dotnet_diagnostic.IDE0303.severity = suggestion
+dotnet_diagnostic.IDE0304.severity = suggestion
+dotnet_diagnostic.IDE0305.severity = suggestion
+dotnet_diagnostic.IDE0390.severity = none
 
 [*.cake]
 indent_style = space
@@ -22,6 +106,15 @@ indent_size = 4
 [*.js]
 indent_style = tab
 indent_size = 2
+
+# Tests: preserve Test.ruleset relaxations
+[src/*.Tests/**/*.cs]
+dotnet_diagnostic.xUnit1012.severity = none
+dotnet_diagnostic.xUnit1013.severity = none
+dotnet_diagnostic.xUnit2000.severity = none
+dotnet_diagnostic.xUnit2002.severity = none
+dotnet_diagnostic.xUnit2003.severity = none
+dotnet_diagnostic.xUnit2004.severity = none
 
 # Verify settings
 [*.{received,verified}.{txt,xml,json,cake}]

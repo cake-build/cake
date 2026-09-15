@@ -1,4 +1,4 @@
-﻿namespace Cake.Common.Tools.Chocolatey.Pack
+namespace Cake.Common.Tools.Chocolatey.Pack
 {
     /// <summary>
     /// Represents a Chocolatey NuGet nuspec dependency.

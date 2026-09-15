@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -128,25 +128,25 @@ namespace Cake.Common.Solution.Project.Properties
             switch (value)
             {
                 case null:
-                {
-                    return string.Empty;
-                }
+                    {
+                        return string.Empty;
+                    }
                 case bool boolValue:
-                {
-                    return boolValue ? _trueStringValue : _falseStringValue;
-                }
+                    {
+                        return boolValue ? _trueStringValue : _falseStringValue;
+                    }
                 case string stringValue:
-                {
-                    return stringValue == string.Empty
-                        ? string.Empty
-                        : isRawValue
-                            ? stringValue
-                            : string.Concat("\"", stringValue.Replace("\"", "\\\""), "\"");
-                }
+                    {
+                        return stringValue == string.Empty
+                            ? string.Empty
+                            : isRawValue
+                                ? stringValue
+                                : string.Concat("\"", stringValue.Replace("\"", "\\\""), "\"");
+                    }
                 default:
-                {
-                    return Convert.ToString(value, CultureInfo.InvariantCulture);
-                }
+                    {
+                        return Convert.ToString(value, CultureInfo.InvariantCulture);
+                    }
             }
         }
 

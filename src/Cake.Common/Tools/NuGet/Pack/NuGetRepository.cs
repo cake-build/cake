@@ -1,4 +1,4 @@
-﻿namespace Cake.Common.Tools.NuGet.Pack
+namespace Cake.Common.Tools.NuGet.Pack
 {
     /// <summary>
     /// Specifies the package's source code location, allowing IDEs to download and debug the code.

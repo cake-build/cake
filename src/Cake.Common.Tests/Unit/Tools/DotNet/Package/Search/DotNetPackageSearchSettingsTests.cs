@@ -1,4 +1,4 @@
-﻿using Cake.Common.Tools.DotNet.Package.Search;
+using Cake.Common.Tools.DotNet.Package.Search;
 using Xunit;
 
 namespace Cake.Common.Tests.Unit.Tools.DotNet.Package.Search

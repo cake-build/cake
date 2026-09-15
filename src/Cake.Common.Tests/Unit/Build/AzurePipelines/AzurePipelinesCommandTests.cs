@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Cake.Common.Build.AzurePipelines;
 using Cake.Common.Build.AzurePipelines.Data;

@@ -1,0 +1,4 @@
+# Commits to skip in git blame (git config blame.ignoreRevsFile .git-blame-ignore-revs)
+#
+# (GH-5006) Replace StyleCop.Analyzers with native SDK analyzers.
+dd2a29ebeb42a233b6508df82ac1d9c993520444

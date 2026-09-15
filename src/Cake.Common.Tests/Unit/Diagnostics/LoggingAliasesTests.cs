@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -66,7 +66,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
                 // Given
                 var context = Substitute.For<ICakeContext>();
                 context.Log.Returns(Substitute.For<ICakeLog>());
-                var value = new { FirstName = "John", LastName="Doe" };
+                var value = new { FirstName = "John", LastName = "Doe" };
 
                 // When
                 context.Error(value);
@@ -143,7 +143,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
                 // Given
                 var context = Substitute.For<ICakeContext>();
                 context.Log.Returns(Substitute.For<ICakeLog>());
-                var value = new { FirstName = "John", LastName="Doe" };
+                var value = new { FirstName = "John", LastName = "Doe" };
 
                 // When
                 context.Warning(value);
@@ -220,7 +220,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
                 // Given
                 var context = Substitute.For<ICakeContext>();
                 context.Log.Returns(Substitute.For<ICakeLog>());
-                var value = new { FirstName = "John", LastName="Doe" };
+                var value = new { FirstName = "John", LastName = "Doe" };
 
                 // When
                 context.Information(value);
@@ -297,7 +297,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
                 // Given
                 var context = Substitute.For<ICakeContext>();
                 context.Log.Returns(Substitute.For<ICakeLog>());
-                var value = new { FirstName = "John", LastName="Doe" };
+                var value = new { FirstName = "John", LastName = "Doe" };
 
                 // When
                 context.Verbose(value);
@@ -374,7 +374,7 @@ namespace Cake.Common.Tests.Unit.Diagnostics
                 // Given
                 var context = Substitute.For<ICakeContext>();
                 context.Log.Returns(Substitute.For<ICakeLog>());
-                var value = new { FirstName = "John", LastName="Doe" };
+                var value = new { FirstName = "John", LastName = "Doe" };
 
                 // When
                 context.Debug(value);

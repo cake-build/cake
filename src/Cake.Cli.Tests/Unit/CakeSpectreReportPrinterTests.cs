@@ -35,7 +35,8 @@ public class CakeSpectreReportPrinterTests
         var executionCategories = Enum
                                     .GetValues<CakeReportEntryCategory>()
                                     .OrderBy(
-                                        category => category switch {
+                                        category => category switch
+                                        {
                                             CakeReportEntryCategory.Setup => 0,
                                             CakeReportEntryCategory.Task => 1,
                                             CakeReportEntryCategory.Teardown => 9,
@@ -46,7 +47,8 @@ public class CakeSpectreReportPrinterTests
         var executionStatuses = Enum
                                     .GetValues<CakeTaskExecutionStatus>()
                                     .OrderBy(
-                                        status => status switch {
+                                        status => status switch
+                                        {
                                             CakeTaskExecutionStatus.Executed => 0,
                                             CakeTaskExecutionStatus.Skipped => 1,
                                             CakeTaskExecutionStatus.Failed => 2,

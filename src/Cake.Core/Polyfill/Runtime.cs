@@ -1,4 +1,4 @@
-﻿namespace Cake.Core.Polyfill
+namespace Cake.Core.Polyfill
 {
     /// <summary>
     /// The current Runtime Cake is executing on.

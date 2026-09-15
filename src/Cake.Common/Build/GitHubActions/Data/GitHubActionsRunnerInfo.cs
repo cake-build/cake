@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -261,13 +261,13 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// </example>
         public GitHubActionsArchitecture Architecture => GetEnvironmentString("RUNNER_ARCH")
                                                             ?.ToUpperInvariant() switch
-                                                            {
-                                                                "X86" => GitHubActionsArchitecture.X86,
-                                                                "X64" => GitHubActionsArchitecture.X64,
-                                                                "ARM" => GitHubActionsArchitecture.ARM,
-                                                                "ARM64" => GitHubActionsArchitecture.ARM64,
-                                                                _ => GitHubActionsArchitecture.Unknown
-                                                            };
+        {
+            "X86" => GitHubActionsArchitecture.X86,
+            "X64" => GitHubActionsArchitecture.X64,
+            "ARM" => GitHubActionsArchitecture.ARM,
+            "ARM64" => GitHubActionsArchitecture.ARM64,
+            _ => GitHubActionsArchitecture.Unknown
+        };
 
         /// <summary>
         /// Gets a value indicating whether debug logging is enabled for the runner.
@@ -321,10 +321,10 @@ namespace Cake.Common.Build.GitHubActions.Data
         /// </example>
         public GitHubActionsRunnerEnvironment Environment => GetEnvironmentString("RUNNER_ENVIRONMENT")
                                                             ?.ToLowerInvariant() switch
-                                                            {
-                                                                "github-hosted" => GitHubActionsRunnerEnvironment.GitHubHosted,
-                                                                "self-hosted" => GitHubActionsRunnerEnvironment.SelfHosted,
-                                                                _ => GitHubActionsRunnerEnvironment.Unknown
-                                                            };
+        {
+            "github-hosted" => GitHubActionsRunnerEnvironment.GitHubHosted,
+            "self-hosted" => GitHubActionsRunnerEnvironment.SelfHosted,
+            _ => GitHubActionsRunnerEnvironment.Unknown
+        };
     }
 }

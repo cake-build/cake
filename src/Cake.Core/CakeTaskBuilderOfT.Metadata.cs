@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -29,7 +29,7 @@ namespace Cake.Core
         /// <typeparam name="TData">The type of the data context.</typeparam>
         public static CakeTaskBuilder<TData> Of<TData>(this CakeTaskBuilder builder)
             where TData : class
-            => new (builder);
+            => new(builder);
 
         /// <summary>
         /// Adds a description to the task.
