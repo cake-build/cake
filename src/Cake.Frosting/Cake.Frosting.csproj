@@ -21,9 +21,6 @@
     <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />
     <ProjectReference Include="..\Cake.DotNetTool.Module\Cake.DotNetTool.Module.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Internal\Imported\" />
-  </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

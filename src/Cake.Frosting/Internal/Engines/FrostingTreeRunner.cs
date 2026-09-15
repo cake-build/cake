@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Frosting.TaskChains;
 
 namespace Cake.Frosting.Internal
 {
@@ -14,9 +15,10 @@ namespace Cake.Frosting.Internal
         public FrostingTreeRunner(TreeScriptHost host,
             ICakeEngine engine, IFrostingContext context, ICakeLog log,
             IEnumerable<IFrostingTask> tasks,
+            ITaskConfigurator taskConfigurator,
             IFrostingSetup setup = null, IFrostingTeardown teardown = null,
             IFrostingTaskSetup taskSetup = null, IFrostingTaskTeardown taskTeardown = null)
-                : base(host, engine, context, log, tasks, setup, teardown, taskSetup, taskTeardown)
+                : base(host, engine, context, log, tasks, taskConfigurator, setup, teardown, taskSetup, taskTeardown)
         {
         }
     }
