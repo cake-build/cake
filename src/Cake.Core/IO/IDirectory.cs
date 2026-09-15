@@ -100,5 +100,13 @@ namespace Cake.Core.IO
         /// <param name="unixFileMode">The <see cref="UnixFileMode"/> to set.</param>
         /// <returns>The <see cref="IDirectory"/> instance representing the specified path.</returns>
         IDirectory SetUnixFileMode(UnixFileMode unixFileMode) => this;
+
+        /// <summary>
+        /// Gets all file system entries in the directory.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <param name="scope">The search scope.</param>
+        /// <returns>The file system entries.</returns>
+        IEnumerable<IFileSystemInfo> GetFileSystemInfos(string filter, SearchScope scope);
     }
 }

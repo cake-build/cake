@@ -20,5 +20,12 @@ namespace Cake.Core.IO
         ///   <see cref="Path" /> instances matching the specified pattern.
         /// </returns>
         IEnumerable<Path> Match(GlobPattern pattern, GlobberSettings settings);
+
+        /// <summary>
+        /// Returns a list of <see cref="IFileSystemInfo"/> matching the specified pattern.
+        /// </summary>
+        /// <param name="pattern">The pattern to match.</param>
+        /// <returns>A list of <see cref="IFileSystemInfo"/>.</returns>
+        IEnumerable<IFileSystemInfo> GetFileSystemInfos(string pattern);
     }
 }

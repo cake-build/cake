@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Cake.Core.IO;
 
@@ -275,6 +276,16 @@ namespace Cake.Testing
         {
             pattern = pattern.Replace(".", "\\.").Replace("*", ".*").Replace("?", ".{1}");
             return new Regex(pattern, RegexOptions.Singleline | RegexOptions.Compiled);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<IFileSystemInfo> GetFileSystemInfos(string filter, SearchScope scope)
+        {
+            // بنجمع المجلدات والملفات الوهمية
+            var directories = GetDirectories(filter, scope).Cast<IFileSystemInfo>();
+            var files = GetFiles(filter, scope).Cast<IFileSystemInfo>();
+
+            return directories.Concat(files);
         }
     }
 }
