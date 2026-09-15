@@ -1,4 +1,4 @@
-﻿using Cake.Core.Diagnostics;
+using Cake.Core.Diagnostics;
 using Cake.Testing;
 using Xunit;
 

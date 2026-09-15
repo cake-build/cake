@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;

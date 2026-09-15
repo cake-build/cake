@@ -1,4 +1,4 @@
-﻿namespace Cake.Common.Security
+namespace Cake.Common.Security
 {
     /// <summary>
     /// Creates a <see cref="System.Security.Cryptography.HashAlgorithm"/> instance by

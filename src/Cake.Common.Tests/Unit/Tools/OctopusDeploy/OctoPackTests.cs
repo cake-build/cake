@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -196,16 +196,16 @@ namespace Cake.Common.Tests.Unit.Tools.OctopusDeploy
             [Fact]
             public void Should_Add_Format_To_Arguments_If_Zip()
             {
-               // Given
-               var fixture = new OctopusDeployPackerFixture();
-               fixture.Id = "MyPackage";
-               fixture.Settings.Format = OctopusPackFormat.Zip;
+                // Given
+                var fixture = new OctopusDeployPackerFixture();
+                fixture.Id = "MyPackage";
+                fixture.Settings.Format = OctopusPackFormat.Zip;
 
-               // When
-               var result = fixture.Run();
+                // When
+                var result = fixture.Run();
 
-               // Then
-               Assert.Equal("pack --id MyPackage --format Zip", result.Args);
+                // Then
+                Assert.Equal("pack --id MyPackage --format Zip", result.Args);
             }
         }
     }

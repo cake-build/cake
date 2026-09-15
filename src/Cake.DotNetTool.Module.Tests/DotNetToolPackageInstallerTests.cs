@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cake.Core.Packaging;
 using Xunit;
 

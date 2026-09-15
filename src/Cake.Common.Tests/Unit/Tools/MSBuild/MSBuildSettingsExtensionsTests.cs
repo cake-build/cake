@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1044,11 +1044,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Given
                 var settings = new MSBuildSettings();
 
-               // When
+                // When
                 settings.WithConsoleLoggerParameter("ForceConsoleColor");
                 settings.WithConsoleLoggerParameter("ShowCommandLine");
 
-               // Then
+                // Then
                 Assert.Contains("ForceConsoleColor", settings.ConsoleLoggerParameters);
                 Assert.Contains("ShowCommandLine", settings.ConsoleLoggerParameters);
             }
@@ -1059,11 +1059,11 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 // Given
                 var settings = new MSBuildSettings();
 
-               // When
+                // When
                 var result = settings.WithConsoleLoggerParameter("ForceConsoleColor");
                 var result1 = settings.WithConsoleLoggerParameter("ShowCommandLine");
 
-               // Then
+                // Then
                 Assert.Equal(settings, result);
                 Assert.Equal(settings, result1);
             }

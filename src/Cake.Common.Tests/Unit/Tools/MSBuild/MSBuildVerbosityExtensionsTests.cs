@@ -74,5 +74,5 @@ namespace Cake.Common.Tests.Unit.Tools.MSBuild
                 Assert.Equal(expectedMessage, actualException.Message);
             }
         }
-   }
+    }
 }

@@ -1,4 +1,4 @@
-﻿namespace Cake.Tests.Fixtures
+namespace Cake.Tests.Fixtures
 {
     public sealed class ProgramFixtureResult
     {

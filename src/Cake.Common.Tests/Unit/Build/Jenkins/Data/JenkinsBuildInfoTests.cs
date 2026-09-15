@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,18 +11,18 @@ namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
     {
         public sealed class TheBuildNumberProperty
         {
-             [Fact]
-             public void Should_Return_Correct_Value()
-             {
-                 // Given
-                 var info = new JenkinsInfoFixture().CreateBuildInfo();
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new JenkinsInfoFixture().CreateBuildInfo();
 
                 // When
-                 var result = info.BuildNumber;
+                var result = info.BuildNumber;
 
                 // Then
-                 Assert.Equal(456, result);
-             }
+                Assert.Equal(456, result);
+            }
         }
 
         public sealed class TheBuildIdProperty

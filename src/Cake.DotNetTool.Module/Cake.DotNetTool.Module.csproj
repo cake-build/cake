@@ -6,9 +6,6 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageTags>$(PackageTags);dotnettool;module;cake-build;cake-module</PackageTags>
   </PropertyGroup>
-  <PropertyGroup>
-    <CodeAnalysisRuleSet>Cake.DotNetTool.Module.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <DefineConstants>TRACE;DEBUG;NETSTANDARD</DefineConstants>
   </PropertyGroup>

@@ -1,4 +1,4 @@
-﻿using NSubstitute;
+using NSubstitute;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit

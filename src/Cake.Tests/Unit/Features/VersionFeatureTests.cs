@@ -1,4 +1,4 @@
-﻿using Cake.Cli;
+using Cake.Cli;
 using Cake.Testing;
 using Cake.Tests.Fakes;
 using Xunit;

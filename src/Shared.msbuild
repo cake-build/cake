@@ -36,12 +36,6 @@
     <None Include="../../nuspec/NuGet.org.md" Pack="true" PackagePath=""/>
   </ItemGroup>
 
-  <!-- Warnings as errors -->
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <EnforceCodeStyleInBuild Condition="'$(IsCakeTestProject)' == '' And '$(IsPackable)' != 'false' And '$(IsCakeTestProject)' != 'true'">true</EnforceCodeStyleInBuild>
-  </PropertyGroup>
-
   <!-- Attribute generation -->
   <PropertyGroup>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -52,17 +46,9 @@
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
   </PropertyGroup>
-  <!-- StyleCop -->
-  <PropertyGroup>
-    <CodeAnalysisRuleSet Condition="$(IsCakeTestProject) == ''">$(MSBuildThisFileDirectory)Cake.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSet Condition="$(IsCakeTestProject) == 'true'">$(MSBuildThisFileDirectory)Test.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup Condition="$(IsCakeTestProject) == 'true'">
     <Content Include="$(MSBuildThisFileDirectory)xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 </Project>

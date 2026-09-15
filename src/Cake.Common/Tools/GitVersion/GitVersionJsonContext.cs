@@ -17,7 +17,7 @@ namespace Cake.Common.Tools.GitVersion
         /// <summary>
         /// Gets the static serializer options used for GitVersion JSON (includes <see cref="JsonStringOrNumberConverter"/>).
         /// </summary>
-        public static JsonSerializerOptions SerializerOptions { get; } = new ()
+        public static JsonSerializerOptions SerializerOptions { get; } = new()
         {
             Converters = { new JsonStringOrNumberConverter() }
         };
@@ -26,6 +26,6 @@ namespace Cake.Common.Tools.GitVersion
         /// Gets the context instance with options that allow number-or-string for string properties (uses <see cref="SerializerOptions"/>).
         /// Use this instead of <see cref="Default"/> when deserializing GitVersion CLI output.
         /// </summary>
-        public static GitVersionJsonContext DefaultWithConverter { get; } = new (SerializerOptions);
+        public static GitVersionJsonContext DefaultWithConverter { get; } = new(SerializerOptions);
     }
 }

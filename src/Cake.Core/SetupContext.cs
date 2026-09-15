@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +10,7 @@ namespace Cake.Core
     public sealed class SetupContext : CakeContextAdapter, ISetupContext
     {
         /// <inheritdoc/>
-        public ICakeTaskInfo TargetTask { get;  }
+        public ICakeTaskInfo TargetTask { get; }
 
         /// <inheritdoc/>
         public IReadOnlyCollection<ICakeTaskInfo> TasksToExecute { get; }

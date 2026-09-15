@@ -1,4 +1,4 @@
-﻿using Cake.Core.Scripting;
+using Cake.Core.Scripting;
 
 namespace Cake.Tests.Fixtures
 {
