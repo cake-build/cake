@@ -70,5 +70,20 @@ namespace Cake.Testing
         {
             return GetFile(path);
         }
+
+        /// <inheritdoc/>
+        public IFileSystemInfo GetFileSystemInfo(DirectoryPath path)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+            var directory = GetDirectory(path);
+            if (directory.Exists)
+            {
+                return directory;
+            }
+            return GetFile(path.FullPath);
+        }
     }
 }
