@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -124,6 +125,31 @@ namespace Cake.Common.Tools.DotCover.Cover
                     builder.Append("--no-ngen");
                 }
 
+                if (settings.Filters is { Count: > 0 })
+                {
+                    context.Log.Warning("Filters parameter is not supported in new DotCover format");
+                }
+
+                if (settings.Scope is { Count: > 0 })
+                {
+                    context.Log.Warning("Scope parameter is not supported in new DotCover format");
+                }
+
+                if (settings.AttributeFilters is { Count: > 0 })
+                {
+                    context.Log.Warning("AttributeFilters parameter is not supported in new DotCover format");
+                }
+
+                if (settings.ProcessFilters is { Count: > 0 })
+                {
+                    context.Log.Warning("ProcessFilters parameter is not supported in new DotCover format");
+                }
+
+                if (settings.DisableDefaultFilters is true)
+                {
+                    context.Log.Warning("DisableDefaultFilters parameter is not supported in new DotCover format");
+                }
+
                 // Get base arguments - new format
                 GetCoverArguments(settings).CopyTo(builder);
             }
@@ -163,41 +189,6 @@ namespace Cake.Common.Tools.DotCover.Cover
             {
                 var excludeProcesses = string.Join(',', settings.ExcludeProcesses);
                 builder.AppendSwitch("--exclude-processes", excludeProcesses.Quote());
-            }
-
-            // Legacy filtering options (maintain backward compatibility with old format)
-            // Scope
-            if (settings.Scope.Count > 0)
-            {
-                var scope = string.Join(';', settings.Scope);
-                builder.AppendSwitch("/Scope", "=", scope.Quote());
-            }
-
-            // Filters
-            if (settings.Filters.Count > 0)
-            {
-                var filters = string.Join(';', settings.Filters);
-                builder.AppendSwitch("/Filters", "=", filters.Quote());
-            }
-
-            // AttributeFilters
-            if (settings.AttributeFilters.Count > 0)
-            {
-                var attributeFilters = string.Join(';', settings.AttributeFilters);
-                builder.AppendSwitch("/AttributeFilters", "=", attributeFilters.Quote());
-            }
-
-            // ProcessFilters
-            if (settings.ProcessFilters.Count > 0)
-            {
-                var processFilters = string.Join(';', settings.ProcessFilters);
-                builder.AppendSwitch("/ProcessFilters", "=", processFilters.Quote());
-            }
-
-            // DisableDefaultFilters
-            if (settings.DisableDefaultFilters)
-            {
-                builder.Append("/DisableDefaultFilters");
             }
 
             return builder;

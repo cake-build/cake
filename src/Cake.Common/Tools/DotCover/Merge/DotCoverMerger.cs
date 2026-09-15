@@ -35,6 +35,17 @@ namespace Cake.Common.Tools.DotCover.Merge
         }
 
         /// <summary>
+        /// Runs DotCover Merge with the new parameter Syntax.
+        /// </summary>
+        /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
+        /// <param name="settings">The settings.</param>
+        /// <param name="outputFile">The merged output file (optional).</param>
+        public void Merge(IEnumerable<FilePath> sourceFiles, DotCoverMergeSettings settings, FilePath outputFile = null)
+        {
+            Merge(sourceFiles, outputFile, settings);
+        }
+
+        /// <summary>
         /// Runs DotCover Merge with the specified settings.
         /// </summary>
         /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
@@ -49,8 +60,11 @@ namespace Cake.Common.Tools.DotCover.Merge
             {
                 throw new ArgumentNullException("sourceFiles");
             }
-            ArgumentNullException.ThrowIfNull(outputFile);
             ArgumentNullException.ThrowIfNull(settings);
+            if (settings.UseLegacySyntax)
+            {
+                ArgumentNullException.ThrowIfNull(outputFile);
+            }
 
             // Run the tool.
             Run(settings, GetArguments(sourceFiles, outputFile, settings));
@@ -63,11 +77,50 @@ namespace Cake.Common.Tools.DotCover.Merge
         {
             var builder = new ProcessArgumentBuilder();
 
-            builder.Append("Merge");
+            // Command name - always lowercase 'merge' for both formats
+            builder.Append("merge");
 
             // Set configuration file if exists.
             GetConfigurationFileArgument(settings).CopyTo(builder);
 
+            if (settings.UseLegacySyntax)
+            {
+                BuildLegacyArguments(sourceFiles, outputFile, builder);
+            }
+            else
+            {
+                BuildNewArguments(sourceFiles, outputFile, builder, settings);
+            }
+
+            // Get Global settings
+            GetArguments(settings).CopyTo(builder);
+
+            return builder;
+        }
+
+        private void BuildNewArguments(IEnumerable<FilePath> sourceFiles, FilePath outputFile, ProcessArgumentBuilder builder, DotCoverMergeSettings settings)
+        {
+            // Set the Source files.
+            var source = string.Join(',', sourceFiles.Select(s => s.MakeAbsolute(_environment).FullPath));
+            builder.AppendSwitch("--snapshot-source", source.Quote());
+
+            // Set the Output file.
+            if (outputFile != null)
+            {
+                outputFile = outputFile.MakeAbsolute(_environment);
+                builder.AppendSwitch("--snapshot-output", outputFile.FullPath.Quote());
+            }
+
+            // Set the Temporary directory.
+            if (settings.TemporaryDirectory != null)
+            {
+                settings.TemporaryDirectory = settings.TemporaryDirectory.MakeAbsolute(_environment);
+                builder.AppendSwitch("--temporary-directory", settings.TemporaryDirectory.FullPath.Quote());
+            }
+        }
+
+        private void BuildLegacyArguments(IEnumerable<FilePath> sourceFiles, FilePath outputFile, ProcessArgumentBuilder builder)
+        {
             // Set the Source files.
             var source = string.Join(';', sourceFiles.Select(s => s.MakeAbsolute(_environment).FullPath));
             builder.AppendSwitch("/Source", "=", source.Quote());
@@ -75,11 +128,6 @@ namespace Cake.Common.Tools.DotCover.Merge
             // Set the Output file.
             outputFile = outputFile.MakeAbsolute(_environment);
             builder.AppendSwitch("/Output", "=", outputFile.FullPath.Quote());
-
-            // Get Global settings
-            GetArguments(settings).CopyTo(builder);
-
-            return builder;
         }
     }
 }

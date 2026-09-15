@@ -241,6 +241,7 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Analyse
                 // Given
                 var fixture = new DotCoverAnalyserFixture();
                 fixture.Settings.LogFile = "./logfile.log";
+                fixture.Settings.UseLegacySyntax = true;
 
                 // When
                 var result = fixture.Run();

@@ -52,13 +52,5 @@ namespace Cake.Common.Tools.DotCover.Cover
         /// This represents the <c>--no-ngen</c> option.
         /// </summary>
         public bool NoNGen { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use the legacy command syntax.
-        /// When true, uses old format like '/TargetExecutable="/path"'.
-        /// When false, uses new format like '--target-executable "/path"'.
-        /// Default is false (new format).
-        /// </summary>
-        public bool UseLegacySyntax { get; set; }
     }
 }
