@@ -428,5 +428,36 @@ namespace Cake.Common.IO
 
             return filePath.ExpandEnvironmentVariables(context.Environment);
         }
+
+        ///<summary>
+        /// Finds all files mactching the specified pattern within a directory
+        /// </summary>
+        /// <param name="Context">The context.</param>
+        /// <param name="directoryPath">The directory path to search in.</param>
+        /// <param name="pattern">The file pattern to match (eg:"*.csproj").</param>
+        /// <parma name= "scope">The search scope (current directory or recursive).</parma>
+        /// <returns>List of files matching the  pattern.</returns>
+        /// <example>
+        /// <code>
+        /// var files = FindFilesInDirectory("./src", "*.csproj", SearchScope.Recursive);
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Find")]
+        public static IEnumerable<FilePath> FindFilesInDirectory(
+            this ICakeContext context,
+            DirectoryPath directoryPath,
+            string pattern,
+            SearchScope scope = SearchScope.Recursive)
+        {
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(directoryPath);
+            ArgumentNullException.ThrowIfNull(pattern);
+
+            var directory = context.FileSystem.GetDirectory(
+                directoryPath.MakeAbsolute(context.Environment));
+
+            return directory.GetFiles(pattern, scope).Select(f => f.Path);
+        } 
     }
 }
