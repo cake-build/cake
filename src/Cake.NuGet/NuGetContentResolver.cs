@@ -227,6 +227,7 @@ namespace Cake.NuGet
             // Get the same major version as we are currently running
             var sdkDirectories = Directory.GetDirectories(sdkRoot)
                 .Select(dir => new DirectoryInfo(dir))
+                .OrderByDescending(dir => new Version(dir.Name))
                 .Where(dir => new Version(dir.Name).Major == Environment.Version.Major);
 
             foreach (var sdkDir in sdkDirectories)
