@@ -172,53 +172,9 @@ namespace Cake.NuGet
         private static string? GetCurrentSdkGraphPath()
         {
             // The RID graph is supplied in the dotnet sdk directory
-            
-            string dotnetDir = null;
-            // Assume environment variable is correct
-            string dotNetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT");
-            if (!string.IsNullOrEmpty(dotNetRoot) && Directory.Exists(dotNetRoot))
-            {
-                dotnetDir = dotNetRoot;
-            }
-            else
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    string winDefault = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet");
-                    if (Directory.Exists(winDefault))
-                    {
-                        dotnetDir = winDefault;
-                    }
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    if (Directory.Exists("/usr/share/dotnet"))
-                    {
-                        dotnetDir = "/usr/share/dotnet";
-                    }
-                    else
-                    {
-                        if (Directory.Exists("/usr/lib/dotnet"))
-                        {
-                            dotnetDir = "/usr/lib/dotnet";
-                        }
-                    }
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    if (Directory.Exists("/usr/local/share/dotnet"))
-                    {
-                        dotnetDir = "/usr/local/share/dotnet";
-                    }
-                }
-            }
-
-            if (dotnetDir == null || !Directory.Exists(dotnetDir))
-            {
-                return null;
-            }
-
-            string sdkRoot = System.IO.Path.Combine(dotnetDir, "sdk");
+            string runtimeDirectory = RuntimeEnvironment.GetRuntimeDirectory();
+            string dotNetRoot = System.IO.Path.GetFullPath(System.IO.Path.Combine(runtimeDirectory, "../../../"));
+            string sdkRoot = System.IO.Path.Combine(dotNetRoot, "sdk");
             if (!Directory.Exists(sdkRoot))
             {
                 return null;
