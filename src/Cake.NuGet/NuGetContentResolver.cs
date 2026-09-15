@@ -4,7 +4,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -25,12 +27,23 @@ namespace Cake.NuGet
 
         private static readonly Lazy<RuntimeGraph> RuntimeGraph = new Lazy<RuntimeGraph>(() =>
         {
+            var sdkRuntimeGraphPath = GetCurrentSdkGraphPath();
+            if (sdkRuntimeGraphPath != null)
+            {
+                using (var stream = File.OpenRead(sdkRuntimeGraphPath))
+                {
+                    return JsonRuntimeFormat.ReadRuntimeGraph(stream);
+                }
+            }
             var assembly = typeof(NuGetContentResolver).Assembly;
+            
             using (var stream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.runtime.json"))
             {
                 return JsonRuntimeFormat.ReadRuntimeGraph(stream);
             }
         });
+        
+
 
         public NuGetContentResolver(
             IFileSystem fileSystem,
@@ -154,6 +167,83 @@ namespace Cake.NuGet
 
             // Return the files.
             return collection.Select(p => _fileSystem.GetFile(p)).ToArray();
+        }
+        
+        private static string? GetCurrentSdkGraphPath()
+        {
+            // The RID graph is supplied in the dotnet sdk directory
+            
+            string dotnetDir = null;
+            // Assume environment variable is correct
+            string dotNetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT");
+            if (!string.IsNullOrEmpty(dotNetRoot) && Directory.Exists(dotNetRoot))
+            {
+                dotnetDir = dotNetRoot;
+            }
+            else
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    string winDefault = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet");
+                    if (Directory.Exists(winDefault))
+                    {
+                        dotnetDir = winDefault;
+                    }
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    if (Directory.Exists("/usr/share/dotnet"))
+                    {
+                        dotnetDir = "/usr/share/dotnet";
+                    }
+                    else
+                    {
+                        if (Directory.Exists("/usr/lib/dotnet"))
+                        {
+                            dotnetDir = "/usr/lib/dotnet";
+                        }
+                    }
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    if (Directory.Exists("/usr/local/share/dotnet"))
+                    {
+                        dotnetDir = "/usr/local/share/dotnet";
+                    }
+                }
+            }
+
+            if (dotnetDir == null || !Directory.Exists(dotnetDir))
+            {
+                return null;
+            }
+
+            string sdkRoot = System.IO.Path.Combine(dotnetDir, "sdk");
+            if (!Directory.Exists(sdkRoot))
+            {
+                return null;
+            }
+
+            // Get the same major version as we are currently running
+            var sdkDirectories = Directory.GetDirectories(sdkRoot)
+                .Select(dir => new DirectoryInfo(dir))
+                .Where(dir => new Version(dir.Name).Major == Environment.Version.Major);
+
+            foreach (var sdkDir in sdkDirectories)
+            {
+                // From .NET 8+ the runtime graph has changed to a smaller "portable" runtime graph
+                // See https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/8.0/rid-graph
+                if (Environment.Version.Major >= 8)
+                {
+                    return System.IO.Path.Combine(sdkDir.FullName, "PortableRuntimeIdentifierGraph.json");
+                }
+                else
+                {
+                    return System.IO.Path.Combine(sdkDir.FullName, "RuntimeIdentifierGraph.json");
+                }
+            }
+
+            return null;
         }
     }
 }
