@@ -57,5 +57,8 @@ namespace Cake.Core
 
         /// <inheritdoc/>
         public virtual ICakeConfiguration Configuration => _context.Configuration;
+
+        /// <inheritdoc/>
+        public virtual IToolInstaller ToolInstaller => _context.ToolInstaller;
     }
 }

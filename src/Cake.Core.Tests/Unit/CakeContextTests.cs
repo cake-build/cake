@@ -136,6 +136,20 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 AssertEx.IsArgumentNullException(result, "configuration");
             }
+
+            [Fact]
+            public void Should_Throw_If_Tool_Installer_Is_Null()
+            {
+                // Given
+                var fixture = new CakeContextFixture();
+                fixture.ToolInstaller = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateContext());
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "toolInstaller");
+            }
         }
 
         public sealed class TheFileSystemProperty
@@ -236,6 +250,20 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.Same(fixture.Configuration, configuration);
+            }
+
+            [Fact]
+            public void Should_Return_Provided_Tool_Installer()
+            {
+                // Given
+                var fixture = new CakeContextFixture();
+                var context = fixture.CreateContext();
+
+                // When
+                var toolInstaller = context.ToolInstaller;
+
+                // Then
+                Assert.Same(fixture.ToolInstaller, toolInstaller);
             }
         }
     }
