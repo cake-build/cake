@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -232,7 +232,7 @@ namespace Cake.Common.Solution
             {
                 "Folder" => ParseSlnxFolder(xmlElement, solutionFile),
                 "Project" => ParseSlnxProject(xmlElement, solutionFile),
-                _ =>[],
+                _ => [],
             };
         }
 
@@ -284,9 +284,9 @@ namespace Cake.Common.Solution
             }
 
             var projectTypeId = xmlElement.GetAttribute("Type");
+            // The new project type id notation does not quite fit the known format, so it is adjusted.
             projectTypeId = string.IsNullOrWhiteSpace(projectTypeId)
                 ? defaultProjectTypeId
-                // the new project type id notation does not quite fit the known format, so it is adjusted.
                 : $"{{{projectTypeId.ToUpper()}}}";
 
             var projectFilePath = new FilePath(projectPath);

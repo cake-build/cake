@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Cake.Common.Tools.NuGet.List;
 
 namespace Cake.Common.Tests.Fixtures.Tools.NuGet.List

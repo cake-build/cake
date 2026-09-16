@@ -1,4 +1,4 @@
-﻿using Cake.Core.IO;
+using Cake.Core.IO;
 
 namespace Cake.Common.Diagnostics
 {

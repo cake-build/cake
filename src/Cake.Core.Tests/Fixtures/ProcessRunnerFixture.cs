@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;

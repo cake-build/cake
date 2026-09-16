@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -22,8 +22,8 @@ namespace Cake.Common.Tools.WiX
         /// <summary>
         /// Gets or sets the pre processor defines.
         /// </summary>
+        // Variable names are case-sensitive. http://wixtoolset.org/documentation/manual/v3/overview/preprocessor.html#custom-variables-define
         public IDictionary<string, string> Defines { get; set; } =
-            // “Variable names are case-sensitive.” http://wixtoolset.org/documentation/manual/v3/overview/preprocessor.html#custom-variables-define
             new Dictionary<string, string>(StringComparer.Ordinal);
 
         /// <summary>

@@ -10,10 +10,10 @@ namespace Cake.Testing.Tests.Fixtures
 {
     public sealed class FakeFileSystemFixture
     {
-        private static readonly DateTimeOffset StartDateTimeOffset = new (2014, 5, 27, 19, 56, 1, TimeSpan.FromHours(2));
-        private static readonly DateTimeOffset TestCreationDateTimeOffset = new (2025, 10, 25, 20, 33, 4, TimeSpan.FromHours(2));
-        private static readonly DateTimeOffset TestLastWriteDateTimeOffset = new (2025, 10, 25, 21, 34, 5, TimeSpan.FromHours(2));
-        private static readonly DateTimeOffset TestLastAccessDateTimeOffset = new (2025, 10, 25, 22, 35, 6, TimeSpan.FromHours(2));
+        private static readonly DateTimeOffset StartDateTimeOffset = new(2014, 5, 27, 19, 56, 1, TimeSpan.FromHours(2));
+        private static readonly DateTimeOffset TestCreationDateTimeOffset = new(2025, 10, 25, 20, 33, 4, TimeSpan.FromHours(2));
+        private static readonly DateTimeOffset TestLastWriteDateTimeOffset = new(2025, 10, 25, 21, 34, 5, TimeSpan.FromHours(2));
+        private static readonly DateTimeOffset TestLastAccessDateTimeOffset = new(2025, 10, 25, 22, 35, 6, TimeSpan.FromHours(2));
 
         public FakeFileSystem FileSystem { get; }
         public FakeEnvironment Environment { get; }

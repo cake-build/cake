@@ -153,7 +153,7 @@ namespace Cake.Common.Tests.Fixtures.Build
                         var getSignedArtifactURLRequest = await System.Text.Json.JsonSerializer.DeserializeAsync<GetSignedArtifactURLRequest>(getSignedArtifactURLRequestStream, cancellationToken: cancellationToken);
                         return getSignedArtifactURLRequest switch
                         {
-                            { Name: { Length: >0}, WorkflowJobRunBackendId: { Length: >0}, WorkflowRunBackendId: { Length: >0 } } => Ok(new StringContent(GetSignedArtifactURLResponse)),
+                            { Name: { Length: > 0 }, WorkflowJobRunBackendId: { Length: > 0 }, WorkflowRunBackendId: { Length: > 0 } } => Ok(new StringContent(GetSignedArtifactURLResponse)),
                             _ => new HttpResponseMessage
                             {
                                 StatusCode = HttpStatusCode.BadRequest
@@ -176,9 +176,9 @@ namespace Cake.Common.Tests.Fixtures.Build
                             { Version: 4, Name: "artifact", } => Ok(new StringContent(CreateArtifactResponse)),
                             { Version: 4, Name: "artifacts", } => Ok(new StringContent(CreateArtifactResponse)),
                             _ => new HttpResponseMessage
-                                {
-                                    StatusCode = HttpStatusCode.BadRequest
-                                }
+                            {
+                                StatusCode = HttpStatusCode.BadRequest
+                            }
                         };
                     }
                 // Finalize Artifact
@@ -193,7 +193,7 @@ namespace Cake.Common.Tests.Fixtures.Build
 
                         return finalizeArtifactRequest switch
                         {
-                            { Hash: { Length: > 0},  Size: >0, Name: "artifact", } => Ok(new StringContent(FinalizeArtifactResponse)),
+                            { Hash: { Length: > 0 }, Size: > 0, Name: "artifact", } => Ok(new StringContent(FinalizeArtifactResponse)),
                             { Hash: { Length: > 0 }, Size: > 0, Name: "artifacts", } => Ok(new StringContent(FinalizeArtifactResponse)),
                             _ => new HttpResponseMessage
                             {

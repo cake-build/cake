@@ -1,4 +1,4 @@
-﻿using Cake.Common.Build.MyGet;
+using Cake.Common.Build.MyGet;
 using Cake.Common.Tests.Fakes;
 using Cake.Core;
 using NSubstitute;

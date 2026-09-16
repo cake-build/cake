@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;

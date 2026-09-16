@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Diagnostics;
