@@ -6,14 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Cake.Cli;
-using Cake.Common.Modules;
-using Cake.Core;
 using Cake.Core.Configuration;
-using Cake.Core.Diagnostics;
-using Cake.Core.Modules;
-using Cake.DotNetTool.Module;
 using Cake.Frosting.Internal;
-using Cake.NuGet;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
@@ -80,7 +74,7 @@ namespace Cake.Frosting
             RegisterTasks(_assemblies);
 
             // Register all the user's registrations
-            var registrar = new TypeRegistrar();
+            var registrar = new Cake.Cli.TypeRegistrar();
             registrar.RegisterInstance(typeof(IServiceCollection), _services);
 
             // Run the application
@@ -102,9 +96,7 @@ namespace Cake.Frosting
         {
             var services = new ServiceCollection();
 
-            services.AddSingleton<ICakeLog, CakeBuildLog>();
-            services.AddSingleton<IConsole, CakeConsole>();
-            services.AddSingleton<ICakeReportPrinter, CakeReportPrinter>();
+            services.AddCakeDiagnostics();
             services.AddSingleton<ICakeConfiguration, FrostingConfiguration>();
 
             services.AddSingleton<BuildScriptHost<IFrostingContext>>();
@@ -123,10 +115,7 @@ namespace Cake.Frosting
 
             services.AddSingleton<IToolInstaller, ToolInstaller>();
 
-            services.UseModule<CoreModule>();
-            services.UseModule<CommonModule>();
-            services.UseModule<NuGetModule>();
-            services.UseModule<DotNetToolModule>();
+            services.UseCakeDefaultModules();
 
             services.AddSingleton<FrostingContext>();
             services.AddSingleton<IFrostingContext>(f => f.GetService<FrostingContext>());

@@ -4,13 +4,13 @@
 
 using System;
 using System.Linq;
-using Autofac;
+using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Composition;
 using Cake.Core.Configuration;
 using Cake.Core.IO;
 using Cake.Infrastructure;
-using Cake.Infrastructure.Composition;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cake.Features
 {
@@ -46,17 +46,18 @@ namespace Cake.Features
         /// <param name="arguments">The Cake arguments.</param>
         /// <param name="action">An optional action to configure the container registrar.</param>
         /// <returns>A container scope.</returns>
-        protected IContainer CreateScope(
+        protected ServiceProvider CreateScope(
             ICakeConfiguration configuration,
             ICakeArguments arguments,
             Action<ICakeContainerRegistrar> action = null)
         {
-            var registrar = new AutofacTypeRegistrar(new ContainerBuilder());
+            var services = new ServiceCollection();
+            var registrar = new ContainerRegistrar(services);
 
             _configurator.Configure(registrar, configuration, arguments);
             action?.Invoke(registrar);
 
-            return registrar.BuildContainer();
+            return registrar.BuildServiceProvider();
         }
 
         /// <summary>

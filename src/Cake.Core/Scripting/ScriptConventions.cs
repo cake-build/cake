@@ -51,7 +51,8 @@ namespace Cake.Core.Scripting
                 "Cake.Core.IO",
                 "Cake.Core.Diagnostics",
                 "Cake.Core.Scripting",
-                "Cake.Core.Tooling"
+                "Cake.Core.Tooling",
+                "Microsoft.Extensions.DependencyInjection"
             };
         }
 
@@ -159,6 +160,13 @@ namespace Cake.Core.Scripting
 
         // ReSharper disable once ReturnTypeCanBeEnumerable.Local
         private static string[] GetCakeAssemblyNames()
-            => new[] { "Cake.Core.dll", "Cake.Common.dll", "Spectre.Console.dll" };
+            => new[]
+            {
+                "Cake.Core.dll",
+                "Cake.Common.dll",
+                "Spectre.Console.dll",
+                "Microsoft.Extensions.DependencyInjection.dll",
+                "Microsoft.Extensions.DependencyInjection.Abstractions.dll"
+            };
     }
 }

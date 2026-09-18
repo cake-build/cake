@@ -4,13 +4,13 @@
 
 using System;
 using System.Linq;
-using Autofac;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Scripting;
 using Cake.Core.Scripting.Analysis;
 using Cake.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cake.Features.Bootstrapping
 {
@@ -75,11 +75,11 @@ namespace Cake.Features.Bootstrapping
             // Create the scope where we will perform the bootstrapping.
             using (var scope = CreateScope(configuration, arguments))
             {
-                var analyzer = scope.Resolve<IScriptAnalyzer>();
-                var processor = scope.Resolve<IScriptProcessor>();
+                var analyzer = scope.GetRequiredService<IScriptAnalyzer>();
+                var processor = scope.GetRequiredService<IScriptProcessor>();
 
                 // Set log verbosity for log in new scope.
-                var log = scope.Resolve<ICakeLog>();
+                var log = scope.GetRequiredService<ICakeLog>();
                 log.Verbosity = verbosity;
 
                 // Get the root directory.

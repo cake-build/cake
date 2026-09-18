@@ -60,5 +60,8 @@ namespace Cake.Core
 
         /// <inheritdoc/>
         public virtual IToolInstaller ToolInstaller => _context.ToolInstaller;
+
+        /// <inheritdoc/>
+        public virtual IServiceProvider ServiceProvider => _context.ServiceProvider;
     }
 }

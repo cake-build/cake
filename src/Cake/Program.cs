@@ -4,16 +4,15 @@
 
 using System;
 using System.Threading.Tasks;
-using Autofac;
 using Cake.Cli;
 using Cake.Commands;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Features.Bootstrapping;
 using Cake.Features.Building;
 using Cake.Infrastructure;
 using Cake.Infrastructure.Composition;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
 namespace Cake
@@ -23,16 +22,16 @@ namespace Cake
     /// </summary>
     public sealed class Program
     {
-        private readonly Action<ContainerBuilder> _overrides;
+        private readonly Action<IServiceCollection> _overrides;
         private readonly bool _propagateExceptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Program"/> class.
         /// </summary>
-        /// <param name="overrides">Optional container builder overrides.</param>
+        /// <param name="overrides">Optional service collection overrides.</param>
         /// <param name="propagateExceptions">Whether to propagate exceptions.</param>
         public Program(
-            Action<ContainerBuilder> overrides = null,
+            Action<IServiceCollection> overrides = null,
             bool propagateExceptions = false)
         {
             _overrides = overrides;
@@ -61,13 +60,7 @@ namespace Cake
             var app = new CommandApp<DefaultCommand>(registrar);
             app.Configure(config =>
             {
-#pragma warning disable SA1114 // Parameter list should follow declaration
-#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
-#pragma warning disable SA1111 // Closing parenthesis should be on line of last parameter
                 config.SetApplicationName("dotnet cake");
-#pragma warning restore SA1111 // Closing parenthesis should be on line of last parameter
-#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
-#pragma warning restore SA1114 // Parameter list should follow declaration
                 config.ValidateExamples();
 
                 if (_propagateExceptions)
@@ -87,38 +80,37 @@ namespace Cake
         // Register everything that the CLI needs to function.
         private ITypeRegistrar BuildTypeRegistrar()
         {
-            var builder = new ContainerBuilder();
+            var services = new ServiceCollection();
 
             // Commands
-            builder.RegisterType<DefaultCommandSettings>();
+            services.AddSingleton<DefaultCommandSettings>();
 
             // Converters
-            builder.RegisterType<Cli.FilePathConverter>();
-            builder.RegisterType<VerbosityConverter>();
+            services.AddSingleton<Cli.FilePathConverter>();
+            services.AddSingleton<VerbosityConverter>();
 
             // Utilities
-            builder.RegisterType<ContainerConfigurator>().As<IContainerConfigurator>().SingleInstance();
-            builder.RegisterType<VersionResolver>().As<IVersionResolver>().SingleInstance();
-            builder.RegisterType<ModuleSearcher>().As<IModuleSearcher>().SingleInstance();
+            services.AddSingleton<IContainerConfigurator, ContainerConfigurator>();
+            services.AddSingleton<IVersionResolver, VersionResolver>();
+            services.AddSingleton<IModuleSearcher, ModuleSearcher>();
 
             // Features
-            builder.RegisterType<BuildFeature>().As<IBuildFeature>().SingleInstance();
-            builder.RegisterType<BootstrapFeature>().As<IBootstrapFeature>().SingleInstance();
-            builder.RegisterType<VersionFeature>().As<ICakeVersionFeature>().SingleInstance();
-            builder.RegisterType<InfoFeature>().As<ICakeInfoFeature>().SingleInstance();
+            services.AddSingleton<IBuildFeature, BuildFeature>();
+            services.AddSingleton<IBootstrapFeature, BootstrapFeature>();
+            services.AddSingleton<ICakeVersionFeature, VersionFeature>();
+            services.AddSingleton<ICakeInfoFeature, InfoFeature>();
 
             // Core
-            builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
-            builder.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().SingleInstance();
-            builder.RegisterType<CakePlatform>().As<ICakePlatform>().SingleInstance();
-            builder.RegisterType<CakeRuntime>().As<ICakeRuntime>().SingleInstance();
-            builder.RegisterType<CakeBuildLog>().As<ICakeLog>().SingleInstance();
-            builder.RegisterType<CakeConsole>().As<IConsole>().SingleInstance();
+            services.AddSingleton<IFileSystem, FileSystem>();
+            services.AddSingleton<ICakeEnvironment, CakeEnvironment>();
+            services.AddSingleton<ICakePlatform, CakePlatform>();
+            services.AddSingleton<ICakeRuntime, CakeRuntime>();
+            services.AddCakeDiagnostics();
 
             // Register custom registrations.
-            _overrides?.Invoke(builder);
+            _overrides?.Invoke(services);
 
-            return new AutofacTypeRegistrar(builder);
+            return new TypeRegistrar(services);
         }
     }
 }

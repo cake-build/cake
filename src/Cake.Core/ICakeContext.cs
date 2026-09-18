@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -78,5 +79,12 @@ namespace Cake.Core
         /// <value>The tool installer.</value>
         IToolInstaller ToolInstaller =>
             throw new CakeException("The current ICakeContext does not provide a tool installer.");
+
+        /// <summary>
+        /// Gets the service provider.
+        /// </summary>
+        /// <value>The service provider.</value>
+        IServiceProvider ServiceProvider =>
+            throw new CakeException("The current ICakeContext does not provide a service provider.");
     }
 }
