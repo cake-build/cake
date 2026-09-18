@@ -71,5 +71,12 @@ namespace Cake.Core
         /// Gets the cake configuration.
         /// </summary>
         ICakeConfiguration Configuration { get; }
+
+        /// <summary>
+        /// Gets the tool installer.
+        /// </summary>
+        /// <value>The tool installer.</value>
+        IToolInstaller ToolInstaller =>
+            throw new CakeException("The current ICakeContext does not provide a tool installer.");
     }
 }

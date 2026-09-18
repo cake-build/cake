@@ -51,6 +51,7 @@ namespace Cake.Core.Modules
             registrar.RegisterType<ToolRepository>().As<IToolRepository>().Singleton();
             registrar.RegisterType<ToolResolutionStrategy>().As<IToolResolutionStrategy>().Singleton();
             registrar.RegisterType<ToolLocator>().As<IToolLocator>().Singleton();
+            registrar.RegisterType<ToolInstaller>().As<IToolInstaller>().Singleton();
 
             // Scripting
             registrar.RegisterType<ScriptAliasFinder>().As<IScriptAliasFinder>().Singleton();

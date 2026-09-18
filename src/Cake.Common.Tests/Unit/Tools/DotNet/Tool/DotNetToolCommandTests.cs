@@ -10,6 +10,7 @@ using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Core.Tooling;
 using Cake.Testing;
 using NSubstitute;
 using Xunit;
@@ -670,7 +671,8 @@ namespace Cake.Common.Tests.Unit.Tools.DotNet.Tool
                     Substitute.For<IRegistry>(),
                     Tools,
                     Substitute.For<ICakeDataService>(),
-                    Configuration);
+                    Configuration,
+                    Substitute.For<IToolInstaller>());
             }
         }
     }

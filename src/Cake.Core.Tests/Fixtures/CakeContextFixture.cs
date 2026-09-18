@@ -22,6 +22,7 @@ namespace Cake.Core.Tests.Fixtures
         public IToolLocator Tools { get; set; }
         public ICakeDataService Data { get; set; }
         public ICakeConfiguration Configuration { get; set; }
+        public IToolInstaller ToolInstaller { get; set; }
 
         public CakeContextFixture()
         {
@@ -35,12 +36,13 @@ namespace Cake.Core.Tests.Fixtures
             Tools = Substitute.For<IToolLocator>();
             Data = Substitute.For<ICakeDataService>();
             Configuration = Substitute.For<ICakeConfiguration>();
+            ToolInstaller = Substitute.For<IToolInstaller>();
         }
 
         public CakeContext CreateContext()
         {
             return new CakeContext(FileSystem, Environment, Globber,
-                Log, Arguments, ProcessRunner, Registry, Tools, Data, Configuration);
+                Log, Arguments, ProcessRunner, Registry, Tools, Data, Configuration, ToolInstaller);
         }
     }
 }

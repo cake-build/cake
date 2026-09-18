@@ -28,6 +28,7 @@ namespace Cake.Core
         /// <param name="tools">The tool locator.</param>
         /// <param name="data">The data service.</param>
         /// <param name="configuration">The cake configuration.</param>
+        /// <param name="toolInstaller">The tool installer.</param>
         public CakeContext(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -38,7 +39,8 @@ namespace Cake.Core
             IRegistry registry,
             IToolLocator tools,
             ICakeDataService data,
-            ICakeConfiguration configuration)
+            ICakeConfiguration configuration,
+            IToolInstaller toolInstaller)
         {
             FileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -50,6 +52,7 @@ namespace Cake.Core
             Tools = tools ?? throw new ArgumentNullException(nameof(tools));
             Data = data ?? throw new ArgumentNullException(nameof(data));
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            ToolInstaller = toolInstaller ?? throw new ArgumentNullException(nameof(toolInstaller));
         }
 
         /// <inheritdoc/>
@@ -81,5 +84,8 @@ namespace Cake.Core
 
         /// <inheritdoc/>
         public ICakeConfiguration Configuration { get; }
+
+        /// <inheritdoc/>
+        public IToolInstaller ToolInstaller { get; }
     }
 }
