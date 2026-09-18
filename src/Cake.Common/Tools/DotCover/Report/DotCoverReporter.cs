@@ -33,7 +33,7 @@ namespace Cake.Common.Tools.DotCover.Report
         }
 
         /// <summary>
-        /// Runs DotCover Cover with the specified settings.
+        /// Runs DotCover Report with the specified settings.
         /// </summary>
         /// <param name="sourceFile">The DotCover coverage snapshot file name.</param>
         /// <param name="outputFile">The DotCover output file.</param>
@@ -44,25 +44,108 @@ namespace Cake.Common.Tools.DotCover.Report
             DotCoverReportSettings settings)
         {
             ArgumentNullException.ThrowIfNull(sourceFile);
-            ArgumentNullException.ThrowIfNull(outputFile);
+            ArgumentNullException.ThrowIfNull(settings);
+
+            if (settings.UseLegacySyntax)
+            {
+                ArgumentNullException.ThrowIfNull(outputFile);
+            }
+
+            if (!settings.UseLegacySyntax && outputFile != null)
+            {
+                // map outputFile to new syntax parameters. Otherwise input is ignored
+                switch (settings.ReportType)
+                {
+                    case DotCoverReportType.XML:
+                        settings.XmlReportOutput = outputFile;
+                        break;
+                    case DotCoverReportType.JSON:
+                        settings.JsonReportOutput = outputFile;
+                        break;
+                    default:
+                        settings.XmlReportOutput = outputFile;
+                        break;
+                }
+            }
+
+            // Run the tool.
+            Run(settings, GetArguments(sourceFile, settings, outputFile));
+        }
+
+        /// <summary>
+        /// Runs DotCover Report with the specified settings.
+        /// </summary>
+        /// <param name="sourceFile">The DotCover coverage snapshot file name.</param>
+        /// <param name="settings">The settings.</param>
+        public void Report(
+            FilePath sourceFile,
+            DotCoverReportSettings settings)
+        {
+            ArgumentNullException.ThrowIfNull(sourceFile);
             ArgumentNullException.ThrowIfNull(settings);
 
             // Run the tool.
-            Run(settings, GetArguments(sourceFile, outputFile, settings));
+            Run(settings, GetArguments(sourceFile, settings));
         }
 
         private ProcessArgumentBuilder GetArguments(
             FilePath sourceFile,
-            FilePath outputFile,
-            DotCoverReportSettings settings)
+            DotCoverReportSettings settings, FilePath outputFile = null)
         {
             var builder = new ProcessArgumentBuilder();
 
-            builder.Append("Report");
+            builder.Append("report");
 
             // Set configuration file if exists.
             GetConfigurationFileArgument(settings).CopyTo(builder);
 
+            if (settings.UseLegacySyntax)
+            {
+                GenerateLegacyArguments(sourceFile, outputFile, settings, builder);
+            }
+            else
+            {
+                GenerateArguments(sourceFile, settings, builder);
+            }
+
+            // Get Global settings
+            GetArguments(settings).CopyTo(builder);
+
+            return builder;
+        }
+
+        private void GenerateArguments(FilePath sourceFile, DotCoverReportSettings settings, ProcessArgumentBuilder builder)
+        {
+            // Set the Source file.
+            builder.AppendSwitch("--snapshot-source", sourceFile.MakeAbsolute(_environment).FullPath.Quote());
+
+            // Set Json report output
+            if (settings.JsonReportOutput != null)
+            {
+                builder.AppendSwitch("--json-report-output", settings.JsonReportOutput.MakeAbsolute(_environment).FullPath.Quote());
+            }
+
+            // Set test scope, ignore default value
+            if (settings.JsonReportCoveringTestsScope.HasValue)
+            {
+                builder.AppendSwitch("--json-report-covering-tests-scope", settings.JsonReportCoveringTestsScope.Value.ToString().ToLowerInvariant().Quote());
+            }
+
+            // Set Xml report output
+            if (settings.XmlReportOutput != null)
+            {
+                builder.AppendSwitch("--xml-report-output", settings.XmlReportOutput.MakeAbsolute(_environment).FullPath.Quote());
+            }
+
+            // Set test scope, ignore default value
+            if (settings.XmlReportCoveringTestsScope.HasValue)
+            {
+                builder.AppendSwitch("--xml-report-covering-tests-scope", settings.XmlReportCoveringTestsScope.Value.ToString().ToLowerInvariant().Quote());
+            }
+        }
+
+        private void GenerateLegacyArguments(FilePath sourceFile, FilePath outputFile, DotCoverReportSettings settings, ProcessArgumentBuilder builder)
+        {
             // Set the Source file.
             sourceFile = sourceFile.MakeAbsolute(_environment);
             builder.AppendSwitch("/Source", "=", sourceFile.FullPath.Quote());
@@ -76,11 +159,6 @@ namespace Cake.Common.Tools.DotCover.Report
             {
                 builder.AppendSwitch("/ReportType", "=", settings.ReportType.ToString());
             }
-
-            // Get Global settings
-            GetArguments(settings).CopyTo(builder);
-
-            return builder;
         }
     }
 }
