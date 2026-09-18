@@ -41,7 +41,8 @@ Copyright © .NET Foundation, Patrik Svensson, Mattias Karlsson, Gary Ewan Park,
 Cake is provided as-is under the MIT license. For more information see [LICENSE](https://github.com/cake-build/cake/blob/develop/LICENSE).
 
 * For Roslyn, see https://github.com/dotnet/roslyn/blob/master/License.txt
-* For Autofac, see https://github.com/autofac/Autofac/blob/master/LICENSE
+* For Microsoft.Extensions.DependencyInjection, see https://github.com/dotnet/runtime/blob/main/LICENSE.TXT
+* For Spectre.Console, see https://github.com/spectreconsole/spectre.console/blob/main/LICENSE.md
 * For NuGet.Core, see https://github.com/NuGet/Home/blob/dev/LICENSE.txt
 
 ## Thanks

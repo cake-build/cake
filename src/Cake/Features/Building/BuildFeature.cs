@@ -5,7 +5,6 @@
 using System;
 using System.Linq;
 using System.Threading;
-using Autofac;
 using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Composition;
@@ -15,6 +14,7 @@ using Cake.Core.Scripting;
 using Cake.Infrastructure;
 using Cake.Infrastructure.Composition;
 using Cake.Infrastructure.Scripting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cake.Features.Building
 {
@@ -118,10 +118,10 @@ namespace Cake.Features.Building
             // Create the scope where we're going to execute the script.
             using (var scope = CreateScope(configuration, arguments, ModifyScope))
             {
-                var runner = scope.Resolve<IScriptRunner>();
+                var runner = scope.GetRequiredService<IScriptRunner>();
 
                 // Set log verbosity for log in new scope.
-                var log = scope.Resolve<ICakeLog>();
+                var log = scope.GetRequiredService<ICakeLog>();
                 log.Verbosity = verbosity;
 
                 // Create the script host.
@@ -134,7 +134,7 @@ namespace Cake.Features.Building
                 // Debug?
                 if (settings.Debug)
                 {
-                    var debugger = scope.Resolve<ICakeDebugger>();
+                    var debugger = scope.GetRequiredService<ICakeDebugger>();
                     debugger.WaitForAttach(Timeout.InfiniteTimeSpan);
                 }
 
@@ -144,18 +144,18 @@ namespace Cake.Features.Building
             return 0;
         }
 
-        private ScriptHost CreateScriptHost(BuildFeatureSettings settings, IContainer scope)
+        private ScriptHost CreateScriptHost(BuildFeatureSettings settings, IServiceProvider scope)
         {
             switch (settings.BuildHostKind)
             {
                 case BuildHostKind.Build:
-                    return scope.Resolve<BuildScriptHost>();
+                    return scope.GetRequiredService<BuildScriptHost>();
                 case BuildHostKind.DryRun:
-                    return scope.Resolve<DryRunScriptHost>();
+                    return scope.GetRequiredService<DryRunScriptHost>();
                 case BuildHostKind.Tree:
-                    return scope.Resolve<TreeScriptHost>();
+                    return scope.GetRequiredService<TreeScriptHost>();
                 case BuildHostKind.Description:
-                    return scope.Resolve<DescriptionScriptHost>();
+                    return scope.GetRequiredService<DescriptionScriptHost>();
             }
 
             throw new NotSupportedException($"Specified script host not supported.");

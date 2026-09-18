@@ -246,7 +246,8 @@ namespace Cake.Common.Tests.Unit.Tools
                 Substitute.For<IToolLocator>(),
                 Substitute.For<ICakeDataService>(),
                 Substitute.For<ICakeConfiguration>(),
-                installer ?? Substitute.For<IToolInstaller>());
+                installer ?? Substitute.For<IToolInstaller>(),
+                Substitute.For<IServiceProvider>());
         }
     }
 }

@@ -25,6 +25,7 @@
 #load "./Cake.Common/Solution/Project/XmlDoc/XmlDocAliases.cake"
 #load "./Cake.Common/Text/TextTransformationAliases.cake"
 #load "./Cake.Common/Tools/ToolAliases.cake"
+#load "./Cake.Common/ServiceProviderAliases.cake"
 #load "./Cake.Common/Tools/Cake/CakeAliases.cake"
 #load "./Cake.Common/Tools/Command/CommandAliases.cake"
 #load "./Cake.Common/Tools/DotNet/DotNetAliases.cake"
@@ -35,6 +36,7 @@
 #load "./Cake.Core/Diagnostics/ICakeLog.cake"
 #load "./Cake.Core/IO/Path.cake"
 #load "./Cake.Core/Scripting/AddinDirective.cake"
+#load "./Cake.Core/Scripting/ModuleDirective.cake"
 #load "./Cake.Core/Scripting/DefineDirective.cake"
 #load "./Cake.Core/Scripting/Dynamic.cake"
 #load "./Cake.Core/Scripting/HttpClient.cake"
@@ -66,6 +68,7 @@ Task("Cake.Core")
     .IsDependentOn("Cake.Core.Diagnostics")
     .IsDependentOn("Cake.Core.IO.Path")
     .IsDependentOn("Cake.Core.Scripting.AddinDirective")
+    .IsDependentOn("Cake.Core.Scripting.ModuleDirective")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective")
     .IsDependentOn("Cake.Core.Scripting.Dynamic")
     .IsDependentOn("Cake.Core.Scripting.HttpClient")
@@ -95,6 +98,7 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Solution.Project.XmlDoc.XmlDocAliases")
     .IsDependentOn("Cake.Common.Text.TextTransformationAliases")
     .IsDependentOn("Cake.Common.Tools.ToolAliases")
+    .IsDependentOn("Cake.Common.ServiceProviderAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases")
     .IsDependentOn("Cake.Common.Tools.Command.CommandAliases")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases")

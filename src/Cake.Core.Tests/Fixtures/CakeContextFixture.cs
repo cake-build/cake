@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -23,6 +24,7 @@ namespace Cake.Core.Tests.Fixtures
         public ICakeDataService Data { get; set; }
         public ICakeConfiguration Configuration { get; set; }
         public IToolInstaller ToolInstaller { get; set; }
+        public IServiceProvider ServiceProvider { get; set; }
 
         public CakeContextFixture()
         {
@@ -37,12 +39,13 @@ namespace Cake.Core.Tests.Fixtures
             Data = Substitute.For<ICakeDataService>();
             Configuration = Substitute.For<ICakeConfiguration>();
             ToolInstaller = Substitute.For<IToolInstaller>();
+            ServiceProvider = Substitute.For<IServiceProvider>();
         }
 
         public CakeContext CreateContext()
         {
             return new CakeContext(FileSystem, Environment, Globber,
-                Log, Arguments, ProcessRunner, Registry, Tools, Data, Configuration, ToolInstaller);
+                Log, Arguments, ProcessRunner, Registry, Tools, Data, Configuration, ToolInstaller, ServiceProvider);
         }
     }
 }

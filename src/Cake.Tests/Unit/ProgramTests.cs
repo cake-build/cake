@@ -1,11 +1,11 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Features.Building;
 using Cake.Tests.Fixtures;
+using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Spectre.Console.Cli;
 using Xunit;
@@ -20,7 +20,7 @@ namespace Cake.Tests.Unit
             // Given
             var fixture = new ProgramFixture();
             var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Overrides.Add(services => services.AddSingleton(feature));
 
             // When
             var result = await fixture.Run();
@@ -46,7 +46,7 @@ namespace Cake.Tests.Unit
             // Given
             var fixture = new ProgramFixture();
             var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Overrides.Add(services => services.AddSingleton(feature));
 
             // When
             var result = await fixture.Run(args);
@@ -66,7 +66,7 @@ namespace Cake.Tests.Unit
             // Given
             var fixture = new ProgramFixture();
             var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Overrides.Add(services => services.AddSingleton(feature));
 
             // When
             var result = await fixture.Run(args);
@@ -86,7 +86,7 @@ namespace Cake.Tests.Unit
             // Given
             var fixture = new ProgramFixture();
             var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Overrides.Add(services => services.AddSingleton(feature));
 
             // When
             var result = await fixture.Run(args);
@@ -106,7 +106,7 @@ namespace Cake.Tests.Unit
             // Given
             var fixture = new ProgramFixture();
             var feature = Substitute.For<ICakeVersionFeature>();
-            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Overrides.Add(services => services.AddSingleton(feature));
 
             // When
             var result = await fixture.Run(args);
@@ -122,7 +122,7 @@ namespace Cake.Tests.Unit
             // Given
             var fixture = new ProgramFixture();
             var feature = Substitute.For<ICakeInfoFeature>();
-            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Overrides.Add(services => services.AddSingleton(feature));
 
             // When
             var result = await fixture.Run(args);
@@ -137,7 +137,7 @@ namespace Cake.Tests.Unit
             // Given
             var fixture = new ProgramFixture();
             var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Overrides.Add(services => services.AddSingleton(feature));
             fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
 
             // When
@@ -156,7 +156,7 @@ namespace Cake.Tests.Unit
             // Given
             var fixture = new ProgramFixture();
             var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Overrides.Add(services => services.AddSingleton(feature));
             fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
 
             // When
@@ -175,7 +175,7 @@ namespace Cake.Tests.Unit
             // Given
             var fixture = new ProgramFixture();
             var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(builder => builder.RegisterInstance(feature));
+            fixture.Overrides.Add(services => services.AddSingleton(feature));
             fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
 
             // When

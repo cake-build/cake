@@ -6,8 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Autofac;
 using Cake.Core.Composition;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cake.Infrastructure.Composition
 {
@@ -16,15 +16,15 @@ namespace Cake.Infrastructure.Composition
     /// </summary>
     public sealed class ModuleLoader
     {
-        private readonly IContainer _container;
+        private readonly IServiceProvider _provider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModuleLoader"/> class.
         /// </summary>
-        /// <param name="container">The container.</param>
-        public ModuleLoader(IContainer container)
+        /// <param name="provider">The service provider.</param>
+        public ModuleLoader(IServiceProvider provider)
         {
-            _container = container;
+            _provider = provider;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Cake.Infrastructure.Composition
             for (int index = 0; index < parameters.Length; index++)
             {
                 var parameter = parameters[index];
-                arguments[index] = _container.Resolve(parameter.ParameterType);
+                arguments[index] = _provider.GetRequiredService(parameter.ParameterType);
             }
 
             if (Activator.CreateInstance(type, arguments) is ICakeModule module)

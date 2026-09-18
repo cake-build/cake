@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Cake.MyService.Module</AssemblyName>
+    <PackageId>Cake.MyService.Module</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Cake.Core" HintPath="$(CakeCorePath)" />
+  </ItemGroup>
+
+</Project>

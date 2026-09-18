@@ -2,7 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Core.Configuration;
+using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 using Cake.Core.Tests.Fixtures;
+using Cake.Core.Tooling;
 using Xunit;
 
 namespace Cake.Core.Tests.Unit
@@ -150,6 +154,20 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 AssertEx.IsArgumentNullException(result, "toolInstaller");
             }
+
+            [Fact]
+            public void Should_Throw_If_Service_Provider_Is_Null()
+            {
+                // Given
+                var fixture = new CakeContextFixture();
+                fixture.ServiceProvider = null;
+
+                // When
+                var result = Record.Exception(() => fixture.CreateContext());
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "serviceProvider");
+            }
         }
 
         public sealed class TheFileSystemProperty
@@ -264,6 +282,50 @@ namespace Cake.Core.Tests.Unit
 
                 // Then
                 Assert.Same(fixture.ToolInstaller, toolInstaller);
+            }
+
+            [Fact]
+            public void Should_Return_Provided_Service_Provider()
+            {
+                // Given
+                var fixture = new CakeContextFixture();
+                var context = fixture.CreateContext();
+
+                // When
+                var serviceProvider = context.ServiceProvider;
+
+                // Then
+                Assert.Same(fixture.ServiceProvider, serviceProvider);
+            }
+        }
+
+        public sealed class TheDefaultInterfaceMembers
+        {
+            [Fact]
+            public void Should_Throw_If_Service_Provider_Is_Not_Implemented()
+            {
+                // Given
+                ICakeContext context = new ContextWithoutServiceProvider();
+
+                // When
+                var result = Record.Exception(() => context.ServiceProvider);
+
+                // Then
+                AssertEx.IsCakeException(result, "The current ICakeContext does not provide a service provider.");
+            }
+
+            private sealed class ContextWithoutServiceProvider : ICakeContext
+            {
+                public IFileSystem FileSystem { get; }
+                public ICakeEnvironment Environment { get; }
+                public IGlobber Globber { get; }
+                public ICakeLog Log { get; }
+                public ICakeArguments Arguments { get; }
+                public IProcessRunner ProcessRunner { get; }
+                public IRegistry Registry { get; }
+                public IToolLocator Tools { get; }
+                public ICakeDataResolver Data { get; }
+                public ICakeConfiguration Configuration { get; }
             }
         }
     }

@@ -119,13 +119,7 @@ namespace Cake.Frosting
         public static IServiceCollection UseModule<TModule>(this IServiceCollection services)
             where TModule : ICakeModule, new()
         {
-            var module = new TModule();
-
-            var adapter = new ServiceCollectionAdapter();
-            module.Register(adapter);
-            adapter.Transfer(services);
-
-            return services;
+            return Cake.Cli.ServiceCollectionExtensions.UseModule<TModule>(services);
         }
 
         /// <summary>
