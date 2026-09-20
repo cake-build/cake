@@ -15,10 +15,13 @@
   <Import Project="..\Shared.msbuild" />
   <ItemGroup>
     <ProjectReference Include="..\Cake.Core\Cake.Core.csproj" />
+    <ProjectReference Include="..\Cake.Common\Cake.Common.csproj" />
+    <ProjectReference Include="..\Cake.NuGet\Cake.NuGet.csproj" />
+    <ProjectReference Include="..\Cake.DotNetTool.Module\Cake.DotNetTool.Module.csproj" />
   </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
       <PackageReference Include="Spectre.Console" />
       <PackageReference Include="Spectre.Console.Cli" />
   </ItemGroup>

@@ -5,17 +5,25 @@
 using System;
 using Spectre.Console.Cli;
 
-namespace Cake.Frosting.Internal
+namespace Cake.Cli
 {
-    internal sealed class TypeResolver : ITypeResolver
+    /// <summary>
+    /// A type resolver that uses <see cref="IServiceProvider"/>.
+    /// </summary>
+    public sealed class TypeResolver : ITypeResolver
     {
         private readonly IServiceProvider _provider;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeResolver"/> class.
+        /// </summary>
+        /// <param name="provider">The service provider.</param>
         public TypeResolver(IServiceProvider provider)
         {
-            _provider = provider;
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
         }
 
+        /// <inheritdoc/>
         public object Resolve(Type type)
         {
             if (type == null)

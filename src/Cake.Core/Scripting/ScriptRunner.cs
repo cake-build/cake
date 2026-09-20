@@ -111,6 +111,11 @@ namespace Cake.Core.Scripting
             var assemblies = new HashSet<Assembly>();
             assemblies.AddRange(_conventions.GetDefaultAssemblies(applicationRoot));
 
+            foreach (var moduleAssembly in GetModuleAssemblies(host, scriptPath.GetDirectory()))
+            {
+                assemblies.Add(moduleAssembly);
+            }
+
             foreach (var reference in result.References)
             {
                 var referencePath = new FilePath(reference);
@@ -187,6 +192,34 @@ namespace Cake.Core.Scripting
 
             var toolPath = GetToolPath(root).ExpandShortPath();
             return toolPath.Combine("Addins").Collapse();
+        }
+
+        private IEnumerable<Assembly> GetModuleAssemblies(IScriptHost host, DirectoryPath root)
+        {
+            var modulePath = Cake.Core.CakeConfigurationExtensions.GetModulePath(_configuration, root, _environment);
+            var moduleDirectory = host.Context.FileSystem.GetDirectory(modulePath);
+            if (!moduleDirectory.Exists)
+            {
+                yield break;
+            }
+
+            foreach (var file in moduleDirectory.GetFiles("Cake.*.Module.dll", SearchScope.Recursive))
+            {
+                Assembly assembly = null;
+                try
+                {
+                    assembly = _assemblyLoader.Load(file.Path, true);
+                }
+                catch (Exception ex)
+                {
+                    _log.Warning("Could not load module assembly '{0}'. {1}", file.Path.FullPath, ex.Message);
+                }
+
+                if (assembly != null)
+                {
+                    yield return assembly;
+                }
+            }
         }
     }
 }
