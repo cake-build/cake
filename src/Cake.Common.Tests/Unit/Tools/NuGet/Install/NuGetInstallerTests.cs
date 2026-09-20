@@ -187,22 +187,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
             }
 
             [Fact]
-            public void Should_Add_NoCache_To_Arguments_If_True()
-            {
-                // Given
-                var fixture = new NuGetInstallerFixture();
-#pragma warning disable CS0618
-                fixture.Settings.NoCache = true;
-#pragma warning restore CS0618
-
-                // When
-                var result = fixture.Run();
-
-                // Then
-                Assert.Equal("install \"Cake\" -NoCache -NonInteractive", result.Args);
-            }
-
-            [Fact]
             public void Should_Add_NoHttpCache_To_Arguments_If_True()
             {
                 // Given
@@ -468,23 +452,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
 
                 // Then
                 Assert.Equal("install \"/Working/packages.config\" -Source \"A;B;C\" " +
-                             "-NonInteractive", result.Args);
-            }
-
-            [Fact]
-            public void Should_Add_NoCache_To_Arguments_If_True()
-            {
-                // Given
-                var fixture = new NuGetInstallerFromConfigFixture();
-#pragma warning disable CS0618
-                fixture.Settings.NoCache = true;
-#pragma warning restore CS0618
-
-                // When
-                var result = fixture.Run();
-
-                // Then
-                Assert.Equal("install \"/Working/packages.config\" -NoCache " +
                              "-NonInteractive", result.Args);
             }
 

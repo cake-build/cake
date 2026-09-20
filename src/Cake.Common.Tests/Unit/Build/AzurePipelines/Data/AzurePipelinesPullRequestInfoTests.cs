@@ -32,24 +32,7 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
             }
         }
 
-        [Obsolete("The Id property is marked obsolete since the type will change to long in the next major version")]
         public sealed class TheIdProperty
-        {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new AzurePipelinesInfoFixture().CreatePullRequestInfo();
-
-                // When
-                var result = info.Id;
-
-                // Then
-                Assert.Equal(1, result);
-            }
-        }
-
-        public sealed class TheLongIdProperty
         {
             [Theory]
             [InlineData("1", 1)]
@@ -62,10 +45,32 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
                 var info = fixture.CreatePullRequestInfo();
 
                 // When
+                var result = info.Id;
+
+                // Then
+                Assert.Equal(expected, result);
+            }
+        }
+
+        [Obsolete("The LongId property is marked obsolete, use Id instead.")]
+        public sealed class TheLongIdProperty
+        {
+            [Theory]
+            [InlineData("1", 1)]
+            [InlineData("2147483648", 2147483648)]
+            public void Should_Return_Same_Value_As_Id(string value, long expected)
+            {
+                // Given
+                var fixture = new AzurePipelinesInfoFixture();
+                fixture.Environment.GetEnvironmentVariable("SYSTEM_PULLREQUEST_PULLREQUESTID").Returns(value);
+                var info = fixture.CreatePullRequestInfo();
+
+                // When
                 var result = info.LongId;
 
                 // Then
                 Assert.Equal(expected, result);
+                Assert.Equal(info.Id, result);
             }
         }
 
