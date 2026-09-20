@@ -12,18 +12,6 @@ namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
         public sealed class TheConstructor
         {
             [Fact]
-            public void Should_Set_NoCache_To_False_By_Default()
-            {
-                // Given, When
-                var settings = new NuGetInstallSettings();
-
-                // Then
-#pragma warning disable CS0618
-                Assert.False(settings.NoCache);
-#pragma warning restore CS0618
-            }
-
-            [Fact]
             public void Should_Set_NoHttpCache_To_False_By_Default()
             {
                 // Given, When
