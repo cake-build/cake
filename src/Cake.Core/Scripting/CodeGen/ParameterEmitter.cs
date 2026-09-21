@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Cake.Core.Scripting.CodeGen
 {
@@ -216,9 +217,7 @@ namespace Cake.Core.Scripting.CodeGen
 
             if (type == typeof(string))
             {
-                // fix quotes, wrap string in quotes
-                var s = ((string)value).Replace("\"", "\\\"");
-                return $"\"{s}\"";
+                return FormatStringLiteral((string)value);
             }
 
             if (type == typeof(char))
@@ -227,6 +226,62 @@ namespace Cake.Core.Scripting.CodeGen
             }
 
             return string.Format(CultureInfo.InvariantCulture, "{0}", value);
+        }
+
+        private static string FormatStringLiteral(string value)
+        {
+            var builder = new StringBuilder(value.Length + 2);
+            builder.Append('"');
+            foreach (var c in value)
+            {
+                switch (c)
+                {
+                    case '\\':
+                        builder.Append("\\\\");
+                        break;
+                    case '"':
+                        builder.Append("\\\"");
+                        break;
+                    case '\0':
+                        builder.Append("\\0");
+                        break;
+                    case '\a':
+                        builder.Append("\\a");
+                        break;
+                    case '\b':
+                        builder.Append("\\b");
+                        break;
+                    case '\f':
+                        builder.Append("\\f");
+                        break;
+                    case '\n':
+                        builder.Append("\\n");
+                        break;
+                    case '\r':
+                        builder.Append("\\r");
+                        break;
+                    case '\t':
+                        builder.Append("\\t");
+                        break;
+                    case '\v':
+                        builder.Append("\\v");
+                        break;
+                    default:
+                        if (char.IsControl(c))
+                        {
+                            builder.Append("\\u");
+                            builder.Append(((int)c).ToString("x4", CultureInfo.InvariantCulture));
+                        }
+                        else
+                        {
+                            builder.Append(c);
+                        }
+                        break;
+                }
+            }
+
+            builder.Append('"');
+            return builder.ToString();
         }
 
         private static readonly HashSet<Type> _numericTypes = new HashSet<Type>
