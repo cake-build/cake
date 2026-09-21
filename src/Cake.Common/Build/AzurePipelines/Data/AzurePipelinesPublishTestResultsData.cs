@@ -50,7 +50,7 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// </summary>
         public bool? PublishRunAttachments { get; set; }
 
-        internal Dictionary<string, string> GetProperties(ICakeEnvironment environment)
+        internal Dictionary<string, string> GetProperties(ICakeEnvironment environment, IEnumerable<FilePath> testResultsFiles = null)
         {
             ArgumentNullException.ThrowIfNull(environment);
 
@@ -80,11 +80,13 @@ namespace Cake.Common.Build.AzurePipelines.Data
             {
                 properties.Add("publishRunAttachments", PublishRunAttachments.ToString().ToLowerInvariant());
             }
-            if (TestResultsFiles != null && TestResultsFiles.Any())
+
+            var resultFiles = testResultsFiles ?? TestResultsFiles;
+            if (resultFiles != null && resultFiles.Any())
             {
                 properties.Add("resultFiles",
                     string.Join(',',
-                        TestResultsFiles.Select(filePath =>
+                        resultFiles.Select(filePath =>
                             filePath
                                 .MakeAbsolute(environment)
                                 .FullPath
