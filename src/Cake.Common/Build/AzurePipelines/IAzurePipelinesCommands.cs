@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Common.Build.AzurePipelines.Data;
 using Cake.Core.IO;
 
@@ -224,6 +225,34 @@ namespace Cake.Common.Build.AzurePipelines
         /// </summary>
         /// <param name="data">The publish test results data.</param>
         void PublishTestResults(AzurePipelinesPublishTestResultsData data);
+
+        /// <summary>
+        /// Publishes and uploads tests results.
+        /// </summary>
+        /// <param name="filePath">The test result file path.</param>
+        /// <param name="data">The publish test results data.</param>
+        void PublishTestResults(FilePath filePath, AzurePipelinesPublishTestResultsData data);
+
+        /// <summary>
+        /// Publishes and uploads tests results.
+        /// </summary>
+        /// <param name="filePath">The test result file path.</param>
+        /// <param name="action">The configuration action for the publish test results data.</param>
+        void PublishTestResults(FilePath filePath, Action<AzurePipelinesPublishTestResultsData> action);
+
+        /// <summary>
+        /// Publishes and uploads tests results.
+        /// </summary>
+        /// <param name="filePaths">The test result file paths.</param>
+        /// <param name="data">The publish test results data.</param>
+        void PublishTestResults(IEnumerable<FilePath> filePaths, AzurePipelinesPublishTestResultsData data);
+
+        /// <summary>
+        /// Publishes and uploads tests results.
+        /// </summary>
+        /// <param name="filePaths">The test result file paths.</param>
+        /// <param name="action">The configuration action for the publish test results data.</param>
+        void PublishTestResults(IEnumerable<FilePath> filePaths, Action<AzurePipelinesPublishTestResultsData> action);
 
         /// <summary>
         /// Publishes and uploads code coverage results.

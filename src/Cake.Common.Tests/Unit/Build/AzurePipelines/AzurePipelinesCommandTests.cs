@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cake.Common.Build.AzurePipelines;
 using Cake.Common.Build.AzurePipelines.Data;
@@ -641,8 +642,231 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines
                 Assert.Equal(expected.Replace('/', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
             }
 
-            // TODO: Windows Fact, OSX Fact
-            // TODO: TestResultFilePaths
+            [Fact]
+            public void Should_Publish_Test_Results_If_File_Paths_Provided()
+            {
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+                var data = new AzurePipelinesPublishTestResultsData
+                {
+                    Configuration = "Debug",
+                    MergeTestResults = true,
+                    Platform = "x86",
+                    PublishRunAttachments = true,
+                    TestRunner = AzurePipelinesTestRunnerType.XUnit,
+                    TestRunTitle = "Cake Test Run 1 [master]"
+                };
+                var filePaths = new FilePath[]
+                {
+                    "./artifacts/resultsXUnit.trx",
+                    "./artifacts/resultsJs.trx"
+                };
+
+                // When
+                service.Commands.PublishTestResults(filePaths, data);
+
+                // Then
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Publish_Test_Results_If_File_Paths_Are_Relative()
+            {
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+                var data = new AzurePipelinesPublishTestResultsData
+                {
+                    Configuration = "Debug",
+                    MergeTestResults = true,
+                    Platform = "x86",
+                    PublishRunAttachments = true,
+                    TestRunner = AzurePipelinesTestRunnerType.XUnit,
+                    TestRunTitle = "Cake Test Run 1 [master]"
+                };
+
+                // When
+                service.Commands.PublishTestResults(
+                    new FilePath[]
+                    {
+                        "./artifacts/resultsXUnit.trx",
+                        "./artifacts/resultsJs.trx"
+                    },
+                    data);
+
+                // Then
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Publish_Test_Results_If_File_Path_Provided()
+            {
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx;]";
+
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+                var data = new AzurePipelinesPublishTestResultsData
+                {
+                    Configuration = "Debug",
+                    MergeTestResults = true,
+                    Platform = "x86",
+                    PublishRunAttachments = true,
+                    TestRunner = AzurePipelinesTestRunnerType.XUnit,
+                    TestRunTitle = "Cake Test Run 1 [master]"
+                };
+
+                // When
+                service.Commands.PublishTestResults("./artifacts/resultsXUnit.trx", data);
+
+                // Then
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Publish_Test_Results_If_File_Paths_And_Action_Provided()
+            {
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx,C:\build\CAKE-CAKE-JOB1\artifacts\resultsJs.trx;]";
+
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+                var filePaths = new FilePath[]
+                {
+                    "./artifacts/resultsXUnit.trx",
+                    "./artifacts/resultsJs.trx"
+                };
+
+                // When
+                service.Commands.PublishTestResults(filePaths, data =>
+                {
+                    data.Configuration = "Debug";
+                    data.MergeTestResults = true;
+                    data.Platform = "x86";
+                    data.PublishRunAttachments = true;
+                    data.TestRunner = AzurePipelinesTestRunnerType.XUnit;
+                    data.TestRunTitle = "Cake Test Run 1 [master]";
+                });
+
+                // Then
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Publish_Test_Results_If_File_Path_And_Action_Provided()
+            {
+                const string expected = @"##vso[results.publish type=XUnit;mergeResults=true;platform=x86;config=Debug;runTitle='Cake Test Run 1 [master]';publishRunAttachments=true;resultFiles=C:\build\CAKE-CAKE-JOB1\artifacts\resultsXUnit.trx;]";
+
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+
+                // When
+                service.Commands.PublishTestResults("./artifacts/resultsXUnit.trx", data =>
+                {
+                    data.Configuration = "Debug";
+                    data.MergeTestResults = true;
+                    data.Platform = "x86";
+                    data.PublishRunAttachments = true;
+                    data.TestRunner = AzurePipelinesTestRunnerType.XUnit;
+                    data.TestRunTitle = "Cake Test Run 1 [master]";
+                });
+
+                // Then
+                Assert.Equal(expected.Replace('\\', System.IO.Path.DirectorySeparatorChar), fixture.Writer.Entries.FirstOrDefault());
+            }
+
+            [Fact]
+            public void Should_Not_Mutate_Test_Results_Files_When_File_Paths_Provided()
+            {
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+                var existingFiles = new FilePath[] { "./artifacts/existing.trx" };
+                var data = new AzurePipelinesPublishTestResultsData
+                {
+                    TestRunner = AzurePipelinesTestRunnerType.XUnit,
+                    TestResultsFiles = existingFiles
+                };
+                var filePaths = new FilePath[]
+                {
+                    "./artifacts/resultsXUnit.trx",
+                    "./artifacts/resultsJs.trx"
+                };
+
+                // When
+                service.Commands.PublishTestResults(filePaths, data);
+
+                // Then
+                Assert.Same(existingFiles, data.TestResultsFiles);
+                Assert.Equal(existingFiles[0].FullPath, data.TestResultsFiles.Single().FullPath);
+                Assert.Contains(fixture.Writer.Entries, m => m.Contains("resultsXUnit.trx") && m.Contains("resultsJs.trx") && !m.Contains("existing.trx"));
+            }
+
+            [Fact]
+            public void PublishTestResults_Should_Throw_If_File_Path_Is_Null()
+            {
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+                var data = new AzurePipelinesPublishTestResultsData();
+
+                // When
+                var result = Record.Exception(() => service.Commands.PublishTestResults((FilePath)null, data));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "filePath");
+            }
+
+            [Fact]
+            public void PublishTestResults_Should_Throw_If_File_Path_Action_Is_Null()
+            {
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+
+                // When
+                var result = Record.Exception(() => service.Commands.PublishTestResults("./artifacts/resultsXUnit.trx", (Action<AzurePipelinesPublishTestResultsData>)null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "action");
+            }
+
+            [Fact]
+            public void PublishTestResults_Should_Throw_If_File_Paths_Are_Null()
+            {
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+                var data = new AzurePipelinesPublishTestResultsData();
+
+                // When
+                var result = Record.Exception(() => service.Commands.PublishTestResults((IEnumerable<FilePath>)null, data));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "filePaths");
+            }
+
+            [Fact]
+            public void PublishTestResults_Should_Throw_If_File_Paths_Action_Is_Null()
+            {
+                // Given
+                var fixture = new AzurePipelinesFixture();
+                var service = fixture.CreateAzurePipelinesService();
+                var filePaths = new FilePath[] { "./artifacts/resultsXUnit.trx" };
+
+                // When
+                var result = Record.Exception(() => service.Commands.PublishTestResults(filePaths, (Action<AzurePipelinesPublishTestResultsData>)null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "action");
+            }
+
             [Fact]
             public void Should_Publish_Code_Coverage()
             {

@@ -270,6 +270,48 @@ namespace Cake.Common.Build.AzurePipelines
         }
 
         /// <inheritdoc/>
+        public void PublishTestResults(FilePath filePath, AzurePipelinesPublishTestResultsData data)
+        {
+            ArgumentNullException.ThrowIfNull(filePath);
+
+            PublishTestResults(new[] { filePath }, data);
+        }
+
+        /// <inheritdoc/>
+        public void PublishTestResults(FilePath filePath, Action<AzurePipelinesPublishTestResultsData> action)
+        {
+            ArgumentNullException.ThrowIfNull(filePath);
+            ArgumentNullException.ThrowIfNull(action);
+
+            var data = new AzurePipelinesPublishTestResultsData();
+            action(data);
+
+            PublishTestResults(filePath, data);
+        }
+
+        /// <inheritdoc/>
+        public void PublishTestResults(IEnumerable<FilePath> filePaths, AzurePipelinesPublishTestResultsData data)
+        {
+            ArgumentNullException.ThrowIfNull(filePaths);
+            ArgumentNullException.ThrowIfNull(data);
+
+            var properties = data.GetProperties(_environment, filePaths);
+            WriteLoggingCommand("results.publish", properties, string.Empty);
+        }
+
+        /// <inheritdoc/>
+        public void PublishTestResults(IEnumerable<FilePath> filePaths, Action<AzurePipelinesPublishTestResultsData> action)
+        {
+            ArgumentNullException.ThrowIfNull(filePaths);
+            ArgumentNullException.ThrowIfNull(action);
+
+            var data = new AzurePipelinesPublishTestResultsData();
+            action(data);
+
+            PublishTestResults(filePaths, data);
+        }
+
+        /// <inheritdoc/>
         public void PublishCodeCoverage(AzurePipelinesPublishCodeCoverageData data)
         {
             var properties = data.GetProperties(_environment);
