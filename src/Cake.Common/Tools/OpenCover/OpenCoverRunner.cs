@@ -91,8 +91,7 @@ namespace Cake.Common.Tools.OpenCover
             var arguments = context.Settings?.Arguments?.Render();
             if (!string.IsNullOrWhiteSpace(arguments))
             {
-                arguments = arguments.Replace("\"", "\\\"");
-                builder.AppendSwitch("-targetargs", ":", arguments.Quote());
+                builder.AppendSwitchQuoted("-targetargs", ":", arguments);
             }
 
             // Filters

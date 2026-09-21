@@ -6,6 +6,8 @@ namespace Cake.Core.IO.Arguments
 {
     /// <summary>
     /// Represents a quoted argument.
+    /// The inner value is treated as a literal and escaped so a standard
+    /// Windows argv parser recovers it (including trailing backslashes and quotes).
     /// </summary>
     public sealed class QuotedArgument : IProcessArgument
     {
@@ -23,13 +25,13 @@ namespace Cake.Core.IO.Arguments
         /// <inheritdoc/>
         public string Render()
         {
-            return string.Concat("\"", _argument.Render(), "\"");
+            return ProcessArgumentEscaper.Escape(_argument.Render(), alwaysQuote: true);
         }
 
         /// <inheritdoc/>
         public string RenderSafe()
         {
-            return string.Concat("\"", _argument.RenderSafe(), "\"");
+            return ProcessArgumentEscaper.Escape(_argument.RenderSafe(), alwaysQuote: true);
         }
 
         /// <inheritdoc/>

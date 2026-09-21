@@ -6,6 +6,7 @@ using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.NUnit;
 using Cake.Common.Tools.OpenCover;
 using Cake.Common.Tools.XUnit;
+using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
 using Xunit;
@@ -98,6 +99,32 @@ namespace Cake.Common.Tests.Unit.Tools.OpenCover
                 // Then
                 Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
                              "-targetargs:\"-argument\" " +
+                             "-register:user -output:\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Capture_Two_Quoted_Paths_As_A_Single_Targetargs_Token()
+            {
+                // Given
+                var fixture = new OpenCoverFixture();
+                fixture.Action = context =>
+                {
+                    context.ProcessRunner.Start(
+                        new FilePath("/Working/tools/Test.exe"),
+                        new ProcessSettings
+                        {
+                            Arguments = new ProcessArgumentBuilder()
+                                .AppendQuoted("/Working/A.dll")
+                                .AppendQuoted("/Working/B.dll")
+                        });
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("-target:\"/Working/tools/Test.exe\" " +
+                             "-targetargs:\"\\\"/Working/A.dll\\\" \\\"/Working/B.dll\\\"\" " +
                              "-register:user -output:\"/Working/result.xml\"", result.Args);
             }
 

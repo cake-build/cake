@@ -114,8 +114,8 @@ namespace Cake.Core.IO
             return _tokens
                 .Select(token => new
                 {
-                    Safe = token.RenderSafe().Trim('"').Trim(),
-                    Unsafe = token.Render().Trim('"').Trim()
+                    Safe = ProcessArgumentEscaper.Unquote(token.RenderSafe()).Trim(),
+                    Unsafe = ProcessArgumentEscaper.Unquote(token.Render()).Trim()
                 })
                 .Where(token => token.Safe != token.Unsafe)
                 .Aggregate(
