@@ -8,6 +8,7 @@
 
 // Load other scripts.
 #load "./build/parameters.cake"
+#load "./build/verify.cake"
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -146,6 +147,17 @@ Task("Run-Unit-Tests")
                 .Append("--report-trx-filename")
                 .AppendQuoted(trxFileName)
         });
+    }
+})
+.ReportError(async exception =>
+{
+    try
+    {
+        await UploadVerifyReceivedFiles(Context, Context.Data.Get<BuildParameters>());
+    }
+    catch (Exception uploadException)
+    {
+        Error("Failed to upload Verify received files: {0}", uploadException.Message);
     }
 });
 
