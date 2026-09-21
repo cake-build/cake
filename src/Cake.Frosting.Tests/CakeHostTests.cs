@@ -60,7 +60,7 @@ namespace Cake.Frosting.Tests
             var result = fixture.Run("--target", "dummytask", "--verbosity", "diagnostic");
 
             // Then
-            Assert.Equal(-1, result);
+            Assert.Equal(1, result);
             Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
         }
 
@@ -212,7 +212,7 @@ namespace Cake.Frosting.Tests
             var result = fixture.Run("--target", "ThrowingTask");
 
             // Then
-            Assert.NotEqual(0, result);
+            Assert.Equal(1, result);
         }
 
         [Fact]
@@ -269,7 +269,7 @@ namespace Cake.Frosting.Tests
             var result = fixture.Run("--target", "InvalidDependencyTask");
 
             // Then
-            Assert.NotEqual(0, result);
+            Assert.Equal(1, result);
             fixture.Log.Received(1).Error("Error: {0}", "The dependency 'DateTime' is not a valid task.");
         }
 
@@ -285,6 +285,21 @@ namespace Cake.Frosting.Tests
 
             // Then
             Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void Should_Return_One_When_Target_Is_Not_Found()
+        {
+            // Given
+            var fixture = new CakeHostFixture();
+            fixture.RegisterTask<DummyTask>();
+
+            // When
+            var result = fixture.Run("--target", "foobar");
+
+            // Then
+            Assert.Equal(1, result);
+            fixture.Log.Received(1).Error("Error: {0}", "The target 'foobar' was not found.");
         }
 
         [Fact]

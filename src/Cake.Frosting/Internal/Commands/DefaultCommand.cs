@@ -78,8 +78,7 @@ namespace Cake.Frosting.Internal
             }
             catch (Exception ex)
             {
-                provider.GetService<ICakeLog>().LogException(ex);
-                return -1;
+                return provider.GetService<ICakeLog>().LogException(ex);
             }
 
             return 0;

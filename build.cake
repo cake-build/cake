@@ -396,18 +396,33 @@ Task("Frosting-Integration-Tests")
     {
         Information("Testing: {0}", test.Framework);
 
-        void RunFrosting(ProcessArgumentBuilder arguments, Dictionary<string, string> environmentVariables)
+        void RunFrosting(ProcessArgumentBuilder arguments, Dictionary<string, string> environmentVariables, int? expectedExitCode = null)
         {
-            DotNetRun(test.Project.FullPath,
-                arguments,
-                new DotNetRunSettings
+            int? exitCode = null;
+            var settings = new DotNetRunSettings
+            {
+                Configuration = parameters.Configuration,
+                Framework = test.Framework,
+                NoRestore = true,
+                NoBuild = true,
+                EnvironmentVariables = environmentVariables
+            };
+
+            if (expectedExitCode is not null)
+            {
+                settings.HandleExitCode = code =>
                 {
-                    Configuration = parameters.Configuration,
-                    Framework = test.Framework,
-                    NoRestore = true,
-                    NoBuild = true,
-                    EnvironmentVariables = environmentVariables
-                });
+                    exitCode = code;
+                    return true;
+                };
+            }
+
+            DotNetRun(test.Project.FullPath, arguments, settings);
+
+            if (expectedExitCode is int expected && exitCode != expected)
+            {
+                throw new Exception($"Expected Frosting exit code {expected}, got {exitCode}.");
+            }
         }
 
         var baseEnvironment = new Dictionary<string, string>
@@ -450,6 +465,13 @@ Task("Frosting-Integration-Tests")
             {
                 ["CAKE_SETTINGS_VERBOSITY"] = "Diagnostic"
             });
+
+        RunFrosting(
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--target", "=", "foobar")
+                .AppendSwitchQuoted("--verbosity", "=", Argument("integration-tests-verbosity", defaultVerbosity)),
+            baseEnvironment,
+            expectedExitCode: 1);
     }
     catch(Exception ex)
     {
