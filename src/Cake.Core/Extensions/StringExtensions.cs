@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
 namespace Cake.Core
@@ -13,31 +14,32 @@ namespace Cake.Core
     public static class StringExtensions
     {
         /// <summary>
-        /// Quotes the specified <see cref="System.String"/>.
+        /// Quotes the specified <see cref="System.String"/> as a process argument literal.
+        /// Trailing backslashes and embedded quotes are escaped so a standard Windows
+        /// argv parser recovers the original value.
         /// </summary>
-        /// <param name="value">The string to quote.</param>
+        /// <param name="value">The literal string to quote. Already-quoted tokens are left unchanged.</param>
         /// <returns>A quoted string.</returns>
         public static string Quote(this string value)
         {
-            if (!IsQuoted(value))
+            if (ProcessArgumentEscaper.IsQuoted(value))
             {
-                value = string.Concat("\"", value, "\"");
+                return value;
             }
-            return value;
+
+            return ProcessArgumentEscaper.Escape(value, alwaysQuote: true);
         }
 
         /// <summary>
-        /// Unquote the specified <see cref="System.String"/>.
+        /// Unquotes a process argument token produced by <see cref="Quote"/> /
+        /// <see cref="ProcessArgumentEscaper.Escape"/>.
+        /// Trailing backslashes and embedded quotes are unescaped; this is not a naive trim of <c>"</c>.
         /// </summary>
         /// <param name="value">The string to unquote.</param>
-        /// <returns>An unquoted string.</returns>
+        /// <returns>The literal argument value.</returns>
         public static string UnQuote(this string value)
         {
-            if (IsQuoted(value))
-            {
-                value = value.Trim('"');
-            }
-            return value;
+            return ProcessArgumentEscaper.Unquote(value);
         }
 
         /// <summary>
@@ -65,12 +67,6 @@ namespace Cake.Core
                 return value.Replace("\n", "\r\n");
             }
             return string.Empty;
-        }
-
-        private static bool IsQuoted(this string value)
-        {
-            return value.StartsWith("\"", StringComparison.OrdinalIgnoreCase)
-                   && value.EndsWith("\"", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

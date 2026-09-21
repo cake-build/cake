@@ -54,8 +54,7 @@ namespace Cake.Common.Tools.DotCover
                 var arguments = targetContext.Settings.Arguments.Render();
                 if (!string.IsNullOrWhiteSpace(arguments))
                 {
-                    arguments = arguments.Replace("\"", "\\\"");
-                    builder.AppendSwitch("--target-arguments", arguments.Quote());
+                    builder.AppendSwitchQuoted("--target-arguments", arguments);
                 }
             }
 
@@ -84,8 +83,7 @@ namespace Cake.Common.Tools.DotCover
                 var arguments = targetContext.Settings.Arguments.Render();
                 if (!string.IsNullOrWhiteSpace(arguments))
                 {
-                    arguments = arguments.Replace("\"", "\\\"");
-                    builder.AppendSwitch("/TargetArguments", "=", arguments.Quote());
+                    builder.AppendSwitchQuoted("/TargetArguments", "=", arguments);
                 }
             }
 

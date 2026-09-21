@@ -71,9 +71,10 @@ namespace Cake.Core
 
         /// <summary>
         /// Quotes and appends the specified text to the argument builder.
+        /// The text is treated as a literal and escaped when quoting.
         /// </summary>
         /// <param name="builder">The builder.</param>
-        /// <param name="text">The text to be quoted and appended.</param>
+        /// <param name="text">The literal text to be quoted and appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
         public static ProcessArgumentBuilder AppendQuoted(this ProcessArgumentBuilder builder, string text)
         {

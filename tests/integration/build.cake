@@ -35,6 +35,7 @@
 #load "./Cake.Common/Tools/TextTransform/TextTransformAliases.cake"
 #load "./Cake.Core/Diagnostics/ICakeLog.cake"
 #load "./Cake.Core/IO/Path.cake"
+#load "./Cake.Core/IO/ProcessArgumentBuilder.cake"
 #load "./Cake.Core/Scripting/AddinDirective.cake"
 #load "./Cake.Core/Scripting/ModuleDirective.cake"
 #load "./Cake.Core/Scripting/DefineDirective.cake"
@@ -67,6 +68,7 @@ Task("Cake.Core")
     .IsDependentOn("Cake.Core.CakeEnvironment")
     .IsDependentOn("Cake.Core.Diagnostics")
     .IsDependentOn("Cake.Core.IO.Path")
+    .IsDependentOn("Cake.Core.IO.ProcessArgumentBuilder")
     .IsDependentOn("Cake.Core.Scripting.AddinDirective")
     .IsDependentOn("Cake.Core.Scripting.ModuleDirective")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective")

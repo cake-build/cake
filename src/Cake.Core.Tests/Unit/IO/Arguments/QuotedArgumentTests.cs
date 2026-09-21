@@ -30,6 +30,10 @@ namespace Cake.Core.Tests.Unit.IO.Arguments
             [InlineData("", "\"\"")]
             [InlineData(" \t ", "\" \t \"")]
             [InlineData(null, "\"\"")]
+            [InlineData("123\\", "\"123\\\\\"")]
+            [InlineData(" 1 2 3 \\", "\" 1 2 3 \\\\\"")]
+            [InlineData("\"1\"2\"3\"", "\"\\\"1\\\"2\\\"3\\\"\"")]
+            [InlineData("\\\\\"", "\"\\\\\\\\\\\"\"")]
             public void Should_Render_The_Provided_Text(string text, string expected)
             {
                 // Given
@@ -63,6 +67,10 @@ namespace Cake.Core.Tests.Unit.IO.Arguments
             [InlineData("", "\"\"")]
             [InlineData(" \t ", "\" \t \"")]
             [InlineData(null, "\"\"")]
+            [InlineData("123\\", "\"123\\\\\"")]
+            [InlineData(" 1 2 3 \\", "\" 1 2 3 \\\\\"")]
+            [InlineData("\"1\"2\"3\"", "\"\\\"1\\\"2\\\"3\\\"\"")]
+            [InlineData("\\\\\"", "\"\\\\\\\\\\\"\"")]
             public void Should_Render_The_Provided_Text_As_Normal(string text, string expected)
             {
                 // Given

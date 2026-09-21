@@ -6,6 +6,7 @@ using Cake.Common.Tests.Fixtures.Tools.DotCover.Analyse;
 using Cake.Common.Tools.DotCover;
 using Cake.Common.Tools.NUnit;
 using Cake.Common.Tools.XUnit;
+using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
 using Xunit;
@@ -271,6 +272,32 @@ namespace Cake.Common.Tests.Unit.Tools.DotCover.Analyse
                 // Then
                 Assert.Equal("Analyse /TargetExecutable=\"/Working/tools/xunit.console.exe\" " +
                              "/TargetArguments=\"\\\"/Working/Test.dll\\\" -noshadow\" " +
+                             "/Output=\"/Working/result.xml\"", result.Args);
+            }
+
+            [Fact]
+            public void Should_Capture_Two_Quoted_Paths_As_A_Single_Target_Arguments_Token()
+            {
+                // Given
+                var fixture = new DotCoverAnalyserFixture();
+                fixture.Action = context =>
+                {
+                    context.ProcessRunner.Start(
+                        new FilePath("/Working/tools/Test.exe"),
+                        new ProcessSettings
+                        {
+                            Arguments = new ProcessArgumentBuilder()
+                                .AppendQuoted("/Working/A.dll")
+                                .AppendQuoted("/Working/B.dll")
+                        });
+                };
+
+                // When
+                var result = fixture.Run();
+
+                // Then
+                Assert.Equal("Analyse /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                             "/TargetArguments=\"\\\"/Working/A.dll\\\" \\\"/Working/B.dll\\\"\" " +
                              "/Output=\"/Working/result.xml\"", result.Args);
             }
 

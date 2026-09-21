@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.IO.Arguments;
 using Xunit;
@@ -50,6 +51,51 @@ namespace Cake.Core.Tests.Unit.IO
 
                 // Then
                 Assert.Empty(builder);
+            }
+        }
+
+        public sealed class TheFilterUnsafeMethod
+        {
+            [Fact]
+            public void Should_Redact_Quoted_Secret()
+            {
+                // Given
+                var builder = new ProcessArgumentBuilder();
+                builder.AppendQuotedSecret("password");
+
+                // When
+                var result = builder.FilterUnsafe("using password now");
+
+                // Then
+                Assert.Equal("using [REDACTED] now", result);
+            }
+
+            [Fact]
+            public void Should_Redact_Quoted_Secret_Ending_With_Backslash()
+            {
+                // Given
+                var builder = new ProcessArgumentBuilder();
+                builder.AppendQuotedSecret("secret\\");
+
+                // When
+                var result = builder.FilterUnsafe("using secret\\ now");
+
+                // Then
+                Assert.Equal("using [REDACTED] now", result);
+            }
+
+            [Fact]
+            public void Should_Redact_Quoted_Secret_Containing_Quotes()
+            {
+                // Given
+                var builder = new ProcessArgumentBuilder();
+                builder.AppendQuotedSecret("\"quoted\"");
+
+                // When
+                var result = builder.FilterUnsafe("using \"quoted\" now");
+
+                // Then
+                Assert.Equal("using [REDACTED] now", result);
             }
         }
 
