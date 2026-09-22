@@ -68,6 +68,8 @@ namespace Cake.Common.Tests.Fixtures.Build
             Environment.GetEnvironmentVariable("SYSTEM_PULLREQUEST_SOURCEBRANCH").Returns(@"refs/heads/FeatureBranch");
             Environment.GetEnvironmentVariable("SYSTEM_PULLREQUEST_SOURCEREPOSITORYURI").Returns(@"https://fabrikamfiber.visualstudio.com/Project/_git/ProjectRepo");
             Environment.GetEnvironmentVariable("SYSTEM_PULLREQUEST_TARGETBRANCH").Returns(@"refs/heads/master");
+            Environment.GetEnvironmentVariable("SYSTEM_PULLREQUEST_TARGETBRANCHNAME").Returns("master");
+            Environment.GetEnvironmentVariable("SYSTEM_PULLREQUEST_SOURCECOMMITID").Returns("4efbc1ffb993dfbcf024e6a9202865cc0b6d9c50");
 
             // TFBuild DefinitionInfo
             Environment.GetEnvironmentVariable("SYSTEM_DEFINITIONID").Returns("1855");
