@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
@@ -92,6 +93,123 @@ namespace Cake.Core.Tests.Unit
                     AssertEx.IsArgumentNullException(result, "other");
                 }
             }
+
+            [Fact]
+            public void Should_Add_Dependencies_From_Name_Collection_Expression()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
+
+                // When
+                builder.IsDependentOn(["Clean", "Build"]);
+
+                // Then
+                Assert.Equal(2, task.Dependencies.Count);
+                Assert.Equal("Clean", task.Dependencies[0].Name);
+                Assert.Equal("Build", task.Dependencies[1].Name);
+            }
+
+            [Fact]
+            public void Should_Add_Dependencies_From_Name_List()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
+                var names = new List<string> { "Clean", "Build" };
+
+                // When
+                builder.IsDependentOn(names);
+
+                // Then
+                Assert.Equal(2, task.Dependencies.Count);
+                Assert.Equal(new[] { "Clean", "Build" }, task.Dependencies.Select(x => x.Name));
+            }
+
+            [Fact]
+            public void Should_Add_Dependencies_From_Builder_Collection_Expression()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
+                var clean = new CakeTaskBuilder(new CakeTask("Clean"));
+                var build = new CakeTaskBuilder(new CakeTask("Build"));
+
+                // When
+                builder.IsDependentOn([clean, build]);
+
+                // Then
+                Assert.Equal(2, task.Dependencies.Count);
+                Assert.Equal("Clean", task.Dependencies[0].Name);
+                Assert.Equal("Build", task.Dependencies[1].Name);
+            }
+
+            [Fact]
+            public void Should_Be_No_Op_When_Name_Collection_Is_Empty()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
+
+                // When
+                builder.IsDependentOn(Array.Empty<string>());
+
+                // Then
+                Assert.Empty(task.Dependencies);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Name_Collection_Is_Null()
+            {
+                // Given
+                var builder = new CakeTaskBuilder(new CakeTask("task"));
+
+                // When
+                var result = Record.Exception(() => builder.IsDependentOn((IEnumerable<string>)null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "names");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Builder_Collection_Is_Null()
+            {
+                // Given
+                var builder = new CakeTaskBuilder(new CakeTask("task"));
+
+                // When
+                var result = Record.Exception(() => builder.IsDependentOn((IEnumerable<CakeTaskBuilder>)null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "others");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Name_In_Collection_Is_Null()
+            {
+                // Given
+                var builder = new CakeTaskBuilder(new CakeTask("task"));
+
+                // When
+                var result = Record.Exception(() => builder.IsDependentOn(new[] { "Clean", null }));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "name");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Builder_In_Collection_Is_Null()
+            {
+                // Given
+                var builder = new CakeTaskBuilder(new CakeTask("task"));
+                var clean = new CakeTaskBuilder(new CakeTask("Clean"));
+
+                // When
+                var result = Record.Exception(() => builder.IsDependentOn(new[] { clean, null }));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "other");
+            }
         }
 
         public sealed class TheIsDependeeOfMethod
@@ -126,6 +244,123 @@ namespace Cake.Core.Tests.Unit
                 // Then
                 Assert.Single(task.Dependees);
                 Assert.Equal("other", task.Dependees[0].Name);
+            }
+
+            [Fact]
+            public void Should_Add_Dependees_From_Name_Collection_Expression()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
+
+                // When
+                builder.IsDependeeOf(["Default", "CI"]);
+
+                // Then
+                Assert.Equal(2, task.Dependees.Count);
+                Assert.Equal("Default", task.Dependees[0].Name);
+                Assert.Equal("CI", task.Dependees[1].Name);
+            }
+
+            [Fact]
+            public void Should_Add_Dependees_From_Name_List()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
+                var names = new List<string> { "Default", "CI" };
+
+                // When
+                builder.IsDependeeOf(names);
+
+                // Then
+                Assert.Equal(2, task.Dependees.Count);
+                Assert.Equal(new[] { "Default", "CI" }, task.Dependees.Select(x => x.Name));
+            }
+
+            [Fact]
+            public void Should_Add_Dependees_From_Builder_Collection_Expression()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
+                var defaultTask = new CakeTaskBuilder(new CakeTask("Default"));
+                var ciTask = new CakeTaskBuilder(new CakeTask("CI"));
+
+                // When
+                builder.IsDependeeOf([defaultTask, ciTask]);
+
+                // Then
+                Assert.Equal(2, task.Dependees.Count);
+                Assert.Equal("Default", task.Dependees[0].Name);
+                Assert.Equal("CI", task.Dependees[1].Name);
+            }
+
+            [Fact]
+            public void Should_Be_No_Op_When_Name_Collection_Is_Empty()
+            {
+                // Given
+                var task = new CakeTask("task");
+                var builder = new CakeTaskBuilder(task);
+
+                // When
+                builder.IsDependeeOf(Array.Empty<string>());
+
+                // Then
+                Assert.Empty(task.Dependees);
+            }
+
+            [Fact]
+            public void Should_Throw_If_Name_Collection_Is_Null()
+            {
+                // Given
+                var builder = new CakeTaskBuilder(new CakeTask("task"));
+
+                // When
+                var result = Record.Exception(() => builder.IsDependeeOf((IEnumerable<string>)null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "names");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Builder_Collection_Is_Null()
+            {
+                // Given
+                var builder = new CakeTaskBuilder(new CakeTask("task"));
+
+                // When
+                var result = Record.Exception(() => builder.IsDependeeOf((IEnumerable<CakeTaskBuilder>)null));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "others");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Name_In_Collection_Is_Null()
+            {
+                // Given
+                var builder = new CakeTaskBuilder(new CakeTask("task"));
+
+                // When
+                var result = Record.Exception(() => builder.IsDependeeOf(new[] { "Default", null }));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "name");
+            }
+
+            [Fact]
+            public void Should_Throw_If_Builder_In_Collection_Is_Null()
+            {
+                // Given
+                var builder = new CakeTaskBuilder(new CakeTask("task"));
+                var defaultTask = new CakeTaskBuilder(new CakeTask("Default"));
+
+                // When
+                var result = Record.Exception(() => builder.IsDependeeOf(new[] { defaultTask, null }));
+
+                // Then
+                AssertEx.IsArgumentNullException(result, "other");
             }
         }
 

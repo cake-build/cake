@@ -48,6 +48,7 @@
 #load "./Cake.Core/Scripting/SpectreConsole.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
 #load "./Cake.Core/CakeAliases.cake"
+#load "./Cake.Core/CakeTaskBuilder.cake"
 #load "./Cake.Core/CakeEnvironment.cake"
 #load "./Cake.DotNetTool.Module/Cake.DotNetTool.Module.cake"
 #load "./Cake.NuGet/InProcessInstaller.cake"
@@ -81,7 +82,8 @@ Task("Cake.Core")
     .IsDependentOn("Cake.Core.Scripting.UsingDirective")
     .IsDependentOn("Cake.Core.Scripting.Spectre.Console")
     .IsDependentOn("Cake.Core.Tooling.ToolLocator")
-    .IsDependentOn("Cake.Core.CakeAliases");
+    .IsDependentOn("Cake.Core.CakeAliases")
+    .IsDependentOn("Cake.Core.CakeTaskBuilder");
 
 Task("Cake.Common")
     .IsDependentOn("Cake.Common.ArgumentAliases")
