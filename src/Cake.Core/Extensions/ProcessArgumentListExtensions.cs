@@ -40,6 +40,19 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Inserts the specified text into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the text should be inserted.</param>
+        /// <param name="text">The text to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder Insert(this ProcessArgumentBuilder builder, int index, string text)
+        {
+            builder?.Insert(index, new TextArgument(text));
+            return builder;
+        }
+
+        /// <summary>
         /// Formats and appends the specified text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -70,6 +83,22 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Formats and inserts the specified text into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the text should be inserted.</param>
+        /// <param name="format">A composite format string.</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="format" /> or <paramref name="args" /> is null. </exception>
+        /// <exception cref="FormatException"><paramref name="format" /> is invalid.-or- The index of a format item is less than zero, or greater than or equal to the length of the <paramref name="args" /> array. </exception>
+        public static ProcessArgumentBuilder Insert(this ProcessArgumentBuilder builder, int index, string format, params object[] args)
+        {
+            var text = string.Format(CultureInfo.InvariantCulture, format, args);
+            return Insert(builder, index, text);
+        }
+
+        /// <summary>
         /// Quotes and appends the specified text to the argument builder.
         /// The text is treated as a literal and escaped when quoting.
         /// </summary>
@@ -91,6 +120,20 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependQuoted(this ProcessArgumentBuilder builder, string text)
         {
             builder?.Prepend(new QuotedArgument(new TextArgument(text)));
+            return builder;
+        }
+
+        /// <summary>
+        /// Quotes and inserts the specified text into the argument builder at the specified index.
+        /// The text is treated as a literal and escaped when quoting.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the text should be inserted.</param>
+        /// <param name="text">The literal text to be quoted and inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertQuoted(this ProcessArgumentBuilder builder, int index, string text)
+        {
+            builder?.Insert(index, new QuotedArgument(new TextArgument(text)));
             return builder;
         }
 
@@ -125,6 +168,22 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Formats, quotes and inserts the specified text into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the text should be inserted.</param>
+        /// <param name="format">A composite format string to be quoted and inserted.</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="format" /> or <paramref name="args" /> is null. </exception>
+        /// <exception cref="FormatException"><paramref name="format" /> is invalid.-or- The index of a format item is less than zero, or greater than or equal to the length of the <paramref name="args" /> array. </exception>
+        public static ProcessArgumentBuilder InsertQuoted(this ProcessArgumentBuilder builder, int index, string format, params object[] args)
+        {
+            var text = string.Format(CultureInfo.InvariantCulture, format, args);
+            return InsertQuoted(builder, index, text);
+        }
+
+        /// <summary>
         /// Quotes and appends the specified argument to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -149,6 +208,19 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Quotes and inserts the specified argument into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the argument should be inserted.</param>
+        /// <param name="argument">The argument to be quoted and inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertQuoted(this ProcessArgumentBuilder builder, int index, IProcessArgument argument)
+        {
+            builder?.Insert(index, new QuotedArgument(argument));
+            return builder;
+        }
+
+        /// <summary>
         /// Appends the specified secret text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -169,6 +241,19 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependSecret(this ProcessArgumentBuilder builder, string text)
         {
             builder?.Prepend(new SecretArgument(new TextArgument(text)));
+            return builder;
+        }
+
+        /// <summary>
+        /// Inserts the specified secret text into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the text should be inserted.</param>
+        /// <param name="text">The secret text to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSecret(this ProcessArgumentBuilder builder, int index, string text)
+        {
+            builder?.Insert(index, new SecretArgument(new TextArgument(text)));
             return builder;
         }
 
@@ -205,6 +290,22 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Formats and inserts the specified secret text into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the text should be inserted.</param>
+        /// <param name="format">A composite format string for the secret text to be inserted.</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="format" /> or <paramref name="args" /> is null. </exception>
+        /// <exception cref="FormatException"><paramref name="format" /> is invalid.-or- The index of a format item is less than zero, or greater than or equal to the length of the <paramref name="args" /> array. </exception>
+        public static ProcessArgumentBuilder InsertSecret(this ProcessArgumentBuilder builder, int index, string format, params object[] args)
+        {
+            var text = string.Format(CultureInfo.InvariantCulture, format, args);
+            return InsertSecret(builder, index, text);
+        }
+
+        /// <summary>
         /// Appends the specified secret text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -229,6 +330,19 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Inserts the specified secret argument into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the argument should be inserted.</param>
+        /// <param name="argument">The secret argument to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSecret(this ProcessArgumentBuilder builder, int index, IProcessArgument argument)
+        {
+            builder?.Insert(index, new SecretArgument(argument));
+            return builder;
+        }
+
+        /// <summary>
         /// Quotes and appends the specified secret text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -249,6 +363,19 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependQuotedSecret(this ProcessArgumentBuilder builder, string text)
         {
             builder?.PrependQuoted(new SecretArgument(new TextArgument(text)));
+            return builder;
+        }
+
+        /// <summary>
+        /// Quotes and inserts the specified secret text into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the text should be inserted.</param>
+        /// <param name="text">The secret text to be quoted and inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertQuotedSecret(this ProcessArgumentBuilder builder, int index, string text)
+        {
+            builder?.InsertQuoted(index, new SecretArgument(new TextArgument(text)));
             return builder;
         }
 
@@ -285,6 +412,22 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Formats, quotes and inserts the specified secret text into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the text should be inserted.</param>
+        /// <param name="format">A composite format string for the secret text to be quoted and inserted.</param>
+        /// <param name="args">An object array that contains zero or more objects to format.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="format" /> or <paramref name="args" /> is null. </exception>
+        /// <exception cref="FormatException"><paramref name="format" /> is invalid.-or- The index of a format item is less than zero, or greater than or equal to the length of the <paramref name="args" /> array. </exception>
+        public static ProcessArgumentBuilder InsertQuotedSecret(this ProcessArgumentBuilder builder, int index, string format, params object[] args)
+        {
+            var text = string.Format(CultureInfo.InvariantCulture, format, args);
+            return InsertQuotedSecret(builder, index, text);
+        }
+
+        /// <summary>
         /// Quotes and appends the specified secret text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -305,6 +448,19 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependQuotedSecret(this ProcessArgumentBuilder builder, IProcessArgument argument)
         {
             builder?.PrependQuoted(new SecretArgument(argument));
+            return builder;
+        }
+
+        /// <summary>
+        /// Quotes and inserts the specified secret argument into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the argument should be inserted.</param>
+        /// <param name="argument">The secret argument to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertQuotedSecret(this ProcessArgumentBuilder builder, int index, IProcessArgument argument)
+        {
+            builder?.InsertQuoted(index, new SecretArgument(argument));
             return builder;
         }
 
@@ -330,6 +486,19 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependSwitch(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return PrependSwitch(builder, @switch, " ", text);
+        }
+
+        /// <summary>
+        /// Inserts the specified switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="text">The text to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitch(this ProcessArgumentBuilder builder, int index, string @switch, string text)
+        {
+            return InsertSwitch(builder, index, @switch, " ", text);
         }
 
         /// <summary>
@@ -361,6 +530,21 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Inserts the specified switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="text">The text to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitch(this ProcessArgumentBuilder builder, int index, string @switch, string separator, string text)
+        {
+            builder?.Insert(index, new SwitchArgument(@switch, new TextArgument(text), separator));
+            return builder;
+        }
+
+        /// <summary>
         /// Quotes and appends the specified text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -382,6 +566,19 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return PrependSwitchQuoted(builder, @switch, " ", text);
+        }
+
+        /// <summary>
+        /// Quotes and inserts the specified switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="text">The text to be quoted and inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitchQuoted(this ProcessArgumentBuilder builder, int index, string @switch, string text)
+        {
+            return InsertSwitchQuoted(builder, index, @switch, " ", text);
         }
 
         /// <summary>
@@ -413,6 +610,21 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Quotes and inserts the specified switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="text">The text to be quoted and inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitchQuoted(this ProcessArgumentBuilder builder, int index, string @switch, string separator, string text)
+        {
+            builder?.Insert(index, new SwitchArgument(@switch, new QuotedArgument(new TextArgument(text)), separator));
+            return builder;
+        }
+
+        /// <summary>
         /// Quotes and appends the specified argument to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -434,6 +646,19 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, IProcessArgument argument)
         {
             return PrependSwitchQuoted(builder, @switch, " ", argument);
+        }
+
+        /// <summary>
+        /// Quotes and inserts the specified switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="argument">The argument to be quoted and inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitchQuoted(this ProcessArgumentBuilder builder, int index, string @switch, IProcessArgument argument)
+        {
+            return InsertSwitchQuoted(builder, index, @switch, " ", argument);
         }
 
         /// <summary>
@@ -465,6 +690,21 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Quotes and inserts the specified switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="argument">The argument to be quoted and inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitchQuoted(this ProcessArgumentBuilder builder, int index, string @switch, string separator, IProcessArgument argument)
+        {
+            builder?.Insert(index, new SwitchArgument(@switch, new QuotedArgument(argument), separator));
+            return builder;
+        }
+
+        /// <summary>
         /// Appends the specified secret text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -486,6 +726,19 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return PrependSwitchSecret(builder, @switch, " ", text);
+        }
+
+        /// <summary>
+        /// Inserts the specified secret switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="text">The secret text to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitchSecret(this ProcessArgumentBuilder builder, int index, string @switch, string text)
+        {
+            return InsertSwitchSecret(builder, index, @switch, " ", text);
         }
 
         /// <summary>
@@ -517,6 +770,21 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Inserts the specified secret switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="text">The secret text to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitchSecret(this ProcessArgumentBuilder builder, int index, string @switch, string separator, string text)
+        {
+            builder?.Insert(index, new SwitchArgument(@switch, new SecretArgument(new TextArgument(text)), separator));
+            return builder;
+        }
+
+        /// <summary>
         /// Appends the specified secret text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -538,6 +806,19 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependSwitchSecret(this ProcessArgumentBuilder builder, string @switch, IProcessArgument argument)
         {
             return PrependSwitchSecret(builder, @switch, " ", argument);
+        }
+
+        /// <summary>
+        /// Inserts the specified secret switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="argument">The secret argument to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitchSecret(this ProcessArgumentBuilder builder, int index, string @switch, IProcessArgument argument)
+        {
+            return InsertSwitchSecret(builder, index, @switch, " ", argument);
         }
 
         /// <summary>
@@ -569,6 +850,21 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Inserts the specified secret switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="argument">The secret argument to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitchSecret(this ProcessArgumentBuilder builder, int index, string @switch, string separator, IProcessArgument argument)
+        {
+            builder?.Insert(index, new SwitchArgument(@switch, new SecretArgument(argument), separator));
+            return builder;
+        }
+
+        /// <summary>
         /// Quotes and appends the specified secret text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -590,6 +886,19 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependSwitchQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return PrependSwitchQuotedSecret(builder, @switch, " ", text);
+        }
+
+        /// <summary>
+        /// Quotes and inserts the specified secret switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="text">The secret text to be quoted and inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitchQuotedSecret(this ProcessArgumentBuilder builder, int index, string @switch, string text)
+        {
+            return InsertSwitchQuotedSecret(builder, index, @switch, " ", text);
         }
 
         /// <summary>
@@ -621,6 +930,21 @@ namespace Cake.Core
         }
 
         /// <summary>
+        /// Quotes and inserts the specified secret switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="text">The secret text to be quoted and inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertSwitchQuotedSecret(this ProcessArgumentBuilder builder, int index, string @switch, string separator, string text)
+        {
+            builder?.InsertSwitchQuoted(index, @switch, separator, new SecretArgument(new TextArgument(text)));
+            return builder;
+        }
+
+        /// <summary>
         /// Quotes and appends the specified secret text to the argument builder.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -642,6 +966,19 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependQuotedSecret(this ProcessArgumentBuilder builder, string @switch, IProcessArgument argument)
         {
             return PrependQuotedSecret(builder, @switch, " ", argument);
+        }
+
+        /// <summary>
+        /// Quotes and inserts the specified secret switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="argument">The secret argument to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertQuotedSecret(this ProcessArgumentBuilder builder, int index, string @switch, IProcessArgument argument)
+        {
+            return InsertQuotedSecret(builder, index, @switch, " ", argument);
         }
 
         /// <summary>
@@ -669,6 +1006,21 @@ namespace Cake.Core
         public static ProcessArgumentBuilder PrependQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string separator, IProcessArgument argument)
         {
             builder?.PrependSwitchQuoted(@switch, separator, new SecretArgument(argument));
+            return builder;
+        }
+
+        /// <summary>
+        /// Quotes and inserts the specified secret switch into the argument builder at the specified index.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="index">The zero-based index at which the switch should be inserted.</param>
+        /// <param name="switch">The switch preceding the text.</param>
+        /// <param name="separator">The separator between the switch and argument.</param>
+        /// <param name="argument">The secret argument to be inserted.</param>
+        /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        public static ProcessArgumentBuilder InsertQuotedSecret(this ProcessArgumentBuilder builder, int index, string @switch, string separator, IProcessArgument argument)
+        {
+            builder?.InsertSwitchQuoted(index, @switch, separator, new SecretArgument(argument));
             return builder;
         }
 
