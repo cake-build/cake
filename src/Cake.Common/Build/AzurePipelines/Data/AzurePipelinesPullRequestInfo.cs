@@ -85,5 +85,25 @@ namespace Cake.Common.Build.AzurePipelines.Data
         /// This property is populated only if the build ran because of a Git PR affected by a branch policy.
         /// </remarks>
         public string TargetBranch => GetEnvironmentString("SYSTEM_PULLREQUEST_TARGETBRANCH");
+
+        /// <summary>
+        /// Gets the name of the target branch for a pull request.
+        /// </summary>
+        /// <remarks>
+        /// Short name such as <c>main</c>, as opposed to <see cref="TargetBranch"/>
+        /// which is often a ref like <c>refs/heads/main</c>.
+        /// This property is populated only if the build ran because of a Git PR affected by a branch policy.
+        /// </remarks>
+        public string TargetBranchName => GetEnvironmentString("SYSTEM_PULLREQUEST_TARGETBRANCHNAME");
+
+        /// <summary>
+        /// Gets the commit that is being reviewed in a pull request.
+        /// </summary>
+        /// <remarks>
+        /// Distinct from <c>BUILD_SOURCEVERSION</c> on
+        /// <see cref="AzurePipelinesRepositoryInfo.SourceVersion"/>.
+        /// This property is populated only if the build ran because of a Git PR affected by a branch policy.
+        /// </remarks>
+        public string SourceCommitId => GetEnvironmentString("SYSTEM_PULLREQUEST_SOURCECOMMITID");
     }
 }

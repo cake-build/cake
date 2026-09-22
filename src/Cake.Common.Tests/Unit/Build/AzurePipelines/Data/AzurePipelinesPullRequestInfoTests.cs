@@ -153,5 +153,37 @@ namespace Cake.Common.Tests.Unit.Build.AzurePipelines.Data
                 Assert.Equal(@"refs/heads/master", result);
             }
         }
+
+        public sealed class ThePullRequestTargetBranchNameProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new AzurePipelinesInfoFixture().CreatePullRequestInfo();
+
+                // When
+                var result = info.TargetBranchName;
+
+                // Then
+                Assert.Equal("master", result);
+            }
+        }
+
+        public sealed class ThePullRequestSourceCommitIdProperty
+        {
+            [Fact]
+            public void Should_Return_Correct_Value()
+            {
+                // Given
+                var info = new AzurePipelinesInfoFixture().CreatePullRequestInfo();
+
+                // When
+                var result = info.SourceCommitId;
+
+                // Then
+                Assert.Equal("4efbc1ffb993dfbcf024e6a9202865cc0b6d9c50", result);
+            }
+        }
     }
 }
