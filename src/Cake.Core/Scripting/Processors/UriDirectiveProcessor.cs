@@ -88,7 +88,8 @@ namespace Cake.Core.Scripting.Processors
 
             // Fetch optional NuGet source.
             var source = tokens.Skip(2).Select(value => value.UnQuote()).FirstOrDefault();
-            if (!string.IsNullOrWhiteSpace(source))
+            if (!string.IsNullOrWhiteSpace(source) &&
+                !source.StartsWith("//", StringComparison.Ordinal))
             {
                 builder.Append(string.Concat(source, "/"));
             }
