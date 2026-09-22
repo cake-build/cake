@@ -37,6 +37,12 @@ namespace Cake.Core
         void Write(string format, params object[] arg);
 
         /// <summary>
+        /// Writes the specified string value to the console output without parsing it as a format string.
+        /// </summary>
+        /// <param name="value">The value to write.</param>
+        void Write(string value) => Write("{0}", value);
+
+        /// <summary>
         /// Writes the text representation of the specified array of objects, followed
         /// by the current line terminator, to the console output using the specified
         /// format information.
@@ -44,6 +50,13 @@ namespace Cake.Core
         /// <param name="format">A composite format string.</param>
         /// <param name="arg">An array of objects to write using format.</param>
         void WriteLine(string format, params object[] arg);
+
+        /// <summary>
+        /// Writes the specified string value, followed by the current line terminator,
+        /// to the console output without parsing it as a format string.
+        /// </summary>
+        /// <param name="value">The value to write.</param>
+        void WriteLine(string value) => WriteLine("{0}", value);
 
         /// <summary>
         /// Writes the text representation of the specified array of objects to the
@@ -54,6 +67,12 @@ namespace Cake.Core
         void WriteError(string format, params object[] arg);
 
         /// <summary>
+        /// Writes the specified string value to the console error output without parsing it as a format string.
+        /// </summary>
+        /// <param name="value">The value to write.</param>
+        void WriteError(string value) => WriteError("{0}", value);
+
+        /// <summary>
         /// Writes the text representation of the specified array of objects, followed
         /// by the current line terminator, to the console error output using the
         /// specified format information.
@@ -61,6 +80,13 @@ namespace Cake.Core
         /// <param name="format">A composite format string.</param>
         /// <param name="arg">An array of objects to write using format.</param>
         void WriteErrorLine(string format, params object[] arg);
+
+        /// <summary>
+        /// Writes the specified string value, followed by the current line terminator,
+        /// to the console error output without parsing it as a format string.
+        /// </summary>
+        /// <param name="value">The value to write.</param>
+        void WriteErrorLine(string value) => WriteErrorLine("{0}", value);
 
         /// <summary>
         /// Sets the foreground and background console colors to their defaults.

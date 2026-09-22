@@ -91,6 +91,12 @@ namespace Cake.Testing
         }
 
         /// <inheritdoc/>
+        public void Write(string value)
+        {
+            Write("{0}", value);
+        }
+
+        /// <inheritdoc/>
         public void WriteLine(string format, params object[] arg)
         {
             if (!string.IsNullOrWhiteSpace(format))
@@ -100,6 +106,18 @@ namespace Cake.Testing
 
             Messages.Add(_builder.ToString());
             _builder.Clear();
+        }
+
+        /// <inheritdoc/>
+        public void WriteLine(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                WriteLine(string.Empty, Array.Empty<object>());
+                return;
+            }
+
+            WriteLine("{0}", value);
         }
 
         /// <inheritdoc/>
@@ -122,6 +140,12 @@ namespace Cake.Testing
         }
 
         /// <inheritdoc/>
+        public void WriteError(string value)
+        {
+            WriteError("{0}", value);
+        }
+
+        /// <inheritdoc/>
         public void WriteErrorLine(string format, params object[] arg)
         {
             if (!string.IsNullOrWhiteSpace(format))
@@ -131,6 +155,18 @@ namespace Cake.Testing
 
             ErrorMessages.Add(_errorBuilder.ToString());
             _errorBuilder.Clear();
+        }
+
+        /// <inheritdoc/>
+        public void WriteErrorLine(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                WriteErrorLine(string.Empty, Array.Empty<object>());
+                return;
+            }
+
+            WriteErrorLine("{0}", value);
         }
 
         /// <inheritdoc/>

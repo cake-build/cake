@@ -50,9 +50,23 @@ namespace Cake.Core
         }
 
         /// <inheritdoc/>
+        public void Write(string value)
+        {
+            Console.Write(value);
+            Console.Out.Flush();
+        }
+
+        /// <inheritdoc/>
         public void WriteLine(string format, params object[] arg)
         {
             Console.WriteLine(format, arg);
+            Console.Out.Flush();
+        }
+
+        /// <inheritdoc/>
+        public void WriteLine(string value)
+        {
+            Console.WriteLine(value);
             Console.Out.Flush();
         }
 
@@ -64,9 +78,23 @@ namespace Cake.Core
         }
 
         /// <inheritdoc/>
+        public void WriteError(string value)
+        {
+            Console.Error.Write(value);
+            Console.Error.Flush();
+        }
+
+        /// <inheritdoc/>
         public void WriteErrorLine(string format, params object[] arg)
         {
             Console.Error.WriteLine(format, arg);
+            Console.Error.Flush();
+        }
+
+        /// <inheritdoc/>
+        public void WriteErrorLine(string value)
+        {
+            Console.Error.WriteLine(value);
             Console.Error.Flush();
         }
 
