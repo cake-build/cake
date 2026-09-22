@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Collections.Generic;
+
 namespace Cake.Core
 {
     public static partial class CakeTaskBuilderOfTExtensions
@@ -20,6 +23,29 @@ namespace Cake.Core
             => builder.Process(builder => builder.IsDependeeOf(name));
 
         /// <summary>
+        /// Makes the task a dependency of the specified tasks.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="names">The names of the tasks the current task will be a dependency of.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Leaf")
+        ///     .IsDependeeOf(["Default", "CI"]);
+        /// </code>
+        /// </example>
+        public static CakeTaskBuilder<TData> IsDependeeOf<TData>(
+            this CakeTaskBuilder<TData> builder,
+            IEnumerable<string> names)
+            where TData : class
+            => builder.Process(taskBuilder =>
+            {
+                ArgumentNullException.ThrowIfNull(names);
+                taskBuilder.IsDependeeOf(names);
+            });
+
+        /// <summary>
         /// Makes the task a dependee of another task.
         /// </summary>
         /// <typeparam name="TData">The type of the data context.</typeparam>
@@ -31,6 +57,49 @@ namespace Cake.Core
             CakeTaskBuilder<TData> other)
             where TData : class
             => builder.Process(builder => builder.IsDependeeOf(other.Builder));
+
+        /// <summary>
+        /// Makes the task a dependency of the specified tasks.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="others">The tasks the current task will be a dependency of.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Leaf")
+        ///     .IsDependeeOf([defaultTask, ciTask]);
+        /// </code>
+        /// </example>
+        public static CakeTaskBuilder<TData> IsDependeeOf<TData>(
+            this CakeTaskBuilder<TData> builder,
+            IEnumerable<CakeTaskBuilder<TData>> others)
+            where TData : class
+            => builder.Process(taskBuilder =>
+            {
+                ArgumentNullException.ThrowIfNull(others);
+                foreach (var other in others)
+                {
+                    taskBuilder.IsDependeeOf(other?.Builder);
+                }
+            });
+
+        /// <summary>
+        /// Makes the task a dependency of the specified tasks.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="others">The tasks the current task will be a dependency of.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<TData> IsDependeeOf<TData>(
+            this CakeTaskBuilder<TData> builder,
+            IEnumerable<CakeTaskBuilder> others)
+            where TData : class
+            => builder.Process(taskBuilder =>
+            {
+                ArgumentNullException.ThrowIfNull(others);
+                taskBuilder.IsDependeeOf(others);
+            });
 
         /// <summary>
         /// Creates a dependency between two tasks.
@@ -46,6 +115,29 @@ namespace Cake.Core
             => builder.Process(builder => builder.IsDependentOn(name));
 
         /// <summary>
+        /// Creates dependencies on the specified tasks.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="names">The names of the dependent tasks.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Default")
+        ///     .IsDependentOn(["Clean", "Build"]);
+        /// </code>
+        /// </example>
+        public static CakeTaskBuilder<TData> IsDependentOn<TData>(
+            this CakeTaskBuilder<TData> builder,
+            IEnumerable<string> names)
+            where TData : class
+            => builder.Process(taskBuilder =>
+            {
+                ArgumentNullException.ThrowIfNull(names);
+                taskBuilder.IsDependentOn(names);
+            });
+
+        /// <summary>
         /// Creates a dependency between two tasks.
         /// </summary>
         /// <typeparam name="TData">The type of the data context.</typeparam>
@@ -59,6 +151,32 @@ namespace Cake.Core
             => builder.Process(builder => builder.IsDependentOn(other?.Builder));
 
         /// <summary>
+        /// Creates dependencies on the specified tasks.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="others">The dependent tasks.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Default")
+        ///     .IsDependentOn([test1, test2]);
+        /// </code>
+        /// </example>
+        public static CakeTaskBuilder<TData> IsDependentOn<TData>(
+            this CakeTaskBuilder<TData> builder,
+            IEnumerable<CakeTaskBuilder<TData>> others)
+            where TData : class
+            => builder.Process(taskBuilder =>
+            {
+                ArgumentNullException.ThrowIfNull(others);
+                foreach (var other in others)
+                {
+                    taskBuilder.IsDependentOn(other?.Builder);
+                }
+            });
+
+        /// <summary>
         /// Creates a dependency between two tasks.
         /// </summary>
         /// <typeparam name="TData">The type of the data context.</typeparam>
@@ -70,5 +188,22 @@ namespace Cake.Core
             CakeTaskBuilder other)
             where TData : class
             => builder.Process(builder => builder.IsDependentOn(other));
+
+        /// <summary>
+        /// Creates dependencies on the specified tasks.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <param name="builder">The task builder.</param>
+        /// <param name="others">The dependent tasks.</param>
+        /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        public static CakeTaskBuilder<TData> IsDependentOn<TData>(
+            this CakeTaskBuilder<TData> builder,
+            IEnumerable<CakeTaskBuilder> others)
+            where TData : class
+            => builder.Process(taskBuilder =>
+            {
+                ArgumentNullException.ThrowIfNull(others);
+                taskBuilder.IsDependentOn(others);
+            });
     }
 }
