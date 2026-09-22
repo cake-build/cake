@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+
 // ReSharper disable once CheckNamespace
 namespace Cake.Core
 {
@@ -16,7 +18,7 @@ namespace Cake.Core
         /// <param name="console">The console to write to.</param>
         public static void WriteLine(this IConsole console)
         {
-            console?.WriteLine(string.Empty);
+            console?.WriteLine(string.Empty, Array.Empty<object>());
         }
 
         /// <summary>
@@ -25,7 +27,7 @@ namespace Cake.Core
         /// <param name="console">The console to write to.</param>
         public static void WriteErrorLine(this IConsole console)
         {
-            console?.WriteErrorLine(string.Empty);
+            console?.WriteErrorLine(string.Empty, Array.Empty<object>());
         }
     }
 }
