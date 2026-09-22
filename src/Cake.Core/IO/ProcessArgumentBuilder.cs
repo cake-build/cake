@@ -80,6 +80,28 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
+        /// Inserts an argument at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index at which the argument should be inserted.</param>
+        /// <param name="argument">The argument.</param>
+        public void Insert(int index, IProcessArgument argument)
+        {
+            _tokens.Insert(index, argument);
+        }
+
+        /// <summary>
+        /// Inserts arguments at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index at which the arguments should be inserted.</param>
+        /// <param name="arguments">The arguments.</param>
+        public void InsertRange(int index, IEnumerable<IProcessArgument> arguments)
+        {
+            ArgumentNullException.ThrowIfNull(arguments);
+
+            _tokens.InsertRange(index, arguments);
+        }
+
+        /// <summary>
         /// Renders the arguments as a <see cref="string"/>.
         /// Sensitive information will be included.
         /// </summary>
