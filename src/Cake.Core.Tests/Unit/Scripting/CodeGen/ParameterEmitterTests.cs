@@ -190,6 +190,18 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
             {
             }
 
+            public static void OptionalStringWithBackslashPath(string arg = @".\Output")
+            {
+            }
+
+            public static void OptionalStringWithVerbatimTab(string arg = @"\t tab")
+            {
+            }
+
+            public static void OptionalStringWithQuotes(string arg = @"there is a ""string"" here")
+            {
+            }
+
             public static void OptionalObject(object arg = null)
             {
             }
@@ -472,6 +484,9 @@ namespace Cake.Core.Tests.Unit.Scripting.CodeGen
         [InlineData("OptionalEnum", "Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum arg = (Cake.Core.Tests.Unit.Scripting.CodeGen.ParameterEmitterTests.TestEnum)2")]
         [InlineData("OptionalBool", "System.Boolean arg = true")]
         [InlineData("OptionalString", "System.String arg = \"value\"")]
+        [InlineData("OptionalStringWithBackslashPath", "System.String arg = \".\\\\Output\"")]
+        [InlineData("OptionalStringWithVerbatimTab", "System.String arg = \"\\\\t tab\"")]
+        [InlineData("OptionalStringWithQuotes", "System.String arg = \"there is a \\\"string\\\" here\"")]
         [InlineData("OptionalObject", "System.Object arg = null")]
         [InlineData("OptionalInterface", "System.IDisposable arg = null")]
         [InlineData("OptionalClass", "Cake.Core.CakeContext arg = null")]
