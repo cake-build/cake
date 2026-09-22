@@ -267,6 +267,36 @@ namespace Cake.Core.Tests.Unit.Scripting.Analysis
             }
 
             [Fact]
+            public void Should_Process_Addin_Directive_With_Comment()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.GivenScriptExist("/Working/script.cake", "#addin \"Hello.World\" //https://github.com/example/Hello.World");
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Single(result.Script.Addins);
+                Assert.Equal("nuget:?package=Hello.World", result.Script.Addins.ElementAt(0).OriginalString);
+            }
+
+            [Fact]
+            public void Should_Process_Addin_Directive_With_Source_And_Comment()
+            {
+                // Given
+                var fixture = new ScriptAnalyzerFixture();
+                fixture.GivenScriptExist("/Working/script.cake", "#addin \"Hello.World\" \"http://source\" //https://ignored");
+
+                // When
+                var result = fixture.Analyze("/Working/script.cake");
+
+                // Then
+                Assert.Single(result.Script.Addins);
+                Assert.Equal("nuget:http://source/?package=Hello.World", result.Script.Addins.ElementAt(0).OriginalString);
+            }
+
+            [Fact]
             public void Should_Process_Tool_Directive_Without_Source()
             {
                 // Given
