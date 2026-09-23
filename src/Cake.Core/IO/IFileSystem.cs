@@ -14,6 +14,12 @@ namespace Cake.Core.IO
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>A <see cref="IFile"/> instance representing the specified path.</returns>
+        /// <example>
+        /// <code>
+        /// var file = context.FileSystem.GetFile("./build.cake");
+        /// Information("Exists: {0}", file.Exists);
+        /// </code>
+        /// </example>
         IFile GetFile(FilePath path);
 
         /// <summary>
@@ -21,6 +27,12 @@ namespace Cake.Core.IO
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>A <see cref="IDirectory"/> instance representing the specified path.</returns>
+        /// <example>
+        /// <code>
+        /// var dir = context.FileSystem.GetDirectory("./artifacts");
+        /// Information("Exists: {0}", dir.Exists);
+        /// </code>
+        /// </example>
         IDirectory GetDirectory(DirectoryPath path);
     }
 }

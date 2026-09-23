@@ -17,6 +17,14 @@ namespace Cake.Core.IO
         /// <param name="fileSystem">The file system.</param>
         /// <param name="path">The path.</param>
         /// <returns>Whether or not the specified file exist.</returns>
+        /// <example>
+        /// <code>
+        /// if (context.FileSystem.Exist("./publish.enabled"))
+        /// {
+        ///     Information("Publish is enabled");
+        /// }
+        /// </code>
+        /// </example>
         public static bool Exist(this IFileSystem fileSystem, FilePath path)
         {
             ArgumentNullException.ThrowIfNull(fileSystem);
@@ -30,6 +38,14 @@ namespace Cake.Core.IO
         /// <param name="fileSystem">The file system.</param>
         /// <param name="path">The path.</param>
         /// <returns>Whether or not the specified directory exist.</returns>
+        /// <example>
+        /// <code>
+        /// if (context.FileSystem.Exist(new DirectoryPath("./artifacts")))
+        /// {
+        ///     Information("Artifacts directory exists");
+        /// }
+        /// </code>
+        /// </example>
         public static bool Exist(this IFileSystem fileSystem, DirectoryPath path)
         {
             ArgumentNullException.ThrowIfNull(fileSystem);

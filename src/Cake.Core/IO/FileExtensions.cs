@@ -45,6 +45,14 @@ namespace Cake.Core.IO
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>A <see cref="Stream"/> to the file.</returns>
+        /// <example>
+        /// <code>
+        /// var file = context.FileSystem.GetFile("./README.md");
+        /// using (var stream = file.OpenRead())
+        /// {
+        /// }
+        /// </code>
+        /// </example>
         public static Stream OpenRead(this IFile file)
         {
             ArgumentNullException.ThrowIfNull(file);
@@ -57,6 +65,14 @@ namespace Cake.Core.IO
         /// </summary>
         /// <param name="file">The file to be opened.</param>
         /// <returns>A <see cref="Stream"/> to the file.</returns>
+        /// <example>
+        /// <code>
+        /// var file = context.FileSystem.GetFile("./artifacts/out.txt");
+        /// using (var stream = file.OpenWrite())
+        /// {
+        /// }
+        /// </code>
+        /// </example>
         public static Stream OpenWrite(this IFile file)
         {
             ArgumentNullException.ThrowIfNull(file);
@@ -69,6 +85,15 @@ namespace Cake.Core.IO
         /// <param name="file">The file to be read from.</param>
         /// <param name="encoding">The encoding that is applied to the content of the file.</param>
         /// <returns>A <see cref="IEnumerable{T}"/> of file line content.</returns>
+        /// <example>
+        /// <code>
+        /// var file = context.FileSystem.GetFile("./README.md");
+        /// foreach (var line in file.ReadLines(System.Text.Encoding.UTF8))
+        /// {
+        ///     Information(line);
+        /// }
+        /// </code>
+        /// </example>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static IEnumerable<string> ReadLines(this IFile file, System.Text.Encoding encoding)
         {

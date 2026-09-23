@@ -14,6 +14,18 @@ namespace Cake.Core
         /// </summary>
         /// <typeparam name="TData">The data type.</typeparam>
         /// <returns>The value of the data.</returns>
+        /// <example>
+        /// <code>
+        /// Setup&lt;Foo&gt;(context => new Foo { Place = "World" });
+        ///
+        /// Task("Hello")
+        ///     .Does(context =>
+        /// {
+        ///     var data = context.Data.Get&lt;Foo&gt;();
+        ///     Information("Hello {0}", data.Place);
+        /// });
+        /// </code>
+        /// </example>
         TData Get<TData>() where TData : class;
     }
 }

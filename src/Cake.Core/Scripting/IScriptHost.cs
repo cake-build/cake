@@ -190,6 +190,12 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
+        /// <example>
+        /// <code>
+        /// var target = Argument("target", "Default");
+        /// RunTarget(target);
+        /// </code>
+        /// </example>
         CakeReport RunTarget(string target);
 
         /// <summary>
@@ -197,6 +203,12 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="target">The target to run.</param>
         /// <returns>The resulting report.</returns>
+        /// <example>
+        /// <code>
+        /// var target = Argument("target", "Default");
+        /// await RunTargetAsync(target);
+        /// </code>
+        /// </example>
         Task<CakeReport> RunTargetAsync(string target);
 
         /// <summary>
@@ -204,6 +216,11 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="targets">The targets to run.</param>
         /// <returns>The resulting report.</returns>
+        /// <example>
+        /// <code>
+        /// RunTargets(["Clean", "Build"]);
+        /// </code>
+        /// </example>
         CakeReport RunTargets(IEnumerable<string> targets);
 
         /// <summary>
@@ -211,6 +228,11 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="targets">The targets to run.</param>
         /// <returns>The resulting report.</returns>
+        /// <example>
+        /// <code>
+        /// await RunTargetsAsync(["Clean", "Build"]);
+        /// </code>
+        /// </example>
         Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets);
     }
 }
