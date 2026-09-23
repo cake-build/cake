@@ -113,6 +113,24 @@ namespace Cake.Common.Build.AppVeyor
         /// Uploads an AppVeyor artifact.
         /// </summary>
         /// <param name="path">The file path of the artifact to upload.</param>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     BuildSystem.AppVeyor.UploadArtifact("./build/release_x86.zip");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor.</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     AppVeyor.UploadArtifact("./build/release_x86.zip");
+        /// }
+        /// </code>
+        /// </example>
         void UploadArtifact(FilePath path);
 
         /// <summary>
@@ -120,6 +138,32 @@ namespace Cake.Common.Build.AppVeyor
         /// </summary>
         /// <param name="path">The file path of the artifact to upload.</param>
         /// <param name="settings">The settings to apply when uploading an artifact.</param>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     BuildSystem.AppVeyor.UploadArtifact(
+        ///         "./build/release_x86.zip",
+        ///         new AppVeyorUploadArtifactsSettings()
+        ///             .SetArtifactType(AppVeyorUploadArtifactType.Auto)
+        ///             .SetDeploymentName("release"));
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor.</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     AppVeyor.UploadArtifact(
+        ///         "./build/release_x86.zip",
+        ///         new AppVeyorUploadArtifactsSettings()
+        ///             .SetArtifactType(AppVeyorUploadArtifactType.Auto)
+        ///             .SetDeploymentName("release"));
+        /// }
+        /// </code>
+        /// </example>
         void UploadArtifact(FilePath path, AppVeyorUploadArtifactsSettings settings);
 
         /// <summary>
@@ -127,6 +171,30 @@ namespace Cake.Common.Build.AppVeyor
         /// </summary>
         /// <param name="path">The file path of the artifact to upload.</param>
         /// <param name="settingsAction">The settings to apply when uploading an artifact.</param>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     BuildSystem.AppVeyor.UploadArtifact("./build/release_x86.zip", settings =>
+        ///     {
+        ///         settings.SetDeploymentName("release");
+        ///     });
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor.</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     AppVeyor.UploadArtifact("./build/release_x86.zip", settings =>
+        ///     {
+        ///         settings.SetDeploymentName("release");
+        ///     });
+        /// }
+        /// </code>
+        /// </example>
         void UploadArtifact(FilePath path, Action<AppVeyorUploadArtifactsSettings> settingsAction);
 
         /// <summary>
@@ -134,6 +202,24 @@ namespace Cake.Common.Build.AppVeyor
         /// </summary>
         /// <param name="path">The file path of the test results XML to upload.</param>
         /// <param name="resultsType">The results type. Can be mstest, xunit, nunit, nunit3 or junit.</param>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     BuildSystem.AppVeyor.UploadTestResults("./test-results.xml", AppVeyorTestResultsType.XUnit);
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AppVeyor.</para>
+        /// <example>
+        /// <code>
+        /// if (AppVeyor.IsRunningOnAppVeyor)
+        /// {
+        ///     AppVeyor.UploadTestResults("./test-results.xml", AppVeyorTestResultsType.XUnit);
+        /// }
+        /// </code>
+        /// </example>
         void UploadTestResults(FilePath path, AppVeyorTestResultsType resultsType);
 
         /// <summary>

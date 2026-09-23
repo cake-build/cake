@@ -598,6 +598,25 @@ namespace Cake.Common.Build
         /// <summary>
         /// Gets the current build provider.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// switch (BuildSystem.Provider)
+        /// {
+        ///     case BuildProvider.GitHubActions:
+        ///         Information("Running on GitHub Actions");
+        ///         break;
+        ///     case BuildProvider.AzurePipelines:
+        ///         Information("Running on Azure Pipelines");
+        ///         break;
+        ///     case BuildProvider.AppVeyor:
+        ///         Information("Running on AppVeyor");
+        ///         break;
+        ///     default:
+        ///         Information("Running locally or on an unrecognized provider");
+        ///         break;
+        /// }
+        /// </code>
+        /// </example>
         /// <value>The current build provider.</value>
         public BuildProvider Provider { get; }
 
@@ -625,6 +644,19 @@ namespace Cake.Common.Build
         /// <summary>
         /// Gets a value indicating whether the current build was started by a pull request.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// // Gets a flag telling us if this build was started by a pull request.
+        /// var isPullRequest = BuildSystem.IsPullRequest;
+        ///
+        /// // Define a task that only runs when not a pull request.
+        /// Task("Publish")
+        ///   .WithCriteria(!isPullRequest)
+        ///   .Does(() =>
+        /// {
+        /// });
+        /// </code>
+        /// </example>
         /// <value>
         ///   <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
         /// </value>

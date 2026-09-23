@@ -30,6 +30,24 @@ namespace Cake.Common.Build.GitLabCI
         /// <param name="envPath">Path to env file.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The Value.</param>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.GitLabCI.IsRunningOnGitLabCI)
+        /// {
+        ///     BuildSystem.GitLabCI.Commands.SetEnvironmentVariable("./gitlab.env", "MY_VAR", "value");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via GitLabCI.</para>
+        /// <example>
+        /// <code>
+        /// if (GitLabCI.IsRunningOnGitLabCI)
+        /// {
+        ///     GitLabCI.Commands.SetEnvironmentVariable("./gitlab.env", "MY_VAR", "value");
+        /// }
+        /// </code>
+        /// </example>
         public void SetEnvironmentVariable(FilePath envPath, string key, string value)
         {
             ArgumentNullException.ThrowIfNull(envPath);

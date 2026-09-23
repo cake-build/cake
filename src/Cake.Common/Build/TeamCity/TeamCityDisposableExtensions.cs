@@ -18,6 +18,30 @@ namespace Cake.Common.Build.TeamCity
         /// <param name="teamCityProvider">TeamCity provider.</param>
         /// <param name="blockName">The name of the report block.</param>
         /// <returns>A disposable that writes the report block end.</returns>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     using (BuildSystem.TeamCity.Block("Restore"))
+        ///     {
+        ///         Information("Restoring packages");
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TeamCity.</para>
+        /// <example>
+        /// <code>
+        /// if (TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     using (TeamCity.Block("Restore"))
+        ///     {
+        ///         Information("Restoring packages");
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         public static IDisposable Block(this ITeamCityProvider teamCityProvider, string blockName)
         {
             ArgumentNullException.ThrowIfNull(teamCityProvider);
@@ -31,6 +55,30 @@ namespace Cake.Common.Build.TeamCity
         /// <param name="teamCityProvider">TeamCity provider.</param>
         /// <param name="compilerName">The name of the build block.</param>
         /// <returns>A disposable that writes the build block end.</returns>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     using (BuildSystem.TeamCity.BuildBlock("dotnet"))
+        ///     {
+        ///         DotNetBuild("./src");
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TeamCity.</para>
+        /// <example>
+        /// <code>
+        /// if (TeamCity.IsRunningOnTeamCity)
+        /// {
+        ///     using (TeamCity.BuildBlock("dotnet"))
+        ///     {
+        ///         DotNetBuild("./src");
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         public static IDisposable BuildBlock(this ITeamCityProvider teamCityProvider, string compilerName)
         {
             ArgumentNullException.ThrowIfNull(teamCityProvider);
