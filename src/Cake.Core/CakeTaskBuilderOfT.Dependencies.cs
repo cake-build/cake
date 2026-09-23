@@ -16,6 +16,12 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="name">The name of the task the current task will be a dependency of.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Clean")
+        ///     .IsDependeeOf("Build");
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> IsDependeeOf<TData>(
             this CakeTaskBuilder<TData> builder,
             string name)
@@ -31,7 +37,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
         /// <example>
         /// <code>
-        /// Task("Leaf")
+        /// TaskOf&lt;Foo&gt;("Leaf")
         ///     .IsDependeeOf(["Default", "CI"]);
         /// </code>
         /// </example>
@@ -52,6 +58,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="other">The dependent task.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var build = TaskOf&lt;Foo&gt;("Build");
+        /// TaskOf&lt;Foo&gt;("Clean")
+        ///     .IsDependeeOf(build);
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> IsDependeeOf<TData>(
             this CakeTaskBuilder<TData> builder,
             CakeTaskBuilder<TData> other)
@@ -67,7 +80,9 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
         /// <example>
         /// <code>
-        /// Task("Leaf")
+        /// var defaultTask = TaskOf&lt;Foo&gt;("Default");
+        /// var ciTask = TaskOf&lt;Foo&gt;("CI");
+        /// TaskOf&lt;Foo&gt;("Leaf")
         ///     .IsDependeeOf([defaultTask, ciTask]);
         /// </code>
         /// </example>
@@ -91,6 +106,14 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="others">The tasks the current task will be a dependency of.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var defaultTask = Task("Default");
+        /// var ciTask = Task("CI");
+        /// TaskOf&lt;Foo&gt;("Leaf")
+        ///     .IsDependeeOf([defaultTask, ciTask]);
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> IsDependeeOf<TData>(
             this CakeTaskBuilder<TData> builder,
             IEnumerable<CakeTaskBuilder> others)
@@ -108,6 +131,12 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="name">The name of the dependent task.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Default")
+        ///     .IsDependentOn("Build");
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> IsDependentOn<TData>(
             this CakeTaskBuilder<TData> builder,
             string name)
@@ -123,7 +152,7 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
         /// <example>
         /// <code>
-        /// Task("Default")
+        /// TaskOf&lt;Foo&gt;("Default")
         ///     .IsDependentOn(["Clean", "Build"]);
         /// </code>
         /// </example>
@@ -144,6 +173,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="other">The dependent task.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var build = TaskOf&lt;Foo&gt;("Build");
+        /// TaskOf&lt;Foo&gt;("Default")
+        ///     .IsDependentOn(build);
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> IsDependentOn<TData>(
             this CakeTaskBuilder<TData> builder,
             CakeTaskBuilder<TData> other)
@@ -159,7 +195,9 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
         /// <example>
         /// <code>
-        /// Task("Default")
+        /// var test1 = TaskOf&lt;Foo&gt;("Test1");
+        /// var test2 = TaskOf&lt;Foo&gt;("Test2");
+        /// TaskOf&lt;Foo&gt;("Default")
         ///     .IsDependentOn([test1, test2]);
         /// </code>
         /// </example>
@@ -183,6 +221,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="other">The dependent task.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var build = Task("Build");
+        /// TaskOf&lt;Foo&gt;("Default")
+        ///     .IsDependentOn(build);
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> IsDependentOn<TData>(
             this CakeTaskBuilder<TData> builder,
             CakeTaskBuilder other)
@@ -196,6 +241,14 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="others">The dependent tasks.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var test1 = Task("Test1");
+        /// var test2 = Task("Test2");
+        /// TaskOf&lt;Foo&gt;("Default")
+        ///     .IsDependentOn([test1, test2]);
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> IsDependentOn<TData>(
             this CakeTaskBuilder<TData> builder,
             IEnumerable<CakeTaskBuilder> others)

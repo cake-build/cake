@@ -17,6 +17,16 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="description">The description.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Hello")
+        ///     .Description("Writes a greeting")
+        ///     .Does(() =>
+        /// {
+        ///     Information("Hello World");
+        /// });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder Description(this CakeTaskBuilder builder, string description)
         {
             ArgumentNullException.ThrowIfNull(builder);

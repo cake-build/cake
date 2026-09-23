@@ -35,6 +35,15 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <param name="name">The name of the task.</param>
         /// <returns>A <see cref="CakeTaskBuilder"/>.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Hello")
+        ///     .Does(() =>
+        /// {
+        ///     Information("Hello World");
+        /// });
+        /// </code>
+        /// </example>
         CakeTaskBuilder Task(string name);
 
         /// <summary>
@@ -43,6 +52,15 @@ namespace Cake.Core.Scripting
         /// <param name="name">The name of the task.</param>
         /// <returns>A <see cref="CakeTaskBuilder"/>.</returns>
         /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Hello")
+        ///     .Does(data =>
+        /// {
+        ///     Information("Hello {0}", data.Place);
+        /// });
+        /// </code>
+        /// </example>
         CakeTaskBuilder<TData> TaskOf<TData>(string name)
             where TData : class
             => new(Task(name));
@@ -110,6 +128,14 @@ namespace Cake.Core.Scripting
         /// If the task setup fails, its task will not be executed but the task teardown will be performed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        /// <example>
+        /// <code>
+        /// TaskSetup(context =>
+        /// {
+        ///     Information("Starting {0}", context.Task.Name);
+        /// });
+        /// </code>
+        /// </example>
         void TaskSetup(Action<ITaskSetupContext> action);
 
         /// <summary>
@@ -118,6 +144,14 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <typeparam name="TData">The data type.</typeparam>
         /// <param name="action">The action to be executed.</param>
+        /// <example>
+        /// <code>
+        /// TaskSetup&lt;Foo&gt;((context, data) =>
+        /// {
+        ///     Information("Starting {0} for {1}", context.Task.Name, data.Place);
+        /// });
+        /// </code>
+        /// </example>
         void TaskSetup<TData>(Action<ITaskSetupContext, TData> action) where TData : class;
 
         /// <summary>
@@ -125,6 +159,14 @@ namespace Cake.Core.Scripting
         /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
         /// </summary>
         /// <param name="action">The action to be executed.</param>
+        /// <example>
+        /// <code>
+        /// TaskTeardown(context =>
+        /// {
+        ///     Information("Finished {0}", context.Task.Name);
+        /// });
+        /// </code>
+        /// </example>
         void TaskTeardown(Action<ITaskTeardownContext> action);
 
         /// <summary>
@@ -133,6 +175,14 @@ namespace Cake.Core.Scripting
         /// </summary>
         /// <typeparam name="TData">The data type.</typeparam>
         /// <param name="action">The action to be executed.</param>
+        /// <example>
+        /// <code>
+        /// TaskTeardown&lt;Foo&gt;((context, data) =>
+        /// {
+        ///     Information("Finished {0} for {1}", context.Task.Name, data.Place);
+        /// });
+        /// </code>
+        /// </example>
         void TaskTeardown<TData>(Action<ITaskTeardownContext, TData> action) where TData : class;
 
         /// <summary>

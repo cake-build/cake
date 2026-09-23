@@ -17,6 +17,15 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="action">The action.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Hello")
+        ///     .Does((context, data) =>
+        /// {
+        ///     context.Log.Information("Hello {0}", data.Place);
+        /// });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> Does<TData>(
         this CakeTaskBuilder<TData> builder,
         Action<ICakeContext, TData> action)
@@ -30,6 +39,16 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="action">The action.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Hello")
+        ///     .Does(async (context, data) =>
+        /// {
+        ///     await System.Threading.Tasks.Task.Delay(100);
+        ///     context.Log.Information("Hello {0}", data.Place);
+        /// });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> Does<TData>(
             this CakeTaskBuilder<TData> builder,
             Func<ICakeContext, TData, Task> action)
@@ -46,6 +65,15 @@ namespace Cake.Core
         /// <param name="itemsFunc">The items.</param>
         /// <param name="action">The action.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Pack")
+        ///     .DoesForEach((data, context) => data.Frameworks, (data, tfm, context) =>
+        /// {
+        ///     context.Log.Information("Packing {0} for {1}", tfm, data.Place);
+        /// });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> DoesForEach<TData, TItem>(
             this CakeTaskBuilder<TData> builder,
             Func<TData, ICakeContext, IEnumerable<TItem>> itemsFunc,
@@ -63,6 +91,15 @@ namespace Cake.Core
         /// <param name="items">The items.</param>
         /// <param name="action">The action.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Pack")
+        ///     .DoesForEach(new[] { "net8.0" }, (data, tfm, context) =>
+        /// {
+        ///     context.Log.Information("Packing {0} for {1}", tfm, data.Place);
+        /// });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> DoesForEach<TData, TItem>(
             this CakeTaskBuilder<TData> builder,
             IEnumerable<TItem> items,

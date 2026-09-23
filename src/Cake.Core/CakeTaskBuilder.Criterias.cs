@@ -10,6 +10,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Publish")
+        ///     .WithCriteria(BuildSystem.IsLocalBuild)
+        ///     .Does(() => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, bool criteria)
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -25,6 +32,13 @@ namespace Cake.Core
         /// <param name="criteria">The criteria.</param>
         /// <param name="message">The message to display if the task was skipped due to the provided criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Publish")
+        ///     .WithCriteria(BuildSystem.IsLocalBuild, "Not a local build")
+        ///     .Does(() => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, bool criteria, string message)
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -40,6 +54,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Publish")
+        ///     .WithCriteria(() => BuildSystem.IsLocalBuild)
+        ///     .Does(() => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, Func<bool> criteria)
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -57,6 +78,13 @@ namespace Cake.Core
         /// <param name="criteria">The criteria.</param>
         /// <param name="message">The message to display if the task was skipped due to the provided criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Publish")
+        ///     .WithCriteria(() => BuildSystem.IsLocalBuild, "Not a local build")
+        ///     .Does(() => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, Func<bool> criteria, string message)
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -73,6 +101,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Publish")
+        ///     .WithCriteria(context => context.FileSystem.Exist("./publish.enabled"))
+        ///     .Does(() => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, Func<ICakeContext, bool> criteria)
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -90,6 +125,13 @@ namespace Cake.Core
         /// <param name="criteria">The criteria.</param>
         /// <param name="message">The message to display if the task was skipped due to the provided criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Publish")
+        ///     .WithCriteria(context => context.FileSystem.Exist("./publish.enabled"), "Publish not enabled")
+        ///     .Does(() => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder WithCriteria(this CakeTaskBuilder builder, Func<ICakeContext, bool> criteria, string message)
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -107,6 +149,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Publish")
+        ///     .WithCriteria&lt;Foo&gt;(data => data.ShouldPublish)
+        ///     .Does(() => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<TData, bool> criteria) where TData : class
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -125,6 +174,13 @@ namespace Cake.Core
         /// <param name="criteria">The criteria.</param>
         /// <param name="message">The message to display if the task was skipped due to the provided criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Publish")
+        ///     .WithCriteria&lt;Foo&gt;(data => data.ShouldPublish, "Publish not enabled")
+        ///     .Does(() => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<TData, bool> criteria, string message) where TData : class
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -142,6 +198,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Publish")
+        ///     .WithCriteria&lt;Foo&gt;((context, data) => data.ShouldPublish)
+        ///     .Does(() => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, bool> criteria) where TData : class
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -160,6 +223,13 @@ namespace Cake.Core
         /// <param name="criteria">The criteria.</param>
         /// <param name="message">The message to display if the task was skipped due to the provided criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Publish")
+        ///     .WithCriteria&lt;Foo&gt;((context, data) => data.ShouldPublish, "Publish not enabled")
+        ///     .Does(() => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder WithCriteria<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, bool> criteria, string message) where TData : class
         {
             ArgumentNullException.ThrowIfNull(builder);

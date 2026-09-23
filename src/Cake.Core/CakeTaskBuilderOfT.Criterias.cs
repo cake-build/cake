@@ -16,6 +16,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Publish")
+        ///     .WithCriteria((context, data) => data.ShouldPublish)
+        ///     .Does((context, data) => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> WithCriteria<TData>(
             this CakeTaskBuilder<TData> builder,
             Func<ICakeContext, TData, bool> criteria)
@@ -31,6 +38,13 @@ namespace Cake.Core
         /// <param name="criteria">The criteria.</param>
         /// <param name="message">The message to display if the task was skipped due to the provided criteria.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Publish")
+        ///     .WithCriteria((context, data) => data.ShouldPublish, "Publish not enabled")
+        ///     .Does((context, data) => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> WithCriteria<TData>(
             this CakeTaskBuilder<TData> builder,
             Func<ICakeContext, TData, bool> criteria,
