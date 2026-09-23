@@ -18,6 +18,32 @@ namespace Cake.Common.Build.Rwx
         /// <value>
         /// <c>true</c> if this instance is running on RWX; otherwise, <c>false</c>.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.Rwx.IsRunningOnRwx)
+        /// {
+        ///     Information("Running on RWX");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on RWX");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via Rwx.</para>
+        /// <example>
+        /// <code>
+        /// if (Rwx.IsRunningOnRwx)
+        /// {
+        ///     Information("Running on RWX");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on RWX");
+        /// }
+        /// </code>
+        /// </example>
         bool IsRunningOnRwx { get; }
 
         /// <summary>
@@ -26,6 +52,24 @@ namespace Cake.Common.Build.Rwx
         /// <value>
         /// The environment.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.Rwx.IsRunningOnRwx)
+        /// {
+        ///     var runId = BuildSystem.Rwx.Environment.Run.Id;
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via Rwx.</para>
+        /// <example>
+        /// <code>
+        /// if (Rwx.IsRunningOnRwx)
+        /// {
+        ///     var runId = Rwx.Environment.Run.Id;
+        /// }
+        /// </code>
+        /// </example>
         RwxEnvironmentInfo Environment { get; }
 
         /// <summary>
@@ -35,6 +79,24 @@ namespace Cake.Common.Build.Rwx
         /// <value>
         /// The commands.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.Rwx.IsRunningOnRwx)
+        /// {
+        ///     BuildSystem.Rwx.Commands.SetValue("cake_version", "1.0.0");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via Rwx.</para>
+        /// <example>
+        /// <code>
+        /// if (Rwx.IsRunningOnRwx)
+        /// {
+        ///     Rwx.Commands.SetValue("cake_version", "1.0.0");
+        /// }
+        /// </code>
+        /// </example>
         RwxCommands Commands { get; }
     }
 }

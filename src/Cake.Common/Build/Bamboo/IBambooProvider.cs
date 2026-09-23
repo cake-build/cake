@@ -17,6 +17,32 @@ namespace Cake.Common.Build.Bamboo
         /// <value>
         /// <c>true</c> if the current build is running on Bamboo; otherwise, <c>false</c>.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.Bamboo.IsRunningOnBamboo)
+        /// {
+        ///     Information("Running on Bamboo");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on Bamboo");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via Bamboo.</para>
+        /// <example>
+        /// <code>
+        /// if (Bamboo.IsRunningOnBamboo)
+        /// {
+        ///     Information("Running on Bamboo");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on Bamboo");
+        /// }
+        /// </code>
+        /// </example>
         bool IsRunningOnBamboo { get; }
 
         /// <summary>
@@ -25,6 +51,24 @@ namespace Cake.Common.Build.Bamboo
         /// <value>
         /// The Bamboo environment.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.Bamboo.IsRunningOnBamboo)
+        /// {
+        ///     var planName = BuildSystem.Bamboo.Environment.Plan.PlanName;
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via Bamboo.</para>
+        /// <example>
+        /// <code>
+        /// if (Bamboo.IsRunningOnBamboo)
+        /// {
+        ///     var planName = Bamboo.Environment.Plan.PlanName;
+        /// }
+        /// </code>
+        /// </example>
         BambooEnvironmentInfo Environment { get; }
     }
 }

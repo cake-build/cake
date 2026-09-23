@@ -17,6 +17,30 @@ namespace Cake.Common.Build.TravisCI
         /// <param name="travisCIProvider">The Travis CI provider.</param>
         /// <param name="name">The name.</param>
         /// <returns>An <see cref="IDisposable"/>.</returns>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     using (BuildSystem.TravisCI.Fold("restore"))
+        ///     {
+        ///         Information("Restoring packages");
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via TravisCI.</para>
+        /// <example>
+        /// <code>
+        /// if (TravisCI.IsRunningOnTravisCI)
+        /// {
+        ///     using (TravisCI.Fold("restore"))
+        ///     {
+        ///         Information("Restoring packages");
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         public static IDisposable Fold(this ITravisCIProvider travisCIProvider, string name)
         {
             ArgumentNullException.ThrowIfNull(travisCIProvider);

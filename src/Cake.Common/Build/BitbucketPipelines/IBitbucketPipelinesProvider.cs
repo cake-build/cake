@@ -17,6 +17,32 @@ namespace Cake.Common.Build.BitbucketPipelines
         /// <value>
         /// <c>true</c> if the current build is running on Bitbucket Pipelines; otherwise, <c>false</c>.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.BitbucketPipelines.IsRunningOnBitbucketPipelines)
+        /// {
+        ///     Information("Running on Bitbucket Pipelines");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on Bitbucket Pipelines");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via BitbucketPipelines.</para>
+        /// <example>
+        /// <code>
+        /// if (BitbucketPipelines.IsRunningOnBitbucketPipelines)
+        /// {
+        ///     Information("Running on Bitbucket Pipelines");
+        /// }
+        /// else
+        /// {
+        ///     Information("Not running on Bitbucket Pipelines");
+        /// }
+        /// </code>
+        /// </example>
         bool IsRunningOnBitbucketPipelines { get; }
 
         /// <summary>
@@ -25,6 +51,24 @@ namespace Cake.Common.Build.BitbucketPipelines
         /// <value>
         /// The Bitbucket Pipelines environment.
         /// </value>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.BitbucketPipelines.IsRunningOnBitbucketPipelines)
+        /// {
+        ///     var repoSlug = BuildSystem.BitbucketPipelines.Environment.Repository.RepoSlug;
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via BitbucketPipelines.</para>
+        /// <example>
+        /// <code>
+        /// if (BitbucketPipelines.IsRunningOnBitbucketPipelines)
+        /// {
+        ///     var repoSlug = BitbucketPipelines.Environment.Repository.RepoSlug;
+        /// }
+        /// </code>
+        /// </example>
         BitbucketPipelinesEnvironmentInfo Environment { get; }
     }
 }

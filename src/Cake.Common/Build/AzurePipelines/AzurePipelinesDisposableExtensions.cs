@@ -17,6 +17,30 @@ namespace Cake.Common.Build.AzurePipelines
         /// <param name="azurePipelinesCommands">The Azure Pipelines Commands.</param>
         /// <param name="name">The name.</param>
         /// <returns>An <see cref="IDisposable"/>.</returns>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.AzurePipelines.IsRunningOnAzurePipelines)
+        /// {
+        ///     using (BuildSystem.AzurePipelines.Commands.Group("Restore"))
+        ///     {
+        ///         Information("Restoring packages");
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via AzurePipelines.</para>
+        /// <example>
+        /// <code>
+        /// if (AzurePipelines.IsRunningOnAzurePipelines)
+        /// {
+        ///     using (AzurePipelines.Commands.Group("Restore"))
+        ///     {
+        ///         Information("Restoring packages");
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         public static IDisposable Group(this IAzurePipelinesCommands azurePipelinesCommands, string name)
         {
             ArgumentNullException.ThrowIfNull(name);

@@ -48,6 +48,24 @@ namespace Cake.Common.Build.Rwx.Commands
         /// </summary>
         /// <param name="key">The value key. May not contain path separators or <c>..</c>.</param>
         /// <param name="value">The value contents.</param>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.Rwx.IsRunningOnRwx)
+        /// {
+        ///     BuildSystem.Rwx.Commands.SetValue("cake_version", "1.0.0");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via Rwx.</para>
+        /// <example>
+        /// <code>
+        /// if (Rwx.IsRunningOnRwx)
+        /// {
+        ///     Rwx.Commands.SetValue("cake_version", "1.0.0");
+        /// }
+        /// </code>
+        /// </example>
         public void SetValue(string key, string value)
         {
             if (string.IsNullOrEmpty(key))
@@ -93,6 +111,24 @@ namespace Cake.Common.Build.Rwx.Commands
         /// </summary>
         /// <param name="name">The environment variable name. May not contain path separators or <c>..</c>.</param>
         /// <param name="value">The environment variable value.</param>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.Rwx.IsRunningOnRwx)
+        /// {
+        ///     BuildSystem.Rwx.Commands.SetEnvironmentVariable("MY_VAR", "value");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via Rwx.</para>
+        /// <example>
+        /// <code>
+        /// if (Rwx.IsRunningOnRwx)
+        /// {
+        ///     Rwx.Commands.SetEnvironmentVariable("MY_VAR", "value");
+        /// }
+        /// </code>
+        /// </example>
         public void SetEnvironmentVariable(string name, string value)
         {
             if (string.IsNullOrEmpty(name))
@@ -135,6 +171,24 @@ namespace Cake.Common.Build.Rwx.Commands
         /// the leaf name of <paramref name="path"/>.
         /// </summary>
         /// <param name="path">Path to the local file to upload.</param>
+        /// <para>Via BuildSystem.</para>
+        /// <example>
+        /// <code>
+        /// if (BuildSystem.Rwx.IsRunningOnRwx)
+        /// {
+        ///     BuildSystem.Rwx.Commands.UploadArtifact("./artifacts/package.nupkg");
+        /// }
+        /// </code>
+        /// </example>
+        /// <para>Via Rwx.</para>
+        /// <example>
+        /// <code>
+        /// if (Rwx.IsRunningOnRwx)
+        /// {
+        ///     Rwx.Commands.UploadArtifact("./artifacts/package.nupkg");
+        /// }
+        /// </code>
+        /// </example>
         public void UploadArtifact(FilePath path)
         {
             ArgumentNullException.ThrowIfNull(path);
