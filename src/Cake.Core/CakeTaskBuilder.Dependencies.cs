@@ -15,6 +15,12 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="name">The name of the dependent task.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Default")
+        ///     .IsDependentOn("Build");
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder IsDependentOn(this CakeTaskBuilder builder, string name)
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -55,6 +61,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="other">The name of the dependent task.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var build = Task("Build");
+        /// Task("Default")
+        ///     .IsDependentOn(build);
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder IsDependentOn(this CakeTaskBuilder builder, CakeTaskBuilder other)
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -72,6 +85,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         /// <example>
         /// <code>
+        /// var test1 = Task("Test1");
+        /// var test2 = Task("Test2");
         /// Task("Default")
         ///     .IsDependentOn([test1, test2]);
         /// </code>
@@ -95,6 +110,12 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="name">The name of the task the current task will be a dependency of.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// Task("Clean")
+        ///     .IsDependeeOf("Build");
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder IsDependeeOf(this CakeTaskBuilder builder, string name)
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -135,6 +156,13 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="other">The name of the dependent task.</param>
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var build = Task("Build");
+        /// Task("Clean")
+        ///     .IsDependeeOf(build);
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder IsDependeeOf(this CakeTaskBuilder builder, CakeTaskBuilder other)
         {
             ArgumentNullException.ThrowIfNull(builder);
@@ -152,6 +180,8 @@ namespace Cake.Core
         /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
         /// <example>
         /// <code>
+        /// var defaultTask = Task("Default");
+        /// var ciTask = Task("CI");
         /// Task("Leaf")
         ///     .IsDependeeOf([defaultTask, ciTask]);
         /// </code>

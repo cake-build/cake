@@ -27,6 +27,16 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <returns>A <see cref="CakeTaskBuilder{TData}"/>.</returns>
         /// <typeparam name="TData">The type of the data context.</typeparam>
+        /// <example>
+        /// <code>
+        /// Task("Hello")
+        ///     .Of&lt;Foo&gt;()
+        ///     .Does((context, data) =>
+        /// {
+        ///     context.Log.Information("Hello {0}", data.Place);
+        /// });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> Of<TData>(this CakeTaskBuilder builder)
             where TData : class
             => new(builder);
@@ -38,6 +48,16 @@ namespace Cake.Core
         /// <param name="builder">The task builder.</param>
         /// <param name="description">The description.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Hello")
+        ///     .Description("Writes a greeting")
+        ///     .Does((context, data) =>
+        /// {
+        ///     context.Log.Information("Hello {0}", data.Place);
+        /// });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> Description<TData>(
             this CakeTaskBuilder<TData> builder,
             string description)

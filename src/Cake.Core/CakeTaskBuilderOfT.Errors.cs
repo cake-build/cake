@@ -15,6 +15,13 @@ namespace Cake.Core
         /// <typeparam name="TData">The type of the data context.</typeparam>
         /// <param name="builder">The task builder.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Risky")
+        ///     .ContinueOnError()
+        ///     .Does((context, data) => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> ContinueOnError<TData>(
             this CakeTaskBuilder<TData> builder)
             where TData : class
@@ -26,6 +33,13 @@ namespace Cake.Core
         /// <typeparam name="TData">The type of the data context.</typeparam>
         /// <param name="builder">The task builder.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Risky")
+        ///     .DeferOnError()
+        ///     .Does((context, data) => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> DeferOnError<TData>(
             this CakeTaskBuilder<TData> builder)
             where TData : class
@@ -38,6 +52,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="errorHandler">The error handler.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Risky")
+        ///     .OnError((ex, context, data) => context.Log.Error("{0}: {1}", data.Place, ex.Message))
+        ///     .Does((context, data) => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> OnError<TData>(
             this CakeTaskBuilder<TData> builder,
             Action<Exception, ICakeContext, TData> errorHandler)
@@ -52,6 +73,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="errorReporter">The error report handler.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Risky")
+        ///     .ReportError(ex => Error(ex.Message))
+        ///     .Does((context, data) => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> ReportError<TData>(
             this CakeTaskBuilder<TData> builder,
             Action<Exception> errorReporter)
@@ -65,6 +93,17 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="errorHandler">The error handler.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Risky")
+        ///     .OnError(async (ex, context, data) =>
+        ///     {
+        ///         context.Log.Error("{0}: {1}", data.Place, ex.Message);
+        ///         await System.Threading.Tasks.Task.CompletedTask;
+        ///     })
+        ///     .Does((context, data) => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> OnError<TData>(
             this CakeTaskBuilder<TData> builder,
             Func<Exception, ICakeContext, TData, Task> errorHandler)
@@ -78,6 +117,17 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="finallyHandler">The finally handler.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Risky")
+        ///     .Finally(async (context, data) =>
+        ///     {
+        ///         context.Log.Information("done {0}", data.Place);
+        ///         await System.Threading.Tasks.Task.CompletedTask;
+        ///     })
+        ///     .Does((context, data) => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> Finally<TData>(
             this CakeTaskBuilder<TData> builder,
             Func<ICakeContext, TData, Task> finallyHandler)
@@ -91,6 +141,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="finallyHandler">The finally handler.</param>
         /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// TaskOf&lt;Foo&gt;("Risky")
+        ///     .Finally((context, data) => context.Log.Information("done {0}", data.Place))
+        ///     .Does((context, data) => { });
+        /// </code>
+        /// </example>
         public static CakeTaskBuilder<TData> Finally<TData>(
             this CakeTaskBuilder<TData> builder,
             Action<ICakeContext, TData> finallyHandler)
