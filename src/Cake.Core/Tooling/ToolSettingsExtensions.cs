@@ -39,6 +39,16 @@ namespace Cake.Core.Tooling
         /// <param name="toolSettings">The tools settings.</param>
         /// <param name="toolPath">The tool path.</param>
         /// <returns>The tools settings.</returns>
+        /// <example>
+        /// <code>
+        /// Command(
+        ///     new[] { "dotnet", "dotnet.exe" },
+        ///     settingsCustomization: settings => settings
+        ///         .WithToolPath("./tools/dotnet")
+        ///         .WithArgumentCustomization(args => args.Append("--version"))
+        ///         .WithExpectedExitCode(0));
+        /// </code>
+        /// </example>
         public static T WithToolPath<T>(this T toolSettings, FilePath toolPath)
                where T : ToolSettings
             => toolSettings.WithToolSettings(toolSettings => toolSettings.ToolPath = toolPath);
@@ -83,6 +93,16 @@ namespace Cake.Core.Tooling
         /// <param name="toolSettings">The tools settings.</param>
         /// <param name="argumentCustomization">The tool argument customization delegate.</param>
         /// <returns>The tools settings.</returns>
+        /// <example>
+        /// <code>
+        /// Command(
+        ///     new[] { "dotnet", "dotnet.exe" },
+        ///     settingsCustomization: settings => settings
+        ///         .WithToolPath("./tools/dotnet")
+        ///         .WithArgumentCustomization(args => args.Append("--version"))
+        ///         .WithExpectedExitCode(0));
+        /// </code>
+        /// </example>
         public static T WithArgumentCustomization<T>(this T toolSettings, Func<ProcessArgumentBuilder, ProcessArgumentBuilder> argumentCustomization)
                where T : ToolSettings
             => toolSettings.WithToolSettings(toolSettings => toolSettings.ArgumentCustomization = argumentCustomization);
@@ -139,6 +159,16 @@ namespace Cake.Core.Tooling
         /// <param name="toolSettings">The tools settings.</param>
         /// <param name="expectExitCode">The tool expected exit code.</param>
         /// <returns>The tools settings.</returns>
+        /// <example>
+        /// <code>
+        /// Command(
+        ///     new[] { "dotnet", "dotnet.exe" },
+        ///     settingsCustomization: settings => settings
+        ///         .WithToolPath("./tools/dotnet")
+        ///         .WithArgumentCustomization(args => args.Append("--version"))
+        ///         .WithExpectedExitCode(0));
+        /// </code>
+        /// </example>
         public static T WithExpectedExitCode<T>(this T toolSettings, int expectExitCode)
                where T : ToolSettings
             => toolSettings.WithToolSettings(toolSettings => toolSettings.HandleExitCode = exitCode => exitCode == expectExitCode);

@@ -17,23 +17,47 @@ namespace Cake.Core.IO
         /// Gets the path to the directory.
         /// </summary>
         /// <value>The path.</value>
+        /// <example>
+        /// <code>
+        /// var dir = context.FileSystem.GetDirectory("./artifacts");
+        /// Information("{0} exists: {1}", dir.Path, dir.Exists);
+        /// </code>
+        /// </example>
         new DirectoryPath Path { get; }
 
         /// <summary>
         /// Creates the directory.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var dir = context.FileSystem.GetDirectory("./artifacts");
+        /// dir.Create();
+        /// </code>
+        /// </example>
         void Create();
 
         /// <summary>
         /// Moves the directory to the specified destination path.
         /// </summary>
         /// <param name="destination">The destination path.</param>
+        /// <example>
+        /// <code>
+        /// var dir = context.FileSystem.GetDirectory("./artifacts");
+        /// dir.Move("./artifacts-old");
+        /// </code>
+        /// </example>
         void Move(DirectoryPath destination);
 
         /// <summary>
         /// Deletes the directory.
         /// </summary>
         /// <param name="recursive">Will perform a recursive delete if set to <c>true</c>.</param>
+        /// <example>
+        /// <code>
+        /// var dir = context.FileSystem.GetDirectory("./artifacts");
+        /// dir.Delete(recursive: true);
+        /// </code>
+        /// </example>
         void Delete(bool recursive);
 
         /// <summary>
@@ -42,6 +66,15 @@ namespace Cake.Core.IO
         /// <param name="filter">The filter.</param>
         /// <param name="scope">The search scope.</param>
         /// <returns>Directories matching the filter and scope.</returns>
+        /// <example>
+        /// <code>
+        /// var dir = context.FileSystem.GetDirectory("./src");
+        /// foreach (var child in dir.GetDirectories("*", SearchScope.Current))
+        /// {
+        ///     Information(child.Path);
+        /// }
+        /// </code>
+        /// </example>
         IEnumerable<IDirectory> GetDirectories(string filter, SearchScope scope);
 
         /// <summary>
@@ -50,6 +83,16 @@ namespace Cake.Core.IO
         /// <param name="filter">The filter.</param>
         /// <param name="scope">The search scope.</param>
         /// <returns>Files matching the specified filter and scope.</returns>
+        /// <example>
+        /// <code>
+        /// var dir = context.FileSystem.GetDirectory("./artifacts");
+        /// dir.Create();
+        /// foreach (var child in dir.GetFiles("*.nupkg", SearchScope.Current))
+        /// {
+        ///     Information(child.Path);
+        /// }
+        /// </code>
+        /// </example>
         IEnumerable<IFile> GetFiles(string filter, SearchScope scope);
 
         /// <summary>

@@ -21,6 +21,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="text">The text to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("restore")
+        ///     .Append("./src");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder Append(this ProcessArgumentBuilder builder, string text)
         {
             builder?.Append(new TextArgument(text));
@@ -33,6 +40,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="text">The text to be prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("./src")
+        ///     .Prepend("restore");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder Prepend(this ProcessArgumentBuilder builder, string text)
         {
             builder?.Prepend(new TextArgument(text));
@@ -46,6 +60,14 @@ namespace Cake.Core
         /// <param name="index">The zero-based index at which the text should be inserted.</param>
         /// <param name="text">The text to be inserted.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("restore")
+        ///     .Append("./src")
+        ///     .Insert(1, "--no-cache");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder Insert(this ProcessArgumentBuilder builder, int index, string text)
         {
             builder?.Insert(index, new TextArgument(text));
@@ -105,6 +127,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="text">The literal text to be quoted and appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("pack")
+        ///     .AppendQuoted("./src/Cake.csproj");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder AppendQuoted(this ProcessArgumentBuilder builder, string text)
         {
             builder?.Append(new QuotedArgument(new TextArgument(text)));
@@ -117,6 +146,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="text">The text to be quoted and prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("pack")
+        ///     .PrependQuoted("./src/Cake.csproj");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder PrependQuoted(this ProcessArgumentBuilder builder, string text)
         {
             builder?.Prepend(new QuotedArgument(new TextArgument(text)));
@@ -131,6 +167,13 @@ namespace Cake.Core
         /// <param name="index">The zero-based index at which the text should be inserted.</param>
         /// <param name="text">The literal text to be quoted and inserted.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("pack")
+        ///     .InsertQuoted(1, "./src/Cake.csproj");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder InsertQuoted(this ProcessArgumentBuilder builder, int index, string text)
         {
             builder?.Insert(index, new QuotedArgument(new TextArgument(text)));
@@ -226,6 +269,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="text">The secret text to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("--api-key")
+        ///     .AppendSecret(Argument&lt;string&gt;("apiKey"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder AppendSecret(this ProcessArgumentBuilder builder, string text)
         {
             builder?.Append(new SecretArgument(new TextArgument(text)));
@@ -238,6 +288,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="text">The secret text to be prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("--api-key")
+        ///     .PrependSecret(Argument&lt;string&gt;("apiKey"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder PrependSecret(this ProcessArgumentBuilder builder, string text)
         {
             builder?.Prepend(new SecretArgument(new TextArgument(text)));
@@ -251,6 +308,13 @@ namespace Cake.Core
         /// <param name="index">The zero-based index at which the text should be inserted.</param>
         /// <param name="text">The secret text to be inserted.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("--api-key")
+        ///     .InsertSecret(1, Argument&lt;string&gt;("apiKey"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder InsertSecret(this ProcessArgumentBuilder builder, int index, string text)
         {
             builder?.Insert(index, new SecretArgument(new TextArgument(text)));
@@ -348,6 +412,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="text">The secret text to be quoted and appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("--password")
+        ///     .AppendQuotedSecret(Argument&lt;string&gt;("password"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder AppendQuotedSecret(this ProcessArgumentBuilder builder, string text)
         {
             builder?.AppendQuoted(new SecretArgument(new TextArgument(text)));
@@ -360,6 +431,13 @@ namespace Cake.Core
         /// <param name="builder">The builder.</param>
         /// <param name="text">The secret text to be quoted and prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("--password")
+        ///     .PrependQuotedSecret(Argument&lt;string&gt;("password"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder PrependQuotedSecret(this ProcessArgumentBuilder builder, string text)
         {
             builder?.PrependQuoted(new SecretArgument(new TextArgument(text)));
@@ -373,6 +451,13 @@ namespace Cake.Core
         /// <param name="index">The zero-based index at which the text should be inserted.</param>
         /// <param name="text">The secret text to be quoted and inserted.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("--password")
+        ///     .InsertQuotedSecret(1, Argument&lt;string&gt;("password"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder InsertQuotedSecret(this ProcessArgumentBuilder builder, int index, string text)
         {
             builder?.InsertQuoted(index, new SecretArgument(new TextArgument(text)));
@@ -471,6 +556,13 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The text to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("analyze")
+        ///     .AppendSwitch("--output", "TABLE");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder AppendSwitch(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return AppendSwitch(builder, @switch, " ", text);
@@ -483,6 +575,13 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The text to be prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("analyze")
+        ///     .PrependSwitch("--output", "TABLE");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder PrependSwitch(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return PrependSwitch(builder, @switch, " ", text);
@@ -496,6 +595,13 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The text to be inserted.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("analyze")
+        ///     .InsertSwitch(0, "--output", "TABLE");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder InsertSwitch(this ProcessArgumentBuilder builder, int index, string @switch, string text)
         {
             return InsertSwitch(builder, index, @switch, " ", text);
@@ -551,6 +657,13 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The text to be quoted and appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("pack")
+        ///     .AppendSwitchQuoted("--output", "./artifacts");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder AppendSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return AppendSwitchQuoted(builder, @switch, " ", text);
@@ -563,6 +676,13 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The text to be quoted and prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("pack")
+        ///     .PrependSwitchQuoted("--output", "./artifacts");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder PrependSwitchQuoted(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return PrependSwitchQuoted(builder, @switch, " ", text);
@@ -576,6 +696,13 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The text to be quoted and inserted.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("pack")
+        ///     .InsertSwitchQuoted(0, "--output", "./artifacts");
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder InsertSwitchQuoted(this ProcessArgumentBuilder builder, int index, string @switch, string text)
         {
             return InsertSwitchQuoted(builder, index, @switch, " ", text);
@@ -711,6 +838,12 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The secret text to be appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .AppendSwitchSecret("--api-key", Argument&lt;string&gt;("apiKey"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder AppendSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return AppendSwitchSecret(builder, @switch, " ", text);
@@ -723,6 +856,13 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The secret text to be prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("push")
+        ///     .PrependSwitchSecret("--api-key", Argument&lt;string&gt;("apiKey"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder PrependSwitchSecret(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return PrependSwitchSecret(builder, @switch, " ", text);
@@ -736,6 +876,13 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The secret text to be inserted.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("push")
+        ///     .InsertSwitchSecret(0, "--api-key", Argument&lt;string&gt;("apiKey"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder InsertSwitchSecret(this ProcessArgumentBuilder builder, int index, string @switch, string text)
         {
             return InsertSwitchSecret(builder, index, @switch, " ", text);
@@ -871,6 +1018,12 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The secret text to be quoted and appended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .AppendSwitchQuotedSecret("--password", Argument&lt;string&gt;("password"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder AppendSwitchQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return AppendSwitchQuotedSecret(builder, @switch, " ", text);
@@ -883,6 +1036,13 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The secret text to be quoted and prepended.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("login")
+        ///     .PrependSwitchQuotedSecret("--password", Argument&lt;string&gt;("password"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder PrependSwitchQuotedSecret(this ProcessArgumentBuilder builder, string @switch, string text)
         {
             return PrependSwitchQuotedSecret(builder, @switch, " ", text);
@@ -896,6 +1056,13 @@ namespace Cake.Core
         /// <param name="switch">The switch preceding the text.</param>
         /// <param name="text">The secret text to be quoted and inserted.</param>
         /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+        /// <example>
+        /// <code>
+        /// var args = new ProcessArgumentBuilder()
+        ///     .Append("login")
+        ///     .InsertSwitchQuotedSecret(0, "--password", Argument&lt;string&gt;("password"));
+        /// </code>
+        /// </example>
         public static ProcessArgumentBuilder InsertSwitchQuotedSecret(this ProcessArgumentBuilder builder, int index, string @switch, string text)
         {
             return InsertSwitchQuotedSecret(builder, index, @switch, " ", text);

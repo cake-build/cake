@@ -16,12 +16,24 @@ namespace Cake.Core.IO
         /// Gets the path to the file.
         /// </summary>
         /// <value>The path.</value>
+        /// <example>
+        /// <code>
+        /// var file = context.FileSystem.GetFile("./README.md");
+        /// Information("{0} exists: {1}", file.Path, file.Exists);
+        /// </code>
+        /// </example>
         new FilePath Path { get; }
 
         /// <summary>
         /// Gets the length of the file.
         /// </summary>
         /// <value>The length of the file.</value>
+        /// <example>
+        /// <code>
+        /// var file = context.FileSystem.GetFile("./README.md");
+        /// Information("{0} ({1} bytes)", file.Path, file.Length);
+        /// </code>
+        /// </example>
         long Length { get; }
 
         /// <summary>
@@ -35,17 +47,35 @@ namespace Cake.Core.IO
         /// </summary>
         /// <param name="destination">The destination path.</param>
         /// <param name="overwrite">Will overwrite existing destination file if set to <c>true</c>.</param>
+        /// <example>
+        /// <code>
+        /// var file = context.FileSystem.GetFile("./README.md");
+        /// file.Copy("./artifacts/README.md", overwrite: true);
+        /// </code>
+        /// </example>
         void Copy(FilePath destination, bool overwrite);
 
         /// <summary>
         /// Moves the file to the specified destination path.
         /// </summary>
         /// <param name="destination">The destination path.</param>
+        /// <example>
+        /// <code>
+        /// var file = context.FileSystem.GetFile("./README.md");
+        /// file.Move("./artifacts/README.md");
+        /// </code>
+        /// </example>
         void Move(FilePath destination);
 
         /// <summary>
         /// Deletes the file.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// var file = context.FileSystem.GetFile("./temp.txt");
+        /// file.Delete();
+        /// </code>
+        /// </example>
         void Delete();
 
         /// <summary>
@@ -55,6 +85,14 @@ namespace Cake.Core.IO
         /// <param name="fileAccess">The file access.</param>
         /// <param name="fileShare">The file share.</param>
         /// <returns>A <see cref="Stream"/> to the file.</returns>
+        /// <example>
+        /// <code>
+        /// var file = context.FileSystem.GetFile("./README.md");
+        /// using (var stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
+        /// {
+        /// }
+        /// </code>
+        /// </example>
         Stream Open(FileMode fileMode, FileAccess fileAccess, FileShare fileShare);
 
         /// <summary>
