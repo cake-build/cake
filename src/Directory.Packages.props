@@ -6,9 +6,9 @@
     <Verify_SponsorshipExemptionUntil>$([System.DateTime]::UtcNow.AddMonths(6).ToString('yyyy-MM'))</Verify_SponsorshipExemptionUntil>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.11" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.11" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.11" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.12" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.12" />
+    <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.12" />
     <PackageVersion Include="Cake.Frosting" Version="3.1.0.0" />
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
