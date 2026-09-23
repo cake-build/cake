@@ -18,7 +18,16 @@ namespace Cake.Common.Diagnostics
         /// <param name="memberName">The member name.</param>
         /// <param name="sourceFilePath">The source file path.</param>
         /// <param name="sourceLineNumber">The source line number.</param>
-        /// <returns>A <see cref="GetCallerInfo"/> instance representing the caller information.</returns>
+        /// <returns>A <see cref="ScriptCallerInfo"/> instance representing the caller information.</returns>
+        /// <example>
+        /// <code>
+        /// var caller = GetCallerInfo();
+        /// Information("Called from {0} at {1}:{2}",
+        ///     caller.MemberName,
+        ///     caller.SourceFilePath,
+        ///     caller.SourceLineNumber);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         public static ScriptCallerInfo GetCallerInfo(
             this ICakeContext context,
