@@ -130,7 +130,7 @@ Task("Run-Unit-Tests")
         () => GetFiles("./src/**/*.Tests.csproj"),
         (parameters, project, context) =>
 {
-    foreach (var framework in new[] { "net8.0", "net9.0", "net10.0", "net11.0" })
+    foreach (var framework in new[] { "net10.0", "net11.0" })
     {
         var trxFileName = $"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.trx";
 
@@ -491,8 +491,6 @@ Task("Run-Integration-Tests")
         parameters => {
             string defaultVerbosity = EnvironmentVariable("RUNNER_DEBUG", "0") == "1" ? "diagnostic" : "quiet";
             return [
-                (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net8.0/**/Cake.dll").Single(), defaultVerbosity),
-                (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net9.0/**/Cake.dll").Single(), defaultVerbosity),
                 (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net10.0/**/Cake.dll").Single(), defaultVerbosity),
                 (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net11.0/**/Cake.dll").Single(), defaultVerbosity)
             ];

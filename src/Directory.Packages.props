@@ -6,8 +6,6 @@
     <Verify_SponsorshipExemptionUntil>$([System.DateTime]::UtcNow.AddMonths(6).ToString('yyyy-MM'))</Verify_SponsorshipExemptionUntil>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Basic.Reference.Assemblies.Net80" Version="1.8.12" />
-    <PackageVersion Include="Basic.Reference.Assemblies.Net90" Version="1.8.12" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net100" Version="1.8.12" />
     <PackageVersion Include="Basic.Reference.Assemblies.Net110" Version="1.8.12" />
     <PackageVersion Include="Cake.Frosting" Version="3.1.0.0" />
@@ -51,15 +49,5 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
     <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.12" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.20" />
-    <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.20" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
-    <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="8.0.1" />
   </ItemGroup>
 </Project>

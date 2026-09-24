@@ -51,7 +51,7 @@ namespace Cake.Common.Tools.DotNet
         /// <code>
         /// var settings = new DotNetReferenceAddSettings
         /// {
-        ///     Framework = "net8.0"
+        ///     Framework = "net10.0"
         /// };
         ///
         /// DotNetAddReference(GetFiles("./src/*.csproj"), settings);
@@ -95,7 +95,7 @@ namespace Cake.Common.Tools.DotNet
         /// <code>
         /// var settings = new DotNetReferenceAddSettings
         /// {
-        ///     Framework = "net8.0"
+        ///     Framework = "net10.0"
         /// };
         ///
         /// DotNetAddReference("./app/app.csproj", GetFiles("./src/*.csproj"), settings);
@@ -145,7 +145,7 @@ namespace Cake.Common.Tools.DotNet
         /// <code>
         /// var settings = new DotNetReferenceRemoveSettings
         /// {
-        ///     Framework = "net8.0"
+        ///     Framework = "net10.0"
         /// };
         ///
         /// DotNetRemoveReference(GetFiles("./src/*.csproj"), settings);
@@ -189,7 +189,7 @@ namespace Cake.Common.Tools.DotNet
         /// <code>
         /// var settings = new DotNetReferenceRemoveSettings
         /// {
-        ///     Framework = "net8.0"
+        ///     Framework = "net10.0"
         /// };
         ///
         /// DotNetRemoveReference("./app/app.csproj", GetFiles("./src/*.csproj"), settings);

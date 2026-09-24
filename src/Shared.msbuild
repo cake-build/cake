@@ -1,7 +1,7 @@
 <Project>
   <!-- General package metadata -->
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
     <PackageId>$(AssemblyName)</PackageId>
     <Copyright>Copyright (c) .NET Foundation and contributors</Copyright>
     <Authors>Patrik Svensson, Mattias Karlsson, Gary Ewan Park, Alistair Chapman, Martin Björkström, Dave Glick, Pascal Berger, Jérémie Desautels, Enrico Campidoglio, C. Augusto Proiete, Nils Andresen, and contributors</Authors>
@@ -18,11 +18,10 @@
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     <DebugType>portable</DebugType>
     
-    <!-- 
-      While .NET 9 not released don't warn, remove as soon as non RC binaries shipped.
+    <!--
+      While .NET 11 not released don't warn, remove as soon as non-RC binaries shipped.
       NU5104
-      A stable release of a package should not have a prerelease dependency. Either modify the version spec of dependency 
-      https://github.com/cake-build/cake/issues/4382
+      A stable release of a package should not have a prerelease dependency. Either modify the version spec of dependency
     -->
     <NoWarn>$(NoWarn);NU5104</NoWarn>
 

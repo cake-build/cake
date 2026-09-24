@@ -87,12 +87,26 @@ namespace Cake.Core.Scripting
         /// <inheritdoc/>
         public IReadOnlyList<string> GetDefaultDefines()
         {
-            return new[]
+            var defines = new List<string>
             {
-                "#define CAKE",
-                _runtime.IsCoreClr ? "#define NETCOREAPP" : "#define NETFRAMEWORK",
-                $"#define {GetFrameworkDefine()}"
+                "#define CAKE"
             };
+
+            var cakeMajor = _runtime.CakeVersion?.Major ?? 0;
+            if (cakeMajor > 0)
+            {
+                defines.Add($"#define CAKE_{cakeMajor}");
+            }
+
+            for (var major = 7; major <= cakeMajor; major++)
+            {
+                defines.Add($"#define CAKE_{major}_OR_GREATER");
+            }
+
+            defines.Add(_runtime.IsCoreClr ? "#define NETCOREAPP" : "#define NETFRAMEWORK");
+            defines.Add($"#define {GetFrameworkDefine()}");
+            defines.AddRange(GetImpliedFrameworkDefines());
+            return defines;
         }
 
         private string GetFrameworkDefine()
@@ -145,6 +159,47 @@ namespace Cake.Core.Scripting
                     return "NETSTANDARD2_0";
             }
         }
+
+        private IEnumerable<string> GetImpliedFrameworkDefines()
+        {
+            var framework = _runtime.BuiltFramework;
+            if (!string.Equals(framework.Identifier, ".NETCoreApp", StringComparison.OrdinalIgnoreCase))
+            {
+                yield break;
+            }
+
+            var version = framework.Version;
+            if (version.Major >= 5)
+            {
+                yield return "#define NET";
+            }
+
+            foreach (var (symbol, major, minor) in CoreAppVersions)
+            {
+                if (version.Major > major || (version.Major == major && version.Minor >= minor))
+                {
+                    yield return $"#define {symbol}_OR_GREATER";
+                }
+            }
+        }
+
+        private static readonly (string Symbol, int Major, int Minor)[] CoreAppVersions =
+        {
+            ("NETCOREAPP1_0", 1, 0),
+            ("NETCOREAPP1_1", 1, 1),
+            ("NETCOREAPP2_0", 2, 0),
+            ("NETCOREAPP2_1", 2, 1),
+            ("NETCOREAPP2_2", 2, 2),
+            ("NETCOREAPP3_0", 3, 0),
+            ("NETCOREAPP3_1", 3, 1),
+            ("NET5_0", 5, 0),
+            ("NET6_0", 6, 0),
+            ("NET7_0", 7, 0),
+            ("NET8_0", 8, 0),
+            ("NET9_0", 9, 0),
+            ("NET10_0", 10, 0),
+            ("NET11_0", 11, 0)
+        };
 
         private List<Assembly> LoadCakeAssemblies(DirectoryPath root)
         {

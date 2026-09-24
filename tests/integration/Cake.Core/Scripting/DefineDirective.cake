@@ -74,8 +74,25 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
     cake = false;
 #endif
     Assert.True(cake);
+
+    bool cake7;
+#if (CAKE_7)
+    cake7 = true;
+#else
+    cake7 = false;
+#endif
+    Assert.True(cake7);
+
+    bool cake7OrGreater;
+#if (CAKE_7_OR_GREATER)
+    cake7OrGreater = true;
+#else
+    cake7OrGreater = false;
+#endif
+    Assert.True(cake7OrGreater);
 });
 
+#if NET5_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#9")
     .Does(() =>
 {
@@ -85,7 +102,9 @@ Task("Cake.Core.Scripting.DefineDirective.C#9")
 });
 
 public record CSharpNine(bool IsNine);
+#endif
 
+#if NET6_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#10")
     .Does(() =>
 {
@@ -99,8 +118,9 @@ Task("Cake.Core.Scripting.DefineDirective.C#10")
     // Then
     Assert.Equal("Hello world!", helloWorld);
 });
+#endif
 
-
+#if NET7_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#11")
     .Does(() =>
 {
@@ -114,7 +134,9 @@ Task("Cake.Core.Scripting.DefineDirective.C#11")
     Some have "quoted text" in them.
     """;
 });
+#endif
 
+#if NET8_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#12")
     .Does(() =>
 {
@@ -124,8 +146,9 @@ Task("Cake.Core.Scripting.DefineDirective.C#12")
     int[] row2 = [7, 8, 9];
     int[] single = [..row0, ..row1, ..row2];
 });
+#endif
 
-#if NET9_0
+#if NET9_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#13")
     .Does(() =>
 {
@@ -142,7 +165,7 @@ Task("Cake.Core.Scripting.DefineDirective.C#13")
 });
 #endif
 
-#if NET10_0
+#if NET10_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#14")
     .Does(() =>
 {
@@ -161,14 +184,22 @@ Task("Cake.Core.Scripting.DefineDirective.C#14")
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
+#if NET5_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#9")
+#endif
+#if NET6_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#10")
+#endif
+#if NET7_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#11")
+#endif
+#if NET8_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#12")
-#if NET9_0
+#endif
+#if NET9_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#13")
 #endif
-#if NET10_0
+#if NET10_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#14")
 #endif
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Defined")

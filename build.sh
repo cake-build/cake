@@ -27,17 +27,9 @@ curl -Lsfo "$SCRIPT_DIR/.dotnet/dotnet-install.sh" https://dot.net/v1/dotnet-ins
 if [ "$CAKE_INSTALL_SUPPORTED_SDKS" = "true" ]; then
     echo "Installing additional supported SDK channels..."
     
-    # Install .NET 8.0 SDK
-    echo "Installing .NET 8.0 SDK..."
-    bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --channel 8.0 --install-dir .dotnet --no-path
-    
-    # Install .NET 9.0 SDK
-    echo "Installing .NET 9.0 SDK..."
-    bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --channel 9.0 --install-dir .dotnet --no-path --skip-non-versioned-files
-    
     # Install .NET 10.0 SDK
     echo "Installing .NET 10.0 SDK..."
-    bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --channel 10.0 --install-dir .dotnet --no-path --skip-non-versioned-files
+    bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --channel 10.0 --install-dir .dotnet --no-path
     
     # Install .NET 11.0 SDK (preview quality)
     echo "Installing .NET 11.0 SDK (preview)..."
