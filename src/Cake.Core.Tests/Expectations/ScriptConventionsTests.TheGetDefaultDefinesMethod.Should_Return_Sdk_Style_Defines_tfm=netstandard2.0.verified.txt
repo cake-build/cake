@@ -1,0 +1,7 @@
+﻿[
+  #define CAKE,
+  #define CAKE_7,
+  #define CAKE_7_OR_GREATER,
+  #define NETCOREAPP,
+  #define NETSTANDARD2_0
+]

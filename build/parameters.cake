@@ -19,6 +19,7 @@ public class BuildParameters
     public bool IsTagged { get; }
     public bool IsPublishBuild { get; }
     public bool IsReleaseBuild { get; }
+    public bool IsSolutionInfoBuild { get; }
     public bool SkipGitVersion { get; }
     public bool SkipSigning { get; }
     public BuildCredentials GitHub { get; }
@@ -95,6 +96,7 @@ public class BuildParameters
         ReleaseNotes = context.ParseReleaseNotes("./ReleaseNotes.md");
         IsPublishBuild = IsPublishing(context.TargetTask.Name);
         IsReleaseBuild = IsReleasing(context.TargetTask.Name);
+        IsSolutionInfoBuild = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SOLUTIONINFO_BUILD"));
         SkipSigning = StringComparer.OrdinalIgnoreCase.Equals("True", context.Argument("skipsigning", "False"));
         SkipGitVersion = StringComparer.OrdinalIgnoreCase.Equals("True", context.EnvironmentVariable("CAKE_SKIP_GITVERSION"));
         Version = BuildVersion.Calculate(context, this);

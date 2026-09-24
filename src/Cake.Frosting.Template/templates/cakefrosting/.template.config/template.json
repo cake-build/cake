@@ -21,14 +21,6 @@
         "replaces": "TargetFrameworkValue",
         "choices": [
             {
-            "choice": "net8.0",
-            "description": "Target .NET 8"
-            },
-            {
-              "choice": "net9.0",
-              "description": "Target .NET 9"
-            },
-            {
               "choice": "net10.0",
               "description": "Target .NET 10"
             },

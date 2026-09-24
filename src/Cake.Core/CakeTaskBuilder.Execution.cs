@@ -214,7 +214,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach(new[] { "net8.0", "net9.0" }, tfm =>
+        ///     .DoesForEach(new[] { "net10.0", "net11.0" }, tfm =>
         /// {
         ///     Information("Packing {0}", tfm);
         /// });
@@ -239,7 +239,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach&lt;Foo, string&gt;(new[] { "net8.0" }, (data, tfm) =>
+        ///     .DoesForEach&lt;Foo, string&gt;(new[] { "net10.0" }, (data, tfm) =>
         /// {
         ///     Information("Packing {0} for {1}", tfm, data.Place);
         /// });
@@ -264,7 +264,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach&lt;Foo, string&gt;(new[] { "net8.0" }, (data, tfm, context) =>
+        ///     .DoesForEach&lt;Foo, string&gt;(new[] { "net10.0" }, (data, tfm, context) =>
         /// {
         ///     context.Log.Information("Packing {0} for {1}", tfm, data.Place);
         /// });
@@ -288,7 +288,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach(new[] { "net8.0" }, (tfm, context) =>
+        ///     .DoesForEach(new[] { "net10.0" }, (tfm, context) =>
         /// {
         ///     context.Log.Information("Packing {0}", tfm);
         /// });
@@ -323,7 +323,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach(() => new[] { "net8.0" }, tfm =>
+        ///     .DoesForEach(() => new[] { "net10.0" }, tfm =>
         /// {
         ///     Information("Packing {0}", tfm);
         /// });
@@ -348,7 +348,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach(context => new[] { "net8.0" }, tfm =>
+        ///     .DoesForEach(context => new[] { "net10.0" }, tfm =>
         /// {
         ///     Information("Packing {0}", tfm);
         /// });
@@ -374,7 +374,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach&lt;Foo, string&gt;(() => new[] { "net8.0" }, (data, tfm) =>
+        ///     .DoesForEach&lt;Foo, string&gt;(() => new[] { "net10.0" }, (data, tfm) =>
         /// {
         ///     Information("Packing {0} for {1}", tfm, data.Place);
         /// });
@@ -400,7 +400,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach&lt;Foo, string&gt;(() => new[] { "net8.0" }, (data, tfm, context) =>
+        ///     .DoesForEach&lt;Foo, string&gt;(() => new[] { "net10.0" }, (data, tfm, context) =>
         /// {
         ///     context.Log.Information("Packing {0} for {1}", tfm, data.Place);
         /// });
@@ -425,7 +425,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach(() => new[] { "net8.0" }, (tfm, context) =>
+        ///     .DoesForEach(() => new[] { "net10.0" }, (tfm, context) =>
         /// {
         ///     context.Log.Information("Packing {0}", tfm);
         /// });
@@ -451,7 +451,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach&lt;Foo, string&gt;(context => new[] { "net8.0" }, (data, tfm) =>
+        ///     .DoesForEach&lt;Foo, string&gt;(context => new[] { "net10.0" }, (data, tfm) =>
         /// {
         ///     Information("Packing {0} for {1}", tfm, data.Place);
         /// });
@@ -503,7 +503,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach&lt;Foo, string&gt;(context => new[] { "net8.0" }, (data, tfm, context) =>
+        ///     .DoesForEach&lt;Foo, string&gt;(context => new[] { "net10.0" }, (data, tfm, context) =>
         /// {
         ///     context.Log.Information("Packing {0} for {1}", tfm, data.Place);
         /// });
@@ -710,7 +710,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// Task("Pack")
-        ///     .DoesForEach(context => new[] { "net8.0" }, (tfm, context) =>
+        ///     .DoesForEach(context => new[] { "net10.0" }, (tfm, context) =>
         /// {
         ///     context.Log.Information("Packing {0}", tfm);
         /// });

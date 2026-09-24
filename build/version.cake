@@ -31,7 +31,7 @@ public record BuildVersion(
             }
 
             context.Information("Calculating Semantic Version");
-            if (!parameters.IsLocalBuild || parameters.IsPublishBuild || parameters.IsReleaseBuild)
+            if (!parameters.IsLocalBuild || parameters.IsPublishBuild || parameters.IsReleaseBuild || parameters.IsSolutionInfoBuild)
             {
                 context.GitVersion(new GitVersionSettings{
                     UpdateAssemblyInfoFilePath = "./src/SolutionInfo.cs",

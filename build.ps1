@@ -76,17 +76,9 @@ if ($IsMacOS -or $IsLinux) {
     if ($InstallSupportedSdks) {
         Write-Host "Installing additional supported SDK channels..."
         
-        # Install .NET 8.0 SDK
-        Write-Host "Installing .NET 8.0 SDK..."
-        & bash $ScriptPath --channel 8.0 --install-dir "$InstallPath" --no-path
-        
-        # Install .NET 9.0 SDK
-        Write-Host "Installing .NET 9.0 SDK..."
-        & bash $ScriptPath --channel 9.0 --install-dir "$InstallPath" --no-path --skip-non-versioned-files
-        
         # Install .NET 10.0 SDK
         Write-Host "Installing .NET 10.0 SDK..."
-        & bash $ScriptPath --channel 10.0 --install-dir "$InstallPath" --no-path --skip-non-versioned-files
+        & bash $ScriptPath --channel 10.0 --install-dir "$InstallPath" --no-path
         
         # Install .NET 11.0 SDK (preview quality)
         Write-Host "Installing .NET 11.0 SDK (preview)..."
@@ -113,17 +105,9 @@ else {
     if ($InstallSupportedSdks) {
         Write-Host "Installing additional supported SDK channels..."
         
-        # Install .NET 8.0 SDK
-        Write-Host "Installing .NET 8.0 SDK..."
-        & $ScriptPath -Channel 8.0 -InstallDir $InstallPath -NoPath
-        
-        # Install .NET 9.0 SDK
-        Write-Host "Installing .NET 9.0 SDK..."
-        & $ScriptPath -Channel 9.0 -InstallDir $InstallPath -NoPath -SkipNonVersionedFiles
-        
         # Install .NET 10.0 SDK
         Write-Host "Installing .NET 10.0 SDK..."
-        & $ScriptPath -Channel 10.0 -InstallDir $InstallPath -NoPath -SkipNonVersionedFiles
+        & $ScriptPath -Channel 10.0 -InstallDir $InstallPath -NoPath
         
         # Install .NET 11.0 SDK (preview quality)
         Write-Host "Installing .NET 11.0 SDK (preview)..."

@@ -94,7 +94,7 @@ namespace Cake.Core
         /// <example>
         /// <code>
         /// TaskOf&lt;Foo&gt;("Pack")
-        ///     .DoesForEach(new[] { "net8.0" }, (data, tfm, context) =>
+        ///     .DoesForEach(new[] { "net10.0" }, (data, tfm, context) =>
         /// {
         ///     context.Log.Information("Packing {0} for {1}", tfm, data.Place);
         /// });
