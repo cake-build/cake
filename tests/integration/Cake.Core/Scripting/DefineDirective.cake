@@ -181,6 +181,31 @@ Task("Cake.Core.Scripting.DefineDirective.C#14")
 });
 #endif
 
+#if NET11_0_OR_GREATER
+Task("Cake.Core.Scripting.DefineDirective.C#15")
+    .Does(() =>
+{
+    // Given - Test C# 15 labeled break
+    var n = 0;
+
+    // When
+    outer: for (var i = 0; i < 3; i++)
+    {
+        for (var j = 0; j < 3; j++)
+        {
+            n++;
+            if (j == 1)
+            {
+                break outer;
+            }
+        }
+    }
+
+    // Then
+    Assert.Equal(2, n);
+});
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
@@ -201,6 +226,9 @@ Task("Cake.Core.Scripting.DefineDirective")
 #endif
 #if NET10_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#14")
+#endif
+#if NET11_0_OR_GREATER
+    .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#15")
 #endif
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Defined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.NotDefined")

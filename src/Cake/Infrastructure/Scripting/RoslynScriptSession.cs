@@ -150,12 +150,15 @@ namespace Cake.Infrastructure.Scripting
             }
 
             // Create the script options dynamically.
+            // Revert to LanguageVersion.CSharp15 when stable Roslyn/.NET 11 bits ship.
+            // https://github.com/cake-build/cake/issues/5002
             var options = Microsoft.CodeAnalysis.Scripting.ScriptOptions.Default
                 .AddImports(Namespaces.Except(script.ExcludedNamespaces.Keys))
                 .AddReferences(References)
                 .AddReferences(ReferencePaths.Select(r => r.FullPath))
                 .WithEmitDebugInformation(_settings.Debug)
-                .WithMetadataResolver(Microsoft.CodeAnalysis.Scripting.ScriptMetadataResolver.Default);
+                .WithMetadataResolver(Microsoft.CodeAnalysis.Scripting.ScriptMetadataResolver.Default)
+                .WithLanguageVersion(Microsoft.CodeAnalysis.CSharp.LanguageVersion.Preview);
 
             var roslynScript = CSharpScript.Create(code, options, _host.GetType());
 
