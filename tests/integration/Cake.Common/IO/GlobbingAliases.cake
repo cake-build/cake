@@ -87,6 +87,67 @@ Task("Cake.Common.IO.GlobbingAliases.GetPaths.Wildcard")
     paths.AssertPaths(foobaa, foobao, foobau, foobar, foobaz, foobax);
 });
 
+Task("Cake.Common.IO.GlobbingAliases.GetFileSystemInfo")
+    .Does(context =>
+{
+    // Given
+    var root = EnsureDirectoryExist($"{Paths.Temp}/Cake.Common.IO.GlobbingAliases/filesysteminfo");
+    var file = EnsureFileExist(root.CombineWithFilePath("file.txt"));
+    var directory = EnsureDirectoryExist(root.Combine("directory"));
+
+    // When
+    var fileInfo = Context.FileSystem.GetFileSystemInfo(file);
+    var directoryInfo = Context.FileSystem.GetFileSystemInfo(directory);
+    var missingInfo = Context.FileSystem.GetFileSystemInfo(root.CombineWithFilePath("missing.txt"));
+    var fileStringInfo = Context.FileSystem.GetFileSystemInfo(file.FullPath);
+    var directoryStringInfo = Context.FileSystem.GetFileSystemInfo(directory.FullPath);
+    var missingStringInfo = Context.FileSystem.GetFileSystemInfo($"{root}/missing.txt");
+
+    // Then
+    Assert.True(fileInfo is IFile);
+    Assert.True(directoryInfo is IDirectory);
+    Assert.True(missingInfo is IFile);
+    Assert.False(missingInfo.Exists);
+    Assert.True(fileStringInfo is IFile);
+    Assert.True(fileStringInfo.Exists);
+    Assert.True(directoryStringInfo is IDirectory);
+    Assert.True(missingStringInfo is IFile);
+    Assert.False(missingStringInfo.Exists);
+});
+
+Task("Cake.Common.IO.GlobbingAliases.GetFileSystemInfos.Directory")
+    .Does(context =>
+{
+    // Given
+    var root = EnsureDirectoryExist($"{Paths.Temp}/Cake.Common.IO.GlobbingAliases/filesysteminfos");
+    EnsureFileExist(root.CombineWithFilePath("file.txt"));
+    EnsureDirectoryExist(root.Combine("directory"));
+    var directory = Context.FileSystem.GetDirectory(root);
+
+    // When
+    var entries = directory.GetFileSystemInfos("*", SearchScope.Current).ToList();
+
+    // Then
+    Assert.Equal(2, entries.Count);
+});
+
+Task("Cake.Common.IO.GlobbingAliases.GetFileSystemInfos.Globber")
+    .Does(context =>
+{
+    // Given
+    var root = EnsureDirectoryExist($"{Paths.Temp}/Cake.Common.IO.GlobbingAliases/filesysteminfos-globber");
+    EnsureFileExist(root.CombineWithFilePath("file.txt"));
+    EnsureDirectoryExist(root.Combine("directory"));
+
+    // When
+    var globberEntries = Context.Globber.GetFileSystemInfos(Context.FileSystem, $"{root}/*").ToList();
+    var aliasEntries = GetFileSystemInfos($"{root}/*").ToList();
+
+    // Then
+    Assert.Equal(2, globberEntries.Count);
+    Assert.Equal(2, aliasEntries.Count);
+});
+
 Task("Cake.Common.IO.GlobbingAliases.GetFiles.RecursiveWildcard")
     .Does(context =>
 {
@@ -396,6 +457,9 @@ Task("Cake.Common.IO.GlobbingAliases")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetFiles.Wildcard")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetDirectories.Wildcard")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetPaths.Wildcard")
+    .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetFileSystemInfo")
+    .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetFileSystemInfos.Directory")
+    .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetFileSystemInfos.Globber")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetFiles.RecursiveWildcard")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetDirectories.RecursiveWildcard")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases.GetPaths.RecursiveWildcard")

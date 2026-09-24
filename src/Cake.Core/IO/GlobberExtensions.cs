@@ -38,6 +38,70 @@ namespace Cake.Core.IO
         }
 
         /// <summary>
+        /// Gets all files and directories matching the specified pattern.
+        /// Scripts and Frosting should use the <c>GetFileSystemInfos(pattern)</c> alias in Cake.Common instead,
+        /// which supplies the file system from the context.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var entries = context.Globber.GetFileSystemInfos(context.FileSystem, "./artifacts/*");
+        /// foreach (var entry in entries)
+        /// {
+        ///     Information("{0}: {1}", entry is IDirectory ? "Directory" : "File", entry.Path);
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="globber">The globber.</param>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="pattern">The pattern.</param>
+        /// <returns>The file system entries matching the specified pattern.</returns>
+        public static IEnumerable<IFileSystemInfo> GetFileSystemInfos(this IGlobber globber, IFileSystem fileSystem, GlobPattern pattern)
+        {
+            return GetFileSystemInfos(globber, fileSystem, pattern, new GlobberSettings());
+        }
+
+        /// <summary>
+        /// Gets all files and directories matching the specified pattern.
+        /// Scripts and Frosting should use the <c>GetFileSystemInfos(pattern)</c> alias in Cake.Common instead,
+        /// which supplies the file system from the context.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
+        ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
+        ///         "node_modules", StringComparison.OrdinalIgnoreCase);
+        ///
+        /// var entries = context.Globber.GetFileSystemInfos(
+        ///     context.FileSystem,
+        ///     "./src/**/*",
+        ///     new GlobberSettings { Predicate = exclude_node_modules });
+        /// foreach (var entry in entries)
+        /// {
+        ///     Information("{0}: {1}", entry is IDirectory ? "Directory" : "File", entry.Path);
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="globber">The globber.</param>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="pattern">The pattern.</param>
+        /// <param name="settings">The globber settings.</param>
+        /// <returns>The file system entries matching the specified pattern.</returns>
+        public static IEnumerable<IFileSystemInfo> GetFileSystemInfos(this IGlobber globber, IFileSystem fileSystem, GlobPattern pattern, GlobberSettings settings)
+        {
+            ArgumentNullException.ThrowIfNull(globber);
+            ArgumentNullException.ThrowIfNull(fileSystem);
+            return globber.Match(pattern, settings).Select(path =>
+            {
+                if (path is DirectoryPath directory)
+                {
+                    return (IFileSystemInfo)fileSystem.GetDirectory(directory);
+                }
+
+                return fileSystem.GetFile((FilePath)path);
+            });
+        }
+
+        /// <summary>
         /// Returns <see cref="Path" /> instances matching the specified pattern.
         /// </summary>
         /// <param name="globber">The globber.</param>
