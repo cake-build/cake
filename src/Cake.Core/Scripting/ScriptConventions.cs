@@ -135,6 +135,9 @@ namespace Cake.Core.Scripting
                 case ".NETCoreApp,Version=v10.0":
                     return "NET10_0";
 
+                case ".NETCoreApp,Version=v11.0":
+                    return "NET11_0";
+
                 default:
                     Console.Error.WriteLine(_runtime.BuiltFramework.FullName);
                     Console.Error.Flush();

@@ -84,9 +84,13 @@ if ($IsMacOS -or $IsLinux) {
         Write-Host "Installing .NET 9.0 SDK..."
         & bash $ScriptPath --channel 9.0 --install-dir "$InstallPath" --no-path --skip-non-versioned-files
         
-        # Future Install .NET 11.0 SDK (preview quality)
-        # Write-Host "Installing .NET 11.0 SDK (preview)..."
-        # & bash $ScriptPath --channel 11.0 --quality preview --install-dir "$InstallPath" --no-path --skip-non-versioned-files
+        # Install .NET 10.0 SDK
+        Write-Host "Installing .NET 10.0 SDK..."
+        & bash $ScriptPath --channel 10.0 --install-dir "$InstallPath" --no-path --skip-non-versioned-files
+        
+        # Install .NET 11.0 SDK (preview quality)
+        Write-Host "Installing .NET 11.0 SDK (preview)..."
+        & bash $ScriptPath --channel 11.0 --quality preview --install-dir "$InstallPath" --no-path --skip-non-versioned-files
     }
     
     # Install SDK from global.json
@@ -117,9 +121,13 @@ else {
         Write-Host "Installing .NET 9.0 SDK..."
         & $ScriptPath -Channel 9.0 -InstallDir $InstallPath -NoPath -SkipNonVersionedFiles
         
-        # Install .NET 10.0 SDK (preview quality)
-        Write-Host "Installing .NET 10.0 SDK (preview)..."
-        & $ScriptPath -Channel 10.0 -Quality preview -InstallDir $InstallPath -NoPath -SkipNonVersionedFiles
+        # Install .NET 10.0 SDK
+        Write-Host "Installing .NET 10.0 SDK..."
+        & $ScriptPath -Channel 10.0 -InstallDir $InstallPath -NoPath -SkipNonVersionedFiles
+        
+        # Install .NET 11.0 SDK (preview quality)
+        Write-Host "Installing .NET 11.0 SDK (preview)..."
+        & $ScriptPath -Channel 11.0 -Quality preview -InstallDir $InstallPath -NoPath -SkipNonVersionedFiles
     }
     
     # Install SDK from global.json

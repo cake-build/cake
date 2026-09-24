@@ -37,8 +37,10 @@ namespace Cake.Infrastructure.Scripting
             Basic.Reference.Assemblies.Net80.References.All)
 #elif NET9_0
             Basic.Reference.Assemblies.Net90.References.All)
-#else
+#elif NET10_0
             Basic.Reference.Assemblies.Net100.References.All)
+#else
+            Basic.Reference.Assemblies.Net110.References.All)
 #endif
                 {
                     Assembly assembly;

@@ -35,9 +35,13 @@ if [ "$CAKE_INSTALL_SUPPORTED_SDKS" = "true" ]; then
     echo "Installing .NET 9.0 SDK..."
     bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --channel 9.0 --install-dir .dotnet --no-path --skip-non-versioned-files
     
-    # Install .NET 10.0 SDK (preview quality)
-    echo "Installing .NET 10.0 SDK (preview)..."
-    bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --channel 10.0 --quality preview --install-dir .dotnet --no-path --skip-non-versioned-files
+    # Install .NET 10.0 SDK
+    echo "Installing .NET 10.0 SDK..."
+    bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --channel 10.0 --install-dir .dotnet --no-path --skip-non-versioned-files
+    
+    # Install .NET 11.0 SDK (preview quality)
+    echo "Installing .NET 11.0 SDK (preview)..."
+    bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --channel 11.0 --quality preview --install-dir .dotnet --no-path --skip-non-versioned-files
 fi
 
 # Install SDK from global.json

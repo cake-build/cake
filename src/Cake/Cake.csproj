@@ -32,5 +32,6 @@
     <PackageReference Include="Basic.Reference.Assemblies.Net80" Condition="'$(TargetFramework)' == 'net8.0'" />
     <PackageReference Include="Basic.Reference.Assemblies.Net90" Condition="'$(TargetFramework)' == 'net9.0'" />
     <PackageReference Include="Basic.Reference.Assemblies.Net100" Condition="'$(TargetFramework)' == 'net10.0'" />
+    <PackageReference Include="Basic.Reference.Assemblies.Net110" Condition="'$(TargetFramework)' == 'net11.0'" />
   </ItemGroup>
 </Project>
