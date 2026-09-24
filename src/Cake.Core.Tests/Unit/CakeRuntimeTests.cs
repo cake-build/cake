@@ -38,7 +38,9 @@ namespace Cake.Core.Tests.Unit
                 Assert.Equal(".NETStandard,Version=v2.0", framework.FullName);
 #else
                 var expect = string.Concat(".NETCoreApp,Version=v",
-#if NET10_0
+#if NET11_0
+                                "11.0");
+#elif NET10_0
                                 "10.0");
 #elif NET9_0
                                 "9.0");

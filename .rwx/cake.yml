@@ -28,7 +28,7 @@ tasks:
     use: code
     call: dotnet/install 1.0.0
     with:
-      dotnet-channels: '["8.0", "9.0"]'
+      dotnet-channels: '["8.0", "9.0", "10.0"]'
       global-json-file: global.json
     filter:
       - global.json

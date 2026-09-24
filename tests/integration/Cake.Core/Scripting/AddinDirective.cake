@@ -23,7 +23,8 @@
                                      {
                                         FilePath net8_0Path         when net8_0Path.FullPath.Contains("net8.0")                 => "net8.0",
                                         FilePath net9_0Path         when net9_0Path.FullPath.Contains("net9.0")                 => "net9.0",
-                                        _ => "net10.0"
+                                        FilePath net10_0Path        when net10_0Path.FullPath.Contains("net10.0")               => "net10.0",
+                                        _ => "net11.0"
                                      }
                                  );
 

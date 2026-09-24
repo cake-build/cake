@@ -24,7 +24,8 @@ Task("ValidateEnvironment")
         data => new [] {
             $"CAKE_{data.OS}_NETCOREAPP_8_0_VERSION",
             $"CAKE_{data.OS}_NETCOREAPP_9_0_VERSION",
-            $"CAKE_{data.OS}_NETCOREAPP_10_0_VERSION"
+            $"CAKE_{data.OS}_NETCOREAPP_10_0_VERSION",
+            $"CAKE_{data.OS}_NETCOREAPP_11_0_VERSION"
         },
         (data, envKey) => Assert.Equal(data.GitVersion, EnvironmentVariable(envKey))
     );
@@ -34,7 +35,8 @@ Task("ValidatePath")
         new [] {
             "Cake\\WTool\\Wtools\\Wnet8\\W0",
             "Cake\\WTool\\Wtools\\Wnet9\\W0",
-            "Cake\\WTool\\Wtools\\Wnet10\\W0"
+            "Cake\\WTool\\Wtools\\Wnet10\\W0",
+            "Cake\\WTool\\Wtools\\Wnet11\\W0"
         },
         (data, path) => Assert.Matches(path, data.Path)
     );
@@ -44,7 +46,8 @@ Task("ValidateVariable")
         () => new [] {
             "CAKE_NETCOREAPP_8_0_VERSION_OS",
             "CAKE_NETCOREAPP_9_0_VERSION_OS",
-            "CAKE_NETCOREAPP_10_0_VERSION_OS"
+            "CAKE_NETCOREAPP_10_0_VERSION_OS",
+            "CAKE_NETCOREAPP_11_0_VERSION_OS"
         },
         (data, varKey) => Assert.Equal(data.GitVersionAndOS, Argument<string>(varKey))
     );
