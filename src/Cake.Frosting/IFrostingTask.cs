@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cake.Core;
 
@@ -13,6 +14,11 @@ namespace Cake.Frosting
     /// </summary>
     public interface IFrostingTask
     {
+        /// <summary>
+        /// Gets ShouldRunCriteria for this task.
+        /// </summary>
+        List<CakeTaskCriteria> ShouldRunCriteria { get; }
+
         /// <summary>
         /// Runs the task using the specified context.
         /// </summary>
@@ -27,6 +33,7 @@ namespace Cake.Frosting
         /// <returns>
         ///   <c>true</c> if the task should run; otherwise <c>false</c>.
         /// </returns>
+        [Obsolete("ShouldRun method will be removed in a future version")]
         bool ShouldRun(ICakeContext context);
 
         /// <summary>
