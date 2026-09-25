@@ -11,6 +11,71 @@ namespace Cake.Core.Tests.Unit.Configuration;
 
 public sealed class CakeConfigurationExtensionsTests
 {
+    public sealed class TheGetBoolValueMethod
+    {
+        [Fact]
+        public void Should_Return_Default_When_Configuration_Is_Null()
+        {
+            // Given
+            ICakeConfiguration configuration = null;
+
+            // When
+            var result = configuration.GetBoolValue("Settings_Test", defaultValue: true);
+
+            // Then
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void Should_Return_Default_When_Value_Is_Missing()
+        {
+            // Given
+            var fixture = new CakeConfigurationProviderFixture();
+
+            // When
+            var result = fixture.Create().GetBoolValue("Settings_Test", defaultValue: true);
+
+            // Then
+            Assert.True(result);
+        }
+
+        [Theory]
+        [InlineData("invalid")]
+        [InlineData(" ")]
+        [InlineData("1")]
+        [InlineData("yes")]
+        public void Should_Return_Default_When_Value_Is_Invalid(string value)
+        {
+            // Given
+            var fixture = new CakeConfigurationProviderFixture();
+            fixture.Arguments["Settings_Test"] = value;
+
+            // When
+            var result = fixture.Create().GetBoolValue("Settings_Test", defaultValue: true);
+
+            // Then
+            Assert.True(result);
+        }
+
+        [Theory]
+        [InlineData("true", true)]
+        [InlineData("True", true)]
+        [InlineData("false", false)]
+        [InlineData("False", false)]
+        public void Should_Parse_Configured_Boolean(string value, bool expected)
+        {
+            // Given
+            var fixture = new CakeConfigurationProviderFixture();
+            fixture.Arguments["Settings_Test"] = value;
+
+            // When
+            var result = fixture.Create().GetBoolValue("Settings_Test", defaultValue: true);
+
+            // Then
+            Assert.Equal(expected, result);
+        }
+    }
+
     public sealed class TheGetVerbosityMethod
     {
         [Fact]
