@@ -4,14 +4,13 @@
 
 using Cake.Common.Tools.DotNet.Workload.Repair;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Workload.Repair
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Workload.Repair;
+
+internal sealed class DotNetWorkloadRepairerFixture : DotNetFixture<DotNetWorkloadRepairSettings>
 {
-    internal sealed class DotNetWorkloadRepairerFixture : DotNetFixture<DotNetWorkloadRepairSettings>
+    protected override void RunTool()
     {
-        protected override void RunTool()
-        {
-            var tool = new DotNetWorkloadRepairer(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Repair(Settings);
-        }
+        var tool = new DotNetWorkloadRepairer(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Repair(Settings);
     }
 }

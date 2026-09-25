@@ -7,48 +7,47 @@ using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 
-namespace Cake.Common.Solution
+namespace Cake.Common.Solution;
+
+/// <summary>
+/// Contains functionality related to MSBuild solution files.
+/// </summary>
+[CakeAliasCategory("MSBuild Resource")]
+public static class SolutionAliases
 {
     /// <summary>
-    /// Contains functionality related to MSBuild solution files.
+    /// Parses project information from a solution file.
     /// </summary>
-    [CakeAliasCategory("MSBuild Resource")]
-    public static class SolutionAliases
+    /// <param name="context">The context.</param>
+    /// <param name="solutionPath">The solution path.</param>
+    /// <returns>A parsed solution.</returns>
+    /// <example>
+    /// <code>
+    /// var solutionPath = "./src/Cake.sln";
+    /// Information("Parsing {0}", solutionPath);
+    /// var parsedSolution = ParseSolution(solutionPath);
+    /// foreach (var project in parsedSolution.Projects)
+    /// {
+    ///     Information(
+    ///         @"Solution project file:
+    ///     Name: {0}
+    ///     Path: {1}
+    ///     Id  : {2}
+    ///     Type: {3}",
+    ///         project.Name,
+    ///         project.Path,
+    ///         project.Id,
+    ///         project.Type
+    ///     );
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    public static SolutionParserResult ParseSolution(this ICakeContext context, FilePath solutionPath)
     {
-        /// <summary>
-        /// Parses project information from a solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="solutionPath">The solution path.</param>
-        /// <returns>A parsed solution.</returns>
-        /// <example>
-        /// <code>
-        /// var solutionPath = "./src/Cake.sln";
-        /// Information("Parsing {0}", solutionPath);
-        /// var parsedSolution = ParseSolution(solutionPath);
-        /// foreach (var project in parsedSolution.Projects)
-        /// {
-        ///     Information(
-        ///         @"Solution project file:
-        ///     Name: {0}
-        ///     Path: {1}
-        ///     Id  : {2}
-        ///     Type: {3}",
-        ///         project.Name,
-        ///         project.Path,
-        ///         project.Id,
-        ///         project.Type
-        ///     );
-        /// }
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        public static SolutionParserResult ParseSolution(this ICakeContext context, FilePath solutionPath)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(context);
 
-            var parser = new SolutionParser(context.FileSystem, context.Environment);
-            return parser.Parse(solutionPath);
-        }
+        var parser = new SolutionParser(context.FileSystem, context.Environment);
+        return parser.Parse(solutionPath);
     }
 }

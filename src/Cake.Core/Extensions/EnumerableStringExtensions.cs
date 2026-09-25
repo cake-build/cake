@@ -6,31 +6,30 @@ using System.Collections.Generic;
 using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Contains extension methods for <see cref="T:IEnumerable{String}"/>.
+/// </summary>
+public static class EnumerableStringExtensions
 {
     /// <summary>
-    /// Contains extension methods for <see cref="T:IEnumerable{String}"/>.
+    /// Performs a conversion from <see cref="IEnumerable{String}"/> to <see cref="ProcessArgumentBuilder"/>.
     /// </summary>
-    public static class EnumerableStringExtensions
+    /// <param name="values">The text values to convert.</param>
+    /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
+    public static ProcessArgumentBuilder ToProcessArguments(this IEnumerable<string> values)
     {
-        /// <summary>
-        /// Performs a conversion from <see cref="IEnumerable{String}"/> to <see cref="ProcessArgumentBuilder"/>.
-        /// </summary>
-        /// <param name="values">The text values to convert.</param>
-        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
-        public static ProcessArgumentBuilder ToProcessArguments(this IEnumerable<string> values)
-        {
-            return ProcessArgumentBuilder.FromStrings(values);
-        }
+        return ProcessArgumentBuilder.FromStrings(values);
+    }
 
-        /// <summary>
-        /// Performs a conversion from <see cref="IEnumerable{String}"/> to <see cref="ProcessArgumentBuilder"/>.
-        /// </summary>
-        /// <param name="values">The text values to convert.</param>
-        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
-        public static ProcessArgumentBuilder ToProcessArgumentsQuoted(this IEnumerable<string> values)
-        {
-            return ProcessArgumentBuilder.FromStringsQuoted(values);
-        }
+    /// <summary>
+    /// Performs a conversion from <see cref="IEnumerable{String}"/> to <see cref="ProcessArgumentBuilder"/>.
+    /// </summary>
+    /// <param name="values">The text values to convert.</param>
+    /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
+    public static ProcessArgumentBuilder ToProcessArgumentsQuoted(this IEnumerable<string> values)
+    {
+        return ProcessArgumentBuilder.FromStringsQuoted(values);
     }
 }

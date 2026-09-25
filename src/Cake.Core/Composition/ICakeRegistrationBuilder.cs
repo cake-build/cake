@@ -4,38 +4,37 @@
 
 using System;
 
-namespace Cake.Core.Composition
+namespace Cake.Core.Composition;
+
+/// <summary>
+/// Represents a registration builder for a container.
+/// </summary>
+public interface ICakeRegistrationBuilder
 {
     /// <summary>
-    /// Represents a registration builder for a container.
+    /// Adds a registration type to the configuration.
     /// </summary>
-    public interface ICakeRegistrationBuilder
-    {
-        /// <summary>
-        /// Adds a registration type to the configuration.
-        /// </summary>
-        /// <param name="type">The registration type.</param>
-        /// <returns>The same <see cref="ICakeRegistrationBuilder"/> instance so that multiple calls can be chained.</returns>
-        ICakeRegistrationBuilder As(Type type);
+    /// <param name="type">The registration type.</param>
+    /// <returns>The same <see cref="ICakeRegistrationBuilder"/> instance so that multiple calls can be chained.</returns>
+    ICakeRegistrationBuilder As(Type type);
 
-        /// <summary>
-        /// Adds a registration type that matches the implementation type.
-        /// </summary>
-        /// <returns>The same <see cref="ICakeRegistrationBuilder"/> instance so that multiple calls can be chained.</returns>
-        ICakeRegistrationBuilder AsSelf();
+    /// <summary>
+    /// Adds a registration type that matches the implementation type.
+    /// </summary>
+    /// <returns>The same <see cref="ICakeRegistrationBuilder"/> instance so that multiple calls can be chained.</returns>
+    ICakeRegistrationBuilder AsSelf();
 
-        /// <summary>
-        /// Configure the component so that every dependent component
-        /// gets the same, shared instance. This is the default lifetime scope.
-        /// </summary>
-        /// <returns>The same <see cref="ICakeRegistrationBuilder"/> instance so that multiple calls can be chained.</returns>
-        ICakeRegistrationBuilder Singleton();
+    /// <summary>
+    /// Configure the component so that every dependent component
+    /// gets the same, shared instance. This is the default lifetime scope.
+    /// </summary>
+    /// <returns>The same <see cref="ICakeRegistrationBuilder"/> instance so that multiple calls can be chained.</returns>
+    ICakeRegistrationBuilder Singleton();
 
-        /// <summary>
-        /// Configure the component so that every dependent component
-        /// gets a new, unique instance.
-        /// </summary>
-        /// <returns>The same <see cref="ICakeRegistrationBuilder"/> instance so that multiple calls can be chained.</returns>
-        ICakeRegistrationBuilder Transient();
-    }
+    /// <summary>
+    /// Configure the component so that every dependent component
+    /// gets a new, unique instance.
+    /// </summary>
+    /// <returns>The same <see cref="ICakeRegistrationBuilder"/> instance so that multiple calls can be chained.</returns>
+    ICakeRegistrationBuilder Transient();
 }

@@ -3,58 +3,56 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
+namespace Cake.Common.Tests.Unit.Build.Bitrise.Data;
+
+public sealed class BitriseProvisioningInfo
 {
-    public sealed class BitriseProvisioningInfo
+    public sealed class TheProvisioningUrlProperty
     {
-        public sealed class TheProvisioningUrlProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BitriseInfoFixture().CreateProvisioningInfo();
+            // Given
+            var info = new BitriseInfoFixture().CreateProvisioningInfo();
 
-                // When
-                var result = info.ProvisionUrl;
+            // When
+            var result = info.ProvisionUrl;
 
-                // Then
-                Assert.Equal("file://cake-build/cake/cake.provision", result);
-            }
+            // Then
+            Assert.Equal("file://cake-build/cake/cake.provision", result);
         }
+    }
 
-        public sealed class TheCertificateUrlProperty
+    public sealed class TheCertificateUrlProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BitriseInfoFixture().CreateProvisioningInfo();
+            // Given
+            var info = new BitriseInfoFixture().CreateProvisioningInfo();
 
-                // When
-                var result = info.CertificateUrl;
+            // When
+            var result = info.CertificateUrl;
 
-                // Then
-                Assert.Equal("file://cake-build/cake/Cert.p12", result);
-            }
+            // Then
+            Assert.Equal("file://cake-build/cake/Cert.p12", result);
         }
+    }
 
-        public sealed class TheCertificatePassPhraseProperty
+    public sealed class TheCertificatePassPhraseProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BitriseInfoFixture().CreateProvisioningInfo();
+            // Given
+            var info = new BitriseInfoFixture().CreateProvisioningInfo();
 
-                // When
-                var result = info.CertificatePassphrase;
+            // When
+            var result = info.CertificatePassphrase;
 
-                // Then
-                Assert.Equal("CAKE", result);
-            }
+            // Then
+            Assert.Equal("CAKE", result);
         }
     }
 }

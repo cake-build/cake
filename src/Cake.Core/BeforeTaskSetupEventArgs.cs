@@ -4,25 +4,24 @@
 
 using System;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Event data for the <see cref="ICakeEngine.BeforeTaskSetup"/> event.
+/// </summary>
+public sealed class BeforeTaskSetupEventArgs : EventArgs
 {
     /// <summary>
-    /// Event data for the <see cref="ICakeEngine.BeforeTaskSetup"/> event.
+    /// Gets the task setup context.
     /// </summary>
-    public sealed class BeforeTaskSetupEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Gets the task setup context.
-        /// </summary>
-        public ITaskSetupContext TaskSetupContext { get; }
+    public ITaskSetupContext TaskSetupContext { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BeforeTaskSetupEventArgs"/> class.
-        /// </summary>
-        /// <param name="taskSetupContext">The task setup context.</param>
-        public BeforeTaskSetupEventArgs(ITaskSetupContext taskSetupContext)
-        {
-            TaskSetupContext = taskSetupContext;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BeforeTaskSetupEventArgs"/> class.
+    /// </summary>
+    /// <param name="taskSetupContext">The task setup context.</param>
+    public BeforeTaskSetupEventArgs(ITaskSetupContext taskSetupContext)
+    {
+        TaskSetupContext = taskSetupContext;
     }
 }

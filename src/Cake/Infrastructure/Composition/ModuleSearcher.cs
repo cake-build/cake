@@ -14,119 +14,118 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Reflection;
 
-namespace Cake.Infrastructure.Composition
+namespace Cake.Infrastructure.Composition;
+
+/// <summary>
+/// Represents a module searcher for finding Cake modules.
+/// </summary>
+public interface IModuleSearcher
 {
     /// <summary>
-    /// Represents a module searcher for finding Cake modules.
+    /// Finds module types in the specified directory.
     /// </summary>
-    public interface IModuleSearcher
+    /// <param name="root">The root directory.</param>
+    /// <param name="configuration">The Cake configuration.</param>
+    /// <returns>A collection of module types.</returns>
+    ICollection<Type> FindModuleTypes(DirectoryPath root, ICakeConfiguration configuration);
+}
+
+/// <summary>
+/// Represents a module searcher for finding Cake modules.
+/// </summary>
+public sealed class ModuleSearcher : IModuleSearcher
+{
+    private static readonly Dictionary<string, string> _excludedModules = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "Cake.DotNetTool.Module", "Cake.DotNetTool.Module is now included with Cake, so should no longer be installed separately to module directory or using #module directive" },
+            { "Cake.NuGet", "Cake.NuGet is included with Cake, so should not be installed separately to module directory or using #module directive" }
+        };
+
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+    private readonly ICakeLog _log;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ModuleSearcher"/> class.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The Cake environment.</param>
+    /// <param name="log">The log.</param>
+    public ModuleSearcher(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        ICakeLog log)
     {
-        /// <summary>
-        /// Finds module types in the specified directory.
-        /// </summary>
-        /// <param name="root">The root directory.</param>
-        /// <param name="configuration">The Cake configuration.</param>
-        /// <returns>A collection of module types.</returns>
-        ICollection<Type> FindModuleTypes(DirectoryPath root, ICakeConfiguration configuration);
+        _fileSystem = fileSystem;
+        _environment = environment;
+        _log = log;
     }
 
     /// <summary>
-    /// Represents a module searcher for finding Cake modules.
+    /// Finds module types in the specified directory.
     /// </summary>
-    public sealed class ModuleSearcher : IModuleSearcher
+    /// <param name="root">The root directory.</param>
+    /// <param name="configuration">The Cake configuration.</param>
+    /// <returns>A collection of module types.</returns>
+    public ICollection<Type> FindModuleTypes(DirectoryPath root, ICakeConfiguration configuration)
     {
-        private static readonly Dictionary<string, string> _excludedModules = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { "Cake.DotNetTool.Module", "Cake.DotNetTool.Module is now included with Cake, so should no longer be installed separately to module directory or using #module directive" },
-                { "Cake.NuGet", "Cake.NuGet is included with Cake, so should not be installed separately to module directory or using #module directive" }
-            };
-
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModuleSearcher"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The Cake environment.</param>
-        /// <param name="log">The log.</param>
-        public ModuleSearcher(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            ICakeLog log)
+        var modulePath = _fileSystem.GetDirectory(configuration.GetModulePath(root, _environment));
+        if (!modulePath.Exists)
         {
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _log = log;
+            _log.Debug("Module directory does not exist.");
+            return Array.Empty<Type>();
         }
 
-        /// <summary>
-        /// Finds module types in the specified directory.
-        /// </summary>
-        /// <param name="root">The root directory.</param>
-        /// <param name="configuration">The Cake configuration.</param>
-        /// <returns>A collection of module types.</returns>
-        public ICollection<Type> FindModuleTypes(DirectoryPath root, ICakeConfiguration configuration)
+        var result = new List<Type>();
+        var files = modulePath.GetFiles("Cake.*.Module.dll", SearchScope.Recursive);
+        foreach (var file in files)
         {
-            var modulePath = _fileSystem.GetDirectory(configuration.GetModulePath(root, _environment));
-            if (!modulePath.Exists)
+            var module = LoadModule(file.Path, configuration);
+            if (module != null)
             {
-                _log.Debug("Module directory does not exist.");
-                return Array.Empty<Type>();
+                result.Add(module);
             }
-
-            var result = new List<Type>();
-            var files = modulePath.GetFiles("Cake.*.Module.dll", SearchScope.Recursive);
-            foreach (var file in files)
-            {
-                var module = LoadModule(file.Path, configuration);
-                if (module != null)
-                {
-                    result.Add(module);
-                }
-            }
-
-            return result;
         }
 
-        private Type LoadModule(FilePath path, ICakeConfiguration configuration)
+        return result;
+    }
+
+    private Type LoadModule(FilePath path, ICakeConfiguration configuration)
+    {
+        try
         {
-            try
+            if (_excludedModules.TryGetValue(path.GetFilenameWithoutExtension().FullPath, out var message))
             {
-                if (_excludedModules.TryGetValue(path.GetFilenameWithoutExtension().FullPath, out var message))
-                {
-                    _log.Warning("{0}, Assembly {1} is excluded from loading.", message, path);
-                    return null;
-                }
-
-                var loader = new AssemblyLoader(_environment, _fileSystem, new AssemblyVerifier(configuration, _log), _log);
-                var assembly = loader.Load(path, true);
-
-                var attribute = assembly.GetCustomAttributes<CakeModuleAttribute>().FirstOrDefault();
-                if (attribute == null)
-                {
-                    _log.Warning("The assembly '{0}' does not have module metadata.", path.FullPath);
-                    return null;
-                }
-
-                if (!typeof(ICakeModule).IsAssignableFrom(attribute.ModuleType))
-                {
-                    _log.Warning("The module type '{0}' is not an actual module.", attribute.ModuleType.FullName);
-                    return null;
-                }
-
-                return attribute.ModuleType;
-            }
-            catch (CakeException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _log.Warning("Could not load module '{0}'. {1}", path.FullPath, ex);
+                _log.Warning("{0}, Assembly {1} is excluded from loading.", message, path);
                 return null;
             }
+
+            var loader = new AssemblyLoader(_environment, _fileSystem, new AssemblyVerifier(configuration, _log), _log);
+            var assembly = loader.Load(path, true);
+
+            var attribute = assembly.GetCustomAttributes<CakeModuleAttribute>().FirstOrDefault();
+            if (attribute == null)
+            {
+                _log.Warning("The assembly '{0}' does not have module metadata.", path.FullPath);
+                return null;
+            }
+
+            if (!typeof(ICakeModule).IsAssignableFrom(attribute.ModuleType))
+            {
+                _log.Warning("The module type '{0}' is not an actual module.", attribute.ModuleType.FullName);
+                return null;
+            }
+
+            return attribute.ModuleType;
+        }
+        catch (CakeException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _log.Warning("Could not load module '{0}'. {1}", path.FullPath, ex);
+            return null;
         }
     }
 }

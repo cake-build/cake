@@ -7,70 +7,69 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.Chocolatey.ApiKey
+namespace Cake.Common.Tools.Chocolatey.ApiKey;
+
+/// <summary>
+/// The Chocolatey package pinner used to pin Chocolatey packages.
+/// </summary>
+public sealed class ChocolateyApiKeySetter : ChocolateyTool<ChocolateyApiKeySettings>
 {
     /// <summary>
-    /// The Chocolatey package pinner used to pin Chocolatey packages.
+    /// Initializes a new instance of the <see cref="ChocolateyApiKeySetter"/> class.
     /// </summary>
-    public sealed class ChocolateyApiKeySetter : ChocolateyTool<ChocolateyApiKeySettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="resolver">The Chocolatey tool resolver.</param>
+    public ChocolateyApiKeySetter(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChocolateyApiKeySetter"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The Chocolatey tool resolver.</param>
-        public ChocolateyApiKeySetter(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
+    }
+
+    /// <summary>
+    /// Pins Chocolatey packages using the specified package id and settings.
+    /// </summary>
+    /// <param name="source">The Server URL where the API key is valid.</param>
+    /// <param name="settings">The settings.</param>
+    public void Set(string source, ChocolateyApiKeySettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        if (string.IsNullOrWhiteSpace(source))
         {
+            throw new ArgumentNullException(nameof(source));
         }
 
-        /// <summary>
-        /// Pins Chocolatey packages using the specified package id and settings.
-        /// </summary>
-        /// <param name="source">The Server URL where the API key is valid.</param>
-        /// <param name="settings">The settings.</param>
-        public void Set(string source, ChocolateyApiKeySettings settings)
+        Run(settings, GetArguments(source, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(string source, ChocolateyApiKeySettings settings)
+    {
+        const string separator = "=";
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("apikey");
+
+        builder.AppendSwitchQuoted("--source", separator, source);
+
+        // Add common arguments using the inherited method
+        AddGlobalArguments(settings, builder);
+
+        if (!string.IsNullOrEmpty(settings.ApiKey))
         {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            if (string.IsNullOrWhiteSpace(source))
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            Run(settings, GetArguments(source, settings));
+            builder.AppendSwitchQuoted("--api-key", separator, settings.ApiKey);
         }
 
-        private ProcessArgumentBuilder GetArguments(string source, ChocolateyApiKeySettings settings)
+        if (settings.Remove)
         {
-            const string separator = "=";
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("apikey");
-
-            builder.AppendSwitchQuoted("--source", separator, source);
-
-            // Add common arguments using the inherited method
-            AddGlobalArguments(settings, builder);
-
-            if (!string.IsNullOrEmpty(settings.ApiKey))
-            {
-                builder.AppendSwitchQuoted("--api-key", separator, settings.ApiKey);
-            }
-
-            if (settings.Remove)
-            {
-                builder.Append("--remove");
-            }
-
-            return builder;
+            builder.Append("--remove");
         }
+
+        return builder;
     }
 }

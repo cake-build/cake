@@ -3,154 +3,152 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.Rwx.Data
+namespace Cake.Common.Tests.Unit.Build.Rwx.Data;
+
+public sealed class RwxGitInfoTests
 {
-    public sealed class RwxGitInfoTests
+    public sealed class TheRepositoryUrlProperty
     {
-        public sealed class TheRepositoryUrlProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateGitInfo();
+            // Given
+            var info = new RwxInfoFixture().CreateGitInfo();
 
-                // When
-                var result = info.RepositoryUrl;
+            // When
+            var result = info.RepositoryUrl;
 
-                // Then
-                Assert.Equal("https://github.com/cake-build/cake.git", result);
-            }
+            // Then
+            Assert.Equal("https://github.com/cake-build/cake.git", result);
         }
+    }
 
-        public sealed class TheRepositoryNameProperty
+    public sealed class TheRepositoryNameProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateGitInfo();
+            // Given
+            var info = new RwxInfoFixture().CreateGitInfo();
 
-                // When
-                var result = info.RepositoryName;
+            // When
+            var result = info.RepositoryName;
 
-                // Then
-                Assert.Equal("cake-build/cake", result);
-            }
+            // Then
+            Assert.Equal("cake-build/cake", result);
         }
+    }
 
-        public sealed class TheCommitShaProperty
+    public sealed class TheCommitShaProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateGitInfo();
+            // Given
+            var info = new RwxInfoFixture().CreateGitInfo();
 
-                // When
-                var result = info.CommitSha;
+            // When
+            var result = info.CommitSha;
 
-                // Then
-                Assert.Equal("0123456789abcdef0123456789abcdef01234567", result);
-            }
+            // Then
+            Assert.Equal("0123456789abcdef0123456789abcdef01234567", result);
         }
+    }
 
-        public sealed class TheCommitMessageProperty
+    public sealed class TheCommitMessageProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateGitInfo();
+            // Given
+            var info = new RwxInfoFixture().CreateGitInfo();
 
-                // When
-                var result = info.CommitMessage;
+            // When
+            var result = info.CommitMessage;
 
-                // Then
-                Assert.Equal("Add RWX build provider\n\nMore details here.", result);
-            }
+            // Then
+            Assert.Equal("Add RWX build provider\n\nMore details here.", result);
         }
+    }
 
-        public sealed class TheCommitSummaryProperty
+    public sealed class TheCommitSummaryProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateGitInfo();
+            // Given
+            var info = new RwxInfoFixture().CreateGitInfo();
 
-                // When
-                var result = info.CommitSummary;
+            // When
+            var result = info.CommitSummary;
 
-                // Then
-                Assert.Equal("Add RWX build provider", result);
-            }
+            // Then
+            Assert.Equal("Add RWX build provider", result);
         }
+    }
 
-        public sealed class TheCommitterNameProperty
+    public sealed class TheCommitterNameProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateGitInfo();
+            // Given
+            var info = new RwxInfoFixture().CreateGitInfo();
 
-                // When
-                var result = info.CommitterName;
+            // When
+            var result = info.CommitterName;
 
-                // Then
-                Assert.Equal("Octo Cat", result);
-            }
+            // Then
+            Assert.Equal("Octo Cat", result);
         }
+    }
 
-        public sealed class TheCommitterEmailProperty
+    public sealed class TheCommitterEmailProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateGitInfo();
+            // Given
+            var info = new RwxInfoFixture().CreateGitInfo();
 
-                // When
-                var result = info.CommitterEmail;
+            // When
+            var result = info.CommitterEmail;
 
-                // Then
-                Assert.Equal("octocat@example.com", result);
-            }
+            // Then
+            Assert.Equal("octocat@example.com", result);
         }
+    }
 
-        public sealed class TheRefProperty
+    public sealed class TheRefProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateGitInfo();
+            // Given
+            var info = new RwxInfoFixture().CreateGitInfo();
 
-                // When
-                var result = info.Ref;
+            // When
+            var result = info.Ref;
 
-                // Then
-                Assert.Equal("refs/heads/main", result);
-            }
+            // Then
+            Assert.Equal("refs/heads/main", result);
         }
+    }
 
-        public sealed class TheRefNameProperty
+    public sealed class TheRefNameProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateGitInfo();
+            // Given
+            var info = new RwxInfoFixture().CreateGitInfo();
 
-                // When
-                var result = info.RefName;
+            // When
+            var result = info.RefName;
 
-                // Then
-                Assert.Equal("main", result);
-            }
+            // Then
+            Assert.Equal("main", result);
         }
     }
 }

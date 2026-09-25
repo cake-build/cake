@@ -4,18 +4,17 @@
 
 using Cake.Common.Tools.DotNet.Format;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Format
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Format;
+
+internal sealed class DotNetFormatterFixture : DotNetFixture<DotNetFormatSettings>
 {
-    internal sealed class DotNetFormatterFixture : DotNetFixture<DotNetFormatSettings>
+    public string Root { get; set; }
+
+    public string Subcommand { get; set; }
+
+    protected override void RunTool()
     {
-        public string Root { get; set; }
-
-        public string Subcommand { get; set; }
-
-        protected override void RunTool()
-        {
-            var tool = new DotNetFormatter(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Format(Root, Subcommand, Settings);
-        }
+        var tool = new DotNetFormatter(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Format(Root, Subcommand, Settings);
     }
 }

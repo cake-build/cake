@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotNet.Reference.List
+namespace Cake.Common.Tools.DotNet.Reference.List;
+
+/// <summary>
+/// Contains settings used by <see cref="DotNetReferenceLister" />.
+/// </summary>
+public sealed class DotNetReferenceListSettings : DotNetSettings
 {
-    /// <summary>
-    /// Contains settings used by <see cref="DotNetReferenceLister" />.
-    /// </summary>
-    public sealed class DotNetReferenceListSettings : DotNetSettings
-    {
-    }
 }

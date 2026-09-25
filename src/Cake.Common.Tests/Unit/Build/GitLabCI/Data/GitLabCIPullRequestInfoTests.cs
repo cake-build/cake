@@ -4,94 +4,92 @@
 
 using Cake.Common.Tests.Fixtures.Build;
 using NSubstitute;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
+namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data;
+
+public sealed class GitLabCIPullRequestInfoTests
 {
-    public sealed class GitLabCIPullRequestInfoTests
+    public sealed class TheIsPullRequestProperty
     {
-        public sealed class TheIsPullRequestProperty
+        [Theory]
+        [InlineData("1", true)]
+        [InlineData("0", false)]
+        public void Should_Return_Correct_Value(string value, bool expected)
         {
-            [Theory]
-            [InlineData("1", true)]
-            [InlineData("0", false)]
-            public void Should_Return_Correct_Value(string value, bool expected)
-            {
-                // Given
-                var fixture = new GitLabCIInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("CI_MERGE_REQUEST_ID").Returns(value);
-                var info = fixture.CreatePullRequestInfo();
+            // Given
+            var fixture = new GitLabCIInfoFixture();
+            fixture.Environment.GetEnvironmentVariable("CI_MERGE_REQUEST_ID").Returns(value);
+            var info = fixture.CreatePullRequestInfo();
 
-                // When
-                var result = info.IsPullRequest;
+            // When
+            var result = info.IsPullRequest;
 
-                // Then
-                Assert.Equal(expected, result);
-            }
+            // Then
+            Assert.Equal(expected, result);
         }
+    }
 
-        public sealed class TheIdProperty
+    public sealed class TheIdProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitLabCIInfoFixture().CreatePullRequestInfo();
+            // Given
+            var info = new GitLabCIInfoFixture().CreatePullRequestInfo();
 
-                // When
-                var result = info.Id;
+            // When
+            var result = info.Id;
 
-                // Then
-                Assert.Equal(10, result);
-            }
+            // Then
+            Assert.Equal(10, result);
         }
+    }
 
-        public sealed class TheIIdProperty
+    public sealed class TheIIdProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitLabCIInfoFixture().CreatePullRequestInfo();
+            // Given
+            var info = new GitLabCIInfoFixture().CreatePullRequestInfo();
 
-                // When
-                var result = info.IId;
+            // When
+            var result = info.IId;
 
-                // Then
-                Assert.Equal(1, result);
-            }
+            // Then
+            Assert.Equal(1, result);
         }
+    }
 
-        public sealed class TheSourceBranchProperty
+    public sealed class TheSourceBranchProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitLabCIInfoFixture().CreatePullRequestInfo();
+            // Given
+            var info = new GitLabCIInfoFixture().CreatePullRequestInfo();
 
-                // When
-                var result = info.SourceBranch;
+            // When
+            var result = info.SourceBranch;
 
-                // Then
-                Assert.Equal("source-branch", result);
-            }
+            // Then
+            Assert.Equal("source-branch", result);
         }
+    }
 
-        public sealed class TheTargetBranchProperty
+    public sealed class TheTargetBranchProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitLabCIInfoFixture().CreatePullRequestInfo();
+            // Given
+            var info = new GitLabCIInfoFixture().CreatePullRequestInfo();
 
-                // When
-                var result = info.TargetBranch;
+            // When
+            var result = info.TargetBranch;
 
-                // Then
-                Assert.Equal("main", result);
-            }
+            // Then
+            Assert.Equal("main", result);
         }
     }
 }

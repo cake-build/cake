@@ -8,104 +8,103 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.SpecFlow.TestExecutionReport
+namespace Cake.Common.Tools.SpecFlow.TestExecutionReport;
+
+/// <summary>
+/// SpecFlow MSTest execution report runner.
+/// </summary>
+public sealed class SpecFlowTestExecutionReporter : SpecFlowTool<SpecFlowTestExecutionReportSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// SpecFlow MSTest execution report runner.
+    /// Initializes a new instance of the <see cref="SpecFlowTestExecutionReporter" /> class.
     /// </summary>
-    public sealed class SpecFlowTestExecutionReporter : SpecFlowTool<SpecFlowTestExecutionReportSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public SpecFlowTestExecutionReporter(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SpecFlowTestExecutionReporter" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public SpecFlowTestExecutionReporter(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Runs SpecFlow Test Execution Report with the specified settings.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="projectFile">The project file path.</param>
+    /// <param name="settings">The settings.</param>
+    public void Run(ICakeContext context,
+        Action<ICakeContext> action,
+        FilePath projectFile,
+        SpecFlowTestExecutionReportSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(action);
+        ArgumentNullException.ThrowIfNull(projectFile);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        // Run the tool using the interceptor.
+        var interceptor = InterceptAction(context, action);
+
+        // Get / Verify Arguments
+        var builder = GetArguments(interceptor, settings, projectFile);
+
+        // Execute the action
+        CakeException testException = null;
+        try
         {
-            _environment = environment;
+            action(context);
+        }
+        catch (CakeException e)
+        {
+            // Write warning to log
+            context.Warning(e.Message);
+            testException = e;
         }
 
-        /// <summary>
-        /// Runs SpecFlow Test Execution Report with the specified settings.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="action">The action.</param>
-        /// <param name="projectFile">The project file path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Run(ICakeContext context,
-            Action<ICakeContext> action,
-            FilePath projectFile,
-            SpecFlowTestExecutionReportSettings settings)
+        // Run the tool.
+        Run(settings, builder);
+
+        if (settings.ThrowOnTestFailure && testException != null)
         {
-            ArgumentNullException.ThrowIfNull(context);
-            ArgumentNullException.ThrowIfNull(action);
-            ArgumentNullException.ThrowIfNull(projectFile);
-            ArgumentNullException.ThrowIfNull(settings);
+            throw testException;
+        }
+    }
 
-            // Run the tool using the interceptor.
-            var interceptor = InterceptAction(context, action);
+    private static SpecFlowContext InterceptAction(
+        ICakeContext context,
+        Action<ICakeContext> action)
+    {
+        var interceptor = new SpecFlowContext(context);
 
-            // Get / Verify Arguments
-            var builder = GetArguments(interceptor, settings, projectFile);
+        action(interceptor);
 
-            // Execute the action
-            CakeException testException = null;
-            try
-            {
-                action(context);
-            }
-            catch (CakeException e)
-            {
-                // Write warning to log
-                context.Warning(e.Message);
-                testException = e;
-            }
-
-            // Run the tool.
-            Run(settings, builder);
-
-            if (settings.ThrowOnTestFailure && testException != null)
-            {
-                throw testException;
-            }
+        // Validate arguments.
+        if (interceptor.FilePath == null)
+        {
+            throw new CakeException("No tool was started.");
         }
 
-        private static SpecFlowContext InterceptAction(
-            ICakeContext context,
-            Action<ICakeContext> action)
-        {
-            var interceptor = new SpecFlowContext(context);
+        return interceptor;
+    }
 
-            action(interceptor);
+    private ProcessArgumentBuilder GetArguments(
+        SpecFlowContext context,
+        SpecFlowTestExecutionReportSettings settings,
+        FilePath projectFile)
+    {
+        var builder = context.GetArguments(projectFile, _environment);
 
-            // Validate arguments.
-            if (interceptor.FilePath == null)
-            {
-                throw new CakeException("No tool was started.");
-            }
+        // Get the SpecFlowSettings arguments
+        AppendArguments(settings, builder);
 
-            return interceptor;
-        }
-
-        private ProcessArgumentBuilder GetArguments(
-            SpecFlowContext context,
-            SpecFlowTestExecutionReportSettings settings,
-            FilePath projectFile)
-        {
-            var builder = context.GetArguments(projectFile, _environment);
-
-            // Get the SpecFlowSettings arguments
-            AppendArguments(settings, builder);
-
-            return builder;
-        }
+        return builder;
     }
 }

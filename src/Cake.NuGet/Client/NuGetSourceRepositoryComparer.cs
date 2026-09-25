@@ -5,27 +5,26 @@
 using System.Collections.Generic;
 using NuGet.Protocol.Core.Types;
 
-namespace Cake.NuGet
+namespace Cake.NuGet;
+
+internal sealed class NuGetSourceRepositoryComparer : IEqualityComparer<SourceRepository>
 {
-    internal sealed class NuGetSourceRepositoryComparer : IEqualityComparer<SourceRepository>
+    public bool Equals(SourceRepository x, SourceRepository y)
     {
-        public bool Equals(SourceRepository x, SourceRepository y)
+        if (x == null && y == null)
         {
-            if (x == null && y == null)
-            {
-                return true;
-            }
-            if (x == null || y == null)
-            {
-                return false;
-            }
-
-            return x.PackageSource.Equals(y.PackageSource);
+            return true;
+        }
+        if (x == null || y == null)
+        {
+            return false;
         }
 
-        public int GetHashCode(SourceRepository obj)
-        {
-            return obj.PackageSource.GetHashCode();
-        }
+        return x.PackageSource.Equals(y.PackageSource);
+    }
+
+    public int GetHashCode(SourceRepository obj)
+    {
+        return obj.PackageSource.GetHashCode();
     }
 }

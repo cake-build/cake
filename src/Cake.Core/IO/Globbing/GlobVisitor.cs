@@ -6,247 +6,246 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.IO.Globbing.Nodes;
 
-namespace Cake.Core.IO.Globbing
+namespace Cake.Core.IO.Globbing;
+
+internal sealed class GlobVisitor
 {
-    internal sealed class GlobVisitor
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+
+    public GlobVisitor(IFileSystem fileSystem, ICakeEnvironment environment)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
+        _fileSystem = fileSystem;
+        _environment = environment;
+    }
 
-        public GlobVisitor(IFileSystem fileSystem, ICakeEnvironment environment)
-        {
-            _fileSystem = fileSystem;
-            _environment = environment;
-        }
+    public IEnumerable<IFileSystemInfo> Walk(GlobNode node, GlobberSettings settings)
+    {
+        var context = new GlobVisitorContext(_fileSystem, _environment, settings.Predicate, settings.FilePredicate);
+        node.Accept(this, context);
+        return context.Results;
+    }
 
-        public IEnumerable<IFileSystemInfo> Walk(GlobNode node, GlobberSettings settings)
+    public void VisitRecursiveWildcardSegment(RecursiveWildcardNode node, GlobVisitorContext context)
+    {
+        var path = context.FileSystem.GetDirectory(context.Path);
+        if (context.FileSystem.Exist(path.Path))
         {
-            var context = new GlobVisitorContext(_fileSystem, _environment, settings.Predicate, settings.FilePredicate);
-            node.Accept(this, context);
-            return context.Results;
-        }
+            // Check if folders match.
+            var candidates = new List<IFileSystemInfo>();
+            candidates.Add(path);
+            candidates.AddRange(FindCandidates(path.Path, node, context, SearchScope.Recursive, includeFiles: false));
 
-        public void VisitRecursiveWildcardSegment(RecursiveWildcardNode node, GlobVisitorContext context)
-        {
-            var path = context.FileSystem.GetDirectory(context.Path);
-            if (context.FileSystem.Exist(path.Path))
+            foreach (var candidate in candidates)
             {
-                // Check if folders match.
-                var candidates = new List<IFileSystemInfo>();
-                candidates.Add(path);
-                candidates.AddRange(FindCandidates(path.Path, node, context, SearchScope.Recursive, includeFiles: false));
-
-                foreach (var candidate in candidates)
+                var pushed = false;
+                if (context.Path.FullPath != candidate.Path.FullPath)
                 {
-                    var pushed = false;
-                    if (context.Path.FullPath != candidate.Path.FullPath)
-                    {
-                        context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
-                        pushed = true;
-                    }
-
-                    if (node.Next != null)
-                    {
-                        node.Next.Accept(this, context);
-                    }
-                    else
-                    {
-                        context.AddResult(candidate);
-                    }
-
-                    if (pushed)
-                    {
-                        context.Pop();
-                    }
-                }
-            }
-        }
-
-        public void VisitRelativeRoot(RelativeRootNode node, GlobVisitorContext context)
-        {
-            // Push each path to the context.
-            var pushedSegmentCount = 0;
-            var path = context.Environment.WorkingDirectory;
-            foreach (var segment in path.Segments)
-            {
-                context.Push(segment);
-                pushedSegmentCount++;
-            }
-
-            node.Next.Accept(this, context);
-
-            // Pop all segments we added to the context.
-            for (var index = 0; index < pushedSegmentCount; index++)
-            {
-                context.Pop();
-            }
-        }
-
-        public void VisitSegment(PathNode node, GlobVisitorContext context)
-        {
-            if (node.IsIdentifier)
-            {
-                // Get the (relative) path to the current node.
-                var segment = node.GetPath();
-
-                // Get a directory that matches this segment.
-                // This might be a file but we can't be sure so we need to check.
-                var directoryPath = context.Path.Combine(segment);
-                var directory = context.FileSystem.GetDirectory(directoryPath);
-
-                // Should we not traverse this directory?
-                if (directory.Exists && !context.ShouldTraverse(directory))
-                {
-                    return;
+                    context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
+                    pushed = true;
                 }
 
-                if (node.Next == null)
+                if (node.Next != null)
                 {
-                    if (directory.Exists)
-                    {
-                        // Directory
-                        context.AddResult(directory);
-                    }
-                    else
-                    {
-                        // Then it must be a file (if it exist).
-                        var filePath = context.Path.CombineWithFilePath(segment);
-                        var file = context.FileSystem.GetFile(filePath);
-                        if (file.Exists && context.ShouldInclude(file))
-                        {
-                            // File
-                            context.AddResult(file);
-                        }
-                    }
+                    node.Next.Accept(this, context);
                 }
                 else
                 {
-                    // Push the current node to the context.
-                    context.Push(node.GetPath());
-                    node.Next.Accept(this, context);
+                    context.AddResult(candidate);
+                }
+
+                if (pushed)
+                {
                     context.Pop();
+                }
+            }
+        }
+    }
+
+    public void VisitRelativeRoot(RelativeRootNode node, GlobVisitorContext context)
+    {
+        // Push each path to the context.
+        var pushedSegmentCount = 0;
+        var path = context.Environment.WorkingDirectory;
+        foreach (var segment in path.Segments)
+        {
+            context.Push(segment);
+            pushedSegmentCount++;
+        }
+
+        node.Next.Accept(this, context);
+
+        // Pop all segments we added to the context.
+        for (var index = 0; index < pushedSegmentCount; index++)
+        {
+            context.Pop();
+        }
+    }
+
+    public void VisitSegment(PathNode node, GlobVisitorContext context)
+    {
+        if (node.IsIdentifier)
+        {
+            // Get the (relative) path to the current node.
+            var segment = node.GetPath();
+
+            // Get a directory that matches this segment.
+            // This might be a file but we can't be sure so we need to check.
+            var directoryPath = context.Path.Combine(segment);
+            var directory = context.FileSystem.GetDirectory(directoryPath);
+
+            // Should we not traverse this directory?
+            if (directory.Exists && !context.ShouldTraverse(directory))
+            {
+                return;
+            }
+
+            if (node.Next == null)
+            {
+                if (directory.Exists)
+                {
+                    // Directory
+                    context.AddResult(directory);
+                }
+                else
+                {
+                    // Then it must be a file (if it exist).
+                    var filePath = context.Path.CombineWithFilePath(segment);
+                    var file = context.FileSystem.GetFile(filePath);
+                    if (file.Exists && context.ShouldInclude(file))
+                    {
+                        // File
+                        context.AddResult(file);
+                    }
                 }
             }
             else
             {
-                // Match using pattern (wildcards, brace expansion, bracket wildcards, etc.),
-                // including when the path segment is only a single non-literal segment (e.g. "{package.json}").
-                var path = context.FileSystem.GetDirectory(context.Path);
-                if (path.Exists)
-                {
-                    foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
-                    {
-                        if (node.Next != null)
-                        {
-                            context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
-                            node.Next.Accept(this, context);
-                            context.Pop();
-                        }
-                        else
-                        {
-                            context.AddResult(candidate);
-                        }
-                    }
-                }
+                // Push the current node to the context.
+                context.Push(node.GetPath());
+                node.Next.Accept(this, context);
+                context.Pop();
             }
         }
-
-        public void VisitUnixRoot(UnixRootNode node, GlobVisitorContext context)
+        else
         {
-            context.Push("/");
-            node.Next.Accept(this, context);
-            context.Pop();
-        }
-
-        public void VisitUncRoot(UncRootNode node, GlobVisitorContext context)
-        {
-            context.Push($@"\\{node.Server}");
-            node.Next.Accept(this, context);
-            context.Pop();
-        }
-
-        public void VisitWildcardSegmentNode(WildcardNode node, GlobVisitorContext context)
-        {
+            // Match using pattern (wildcards, brace expansion, bracket wildcards, etc.),
+            // including when the path segment is only a single non-literal segment (e.g. "{package.json}").
             var path = context.FileSystem.GetDirectory(context.Path);
-            if (context.FileSystem.Exist(path.Path))
+            if (path.Exists)
             {
                 foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
                 {
-                    context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
                     if (node.Next != null)
                     {
+                        context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
                         node.Next.Accept(this, context);
+                        context.Pop();
                     }
                     else
                     {
                         context.AddResult(candidate);
                     }
-                    context.Pop();
                 }
             }
         }
+    }
 
-        public void VisitWindowsRoot(WindowsRootNode node, GlobVisitorContext context)
+    public void VisitUnixRoot(UnixRootNode node, GlobVisitorContext context)
+    {
+        context.Push("/");
+        node.Next.Accept(this, context);
+        context.Pop();
+    }
+
+    public void VisitUncRoot(UncRootNode node, GlobVisitorContext context)
+    {
+        context.Push($@"\\{node.Server}");
+        node.Next.Accept(this, context);
+        context.Pop();
+    }
+
+    public void VisitWildcardSegmentNode(WildcardNode node, GlobVisitorContext context)
+    {
+        var path = context.FileSystem.GetDirectory(context.Path);
+        if (context.FileSystem.Exist(path.Path))
         {
-            context.Push(node.Drive + ":");
-            node.Next.Accept(this, context);
-            context.Pop();
-        }
-
-        public void VisitParent(ParentDirectoryNode node, GlobVisitorContext context)
-        {
-            // Back up one level.
-            var last = context.Pop();
-            node.Next.Accept(this, context);
-
-            // Push the segment back so pop/push
-            // count remains balanced.
-            context.Push(last);
-        }
-
-        public void VisitCurrent(CurrentDirectoryNode node, GlobVisitorContext context)
-        {
-            node.Next.Accept(this, context);
-        }
-
-        private static IEnumerable<IFileSystemInfo> FindCandidates(
-            DirectoryPath path,
-            MatchableNode node,
-            GlobVisitorContext context,
-            SearchScope option,
-            bool includeFiles = true,
-            bool includeDirectories = true)
-        {
-            var result = new List<IFileSystemInfo>();
-            var current = context.FileSystem.GetDirectory(path);
-
-            // Directories
-            if (includeDirectories)
+            foreach (var candidate in FindCandidates(path.Path, node, context, SearchScope.Current))
             {
-                foreach (var directory in current.GetDirectories("*", option))
+                context.Push(candidate.Path.FullPath.Substring(path.Path.FullPath.Length + (path.Path.FullPath.Length > 1 ? 1 : 0)));
+                if (node.Next != null)
                 {
-                    var lastPath = directory.Path.Segments.Last();
-                    if (node.IsMatch(lastPath) && context.ShouldTraverse(directory))
-                    {
-                        result.Add(directory);
-                    }
+                    node.Next.Accept(this, context);
                 }
-            }
-
-            // Files
-            if (includeFiles)
-            {
-                foreach (var file in current.GetFiles("*", option))
+                else
                 {
-                    var lastPath = file.Path.Segments.Last();
-                    if (node.IsMatch(lastPath) && context.ShouldInclude(file))
-                    {
-                        result.Add(file);
-                    }
+                    context.AddResult(candidate);
                 }
+                context.Pop();
             }
-
-            return result;
         }
+    }
+
+    public void VisitWindowsRoot(WindowsRootNode node, GlobVisitorContext context)
+    {
+        context.Push(node.Drive + ":");
+        node.Next.Accept(this, context);
+        context.Pop();
+    }
+
+    public void VisitParent(ParentDirectoryNode node, GlobVisitorContext context)
+    {
+        // Back up one level.
+        var last = context.Pop();
+        node.Next.Accept(this, context);
+
+        // Push the segment back so pop/push
+        // count remains balanced.
+        context.Push(last);
+    }
+
+    public void VisitCurrent(CurrentDirectoryNode node, GlobVisitorContext context)
+    {
+        node.Next.Accept(this, context);
+    }
+
+    private static IEnumerable<IFileSystemInfo> FindCandidates(
+        DirectoryPath path,
+        MatchableNode node,
+        GlobVisitorContext context,
+        SearchScope option,
+        bool includeFiles = true,
+        bool includeDirectories = true)
+    {
+        var result = new List<IFileSystemInfo>();
+        var current = context.FileSystem.GetDirectory(path);
+
+        // Directories
+        if (includeDirectories)
+        {
+            foreach (var directory in current.GetDirectories("*", option))
+            {
+                var lastPath = directory.Path.Segments.Last();
+                if (node.IsMatch(lastPath) && context.ShouldTraverse(directory))
+                {
+                    result.Add(directory);
+                }
+            }
+        }
+
+        // Files
+        if (includeFiles)
+        {
+            foreach (var file in current.GetFiles("*", option))
+            {
+                var lastPath = file.Path.Segments.Last();
+                if (node.IsMatch(lastPath) && context.ShouldInclude(file))
+                {
+                    result.Add(file);
+                }
+            }
+        }
+
+        return result;
     }
 }

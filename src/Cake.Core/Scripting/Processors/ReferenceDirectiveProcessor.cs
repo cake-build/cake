@@ -6,46 +6,45 @@ using System;
 using Cake.Core.IO;
 using Cake.Core.Scripting.Analysis;
 
-namespace Cake.Core.Scripting.Processors
+namespace Cake.Core.Scripting.Processors;
+
+internal sealed class ReferenceDirectiveProcessor : LineProcessor
 {
-    internal sealed class ReferenceDirectiveProcessor : LineProcessor
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+
+    public ReferenceDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
+        _fileSystem = fileSystem;
+        _environment = environment;
+    }
 
-        public ReferenceDirectiveProcessor(IFileSystem fileSystem, ICakeEnvironment environment)
+    public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        replacement = null;
+
+        var tokens = Split(line);
+        if (tokens.Length <= 0)
         {
-            _fileSystem = fileSystem;
-            _environment = environment;
+            return false;
         }
 
-        public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
+        if (!tokens[0].Equals("#r", StringComparison.Ordinal) &&
+            !tokens[0].Equals("#reference", StringComparison.Ordinal))
         {
-            ArgumentNullException.ThrowIfNull(context);
-
-            replacement = null;
-
-            var tokens = Split(line);
-            if (tokens.Length <= 0)
-            {
-                return false;
-            }
-
-            if (!tokens[0].Equals("#r", StringComparison.Ordinal) &&
-                !tokens[0].Equals("#reference", StringComparison.Ordinal))
-            {
-                return false;
-            }
-
-            var referencePath = new FilePath(tokens[1].UnQuote());
-
-            var directoryPath = context.Current.Path.MakeAbsolute(_environment).GetDirectory();
-            var absoluteReferencePath = referencePath.MakeAbsolute(directoryPath);
-
-            context.Current.References.Add(_fileSystem.Exist(absoluteReferencePath)
-                ? absoluteReferencePath.FullPath : referencePath.FullPath);
-
-            return true;
+            return false;
         }
+
+        var referencePath = new FilePath(tokens[1].UnQuote());
+
+        var directoryPath = context.Current.Path.MakeAbsolute(_environment).GetDirectory();
+        var absoluteReferencePath = referencePath.MakeAbsolute(directoryPath);
+
+        context.Current.References.Add(_fileSystem.Exist(absoluteReferencePath)
+            ? absoluteReferencePath.FullPath : referencePath.FullPath);
+
+        return true;
     }
 }

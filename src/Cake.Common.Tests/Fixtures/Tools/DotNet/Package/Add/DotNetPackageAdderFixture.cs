@@ -4,18 +4,17 @@
 
 using Cake.Common.Tools.DotNet.Package.Add;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Package.Add
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Package.Add;
+
+internal sealed class DotNetPackageAdderFixture : DotNetFixture<DotNetPackageAddSettings>
 {
-    internal sealed class DotNetPackageAdderFixture : DotNetFixture<DotNetPackageAddSettings>
+    public string PackageName { get; set; }
+
+    public string Project { get; set; }
+
+    protected override void RunTool()
     {
-        public string PackageName { get; set; }
-
-        public string Project { get; set; }
-
-        protected override void RunTool()
-        {
-            var tool = new DotNetPackageAdder(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Add(PackageName, Project, Settings);
-        }
+        var tool = new DotNetPackageAdder(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Add(PackageName, Project, Settings);
     }
 }

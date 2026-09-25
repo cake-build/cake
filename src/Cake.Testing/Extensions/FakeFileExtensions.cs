@@ -9,109 +9,108 @@ using Cake.Core;
 using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Testing
+namespace Cake.Testing;
+
+/// <summary>
+/// Contains extensions for <see cref="FakeFile"/>.
+/// </summary>
+public static class FakeFileExtensions
 {
     /// <summary>
-    /// Contains extensions for <see cref="FakeFile"/>.
+    /// Sets the content of the provided file.
     /// </summary>
-    public static class FakeFileExtensions
+    /// <param name="file">The file.</param>
+    /// <param name="content">The content.</param>
+    /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+    public static FakeFile SetContent(this FakeFile file, string content)
     {
-        /// <summary>
-        /// Sets the content of the provided file.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <param name="content">The content.</param>
-        /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public static FakeFile SetContent(this FakeFile file, string content)
+        ArgumentNullException.ThrowIfNull(file);
+        ArgumentNullException.ThrowIfNull(content);
+        using (var stream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
+        using (var writer = new StreamWriter(stream))
         {
-            ArgumentNullException.ThrowIfNull(file);
-            ArgumentNullException.ThrowIfNull(content);
-            using (var stream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
-            using (var writer = new StreamWriter(stream))
-            {
-                writer.Write(content);
-                file.SetLastWriteNow();
-                return file;
-            }
-        }
-
-        /// <summary>
-        /// Gets the binary content of the specified file.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <returns>The binary content of the specified file.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public static byte[] GetBinaryContent(this FakeFile file)
-        {
-            ArgumentNullException.ThrowIfNull(file);
-            if (!file.Exists)
-            {
-                throw new FileNotFoundException("File could not be found.", file.Path.FullPath);
-            }
-            using (var stream = file.OpenRead())
-            using (var reader = new BinaryReader(stream))
-            using (var memory = new MemoryStream())
-            {
-                reader.BaseStream.CopyTo(memory);
-                return memory.ToArray();
-            }
-        }
-
-        /// <summary>
-        /// Gets the text content of the file.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <returns>The text content of the file.</returns>
-        public static string GetTextContent(this FakeFile file)
-        {
-            return file?.GetTextContent(Encoding.UTF8);
-        }
-
-        /// <summary>
-        /// Gets the text content of the file.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <param name="encoding">The text encoding.</param>
-        /// <returns>The text content of the file.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public static string GetTextContent(this FakeFile file, Encoding encoding)
-        {
-            ArgumentNullException.ThrowIfNull(file);
-            if (!file.Exists)
-            {
-                throw new FileNotFoundException("File could not be found.", file.Path.FullPath);
-            }
-            using (var stream = file.OpenRead())
-            using (var reader = new StreamReader(stream, encoding))
-            {
-                return reader.ReadToEnd();
-            }
-        }
-
-        /// <summary>
-        /// Determines if a specified file has a UTF-8 BOM.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <returns>Whether or not the specified file has a UTF-8 BOM.</returns>
-        // ReSharper disable once InconsistentNaming
-        public static bool HasUTF8BOM(this FakeFile file)
-        {
-            var content = GetBinaryContent(file);
-            var preamble = Encoding.UTF8.GetPreamble();
-            return content.StartsWith(preamble);
-        }
-
-        /// <summary>
-        /// Hides the specified file.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
-        public static FakeFile Hide(this FakeFile file)
-        {
-            ArgumentNullException.ThrowIfNull(file);
-            file.Hidden = true;
+            writer.Write(content);
+            file.SetLastWriteNow();
             return file;
         }
+    }
+
+    /// <summary>
+    /// Gets the binary content of the specified file.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <returns>The binary content of the specified file.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+    public static byte[] GetBinaryContent(this FakeFile file)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        if (!file.Exists)
+        {
+            throw new FileNotFoundException("File could not be found.", file.Path.FullPath);
+        }
+        using (var stream = file.OpenRead())
+        using (var reader = new BinaryReader(stream))
+        using (var memory = new MemoryStream())
+        {
+            reader.BaseStream.CopyTo(memory);
+            return memory.ToArray();
+        }
+    }
+
+    /// <summary>
+    /// Gets the text content of the file.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <returns>The text content of the file.</returns>
+    public static string GetTextContent(this FakeFile file)
+    {
+        return file?.GetTextContent(Encoding.UTF8);
+    }
+
+    /// <summary>
+    /// Gets the text content of the file.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <param name="encoding">The text encoding.</param>
+    /// <returns>The text content of the file.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+    public static string GetTextContent(this FakeFile file, Encoding encoding)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        if (!file.Exists)
+        {
+            throw new FileNotFoundException("File could not be found.", file.Path.FullPath);
+        }
+        using (var stream = file.OpenRead())
+        using (var reader = new StreamReader(stream, encoding))
+        {
+            return reader.ReadToEnd();
+        }
+    }
+
+    /// <summary>
+    /// Determines if a specified file has a UTF-8 BOM.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <returns>Whether or not the specified file has a UTF-8 BOM.</returns>
+    // ReSharper disable once InconsistentNaming
+    public static bool HasUTF8BOM(this FakeFile file)
+    {
+        var content = GetBinaryContent(file);
+        var preamble = Encoding.UTF8.GetPreamble();
+        return content.StartsWith(preamble);
+    }
+
+    /// <summary>
+    /// Hides the specified file.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
+    public static FakeFile Hide(this FakeFile file)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        file.Hidden = true;
+        return file;
     }
 }

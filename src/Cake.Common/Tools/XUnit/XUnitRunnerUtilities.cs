@@ -5,22 +5,21 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.XUnit
+namespace Cake.Common.Tools.XUnit;
+
+internal static class XUnitRunnerUtilities
 {
-    internal static class XUnitRunnerUtilities
+    internal static FilePath GetReportFileName(IReadOnlyList<FilePath> assemblyPaths, XUnit2Settings settings)
     {
-        internal static FilePath GetReportFileName(IReadOnlyList<FilePath> assemblyPaths, XUnit2Settings settings)
+        if (string.IsNullOrEmpty(settings.ReportName))
         {
-            if (string.IsNullOrEmpty(settings.ReportName))
-            {
-                return assemblyPaths.Count == 1
-                    ? assemblyPaths[0].GetFilename()
-                    : new FilePath("TestResults");
-            }
-            else
-            {
-                return settings.ReportName;
-            }
+            return assemblyPaths.Count == 1
+                ? assemblyPaths[0].GetFilename()
+                : new FilePath("TestResults");
+        }
+        else
+        {
+            return settings.ReportName;
         }
     }
 }

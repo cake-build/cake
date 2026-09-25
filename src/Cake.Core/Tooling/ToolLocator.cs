@@ -6,56 +6,55 @@ using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
 
-namespace Cake.Core.Tooling
+namespace Cake.Core.Tooling;
+
+/// <summary>
+/// Implementation of the tool locator.
+/// </summary>
+public sealed class ToolLocator : IToolLocator
 {
+    private readonly ICakeEnvironment _environment;
+    private readonly IToolRepository _repository;
+    private readonly IToolResolutionStrategy _strategy;
+
     /// <summary>
-    /// Implementation of the tool locator.
+    /// Initializes a new instance of the <see cref="ToolLocator"/> class.
     /// </summary>
-    public sealed class ToolLocator : IToolLocator
+    /// <param name="environment">The environment.</param>
+    /// <param name="repository">The tool repository.</param>
+    /// <param name="strategy">The tool resolution strategy.</param>
+    public ToolLocator(ICakeEnvironment environment, IToolRepository repository, IToolResolutionStrategy strategy)
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly IToolRepository _repository;
-        private readonly IToolResolutionStrategy _strategy;
+        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ToolLocator"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        /// <param name="repository">The tool repository.</param>
-        /// <param name="strategy">The tool resolution strategy.</param>
-        public ToolLocator(ICakeEnvironment environment, IToolRepository repository, IToolResolutionStrategy strategy)
+    /// <inheritdoc/>
+    public void RegisterFile(FilePath path)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+
+        _repository.Register(path.MakeAbsolute(_environment));
+    }
+
+    /// <inheritdoc/>
+    public FilePath Resolve(string tool)
+    {
+        ArgumentNullException.ThrowIfNull(tool);
+        if (string.IsNullOrWhiteSpace(tool))
         {
-            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+            throw new ArgumentException("Tool name cannot be empty.", nameof(tool));
         }
 
-        /// <inheritdoc/>
-        public void RegisterFile(FilePath path)
-        {
-            ArgumentNullException.ThrowIfNull(path);
+        return _strategy.Resolve(_repository, tool);
+    }
 
-            _repository.Register(path.MakeAbsolute(_environment));
-        }
+    /// <inheritdoc/>
+    public FilePath Resolve(IEnumerable<string> toolExeNames)
+    {
+        ArgumentNullException.ThrowIfNull(toolExeNames);
 
-        /// <inheritdoc/>
-        public FilePath Resolve(string tool)
-        {
-            ArgumentNullException.ThrowIfNull(tool);
-            if (string.IsNullOrWhiteSpace(tool))
-            {
-                throw new ArgumentException("Tool name cannot be empty.", nameof(tool));
-            }
-
-            return _strategy.Resolve(_repository, tool);
-        }
-
-        /// <inheritdoc/>
-        public FilePath Resolve(IEnumerable<string> toolExeNames)
-        {
-            ArgumentNullException.ThrowIfNull(toolExeNames);
-
-            return _strategy.Resolve(_repository, toolExeNames);
-        }
+        return _strategy.Resolve(_repository, toolExeNames);
     }
 }

@@ -4,21 +4,20 @@
 
 using Cake.Common.Tools.NuGet.Install;
 
-namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Installer
+namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Installer;
+
+internal sealed class NuGetInstallerFixture : NuGetFixture<NuGetInstallSettings>
 {
-    internal sealed class NuGetInstallerFixture : NuGetFixture<NuGetInstallSettings>
+    public string PackageId { get; set; }
+
+    public NuGetInstallerFixture()
     {
-        public string PackageId { get; set; }
+        PackageId = "Cake";
+    }
 
-        public NuGetInstallerFixture()
-        {
-            PackageId = "Cake";
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new NuGetInstaller(FileSystem, Environment, ProcessRunner, Tools, Resolver);
-            tool.Install(PackageId, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new NuGetInstaller(FileSystem, Environment, ProcessRunner, Tools, Resolver);
+        tool.Install(PackageId, Settings);
     }
 }

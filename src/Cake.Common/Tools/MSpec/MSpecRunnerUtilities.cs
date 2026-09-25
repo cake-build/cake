@@ -5,22 +5,21 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.MSpec
+namespace Cake.Common.Tools.MSpec;
+
+internal static class MSpecRunnerUtilities
 {
-    internal static class MSpecRunnerUtilities
+    internal static FilePath GetReportFileName(IReadOnlyList<FilePath> assemblyPaths, MSpecSettings settings)
     {
-        internal static FilePath GetReportFileName(IReadOnlyList<FilePath> assemblyPaths, MSpecSettings settings)
+        if (string.IsNullOrEmpty(settings.ReportName))
         {
-            if (string.IsNullOrEmpty(settings.ReportName))
-            {
-                return assemblyPaths.Count == 1
-                    ? assemblyPaths[0].GetFilename()
-                    : new FilePath("TestResults");
-            }
-            else
-            {
-                return settings.ReportName;
-            }
+            return assemblyPaths.Count == 1
+                ? assemblyPaths[0].GetFilename()
+                : new FilePath("TestResults");
+        }
+        else
+        {
+            return settings.ReportName;
         }
     }
 }

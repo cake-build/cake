@@ -4,44 +4,43 @@
 
 using Cake.Core;
 
-namespace Cake.Common.Build.AppVeyor.Data
+namespace Cake.Common.Build.AppVeyor.Data;
+
+/// <summary>
+/// Provides AppVeyor pull request information for a current build.
+/// </summary>
+public sealed class AppVeyorPullRequestInfo : AppVeyorInfo
 {
     /// <summary>
-    /// Provides AppVeyor pull request information for a current build.
+    /// Gets a value indicating whether the current build was started by a pull request.
     /// </summary>
-    public sealed class AppVeyorPullRequestInfo : AppVeyorInfo
+    /// <value>
+    ///   <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
+    /// </value>
+    public bool IsPullRequest => Number > 0;
+
+    /// <summary>
+    /// Gets the GitHub pull request number.
+    /// </summary>
+    /// <value>
+    ///   The GitHub pull request number.
+    /// </value>
+    public int Number => GetEnvironmentInteger("APPVEYOR_PULL_REQUEST_NUMBER");
+
+    /// <summary>
+    /// Gets the GitHub pull request title.
+    /// </summary>
+    /// <value>
+    ///   The GitHub pull request title.
+    /// </value>
+    public string Title => GetEnvironmentString("APPVEYOR_PULL_REQUEST_TITLE");
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AppVeyorPullRequestInfo"/> class.
+    /// </summary>
+    /// <param name="environment">The environment.</param>
+    public AppVeyorPullRequestInfo(ICakeEnvironment environment)
+        : base(environment)
     {
-        /// <summary>
-        /// Gets a value indicating whether the current build was started by a pull request.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsPullRequest => Number > 0;
-
-        /// <summary>
-        /// Gets the GitHub pull request number.
-        /// </summary>
-        /// <value>
-        ///   The GitHub pull request number.
-        /// </value>
-        public int Number => GetEnvironmentInteger("APPVEYOR_PULL_REQUEST_NUMBER");
-
-        /// <summary>
-        /// Gets the GitHub pull request title.
-        /// </summary>
-        /// <value>
-        ///   The GitHub pull request title.
-        /// </value>
-        public string Title => GetEnvironmentString("APPVEYOR_PULL_REQUEST_TITLE");
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AppVeyorPullRequestInfo"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public AppVeyorPullRequestInfo(ICakeEnvironment environment)
-            : base(environment)
-        {
-        }
     }
 }

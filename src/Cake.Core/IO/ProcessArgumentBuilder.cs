@@ -9,233 +9,232 @@ using System.Linq;
 using System.Text;
 using Cake.Core.IO.Arguments;
 
-namespace Cake.Core.IO
+namespace Cake.Core.IO;
+
+/// <summary>
+/// Utility for building process arguments.
+/// </summary>
+public sealed class ProcessArgumentBuilder : IReadOnlyCollection<IProcessArgument>
 {
+    private readonly List<IProcessArgument> _tokens;
+
     /// <summary>
-    /// Utility for building process arguments.
+    /// Gets the number of arguments contained in the <see cref="ProcessArgumentBuilder"/>.
     /// </summary>
-    public sealed class ProcessArgumentBuilder : IReadOnlyCollection<IProcessArgument>
+    public int Count => _tokens.Count;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ProcessArgumentBuilder"/> class.
+    /// </summary>
+    public ProcessArgumentBuilder()
     {
-        private readonly List<IProcessArgument> _tokens;
+        _tokens = new List<IProcessArgument>();
+    }
 
-        /// <summary>
-        /// Gets the number of arguments contained in the <see cref="ProcessArgumentBuilder"/>.
-        /// </summary>
-        public int Count => _tokens.Count;
+    /// <summary>
+    /// Clears all arguments from the builder.
+    /// </summary>
+    public void Clear()
+    {
+        _tokens.Clear();
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProcessArgumentBuilder"/> class.
-        /// </summary>
-        public ProcessArgumentBuilder()
+    /// <summary>
+    /// Appends an argument.
+    /// </summary>
+    /// <param name="argument">The argument.</param>
+    public void Append(IProcessArgument argument)
+    {
+        _tokens.Add(argument);
+    }
+
+    /// <summary>
+    /// Prepends an argument.
+    /// </summary>
+    /// <param name="argument">The argument.</param>
+    public void Prepend(IProcessArgument argument)
+    {
+        _tokens.Insert(0, argument);
+    }
+
+    /// <summary>
+    /// Appends arguments.
+    /// </summary>
+    /// <param name="arguments">The arguments.</param>
+    public void AppendRange(IEnumerable<IProcessArgument> arguments)
+    {
+        ArgumentNullException.ThrowIfNull(arguments);
+
+        _tokens.AddRange(arguments);
+    }
+
+    /// <summary>
+    /// Prepends arguments.
+    /// </summary>
+    /// <param name="arguments">The arguments.</param>
+    public void PrependRange(IEnumerable<IProcessArgument> arguments)
+    {
+        ArgumentNullException.ThrowIfNull(arguments);
+
+        _tokens.InsertRange(0, arguments);
+    }
+
+    /// <summary>
+    /// Inserts an argument at the specified index.
+    /// </summary>
+    /// <param name="index">The zero-based index at which the argument should be inserted.</param>
+    /// <param name="argument">The argument.</param>
+    public void Insert(int index, IProcessArgument argument)
+    {
+        _tokens.Insert(index, argument);
+    }
+
+    /// <summary>
+    /// Inserts arguments at the specified index.
+    /// </summary>
+    /// <param name="index">The zero-based index at which the arguments should be inserted.</param>
+    /// <param name="arguments">The arguments.</param>
+    public void InsertRange(int index, IEnumerable<IProcessArgument> arguments)
+    {
+        ArgumentNullException.ThrowIfNull(arguments);
+
+        _tokens.InsertRange(index, arguments);
+    }
+
+    /// <summary>
+    /// Renders the arguments as a <see cref="string"/>.
+    /// Sensitive information will be included.
+    /// </summary>
+    /// <returns>A string representation of the arguments.</returns>
+    public string Render()
+    {
+        return string.Join(' ', _tokens.Select(t => t.Render()));
+    }
+
+    /// <summary>
+    /// Renders the arguments as a <see cref="string"/>.
+    /// Sensitive information will be redacted.
+    /// </summary>
+    /// <returns>A safe string representation of the arguments.</returns>
+    public string RenderSafe()
+    {
+        return string.Join(' ', _tokens.Select(t => t.RenderSafe()));
+    }
+
+    /// <summary>
+    /// Tries to filer any unsafe arguments from string.
+    /// </summary>
+    /// <param name="source">unsafe source string.</param>
+    /// <returns>Filtered string.</returns>
+    public string FilterUnsafe(string source)
+    {
+        if (string.IsNullOrWhiteSpace(source))
         {
-            _tokens = new List<IProcessArgument>();
+            return source;
         }
 
-        /// <summary>
-        /// Clears all arguments from the builder.
-        /// </summary>
-        public void Clear()
-        {
-            _tokens.Clear();
-        }
-
-        /// <summary>
-        /// Appends an argument.
-        /// </summary>
-        /// <param name="argument">The argument.</param>
-        public void Append(IProcessArgument argument)
-        {
-            _tokens.Add(argument);
-        }
-
-        /// <summary>
-        /// Prepends an argument.
-        /// </summary>
-        /// <param name="argument">The argument.</param>
-        public void Prepend(IProcessArgument argument)
-        {
-            _tokens.Insert(0, argument);
-        }
-
-        /// <summary>
-        /// Appends arguments.
-        /// </summary>
-        /// <param name="arguments">The arguments.</param>
-        public void AppendRange(IEnumerable<IProcessArgument> arguments)
-        {
-            ArgumentNullException.ThrowIfNull(arguments);
-
-            _tokens.AddRange(arguments);
-        }
-
-        /// <summary>
-        /// Prepends arguments.
-        /// </summary>
-        /// <param name="arguments">The arguments.</param>
-        public void PrependRange(IEnumerable<IProcessArgument> arguments)
-        {
-            ArgumentNullException.ThrowIfNull(arguments);
-
-            _tokens.InsertRange(0, arguments);
-        }
-
-        /// <summary>
-        /// Inserts an argument at the specified index.
-        /// </summary>
-        /// <param name="index">The zero-based index at which the argument should be inserted.</param>
-        /// <param name="argument">The argument.</param>
-        public void Insert(int index, IProcessArgument argument)
-        {
-            _tokens.Insert(index, argument);
-        }
-
-        /// <summary>
-        /// Inserts arguments at the specified index.
-        /// </summary>
-        /// <param name="index">The zero-based index at which the arguments should be inserted.</param>
-        /// <param name="arguments">The arguments.</param>
-        public void InsertRange(int index, IEnumerable<IProcessArgument> arguments)
-        {
-            ArgumentNullException.ThrowIfNull(arguments);
-
-            _tokens.InsertRange(index, arguments);
-        }
-
-        /// <summary>
-        /// Renders the arguments as a <see cref="string"/>.
-        /// Sensitive information will be included.
-        /// </summary>
-        /// <returns>A string representation of the arguments.</returns>
-        public string Render()
-        {
-            return string.Join(' ', _tokens.Select(t => t.Render()));
-        }
-
-        /// <summary>
-        /// Renders the arguments as a <see cref="string"/>.
-        /// Sensitive information will be redacted.
-        /// </summary>
-        /// <returns>A safe string representation of the arguments.</returns>
-        public string RenderSafe()
-        {
-            return string.Join(' ', _tokens.Select(t => t.RenderSafe()));
-        }
-
-        /// <summary>
-        /// Tries to filer any unsafe arguments from string.
-        /// </summary>
-        /// <param name="source">unsafe source string.</param>
-        /// <returns>Filtered string.</returns>
-        public string FilterUnsafe(string source)
-        {
-            if (string.IsNullOrWhiteSpace(source))
+        return _tokens
+            .Select(token => new
             {
-                return source;
-            }
+                Safe = ProcessArgumentEscaper.Unquote(token.RenderSafe()).Trim(),
+                Unsafe = ProcessArgumentEscaper.Unquote(token.Render()).Trim()
+            })
+            .Where(token => token.Safe != token.Unsafe)
+            .Aggregate(
+                new StringBuilder(source),
+                (sb, token) => sb.Replace(token.Unsafe, token.Safe),
+                sb => sb.ToString());
+    }
 
-            return _tokens
-                .Select(token => new
-                {
-                    Safe = ProcessArgumentEscaper.Unquote(token.RenderSafe()).Trim(),
-                    Unsafe = ProcessArgumentEscaper.Unquote(token.Render()).Trim()
-                })
-                .Where(token => token.Safe != token.Unsafe)
-                .Aggregate(
-                    new StringBuilder(source),
-                    (sb, token) => sb.Replace(token.Unsafe, token.Safe),
-                    sb => sb.ToString());
-        }
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="string"/> to <see cref="ProcessArgumentBuilder"/>.
+    /// </summary>
+    /// <param name="value">The text value to convert.</param>
+    /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
+    public static implicit operator ProcessArgumentBuilder(string value)
+    {
+        return FromString(value);
+    }
 
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="string"/> to <see cref="ProcessArgumentBuilder"/>.
-        /// </summary>
-        /// <param name="value">The text value to convert.</param>
-        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
-        public static implicit operator ProcessArgumentBuilder(string value)
+    /// <summary>
+    /// Performs a conversion from <see cref="string"/> to <see cref="ProcessArgumentBuilder"/>.
+    /// </summary>
+    /// <param name="value">The text value to convert.</param>
+    /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
+    public static ProcessArgumentBuilder FromString(string value)
+    {
+        var builder = new ProcessArgumentBuilder();
+        builder.Append(new TextArgument(value));
+        return builder;
+    }
+
+    /// <summary>
+    /// Performs a conversion from <see cref="string"/> to <see cref="ProcessArgumentBuilder"/>.
+    /// </summary>
+    /// <param name="value">The text value to convert.</param>
+    /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
+    public static ProcessArgumentBuilder FromStringQuoted(string value)
+    {
+        var builder = new ProcessArgumentBuilder();
+        builder.AppendQuoted(new TextArgument(value));
+        return builder;
+    }
+
+    /// <summary>
+    /// Performs a conversion from <see cref="IEnumerable{String}"/> to <see cref="ProcessArgumentBuilder"/>.
+    /// </summary>
+    /// <param name="values">The text values to convert.</param>
+    /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
+    public static ProcessArgumentBuilder FromStrings(IEnumerable<string> values)
+    {
+        var builder = new ProcessArgumentBuilder();
+        if (values != null)
         {
-            return FromString(value);
-        }
-
-        /// <summary>
-        /// Performs a conversion from <see cref="string"/> to <see cref="ProcessArgumentBuilder"/>.
-        /// </summary>
-        /// <param name="value">The text value to convert.</param>
-        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
-        public static ProcessArgumentBuilder FromString(string value)
-        {
-            var builder = new ProcessArgumentBuilder();
-            builder.Append(new TextArgument(value));
-            return builder;
-        }
-
-        /// <summary>
-        /// Performs a conversion from <see cref="string"/> to <see cref="ProcessArgumentBuilder"/>.
-        /// </summary>
-        /// <param name="value">The text value to convert.</param>
-        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
-        public static ProcessArgumentBuilder FromStringQuoted(string value)
-        {
-            var builder = new ProcessArgumentBuilder();
-            builder.AppendQuoted(new TextArgument(value));
-            return builder;
-        }
-
-        /// <summary>
-        /// Performs a conversion from <see cref="IEnumerable{String}"/> to <see cref="ProcessArgumentBuilder"/>.
-        /// </summary>
-        /// <param name="values">The text values to convert.</param>
-        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
-        public static ProcessArgumentBuilder FromStrings(IEnumerable<string> values)
-        {
-            var builder = new ProcessArgumentBuilder();
-            if (values != null)
+            foreach (var value in values)
             {
-                foreach (var value in values)
-                {
-                    builder.Append(new TextArgument(value));
-                }
+                builder.Append(new TextArgument(value));
             }
-            return builder;
         }
+        return builder;
+    }
 
-        /// <summary>
-        /// Performs a conversion from <see cref="IEnumerable{String}"/> to <see cref="ProcessArgumentBuilder"/>.
-        /// </summary>
-        /// <param name="values">The text values to convert.</param>
-        /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
-        public static ProcessArgumentBuilder FromStringsQuoted(IEnumerable<string> values)
+    /// <summary>
+    /// Performs a conversion from <see cref="IEnumerable{String}"/> to <see cref="ProcessArgumentBuilder"/>.
+    /// </summary>
+    /// <param name="values">The text values to convert.</param>
+    /// <returns>A <see cref="ProcessArgumentBuilder"/>.</returns>
+    public static ProcessArgumentBuilder FromStringsQuoted(IEnumerable<string> values)
+    {
+        var builder = new ProcessArgumentBuilder();
+        if (values != null)
         {
-            var builder = new ProcessArgumentBuilder();
-            if (values != null)
+            foreach (var value in values)
             {
-                foreach (var value in values)
-                {
-                    builder.AppendQuoted(new TextArgument(value));
-                }
+                builder.AppendQuoted(new TextArgument(value));
             }
-            return builder;
         }
+        return builder;
+    }
 
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>
-        /// An enumerator that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator<IProcessArgument> IEnumerable<IProcessArgument>.GetEnumerator()
-        {
-            return _tokens.GetEnumerator();
-        }
+    /// <summary>
+    /// Returns an enumerator that iterates through the collection.
+    /// </summary>
+    /// <returns>
+    /// An enumerator that can be used to iterate through the collection.
+    /// </returns>
+    IEnumerator<IProcessArgument> IEnumerable<IProcessArgument>.GetEnumerator()
+    {
+        return _tokens.GetEnumerator();
+    }
 
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="IEnumerator" /> that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable)_tokens).GetEnumerator();
-        }
+    /// <summary>
+    /// Returns an enumerator that iterates through a collection.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="IEnumerator" /> that can be used to iterate through the collection.
+    /// </returns>
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return ((IEnumerable)_tokens).GetEnumerator();
     }
 }

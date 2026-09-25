@@ -3,24 +3,22 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.NuGet.Sources;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources
+namespace Cake.Common.Tests.Unit.Tools.NuGet.Sources;
+
+public sealed class NuGetSourcesSettingsTests
 {
-    public sealed class NuGetSourcesSettingsTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Set_IsSensitiveSource_To_False_By_Default()
         {
-            [Fact]
-            public void Should_Set_IsSensitiveSource_To_False_By_Default()
-            {
-                // Given, When
-                var settings = new NuGetSourcesSettings();
+            // Given, When
+            var settings = new NuGetSourcesSettings();
 
-                // Then
-                Assert.False(settings.IsSensitiveSource);
-                Assert.False(settings.StorePasswordInClearText);
-            }
+            // Then
+            Assert.False(settings.IsSensitiveSource);
+            Assert.False(settings.StorePasswordInClearText);
         }
     }
 }

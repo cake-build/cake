@@ -6,23 +6,22 @@ using System;
 using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Contains extension methods for <see cref="IProcessRunner"/>.
+/// </summary>
+public static class ProcessRunnerExtensions
 {
     /// <summary>
-    /// Contains extension methods for <see cref="IProcessRunner"/>.
+    /// Starts a process using the specified information.
     /// </summary>
-    public static class ProcessRunnerExtensions
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="filePath">The file name such as an application or document with which to start the process.</param>
+    /// <returns>A process handle.</returns>
+    public static IProcess Start(this IProcessRunner processRunner, FilePath filePath)
     {
-        /// <summary>
-        /// Starts a process using the specified information.
-        /// </summary>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="filePath">The file name such as an application or document with which to start the process.</param>
-        /// <returns>A process handle.</returns>
-        public static IProcess Start(this IProcessRunner processRunner, FilePath filePath)
-        {
-            ArgumentNullException.ThrowIfNull(processRunner);
-            return processRunner.Start(filePath, new ProcessSettings());
-        }
+        ArgumentNullException.ThrowIfNull(processRunner);
+        return processRunner.Start(filePath, new ProcessSettings());
     }
 }

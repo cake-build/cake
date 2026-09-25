@@ -10,163 +10,162 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Spectre.Console;
 
-namespace Cake.Cli
-{
-    /// <summary>
-    /// The default report printer.
-    /// </summary>
-    public sealed class CakeSpectreReportPrinter : ICakeReportPrinter
-    {
-        private readonly IAnsiConsole _console;
+namespace Cake.Cli;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeSpectreReportPrinter"/> class.
-        /// </summary>
-        /// <param name="console">The console.</param>
-        public CakeSpectreReportPrinter(IAnsiConsole console)
+/// <summary>
+/// The default report printer.
+/// </summary>
+public sealed class CakeSpectreReportPrinter : ICakeReportPrinter
+{
+    private readonly IAnsiConsole _console;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakeSpectreReportPrinter"/> class.
+    /// </summary>
+    /// <param name="console">The console.</param>
+    public CakeSpectreReportPrinter(IAnsiConsole console)
+    {
+        ArgumentNullException.ThrowIfNull(console);
+        _console = console;
+    }
+
+    /// <inheritdoc/>
+    public void Write(CakeReport report)
+    {
+        // Create a table
+        var table = new Table().Border(TableBorder.SimpleHeavy);
+        table.Width(100);
+        table.BorderStyle(Style.Plain.Foreground(ConsoleColor.Green));
+
+        var includeSkippedReasonColumn = report.Any(r => !string.IsNullOrEmpty(r.SkippedMessage));
+        var rowStyle = new Style(ConsoleColor.Green);
+
+        // Add some columns
+        table.AddColumn(new TableColumn(new Text("Task", rowStyle)).Footer(new Text("Total:", rowStyle)).PadRight(10));
+        table.AddColumn(
+            new TableColumn(
+                new Text("Duration", rowStyle)).Footer(
+                    new Text(FormatTime(GetTotalTime(report)).EscapeMarkup(), rowStyle)));
+
+        table.AddColumn(
+            new TableColumn(
+                new Text("Status", rowStyle)));
+
+        if (includeSkippedReasonColumn)
         {
-            ArgumentNullException.ThrowIfNull(console);
-            _console = console;
+            table.AddColumn(new TableColumn(new Text("Skip Reason", rowStyle)));
         }
 
-        /// <inheritdoc/>
-        public void Write(CakeReport report)
+        foreach (var item in report)
         {
-            // Create a table
-            var table = new Table().Border(TableBorder.SimpleHeavy);
-            table.Width(100);
-            table.BorderStyle(Style.Plain.Foreground(ConsoleColor.Green));
-
-            var includeSkippedReasonColumn = report.Any(r => !string.IsNullOrEmpty(r.SkippedMessage));
-            var rowStyle = new Style(ConsoleColor.Green);
-
-            // Add some columns
-            table.AddColumn(new TableColumn(new Text("Task", rowStyle)).Footer(new Text("Total:", rowStyle)).PadRight(10));
-            table.AddColumn(
-                new TableColumn(
-                    new Text("Duration", rowStyle)).Footer(
-                        new Text(FormatTime(GetTotalTime(report)).EscapeMarkup(), rowStyle)));
-
-            table.AddColumn(
-                new TableColumn(
-                    new Text("Status", rowStyle)));
+            var itemStyle = GetItemStyle(item);
 
             if (includeSkippedReasonColumn)
             {
-                table.AddColumn(new TableColumn(new Text("Skip Reason", rowStyle)));
+                table.AddRow(new Markup(item.TaskName.EscapeMarkup(), itemStyle),
+                            new Markup(FormatDuration(item).EscapeMarkup(), itemStyle),
+                            new Markup(item.ExecutionStatus.ToReportStatus().EscapeMarkup(), itemStyle),
+                            new Markup(item.SkippedMessage.EscapeMarkup(), itemStyle));
             }
-
-            foreach (var item in report)
+            else
             {
-                var itemStyle = GetItemStyle(item);
-
-                if (includeSkippedReasonColumn)
-                {
-                    table.AddRow(new Markup(item.TaskName.EscapeMarkup(), itemStyle),
-                                new Markup(FormatDuration(item).EscapeMarkup(), itemStyle),
-                                new Markup(item.ExecutionStatus.ToReportStatus().EscapeMarkup(), itemStyle),
-                                new Markup(item.SkippedMessage.EscapeMarkup(), itemStyle));
-                }
-                else
-                {
-                    table.AddRow(new Markup(item.TaskName.EscapeMarkup(), itemStyle),
-                                new Markup(FormatDuration(item).EscapeMarkup(), itemStyle),
-                                new Markup(item.ExecutionStatus.ToReportStatus().EscapeMarkup(), itemStyle));
-                }
+                table.AddRow(new Markup(item.TaskName.EscapeMarkup(), itemStyle),
+                            new Markup(FormatDuration(item).EscapeMarkup(), itemStyle),
+                            new Markup(item.ExecutionStatus.ToReportStatus().EscapeMarkup(), itemStyle));
             }
-
-            // Render the table to the console
-            _console.Write(table);
         }
 
-        /// <inheritdoc/>
-        public void WriteStep(string name, Verbosity verbosity)
+        // Render the table to the console
+        _console.Write(table);
+    }
+
+    /// <inheritdoc/>
+    public void WriteStep(string name, Verbosity verbosity)
+    {
+        if (verbosity < Verbosity.Normal)
         {
-            if (verbosity < Verbosity.Normal)
-            {
-                return;
-            }
-
-            var table = new Table().Border(DoubleBorder.Shared);
-            table.Width(100);
-            table.AddColumn(name.EscapeMarkup());
-            _console.Write(new Padder(table).Padding(0, 1, 0, 0));
+            return;
         }
 
-        /// <inheritdoc/>
-        public void WriteLifeCycleStep(string name, Verbosity verbosity)
+        var table = new Table().Border(DoubleBorder.Shared);
+        table.Width(100);
+        table.AddColumn(name.EscapeMarkup());
+        _console.Write(new Padder(table).Padding(0, 1, 0, 0));
+    }
+
+    /// <inheritdoc/>
+    public void WriteLifeCycleStep(string name, Verbosity verbosity)
+    {
+        if (verbosity < Verbosity.Normal)
         {
-            if (verbosity < Verbosity.Normal)
-            {
-                return;
-            }
-
-            _console.WriteLine();
-
-            var table = new Table().Border(SingleBorder.Shared);
-            table.Width(100);
-            table.AddColumn(name.EscapeMarkup());
-            _console.Write(table);
+            return;
         }
 
-        /// <inheritdoc/>
-        public void WriteSkippedStep(string name, Verbosity verbosity)
+        _console.WriteLine();
+
+        var table = new Table().Border(SingleBorder.Shared);
+        table.Width(100);
+        table.AddColumn(name.EscapeMarkup());
+        _console.Write(table);
+    }
+
+    /// <inheritdoc/>
+    public void WriteSkippedStep(string name, Verbosity verbosity)
+    {
+        if (verbosity < Verbosity.Verbose)
         {
-            if (verbosity < Verbosity.Verbose)
-            {
-                return;
-            }
-
-            _console.WriteLine();
-
-            var table = new Table()
-                .Border(DoubleBorder.Shared)
-                .BorderStyle(new Style(ConsoleColor.Gray));
-
-            table.Width(100);
-            table.AddColumn(name.EscapeMarkup());
-            _console.Write(table);
+            return;
         }
 
-        private static string FormatDuration(CakeReportEntry item)
+        _console.WriteLine();
+
+        var table = new Table()
+            .Border(DoubleBorder.Shared)
+            .BorderStyle(new Style(ConsoleColor.Gray));
+
+        table.Width(100);
+        table.AddColumn(name.EscapeMarkup());
+        _console.Write(table);
+    }
+
+    private static string FormatDuration(CakeReportEntry item)
+    {
+        if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
         {
-            if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
-            {
-                return "-";
-            }
-
-            return FormatTime(item.Duration);
+            return "-";
         }
 
-        private static Style GetItemStyle(CakeReportEntry item)
+        return FormatTime(item.Duration);
+    }
+
+    private static Style GetItemStyle(CakeReportEntry item)
+    {
+        if (item.Category == CakeReportEntryCategory.Setup || item.Category == CakeReportEntryCategory.Teardown)
         {
-            if (item.Category == CakeReportEntryCategory.Setup || item.Category == CakeReportEntryCategory.Teardown)
-            {
-                return new Style(ConsoleColor.Cyan);
-            }
-
-            if (item.ExecutionStatus == CakeTaskExecutionStatus.Failed)
-            {
-                return new Style(ConsoleColor.Red);
-            }
-
-            if (item.ExecutionStatus == CakeTaskExecutionStatus.Executed)
-            {
-                return new Style(ConsoleColor.Green);
-            }
-
-            return new Style(ConsoleColor.Gray);
+            return new Style(ConsoleColor.Cyan);
         }
 
-        private static string FormatTime(TimeSpan time)
+        if (item.ExecutionStatus == CakeTaskExecutionStatus.Failed)
         {
-            return time.ToString("c", CultureInfo.InvariantCulture);
+            return new Style(ConsoleColor.Red);
         }
 
-        private static TimeSpan GetTotalTime(IEnumerable<CakeReportEntry> entries)
+        if (item.ExecutionStatus == CakeTaskExecutionStatus.Executed)
         {
-            return entries.Select(i => i.Duration)
-                .Aggregate(TimeSpan.Zero, (t1, t2) => t1 + t2);
+            return new Style(ConsoleColor.Green);
         }
+
+        return new Style(ConsoleColor.Gray);
+    }
+
+    private static string FormatTime(TimeSpan time)
+    {
+        return time.ToString("c", CultureInfo.InvariantCulture);
+    }
+
+    private static TimeSpan GetTotalTime(IEnumerable<CakeReportEntry> entries)
+    {
+        return entries.Select(i => i.Duration)
+            .Aggregate(TimeSpan.Zero, (t1, t2) => t1 + t2);
     }
 }

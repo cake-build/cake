@@ -5,55 +5,54 @@
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.MSTest
+namespace Cake.Common.Tools.MSTest;
+
+/// <summary>
+/// Contains settings used by <see cref="MSTestRunner"/>.
+/// </summary>
+public sealed class MSTestSettings : ToolSettings
 {
     /// <summary>
-    /// Contains settings used by <see cref="MSTestRunner"/>.
+    /// Gets or sets a value indicating whether to run tests within the MSTest process.
+    /// This choice improves test run speed but increases risk to the MSTest.exe process.
+    /// Defaults to <c>true</c>.
     /// </summary>
-    public sealed class MSTestSettings : ToolSettings
+    /// <value>
+    ///   <c>true</c> if running without isolation; otherwise, <c>false</c>.
+    /// </value>
+    public bool NoIsolation { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating the test category filter string to pass to
+    /// MSTest.exe flag <see href="https://msdn.microsoft.com/en-us/library/ms182489.aspx#category">/testcategory</see>.
+    /// </summary>
+    public string Category { get; set; }
+
+    /// <summary>
+    /// Gets or sets the filepath for a named resulting test file.
+    /// MSTest.exe flag <see href="https://msdn.microsoft.com/en-us/library/ms182489.aspx#resultsfile">/resultsfile</see>.
+    /// </summary>
+    public string ResultsFile { get; set; }
+
+    /// <summary>
+    /// Gets or sets the test settings file to pass to MSTest.exe flag <see href="https://msdn.microsoft.com/en-us/library/ms182489.aspx#testsettings">/testsettings</see>.
+    /// </summary>
+    public FilePath TestSettings { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MSTestSettings"/> class.
+    /// </summary>
+    public MSTestSettings()
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether to run tests within the MSTest process.
-        /// This choice improves test run speed but increases risk to the MSTest.exe process.
-        /// Defaults to <c>true</c>.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if running without isolation; otherwise, <c>false</c>.
-        /// </value>
-        public bool NoIsolation { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating the test category filter string to pass to
-        /// MSTest.exe flag <see href="https://msdn.microsoft.com/en-us/library/ms182489.aspx#category">/testcategory</see>.
-        /// </summary>
-        public string Category { get; set; }
-
-        /// <summary>
-        /// Gets or sets the filepath for a named resulting test file.
-        /// MSTest.exe flag <see href="https://msdn.microsoft.com/en-us/library/ms182489.aspx#resultsfile">/resultsfile</see>.
-        /// </summary>
-        public string ResultsFile { get; set; }
-
-        /// <summary>
-        /// Gets or sets the test settings file to pass to MSTest.exe flag <see href="https://msdn.microsoft.com/en-us/library/ms182489.aspx#testsettings">/testsettings</see>.
-        /// </summary>
-        public FilePath TestSettings { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MSTestSettings"/> class.
-        /// </summary>
-        public MSTestSettings()
-        {
-            NoIsolation = true;
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether tools from a preview edition of Visual Studio should be used.
-        /// <para>
-        /// If set to <c>true</c>, MSTest from a Preview edition
-        /// (e.g. Visual Studio 2022 Preview) will be considered to be used.
-        /// </para>
-        /// </summary>
-        public bool AllowPreviewVersion { get; set; } = false;
+        NoIsolation = true;
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether tools from a preview edition of Visual Studio should be used.
+    /// <para>
+    /// If set to <c>true</c>, MSTest from a Preview edition
+    /// (e.g. Visual Studio 2022 Preview) will be considered to be used.
+    /// </para>
+    /// </summary>
+    public bool AllowPreviewVersion { get; set; } = false;
 }

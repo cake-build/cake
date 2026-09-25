@@ -2,36 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Build.AppVeyor
+namespace Cake.Common.Build.AppVeyor;
+
+/// <summary>
+/// Provides the known values for the AppVeyor test results types.
+/// </summary>
+public enum AppVeyorTestResultsType
 {
     /// <summary>
-    /// Provides the known values for the AppVeyor test results types.
+    /// MSTest test results.
     /// </summary>
-    public enum AppVeyorTestResultsType
-    {
-        /// <summary>
-        /// MSTest test results.
-        /// </summary>
-        MSTest,
+    MSTest,
 
-        /// <summary>
-        /// XUnit test results.
-        /// </summary>
-        XUnit,
+    /// <summary>
+    /// XUnit test results.
+    /// </summary>
+    XUnit,
 
-        /// <summary>
-        /// NUnit test results.
-        /// </summary>
-        NUnit,
+    /// <summary>
+    /// NUnit test results.
+    /// </summary>
+    NUnit,
 
-        /// <summary>
-        /// NUnit v3 test results.
-        /// </summary>
-        NUnit3,
+    /// <summary>
+    /// NUnit v3 test results.
+    /// </summary>
+    NUnit3,
 
-        /// <summary>
-        /// JUnit test results.
-        /// </summary>
-        JUnit
-    }
+    /// <summary>
+    /// JUnit test results.
+    /// </summary>
+    JUnit
 }

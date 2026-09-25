@@ -4,10 +4,9 @@
 
 using Cake.Core;
 
-namespace Cake.Frosting.Tests
+namespace Cake.Frosting.Tests;
+
+[IsDependentOn(typeof(CleanTask))]
+public sealed class BuildTask : FrostingTask<ICakeContext>
 {
-    [IsDependentOn(typeof(CleanTask))]
-    public sealed class BuildTask : FrostingTask<ICakeContext>
-    {
-    }
 }

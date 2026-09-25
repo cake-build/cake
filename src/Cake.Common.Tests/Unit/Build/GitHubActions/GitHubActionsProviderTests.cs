@@ -7,99 +7,97 @@ using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.GitHubActions
+namespace Cake.Common.Tests.Unit.Build.GitHubActions;
+
+public sealed class GitHubActionsProviderTests
 {
-    public sealed class GitHubActionsProviderTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Throw_If_Environment_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => new GitHubActionsProvider(null, null, null));
+            // Given, When
+            var result = Record.Exception(() => new GitHubActionsProvider(null, null, null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "environment");
-            }
-
-            [Fact]
-            public void Should_Throw_If_FileSystem_Is_Null()
-            {
-                // Given
-                var environment = Substitute.For<ICakeEnvironment>();
-
-                // When
-                var result = Record.Exception(() => new GitHubActionsProvider(environment, null, null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "fileSystem");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Writer_Is_Null()
-            {
-                // Given
-                var environment = Substitute.For<ICakeEnvironment>();
-                var filesystem = Substitute.For<IFileSystem>();
-
-                // When
-                var result = Record.Exception(() => new GitHubActionsProvider(environment, filesystem, null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "writer");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "environment");
         }
 
-        public sealed class TheIsRunningOnGitHubActionsProperty
+        [Fact]
+        public void Should_Throw_If_FileSystem_Is_Null()
         {
-            [Fact]
-            public void Should_Return_True_If_Running_On_GitHubActions()
-            {
-                // Given
-                var fixture = new GitHubActionsFixture();
-                fixture.IsRunningOnGitHubActions();
-                var gitHubActions = fixture.CreateGitHubActionsService();
+            // Given
+            var environment = Substitute.For<ICakeEnvironment>();
 
-                // When
-                var result = gitHubActions.IsRunningOnGitHubActions;
+            // When
+            var result = Record.Exception(() => new GitHubActionsProvider(environment, null, null));
 
-                // Then
-                Assert.True(result);
-            }
-
-            [Fact]
-            public void Should_Return_False_If_Not_Running_On_GitHubActions()
-            {
-                // Given
-                var fixture = new GitHubActionsFixture();
-                var gitHubActions = fixture.CreateGitHubActionsService();
-
-                // When
-                var result = gitHubActions.IsRunningOnGitHubActions;
-
-                // Then
-                Assert.False(result);
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "fileSystem");
         }
 
-        public sealed class TheEnvironmentProperty
+        [Fact]
+        public void Should_Throw_If_Writer_Is_Null()
         {
-            [Fact]
-            public void Should_Return_Non_Null_Reference()
-            {
-                // Given
-                var fixture = new GitHubActionsFixture();
-                var gitHubActions = fixture.CreateGitHubActionsService();
+            // Given
+            var environment = Substitute.For<ICakeEnvironment>();
+            var filesystem = Substitute.For<IFileSystem>();
 
-                // When
-                var result = gitHubActions.Environment;
+            // When
+            var result = Record.Exception(() => new GitHubActionsProvider(environment, filesystem, null));
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "writer");
+        }
+    }
+
+    public sealed class TheIsRunningOnGitHubActionsProperty
+    {
+        [Fact]
+        public void Should_Return_True_If_Running_On_GitHubActions()
+        {
+            // Given
+            var fixture = new GitHubActionsFixture();
+            fixture.IsRunningOnGitHubActions();
+            var gitHubActions = fixture.CreateGitHubActionsService();
+
+            // When
+            var result = gitHubActions.IsRunningOnGitHubActions;
+
+            // Then
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void Should_Return_False_If_Not_Running_On_GitHubActions()
+        {
+            // Given
+            var fixture = new GitHubActionsFixture();
+            var gitHubActions = fixture.CreateGitHubActionsService();
+
+            // When
+            var result = gitHubActions.IsRunningOnGitHubActions;
+
+            // Then
+            Assert.False(result);
+        }
+    }
+
+    public sealed class TheEnvironmentProperty
+    {
+        [Fact]
+        public void Should_Return_Non_Null_Reference()
+        {
+            // Given
+            var fixture = new GitHubActionsFixture();
+            var gitHubActions = fixture.CreateGitHubActionsService();
+
+            // When
+            var result = gitHubActions.Environment;
+
+            // Then
+            Assert.NotNull(result);
         }
     }
 }

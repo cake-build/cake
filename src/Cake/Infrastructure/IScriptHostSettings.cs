@@ -4,21 +4,20 @@
 
 using Cake.Core.IO;
 
-namespace Cake.Infrastructure
+namespace Cake.Infrastructure;
+
+/// <summary>
+/// Represents settings for a script host.
+/// </summary>
+public interface IScriptHostSettings
 {
     /// <summary>
-    /// Represents settings for a script host.
+    /// Gets a value indicating whether to run in debug mode.
     /// </summary>
-    public interface IScriptHostSettings
-    {
-        /// <summary>
-        /// Gets a value indicating whether to run in debug mode.
-        /// </summary>
-        bool Debug { get; }
+    bool Debug { get; }
 
-        /// <summary>
-        /// Gets the script file path.
-        /// </summary>
-        FilePath Script { get; }
-    }
+    /// <summary>
+    /// Gets the script file path.
+    /// </summary>
+    FilePath Script { get; }
 }

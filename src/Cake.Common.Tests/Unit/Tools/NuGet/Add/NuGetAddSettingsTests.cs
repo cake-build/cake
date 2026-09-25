@@ -3,23 +3,21 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.NuGet.Add;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.NuGet.Add
+namespace Cake.Common.Tests.Unit.Tools.NuGet.Add;
+
+public sealed class NuGetAddSettingsTests
 {
-    public sealed class NuGetAddSettingsTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Set_Expand_To_False_By_Default()
         {
-            [Fact]
-            public void Should_Set_Expand_To_False_By_Default()
-            {
-                // Given, When
-                var settings = new NuGetAddSettings();
+            // Given, When
+            var settings = new NuGetAddSettings();
 
-                // Then
-                Assert.False(settings.Expand);
-            }
+            // Then
+            Assert.False(settings.Expand);
         }
     }
 }

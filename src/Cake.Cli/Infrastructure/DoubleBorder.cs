@@ -6,55 +6,54 @@
 using Spectre.Console;
 using Spectre.Console.Rendering;
 
-namespace Cake.Cli
+namespace Cake.Cli;
+
+/// <summary>
+/// A custom Spectre.Console border class, used for outputting information about steps.
+/// </summary>
+public class DoubleBorder : TableBorder
 {
     /// <summary>
-    /// A custom Spectre.Console border class, used for outputting information about steps.
+    /// Gets a single instance of the DoubleBorder class.
     /// </summary>
-    public class DoubleBorder : TableBorder
+    public static TableBorder Shared { get; } = new DoubleBorder();
+
+    /// <inheritdoc/>
+    public override TableBorder? SafeBorder => new Safe();
+
+    /// <summary>
+    /// Get information about the custom border.
+    /// </summary>
+    /// <param name="part">The part that needs a border applied to it.</param>
+    /// <returns>A simple double border character.</returns>
+    public override string GetPart(TableBorderPart part)
     {
-        /// <summary>
-        /// Gets a single instance of the DoubleBorder class.
-        /// </summary>
-        public static TableBorder Shared { get; } = new DoubleBorder();
+        return part switch
+        {
+            TableBorderPart.HeaderTopLeft => "═",
+            TableBorderPart.HeaderTop => "═",
+            TableBorderPart.HeaderTopRight => "═",
+            TableBorderPart.FooterBottomLeft => "═",
+            TableBorderPart.FooterBottom => "═",
+            TableBorderPart.FooterBottomRight => "═",
+            _ => string.Empty,
+        };
+    }
 
-        /// <inheritdoc/>
-        public override TableBorder? SafeBorder => new Safe();
-
-        /// <summary>
-        /// Get information about the custom border.
-        /// </summary>
-        /// <param name="part">The part that needs a border applied to it.</param>
-        /// <returns>A simple double border character.</returns>
+    private sealed class Safe : TableBorder
+    {
         public override string GetPart(TableBorderPart part)
         {
             return part switch
             {
-                TableBorderPart.HeaderTopLeft => "═",
-                TableBorderPart.HeaderTop => "═",
-                TableBorderPart.HeaderTopRight => "═",
-                TableBorderPart.FooterBottomLeft => "═",
-                TableBorderPart.FooterBottom => "═",
-                TableBorderPart.FooterBottomRight => "═",
+                TableBorderPart.HeaderTopLeft => "=",
+                TableBorderPart.HeaderTop => "=",
+                TableBorderPart.HeaderTopRight => "=",
+                TableBorderPart.FooterBottomLeft => "=",
+                TableBorderPart.FooterBottom => "=",
+                TableBorderPart.FooterBottomRight => "=",
                 _ => string.Empty,
             };
-        }
-
-        private sealed class Safe : TableBorder
-        {
-            public override string GetPart(TableBorderPart part)
-            {
-                return part switch
-                {
-                    TableBorderPart.HeaderTopLeft => "=",
-                    TableBorderPart.HeaderTop => "=",
-                    TableBorderPart.HeaderTopRight => "=",
-                    TableBorderPart.FooterBottomLeft => "=",
-                    TableBorderPart.FooterBottom => "=",
-                    TableBorderPart.FooterBottomRight => "=",
-                    _ => string.Empty,
-                };
-            }
         }
     }
 }

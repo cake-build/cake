@@ -4,14 +4,13 @@
 
 using Cake.Common.Tools.DotNet.SDKCheck;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.SDKCheck
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.SDKCheck;
+
+internal sealed class DotNetSDKCheckerFixture : DotNetFixture<DotNetSDKCheckSettings>
 {
-    internal sealed class DotNetSDKCheckerFixture : DotNetFixture<DotNetSDKCheckSettings>
+    protected override void RunTool()
     {
-        protected override void RunTool()
-        {
-            var tool = new DotNetSDKChecker(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Check();
-        }
+        var tool = new DotNetSDKChecker(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Check();
     }
 }

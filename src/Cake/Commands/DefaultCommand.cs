@@ -12,148 +12,147 @@ using Cake.Features.Bootstrapping;
 using Cake.Features.Building;
 using Spectre.Console.Cli;
 
-namespace Cake.Commands
+namespace Cake.Commands;
+
+/// <summary>
+/// The default command for executing Cake scripts.
+/// </summary>
+public sealed class DefaultCommand : Command<DefaultCommandSettings>
 {
+    private readonly IBuildFeature _builder;
+    private readonly IBootstrapFeature _bootstrapper;
+    private readonly ICakeVersionFeature _version;
+    private readonly ICakeInfoFeature _info;
+    private readonly IConsole _console;
+    private readonly ICakeLog _log;
+
     /// <summary>
-    /// The default command for executing Cake scripts.
+    /// Initializes a new instance of the <see cref="DefaultCommand"/> class.
     /// </summary>
-    public sealed class DefaultCommand : Command<DefaultCommandSettings>
+    /// <param name="builder">The build feature.</param>
+    /// <param name="bootstrapper">The bootstrap feature.</param>
+    /// <param name="version">The version feature.</param>
+    /// <param name="info">The info feature.</param>
+    /// <param name="console">The console.</param>
+    /// <param name="log">The log.</param>
+    public DefaultCommand(
+        IBuildFeature builder,
+        IBootstrapFeature bootstrapper,
+        ICakeVersionFeature version,
+        ICakeInfoFeature info,
+        IConsole console,
+        ICakeLog log)
     {
-        private readonly IBuildFeature _builder;
-        private readonly IBootstrapFeature _bootstrapper;
-        private readonly ICakeVersionFeature _version;
-        private readonly ICakeInfoFeature _info;
-        private readonly IConsole _console;
-        private readonly ICakeLog _log;
+        _builder = builder;
+        _bootstrapper = bootstrapper;
+        _version = version;
+        _info = info;
+        _console = console;
+        _log = log;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultCommand"/> class.
-        /// </summary>
-        /// <param name="builder">The build feature.</param>
-        /// <param name="bootstrapper">The bootstrap feature.</param>
-        /// <param name="version">The version feature.</param>
-        /// <param name="info">The info feature.</param>
-        /// <param name="console">The console.</param>
-        /// <param name="log">The log.</param>
-        public DefaultCommand(
-            IBuildFeature builder,
-            IBootstrapFeature bootstrapper,
-            ICakeVersionFeature version,
-            ICakeInfoFeature info,
-            IConsole console,
-            ICakeLog log)
+    /// <summary>
+    /// Executes the command with the specified context and settings.
+    /// </summary>
+    /// <param name="context">The command context.</param>
+    /// <param name="settings">The command settings.</param>
+    /// <param name="cancellationToken">The cancellation token to monitor for cancel requests.</param>
+    /// <returns>The exit code.</returns>
+    protected override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
+    {
+        try
         {
-            _builder = builder;
-            _bootstrapper = bootstrapper;
-            _version = version;
-            _info = info;
-            _console = console;
-            _log = log;
-        }
+            // Set log verbosity.
+            _log.Verbosity = settings.Verbosity ?? Verbosity.Normal;
 
-        /// <summary>
-        /// Executes the command with the specified context and settings.
-        /// </summary>
-        /// <param name="context">The command context.</param>
-        /// <param name="settings">The command settings.</param>
-        /// <param name="cancellationToken">The cancellation token to monitor for cancel requests.</param>
-        /// <returns>The exit code.</returns>
-        protected override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
-        {
-            try
+            var arguments = CreateCakeArguments(context.Remaining, settings);
+
+            if (settings.ShowVersion)
             {
-                // Set log verbosity.
-                _log.Verbosity = settings.Verbosity ?? Verbosity.Normal;
-
-                var arguments = CreateCakeArguments(context.Remaining, settings);
-
-                if (settings.ShowVersion)
-                {
-                    _version.Run(_console);
-                    return 0;
-                }
-                else if (settings.ShowInfo)
-                {
-                    _info.Run(_console);
-                    return 0;
-                }
-
-                // Get the build host type.
-                var host = GetBuildHostKind(settings);
-
-                // Run the bootstrapper?
-                if (!settings.SkipBootstrap || settings.Bootstrap)
-                {
-                    int bootstrapperResult = PerformBootstrapping(arguments, settings, host);
-                    if (bootstrapperResult != 0 || settings.Bootstrap)
-                    {
-                        return bootstrapperResult;
-                    }
-                }
-
-                // Run the build feature.
-                return _builder.Run(arguments, new BuildFeatureSettings(host)
-                {
-                    Script = settings.Script,
-                    Verbosity = settings.Verbosity,
-                    Exclusive = settings.Exclusive,
-                    Debug = settings.Debug,
-                    NoBootstrapping = settings.SkipBootstrap,
-                });
+                _version.Run(_console);
+                return 0;
             }
-            catch (Exception ex)
+            else if (settings.ShowInfo)
             {
-                return _log.LogException(ex);
-            }
-        }
-
-        private BuildHostKind GetBuildHostKind(DefaultCommandSettings settings)
-        {
-            if (settings.DryRun)
-            {
-                return BuildHostKind.DryRun;
-            }
-            else if (settings.Description)
-            {
-                return BuildHostKind.Description;
-            }
-            else if (settings.Tree)
-            {
-                return BuildHostKind.Tree;
-            }
-
-            return BuildHostKind.Build;
-        }
-
-        private int PerformBootstrapping(ICakeArguments arguments, DefaultCommandSettings settings, BuildHostKind host)
-        {
-            if (host != BuildHostKind.Build && host != BuildHostKind.DryRun)
-            {
+                _info.Run(_console);
                 return 0;
             }
 
-            return _bootstrapper.Run(arguments, new BootstrapFeatureSettings
+            // Get the build host type.
+            var host = GetBuildHostKind(settings);
+
+            // Run the bootstrapper?
+            if (!settings.SkipBootstrap || settings.Bootstrap)
+            {
+                int bootstrapperResult = PerformBootstrapping(arguments, settings, host);
+                if (bootstrapperResult != 0 || settings.Bootstrap)
+                {
+                    return bootstrapperResult;
+                }
+            }
+
+            // Run the build feature.
+            return _builder.Run(arguments, new BuildFeatureSettings(host)
             {
                 Script = settings.Script,
-                Verbosity = settings.Verbosity
+                Verbosity = settings.Verbosity,
+                Exclusive = settings.Exclusive,
+                Debug = settings.Debug,
+                NoBootstrapping = settings.SkipBootstrap,
             });
         }
-
-        private static CakeArguments CreateCakeArguments(IRemainingArguments remainingArguments, DefaultCommandSettings settings)
+        catch (Exception ex)
         {
-            return remainingArguments.ToCakeArguments(
-                settings.NoReport,
-                preProcessArgs: arguments =>
-                {
-                    // Fixes #4157, We have to add arguments manually which are defined within the DefaultCommandSettings type. Those are not considered "as remaining" because they could be parsed
-                    const string recompileArgumentName = Infrastructure.Constants.Cache.InvalidateScriptCache;
-                    if (settings.Recompile)
-                    {
-                        arguments.TryAdd(
-                            recompileArgumentName,
-                            [true.ToString()]);
-                    }
-                });
+            return _log.LogException(ex);
         }
+    }
+
+    private BuildHostKind GetBuildHostKind(DefaultCommandSettings settings)
+    {
+        if (settings.DryRun)
+        {
+            return BuildHostKind.DryRun;
+        }
+        else if (settings.Description)
+        {
+            return BuildHostKind.Description;
+        }
+        else if (settings.Tree)
+        {
+            return BuildHostKind.Tree;
+        }
+
+        return BuildHostKind.Build;
+    }
+
+    private int PerformBootstrapping(ICakeArguments arguments, DefaultCommandSettings settings, BuildHostKind host)
+    {
+        if (host != BuildHostKind.Build && host != BuildHostKind.DryRun)
+        {
+            return 0;
+        }
+
+        return _bootstrapper.Run(arguments, new BootstrapFeatureSettings
+        {
+            Script = settings.Script,
+            Verbosity = settings.Verbosity
+        });
+    }
+
+    private static CakeArguments CreateCakeArguments(IRemainingArguments remainingArguments, DefaultCommandSettings settings)
+    {
+        return remainingArguments.ToCakeArguments(
+            settings.NoReport,
+            preProcessArgs: arguments =>
+            {
+                // Fixes #4157, We have to add arguments manually which are defined within the DefaultCommandSettings type. Those are not considered "as remaining" because they could be parsed
+                const string recompileArgumentName = Infrastructure.Constants.Cache.InvalidateScriptCache;
+                if (settings.Recompile)
+                {
+                    arguments.TryAdd(
+                        recompileArgumentName,
+                        [true.ToString()]);
+                }
+            });
     }
 }

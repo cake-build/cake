@@ -11,210 +11,209 @@ using Cake.Common.Polyfill;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Xml
+namespace Cake.Common.Xml;
+
+/// <summary>
+/// Provides functionality to perform XML transformation.
+/// </summary>
+public static class XmlTransformation
 {
     /// <summary>
-    /// Provides functionality to perform XML transformation.
+    /// Performs XML XSL transformation.
     /// </summary>
-    public static class XmlTransformation
+    /// <param name="xsl">XML style sheet.</param>
+    /// <param name="xml">XML data.</param>
+    /// <returns>Transformed XML string.</returns>
+    public static string Transform(string xsl, string xml)
     {
-        /// <summary>
-        /// Performs XML XSL transformation.
-        /// </summary>
-        /// <param name="xsl">XML style sheet.</param>
-        /// <param name="xml">XML data.</param>
-        /// <returns>Transformed XML string.</returns>
-        public static string Transform(string xsl, string xml)
+        var settings = new XmlTransformationSettings
         {
-            var settings = new XmlTransformationSettings
-            {
-                OmitXmlDeclaration = true,
-                Encoding = new UTF8Encoding(false)
-            };
+            OmitXmlDeclaration = true,
+            Encoding = new UTF8Encoding(false)
+        };
 
-            return Transform(xsl, xml, settings);
+        return Transform(xsl, xml, settings);
+    }
+
+    /// <summary>
+    /// Performs XML XSL transformation.
+    /// </summary>
+    /// <param name="xsl">XML style sheet.</param>
+    /// <param name="xml">XML data.</param>
+    /// <param name="settings">Settings for result file XML transformation.</param>
+    /// <returns>Transformed XML string.</returns>
+    public static string Transform(string xsl, string xml, XmlTransformationSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(xsl))
+        {
+            throw new ArgumentNullException(nameof(xsl), "Null or empty XML style sheet supplied.");
         }
 
-        /// <summary>
-        /// Performs XML XSL transformation.
-        /// </summary>
-        /// <param name="xsl">XML style sheet.</param>
-        /// <param name="xml">XML data.</param>
-        /// <param name="settings">Settings for result file XML transformation.</param>
-        /// <returns>Transformed XML string.</returns>
-        public static string Transform(string xsl, string xml, XmlTransformationSettings settings)
+        if (string.IsNullOrWhiteSpace(xml))
         {
-            if (string.IsNullOrWhiteSpace(xsl))
-            {
-                throw new ArgumentNullException(nameof(xsl), "Null or empty XML style sheet supplied.");
-            }
-
-            if (string.IsNullOrWhiteSpace(xml))
-            {
-                throw new ArgumentNullException(nameof(xml), "Null or empty XML data supplied.");
-            }
-
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings), "Null settings supplied.");
-            }
-
-            using (TextReader
-                xslReader = new StringReader(xsl),
-                xmlReader = new StringReader(xml))
-            {
-                using (var result = new MemoryStream())
-                {
-                    Transform(xslReader, settings.XsltArgumentList, xmlReader, result, settings.XmlWriterSettings);
-                    result.Position = 0;
-                    return settings.Encoding.GetString(result.ToArray());
-                }
-            }
+            throw new ArgumentNullException(nameof(xml), "Null or empty XML data supplied.");
         }
 
-        /// <summary>
-        /// Performs XML XSL transformation.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="xslPath">Path to XML style sheet.</param>
-        /// <param name="xmlPath">Path XML data.</param>
-        /// <param name="resultPath">Transformation result path.</param>
-        public static void Transform(IFileSystem fileSystem, FilePath xslPath, FilePath xmlPath, FilePath resultPath)
+        if (settings == null)
         {
-            var settings = new XmlTransformationSettings();
-            Transform(fileSystem, xslPath, xmlPath, resultPath, settings);
+            throw new ArgumentNullException(nameof(settings), "Null settings supplied.");
         }
 
-        /// <summary>
-        /// Performs XML XSL transformation.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="xslPath">Path to XML style sheet.</param>
-        /// <param name="xmlPath">Path XML data.</param>
-        /// <param name="resultPath">Transformation result path.</param>
-        /// <param name="settings">Settings for result file XML transformation.</param>
-        public static void Transform(IFileSystem fileSystem, FilePath xslPath, FilePath xmlPath, FilePath resultPath, XmlTransformationSettings settings)
+        using (TextReader
+            xslReader = new StringReader(xsl),
+            xmlReader = new StringReader(xml))
         {
-            if (fileSystem == null)
+            using (var result = new MemoryStream())
             {
-                throw new ArgumentNullException(nameof(fileSystem), "Null filesystem supplied.");
-            }
-
-            if (xslPath == null)
-            {
-                throw new ArgumentNullException(nameof(xslPath), "Null XML style sheet path supplied.");
-            }
-
-            if (xmlPath == null)
-            {
-                throw new ArgumentNullException(nameof(xmlPath), "Null XML data path supplied.");
-            }
-
-            if (resultPath == null)
-            {
-                throw new ArgumentNullException(nameof(resultPath), "Null result path supplied.");
-            }
-
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings), "Null settings supplied.");
-            }
-
-            IFile
-                xslFile = fileSystem.GetFile(xslPath),
-                xmlFile = fileSystem.GetFile(xmlPath),
-                resultFile = fileSystem.GetFile(resultPath);
-
-            if (!xslFile.Exists)
-            {
-                throw new FileNotFoundException("XSL file not found.", xslFile.Path.FullPath);
-            }
-
-            if (!xmlFile.Exists)
-            {
-                throw new FileNotFoundException("XML file not found.", xmlFile.Path.FullPath);
-            }
-
-            if (!settings.Overwrite && resultFile.Exists)
-            {
-                throw new CakeException("Result file found and overwrite set to false.");
-            }
-
-            using (Stream
-                xslStream = xslFile.OpenRead(),
-                xmlStream = xmlFile.OpenRead(),
-                resultStream = resultFile.OpenWrite())
-            {
-                XmlReader
-                    xslReader = XmlReader.Create(xslStream),
-                    xmlReader = XmlReader.Create(xmlStream);
-
-                var resultWriter = XmlWriter.Create(resultStream, settings.XmlWriterSettings);
-                Transform(xslReader, settings.XsltArgumentList, xmlReader, resultWriter);
+                Transform(xslReader, settings.XsltArgumentList, xmlReader, result, settings.XmlWriterSettings);
+                result.Position = 0;
+                return settings.Encoding.GetString(result.ToArray());
             }
         }
+    }
 
-        /// <summary>
-        /// Performs XML XSL transformation.
-        /// </summary>
-        /// <param name="xsl">XML style sheet.</param>
-        /// <param name="arguments">XSLT argument list.</param>
-        /// <param name="xml">XML data.</param>
-        /// <param name="result">Transformation result.</param>
-        /// <param name="settings">Optional settings for result file XML writer.</param>
-        private static void Transform(TextReader xsl, XsltArgumentList arguments, TextReader xml, Stream result, XmlWriterSettings settings = null)
+    /// <summary>
+    /// Performs XML XSL transformation.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="xslPath">Path to XML style sheet.</param>
+    /// <param name="xmlPath">Path XML data.</param>
+    /// <param name="resultPath">Transformation result path.</param>
+    public static void Transform(IFileSystem fileSystem, FilePath xslPath, FilePath xmlPath, FilePath resultPath)
+    {
+        var settings = new XmlTransformationSettings();
+        Transform(fileSystem, xslPath, xmlPath, resultPath, settings);
+    }
+
+    /// <summary>
+    /// Performs XML XSL transformation.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="xslPath">Path to XML style sheet.</param>
+    /// <param name="xmlPath">Path XML data.</param>
+    /// <param name="resultPath">Transformation result path.</param>
+    /// <param name="settings">Settings for result file XML transformation.</param>
+    public static void Transform(IFileSystem fileSystem, FilePath xslPath, FilePath xmlPath, FilePath resultPath, XmlTransformationSettings settings)
+    {
+        if (fileSystem == null)
         {
-            if (xsl == null)
-            {
-                throw new ArgumentNullException(nameof(xsl), "Null XML style sheet supplied.");
-            }
-
-            if (xml == null)
-            {
-                throw new ArgumentNullException(nameof(xml), "Null XML data supplied.");
-            }
-
-            if (result == null)
-            {
-                throw new ArgumentNullException(nameof(result), "Null result supplied.");
-            }
-
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings), "Null settings supplied.");
-            }
-
-            var xslXmlReader = XmlReader.Create(xsl);
-            var xmlXmlReader = XmlReader.Create(xml);
-            var resultXmlTextWriter = XmlWriter.Create(result, settings);
-            Transform(xslXmlReader, arguments, xmlXmlReader, resultXmlTextWriter);
+            throw new ArgumentNullException(nameof(fileSystem), "Null filesystem supplied.");
         }
 
-        /// <summary>
-        /// Performs XML XSL transformation.
-        /// </summary>
-        /// <param name="xsl">XML style sheet.</param>
-        /// <param name="arguments">XSLT argument list.</param>
-        /// <param name="xml">XML data.</param>
-        /// <param name="result">Transformation result.</param>
-        private static void Transform(XmlReader xsl, XsltArgumentList arguments, XmlReader xml, XmlWriter result)
+        if (xslPath == null)
         {
-            if (xsl == null)
-            {
-                throw new ArgumentNullException(nameof(xsl), "Null XML style sheet supplied.");
-            }
-
-            if (xml == null)
-            {
-                throw new ArgumentNullException(nameof(xml), "Null XML data supplied.");
-            }
-
-            if (result == null)
-            {
-                throw new ArgumentNullException(nameof(result), "Null result supplied.");
-            }
-
-            XmlTransformationHelper.Transform(xsl, arguments, xml, result);
+            throw new ArgumentNullException(nameof(xslPath), "Null XML style sheet path supplied.");
         }
+
+        if (xmlPath == null)
+        {
+            throw new ArgumentNullException(nameof(xmlPath), "Null XML data path supplied.");
+        }
+
+        if (resultPath == null)
+        {
+            throw new ArgumentNullException(nameof(resultPath), "Null result path supplied.");
+        }
+
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings), "Null settings supplied.");
+        }
+
+        IFile
+            xslFile = fileSystem.GetFile(xslPath),
+            xmlFile = fileSystem.GetFile(xmlPath),
+            resultFile = fileSystem.GetFile(resultPath);
+
+        if (!xslFile.Exists)
+        {
+            throw new FileNotFoundException("XSL file not found.", xslFile.Path.FullPath);
+        }
+
+        if (!xmlFile.Exists)
+        {
+            throw new FileNotFoundException("XML file not found.", xmlFile.Path.FullPath);
+        }
+
+        if (!settings.Overwrite && resultFile.Exists)
+        {
+            throw new CakeException("Result file found and overwrite set to false.");
+        }
+
+        using (Stream
+            xslStream = xslFile.OpenRead(),
+            xmlStream = xmlFile.OpenRead(),
+            resultStream = resultFile.OpenWrite())
+        {
+            XmlReader
+                xslReader = XmlReader.Create(xslStream),
+                xmlReader = XmlReader.Create(xmlStream);
+
+            var resultWriter = XmlWriter.Create(resultStream, settings.XmlWriterSettings);
+            Transform(xslReader, settings.XsltArgumentList, xmlReader, resultWriter);
+        }
+    }
+
+    /// <summary>
+    /// Performs XML XSL transformation.
+    /// </summary>
+    /// <param name="xsl">XML style sheet.</param>
+    /// <param name="arguments">XSLT argument list.</param>
+    /// <param name="xml">XML data.</param>
+    /// <param name="result">Transformation result.</param>
+    /// <param name="settings">Optional settings for result file XML writer.</param>
+    private static void Transform(TextReader xsl, XsltArgumentList arguments, TextReader xml, Stream result, XmlWriterSettings settings = null)
+    {
+        if (xsl == null)
+        {
+            throw new ArgumentNullException(nameof(xsl), "Null XML style sheet supplied.");
+        }
+
+        if (xml == null)
+        {
+            throw new ArgumentNullException(nameof(xml), "Null XML data supplied.");
+        }
+
+        if (result == null)
+        {
+            throw new ArgumentNullException(nameof(result), "Null result supplied.");
+        }
+
+        if (settings == null)
+        {
+            throw new ArgumentNullException(nameof(settings), "Null settings supplied.");
+        }
+
+        var xslXmlReader = XmlReader.Create(xsl);
+        var xmlXmlReader = XmlReader.Create(xml);
+        var resultXmlTextWriter = XmlWriter.Create(result, settings);
+        Transform(xslXmlReader, arguments, xmlXmlReader, resultXmlTextWriter);
+    }
+
+    /// <summary>
+    /// Performs XML XSL transformation.
+    /// </summary>
+    /// <param name="xsl">XML style sheet.</param>
+    /// <param name="arguments">XSLT argument list.</param>
+    /// <param name="xml">XML data.</param>
+    /// <param name="result">Transformation result.</param>
+    private static void Transform(XmlReader xsl, XsltArgumentList arguments, XmlReader xml, XmlWriter result)
+    {
+        if (xsl == null)
+        {
+            throw new ArgumentNullException(nameof(xsl), "Null XML style sheet supplied.");
+        }
+
+        if (xml == null)
+        {
+            throw new ArgumentNullException(nameof(xml), "Null XML data supplied.");
+        }
+
+        if (result == null)
+        {
+            throw new ArgumentNullException(nameof(result), "Null result supplied.");
+        }
+
+        XmlTransformationHelper.Transform(xsl, arguments, xml, result);
     }
 }

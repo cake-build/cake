@@ -4,52 +4,51 @@
 
 using Cake.Core;
 
-namespace Cake.Common.Build.GitLabCI.Data
+namespace Cake.Common.Build.GitLabCI.Data;
+
+/// <summary>
+/// Provides GitLab CI server information for a current build.
+/// </summary>
+public sealed class GitLabCIServerInfo : GitLabCIInfo
 {
     /// <summary>
-    /// Provides GitLab CI server information for a current build.
+    /// Initializes a new instance of the <see cref="GitLabCIServerInfo"/> class.
     /// </summary>
-    public sealed class GitLabCIServerInfo : GitLabCIInfo
+    /// <param name="environment">The environment.</param>
+    public GitLabCIServerInfo(ICakeEnvironment environment)
+        : base(environment)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GitLabCIServerInfo"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public GitLabCIServerInfo(ICakeEnvironment environment)
-            : base(environment)
-        {
-        }
-
-        /// <summary>
-        /// Gets the name of CI server that is used to coordinate builds.
-        /// </summary>
-        /// <value>
-        /// The name of CI server that is used to coordinate builds.
-        /// </value>
-        public string Name => GetEnvironmentString("CI_SERVER_NAME");
-
-        /// <summary>
-        /// Gets the GitLab version that is used to schedule builds.
-        /// </summary>
-        /// <value>
-        /// The GitLab version that is used to schedule builds.
-        /// </value>
-        public string Version => GetEnvironmentString("CI_SERVER_VERSION");
-
-        /// <summary>
-        /// Gets the GitLab revision that is used to schedule builds.
-        /// </summary>
-        /// <value>
-        /// The GitLab revision that is used to schedule builds.
-        /// </value>
-        public string Revision => GetEnvironmentString("CI_SERVER_REVISION");
-
-        /// <summary>
-        /// Gets the base URL of the GitLab instance, including protocol and port.
-        /// </summary>
-        /// <value>
-        /// The base URL of the GitLab instance, including protocol and port.
-        /// </value>
-        public string Url => GetEnvironmentString("CI_SERVER_URL");
     }
+
+    /// <summary>
+    /// Gets the name of CI server that is used to coordinate builds.
+    /// </summary>
+    /// <value>
+    /// The name of CI server that is used to coordinate builds.
+    /// </value>
+    public string Name => GetEnvironmentString("CI_SERVER_NAME");
+
+    /// <summary>
+    /// Gets the GitLab version that is used to schedule builds.
+    /// </summary>
+    /// <value>
+    /// The GitLab version that is used to schedule builds.
+    /// </value>
+    public string Version => GetEnvironmentString("CI_SERVER_VERSION");
+
+    /// <summary>
+    /// Gets the GitLab revision that is used to schedule builds.
+    /// </summary>
+    /// <value>
+    /// The GitLab revision that is used to schedule builds.
+    /// </value>
+    public string Revision => GetEnvironmentString("CI_SERVER_REVISION");
+
+    /// <summary>
+    /// Gets the base URL of the GitLab instance, including protocol and port.
+    /// </summary>
+    /// <value>
+    /// The base URL of the GitLab instance, including protocol and port.
+    /// </value>
+    public string Url => GetEnvironmentString("CI_SERVER_URL");
 }

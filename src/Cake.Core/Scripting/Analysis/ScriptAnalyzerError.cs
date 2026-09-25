@@ -5,42 +5,41 @@
 using System;
 using Cake.Core.IO;
 
-namespace Cake.Core.Scripting.Analysis
+namespace Cake.Core.Scripting.Analysis;
+
+/// <summary>
+/// Represents a script analysis error.
+/// </summary>
+public sealed class ScriptAnalyzerError
 {
     /// <summary>
-    /// Represents a script analysis error.
+    /// Gets the file containing the error.
     /// </summary>
-    public sealed class ScriptAnalyzerError
+    public FilePath File { get; }
+
+    /// <summary>
+    /// Gets the line number for the error.
+    /// </summary>
+    public int Line { get; }
+
+    /// <summary>
+    /// Gets the error message.
+    /// </summary>
+    public string Message { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ScriptAnalyzerError"/> class.
+    /// </summary>
+    /// <param name="file">The file containing the error.</param>
+    /// <param name="line">The line number for the error.</param>
+    /// <param name="message">The error message.</param>
+    public ScriptAnalyzerError(FilePath file, int line, string message)
     {
-        /// <summary>
-        /// Gets the file containing the error.
-        /// </summary>
-        public FilePath File { get; }
+        ArgumentNullException.ThrowIfNull(file);
+        ArgumentNullException.ThrowIfNull(message);
 
-        /// <summary>
-        /// Gets the line number for the error.
-        /// </summary>
-        public int Line { get; }
-
-        /// <summary>
-        /// Gets the error message.
-        /// </summary>
-        public string Message { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScriptAnalyzerError"/> class.
-        /// </summary>
-        /// <param name="file">The file containing the error.</param>
-        /// <param name="line">The line number for the error.</param>
-        /// <param name="message">The error message.</param>
-        public ScriptAnalyzerError(FilePath file, int line, string message)
-        {
-            ArgumentNullException.ThrowIfNull(file);
-            ArgumentNullException.ThrowIfNull(message);
-
-            File = file;
-            Line = line;
-            Message = message;
-        }
+        File = file;
+        Line = line;
+        Message = message;
     }
 }

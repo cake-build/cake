@@ -5,13 +5,12 @@
 using Cake.Common.Tools.InspectCode;
 using Cake.Testing.Fixtures;
 
-namespace Cake.Common.Tests.Fixtures.Tools.InspectCode
+namespace Cake.Common.Tests.Fixtures.Tools.InspectCode;
+
+internal abstract class InspectCodeFixture : ToolFixture<InspectCodeSettings>
 {
-    internal abstract class InspectCodeFixture : ToolFixture<InspectCodeSettings>
+    protected InspectCodeFixture(bool useX86)
+        : base(useX86 ? "inspectcode.x86.exe" : "inspectcode.exe")
     {
-        protected InspectCodeFixture(bool useX86)
-            : base(useX86 ? "inspectcode.x86.exe" : "inspectcode.exe")
-        {
-        }
     }
 }

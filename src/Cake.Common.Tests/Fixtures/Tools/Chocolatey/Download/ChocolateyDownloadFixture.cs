@@ -4,21 +4,20 @@
 
 using Cake.Common.Tools.Chocolatey.Download;
 
-namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Download
+namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Download;
+
+internal sealed class ChocolateyDownloadFixture : ChocolateyFixture<ChocolateyDownloadSettings>
 {
-    internal sealed class ChocolateyDownloadFixture : ChocolateyFixture<ChocolateyDownloadSettings>
+    public string PackageId { get; set; }
+
+    public ChocolateyDownloadFixture()
     {
-        public string PackageId { get; set; }
+        PackageId = "MyPackage";
+    }
 
-        public ChocolateyDownloadFixture()
-        {
-            PackageId = "MyPackage";
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new ChocolateyDownloader(FileSystem, Environment, ProcessRunner, Tools, Resolver);
-            tool.Download(PackageId, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new ChocolateyDownloader(FileSystem, Environment, ProcessRunner, Tools, Resolver);
+        tool.Download(PackageId, Settings);
     }
 }

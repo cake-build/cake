@@ -4,33 +4,32 @@
 
 using System.Collections.Generic;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Represents arguments passed to the executing script.
+/// </summary>
+public interface ICakeArguments
 {
     /// <summary>
-    /// Represents arguments passed to the executing script.
+    /// Determines whether or not the specified argument exist.
     /// </summary>
-    public interface ICakeArguments
-    {
-        /// <summary>
-        /// Determines whether or not the specified argument exist.
-        /// </summary>
-        /// <param name="name">The argument name.</param>
-        /// <returns>
-        ///   <c>true</c> if the argument exist; otherwise <c>false</c>.
-        /// </returns>
-        bool HasArgument(string name);
+    /// <param name="name">The argument name.</param>
+    /// <returns>
+    ///   <c>true</c> if the argument exist; otherwise <c>false</c>.
+    /// </returns>
+    bool HasArgument(string name);
 
-        /// <summary>
-        /// Gets all values for an argument.
-        /// </summary>
-        /// <param name="name">The argument name.</param>
-        /// <returns>The argument values.</returns>
-        ICollection<string> GetArguments(string name);
+    /// <summary>
+    /// Gets all values for an argument.
+    /// </summary>
+    /// <param name="name">The argument name.</param>
+    /// <returns>The argument values.</returns>
+    ICollection<string> GetArguments(string name);
 
-        /// <summary>
-        /// Gets all command line arguments.
-        /// </summary>
-        /// <returns>The command line arguments as IDictionary&lt;string, ICollection&lt;string&gt;&gt;.</returns>
-        IDictionary<string, ICollection<string>> GetArguments();
-    }
+    /// <summary>
+    /// Gets all command line arguments.
+    /// </summary>
+    /// <returns>The command line arguments as IDictionary&lt;string, ICollection&lt;string&gt;&gt;.</returns>
+    IDictionary<string, ICollection<string>> GetArguments();
 }

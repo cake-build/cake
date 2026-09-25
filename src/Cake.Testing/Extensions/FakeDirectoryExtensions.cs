@@ -5,24 +5,23 @@
 using System;
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Testing
+namespace Cake.Testing;
+
+/// <summary>
+/// Contains extensions for <see cref="FakeDirectory"/>.
+/// </summary>
+public static class FakeDirectoryExtensions
 {
     /// <summary>
-    /// Contains extensions for <see cref="FakeDirectory"/>.
+    /// Hides the specified directory.
     /// </summary>
-    public static class FakeDirectoryExtensions
+    /// <param name="directory">The directory to hide.</param>
+    /// <returns>The same <see cref="FakeDirectory"/> instance so that multiple calls can be chained.</returns>
+    public static FakeDirectory Hide(this FakeDirectory directory)
     {
-        /// <summary>
-        /// Hides the specified directory.
-        /// </summary>
-        /// <param name="directory">The directory to hide.</param>
-        /// <returns>The same <see cref="FakeDirectory"/> instance so that multiple calls can be chained.</returns>
-        public static FakeDirectory Hide(this FakeDirectory directory)
-        {
-            ArgumentNullException.ThrowIfNull(directory);
+        ArgumentNullException.ThrowIfNull(directory);
 
-            directory.Hidden = true;
-            return directory;
-        }
+        directory.Hidden = true;
+        return directory;
     }
 }

@@ -38,14 +38,14 @@ dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
 csharp_prefer_braces = true:warning
 csharp_style_prefer_default_literal = true:suggestion
 csharp_prefer_trailing_comma = true:silent
-csharp_style_namespace_declarations = block_scoped:silent
+csharp_style_namespace_declarations = file_scoped:warning
 csharp_style_prefer_top_level_statements = false:silent
 csharp_style_prefer_pattern_matching = true:suggestion
 csharp_style_prefer_switch_expression = true:suggestion
 csharp_style_prefer_not_pattern = true:suggestion
 csharp_style_prefer_extended_property_pattern = true:suggestion
 csharp_style_prefer_primary_constructors = true:suggestion
-dotnet_style_prefer_collection_expression = when_types_exactly_match:suggestion
+dotnet_style_prefer_collection_expression = when_types_exactly_match:warning
 csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
 csharp_prefer_simple_using_statement = true:suggestion
 csharp_style_prefer_method_group_conversion = true:suggestion
@@ -91,12 +91,14 @@ dotnet_diagnostic.IDE0072.severity = suggestion
 dotnet_diagnostic.IDE0100.severity = none
 dotnet_diagnostic.IDE0130.severity = none
 dotnet_diagnostic.IDE0290.severity = suggestion
-dotnet_diagnostic.IDE0300.severity = suggestion
-dotnet_diagnostic.IDE0301.severity = suggestion
-dotnet_diagnostic.IDE0302.severity = suggestion
-dotnet_diagnostic.IDE0303.severity = suggestion
-dotnet_diagnostic.IDE0304.severity = suggestion
-dotnet_diagnostic.IDE0305.severity = suggestion
+dotnet_diagnostic.IDE0160.severity = none
+dotnet_diagnostic.IDE0161.severity = warning
+dotnet_diagnostic.IDE0300.severity = warning
+dotnet_diagnostic.IDE0301.severity = warning
+dotnet_diagnostic.IDE0302.severity = warning
+dotnet_diagnostic.IDE0303.severity = warning
+dotnet_diagnostic.IDE0304.severity = warning
+dotnet_diagnostic.IDE0305.severity = warning
 dotnet_diagnostic.IDE0390.severity = none
 
 [*.cake]
@@ -115,6 +117,24 @@ dotnet_diagnostic.xUnit2000.severity = none
 dotnet_diagnostic.xUnit2002.severity = none
 dotnet_diagnostic.xUnit2003.severity = none
 dotnet_diagnostic.xUnit2004.severity = none
+
+# Doc-only NamespaceDoc files declare many namespaces in one file.
+[src/**/Properties/Namespaces.cs]
+csharp_style_namespace_declarations = block_scoped:silent
+dotnet_diagnostic.IDE0160.severity = none
+dotnet_diagnostic.IDE0161.severity = none
+
+# Generated resource designers keep the classic namespace + usings-inside shape.
+[src/**/Properties/Resources.Designer.cs]
+csharp_style_namespace_declarations = block_scoped:silent
+dotnet_diagnostic.IDE0160.severity = none
+dotnet_diagnostic.IDE0161.severity = none
+dotnet_diagnostic.IDE0300.severity = none
+dotnet_diagnostic.IDE0301.severity = none
+dotnet_diagnostic.IDE0302.severity = none
+dotnet_diagnostic.IDE0303.severity = none
+dotnet_diagnostic.IDE0304.severity = none
+dotnet_diagnostic.IDE0305.severity = none
 
 # Verify settings
 [*.{received,verified}.{txt,xml,json,cake}]

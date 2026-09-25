@@ -7,109 +7,108 @@ using Cake.Core.IO;
 using Cake.Testing;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.IO
+namespace Cake.Core.Tests.Unit.IO;
+
+public sealed class PathExtensionsTests
 {
-    public sealed class PathExtensionsTests
+    public sealed class TheExpandEnvironmentVariablesMethod
     {
-        public sealed class TheExpandEnvironmentVariablesMethod
+        public sealed class ThatTakesAFilePath
         {
-            public sealed class ThatTakesAFilePath
+            [Fact]
+            public void Should_Throw_If_Environment_Is_Null()
             {
-                [Fact]
-                public void Should_Throw_If_Environment_Is_Null()
-                {
-                    // Given
-                    var path = new FilePath("/%FOO%/baz.qux");
+                // Given
+                var path = new FilePath("/%FOO%/baz.qux");
 
-                    // When
-                    var result = Record.Exception(() => path.ExpandEnvironmentVariables(null));
+                // When
+                var result = Record.Exception(() => path.ExpandEnvironmentVariables(null));
 
-                    // Then
-                    AssertEx.IsArgumentNullException(result, "environment");
-                }
-
-                [Fact]
-                public void Should_Expand_Existing_Environment_Variables()
-                {
-                    // Given
-                    var environment = FakeEnvironment.CreateWindowsEnvironment();
-                    environment.SetEnvironmentVariable("FOO", "bar");
-                    var path = new FilePath("/%FOO%/baz.qux");
-
-                    // When
-                    var result = path.ExpandEnvironmentVariables(environment);
-
-                    // Then
-                    Assert.Equal("/bar/baz.qux", result.FullPath);
-                }
+                // Then
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
-            public sealed class ThatTakesADirectoryPath
+            [Fact]
+            public void Should_Expand_Existing_Environment_Variables()
             {
-                [Fact]
-                public void Should_Throw_If_Environment_Is_Null()
-                {
-                    // Given
-                    var path = new DirectoryPath("/%FOO%/baz");
+                // Given
+                var environment = FakeEnvironment.CreateWindowsEnvironment();
+                environment.SetEnvironmentVariable("FOO", "bar");
+                var path = new FilePath("/%FOO%/baz.qux");
 
-                    // When
-                    var result = Record.Exception(() => path.ExpandEnvironmentVariables(null));
+                // When
+                var result = path.ExpandEnvironmentVariables(environment);
 
-                    // Then
-                    AssertEx.IsArgumentNullException(result, "environment");
-                }
-
-                [Fact]
-                public void Should_Expand_Existing_Environment_Variables()
-                {
-                    // Given
-                    var environment = FakeEnvironment.CreateWindowsEnvironment();
-                    environment.SetEnvironmentVariable("FOO", "bar");
-                    var path = new DirectoryPath("/%FOO%/baz");
-
-                    // When
-                    var result = path.ExpandEnvironmentVariables(environment);
-
-                    // Then
-                    Assert.Equal("/bar/baz", result.FullPath);
-                }
+                // Then
+                Assert.Equal("/bar/baz.qux", result.FullPath);
             }
         }
 
-        public sealed class TheExpandShortPathMethod
+        public sealed class ThatTakesADirectoryPath
         {
-            [Theory]
-            [InlineData("C:/Program Files/cake-build/addins", "C:/Program Files/cake-build/addins")]
-            [InlineData("C:/PROGRA~1/cake-build/addins", "C:/Program Files/cake-build/addins")]
-            public void Will_Normalize_Short_Paths_File(string input, string expected)
+            [Fact]
+            public void Should_Throw_If_Environment_Is_Null()
             {
-                // Given, When
-                var path = new FilePath(input);
+                // Given
+                var path = new DirectoryPath("/%FOO%/baz");
 
-                path = path.ExpandShortPath();
+                // When
+                var result = Record.Exception(() => path.ExpandEnvironmentVariables(null));
 
                 // Then
-                if (OperatingSystem.IsWindows())
-                {
-                    Assert.Equal(expected, path.FullPath);
-                }
+                AssertEx.IsArgumentNullException(result, "environment");
             }
 
-            [Theory]
-            [InlineData("C:/Program Files/cake-build/addins", "C:/Program Files/cake-build/addins")]
-            [InlineData("C:/PROGRA~1/cake-build/addins", "C:/Program Files/cake-build/addins")]
-            public void Will_Normalize_Short_Paths_Directory(string input, string expected)
+            [Fact]
+            public void Should_Expand_Existing_Environment_Variables()
             {
-                // Given, When
-                var path = new DirectoryPath(input);
+                // Given
+                var environment = FakeEnvironment.CreateWindowsEnvironment();
+                environment.SetEnvironmentVariable("FOO", "bar");
+                var path = new DirectoryPath("/%FOO%/baz");
 
-                path = path.ExpandShortPath();
+                // When
+                var result = path.ExpandEnvironmentVariables(environment);
 
                 // Then
-                if (OperatingSystem.IsWindows())
-                {
-                    Assert.Equal(expected, path.FullPath);
-                }
+                Assert.Equal("/bar/baz", result.FullPath);
+            }
+        }
+    }
+
+    public sealed class TheExpandShortPathMethod
+    {
+        [Theory]
+        [InlineData("C:/Program Files/cake-build/addins", "C:/Program Files/cake-build/addins")]
+        [InlineData("C:/PROGRA~1/cake-build/addins", "C:/Program Files/cake-build/addins")]
+        public void Will_Normalize_Short_Paths_File(string input, string expected)
+        {
+            // Given, When
+            var path = new FilePath(input);
+
+            path = path.ExpandShortPath();
+
+            // Then
+            if (OperatingSystem.IsWindows())
+            {
+                Assert.Equal(expected, path.FullPath);
+            }
+        }
+
+        [Theory]
+        [InlineData("C:/Program Files/cake-build/addins", "C:/Program Files/cake-build/addins")]
+        [InlineData("C:/PROGRA~1/cake-build/addins", "C:/Program Files/cake-build/addins")]
+        public void Will_Normalize_Short_Paths_Directory(string input, string expected)
+        {
+            // Given, When
+            var path = new DirectoryPath(input);
+
+            path = path.ExpandShortPath();
+
+            // Then
+            if (OperatingSystem.IsWindows())
+            {
+                Assert.Equal(expected, path.FullPath);
             }
         }
     }

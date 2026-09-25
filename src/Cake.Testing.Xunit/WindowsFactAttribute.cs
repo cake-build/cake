@@ -6,31 +6,30 @@ using Cake.Core;
 using Cake.Core.Polyfill;
 using Xunit;
 
-namespace Cake.Testing.Xunit
+namespace Cake.Testing.Xunit;
+
+/// <summary>
+/// Marks a test method as a fact that should only run on Windows platforms.
+/// </summary>
+public sealed class WindowsFactAttribute : FactAttribute
 {
-    /// <summary>
-    /// Marks a test method as a fact that should only run on Windows platforms.
-    /// </summary>
-    public sealed class WindowsFactAttribute : FactAttribute
+    private static readonly PlatformFamily _family;
+
+    static WindowsFactAttribute()
     {
-        private static readonly PlatformFamily _family;
+        _family = EnvironmentHelper.GetPlatformFamily();
+    }
 
-        static WindowsFactAttribute()
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WindowsFactAttribute"/> class.
+    /// </summary>
+    /// <param name="reason">The reason why the test is skipped on non-Windows platforms.</param>
+    // ReSharper disable once UnusedParameter.Local
+    public WindowsFactAttribute(string reason = null)
+    {
+        if (_family != PlatformFamily.Windows)
         {
-            _family = EnvironmentHelper.GetPlatformFamily();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WindowsFactAttribute"/> class.
-        /// </summary>
-        /// <param name="reason">The reason why the test is skipped on non-Windows platforms.</param>
-        // ReSharper disable once UnusedParameter.Local
-        public WindowsFactAttribute(string reason = null)
-        {
-            if (_family != PlatformFamily.Windows)
-            {
-                Skip = reason ?? "Windows test.";
-            }
+            Skip = reason ?? "Windows test.";
         }
     }
 }

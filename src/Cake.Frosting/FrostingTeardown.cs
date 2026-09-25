@@ -5,35 +5,34 @@
 using System;
 using Cake.Core;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Base class for teardown logic.
+/// </summary>
+public abstract class FrostingTeardown : FrostingTeardown<ICakeContext>
+{
+}
+
+/// <summary>
+/// Base class for teardown logic.
+/// </summary>
+/// <typeparam name="TContext">The build context type.</typeparam>
+public abstract class FrostingTeardown<TContext> : IFrostingTeardown
+    where TContext : ICakeContext
 {
     /// <summary>
-    /// Base class for teardown logic.
+    /// This method is executed before any tasks are run.
+    /// If setup fails, no tasks will be executed but teardown will be performed.
     /// </summary>
-    public abstract class FrostingTeardown : FrostingTeardown<ICakeContext>
+    /// <param name="context">The context.</param>
+    /// <param name="info">The teardown information.</param>
+    public abstract void Teardown(TContext context, ITeardownContext info);
+
+    void IFrostingTeardown.Teardown(ICakeContext context, ITeardownContext info)
     {
-    }
+        ArgumentNullException.ThrowIfNull(context);
 
-    /// <summary>
-    /// Base class for teardown logic.
-    /// </summary>
-    /// <typeparam name="TContext">The build context type.</typeparam>
-    public abstract class FrostingTeardown<TContext> : IFrostingTeardown
-        where TContext : ICakeContext
-    {
-        /// <summary>
-        /// This method is executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="info">The teardown information.</param>
-        public abstract void Teardown(TContext context, ITeardownContext info);
-
-        void IFrostingTeardown.Teardown(ICakeContext context, ITeardownContext info)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-
-            Teardown((TContext)context, info);
-        }
+        Teardown((TContext)context, info);
     }
 }

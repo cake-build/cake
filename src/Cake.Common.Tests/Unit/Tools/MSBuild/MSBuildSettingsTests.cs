@@ -4,348 +4,346 @@
 
 using Cake.Common.Tools.MSBuild;
 using Cake.Core.Diagnostics;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.MSBuild
+namespace Cake.Common.Tests.Unit.Tools.MSBuild;
+
+public sealed class MSBuildSettingsTests
 {
-    public sealed class MSBuildSettingsTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Set_Default_Tools_Version_To_Default()
         {
-            [Fact]
-            public void Should_Set_Default_Tools_Version_To_Default()
-            {
-                // Given, When
-                var settings = new MSBuildSettings();
+            // Given, When
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Equal(MSBuildToolVersion.Default, settings.ToolVersion);
-            }
-
-            [Fact]
-            public void Should_Set_Default_Platform_Target_To_Null()
-            {
-                // Given, When
-                var settings = new MSBuildSettings();
-
-                // Then
-                Assert.Null(settings.PlatformTarget);
-            }
-
-            [Fact]
-            public void Should_Set_Default_Verbosity_To_Normal()
-            {
-                // Given, When
-                var settings = new MSBuildSettings();
-
-                // Then
-                Assert.Equal(Verbosity.Normal, settings.Verbosity);
-            }
+            // Then
+            Assert.Equal(MSBuildToolVersion.Default, settings.ToolVersion);
         }
 
-        public sealed class TheTargetsProperty
+        [Fact]
+        public void Should_Set_Default_Platform_Target_To_Null()
         {
-            [Fact]
-            public void Should_Return_A_Set_That_Is_Case_Insensitive()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given, When
+            var settings = new MSBuildSettings();
 
-                // When
-                settings.Targets.Add("TARGET");
-
-                // Then
-                Assert.True(settings.Targets.Contains("target"));
-            }
+            // Then
+            Assert.Null(settings.PlatformTarget);
         }
 
-        public sealed class ThePropertiesProperty
+        [Fact]
+        public void Should_Set_Default_Verbosity_To_Normal()
         {
-            [Fact]
-            public void Should_Return_A_Dictionary_That_Is_Case_Insensitive()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given, When
+            var settings = new MSBuildSettings();
 
-                // When
-                settings.Properties.Add("THEKEY", new[] { "THEVALUE" });
-
-                // Then
-                Assert.True(settings.Properties.ContainsKey("thekey"));
-            }
+            // Then
+            Assert.Equal(Verbosity.Normal, settings.Verbosity);
         }
+    }
 
-        public sealed class TheConfigurationProperty
+    public sealed class TheTargetsProperty
+    {
+        [Fact]
+        public void Should_Return_A_Set_That_Is_Case_Insensitive()
         {
-            [Fact]
-            public void Should_Be_Empty_By_Default()
-            {
-                // Given, When
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Equal(string.Empty, settings.Configuration);
-            }
+            // When
+            settings.Targets.Add("TARGET");
+
+            // Then
+            Assert.True(settings.Targets.Contains("target"));
         }
+    }
 
-        public sealed class ThePlatformProperty
+    public sealed class ThePropertiesProperty
+    {
+        [Fact]
+        public void Should_Return_A_Dictionary_That_Is_Case_Insensitive()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given, When
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.PlatformTarget);
-            }
+            // When
+            settings.Properties.Add("THEKEY", new[] { "THEVALUE" });
+
+            // Then
+            Assert.True(settings.Properties.ContainsKey("thekey"));
         }
+    }
 
-        public sealed class TheMaxCpuCountProperty
+    public sealed class TheConfigurationProperty
+    {
+        [Fact]
+        public void Should_Be_Empty_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given, When
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.MaxCpuCount);
-            }
+            // Then
+            Assert.Equal(string.Empty, settings.Configuration);
         }
+    }
 
-        public sealed class TheDetailedSummaryProperty
+    public sealed class ThePlatformProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given, When
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.DetailedSummary);
-            }
+            // Then
+            Assert.Null(settings.PlatformTarget);
         }
+    }
 
-        public sealed class TheNoConsoleLogProperty
+    public sealed class TheMaxCpuCountProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.NoConsoleLogger);
-            }
+            // Then
+            Assert.Null(settings.MaxCpuCount);
         }
+    }
 
-        public sealed class TheNoLogoProperty
+    public sealed class TheDetailedSummaryProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.NoLogo);
-            }
+            // Then
+            Assert.Null(settings.DetailedSummary);
         }
+    }
 
-        public sealed class TheContinuousIntegrationBuildProperty
+    public sealed class TheNoConsoleLogProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.ContinuousIntegrationBuild);
-            }
+            // Then
+            Assert.Null(settings.NoConsoleLogger);
         }
+    }
 
-        public sealed class TheVersionProperty
+    public sealed class TheNoLogoProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.Version);
-            }
+            // Then
+            Assert.Null(settings.NoLogo);
         }
+    }
 
-        public sealed class TheVersionPrefixProperty
+    public sealed class TheContinuousIntegrationBuildProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.VersionPrefix);
-            }
+            // Then
+            Assert.Null(settings.ContinuousIntegrationBuild);
         }
+    }
 
-        public sealed class TheVersionSuffixProperty
+    public sealed class TheVersionProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.VersionSuffix);
-            }
+            // Then
+            Assert.Null(settings.Version);
         }
+    }
 
-        public sealed class TheFileVersionProperty
+    public sealed class TheVersionPrefixProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.FileVersion);
-            }
+            // Then
+            Assert.Null(settings.VersionPrefix);
         }
+    }
 
-        public sealed class TheAssemblyVersionProperty
+    public sealed class TheVersionSuffixProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.AssemblyVersion);
-            }
+            // Then
+            Assert.Null(settings.VersionSuffix);
         }
+    }
 
-        public sealed class ThePackageVersionProperty
+    public sealed class TheFileVersionProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.PackageVersion);
-            }
+            // Then
+            Assert.Null(settings.FileVersion);
         }
+    }
 
-        public sealed class ThePackageReleaseNotesProperty
+    public sealed class TheAssemblyVersionProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.PackageReleaseNotes);
-            }
+            // Then
+            Assert.Null(settings.AssemblyVersion);
         }
+    }
 
-        public sealed class TheLoggersProperty
+    public sealed class ThePackageVersionProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Empty_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Empty(settings.Loggers);
-            }
+            // Then
+            Assert.Null(settings.PackageVersion);
         }
+    }
 
-        public sealed class TheFileLoggersProperty
+    public sealed class ThePackageReleaseNotesProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
         {
-            [Fact]
-            public void Should_Be_Empty_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Empty(settings.FileLoggers);
-            }
+            // Then
+            Assert.Null(settings.PackageReleaseNotes);
         }
+    }
 
-        public sealed class TheWarningsAsErrorCodesProperty
+    public sealed class TheLoggersProperty
+    {
+        [Fact]
+        public void Should_Be_Empty_By_Default()
         {
-            [Fact]
-            public void Should_Be_Empty_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Empty(settings.WarningsAsErrorCodes);
-            }
+            // Then
+            Assert.Empty(settings.Loggers);
         }
+    }
 
-        public sealed class TheWarningsAsMessageCodesProperty
+    public sealed class TheFileLoggersProperty
+    {
+        [Fact]
+        public void Should_Be_Empty_By_Default()
         {
-            [Fact]
-            public void Should_Be_Empty_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Empty(settings.WarningsAsMessageCodes);
-            }
+            // Then
+            Assert.Empty(settings.FileLoggers);
         }
+    }
 
-        public sealed class TheRestoreProperty
+    public sealed class TheWarningsAsErrorCodesProperty
+    {
+        [Fact]
+        public void Should_Be_Empty_By_Default()
         {
-            [Fact]
-            public void Should_Be_False_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.False(settings.Restore);
-            }
+            // Then
+            Assert.Empty(settings.WarningsAsErrorCodes);
         }
+    }
 
-        public sealed class TheConsoleLoggerParametersProperty
+    public sealed class TheWarningsAsMessageCodesProperty
+    {
+        [Fact]
+        public void Should_Be_Empty_By_Default()
         {
-            [Fact]
-            public void Should_Be_Empty_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Empty(settings.ConsoleLoggerParameters);
-            }
+            // Then
+            Assert.Empty(settings.WarningsAsMessageCodes);
         }
+    }
 
-        public sealed class TheRestoreLockedModeProperty
+    public sealed class TheRestoreProperty
+    {
+        [Fact]
+        public void Should_Be_False_By_Default()
         {
-            [Fact]
-            public void Should_Be_Null_By_Default()
-            {
-                // Given
-                var settings = new MSBuildSettings();
+            // Given
+            var settings = new MSBuildSettings();
 
-                // Then
-                Assert.Null(settings.RestoreLockedMode);
-            }
+            // Then
+            Assert.False(settings.Restore);
+        }
+    }
+
+    public sealed class TheConsoleLoggerParametersProperty
+    {
+        [Fact]
+        public void Should_Be_Empty_By_Default()
+        {
+            // Given
+            var settings = new MSBuildSettings();
+
+            // Then
+            Assert.Empty(settings.ConsoleLoggerParameters);
+        }
+    }
+
+    public sealed class TheRestoreLockedModeProperty
+    {
+        [Fact]
+        public void Should_Be_Null_By_Default()
+        {
+            // Given
+            var settings = new MSBuildSettings();
+
+            // Then
+            Assert.Null(settings.RestoreLockedMode);
         }
     }
 }

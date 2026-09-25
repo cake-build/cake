@@ -4,12 +4,11 @@
 
 using Cake.Core.Packaging;
 
-namespace Cake.NuGet
+namespace Cake.NuGet;
+
+/// <summary>
+/// Represents a NuGet package installer.
+/// </summary>
+public interface INuGetPackageInstaller : IPackageInstaller
 {
-    /// <summary>
-    /// Represents a NuGet package installer.
-    /// </summary>
-    public interface INuGetPackageInstaller : IPackageInstaller
-    {
-    }
 }

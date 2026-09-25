@@ -2,21 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.OctopusDeploy
+namespace Cake.Common.Tools.OctopusDeploy;
+
+/// <summary>
+/// Represents the format of an Octopus package.
+/// </summary>
+public enum OctopusPackFormat
 {
     /// <summary>
-    /// Represents the format of an Octopus package.
+    /// NuGet package
     /// </summary>
-    public enum OctopusPackFormat
-    {
-        /// <summary>
-        /// NuGet package
-        /// </summary>
-        NuPkg,
+    NuPkg,
 
-        /// <summary>
-        /// Zip package
-        /// </summary>
-        Zip
-    }
+    /// <summary>
+    /// Zip package
+    /// </summary>
+    Zip
 }

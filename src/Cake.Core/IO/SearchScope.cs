@@ -2,21 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Core.IO
+namespace Cake.Core.IO;
+
+/// <summary>
+/// Represents a search scope.
+/// </summary>
+public enum SearchScope
 {
     /// <summary>
-    /// Represents a search scope.
+    /// The current directory.
     /// </summary>
-    public enum SearchScope
-    {
-        /// <summary>
-        /// The current directory.
-        /// </summary>
-        Current,
+    Current,
 
-        /// <summary>
-        /// The current directory and child directories.
-        /// </summary>
-        Recursive
-    }
+    /// <summary>
+    /// The current directory and child directories.
+    /// </summary>
+    Recursive
 }

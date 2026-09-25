@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Cake.Cli;
 using Cake.Core;
@@ -7,185 +6,183 @@ using Cake.Features.Building;
 using Cake.Tests.Fixtures;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
-using Spectre.Console.Cli;
 using Xunit;
 
-namespace Cake.Tests.Unit
+namespace Cake.Tests.Unit;
+
+public class ProgramTests
 {
-    public class ProgramTests
+    [Fact]
+    public async Task Should_Use_Default_Parameters_By_Default()
     {
-        [Fact]
-        public async Task Should_Use_Default_Parameters_By_Default()
-        {
-            // Given
-            var fixture = new ProgramFixture();
-            var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(services => services.AddSingleton(feature));
+        // Given
+        var fixture = new ProgramFixture();
+        var feature = Substitute.For<IBuildFeature>();
+        fixture.Overrides.Add(services => services.AddSingleton(feature));
 
-            // When
-            var result = await fixture.Run();
+        // When
+        var result = await fixture.Run();
 
-            // Then
-            feature.Received(1).Run(
-                Arg.Any<ICakeArguments>(),
-                Arg.Is<BuildFeatureSettings>(settings =>
-                    settings.BuildHostKind == BuildHostKind.Build &&
-                    settings.Debug == false &&
-                    settings.Exclusive == false &&
-                    settings.Script.FullPath == "build.cake" &&
-                    settings.Verbosity == null &&
-                    settings.NoBootstrapping == false));
-        }
+        // Then
+        feature.Received(1).Run(
+            Arg.Any<ICakeArguments>(),
+            Arg.Is<BuildFeatureSettings>(settings =>
+                settings.BuildHostKind == BuildHostKind.Build &&
+                settings.Debug == false &&
+                settings.Exclusive == false &&
+                settings.Script.FullPath == "build.cake" &&
+                settings.Verbosity == null &&
+                settings.NoBootstrapping == false));
+    }
 
-        [Theory]
-        [InlineData("--dryrun")]
-        [InlineData("--whatif")]
-        [InlineData("--noop")]
-        public async Task The_DryRun_Option_Should_Perform_A_Dry_Run_Of_Script(params string[] args)
-        {
-            // Given
-            var fixture = new ProgramFixture();
-            var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(services => services.AddSingleton(feature));
+    [Theory]
+    [InlineData("--dryrun")]
+    [InlineData("--whatif")]
+    [InlineData("--noop")]
+    public async Task The_DryRun_Option_Should_Perform_A_Dry_Run_Of_Script(params string[] args)
+    {
+        // Given
+        var fixture = new ProgramFixture();
+        var feature = Substitute.For<IBuildFeature>();
+        fixture.Overrides.Add(services => services.AddSingleton(feature));
 
-            // When
-            var result = await fixture.Run(args);
+        // When
+        var result = await fixture.Run(args);
 
-            // Then
-            feature.Received(1).Run(
-                Arg.Any<ICakeArguments>(),
-                Arg.Is<BuildFeatureSettings>(settings =>
-                    settings.BuildHostKind == BuildHostKind.DryRun));
-        }
+        // Then
+        feature.Received(1).Run(
+            Arg.Any<ICakeArguments>(),
+            Arg.Is<BuildFeatureSettings>(settings =>
+                settings.BuildHostKind == BuildHostKind.DryRun));
+    }
 
-        [Theory]
-        [InlineData("--showtree")]
-        [InlineData("--tree")]
-        public async Task The_Tree_Option_Should_Show_The_Script_Tree(params string[] args)
-        {
-            // Given
-            var fixture = new ProgramFixture();
-            var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(services => services.AddSingleton(feature));
+    [Theory]
+    [InlineData("--showtree")]
+    [InlineData("--tree")]
+    public async Task The_Tree_Option_Should_Show_The_Script_Tree(params string[] args)
+    {
+        // Given
+        var fixture = new ProgramFixture();
+        var feature = Substitute.For<IBuildFeature>();
+        fixture.Overrides.Add(services => services.AddSingleton(feature));
 
-            // When
-            var result = await fixture.Run(args);
+        // When
+        var result = await fixture.Run(args);
 
-            // Then
-            feature.Received(1).Run(
-                Arg.Any<ICakeArguments>(),
-                Arg.Is<BuildFeatureSettings>(settings =>
-                    settings.BuildHostKind == BuildHostKind.Tree));
-        }
+        // Then
+        feature.Received(1).Run(
+            Arg.Any<ICakeArguments>(),
+            Arg.Is<BuildFeatureSettings>(settings =>
+                settings.BuildHostKind == BuildHostKind.Tree));
+    }
 
-        [Theory]
-        [InlineData("--showdescription")]
-        [InlineData("--description")]
-        public async Task The_Description_Option_Should_Show_Script_Descriptions(params string[] args)
-        {
-            // Given
-            var fixture = new ProgramFixture();
-            var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(services => services.AddSingleton(feature));
+    [Theory]
+    [InlineData("--showdescription")]
+    [InlineData("--description")]
+    public async Task The_Description_Option_Should_Show_Script_Descriptions(params string[] args)
+    {
+        // Given
+        var fixture = new ProgramFixture();
+        var feature = Substitute.For<IBuildFeature>();
+        fixture.Overrides.Add(services => services.AddSingleton(feature));
 
-            // When
-            var result = await fixture.Run(args);
+        // When
+        var result = await fixture.Run(args);
 
-            // Then
-            feature.Received(1).Run(
-                Arg.Any<ICakeArguments>(),
-                Arg.Is<BuildFeatureSettings>(settings =>
-                    settings.BuildHostKind == BuildHostKind.Description));
-        }
+        // Then
+        feature.Received(1).Run(
+            Arg.Any<ICakeArguments>(),
+            Arg.Is<BuildFeatureSettings>(settings =>
+                settings.BuildHostKind == BuildHostKind.Description));
+    }
 
-        [Theory]
-        [InlineData("--version")]
-        [InlineData("--ver")]
-        public async Task The_Version_Option_Should_Call_Version_Feature(params string[] args)
-        {
-            // Given
-            var fixture = new ProgramFixture();
-            var feature = Substitute.For<ICakeVersionFeature>();
-            fixture.Overrides.Add(services => services.AddSingleton(feature));
+    [Theory]
+    [InlineData("--version")]
+    [InlineData("--ver")]
+    public async Task The_Version_Option_Should_Call_Version_Feature(params string[] args)
+    {
+        // Given
+        var fixture = new ProgramFixture();
+        var feature = Substitute.For<ICakeVersionFeature>();
+        fixture.Overrides.Add(services => services.AddSingleton(feature));
 
-            // When
-            var result = await fixture.Run(args);
+        // When
+        var result = await fixture.Run(args);
 
-            // Then
-            feature.Received(1).Run(fixture.Console);
-        }
+        // Then
+        feature.Received(1).Run(fixture.Console);
+    }
 
-        [Theory]
-        [InlineData("--info")]
-        public async Task The_Info_Option_Should_Call_Info_Feature(params string[] args)
-        {
-            // Given
-            var fixture = new ProgramFixture();
-            var feature = Substitute.For<ICakeInfoFeature>();
-            fixture.Overrides.Add(services => services.AddSingleton(feature));
+    [Theory]
+    [InlineData("--info")]
+    public async Task The_Info_Option_Should_Call_Info_Feature(params string[] args)
+    {
+        // Given
+        var fixture = new ProgramFixture();
+        var feature = Substitute.For<ICakeInfoFeature>();
+        fixture.Overrides.Add(services => services.AddSingleton(feature));
 
-            // When
-            var result = await fixture.Run(args);
+        // When
+        var result = await fixture.Run(args);
 
-            // Then
-            feature.Received(1).Run(fixture.Console);
-        }
+        // Then
+        feature.Received(1).Run(fixture.Console);
+    }
 
-        [Fact]
-        public async Task Should_Leave_Verbosity_Unset_When_Not_Specified_On_Command_Line()
-        {
-            // Given
-            var fixture = new ProgramFixture();
-            var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(services => services.AddSingleton(feature));
-            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+    [Fact]
+    public async Task Should_Leave_Verbosity_Unset_When_Not_Specified_On_Command_Line()
+    {
+        // Given
+        var fixture = new ProgramFixture();
+        var feature = Substitute.For<IBuildFeature>();
+        fixture.Overrides.Add(services => services.AddSingleton(feature));
+        fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
 
-            // When
-            await fixture.Run();
+        // When
+        await fixture.Run();
 
-            // Then
-            feature.Received(1).Run(
-                Arg.Any<ICakeArguments>(),
-                Arg.Is<BuildFeatureSettings>(settings =>
-                    settings.Verbosity == null));
-        }
+        // Then
+        feature.Received(1).Run(
+            Arg.Any<ICakeArguments>(),
+            Arg.Is<BuildFeatureSettings>(settings =>
+                settings.Verbosity == null));
+    }
 
-        [Fact]
-        public async Task Should_Prefer_Command_Line_Verbosity_Over_Environment()
-        {
-            // Given
-            var fixture = new ProgramFixture();
-            var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(services => services.AddSingleton(feature));
-            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+    [Fact]
+    public async Task Should_Prefer_Command_Line_Verbosity_Over_Environment()
+    {
+        // Given
+        var fixture = new ProgramFixture();
+        var feature = Substitute.For<IBuildFeature>();
+        fixture.Overrides.Add(services => services.AddSingleton(feature));
+        fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
 
-            // When
-            await fixture.Run("--verbosity", "quiet");
+        // When
+        await fixture.Run("--verbosity", "quiet");
 
-            // Then
-            feature.Received(1).Run(
-                Arg.Any<ICakeArguments>(),
-                Arg.Is<BuildFeatureSettings>(settings =>
-                    settings.Verbosity == Verbosity.Quiet));
-        }
+        // Then
+        feature.Received(1).Run(
+            Arg.Any<ICakeArguments>(),
+            Arg.Is<BuildFeatureSettings>(settings =>
+                settings.Verbosity == Verbosity.Quiet));
+    }
 
-        [Fact]
-        public async Task Should_Prefer_Explicit_Normal_Verbosity_Over_Environment()
-        {
-            // Given
-            var fixture = new ProgramFixture();
-            var feature = Substitute.For<IBuildFeature>();
-            fixture.Overrides.Add(services => services.AddSingleton(feature));
-            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+    [Fact]
+    public async Task Should_Prefer_Explicit_Normal_Verbosity_Over_Environment()
+    {
+        // Given
+        var fixture = new ProgramFixture();
+        var feature = Substitute.For<IBuildFeature>();
+        fixture.Overrides.Add(services => services.AddSingleton(feature));
+        fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
 
-            // When
-            await fixture.Run("--verbosity", "normal");
+        // When
+        await fixture.Run("--verbosity", "normal");
 
-            // Then
-            feature.Received(1).Run(
-                Arg.Any<ICakeArguments>(),
-                Arg.Is<BuildFeatureSettings>(settings =>
-                    settings.Verbosity == Verbosity.Normal));
-        }
+        // Then
+        feature.Received(1).Run(
+            Arg.Any<ICakeArguments>(),
+            Arg.Is<BuildFeatureSettings>(settings =>
+                settings.Verbosity == Verbosity.Normal));
     }
 }

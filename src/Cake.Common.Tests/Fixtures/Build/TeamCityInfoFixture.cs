@@ -7,76 +7,75 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
 
-namespace Cake.Common.Tests.Fixtures.Build
+namespace Cake.Common.Tests.Fixtures.Build;
+
+internal sealed class TeamCityInfoFixture
 {
-    internal sealed class TeamCityInfoFixture
+    public IFileSystem FileSystem { get; set; }
+    public ICakeEnvironment Environment { get; set; }
+
+    public TeamCityInfoFixture()
     {
-        public IFileSystem FileSystem { get; set; }
-        public ICakeEnvironment Environment { get; set; }
+        Environment = FakeEnvironment.CreateUnixEnvironment();
+        FileSystem = new FakeFileSystem(Environment);
+        ((FakeFileSystem)FileSystem).CreateDirectory("/Working");
 
-        public TeamCityInfoFixture()
-        {
-            Environment = FakeEnvironment.CreateUnixEnvironment();
-            FileSystem = new FakeFileSystem(Environment);
-            ((FakeFileSystem)FileSystem).CreateDirectory("/Working");
+        ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_BUILDCONF_NAME", @"Cake Build");
+        ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_NUMBER", "10-Foo");
+        ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_PROJECT_NAME", "Cake");
+        ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_BUILD_PROPERTIES_FILE", "/Working/teamcity.build.properties");
+        ((FakeEnvironment)Environment).SetEnvironmentVariable("Git_Branch", "refs/pull-requests/7/from");
+        ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_DATE", "20200822");
+        ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_TIME", "123456");
+    }
 
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_BUILDCONF_NAME", @"Cake Build");
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_NUMBER", "10-Foo");
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_PROJECT_NAME", "Cake");
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("TEAMCITY_BUILD_PROPERTIES_FILE", "/Working/teamcity.build.properties");
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("Git_Branch", "refs/pull-requests/7/from");
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_DATE", "20200822");
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_TIME", "123456");
-        }
+    public void SetBuildPropertiesContent(string xml)
+    {
+        ((FakeFileSystem)FileSystem).GetFile("/Working/teamcity.build.properties.xml").SetContent(xml);
+    }
 
-        public void SetBuildPropertiesContent(string xml)
-        {
-            ((FakeFileSystem)FileSystem).GetFile("/Working/teamcity.build.properties.xml").SetContent(xml);
-        }
+    public void SetConfigPropertiesContent(string xml)
+    {
+        ((FakeFileSystem)FileSystem).GetFile("/Working/teamcity.config.configuration.xml").SetContent(xml);
+    }
 
-        public void SetConfigPropertiesContent(string xml)
-        {
-            ((FakeFileSystem)FileSystem).GetFile("/Working/teamcity.config.configuration.xml").SetContent(xml);
-        }
+    public void SetRunnerPropertiesContent(string xml)
+    {
+        ((FakeFileSystem)FileSystem).GetFile("/Working/teamcity.runner.configuration.xml").SetContent(xml);
+    }
 
-        public void SetRunnerPropertiesContent(string xml)
-        {
-            ((FakeFileSystem)FileSystem).GetFile("/Working/teamcity.runner.configuration.xml").SetContent(xml);
-        }
+    public void SetGitBranch(string branch)
+    {
+        ((FakeEnvironment)Environment).SetEnvironmentVariable("Git_Branch", branch);
+    }
 
-        public void SetGitBranch(string branch)
-        {
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("Git_Branch", branch);
-        }
+    public void SetBuildStartDate(string startDate)
+    {
+        ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_DATE", startDate);
+    }
 
-        public void SetBuildStartDate(string startDate)
-        {
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_DATE", startDate);
-        }
+    public void SetBuildStartTime(string startTime)
+    {
+        ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_TIME", startTime);
+    }
 
-        public void SetBuildStartTime(string startTime)
-        {
-            ((FakeEnvironment)Environment).SetEnvironmentVariable("BUILD_START_TIME", startTime);
-        }
+    public TeamCityPullRequestInfo CreatePullRequestInfo()
+    {
+        return new TeamCityPullRequestInfo(Environment, CreateBuildInfo());
+    }
 
-        public TeamCityPullRequestInfo CreatePullRequestInfo()
-        {
-            return new TeamCityPullRequestInfo(Environment, CreateBuildInfo());
-        }
+    public TeamCityEnvironmentInfo CreateEnvironmentInfo()
+    {
+        return new TeamCityEnvironmentInfo(Environment, FileSystem);
+    }
 
-        public TeamCityEnvironmentInfo CreateEnvironmentInfo()
-        {
-            return new TeamCityEnvironmentInfo(Environment, FileSystem);
-        }
+    public TeamCityBuildInfo CreateBuildInfo()
+    {
+        return new TeamCityBuildInfo(Environment, FileSystem);
+    }
 
-        public TeamCityBuildInfo CreateBuildInfo()
-        {
-            return new TeamCityBuildInfo(Environment, FileSystem);
-        }
-
-        public TeamCityProjectInfo CreateProjectInfo()
-        {
-            return new TeamCityProjectInfo(Environment);
-        }
+    public TeamCityProjectInfo CreateProjectInfo()
+    {
+        return new TeamCityProjectInfo(Environment);
     }
 }

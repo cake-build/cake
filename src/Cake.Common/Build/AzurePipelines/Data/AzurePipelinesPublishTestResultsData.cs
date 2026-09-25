@@ -8,92 +8,91 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Build.AzurePipelines.Data
+namespace Cake.Common.Build.AzurePipelines.Data;
+
+/// <summary>
+///  Description of test result information to publish to Azure Pipelines.
+/// </summary>
+public class AzurePipelinesPublishTestResultsData
 {
     /// <summary>
-    ///  Description of test result information to publish to Azure Pipelines.
+    /// Gets or sets the type test runner the results are formatted in.
     /// </summary>
-    public class AzurePipelinesPublishTestResultsData
+    public AzurePipelinesTestRunnerType? TestRunner { get; set; }
+
+    /// <summary>
+    /// Gets or sets the list of test result files to publish.
+    /// </summary>
+    public ICollection<FilePath> TestResultsFiles { get; set; } = new List<FilePath>();
+
+    /// <summary>
+    /// Gets or sets whether to merge all test result files into one run.
+    /// </summary>
+    public bool? MergeTestResults { get; set; }
+
+    /// <summary>
+    /// Gets or sets the platform for which the tests were run on.
+    /// </summary>
+    public string Platform { get; set; }
+
+    /// <summary>
+    /// Gets or sets the configuration for which the tests were run on.
+    /// </summary>
+    public string Configuration { get; set; }
+
+    /// <summary>
+    /// Gets or sets a name for the test run.
+    /// </summary>
+    public string TestRunTitle { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether to opt in/out of publishing test run level attachments.
+    /// </summary>
+    public bool? PublishRunAttachments { get; set; }
+
+    internal Dictionary<string, string> GetProperties(ICakeEnvironment environment, IEnumerable<FilePath> testResultsFiles = null)
     {
-        /// <summary>
-        /// Gets or sets the type test runner the results are formatted in.
-        /// </summary>
-        public AzurePipelinesTestRunnerType? TestRunner { get; set; }
+        ArgumentNullException.ThrowIfNull(environment);
 
-        /// <summary>
-        /// Gets or sets the list of test result files to publish.
-        /// </summary>
-        public ICollection<FilePath> TestResultsFiles { get; set; } = new List<FilePath>();
+        var properties = new Dictionary<string, string>();
 
-        /// <summary>
-        /// Gets or sets whether to merge all test result files into one run.
-        /// </summary>
-        public bool? MergeTestResults { get; set; }
-
-        /// <summary>
-        /// Gets or sets the platform for which the tests were run on.
-        /// </summary>
-        public string Platform { get; set; }
-
-        /// <summary>
-        /// Gets or sets the configuration for which the tests were run on.
-        /// </summary>
-        public string Configuration { get; set; }
-
-        /// <summary>
-        /// Gets or sets a name for the test run.
-        /// </summary>
-        public string TestRunTitle { get; set; }
-
-        /// <summary>
-        /// Gets or sets whether to opt in/out of publishing test run level attachments.
-        /// </summary>
-        public bool? PublishRunAttachments { get; set; }
-
-        internal Dictionary<string, string> GetProperties(ICakeEnvironment environment, IEnumerable<FilePath> testResultsFiles = null)
+        if (TestRunner.HasValue)
         {
-            ArgumentNullException.ThrowIfNull(environment);
-
-            var properties = new Dictionary<string, string>();
-
-            if (TestRunner.HasValue)
-            {
-                properties.Add("type", TestRunner.Value.ToString());
-            }
-            if (MergeTestResults.HasValue)
-            {
-                properties.Add("mergeResults", MergeTestResults.ToString().ToLowerInvariant());
-            }
-            if (!string.IsNullOrWhiteSpace(Platform))
-            {
-                properties.Add("platform", Platform);
-            }
-            if (!string.IsNullOrWhiteSpace(Configuration))
-            {
-                properties.Add("config", Configuration);
-            }
-            if (!string.IsNullOrWhiteSpace(TestRunTitle))
-            {
-                properties.Add("runTitle", $"'{TestRunTitle}'");
-            }
-            if (PublishRunAttachments.HasValue)
-            {
-                properties.Add("publishRunAttachments", PublishRunAttachments.ToString().ToLowerInvariant());
-            }
-
-            var resultFiles = testResultsFiles ?? TestResultsFiles;
-            if (resultFiles != null && resultFiles.Any())
-            {
-                properties.Add("resultFiles",
-                    string.Join(',',
-                        resultFiles.Select(filePath =>
-                            filePath
-                                .MakeAbsolute(environment)
-                                .FullPath
-                                .Replace(filePath.Separator, System.IO.Path.DirectorySeparatorChar))));
-            }
-
-            return properties;
+            properties.Add("type", TestRunner.Value.ToString());
         }
+        if (MergeTestResults.HasValue)
+        {
+            properties.Add("mergeResults", MergeTestResults.ToString().ToLowerInvariant());
+        }
+        if (!string.IsNullOrWhiteSpace(Platform))
+        {
+            properties.Add("platform", Platform);
+        }
+        if (!string.IsNullOrWhiteSpace(Configuration))
+        {
+            properties.Add("config", Configuration);
+        }
+        if (!string.IsNullOrWhiteSpace(TestRunTitle))
+        {
+            properties.Add("runTitle", $"'{TestRunTitle}'");
+        }
+        if (PublishRunAttachments.HasValue)
+        {
+            properties.Add("publishRunAttachments", PublishRunAttachments.ToString().ToLowerInvariant());
+        }
+
+        var resultFiles = testResultsFiles ?? TestResultsFiles;
+        if (resultFiles != null && resultFiles.Any())
+        {
+            properties.Add("resultFiles",
+                string.Join(',',
+                    resultFiles.Select(filePath =>
+                        filePath
+                            .MakeAbsolute(environment)
+                            .FullPath
+                            .Replace(filePath.Separator, System.IO.Path.DirectorySeparatorChar))));
+        }
+
+        return properties;
     }
 }

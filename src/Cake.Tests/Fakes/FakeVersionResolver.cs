@@ -1,26 +1,25 @@
 using Cake.Cli;
 
-namespace Cake.Tests.Fakes
+namespace Cake.Tests.Fakes;
+
+public sealed class FakeVersionResolver : IVersionResolver
 {
-    public sealed class FakeVersionResolver : IVersionResolver
+    private readonly string _version;
+    private readonly string _product;
+
+    public FakeVersionResolver(string version, string product)
     {
-        private readonly string _version;
-        private readonly string _product;
+        _version = version;
+        _product = product;
+    }
 
-        public FakeVersionResolver(string version, string product)
-        {
-            _version = version;
-            _product = product;
-        }
+    public string GetVersion()
+    {
+        return _version;
+    }
 
-        public string GetVersion()
-        {
-            return _version;
-        }
-
-        public string GetProductVersion()
-        {
-            return _product;
-        }
+    public string GetProductVersion()
+    {
+        return _product;
     }
 }

@@ -6,233 +6,232 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Cake.Core.Scripting
+namespace Cake.Core.Scripting;
+
+/// <summary>
+/// Represents a script host that works as a context for scripts.
+/// </summary>
+public interface IScriptHost
 {
     /// <summary>
-    /// Represents a script host that works as a context for scripts.
+    /// Gets the context.
     /// </summary>
-    public interface IScriptHost
-    {
-        /// <summary>
-        /// Gets the context.
-        /// </summary>
-        /// <value>The context.</value>
-        ICakeContext Context { get; }
+    /// <value>The context.</value>
+    ICakeContext Context { get; }
 
-        /// <summary>
-        /// Gets all registered tasks.
-        /// </summary>
-        /// <value>The registered tasks.</value>
-        IReadOnlyList<ICakeTaskInfo> Tasks { get; }
+    /// <summary>
+    /// Gets all registered tasks.
+    /// </summary>
+    /// <value>The registered tasks.</value>
+    IReadOnlyList<ICakeTaskInfo> Tasks { get; }
 
-        /// <summary>
-        /// Gets the execution settings.
-        /// </summary>
-        ExecutionSettings Settings { get; }
+    /// <summary>
+    /// Gets the execution settings.
+    /// </summary>
+    ExecutionSettings Settings { get; }
 
-        /// <summary>
-        /// Registers a new task.
-        /// </summary>
-        /// <param name="name">The name of the task.</param>
-        /// <returns>A <see cref="CakeTaskBuilder"/>.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Hello")
-        ///     .Does(() =>
-        /// {
-        ///     Information("Hello World");
-        /// });
-        /// </code>
-        /// </example>
-        CakeTaskBuilder Task(string name);
+    /// <summary>
+    /// Registers a new task.
+    /// </summary>
+    /// <param name="name">The name of the task.</param>
+    /// <returns>A <see cref="CakeTaskBuilder"/>.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Hello")
+    ///     .Does(() =>
+    /// {
+    ///     Information("Hello World");
+    /// });
+    /// </code>
+    /// </example>
+    CakeTaskBuilder Task(string name);
 
-        /// <summary>
-        /// Registers a new task.
-        /// </summary>
-        /// <param name="name">The name of the task.</param>
-        /// <returns>A <see cref="CakeTaskBuilder"/>.</returns>
-        /// <typeparam name="TData">The type of the data context.</typeparam>
-        /// <example>
-        /// <code>
-        /// TaskOf&lt;Foo&gt;("Hello")
-        ///     .Does(data =>
-        /// {
-        ///     Information("Hello {0}", data.Place);
-        /// });
-        /// </code>
-        /// </example>
-        CakeTaskBuilder<TData> TaskOf<TData>(string name)
-            where TData : class
-            => new(Task(name));
+    /// <summary>
+    /// Registers a new task.
+    /// </summary>
+    /// <param name="name">The name of the task.</param>
+    /// <returns>A <see cref="CakeTaskBuilder"/>.</returns>
+    /// <typeparam name="TData">The type of the data context.</typeparam>
+    /// <example>
+    /// <code>
+    /// TaskOf&lt;Foo&gt;("Hello")
+    ///     .Does(data =>
+    /// {
+    ///     Information("Hello {0}", data.Place);
+    /// });
+    /// </code>
+    /// </example>
+    CakeTaskBuilder<TData> TaskOf<TData>(string name)
+        where TData : class
+        => new(Task(name));
 
-        /// <summary>
-        /// Allows registration of an action that's executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// Setup(context => {
-        ///   context.Log.Information("Hello World!");
-        /// });
-        /// </code>
-        /// </example>
-        void Setup(Action<ISetupContext> action);
+    /// <summary>
+    /// Allows registration of an action that's executed before any tasks are run.
+    /// If setup fails, no tasks will be executed but teardown will be performed.
+    /// </summary>
+    /// <param name="action">The action to be executed.</param>
+    /// <example>
+    /// <code>
+    /// Setup(context => {
+    ///   context.Log.Information("Hello World!");
+    /// });
+    /// </code>
+    /// </example>
+    void Setup(Action<ISetupContext> action);
 
-        /// <summary>
-        /// Allows registration of an action that's executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// Setup&lt;Foo&gt;(context => {
-        ///   return new Foo();
-        /// });
-        /// </code>
-        /// </example>
-        void Setup<TData>(Func<ISetupContext, TData> action) where TData : class;
+    /// <summary>
+    /// Allows registration of an action that's executed before any tasks are run.
+    /// If setup fails, no tasks will be executed but teardown will be performed.
+    /// </summary>
+    /// <typeparam name="TData">The data type.</typeparam>
+    /// <param name="action">The action to be executed.</param>
+    /// <example>
+    /// <code>
+    /// Setup&lt;Foo&gt;(context => {
+    ///   return new Foo();
+    /// });
+    /// </code>
+    /// </example>
+    void Setup<TData>(Func<ISetupContext, TData> action) where TData : class;
 
-        /// <summary>
-        /// Allows registration of an action that's executed after all other tasks have been run.
-        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// Teardown(context => {
-        ///   context.Log.Information("Goodbye World!");
-        /// });
-        /// </code>
-        /// </example>
-        void Teardown(Action<ITeardownContext> action);
+    /// <summary>
+    /// Allows registration of an action that's executed after all other tasks have been run.
+    /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
+    /// </summary>
+    /// <param name="action">The action to be executed.</param>
+    /// <example>
+    /// <code>
+    /// Teardown(context => {
+    ///   context.Log.Information("Goodbye World!");
+    /// });
+    /// </code>
+    /// </example>
+    void Teardown(Action<ITeardownContext> action);
 
-        /// <summary>
-        /// Allows registration of an action that's executed after all other tasks have been run.
-        /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// Teardown((context, data) => {
-        ///   context.Log.Information("Goodbye {0}!", data.Place);
-        /// });
-        /// </code>
-        /// </example>
-        void Teardown<TData>(Action<ITeardownContext, TData> action) where TData : class;
+    /// <summary>
+    /// Allows registration of an action that's executed after all other tasks have been run.
+    /// If a setup action or a task fails with or without recovery, the specified teardown action will still be executed.
+    /// </summary>
+    /// <typeparam name="TData">The data type.</typeparam>
+    /// <param name="action">The action to be executed.</param>
+    /// <example>
+    /// <code>
+    /// Teardown((context, data) => {
+    ///   context.Log.Information("Goodbye {0}!", data.Place);
+    /// });
+    /// </code>
+    /// </example>
+    void Teardown<TData>(Action<ITeardownContext, TData> action) where TData : class;
 
-        /// <summary>
-        /// Allows registration of an action that's executed before each task is run.
-        /// If the task setup fails, its task will not be executed but the task teardown will be performed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// TaskSetup(context =>
-        /// {
-        ///     Information("Starting {0}", context.Task.Name);
-        /// });
-        /// </code>
-        /// </example>
-        void TaskSetup(Action<ITaskSetupContext> action);
+    /// <summary>
+    /// Allows registration of an action that's executed before each task is run.
+    /// If the task setup fails, its task will not be executed but the task teardown will be performed.
+    /// </summary>
+    /// <param name="action">The action to be executed.</param>
+    /// <example>
+    /// <code>
+    /// TaskSetup(context =>
+    /// {
+    ///     Information("Starting {0}", context.Task.Name);
+    /// });
+    /// </code>
+    /// </example>
+    void TaskSetup(Action<ITaskSetupContext> action);
 
-        /// <summary>
-        /// Allows registration of an action that's executed before each task is run.
-        /// If the task setup fails, its task will not be executed but the task teardown will be performed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// TaskSetup&lt;Foo&gt;((context, data) =>
-        /// {
-        ///     Information("Starting {0} for {1}", context.Task.Name, data.Place);
-        /// });
-        /// </code>
-        /// </example>
-        void TaskSetup<TData>(Action<ITaskSetupContext, TData> action) where TData : class;
+    /// <summary>
+    /// Allows registration of an action that's executed before each task is run.
+    /// If the task setup fails, its task will not be executed but the task teardown will be performed.
+    /// </summary>
+    /// <typeparam name="TData">The data type.</typeparam>
+    /// <param name="action">The action to be executed.</param>
+    /// <example>
+    /// <code>
+    /// TaskSetup&lt;Foo&gt;((context, data) =>
+    /// {
+    ///     Information("Starting {0} for {1}", context.Task.Name, data.Place);
+    /// });
+    /// </code>
+    /// </example>
+    void TaskSetup<TData>(Action<ITaskSetupContext, TData> action) where TData : class;
 
-        /// <summary>
-        /// Allows registration of an action that's executed after each task has been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// TaskTeardown(context =>
-        /// {
-        ///     Information("Finished {0}", context.Task.Name);
-        /// });
-        /// </code>
-        /// </example>
-        void TaskTeardown(Action<ITaskTeardownContext> action);
+    /// <summary>
+    /// Allows registration of an action that's executed after each task has been run.
+    /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+    /// </summary>
+    /// <param name="action">The action to be executed.</param>
+    /// <example>
+    /// <code>
+    /// TaskTeardown(context =>
+    /// {
+    ///     Information("Finished {0}", context.Task.Name);
+    /// });
+    /// </code>
+    /// </example>
+    void TaskTeardown(Action<ITaskTeardownContext> action);
 
-        /// <summary>
-        /// Allows registration of an action that's executed after each task has been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <typeparam name="TData">The data type.</typeparam>
-        /// <param name="action">The action to be executed.</param>
-        /// <example>
-        /// <code>
-        /// TaskTeardown&lt;Foo&gt;((context, data) =>
-        /// {
-        ///     Information("Finished {0} for {1}", context.Task.Name, data.Place);
-        /// });
-        /// </code>
-        /// </example>
-        void TaskTeardown<TData>(Action<ITaskTeardownContext, TData> action) where TData : class;
+    /// <summary>
+    /// Allows registration of an action that's executed after each task has been run.
+    /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
+    /// </summary>
+    /// <typeparam name="TData">The data type.</typeparam>
+    /// <param name="action">The action to be executed.</param>
+    /// <example>
+    /// <code>
+    /// TaskTeardown&lt;Foo&gt;((context, data) =>
+    /// {
+    ///     Information("Finished {0} for {1}", context.Task.Name, data.Place);
+    /// });
+    /// </code>
+    /// </example>
+    void TaskTeardown<TData>(Action<ITaskTeardownContext, TData> action) where TData : class;
 
-        /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="target">The target to run.</param>
-        /// <returns>The resulting report.</returns>
-        /// <example>
-        /// <code>
-        /// var target = Argument("target", "Default");
-        /// RunTarget(target);
-        /// </code>
-        /// </example>
-        CakeReport RunTarget(string target);
+    /// <summary>
+    /// Runs the specified target.
+    /// </summary>
+    /// <param name="target">The target to run.</param>
+    /// <returns>The resulting report.</returns>
+    /// <example>
+    /// <code>
+    /// var target = Argument("target", "Default");
+    /// RunTarget(target);
+    /// </code>
+    /// </example>
+    CakeReport RunTarget(string target);
 
-        /// <summary>
-        /// Runs the specified target.
-        /// </summary>
-        /// <param name="target">The target to run.</param>
-        /// <returns>The resulting report.</returns>
-        /// <example>
-        /// <code>
-        /// var target = Argument("target", "Default");
-        /// await RunTargetAsync(target);
-        /// </code>
-        /// </example>
-        Task<CakeReport> RunTargetAsync(string target);
+    /// <summary>
+    /// Runs the specified target.
+    /// </summary>
+    /// <param name="target">The target to run.</param>
+    /// <returns>The resulting report.</returns>
+    /// <example>
+    /// <code>
+    /// var target = Argument("target", "Default");
+    /// await RunTargetAsync(target);
+    /// </code>
+    /// </example>
+    Task<CakeReport> RunTargetAsync(string target);
 
-        /// <summary>
-        /// Runs the specified targets.
-        /// </summary>
-        /// <param name="targets">The targets to run.</param>
-        /// <returns>The resulting report.</returns>
-        /// <example>
-        /// <code>
-        /// RunTargets(["Clean", "Build"]);
-        /// </code>
-        /// </example>
-        CakeReport RunTargets(IEnumerable<string> targets);
+    /// <summary>
+    /// Runs the specified targets.
+    /// </summary>
+    /// <param name="targets">The targets to run.</param>
+    /// <returns>The resulting report.</returns>
+    /// <example>
+    /// <code>
+    /// RunTargets(["Clean", "Build"]);
+    /// </code>
+    /// </example>
+    CakeReport RunTargets(IEnumerable<string> targets);
 
-        /// <summary>
-        /// Runs the specified targets.
-        /// </summary>
-        /// <param name="targets">The targets to run.</param>
-        /// <returns>The resulting report.</returns>
-        /// <example>
-        /// <code>
-        /// await RunTargetsAsync(["Clean", "Build"]);
-        /// </code>
-        /// </example>
-        Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets);
-    }
+    /// <summary>
+    /// Runs the specified targets.
+    /// </summary>
+    /// <param name="targets">The targets to run.</param>
+    /// <returns>The resulting report.</returns>
+    /// <example>
+    /// <code>
+    /// await RunTargetsAsync(["Clean", "Build"]);
+    /// </code>
+    /// </example>
+    Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets);
 }

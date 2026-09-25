@@ -6,39 +6,38 @@ using System;
 using System.Collections.Generic;
 using Cake.Core.Configuration;
 
-namespace Cake.Testing
+namespace Cake.Testing;
+
+/// <summary>
+/// Implementation of a fake <see cref="ICakeConfiguration"/>.
+/// </summary>
+public sealed class FakeConfiguration : ICakeConfiguration
 {
+    private readonly Dictionary<string, string> _lookup;
+
     /// <summary>
-    /// Implementation of a fake <see cref="ICakeConfiguration"/>.
+    /// Initializes a new instance of the <see cref="FakeConfiguration"/> class.
     /// </summary>
-    public sealed class FakeConfiguration : ICakeConfiguration
+    public FakeConfiguration()
     {
-        private readonly Dictionary<string, string> _lookup;
+        _lookup = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FakeConfiguration"/> class.
-        /// </summary>
-        public FakeConfiguration()
-        {
-            _lookup = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        }
+    /// <inheritdoc/>
+    public string GetValue(string key)
+    {
+        string value;
+        _lookup.TryGetValue(key, out value);
+        return value;
+    }
 
-        /// <inheritdoc/>
-        public string GetValue(string key)
-        {
-            string value;
-            _lookup.TryGetValue(key, out value);
-            return value;
-        }
-
-        /// <summary>
-        /// Sets the value that corresponds to the specified key.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        public void SetValue(string key, string value)
-        {
-            _lookup[key] = value;
-        }
+    /// <summary>
+    /// Sets the value that corresponds to the specified key.
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <param name="value">The value.</param>
+    public void SetValue(string key, string value)
+    {
+        _lookup[key] = value;
     }
 }

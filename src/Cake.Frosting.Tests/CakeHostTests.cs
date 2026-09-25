@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Reflection;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Packaging;
@@ -11,462 +12,483 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Frosting.Tests
+namespace Cake.Frosting.Tests;
+
+public sealed partial class CakeHostTests
 {
-    public sealed partial class CakeHostTests
+    [Fact]
+    public void Should_Set_Working_Directory_From_Options_If_Set()
     {
-        [Fact]
-        public void Should_Set_Working_Directory_From_Options_If_Set()
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.Host.UseWorkingDirectory("./Foo");
+        fixture.FileSystem.CreateDirectory("/Working/Foo");
+
+        // When
+        fixture.Run();
+
+        // Then
+        Assert.Equal("/Working/Foo", fixture.Environment.WorkingDirectory.FullPath);
+    }
+
+    [Fact]
+    public void Should_Prefer_Working_Directory_From_Options_Over_Configuration()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.FileSystem.CreateDirectory("/Working/Foo");
+        fixture.FileSystem.CreateDirectory("/Working/Bar");
+        fixture.Host.UseWorkingDirectory("./Foo");
+
+        // When
+        fixture.Run("-w", "./Bar");
+
+        // Then
+        Assert.Equal("/Working/Bar", fixture.Environment.WorkingDirectory.FullPath);
+    }
+
+    [Fact]
+    public void Should_Set_Command_Line_Verbosity_Before_Setting_Working_Directory()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.Host.UseWorkingDirectory("./Foo");
+
+        // When
+        var result = fixture.Run("--target", "dummytask", "--verbosity", "diagnostic");
+
+        // Then
+        Assert.Equal(1, result);
+        Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
+    }
+
+    [Fact]
+    public void Should_Read_Verbosity_From_Cake_Config_In_Working_Directory()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.FileSystem.CreateDirectory("/Working/Foo");
+        fixture.FileSystem.CreateFile("/Working/Foo/cake.config").SetContent("[Settings]\nVerbosity=Diagnostic");
+        fixture.Host.UseWorkingDirectory("./Foo");
+
+        // When
+        fixture.Run("--target", "dummytask");
+
+        // Then
+        Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
+    }
+
+    [Fact]
+    public void Should_Not_Read_Verbosity_From_Cake_Config_Outside_Working_Directory()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.FileSystem.CreateDirectory("/Working/Foo");
+        fixture.FileSystem.CreateFile("/Working/cake.config").SetContent("[Settings]\nVerbosity=Diagnostic");
+        fixture.Host.UseWorkingDirectory("./Foo");
+
+        // When
+        fixture.Run("--target", "dummytask");
+
+        // Then
+        Assert.Equal(Verbosity.Normal, fixture.Log.Verbosity);
+    }
+
+    [Fact]
+    public void Should_Call_Setup_On_Registered_Setup_Lifetime()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+
+        var lifetime = new FakeLifetime();
+        fixture.Host.ConfigureServices(services => services.AddSingleton<IFrostingSetup>(lifetime));
+
+        // When
+        var result = fixture.Run("--target", "dummytask");
+
+        // Then
+        Assert.Equal(0, result);
+        Assert.Equal(1, lifetime.SetupCount);
+    }
+
+    [Fact]
+    public void Should_Call_Teardown_On_Registered_Teardown_Lifetime()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+
+        var lifetime = new FakeLifetime();
+        fixture.Host.ConfigureServices(services => services.AddSingleton<IFrostingTeardown>(lifetime));
+
+        // When
+        var result = fixture.Run("--target", "dummytask");
+
+        // Then
+        Assert.Equal(0, result);
+        Assert.Equal(1, lifetime.TeardownCount);
+    }
+
+    [Fact]
+    public void Should_Call_Setup_On_Registered_Task_Lifetime()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+
+        var lifetime = new FakeTaskLifetime();
+        fixture.Host.ConfigureServices(services => services.AddSingleton<IFrostingTaskSetup>(lifetime));
+
+        // When
+        var result = fixture.Run("--target", "dummytask");
+
+        // Then
+        Assert.Equal(0, result);
+        Assert.Equal(1, lifetime.SetupCount);
+    }
+
+    [Fact]
+    public void Should_Call_Teardown_On_Registered_Task_Lifetime()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+
+        var lifetime = new FakeTaskLifetime();
+        fixture.Host.ConfigureServices(services => services.AddSingleton<IFrostingTaskTeardown>(lifetime));
+
+        // When
+        var result = fixture.Run("--target", "dummytask");
+
+        // Then
+        Assert.Equal(0, result);
+        Assert.Equal(1, lifetime.TeardownCount);
+    }
+
+    [Fact]
+    public void Should_Execute_Tasks()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.Strategy = Substitute.For<IExecutionStrategy>();
+        fixture.RegisterTask<DummyTask>();
+
+        // When
+        var result = fixture.Run("--target", "dummytask");
+
+        // Then
+        fixture.Strategy
+            .Received(1)
+            .ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "DummyTask"), Arg.Any<ICakeContext>());
+    }
+
+    [Fact]
+    public void Should_Register_All_Tasks_Discovered_In_Assembly()
+    {
+        // Given — assembly scan (not DI) must find more than the first IFrostingTask.
+        var fixture = new CakeHostFixture();
+        var log = new FakeLog();
+        fixture.Log = log;
+        var assembly = typeof(AssemblyScanTaskA).Assembly;
+        if (!Equals(Assembly.GetEntryAssembly(), assembly))
         {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-            fixture.Host.UseWorkingDirectory("./Foo");
-            fixture.FileSystem.CreateDirectory("/Working/Foo");
-
-            // When
-            fixture.Run();
-
-            // Then
-            Assert.Equal("/Working/Foo", fixture.Environment.WorkingDirectory.FullPath);
+            fixture.Host.AddAssembly(assembly);
         }
 
-        [Fact]
-        public void Should_Prefer_Working_Directory_From_Options_Over_Configuration()
+        // When
+        var result = fixture.Run("--target", nameof(AssemblyScanTaskA), "--verbosity", "diagnostic");
+
+        // Then
+        Assert.Equal(0, result);
+        Assert.Contains(log.Entries, entry => entry.Message.Contains($"Registering task: {nameof(AssemblyScanTaskA)}"));
+        Assert.Contains(log.Entries, entry => entry.Message.Contains($"Registering task: {nameof(AssemblyScanTaskB)}"));
+    }
+
+    [Fact]
+    public void Should_Not_Abort_Build_If_Task_That_Is_ContinueOnError_Throws()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<ContinueOnErrorTask>();
+
+        // When
+        var result = fixture.Run("--target", "ContinueOnErrorTask");
+
+        // Then
+        Assert.Equal(0, result);
+    }
+
+    [Fact]
+    public void Should_Abort_Build_If_Task_That_Is_Not_ContinueOnError_Throws()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<ThrowingTask>();
+
+        // When
+        var result = fixture.Run("--target", "ThrowingTask");
+
+        // Then
+        Assert.Equal(1, result);
+    }
+
+    [Fact]
+    public void Should_Execute_Dependee_Task()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<CleanTask>();
+        fixture.RegisterTask<DependeeTask>();
+        fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+        // When
+        fixture.Run("--target", nameof(CleanTask));
+
+        // Then
+        Received.InOrder(() =>
         {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-            fixture.FileSystem.CreateDirectory("/Working/Foo");
-            fixture.FileSystem.CreateDirectory("/Working/Bar");
-            fixture.Host.UseWorkingDirectory("./Foo");
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == nameof(DependeeTask)), Arg.Any<ICakeContext>());
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == nameof(CleanTask)), Arg.Any<ICakeContext>());
+        });
+    }
 
-            // When
-            fixture.Run("-w", "./Bar");
+    [Fact]
+    public void Should_Execute_Tasks_In_Correct_Order()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<BuildTask>();
+        fixture.RegisterTask<CleanTask>();
+        fixture.RegisterTask<UnitTestsTask>();
+        fixture.Strategy = Substitute.For<IExecutionStrategy>();
 
-            // Then
-            Assert.Equal("/Working/Bar", fixture.Environment.WorkingDirectory.FullPath);
-        }
+        // When
+        fixture.Run("--target", "UnitTestsTask");
 
-        [Fact]
-        public void Should_Set_Command_Line_Verbosity_Before_Setting_Working_Directory()
+        // Then
+        Received.InOrder(() =>
         {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-            fixture.Host.UseWorkingDirectory("./Foo");
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "CleanTask"), Arg.Any<ICakeContext>());
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "BuildTask"), Arg.Any<ICakeContext>());
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "UnitTestsTask"), Arg.Any<ICakeContext>());
+        });
+    }
 
-            // When
-            var result = fixture.Run("--target", "dummytask", "--verbosity", "diagnostic");
+    [Fact]
+    public void Should_Throw_If_Dependency_Is_Not_A_Valid_Task()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<InvalidDependencyTask>();
+        fixture.Strategy = Substitute.For<IExecutionStrategy>();
 
-            // Then
-            Assert.Equal(1, result);
-            Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
-        }
+        // When
+        var result = fixture.Run("--target", "InvalidDependencyTask");
 
-        [Fact]
-        public void Should_Read_Verbosity_From_Cake_Config_In_Working_Directory()
+        // Then
+        Assert.Equal(1, result);
+        fixture.Log.Received(1).Error("Error: {0}", "The dependency 'DateTime' is not a valid task.");
+    }
+
+    [Fact]
+    public void Should_Return_Zero_On_Success()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+
+        // When
+        var result = fixture.Run("--target", "dummytask");
+
+        // Then
+        Assert.Equal(0, result);
+    }
+
+    [Fact]
+    public void Should_Return_One_When_Target_Is_Not_Found()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+
+        // When
+        var result = fixture.Run("--target", "foobar");
+
+        // Then
+        Assert.Equal(1, result);
+        fixture.Log.Received(1).Error("Error: {0}", "The target 'foobar' was not found.");
+    }
+
+    [Fact]
+    public void Should_Execute_OnError_Method_If_Run_Failed()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<OnErrorRunFailedTask>();
+
+        // When
+        fixture.Run("--target", "OnErrorRunFailedTask");
+
+        // Then
+        fixture.Log.Received(1).Error("OnError: {0}", "An exception");
+    }
+
+    [Fact]
+    public void Should_Execute_OnError_Method_If_RunAsync_Failed()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<OnErrorRunAsyncFailedTask>();
+
+        // When
+        fixture.Run("--target", "OnErrorRunAsyncFailedTask");
+
+        // Then
+        fixture.Log.Received(1).Error("OnError: {0}", "An exception");
+    }
+
+    [Fact]
+    public void Should_Not_Execute_OnError_Method_If_Run_Completed()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<OnErrorRunCompletedTask>();
+
+        // When
+        fixture.Run("--target", "OnErrorRunCompletedTask");
+
+        // Then
+        fixture.Log.DidNotReceive().Error("OnError: {0}", "An exception");
+    }
+
+    [Fact]
+    public void Should_Execute_Finally_Method_After_All_Methods()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<FinallyTask>();
+
+        // When
+        fixture.Run("--target", "FinallyTask");
+
+        // Then
+        Received.InOrder(() =>
         {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-            fixture.FileSystem.CreateDirectory("/Working/Foo");
-            fixture.FileSystem.CreateFile("/Working/Foo/cake.config").SetContent("[Settings]\nVerbosity=Diagnostic");
-            fixture.Host.UseWorkingDirectory("./Foo");
+            fixture.Log.Information("Run method called");
+            fixture.Log.Information("OnError method called");
+            fixture.Log.Information("Finally method called");
+        });
+    }
 
-            // When
-            fixture.Run("--target", "dummytask");
+    [Fact]
+    public void Should_Install_Tools()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.Host.ConfigureServices(s => s.UseTool(new Uri("foo:?package=Bar")));
+        fixture.RegisterTask<DummyTask>();
 
-            // Then
-            Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
-        }
+        // When
+        var result = fixture.Run("--target", "dummytask");
 
-        [Fact]
-        public void Should_Not_Read_Verbosity_From_Cake_Config_Outside_Working_Directory()
+        // Then
+        fixture.Installer.Received(1).Install(
+            Arg.Is<PackageReference>(p => p.OriginalString == "foo:?package=Bar"));
+    }
+
+    [Fact]
+    public void Should_pass_target_within_cakeContext_arguments()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+        // When
+        fixture.Run("--target", nameof(DummyTask));
+
+        // Then
+        fixture.Strategy
+            .Received(1)
+            .ExecuteAsync(Arg.Any<CakeTask>(), Arg.Is<ICakeContext>(cc => cc.Arguments.HasArgument("target") && cc.Arguments.GetArgument("target").Equals(nameof(DummyTask))));
+    }
+
+    [Theory]
+    [InlineData(nameof(DummyTask), nameof(DummyTask2), nameof(DummyTask3))]
+    [InlineData(nameof(DummyTask), nameof(DummyTask3), nameof(DummyTask2))]
+    [InlineData(nameof(DummyTask2), nameof(DummyTask3), nameof(DummyTask))]
+    [InlineData(nameof(DummyTask2), nameof(DummyTask), nameof(DummyTask3))]
+    [InlineData(nameof(DummyTask3), nameof(DummyTask2), nameof(DummyTask))]
+    [InlineData(nameof(DummyTask3), nameof(DummyTask), nameof(DummyTask2))]
+    public void Should_Execute_Multiple_Targets_In_Correct_Order(string task0, string task1, string task2)
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.RegisterTask<DummyTask2>();
+        fixture.RegisterTask<DummyTask3>();
+        fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+        // When
+        fixture.Run("--target", task0, "--target", task1, "--target", task2);
+
+        // Then
+        Received.InOrder(() =>
         {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-            fixture.FileSystem.CreateDirectory("/Working/Foo");
-            fixture.FileSystem.CreateFile("/Working/cake.config").SetContent("[Settings]\nVerbosity=Diagnostic");
-            fixture.Host.UseWorkingDirectory("./Foo");
-
-            // When
-            fixture.Run("--target", "dummytask");
-
-            // Then
-            Assert.Equal(Verbosity.Normal, fixture.Log.Verbosity);
-        }
-
-        [Fact]
-        public void Should_Call_Setup_On_Registered_Setup_Lifetime()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-
-            var lifetime = new FakeLifetime();
-            fixture.Host.ConfigureServices(services => services.AddSingleton<IFrostingSetup>(lifetime));
-
-            // When
-            var result = fixture.Run("--target", "dummytask");
-
-            // Then
-            Assert.Equal(0, result);
-            Assert.Equal(1, lifetime.SetupCount);
-        }
-
-        [Fact]
-        public void Should_Call_Teardown_On_Registered_Teardown_Lifetime()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-
-            var lifetime = new FakeLifetime();
-            fixture.Host.ConfigureServices(services => services.AddSingleton<IFrostingTeardown>(lifetime));
-
-            // When
-            var result = fixture.Run("--target", "dummytask");
-
-            // Then
-            Assert.Equal(0, result);
-            Assert.Equal(1, lifetime.TeardownCount);
-        }
-
-        [Fact]
-        public void Should_Call_Setup_On_Registered_Task_Lifetime()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-
-            var lifetime = new FakeTaskLifetime();
-            fixture.Host.ConfigureServices(services => services.AddSingleton<IFrostingTaskSetup>(lifetime));
-
-            // When
-            var result = fixture.Run("--target", "dummytask");
-
-            // Then
-            Assert.Equal(0, result);
-            Assert.Equal(1, lifetime.SetupCount);
-        }
-
-        [Fact]
-        public void Should_Call_Teardown_On_Registered_Task_Lifetime()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-
-            var lifetime = new FakeTaskLifetime();
-            fixture.Host.ConfigureServices(services => services.AddSingleton<IFrostingTaskTeardown>(lifetime));
-
-            // When
-            var result = fixture.Run("--target", "dummytask");
-
-            // Then
-            Assert.Equal(0, result);
-            Assert.Equal(1, lifetime.TeardownCount);
-        }
-
-        [Fact]
-        public void Should_Execute_Tasks()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.Strategy = Substitute.For<IExecutionStrategy>();
-            fixture.RegisterTask<DummyTask>();
-
-            // When
-            var result = fixture.Run("--target", "dummytask");
-
-            // Then
-            fixture.Strategy
-                .Received(1)
-                .ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "DummyTask"), Arg.Any<ICakeContext>());
-        }
-
-        [Fact]
-        public void Should_Not_Abort_Build_If_Task_That_Is_ContinueOnError_Throws()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<ContinueOnErrorTask>();
-
-            // When
-            var result = fixture.Run("--target", "ContinueOnErrorTask");
-
-            // Then
-            Assert.Equal(0, result);
-        }
-
-        [Fact]
-        public void Should_Abort_Build_If_Task_That_Is_Not_ContinueOnError_Throws()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<ThrowingTask>();
-
-            // When
-            var result = fixture.Run("--target", "ThrowingTask");
-
-            // Then
-            Assert.Equal(1, result);
-        }
-
-        [Fact]
-        public void Should_Execute_Dependee_Task()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<CleanTask>();
-            fixture.RegisterTask<DependeeTask>();
-            fixture.Strategy = Substitute.For<IExecutionStrategy>();
-
-            // When
-            fixture.Run("--target", nameof(CleanTask));
-
-            // Then
-            Received.InOrder(() =>
-            {
-                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == nameof(DependeeTask)), Arg.Any<ICakeContext>());
-                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == nameof(CleanTask)), Arg.Any<ICakeContext>());
-            });
-        }
-
-        [Fact]
-        public void Should_Execute_Tasks_In_Correct_Order()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<BuildTask>();
-            fixture.RegisterTask<CleanTask>();
-            fixture.RegisterTask<UnitTestsTask>();
-            fixture.Strategy = Substitute.For<IExecutionStrategy>();
-
-            // When
-            fixture.Run("--target", "UnitTestsTask");
-
-            // Then
-            Received.InOrder(() =>
-            {
-                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "CleanTask"), Arg.Any<ICakeContext>());
-                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "BuildTask"), Arg.Any<ICakeContext>());
-                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == "UnitTestsTask"), Arg.Any<ICakeContext>());
-            });
-        }
-
-        [Fact]
-        public void Should_Throw_If_Dependency_Is_Not_A_Valid_Task()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<InvalidDependencyTask>();
-            fixture.Strategy = Substitute.For<IExecutionStrategy>();
-
-            // When
-            var result = fixture.Run("--target", "InvalidDependencyTask");
-
-            // Then
-            Assert.Equal(1, result);
-            fixture.Log.Received(1).Error("Error: {0}", "The dependency 'DateTime' is not a valid task.");
-        }
-
-        [Fact]
-        public void Should_Return_Zero_On_Success()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-
-            // When
-            var result = fixture.Run("--target", "dummytask");
-
-            // Then
-            Assert.Equal(0, result);
-        }
-
-        [Fact]
-        public void Should_Return_One_When_Target_Is_Not_Found()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-
-            // When
-            var result = fixture.Run("--target", "foobar");
-
-            // Then
-            Assert.Equal(1, result);
-            fixture.Log.Received(1).Error("Error: {0}", "The target 'foobar' was not found.");
-        }
-
-        [Fact]
-        public void Should_Execute_OnError_Method_If_Run_Failed()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<OnErrorRunFailedTask>();
-
-            // When
-            fixture.Run("--target", "OnErrorRunFailedTask");
-
-            // Then
-            fixture.Log.Received(1).Error("OnError: {0}", "An exception");
-        }
-
-        [Fact]
-        public void Should_Execute_OnError_Method_If_RunAsync_Failed()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<OnErrorRunAsyncFailedTask>();
-
-            // When
-            fixture.Run("--target", "OnErrorRunAsyncFailedTask");
-
-            // Then
-            fixture.Log.Received(1).Error("OnError: {0}", "An exception");
-        }
-
-        [Fact]
-        public void Should_Not_Execute_OnError_Method_If_Run_Completed()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<OnErrorRunCompletedTask>();
-
-            // When
-            fixture.Run("--target", "OnErrorRunCompletedTask");
-
-            // Then
-            fixture.Log.DidNotReceive().Error("OnError: {0}", "An exception");
-        }
-
-        [Fact]
-        public void Should_Execute_Finally_Method_After_All_Methods()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<FinallyTask>();
-
-            // When
-            fixture.Run("--target", "FinallyTask");
-
-            // Then
-            Received.InOrder(() =>
-            {
-                fixture.Log.Information("Run method called");
-                fixture.Log.Information("OnError method called");
-                fixture.Log.Information("Finally method called");
-            });
-        }
-
-        [Fact]
-        public void Should_Install_Tools()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.Host.ConfigureServices(s => s.UseTool(new Uri("foo:?package=Bar")));
-            fixture.RegisterTask<DummyTask>();
-
-            // When
-            var result = fixture.Run("--target", "dummytask");
-
-            // Then
-            fixture.Installer.Received(1).Install(
-                Arg.Is<PackageReference>(p => p.OriginalString == "foo:?package=Bar"));
-        }
-
-        [Fact]
-        public void Should_pass_target_within_cakeContext_arguments()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-            fixture.Strategy = Substitute.For<IExecutionStrategy>();
-
-            // When
-            fixture.Run("--target", nameof(DummyTask));
-
-            // Then
-            fixture.Strategy
-                .Received(1)
-                .ExecuteAsync(Arg.Any<CakeTask>(), Arg.Is<ICakeContext>(cc => cc.Arguments.HasArgument("target") && cc.Arguments.GetArgument("target").Equals(nameof(DummyTask))));
-        }
-
-        [Theory]
-        [InlineData(nameof(DummyTask), nameof(DummyTask2), nameof(DummyTask3))]
-        [InlineData(nameof(DummyTask), nameof(DummyTask3), nameof(DummyTask2))]
-        [InlineData(nameof(DummyTask2), nameof(DummyTask3), nameof(DummyTask))]
-        [InlineData(nameof(DummyTask2), nameof(DummyTask), nameof(DummyTask3))]
-        [InlineData(nameof(DummyTask3), nameof(DummyTask2), nameof(DummyTask))]
-        [InlineData(nameof(DummyTask3), nameof(DummyTask), nameof(DummyTask2))]
-        public void Should_Execute_Multiple_Targets_In_Correct_Order(string task0, string task1, string task2)
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-            fixture.RegisterTask<DummyTask2>();
-            fixture.RegisterTask<DummyTask3>();
-            fixture.Strategy = Substitute.For<IExecutionStrategy>();
-
-            // When
-            fixture.Run("--target", task0, "--target", task1, "--target", task2);
-
-            // Then
-            Received.InOrder(() =>
-            {
-                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task0), Arg.Any<ICakeContext>());
-                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task1), Arg.Any<ICakeContext>());
-                fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task2), Arg.Any<ICakeContext>());
-            });
-        }
-
-        [Fact]
-        public void Should_Use_Verbosity_From_Environment_When_Not_Specified()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
-
-            // When
-            fixture.Run("--target", "dummytask");
-
-            // Then
-            Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
-        }
-
-        [Fact]
-        public void Should_Prefer_Command_Line_Verbosity_Over_Environment()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
-
-            // When
-            fixture.Run("--target", "dummytask", "--verbosity", "quiet");
-
-            // Then
-            Assert.Equal(Verbosity.Quiet, fixture.Log.Verbosity);
-        }
-
-        [Fact]
-        public void Should_Prefer_Explicit_Normal_Verbosity_Over_Environment()
-        {
-            // Given
-            var fixture = new CakeHostFixture();
-            fixture.RegisterTask<DummyTask>();
-            fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
-
-            // When
-            fixture.Run("--target", "dummytask", "--verbosity", "normal");
-
-            // Then
-            Assert.Equal(Verbosity.Normal, fixture.Log.Verbosity);
-        }
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task0), Arg.Any<ICakeContext>());
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task1), Arg.Any<ICakeContext>());
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == task2), Arg.Any<ICakeContext>());
+        });
+    }
+
+    [Fact]
+    public void Should_Use_Verbosity_From_Environment_When_Not_Specified()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+        // When
+        fixture.Run("--target", "dummytask");
+
+        // Then
+        Assert.Equal(Verbosity.Diagnostic, fixture.Log.Verbosity);
+    }
+
+    [Fact]
+    public void Should_Prefer_Command_Line_Verbosity_Over_Environment()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+        // When
+        fixture.Run("--target", "dummytask", "--verbosity", "quiet");
+
+        // Then
+        Assert.Equal(Verbosity.Quiet, fixture.Log.Verbosity);
+    }
+
+    [Fact]
+    public void Should_Prefer_Explicit_Normal_Verbosity_Over_Environment()
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.Environment.SetEnvironmentVariable("CAKE_SETTINGS_VERBOSITY", "Diagnostic");
+
+        // When
+        fixture.Run("--target", "dummytask", "--verbosity", "normal");
+
+        // Then
+        Assert.Equal(Verbosity.Normal, fixture.Log.Verbosity);
     }
 }

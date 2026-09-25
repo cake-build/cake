@@ -7,96 +7,95 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotNet.Clean
+namespace Cake.Common.Tools.DotNet.Clean;
+
+/// <summary>
+/// .NET Core project cleaner.
+/// </summary>
+public sealed class DotNetCleaner : DotNetTool<DotNetCleanSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// .NET Core project cleaner.
+    /// Initializes a new instance of the <see cref="DotNetCleaner" /> class.
     /// </summary>
-    public sealed class DotNetCleaner : DotNetTool<DotNetCleanSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotNetCleaner(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetCleaner" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public DotNetCleaner(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Cleans the project's output using the specified path and settings.
+    /// </summary>
+    /// <param name="project">The target project path.</param>
+    /// <param name="settings">The settings.</param>
+    public void Clean(string project, DotNetCleanSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(project);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        RunCommand(settings, GetArguments(project, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(string project, DotNetCleanSettings settings)
+    {
+        var builder = CreateArgumentBuilder(settings);
+
+        builder.Append("clean");
+
+        // Specific path?
+        if (project != null)
         {
-            _environment = environment;
+            builder.AppendQuoted(project);
         }
 
-        /// <summary>
-        /// Cleans the project's output using the specified path and settings.
-        /// </summary>
-        /// <param name="project">The target project path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Clean(string project, DotNetCleanSettings settings)
+        // Output directory
+        if (settings.OutputDirectory != null)
         {
-            ArgumentNullException.ThrowIfNull(project);
-            ArgumentNullException.ThrowIfNull(settings);
-
-            RunCommand(settings, GetArguments(project, settings));
+            builder.Append("--output");
+            builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, DotNetCleanSettings settings)
+        // Framework
+        if (!string.IsNullOrEmpty(settings.Framework))
         {
-            var builder = CreateArgumentBuilder(settings);
-
-            builder.Append("clean");
-
-            // Specific path?
-            if (project != null)
-            {
-                builder.AppendQuoted(project);
-            }
-
-            // Output directory
-            if (settings.OutputDirectory != null)
-            {
-                builder.Append("--output");
-                builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Framework
-            if (!string.IsNullOrEmpty(settings.Framework))
-            {
-                builder.Append("--framework");
-                builder.Append(settings.Framework);
-            }
-
-            // Runtime
-            if (!string.IsNullOrEmpty(settings.Runtime))
-            {
-                builder.Append("--runtime");
-                builder.Append(settings.Runtime);
-            }
-
-            // Configuration
-            if (!string.IsNullOrEmpty(settings.Configuration))
-            {
-                builder.Append("--configuration");
-                builder.Append(settings.Configuration);
-            }
-
-            // No Logo
-            if (settings.NoLogo)
-            {
-                builder.Append("--nologo");
-            }
-
-            if (settings.MSBuildSettings != null)
-            {
-                builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
-            }
-
-            return builder;
+            builder.Append("--framework");
+            builder.Append(settings.Framework);
         }
+
+        // Runtime
+        if (!string.IsNullOrEmpty(settings.Runtime))
+        {
+            builder.Append("--runtime");
+            builder.Append(settings.Runtime);
+        }
+
+        // Configuration
+        if (!string.IsNullOrEmpty(settings.Configuration))
+        {
+            builder.Append("--configuration");
+            builder.Append(settings.Configuration);
+        }
+
+        // No Logo
+        if (settings.NoLogo)
+        {
+            builder.Append("--nologo");
+        }
+
+        if (settings.MSBuildSettings != null)
+        {
+            builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
+        }
+
+        return builder;
     }
 }

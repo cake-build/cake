@@ -4,18 +4,17 @@
 
 using Cake.Common.Tools.DotNet.Package.Remove;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Package.Remove
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Package.Remove;
+
+internal sealed class DotNetPackageRemoverFixture : DotNetFixture<DotNetPackageRemoveSettings>
 {
-    internal sealed class DotNetPackageRemoverFixture : DotNetFixture<DotNetPackageRemoveSettings>
+    public string PackageName { get; set; }
+
+    public string Project { get; set; }
+
+    protected override void RunTool()
     {
-        public string PackageName { get; set; }
-
-        public string Project { get; set; }
-
-        protected override void RunTool()
-        {
-            var tool = new DotNetPackageRemover(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Remove(PackageName, Project);
-        }
+        var tool = new DotNetPackageRemover(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Remove(PackageName, Project);
     }
 }

@@ -5,33 +5,32 @@
 using System;
 using Spectre.Console.Cli;
 
-namespace Cake.Cli
+namespace Cake.Cli;
+
+/// <summary>
+/// A type resolver that uses <see cref="IServiceProvider"/>.
+/// </summary>
+public sealed class TypeResolver : ITypeResolver
 {
+    private readonly IServiceProvider _provider;
+
     /// <summary>
-    /// A type resolver that uses <see cref="IServiceProvider"/>.
+    /// Initializes a new instance of the <see cref="TypeResolver"/> class.
     /// </summary>
-    public sealed class TypeResolver : ITypeResolver
+    /// <param name="provider">The service provider.</param>
+    public TypeResolver(IServiceProvider provider)
     {
-        private readonly IServiceProvider _provider;
+        _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TypeResolver"/> class.
-        /// </summary>
-        /// <param name="provider">The service provider.</param>
-        public TypeResolver(IServiceProvider provider)
+    /// <inheritdoc/>
+    public object Resolve(Type type)
+    {
+        if (type == null)
         {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            return null;
         }
 
-        /// <inheritdoc/>
-        public object Resolve(Type type)
-        {
-            if (type == null)
-            {
-                return null;
-            }
-
-            return _provider.GetService(type);
-        }
+        return _provider.GetService(type);
     }
 }

@@ -8,166 +8,165 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core.Diagnostics;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// The default report printer.
+/// </summary>
+public sealed class CakeReportPrinter : ICakeReportPrinter
 {
+    private readonly IConsole _console;
+    private readonly ICakeContext _context;
+
     /// <summary>
-    /// The default report printer.
+    /// Initializes a new instance of the <see cref="CakeReportPrinter"/> class.
     /// </summary>
-    public sealed class CakeReportPrinter : ICakeReportPrinter
+    /// <param name="console">The console.</param>
+    /// <param name="context">The context.</param>
+    public CakeReportPrinter(IConsole console, ICakeContext context)
     {
-        private readonly IConsole _console;
-        private readonly ICakeContext _context;
+        ArgumentNullException.ThrowIfNull(console);
+        ArgumentNullException.ThrowIfNull(context);
+        _context = context;
+        _console = console;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeReportPrinter"/> class.
-        /// </summary>
-        /// <param name="console">The console.</param>
-        /// <param name="context">The context.</param>
-        public CakeReportPrinter(IConsole console, ICakeContext context)
+    /// <inheritdoc/>
+    public void Write(CakeReport report)
+    {
+        ArgumentNullException.ThrowIfNull(report);
+
+        try
         {
-            ArgumentNullException.ThrowIfNull(console);
-            ArgumentNullException.ThrowIfNull(context);
-            _context = context;
-            _console = console;
-        }
-
-        /// <inheritdoc/>
-        public void Write(CakeReport report)
-        {
-            ArgumentNullException.ThrowIfNull(report);
-
-            try
+            var maxTaskNameLength = 29;
+            foreach (var item in report)
             {
-                var maxTaskNameLength = 29;
-                foreach (var item in report)
+                if (item.TaskName.Length > maxTaskNameLength)
                 {
-                    if (item.TaskName.Length > maxTaskNameLength)
-                    {
-                        maxTaskNameLength = item.TaskName.Length;
-                    }
+                    maxTaskNameLength = item.TaskName.Length;
                 }
+            }
 
-                maxTaskNameLength++;
-                string lineFormat = "{0,-" + maxTaskNameLength + "}{1,-20}{2,-20}";
-                _console.ForegroundColor = ConsoleColor.Green;
+            maxTaskNameLength++;
+            string lineFormat = "{0,-" + maxTaskNameLength + "}{1,-20}{2,-20}";
+            _console.ForegroundColor = ConsoleColor.Green;
 
-                // Write header.
-                _console.WriteLine();
-                _console.WriteLine(lineFormat, "Task", "Duration", "Status");
-                _console.WriteLine(new string('-', 40 + maxTaskNameLength));
+            // Write header.
+            _console.WriteLine();
+            _console.WriteLine(lineFormat, "Task", "Duration", "Status");
+            _console.WriteLine(new string('-', 40 + maxTaskNameLength));
 
-                // Write task status.
-                foreach (var item in report)
+            // Write task status.
+            foreach (var item in report)
+            {
+                if (ShouldWriteTask(item))
                 {
-                    if (ShouldWriteTask(item))
-                    {
-                        _console.ForegroundColor = GetItemForegroundColor(item);
-                        _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus());
-                    }
+                    _console.ForegroundColor = GetItemForegroundColor(item);
+                    _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus());
                 }
+            }
 
-                // Write footer.
-                _console.ForegroundColor = ConsoleColor.Green;
-                _console.WriteLine(new string('-', 40 + maxTaskNameLength));
-                _console.WriteLine(lineFormat, "Total:", FormatTime(GetTotalTime(report)), string.Empty);
-            }
-            finally
-            {
-                _console.ResetColor();
-            }
+            // Write footer.
+            _console.ForegroundColor = ConsoleColor.Green;
+            _console.WriteLine(new string('-', 40 + maxTaskNameLength));
+            _console.WriteLine(lineFormat, "Total:", FormatTime(GetTotalTime(report)), string.Empty);
         }
-
-        /// <inheritdoc/>
-        public void WriteStep(string name, Verbosity verbosity)
+        finally
         {
-            if (verbosity < Verbosity.Normal)
-            {
-                return;
-            }
-
-            _console.WriteLine();
-            _console.WriteLine("========================================");
-            _console.WriteLine(name);
-            _console.WriteLine("========================================");
+            _console.ResetColor();
         }
+    }
 
-        /// <inheritdoc/>
-        public void WriteLifeCycleStep(string name, Verbosity verbosity)
+    /// <inheritdoc/>
+    public void WriteStep(string name, Verbosity verbosity)
+    {
+        if (verbosity < Verbosity.Normal)
         {
-            if (verbosity < Verbosity.Normal)
-            {
-                return;
-            }
-
-            _console.WriteLine();
-            _console.WriteLine("----------------------------------------");
-            _console.WriteLine(name);
-            _console.WriteLine("----------------------------------------");
+            return;
         }
 
-        /// <inheritdoc/>
-        public void WriteSkippedStep(string name, Verbosity verbosity)
+        _console.WriteLine();
+        _console.WriteLine("========================================");
+        _console.WriteLine(name);
+        _console.WriteLine("========================================");
+    }
+
+    /// <inheritdoc/>
+    public void WriteLifeCycleStep(string name, Verbosity verbosity)
+    {
+        if (verbosity < Verbosity.Normal)
         {
-            if (verbosity < Verbosity.Verbose)
-            {
-                return;
-            }
-
-            _console.WriteLine();
-            _console.WriteLine("----------------------------------------");
-            _console.WriteLine(name);
-            _console.WriteLine("----------------------------------------");
+            return;
         }
 
-        private bool ShouldWriteTask(CakeReportEntry item)
+        _console.WriteLine();
+        _console.WriteLine("----------------------------------------");
+        _console.WriteLine(name);
+        _console.WriteLine("----------------------------------------");
+    }
+
+    /// <inheritdoc/>
+    public void WriteSkippedStep(string name, Verbosity verbosity)
+    {
+        if (verbosity < Verbosity.Verbose)
         {
-            if (item.ExecutionStatus == CakeTaskExecutionStatus.Delegated)
-            {
-                return _context.Log.Verbosity >= Verbosity.Verbose;
-            }
-
-            return true;
+            return;
         }
 
-        private string FormatDuration(CakeReportEntry item)
+        _console.WriteLine();
+        _console.WriteLine("----------------------------------------");
+        _console.WriteLine(name);
+        _console.WriteLine("----------------------------------------");
+    }
+
+    private bool ShouldWriteTask(CakeReportEntry item)
+    {
+        if (item.ExecutionStatus == CakeTaskExecutionStatus.Delegated)
         {
-            if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
-            {
-                return "-";
-            }
-
-            return FormatTime(item.Duration);
+            return _context.Log.Verbosity >= Verbosity.Verbose;
         }
 
-        private static ConsoleColor GetItemForegroundColor(CakeReportEntry item)
+        return true;
+    }
+
+    private string FormatDuration(CakeReportEntry item)
+    {
+        if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
         {
-            if (item.Category == CakeReportEntryCategory.Setup || item.Category == CakeReportEntryCategory.Teardown)
-            {
-                return ConsoleColor.Cyan;
-            }
-
-            if (item.ExecutionStatus == CakeTaskExecutionStatus.Failed)
-            {
-                return ConsoleColor.Red;
-            }
-
-            if (item.ExecutionStatus == CakeTaskExecutionStatus.Executed)
-            {
-                return ConsoleColor.Green;
-            }
-
-            return ConsoleColor.Gray;
+            return "-";
         }
 
-        private static string FormatTime(TimeSpan time)
+        return FormatTime(item.Duration);
+    }
+
+    private static ConsoleColor GetItemForegroundColor(CakeReportEntry item)
+    {
+        if (item.Category == CakeReportEntryCategory.Setup || item.Category == CakeReportEntryCategory.Teardown)
         {
-            return time.ToString("c", CultureInfo.InvariantCulture);
+            return ConsoleColor.Cyan;
         }
 
-        private static TimeSpan GetTotalTime(IEnumerable<CakeReportEntry> entries)
+        if (item.ExecutionStatus == CakeTaskExecutionStatus.Failed)
         {
-            return entries.Select(i => i.Duration)
-                .Aggregate(TimeSpan.Zero, (t1, t2) => t1 + t2);
+            return ConsoleColor.Red;
         }
+
+        if (item.ExecutionStatus == CakeTaskExecutionStatus.Executed)
+        {
+            return ConsoleColor.Green;
+        }
+
+        return ConsoleColor.Gray;
+    }
+
+    private static string FormatTime(TimeSpan time)
+    {
+        return time.ToString("c", CultureInfo.InvariantCulture);
+    }
+
+    private static TimeSpan GetTotalTime(IEnumerable<CakeReportEntry> entries)
+    {
+        return entries.Select(i => i.Duration)
+            .Aggregate(TimeSpan.Zero, (t1, t2) => t1 + t2);
     }
 }

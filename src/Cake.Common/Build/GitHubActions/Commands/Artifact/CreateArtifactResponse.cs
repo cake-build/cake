@@ -4,13 +4,10 @@
 
 using System.Text.Json.Serialization;
 
-namespace Cake.Common.Build.GitHubActions.Commands.Artifact
-{
-#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
-    internal record CreateArtifactResponse(
-        [property: JsonPropertyName("ok")]
-        bool Ok,
-        [property: JsonPropertyName("signed_upload_url")]
-        string SignedUploadUrl);
-#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
-}
+namespace Cake.Common.Build.GitHubActions.Commands.Artifact;
+
+internal record CreateArtifactResponse(
+    [property: JsonPropertyName("ok")]
+    bool Ok,
+    [property: JsonPropertyName("signed_upload_url")]
+    string SignedUploadUrl);

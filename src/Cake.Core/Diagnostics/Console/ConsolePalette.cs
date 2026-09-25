@@ -5,41 +5,40 @@
 using System;
 using System.Collections.Generic;
 
-namespace Cake.Core.Diagnostics
+namespace Cake.Core.Diagnostics;
+
+internal sealed class ConsolePalette
 {
-    internal sealed class ConsolePalette
+    public ConsoleColor Background { get; set; }
+    public ConsoleColor Foreground { get; set; }
+    public ConsoleColor ArgumentBackground { get; set; }
+    public ConsoleColor ArgumentForeground { get; set; }
+
+    public ConsolePalette(ConsoleColor background, ConsoleColor foreground,
+        ConsoleColor argumentBackground, ConsoleColor argumentForeground)
     {
-        public ConsoleColor Background { get; set; }
-        public ConsoleColor Foreground { get; set; }
-        public ConsoleColor ArgumentBackground { get; set; }
-        public ConsoleColor ArgumentForeground { get; set; }
+        Background = background;
+        Foreground = foreground;
+        ArgumentBackground = argumentBackground;
+        ArgumentForeground = argumentForeground;
+    }
 
-        public ConsolePalette(ConsoleColor background, ConsoleColor foreground,
-            ConsoleColor argumentBackground, ConsoleColor argumentForeground)
+    public static IDictionary<LogLevel, ConsolePalette> CreateLookup(IConsole console)
+    {
+        var background = console.BackgroundColor;
+        if ((int)background < 0 || console.SupportAnsiEscapeCodes)
         {
-            Background = background;
-            Foreground = foreground;
-            ArgumentBackground = argumentBackground;
-            ArgumentForeground = argumentForeground;
+            background = Constants.DefaultConsoleColor;
         }
 
-        public static IDictionary<LogLevel, ConsolePalette> CreateLookup(IConsole console)
+        return new Dictionary<LogLevel, ConsolePalette>
         {
-            var background = console.BackgroundColor;
-            if ((int)background < 0 || console.SupportAnsiEscapeCodes)
-            {
-                background = Constants.DefaultConsoleColor;
-            }
-
-            return new Dictionary<LogLevel, ConsolePalette>
-            {
-                { LogLevel.Fatal, new ConsolePalette(ConsoleColor.Magenta, ConsoleColor.White, ConsoleColor.DarkMagenta, ConsoleColor.White) },
-                { LogLevel.Error, new ConsolePalette(ConsoleColor.DarkRed, ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White) },
-                { LogLevel.Warning, new ConsolePalette(background, ConsoleColor.Yellow, background, ConsoleColor.Yellow) },
-                { LogLevel.Information, new ConsolePalette(background, ConsoleColor.White, ConsoleColor.DarkBlue, ConsoleColor.White) },
-                { LogLevel.Verbose, new ConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
-                { LogLevel.Debug, new ConsolePalette(background, ConsoleColor.DarkGray, background, ConsoleColor.Gray) }
-            };
-        }
+            { LogLevel.Fatal, new ConsolePalette(ConsoleColor.Magenta, ConsoleColor.White, ConsoleColor.DarkMagenta, ConsoleColor.White) },
+            { LogLevel.Error, new ConsolePalette(ConsoleColor.DarkRed, ConsoleColor.White, ConsoleColor.Red, ConsoleColor.White) },
+            { LogLevel.Warning, new ConsolePalette(background, ConsoleColor.Yellow, background, ConsoleColor.Yellow) },
+            { LogLevel.Information, new ConsolePalette(background, ConsoleColor.White, ConsoleColor.DarkBlue, ConsoleColor.White) },
+            { LogLevel.Verbose, new ConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
+            { LogLevel.Debug, new ConsolePalette(background, ConsoleColor.DarkGray, background, ConsoleColor.Gray) }
+        };
     }
 }

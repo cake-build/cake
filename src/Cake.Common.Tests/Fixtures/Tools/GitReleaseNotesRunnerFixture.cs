@@ -6,22 +6,21 @@ using Cake.Common.Tools.GitReleaseNotes;
 using Cake.Core.IO;
 using Cake.Testing.Fixtures;
 
-namespace Cake.Common.Tests.Fixtures.Tools
+namespace Cake.Common.Tests.Fixtures.Tools;
+
+internal sealed class GitReleaseNotesRunnerFixture : ToolFixture<GitReleaseNotesSettings>
 {
-    internal sealed class GitReleaseNotesRunnerFixture : ToolFixture<GitReleaseNotesSettings>
+    public FilePath OutputFile { get; set; }
+
+    public GitReleaseNotesRunnerFixture()
+        : base("GitReleaseNotes.exe")
     {
-        public FilePath OutputFile { get; set; }
+        OutputFile = "/temp/releasenotes.md";
+    }
 
-        public GitReleaseNotesRunnerFixture()
-            : base("GitReleaseNotes.exe")
-        {
-            OutputFile = "/temp/releasenotes.md";
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new GitReleaseNotesRunner(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Run(OutputFile, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new GitReleaseNotesRunner(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Run(OutputFile, Settings);
     }
 }

@@ -4,14 +4,13 @@
 
 using Cake.Common.Tools.DotNet.BuildServer;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Build
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Build;
+
+internal sealed class DotNetBuildServerFixture : DotNetFixture<DotNetBuildServerShutdownSettings>
 {
-    internal sealed class DotNetBuildServerFixture : DotNetFixture<DotNetBuildServerShutdownSettings>
+    protected override void RunTool()
     {
-        protected override void RunTool()
-        {
-            var tool = new DotNetBuildServer(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Shutdown(Settings);
-        }
+        var tool = new DotNetBuildServer(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Shutdown(Settings);
     }
 }

@@ -6,113 +6,112 @@ using System;
 using Cake.Core.IO;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.IO
+namespace Cake.Core.Tests.Unit.IO;
+
+public sealed class FilePathConverterTests
 {
-    public sealed class FilePathConverterTests
+    public sealed class TheCanConvertFromMethod
     {
-        public sealed class TheCanConvertFromMethod
+        [Fact]
+        public void Should_Return_True_When_Source_Type_Is_String()
         {
-            [Fact]
-            public void Should_Return_True_When_Source_Type_Is_String()
-            {
-                var converter = new FilePathConverter();
+            var converter = new FilePathConverter();
 
-                var result = converter.CanConvertFrom(typeof(string));
+            var result = converter.CanConvertFrom(typeof(string));
 
-                Assert.True(result);
-            }
-
-            [Fact]
-            public void Should_Return_False_When_Source_Type_Is_Not_String()
-            {
-                var converter = new FilePathConverter();
-
-                var result = converter.CanConvertFrom(typeof(DateTime));
-
-                Assert.False(result);
-            }
+            Assert.True(result);
         }
 
-        public sealed class TheConvertFromMethod
+        [Fact]
+        public void Should_Return_False_When_Source_Type_Is_Not_String()
         {
-            [Fact]
-            public void Should_Convert_String_Value_To_File_Path()
-            {
-                var converter = new FilePathConverter();
+            var converter = new FilePathConverter();
 
-                var result = converter.ConvertFrom("c:/data/work/file.txt");
+            var result = converter.CanConvertFrom(typeof(DateTime));
 
-                Assert.IsType<FilePath>(result);
-                Assert.Equal("c:/data/work/file.txt", ((FilePath)result).FullPath);
-            }
+            Assert.False(result);
+        }
+    }
 
-            [Fact]
-            public void Should_Throw_NotSupportedException_When_Value_Is_Not_A_Valid_File_Path()
-            {
-                var converter = new FilePathConverter();
+    public sealed class TheConvertFromMethod
+    {
+        [Fact]
+        public void Should_Convert_String_Value_To_File_Path()
+        {
+            var converter = new FilePathConverter();
 
-                var result = Record.Exception(() => converter.ConvertFrom(DateTime.Now));
+            var result = converter.ConvertFrom("c:/data/work/file.txt");
 
-                Assert.IsType<NotSupportedException>(result);
-            }
+            Assert.IsType<FilePath>(result);
+            Assert.Equal("c:/data/work/file.txt", ((FilePath)result).FullPath);
         }
 
-        public sealed class TheCanConvertToMethod
+        [Fact]
+        public void Should_Throw_NotSupportedException_When_Value_Is_Not_A_Valid_File_Path()
         {
-            [Fact]
-            public void Should_Return_True_When_Destination_Type_Is_String()
-            {
-                var converter = new FilePathConverter();
+            var converter = new FilePathConverter();
 
-                var result = converter.CanConvertTo(typeof(string));
+            var result = Record.Exception(() => converter.ConvertFrom(DateTime.Now));
 
-                Assert.True(result);
-            }
+            Assert.IsType<NotSupportedException>(result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_True_When_Destination_Type_Is_FilePath()
-            {
-                var converter = new FilePathConverter();
+    public sealed class TheCanConvertToMethod
+    {
+        [Fact]
+        public void Should_Return_True_When_Destination_Type_Is_String()
+        {
+            var converter = new FilePathConverter();
 
-                var result = converter.CanConvertTo(typeof(FilePath));
+            var result = converter.CanConvertTo(typeof(string));
 
-                Assert.True(result);
-            }
-
-            [Fact]
-            public void Should_Return_False_When_Source_Type_Is_Not_FilePath()
-            {
-                var converter = new FilePathConverter();
-
-                var result = converter.CanConvertTo(typeof(DateTime));
-
-                Assert.False(result);
-            }
+            Assert.True(result);
         }
 
-        public sealed class TheConvertToMethod
+        [Fact]
+        public void Should_Return_True_When_Destination_Type_Is_FilePath()
         {
-            [Fact]
-            public void Should_Convert_File_Path_To_String_Value_Using_FullPath()
-            {
-                var converter = new FilePathConverter();
+            var converter = new FilePathConverter();
 
-                var result = converter.ConvertTo(FilePath.FromString("c:/data/work/file.txt"), typeof(string));
+            var result = converter.CanConvertTo(typeof(FilePath));
 
-                Assert.IsType<string>(result);
-                Assert.Equal("c:/data/work/file.txt", result);
-            }
+            Assert.True(result);
+        }
 
-            [Fact]
-            public void Should_Throw_NotSupportedException_When_Destination_Type_Is_Not_String()
-            {
-                var converter = new FilePathConverter();
+        [Fact]
+        public void Should_Return_False_When_Source_Type_Is_Not_FilePath()
+        {
+            var converter = new FilePathConverter();
 
-                var result = Record.Exception(() =>
-                    converter.ConvertTo(FilePath.FromString("c:/data/work/file.txt"), typeof(DateTime)));
+            var result = converter.CanConvertTo(typeof(DateTime));
 
-                Assert.IsType<NotSupportedException>(result);
-            }
+            Assert.False(result);
+        }
+    }
+
+    public sealed class TheConvertToMethod
+    {
+        [Fact]
+        public void Should_Convert_File_Path_To_String_Value_Using_FullPath()
+        {
+            var converter = new FilePathConverter();
+
+            var result = converter.ConvertTo(FilePath.FromString("c:/data/work/file.txt"), typeof(string));
+
+            Assert.IsType<string>(result);
+            Assert.Equal("c:/data/work/file.txt", result);
+        }
+
+        [Fact]
+        public void Should_Throw_NotSupportedException_When_Destination_Type_Is_Not_String()
+        {
+            var converter = new FilePathConverter();
+
+            var result = Record.Exception(() =>
+                converter.ConvertTo(FilePath.FromString("c:/data/work/file.txt"), typeof(DateTime)));
+
+            Assert.IsType<NotSupportedException>(result);
         }
     }
 }

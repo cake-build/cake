@@ -4,58 +4,57 @@
 
 using Cake.Core;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Base class for the lifetime for a task.
+/// </summary>
+/// <seealso cref="ICakeContext" />
+public abstract class FrostingTaskLifetime : FrostingTaskLifetime<ICakeContext>
+{
+}
+
+/// <summary>
+/// Base class for the lifetime for a task.
+/// </summary>
+/// <typeparam name="TContext">The build context type.</typeparam>
+/// <seealso cref="ICakeContext" />
+public abstract class FrostingTaskLifetime<TContext> : IFrostingTaskLifetime
+    where TContext : ICakeContext
 {
     /// <summary>
-    /// Base class for the lifetime for a task.
+    /// This method is executed before each task is run.
+    /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
     /// </summary>
-    /// <seealso cref="ICakeContext" />
-    public abstract class FrostingTaskLifetime : FrostingTaskLifetime<ICakeContext>
-    {
-    }
+    /// <param name="context">The context.</param>
+    /// <param name="info">The setup information.</param>
+    public abstract void Setup(TContext context, ITaskSetupContext info);
 
     /// <summary>
-    /// Base class for the lifetime for a task.
+    /// This method is executed after each task have been run.
+    /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
     /// </summary>
-    /// <typeparam name="TContext">The build context type.</typeparam>
-    /// <seealso cref="ICakeContext" />
-    public abstract class FrostingTaskLifetime<TContext> : IFrostingTaskLifetime
-        where TContext : ICakeContext
+    /// <param name="context">The context.</param>
+    /// <param name="info">The teardown information.</param>
+    public abstract void Teardown(TContext context, ITaskTeardownContext info);
+
+    /// <inheritdoc/>
+    void IFrostingTaskSetup.Setup(ICakeContext context, ITaskSetupContext info)
     {
-        /// <summary>
-        /// This method is executed before each task is run.
-        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="info">The setup information.</param>
-        public abstract void Setup(TContext context, ITaskSetupContext info);
+        System.ArgumentNullException.ThrowIfNull(context);
 
-        /// <summary>
-        /// This method is executed after each task have been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="info">The teardown information.</param>
-        public abstract void Teardown(TContext context, ITaskTeardownContext info);
+        System.ArgumentNullException.ThrowIfNull(info);
 
-        /// <inheritdoc/>
-        void IFrostingTaskSetup.Setup(ICakeContext context, ITaskSetupContext info)
-        {
-            System.ArgumentNullException.ThrowIfNull(context);
+        Setup((TContext)context, info);
+    }
 
-            System.ArgumentNullException.ThrowIfNull(info);
+    /// <inheritdoc/>
+    void IFrostingTaskTeardown.Teardown(ICakeContext context, ITaskTeardownContext info)
+    {
+        System.ArgumentNullException.ThrowIfNull(context);
 
-            Setup((TContext)context, info);
-        }
+        System.ArgumentNullException.ThrowIfNull(info);
 
-        /// <inheritdoc/>
-        void IFrostingTaskTeardown.Teardown(ICakeContext context, ITaskTeardownContext info)
-        {
-            System.ArgumentNullException.ThrowIfNull(context);
-
-            System.ArgumentNullException.ThrowIfNull(info);
-
-            Teardown((TContext)context, info);
-        }
+        Teardown((TContext)context, info);
     }
 }

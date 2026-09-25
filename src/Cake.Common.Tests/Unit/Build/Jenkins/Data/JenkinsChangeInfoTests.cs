@@ -3,170 +3,168 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
+namespace Cake.Common.Tests.Unit.Build.Jenkins.Data;
+
+public sealed class JenkinsChangeInfoTests
 {
-    public sealed class JenkinsChangeInfoTests
+    public sealed class TheChangeIdProperty
     {
-        public sealed class TheChangeIdProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Change.Id;
+            // When
+            var result = info.Change.Id;
 
-                // Then
-                Assert.Equal("42178", result);
-            }
+            // Then
+            Assert.Equal("42178", result);
         }
+    }
 
-        public sealed class TheChangeUrlProperty
+    public sealed class TheChangeUrlProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Change.Url;
+            // When
+            var result = info.Change.Url;
 
-                // Then
-                Assert.Equal("http://changeurl", result);
-            }
+            // Then
+            Assert.Equal("http://changeurl", result);
         }
+    }
 
-        public sealed class TheChangeTitleProperty
+    public sealed class TheChangeTitleProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Change.Title;
+            // When
+            var result = info.Change.Title;
 
-                // Then
-                Assert.Equal("Modified x", result);
-            }
+            // Then
+            Assert.Equal("Modified x", result);
         }
+    }
 
-        public sealed class TheChangeAuthorProperty
+    public sealed class TheChangeAuthorProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Change.Author;
+            // When
+            var result = info.Change.Author;
 
-                // Then
-                Assert.Equal("cu", result);
-            }
+            // Then
+            Assert.Equal("cu", result);
         }
+    }
 
-        public sealed class TheChangeAuthorDisplayNameProperty
+    public sealed class TheChangeAuthorDisplayNameProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Change.AuthorDisplayName;
+            // When
+            var result = info.Change.AuthorDisplayName;
 
-                // Then
-                Assert.Equal("Cake User", result);
-            }
+            // Then
+            Assert.Equal("Cake User", result);
         }
+    }
 
-        public sealed class TheChangeAuthorEmailroperty
+    public sealed class TheChangeAuthorEmailroperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Change.AuthorEmail;
+            // When
+            var result = info.Change.AuthorEmail;
 
-                // Then
-                Assert.Equal("cake@cakebuild.net", result);
-            }
+            // Then
+            Assert.Equal("cake@cakebuild.net", result);
         }
+    }
 
-        public sealed class TheChangeTargetProperty
+    public sealed class TheChangeTargetProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Change.Target;
+            // When
+            var result = info.Change.Target;
 
-                // Then
-                Assert.Equal("develop", result);
-            }
+            // Then
+            Assert.Equal("develop", result);
         }
+    }
 
-        public sealed class TheChangeBranchProperty
+    public sealed class TheChangeBranchProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Change.Branch;
+            // When
+            var result = info.Change.Branch;
 
-                // Then
-                Assert.Equal("feature/feature1", result);
-            }
+            // Then
+            Assert.Equal("feature/feature1", result);
         }
+    }
 
-        public sealed class TheChangeForkProperty
+    public sealed class TheChangeForkProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Change.Fork;
+            // When
+            var result = info.Change.Fork;
 
-                // Then
-                Assert.Equal("fork1", result);
-            }
+            // Then
+            Assert.Equal("fork1", result);
         }
+    }
 
-        public sealed class TheIsPullRequestProperty
+    public sealed class TheIsPullRequestProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Change.IsPullRequest;
+            // When
+            var result = info.Change.IsPullRequest;
 
-                // Then
-                Assert.Equal(true, result);
-            }
+            // Then
+            Assert.Equal(true, result);
         }
     }
 }

@@ -6,69 +6,68 @@ using System;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Testing
+namespace Cake.Testing;
+
+/// <summary>
+/// Represents a fake file system.
+/// </summary>
+public sealed class FakeFileSystem : IFileSystem
 {
+    private readonly FakeFileSystemTree _tree;
+
     /// <summary>
-    /// Represents a fake file system.
+    /// Initializes a new instance of the <see cref="FakeFileSystem"/> class.
     /// </summary>
-    public sealed class FakeFileSystem : IFileSystem
+    /// <param name="environment">The environment.</param>
+    public FakeFileSystem(ICakeEnvironment environment) : this(environment, TimeProvider.System)
     {
-        private readonly FakeFileSystemTree _tree;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FakeFileSystem"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public FakeFileSystem(ICakeEnvironment environment) : this(environment, TimeProvider.System)
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FakeFileSystem"/> class.
+    /// </summary>
+    /// <param name="environment">The environment.</param>
+    /// <param name="timeProvider">The time provider to use for file system operations.</param>
+    public FakeFileSystem(ICakeEnvironment environment, TimeProvider timeProvider)
+    {
+        TimeProvider = timeProvider;
+        _tree = new FakeFileSystemTree(environment, () => TimeProvider);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FakeFileSystem"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        /// <param name="timeProvider">The time provider to use for file system operations.</param>
-        public FakeFileSystem(ICakeEnvironment environment, TimeProvider timeProvider)
-        {
-            TimeProvider = timeProvider;
-            _tree = new FakeFileSystemTree(environment, () => TimeProvider);
-        }
+    /// <summary>
+    /// Gets the time provider used for file system operations.
+    /// </summary>
+    public System.TimeProvider TimeProvider { get; init; }
 
-        /// <summary>
-        /// Gets the time provider used for file system operations.
-        /// </summary>
-        public System.TimeProvider TimeProvider { get; init; }
+    /// <summary>
+    /// Gets a <see cref="FakeFile"/> instance representing the specified path.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <returns>A <see cref="FakeFile"/> instance representing the specified path.</returns>
+    public FakeFile GetFile(FilePath path)
+    {
+        return _tree.FindFile(path) ?? new FakeFile(_tree, path);
+    }
 
-        /// <summary>
-        /// Gets a <see cref="FakeFile"/> instance representing the specified path.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>A <see cref="FakeFile"/> instance representing the specified path.</returns>
-        public FakeFile GetFile(FilePath path)
-        {
-            return _tree.FindFile(path) ?? new FakeFile(_tree, path);
-        }
+    /// <summary>
+    /// Gets a <see cref="FakeDirectory" /> instance representing the specified path.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <returns>A <see cref="FakeDirectory" /> instance representing the specified path.</returns>
+    public FakeDirectory GetDirectory(DirectoryPath path)
+    {
+        return _tree.FindDirectory(path) ?? new FakeDirectory(_tree, path);
+    }
 
-        /// <summary>
-        /// Gets a <see cref="FakeDirectory" /> instance representing the specified path.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>A <see cref="FakeDirectory" /> instance representing the specified path.</returns>
-        public FakeDirectory GetDirectory(DirectoryPath path)
-        {
-            return _tree.FindDirectory(path) ?? new FakeDirectory(_tree, path);
-        }
+    /// <inheritdoc/>
+    IDirectory IFileSystem.GetDirectory(DirectoryPath path)
+    {
+        return GetDirectory(path);
+    }
 
-        /// <inheritdoc/>
-        IDirectory IFileSystem.GetDirectory(DirectoryPath path)
-        {
-            return GetDirectory(path);
-        }
-
-        /// <inheritdoc/>
-        IFile IFileSystem.GetFile(FilePath path)
-        {
-            return GetFile(path);
-        }
+    /// <inheritdoc/>
+    IFile IFileSystem.GetFile(FilePath path)
+    {
+        return GetFile(path);
     }
 }

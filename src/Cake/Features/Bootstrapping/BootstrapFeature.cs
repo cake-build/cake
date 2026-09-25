@@ -12,107 +12,106 @@ using Cake.Core.Scripting.Analysis;
 using Cake.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cake.Features.Bootstrapping
+namespace Cake.Features.Bootstrapping;
+
+/// <summary>
+/// Represents a feature for bootstrapping Cake modules.
+/// </summary>
+public interface IBootstrapFeature
 {
     /// <summary>
-    /// Represents a feature for bootstrapping Cake modules.
+    /// Runs the bootstrap feature with the specified arguments and settings.
     /// </summary>
-    public interface IBootstrapFeature
+    /// <param name="arguments">The Cake arguments.</param>
+    /// <param name="settings">The bootstrap feature settings.</param>
+    /// <returns>The exit code.</returns>
+    int Run(ICakeArguments arguments, BootstrapFeatureSettings settings);
+}
+
+/// <summary>
+/// Represents a feature for bootstrapping Cake modules.
+/// </summary>
+public sealed class BootstrapFeature : Feature, IBootstrapFeature
+{
+    private readonly ICakeEnvironment _environment;
+    private readonly ICakeLog _log;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BootstrapFeature"/> class.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The Cake environment.</param>
+    /// <param name="configurator">The container configurator.</param>
+    /// <param name="log">The log.</param>
+    public BootstrapFeature(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IContainerConfigurator configurator,
+        ICakeLog log) : base(fileSystem, environment, configurator)
     {
-        /// <summary>
-        /// Runs the bootstrap feature with the specified arguments and settings.
-        /// </summary>
-        /// <param name="arguments">The Cake arguments.</param>
-        /// <param name="settings">The bootstrap feature settings.</param>
-        /// <returns>The exit code.</returns>
-        int Run(ICakeArguments arguments, BootstrapFeatureSettings settings);
+        _environment = environment;
+        _log = log;
     }
 
     /// <summary>
-    /// Represents a feature for bootstrapping Cake modules.
+    /// Runs the bootstrap feature with the specified arguments and settings.
     /// </summary>
-    public sealed class BootstrapFeature : Feature, IBootstrapFeature
+    /// <param name="arguments">The Cake arguments.</param>
+    /// <param name="settings">The bootstrap feature settings.</param>
+    /// <returns>The exit code.</returns>
+    public int Run(ICakeArguments arguments, BootstrapFeatureSettings settings)
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
+        // Fix the script path.
+        settings.Script = settings.Script ?? new FilePath("build.cake");
+        settings.Script = settings.Script.MakeAbsolute(_environment);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BootstrapFeature"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The Cake environment.</param>
-        /// <param name="configurator">The container configurator.</param>
-        /// <param name="log">The log.</param>
-        public BootstrapFeature(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IContainerConfigurator configurator,
-            ICakeLog log) : base(fileSystem, environment, configurator)
+        // Read the configuration.
+        var configuration = ReadConfiguration(arguments, settings.Script.GetDirectory());
+
+        // Set log verbosity.
+        var verbosity = configuration.GetVerbosity(settings.Verbosity);
+        _log.Verbosity = verbosity;
+
+        // Create the scope where we will perform the bootstrapping.
+        using (var scope = CreateScope(configuration, arguments))
         {
-            _environment = environment;
-            _log = log;
-        }
+            var analyzer = scope.GetRequiredService<IScriptAnalyzer>();
+            var processor = scope.GetRequiredService<IScriptProcessor>();
 
-        /// <summary>
-        /// Runs the bootstrap feature with the specified arguments and settings.
-        /// </summary>
-        /// <param name="arguments">The Cake arguments.</param>
-        /// <param name="settings">The bootstrap feature settings.</param>
-        /// <returns>The exit code.</returns>
-        public int Run(ICakeArguments arguments, BootstrapFeatureSettings settings)
-        {
-            // Fix the script path.
-            settings.Script = settings.Script ?? new FilePath("build.cake");
-            settings.Script = settings.Script.MakeAbsolute(_environment);
+            // Set log verbosity for log in new scope.
+            var log = scope.GetRequiredService<ICakeLog>();
+            log.Verbosity = verbosity;
 
-            // Read the configuration.
-            var configuration = ReadConfiguration(arguments, settings.Script.GetDirectory());
+            // Get the root directory.
+            var root = settings.Script.GetDirectory();
 
-            // Set log verbosity.
-            var verbosity = configuration.GetVerbosity(settings.Verbosity);
-            _log.Verbosity = verbosity;
-
-            // Create the scope where we will perform the bootstrapping.
-            using (var scope = CreateScope(configuration, arguments))
+            // Analyze the script.
+            log.Debug("Looking for modules...");
+            ScriptAnalyzerResult result = PerformAnalysis(analyzer, root, settings);
+            if (result.Modules.Count == 0)
             {
-                var analyzer = scope.GetRequiredService<IScriptAnalyzer>();
-                var processor = scope.GetRequiredService<IScriptProcessor>();
-
-                // Set log verbosity for log in new scope.
-                var log = scope.GetRequiredService<ICakeLog>();
-                log.Verbosity = verbosity;
-
-                // Get the root directory.
-                var root = settings.Script.GetDirectory();
-
-                // Analyze the script.
-                log.Debug("Looking for modules...");
-                ScriptAnalyzerResult result = PerformAnalysis(analyzer, root, settings);
-                if (result.Modules.Count == 0)
-                {
-                    log.Debug("No modules found to install.");
-                    return 0;
-                }
-
-                // Install modules.
-                processor.InstallModules(
-                    result.Modules,
-                    configuration.GetModulePath(root, _environment));
+                log.Debug("No modules found to install.");
+                return 0;
             }
 
-            return 0;
+            // Install modules.
+            processor.InstallModules(
+                result.Modules,
+                configuration.GetModulePath(root, _environment));
         }
 
-        private static ScriptAnalyzerResult PerformAnalysis(IScriptAnalyzer analyzer, DirectoryPath root, BootstrapFeatureSettings settings)
+        return 0;
+    }
+
+    private static ScriptAnalyzerResult PerformAnalysis(IScriptAnalyzer analyzer, DirectoryPath root, BootstrapFeatureSettings settings)
+    {
+        var result = analyzer.Analyze(settings.Script, new ScriptAnalyzerSettings() { Mode = ScriptAnalyzerMode.Modules });
+        if (!result.Succeeded)
         {
-            var result = analyzer.Analyze(settings.Script, new ScriptAnalyzerSettings() { Mode = ScriptAnalyzerMode.Modules });
-            if (!result.Succeeded)
-            {
-                var messages = string.Join('\n', result.Errors.Select(s => $"{root.GetRelativePath(s.File).FullPath}, line #{s.Line}: {s.Message}"));
-                throw new AggregateException($"Bootstrapping failed for '{settings.Script}'.\n{messages}");
-            }
-
-            return result;
+            var messages = string.Join('\n', result.Errors.Select(s => $"{root.GetRelativePath(s.File).FullPath}, line #{s.Line}: {s.Message}"));
+            throw new AggregateException($"Bootstrapping failed for '{settings.Script}'.\n{messages}");
         }
+
+        return result;
     }
 }

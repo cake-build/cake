@@ -4,24 +4,23 @@
 
 using System;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Acts as a context providing info about the overall build following its completion.
+/// </summary>
+public interface ITeardownContext : ICakeContext
 {
     /// <summary>
-    /// Acts as a context providing info about the overall build following its completion.
+    /// Gets a value indicating whether this build was successful.
     /// </summary>
-    public interface ITeardownContext : ICakeContext
-    {
-        /// <summary>
-        /// Gets a value indicating whether this build was successful.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if successful; otherwise <c>false</c>.
-        /// </value>
-        bool Successful { get; }
+    /// <value>
+    /// <c>true</c> if successful; otherwise <c>false</c>.
+    /// </value>
+    bool Successful { get; }
 
-        /// <summary>
-        /// Gets the exception that was thrown by the target.
-        /// </summary>
-        Exception ThrownException { get; }
-    }
+    /// <summary>
+    /// Gets the exception that was thrown by the target.
+    /// </summary>
+    Exception ThrownException { get; }
 }

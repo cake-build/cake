@@ -5,18 +5,17 @@
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Execute
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Execute;
+
+internal sealed class DotNetExecutorFixture : DotNetFixture<DotNetExecuteSettings>
 {
-    internal sealed class DotNetExecutorFixture : DotNetFixture<DotNetExecuteSettings>
+    public FilePath AssemblyPath { get; set; }
+
+    public ProcessArgumentBuilder Arguments { get; set; }
+
+    protected override void RunTool()
     {
-        public FilePath AssemblyPath { get; set; }
-
-        public ProcessArgumentBuilder Arguments { get; set; }
-
-        protected override void RunTool()
-        {
-            var tool = new DotNetExecutor(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Execute(AssemblyPath, Arguments, Settings);
-        }
+        var tool = new DotNetExecutor(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Execute(AssemblyPath, Arguments, Settings);
     }
 }

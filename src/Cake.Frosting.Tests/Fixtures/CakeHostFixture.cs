@@ -9,50 +9,50 @@ using Cake.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 
-namespace Cake.Frosting.Tests
+namespace Cake.Frosting.Tests;
+
+public sealed class CakeHostFixture
 {
-    public sealed class CakeHostFixture
+    public CakeHost Host { get; set; }
+    public FakeEnvironment Environment { get; set; }
+    public FakeFileSystem FileSystem { get; set; }
+    public FakeConsole Console { get; set; }
+    public ICakeLog Log { get; set; }
+    public IExecutionStrategy Strategy { get; set; }
+    public IToolInstaller Installer { get; set; }
+
+    public CakeHostFixture()
     {
-        public CakeHost Host { get; set; }
-        public FakeEnvironment Environment { get; set; }
-        public FakeFileSystem FileSystem { get; set; }
-        public FakeConsole Console { get; set; }
-        public ICakeLog Log { get; set; }
-        public IExecutionStrategy Strategy { get; set; }
-        public IToolInstaller Installer { get; set; }
+        Host = new CakeHost();
+        Environment = FakeEnvironment.CreateUnixEnvironment();
+        Console = new FakeConsole();
+        Log = Substitute.For<ICakeLog>();
+        Installer = Substitute.For<IToolInstaller>();
 
-        public CakeHostFixture()
+        FileSystem = new FakeFileSystem(Environment);
+        FileSystem.CreateDirectory("/Working");
+    }
+
+    public void RegisterTask<T>()
+        where T : class, IFrostingTask
+    {
+        Host.ConfigureServices(services => services.AddSingleton<IFrostingTask, T>());
+    }
+
+    public int Run(params string[] args)
+    {
+        Host.ConfigureServices(services => services.AddSingleton<IFileSystem>(FileSystem));
+        Host.ConfigureServices(services => services.AddSingleton<ICakeEnvironment>(Environment));
+        Host.ConfigureServices(services => services.AddSingleton<IConsole>(Console));
+        Host.ConfigureServices(services => services.AddSingleton(Substitute.For<ICakeReportPrinter>()));
+        Host.ConfigureServices(services => services.AddSingleton(Log));
+        Host.ConfigureServices(services => services.AddSingleton(Installer));
+
+        if (Strategy != null)
         {
-            Host = new CakeHost();
-            Environment = FakeEnvironment.CreateUnixEnvironment();
-            Console = new FakeConsole();
-            Log = Substitute.For<ICakeLog>();
-            Installer = Substitute.For<IToolInstaller>();
-
-            FileSystem = new FakeFileSystem(Environment);
-            FileSystem.CreateDirectory("/Working");
+            Host.ConfigureServices(services => services.AddSingleton(Strategy));
         }
 
-        public void RegisterTask<T>()
-            where T : class, IFrostingTask
-        {
-            Host.ConfigureServices(services => services.AddSingleton<IFrostingTask, T>());
-        }
-
-        public int Run(params string[] args)
-        {
-            Host.ConfigureServices(services => services.AddSingleton<IFileSystem>(FileSystem));
-            Host.ConfigureServices(services => services.AddSingleton<ICakeEnvironment>(Environment));
-            Host.ConfigureServices(services => services.AddSingleton<IConsole>(Console));
-            Host.ConfigureServices(services => services.AddSingleton(Log));
-            Host.ConfigureServices(services => services.AddSingleton(Installer));
-
-            if (Strategy != null)
-            {
-                Host.ConfigureServices(services => services.AddSingleton(Strategy));
-            }
-
-            return Host.Run(args);
-        }
+        return Host.Run(args);
     }
 }

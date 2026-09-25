@@ -5,107 +5,106 @@
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.OctopusDeploy
+namespace Cake.Common.Tools.OctopusDeploy;
+
+internal abstract class OctopusDeployArgumentBuilder<T>
+    where T : OctopusDeployCommonToolSettings
 {
-    internal abstract class OctopusDeployArgumentBuilder<T>
-        where T : OctopusDeployCommonToolSettings
+    private readonly string _serverUrl;
+    private readonly string _apiKey;
+
+    protected ICakeEnvironment Environment { get; }
+
+    protected ProcessArgumentBuilder Builder { get; }
+
+    protected T Settings { get; }
+
+    protected OctopusDeployArgumentBuilder(ICakeEnvironment environment, T settings)
+        : this(settings.Server, settings.ApiKey, environment, settings)
     {
-        private readonly string _serverUrl;
-        private readonly string _apiKey;
+    }
 
-        protected ICakeEnvironment Environment { get; }
+    protected OctopusDeployArgumentBuilder(string server, string apiKey, ICakeEnvironment environment, T settings)
+    {
+        _serverUrl = server;
+        _apiKey = apiKey;
 
-        protected ProcessArgumentBuilder Builder { get; }
+        Environment = environment;
+        Builder = new ProcessArgumentBuilder();
+        Settings = settings;
+    }
 
-        protected T Settings { get; }
-
-        protected OctopusDeployArgumentBuilder(ICakeEnvironment environment, T settings)
-            : this(settings.Server, settings.ApiKey, environment, settings)
+    protected void AppendArgumentIfNotNull(string argumentName, string value)
+    {
+        if (value != null)
         {
+            Builder.Append("--" + argumentName);
+            Builder.AppendQuoted(value);
         }
+    }
 
-        protected OctopusDeployArgumentBuilder(string server, string apiKey, ICakeEnvironment environment, T settings)
+    protected void AppendArgumentIfNotNull(string argumentName, FilePath value)
+    {
+        if (value != null)
         {
-            _serverUrl = server;
-            _apiKey = apiKey;
-
-            Environment = environment;
-            Builder = new ProcessArgumentBuilder();
-            Settings = settings;
+            Builder.Append("--" + argumentName);
+            Builder.AppendQuoted(value.MakeAbsolute(Environment).FullPath);
         }
+    }
 
-        protected void AppendArgumentIfNotNull(string argumentName, string value)
+    protected void AppendMultipleTimes(string argumentName, string[] values)
+    {
+        if (values != null && values.Length > 0)
         {
-            if (value != null)
+            foreach (var value in values)
             {
-                Builder.Append("--" + argumentName);
-                Builder.AppendQuoted(value);
-            }
-        }
-
-        protected void AppendArgumentIfNotNull(string argumentName, FilePath value)
-        {
-            if (value != null)
-            {
-                Builder.Append("--" + argumentName);
-                Builder.AppendQuoted(value.MakeAbsolute(Environment).FullPath);
+                Builder.AppendSwitchQuoted("--" + argumentName, "=", value);
             }
         }
+    }
 
-        protected void AppendMultipleTimes(string argumentName, string[] values)
+    protected ProcessArgumentBuilder AppendConditionalFlag(bool condition, string flag)
+    {
+        if (condition)
         {
-            if (values != null && values.Length > 0)
-            {
-                foreach (var value in values)
-                {
-                    Builder.AppendSwitchQuoted("--" + argumentName, "=", value);
-                }
-            }
+            Builder.Append(flag);
+        }
+        return Builder;
+    }
+
+    protected void AppendCommonArguments()
+    {
+        Builder.Append("--server");
+        Builder.Append(_serverUrl);
+
+        Builder.Append("--apiKey");
+        Builder.AppendSecret(_apiKey);
+
+        AppendArgumentIfNotNull("user", Settings.Username);
+
+        if (Settings.Password != null)
+        {
+            Builder.Append("--pass");
+            Builder.AppendQuotedSecret(Settings.Password);
         }
 
-        protected ProcessArgumentBuilder AppendConditionalFlag(bool condition, string flag)
+        AppendArgumentIfNotNull("configFile", Settings.ConfigurationFile);
+
+        if (Settings.EnableDebugLogging)
         {
-            if (condition)
-            {
-                Builder.Append(flag);
-            }
-            return Builder;
+            Builder.Append("--debug");
         }
 
-        protected void AppendCommonArguments()
+        if (Settings.IgnoreSslErrors)
         {
-            Builder.Append("--server");
-            Builder.Append(_serverUrl);
-
-            Builder.Append("--apiKey");
-            Builder.AppendSecret(_apiKey);
-
-            AppendArgumentIfNotNull("user", Settings.Username);
-
-            if (Settings.Password != null)
-            {
-                Builder.Append("--pass");
-                Builder.AppendQuotedSecret(Settings.Password);
-            }
-
-            AppendArgumentIfNotNull("configFile", Settings.ConfigurationFile);
-
-            if (Settings.EnableDebugLogging)
-            {
-                Builder.Append("--debug");
-            }
-
-            if (Settings.IgnoreSslErrors)
-            {
-                Builder.Append("--ignoreSslErrors");
-            }
-
-            if (Settings.EnableServiceMessages)
-            {
-                Builder.Append("--enableServiceMessages");
-            }
-
-            AppendArgumentIfNotNull("space", Settings.Space);
+            Builder.Append("--ignoreSslErrors");
         }
+
+        if (Settings.EnableServiceMessages)
+        {
+            Builder.Append("--enableServiceMessages");
+        }
+
+        AppendArgumentIfNotNull("space", Settings.Space);
     }
 }

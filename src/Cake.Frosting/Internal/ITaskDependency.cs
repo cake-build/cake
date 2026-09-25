@@ -4,10 +4,9 @@
 
 using System;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+internal interface ITaskDependency
 {
-    internal interface ITaskDependency
-    {
-        Type Task { get; }
-    }
+    Type Task { get; }
 }

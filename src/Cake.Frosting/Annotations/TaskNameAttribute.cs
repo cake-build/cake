@@ -4,27 +4,26 @@
 
 using System;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Represents a custom task name.
+/// </summary>
+/// <seealso cref="Attribute" />
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+public sealed class TaskNameAttribute : Attribute
 {
     /// <summary>
-    /// Represents a custom task name.
+    /// Gets the task name.
     /// </summary>
-    /// <seealso cref="Attribute" />
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public sealed class TaskNameAttribute : Attribute
-    {
-        /// <summary>
-        /// Gets the task name.
-        /// </summary>
-        public string Name { get; }
+    public string Name { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TaskNameAttribute"/> class.
-        /// </summary>
-        /// <param name="name">The task name.</param>
-        public TaskNameAttribute(string name)
-        {
-            Name = name;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TaskNameAttribute"/> class.
+    /// </summary>
+    /// <param name="name">The task name.</param>
+    public TaskNameAttribute(string name)
+    {
+        Name = name;
     }
 }

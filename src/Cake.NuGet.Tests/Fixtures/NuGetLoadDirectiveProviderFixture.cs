@@ -11,80 +11,79 @@ using Cake.Core.Scripting.Processors.Loading;
 using Cake.Testing;
 using NSubstitute;
 
-namespace Cake.NuGet.Tests.Fixtures
+namespace Cake.NuGet.Tests.Fixtures;
+
+internal sealed class NuGetLoadDirectiveProviderFixture
 {
-    internal sealed class NuGetLoadDirectiveProviderFixture
+    public FakeEnvironment Environment { get; set; }
+    public INuGetPackageInstaller Installer { get; set; }
+    public IScriptAnalyzerContext Context { get; set; }
+    public FakeConfiguration Configuration { get; set; }
+    public FakeLog Log { get; set; }
+
+    public LoadReference Reference { get; set; }
+    public List<FilePath> InstallResult { get; set; }
+
+    public NuGetLoadDirectiveProviderFixture()
+        : this("nuget:?package=Cake.Recipe")
     {
-        public FakeEnvironment Environment { get; set; }
-        public INuGetPackageInstaller Installer { get; set; }
-        public IScriptAnalyzerContext Context { get; set; }
-        public FakeConfiguration Configuration { get; set; }
-        public FakeLog Log { get; set; }
+    }
 
-        public LoadReference Reference { get; set; }
-        public List<FilePath> InstallResult { get; set; }
+    public NuGetLoadDirectiveProviderFixture(string uri)
+    {
+        Environment = FakeEnvironment.CreateUnixEnvironment();
+        Installer = Substitute.For<INuGetPackageInstaller>();
+        Configuration = new FakeConfiguration();
+        Log = new FakeLog();
+        Reference = new LoadReference(new Uri(uri));
+        InstallResult = new List<FilePath>();
 
-        public NuGetLoadDirectiveProviderFixture()
-            : this("nuget:?package=Cake.Recipe")
-        {
-        }
+        Context = Substitute.For<IScriptAnalyzerContext>();
+        Context.Root.Returns(new FilePath("/Working/build.cake"));
+    }
 
-        public NuGetLoadDirectiveProviderFixture(string uri)
-        {
-            Environment = FakeEnvironment.CreateUnixEnvironment();
-            Installer = Substitute.For<INuGetPackageInstaller>();
-            Configuration = new FakeConfiguration();
-            Log = new FakeLog();
-            Reference = new LoadReference(new Uri(uri));
-            InstallResult = new List<FilePath>();
+    public bool CanLoad()
+    {
+        var provider = new NuGetLoadDirectiveProvider(Environment, Installer, Configuration, Log);
+        return provider.CanLoad(Context, Reference);
+    }
 
-            Context = Substitute.For<IScriptAnalyzerContext>();
-            Context.Root.Returns(new FilePath("/Working/build.cake"));
-        }
+    public NuGetLoadDirectiveProviderFixtureResult Load()
+    {
+        var provider = new NuGetLoadDirectiveProvider(Environment, Installer, Configuration, Log);
+        var result = new NuGetLoadDirectiveProviderFixtureResult();
 
-        public bool CanLoad()
-        {
-            var provider = new NuGetLoadDirectiveProvider(Environment, Installer, Configuration, Log);
-            return provider.CanLoad(Context, Reference);
-        }
-
-        public NuGetLoadDirectiveProviderFixtureResult Load()
-        {
-            var provider = new NuGetLoadDirectiveProvider(Environment, Installer, Configuration, Log);
-            var result = new NuGetLoadDirectiveProviderFixtureResult();
-
-            // Setup the files that should be installed.
-            Installer.Install(Arg.Any<PackageReference>(), PackageType.Tool, Arg.Any<DirectoryPath>())
-                .Returns(info =>
+        // Setup the files that should be installed.
+        Installer.Install(Arg.Any<PackageReference>(), PackageType.Tool, Arg.Any<DirectoryPath>())
+            .Returns(info =>
+            {
+                var files = new List<IFile>();
+                foreach (var path in InstallResult)
                 {
-                    var files = new List<IFile>();
-                    foreach (var path in InstallResult)
-                    {
-                        var file = Substitute.For<IFile>();
-                        file.Path.Returns(path);
-                        files.Add(file);
-                    }
-                    return files;
-                });
+                    var file = Substitute.For<IFile>();
+                    file.Path.Returns(path);
+                    files.Add(file);
+                }
+                return files;
+            });
 
-            // Capture install parameters.
-            Installer.When(i => i.Install(Arg.Any<PackageReference>(), Arg.Any<PackageType>(), Arg.Any<DirectoryPath>()))
-                .Do(info =>
-                {
-                    result.Package = info.Arg<PackageReference>();
-                    result.PackageType = info.Arg<PackageType>();
-                    result.InstallPath = info.Arg<DirectoryPath>();
-                });
+        // Capture install parameters.
+        Installer.When(i => i.Install(Arg.Any<PackageReference>(), Arg.Any<PackageType>(), Arg.Any<DirectoryPath>()))
+            .Do(info =>
+            {
+                result.Package = info.Arg<PackageReference>();
+                result.PackageType = info.Arg<PackageType>();
+                result.InstallPath = info.Arg<DirectoryPath>();
+            });
 
-            // Capture analysis results.
-            Context?.When(c => c.Analyze(Arg.Any<FilePath>()))
-                .Do(info => result.AnalyzedFiles.Add(info.Arg<FilePath>()));
+        // Capture analysis results.
+        Context?.When(c => c.Analyze(Arg.Any<FilePath>()))
+            .Do(info => result.AnalyzedFiles.Add(info.Arg<FilePath>()));
 
-            // Load the reference.
-            provider.Load(Context, Reference);
+        // Load the reference.
+        provider.Load(Context, Reference);
 
-            // Return the result.
-            return result;
-        }
+        // Return the result.
+        return result;
     }
 }

@@ -5,103 +5,102 @@
 using System;
 using Cake.Core.Diagnostics;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// The default console implementation.
+/// </summary>
+public sealed class CakeConsole : IConsole
 {
-    /// <summary>
-    /// The default console implementation.
-    /// </summary>
-    public sealed class CakeConsole : IConsole
+    private readonly Lazy<bool> _supportAnsiEscapeCodes;
+
+    /// <inheritdoc/>
+    public ConsoleColor ForegroundColor
     {
-        private readonly Lazy<bool> _supportAnsiEscapeCodes;
+        get { return Console.ForegroundColor; }
+        set { Console.ForegroundColor = value; }
+    }
 
-        /// <inheritdoc/>
-        public ConsoleColor ForegroundColor
-        {
-            get { return Console.ForegroundColor; }
-            set { Console.ForegroundColor = value; }
-        }
+    /// <inheritdoc/>
+    public ConsoleColor BackgroundColor
+    {
+        get { return Console.BackgroundColor; }
+        set { Console.BackgroundColor = value; }
+    }
 
-        /// <inheritdoc/>
-        public ConsoleColor BackgroundColor
-        {
-            get { return Console.BackgroundColor; }
-            set { Console.BackgroundColor = value; }
-        }
+    /// <inheritdoc/>
+    public bool SupportAnsiEscapeCodes => _supportAnsiEscapeCodes.Value;
 
-        /// <inheritdoc/>
-        public bool SupportAnsiEscapeCodes => _supportAnsiEscapeCodes.Value;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakeConsole"/> class.
+    /// </summary>
+    /// <param name="environment">The environment.</param>
+    public CakeConsole(ICakeEnvironment environment)
+    {
+        ArgumentNullException.ThrowIfNull(environment);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeConsole"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public CakeConsole(ICakeEnvironment environment)
-        {
-            ArgumentNullException.ThrowIfNull(environment);
+        _supportAnsiEscapeCodes = new Lazy<bool>(() => AnsiDetector.SupportsAnsi(environment));
+    }
 
-            _supportAnsiEscapeCodes = new Lazy<bool>(() => AnsiDetector.SupportsAnsi(environment));
-        }
+    /// <inheritdoc/>
+    public void Write(string format, params object[] arg)
+    {
+        Console.Write(format, arg);
+        Console.Out.Flush();
+    }
 
-        /// <inheritdoc/>
-        public void Write(string format, params object[] arg)
-        {
-            Console.Write(format, arg);
-            Console.Out.Flush();
-        }
+    /// <inheritdoc/>
+    public void Write(string value)
+    {
+        Console.Write(value);
+        Console.Out.Flush();
+    }
 
-        /// <inheritdoc/>
-        public void Write(string value)
-        {
-            Console.Write(value);
-            Console.Out.Flush();
-        }
+    /// <inheritdoc/>
+    public void WriteLine(string format, params object[] arg)
+    {
+        Console.WriteLine(format, arg);
+        Console.Out.Flush();
+    }
 
-        /// <inheritdoc/>
-        public void WriteLine(string format, params object[] arg)
-        {
-            Console.WriteLine(format, arg);
-            Console.Out.Flush();
-        }
+    /// <inheritdoc/>
+    public void WriteLine(string value)
+    {
+        Console.WriteLine(value);
+        Console.Out.Flush();
+    }
 
-        /// <inheritdoc/>
-        public void WriteLine(string value)
-        {
-            Console.WriteLine(value);
-            Console.Out.Flush();
-        }
+    /// <inheritdoc/>
+    public void WriteError(string format, params object[] arg)
+    {
+        Console.Error.Write(format, arg);
+        Console.Error.Flush();
+    }
 
-        /// <inheritdoc/>
-        public void WriteError(string format, params object[] arg)
-        {
-            Console.Error.Write(format, arg);
-            Console.Error.Flush();
-        }
+    /// <inheritdoc/>
+    public void WriteError(string value)
+    {
+        Console.Error.Write(value);
+        Console.Error.Flush();
+    }
 
-        /// <inheritdoc/>
-        public void WriteError(string value)
-        {
-            Console.Error.Write(value);
-            Console.Error.Flush();
-        }
+    /// <inheritdoc/>
+    public void WriteErrorLine(string format, params object[] arg)
+    {
+        Console.Error.WriteLine(format, arg);
+        Console.Error.Flush();
+    }
 
-        /// <inheritdoc/>
-        public void WriteErrorLine(string format, params object[] arg)
-        {
-            Console.Error.WriteLine(format, arg);
-            Console.Error.Flush();
-        }
+    /// <inheritdoc/>
+    public void WriteErrorLine(string value)
+    {
+        Console.Error.WriteLine(value);
+        Console.Error.Flush();
+    }
 
-        /// <inheritdoc/>
-        public void WriteErrorLine(string value)
-        {
-            Console.Error.WriteLine(value);
-            Console.Error.Flush();
-        }
-
-        /// <inheritdoc/>
-        public void ResetColor()
-        {
-            Console.ResetColor();
-        }
+    /// <inheritdoc/>
+    public void ResetColor()
+    {
+        Console.ResetColor();
     }
 }

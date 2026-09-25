@@ -5,15 +5,14 @@
 using System.Xml;
 using System.Xml.Xsl;
 
-namespace Cake.Common.Polyfill
+namespace Cake.Common.Polyfill;
+
+internal static class XmlTransformationHelper
 {
-    internal static class XmlTransformationHelper
+    public static void Transform(XmlReader xsl, XsltArgumentList arguments, XmlReader xml, XmlWriter result)
     {
-        public static void Transform(XmlReader xsl, XsltArgumentList arguments, XmlReader xml, XmlWriter result)
-        {
-            var xslTransform = new XslCompiledTransform();
-            xslTransform.Load(xsl);
-            xslTransform.Transform(xml, arguments, result);
-        }
+        var xslTransform = new XslCompiledTransform();
+        xslTransform.Load(xsl);
+        xslTransform.Transform(xml, arguments, result);
     }
 }

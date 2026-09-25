@@ -5,43 +5,42 @@
 using System;
 using Cake.Core.IO;
 
-namespace Cake.Testing.Fixtures
+namespace Cake.Testing.Fixtures;
+
+/// <summary>
+/// Represents a tool fixture result.
+/// </summary>
+public class ToolFixtureResult
 {
     /// <summary>
-    /// Represents a tool fixture result.
+    /// Gets the tool path.
     /// </summary>
-    public class ToolFixtureResult
+    /// <value>The tool path.</value>
+    public FilePath Path { get; }
+
+    /// <summary>
+    /// Gets the process settings.
+    /// </summary>
+    /// <value>The process settings.</value>
+    public ProcessSettings Process { get; }
+
+    /// <summary>
+    /// Gets the arguments.
+    /// </summary>
+    /// <value>The arguments.</value>
+    public string Args { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ToolFixtureResult"/> class.
+    /// </summary>
+    /// <param name="path">The tool path.</param>
+    /// <param name="process">The process settings.</param>
+    public ToolFixtureResult(FilePath path, ProcessSettings process)
     {
-        /// <summary>
-        /// Gets the tool path.
-        /// </summary>
-        /// <value>The tool path.</value>
-        public FilePath Path { get; }
-
-        /// <summary>
-        /// Gets the process settings.
-        /// </summary>
-        /// <value>The process settings.</value>
-        public ProcessSettings Process { get; }
-
-        /// <summary>
-        /// Gets the arguments.
-        /// </summary>
-        /// <value>The arguments.</value>
-        public string Args { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ToolFixtureResult"/> class.
-        /// </summary>
-        /// <param name="path">The tool path.</param>
-        /// <param name="process">The process settings.</param>
-        public ToolFixtureResult(FilePath path, ProcessSettings process)
-        {
-            ArgumentNullException.ThrowIfNull(path);
-            ArgumentNullException.ThrowIfNull(process);
-            Path = path;
-            Args = process.Arguments.Render();
-            Process = process;
-        }
+        ArgumentNullException.ThrowIfNull(path);
+        ArgumentNullException.ThrowIfNull(process);
+        Path = path;
+        Args = process.Arguments.Render();
+        Process = process;
     }
 }

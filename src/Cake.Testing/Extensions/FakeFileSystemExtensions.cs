@@ -7,93 +7,92 @@ using System.IO;
 using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Testing
+namespace Cake.Testing;
+
+/// <summary>
+/// Contains extensions for <see cref="FakeFileSystem"/>.
+/// </summary>
+public static class FakeFileSystemExtensions
 {
     /// <summary>
-    /// Contains extensions for <see cref="FakeFileSystem"/>.
+    /// Ensures that the specified file does not exist.
     /// </summary>
-    public static class FakeFileSystemExtensions
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="path">The path.</param>
+    public static void EnsureFileDoesNotExist(this FakeFileSystem fileSystem, FilePath path)
     {
-        /// <summary>
-        /// Ensures that the specified file does not exist.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="path">The path.</param>
-        public static void EnsureFileDoesNotExist(this FakeFileSystem fileSystem, FilePath path)
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        ArgumentNullException.ThrowIfNull(path);
+        var file = fileSystem.GetFile(path);
+        if (file != null && file.Exists)
         {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            ArgumentNullException.ThrowIfNull(path);
-            var file = fileSystem.GetFile(path);
-            if (file != null && file.Exists)
-            {
-                file.Delete();
-            }
+            file.Delete();
         }
+    }
 
-        /// <summary>
-        /// Creates a file at the specified path.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="path">The path.</param>
-        /// <param name="attributes">The file attributes to set.</param>
-        /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
-        public static FakeFile CreateFile(this FakeFileSystem fileSystem, FilePath path, FileAttributes attributes = 0)
+    /// <summary>
+    /// Creates a file at the specified path.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="path">The path.</param>
+    /// <param name="attributes">The file attributes to set.</param>
+    /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
+    public static FakeFile CreateFile(this FakeFileSystem fileSystem, FilePath path, FileAttributes attributes = 0)
+    {
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        ArgumentNullException.ThrowIfNull(path);
+        CreateDirectory(fileSystem, path.GetDirectory());
+        var file = fileSystem.GetFile(path);
+        if (!file.Exists)
         {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            ArgumentNullException.ThrowIfNull(path);
-            CreateDirectory(fileSystem, path.GetDirectory());
-            var file = fileSystem.GetFile(path);
-            if (!file.Exists)
-            {
-                file.OpenWrite().Dispose();
-            }
-            file.Attributes = attributes;
-            return file;
+            file.OpenWrite().Dispose();
         }
+        file.Attributes = attributes;
+        return file;
+    }
 
-        /// <summary>
-        /// Creates a file at the specified path.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="path">The path.</param>
-        /// <param name="contentsBytes">The file contents.</param>
-        /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
-        public static FakeFile CreateFile(this FakeFileSystem fileSystem, FilePath path, byte[] contentsBytes)
+    /// <summary>
+    /// Creates a file at the specified path.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="path">The path.</param>
+    /// <param name="contentsBytes">The file contents.</param>
+    /// <returns>The same <see cref="FakeFile"/> instance so that multiple calls can be chained.</returns>
+    public static FakeFile CreateFile(this FakeFileSystem fileSystem, FilePath path, byte[] contentsBytes)
+    {
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        ArgumentNullException.ThrowIfNull(path);
+        ArgumentNullException.ThrowIfNull(contentsBytes);
+        CreateDirectory(fileSystem, path.GetDirectory());
+        var file = fileSystem.GetFile(path);
+        if (!file.Exists)
         {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            ArgumentNullException.ThrowIfNull(path);
-            ArgumentNullException.ThrowIfNull(contentsBytes);
-            CreateDirectory(fileSystem, path.GetDirectory());
-            var file = fileSystem.GetFile(path);
-            if (!file.Exists)
+            using (var stream = file.OpenWrite())
             {
-                using (var stream = file.OpenWrite())
+                using (var ms = new MemoryStream(contentsBytes))
                 {
-                    using (var ms = new MemoryStream(contentsBytes))
-                    {
-                        ms.CopyTo(stream);
-                    }
+                    ms.CopyTo(stream);
                 }
             }
-            return file;
         }
+        return file;
+    }
 
-        /// <summary>
-        /// Creates a directory at the specified path.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="path">The path.</param>
-        /// <returns>The same <see cref="FakeDirectory"/> instance so that multiple calls can be chained.</returns>
-        public static FakeDirectory CreateDirectory(this FakeFileSystem fileSystem, DirectoryPath path)
+    /// <summary>
+    /// Creates a directory at the specified path.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="path">The path.</param>
+    /// <returns>The same <see cref="FakeDirectory"/> instance so that multiple calls can be chained.</returns>
+    public static FakeDirectory CreateDirectory(this FakeFileSystem fileSystem, DirectoryPath path)
+    {
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        ArgumentNullException.ThrowIfNull(path);
+        var directory = fileSystem.GetDirectory(path);
+        if (!directory.Exists)
         {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            ArgumentNullException.ThrowIfNull(path);
-            var directory = fileSystem.GetDirectory(path);
-            if (!directory.Exists)
-            {
-                directory.Create();
-            }
-            return directory;
+            directory.Create();
         }
+        return directory;
     }
 }

@@ -6,65 +6,64 @@ using System;
 using System.IO;
 using Cake.Core.IO;
 
-namespace Cake.Common.Build.GitLabCI
+namespace Cake.Common.Build.GitLabCI;
+
+/// <summary>
+/// Provides GitLab CI commands for a current build.
+/// </summary>
+public sealed class GitLabCICommands
 {
+    private readonly IFileSystem _fileSystem;
+
     /// <summary>
-    /// Provides GitLab CI commands for a current build.
+    /// Initializes a new instance of the <see cref="GitLabCICommands"/> class.
     /// </summary>
-    public sealed class GitLabCICommands
+    /// <param name="fileSystem">The file system.</param>
+    public GitLabCICommands(IFileSystem fileSystem)
     {
-        private readonly IFileSystem _fileSystem;
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GitLabCICommands"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        public GitLabCICommands(IFileSystem fileSystem)
+    /// <summary>
+    /// Creates or updates an environment variable for any steps running next in a job.
+    /// </summary>
+    /// <param name="envPath">Path to env file.</param>
+    /// <param name="key">The key.</param>
+    /// <param name="value">The Value.</param>
+    /// <para>Via BuildSystem.</para>
+    /// <example>
+    /// <code>
+    /// if (BuildSystem.GitLabCI.IsRunningOnGitLabCI)
+    /// {
+    ///     BuildSystem.GitLabCI.Commands.SetEnvironmentVariable("./gitlab.env", "MY_VAR", "value");
+    /// }
+    /// </code>
+    /// </example>
+    /// <para>Via GitLabCI.</para>
+    /// <example>
+    /// <code>
+    /// if (GitLabCI.IsRunningOnGitLabCI)
+    /// {
+    ///     GitLabCI.Commands.SetEnvironmentVariable("./gitlab.env", "MY_VAR", "value");
+    /// }
+    /// </code>
+    /// </example>
+    public void SetEnvironmentVariable(FilePath envPath, string key, string value)
+    {
+        ArgumentNullException.ThrowIfNull(envPath);
+
+        if (string.IsNullOrEmpty(key))
         {
-            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            throw new ArgumentNullException(nameof(key));
         }
 
-        /// <summary>
-        /// Creates or updates an environment variable for any steps running next in a job.
-        /// </summary>
-        /// <param name="envPath">Path to env file.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The Value.</param>
-        /// <para>Via BuildSystem.</para>
-        /// <example>
-        /// <code>
-        /// if (BuildSystem.GitLabCI.IsRunningOnGitLabCI)
-        /// {
-        ///     BuildSystem.GitLabCI.Commands.SetEnvironmentVariable("./gitlab.env", "MY_VAR", "value");
-        /// }
-        /// </code>
-        /// </example>
-        /// <para>Via GitLabCI.</para>
-        /// <example>
-        /// <code>
-        /// if (GitLabCI.IsRunningOnGitLabCI)
-        /// {
-        ///     GitLabCI.Commands.SetEnvironmentVariable("./gitlab.env", "MY_VAR", "value");
-        /// }
-        /// </code>
-        /// </example>
-        public void SetEnvironmentVariable(FilePath envPath, string key, string value)
-        {
-            ArgumentNullException.ThrowIfNull(envPath);
+        ArgumentNullException.ThrowIfNull(value);
 
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
-
-            ArgumentNullException.ThrowIfNull(value);
-
-            var file = _fileSystem.GetFile(envPath);
-            using var stream = file.Open(FileMode.Append, FileAccess.Write, FileShare.None);
-            using var writer = new StreamWriter(stream);
-            writer.Write(key);
-            writer.Write('=');
-            writer.WriteLine(value);
-        }
+        var file = _fileSystem.GetFile(envPath);
+        using var stream = file.Open(FileMode.Append, FileAccess.Write, FileShare.None);
+        using var writer = new StreamWriter(stream);
+        writer.Write(key);
+        writer.Write('=');
+        writer.WriteLine(value);
     }
 }

@@ -5,93 +5,93 @@
 using System;
 using Cake.Core.Tooling;
 
-namespace Cake.Core.IO.NuGet
+namespace Cake.Core.IO.NuGet;
+
+/// <summary>
+/// Contains NuGet path resolver functionality.
+/// </summary>
+public sealed class NuGetToolResolver : INuGetToolResolver
 {
-    /// <summary>
-    /// Contains NuGet path resolver functionality.
-    /// </summary>
-    public sealed class NuGetToolResolver : INuGetToolResolver
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+    private readonly IToolLocator _tools;
+    private IFile _cachedPath;
+
+    private static readonly FilePath[] _unixSystemPaths;
+
+    static NuGetToolResolver()
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly IToolLocator _tools;
-        private IFile _cachedPath;
 
-        private static readonly FilePath[] _unixSystemPaths;
+        _unixSystemPaths =
+        [
+            new FilePath("/Library/Frameworks/Mono.framework/Versions/Current/Commands/nuget"),
+            new FilePath("/usr/local/bin/nuget"),
+            new FilePath("/usr/bin/nuget")
+        ];
+    }
 
-        static NuGetToolResolver()
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NuGetToolResolver" /> class.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="tools">The tool locator.</param>
+    public NuGetToolResolver(IFileSystem fileSystem, ICakeEnvironment environment, IToolLocator tools)
+    {
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        ArgumentNullException.ThrowIfNull(environment);
+        ArgumentNullException.ThrowIfNull(tools);
+        _fileSystem = fileSystem;
+        _environment = environment;
+        _tools = tools;
+    }
+
+    /// <inheritdoc/>
+    public FilePath ResolvePath()
+    {
+        // Check if path already resolved
+        if (_cachedPath != null && _cachedPath.Exists)
         {
-            _unixSystemPaths = new[]
-            {
-                new FilePath("/Library/Frameworks/Mono.framework/Versions/Current/Commands/nuget"),
-                new FilePath("/usr/local/bin/nuget"),
-                new FilePath("/usr/bin/nuget")
-            };
+            return _cachedPath.Path;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NuGetToolResolver" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="tools">The tool locator.</param>
-        public NuGetToolResolver(IFileSystem fileSystem, ICakeEnvironment environment, IToolLocator tools)
+        // Try to resolve it with the regular tool resolver.
+        var toolsExe = _tools.Resolve("nuget.exe");
+        if (toolsExe != null)
         {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            ArgumentNullException.ThrowIfNull(environment);
-            ArgumentNullException.ThrowIfNull(tools);
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _tools = tools;
-        }
-
-        /// <inheritdoc/>
-        public FilePath ResolvePath()
-        {
-            // Check if path already resolved
-            if (_cachedPath != null && _cachedPath.Exists)
+            var toolsFile = _fileSystem.GetFile(toolsExe);
+            if (toolsFile.Exists)
             {
+                _cachedPath = toolsFile;
                 return _cachedPath.Path;
             }
-
-            // Try to resolve it with the regular tool resolver.
-            var toolsExe = _tools.Resolve("nuget.exe");
-            if (toolsExe != null)
-            {
-                var toolsFile = _fileSystem.GetFile(toolsExe);
-                if (toolsFile.Exists)
-                {
-                    _cachedPath = toolsFile;
-                    return _cachedPath.Path;
-                }
-            }
-
-            // Check if path set to environment variable
-            var environmentExe = _environment.GetEnvironmentVariable("NUGET_EXE");
-            if (!string.IsNullOrWhiteSpace(environmentExe))
-            {
-                var envFile = _fileSystem.GetFile(environmentExe);
-                if (envFile.Exists)
-                {
-                    _cachedPath = envFile;
-                    return _cachedPath.Path;
-                }
-            }
-
-            // On Unix /usr/bin/nuget or /usr/local/bin/nuget are viable options
-            if (_environment.Platform.IsUnix())
-            {
-                foreach (var systemPath in _unixSystemPaths)
-                {
-                    if (_fileSystem.Exist(systemPath))
-                    {
-                        _cachedPath = _fileSystem.GetFile(systemPath);
-                        return _cachedPath.Path;
-                    }
-                }
-            }
-
-            throw new CakeException("Could not locate nuget.exe.");
         }
+
+        // Check if path set to environment variable
+        var environmentExe = _environment.GetEnvironmentVariable("NUGET_EXE");
+        if (!string.IsNullOrWhiteSpace(environmentExe))
+        {
+            var envFile = _fileSystem.GetFile(environmentExe);
+            if (envFile.Exists)
+            {
+                _cachedPath = envFile;
+                return _cachedPath.Path;
+            }
+        }
+
+        // On Unix /usr/bin/nuget or /usr/local/bin/nuget are viable options
+        if (_environment.Platform.IsUnix())
+        {
+            foreach (var systemPath in _unixSystemPaths)
+            {
+                if (_fileSystem.Exist(systemPath))
+                {
+                    _cachedPath = _fileSystem.GetFile(systemPath);
+                    return _cachedPath.Path;
+                }
+            }
+        }
+
+        throw new CakeException("Could not locate nuget.exe.");
     }
 }

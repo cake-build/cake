@@ -5,31 +5,29 @@
 using Cake.Common.Build.TravisCI;
 using Cake.Common.Tests.Fakes;
 using Cake.Core;
-using Cake.Testing;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Build
+namespace Cake.Common.Tests.Fixtures.Build;
+
+internal sealed class TravisCIFixture
 {
-    internal sealed class TravisCIFixture
+    public ICakeEnvironment Environment { get; set; }
+    public FakeBuildSystemServiceMessageWriter Writer { get; set; }
+
+    public TravisCIFixture()
     {
-        public ICakeEnvironment Environment { get; set; }
-        public FakeBuildSystemServiceMessageWriter Writer { get; set; }
+        Environment = Substitute.For<ICakeEnvironment>();
+        Environment.WorkingDirectory.Returns("/home/travis/.local");
+        Writer = new FakeBuildSystemServiceMessageWriter();
+    }
 
-        public TravisCIFixture()
-        {
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.WorkingDirectory.Returns("/home/travis/.local");
-            Writer = new FakeBuildSystemServiceMessageWriter();
-        }
+    public void IsRunningOnTravisCI()
+    {
+        Environment.GetEnvironmentVariable("TRAVIS").Returns("true");
+    }
 
-        public void IsRunningOnTravisCI()
-        {
-            Environment.GetEnvironmentVariable("TRAVIS").Returns("true");
-        }
-
-        public TravisCIProvider CreateTravisCIProvider()
-        {
-            return new TravisCIProvider(Environment, Writer);
-        }
+    public TravisCIProvider CreateTravisCIProvider()
+    {
+        return new TravisCIProvider(Environment, Writer);
     }
 }

@@ -5,121 +5,119 @@
 using System.Threading.Tasks;
 using Cake.Core.Scripting.CodeGen;
 using Cake.Core.Tests.Fixtures;
-using VerifyXunit;
 using Xunit;
 using static Cake.Core.Tests.VerifyConfig;
 
-namespace Cake.Core.Tests.Unit.Scripting.CodeGen
+namespace Cake.Core.Tests.Unit.Scripting.CodeGen;
+
+public sealed class MethodAliasGeneratorTests
 {
-    public sealed class MethodAliasGeneratorTests
+    public sealed class TheGeneratorMethod : IClassFixture<MethodAliasGeneratorFixture>
     {
-        public sealed class TheGeneratorMethod : IClassFixture<MethodAliasGeneratorFixture>
+        private readonly MethodAliasGeneratorFixture _fixture;
+
+        public TheGeneratorMethod(MethodAliasGeneratorFixture fixture)
         {
-            private readonly MethodAliasGeneratorFixture _fixture;
+            _fixture = fixture;
+        }
 
-            public TheGeneratorMethod(MethodAliasGeneratorFixture fixture)
-            {
-                _fixture = fixture;
-            }
+        [Fact]
+        public void Should_Throw_If_Method_Is_Null()
+        {
+            // Given, When
+            var result = Record.Exception(() => MethodAliasGenerator.Generate(null));
 
-            [Fact]
-            public void Should_Throw_If_Method_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => MethodAliasGenerator.Generate(null));
+            // Then
+            AssertEx.IsArgumentNullException(result, "method");
+        }
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "method");
-            }
+        [Theory]
+        [InlineData("ExtensionMethodWithNoParameters")]
+        [InlineData("ExtensionMethodWithParameter")]
+        [InlineData("ExtensionMethodWithGenericParameter")]
+        [InlineData("ExtensionMethodWithGenericExpressionParameter")]
+        [InlineData("ExtensionMethodWithGenericExpressionArrayParameter")]
+        [InlineData("ExtensionMethodWithGenericExpressionParamsArrayParameter")]
+        [InlineData("ExtensionMethodWithReturnValue")]
+        [InlineData("ExtensionMethodWithParameterArray")]
+        [InlineData("ExtensionMethodWithOptionalObjectParameter")]
+        [InlineData("ExtensionMethodWithOptionalBooleanParameter")]
+        [InlineData("ExtensionMethodWithOptionalStringParameter")]
+        [InlineData("ExtensionMethodWithOptionalEnumParameter")]
+        [InlineData("ExtensionMethodWithOptionalCharParameter")]
+        [InlineData("ExtensionMethodWithOptionalDecimalParameter")]
+        [InlineData("ExtensionMethodWithOptionalNullableTParameter")]
+        [InlineData("ExtensionMethodWithOptionalNullableBooleanParameter")]
+        [InlineData("ExtensionMethodWithOptionalNullableCharParameter")]
+        [InlineData("ExtensionMethodWithOptionalNullableEnumParameter")]
+        [InlineData("ExtensionMethodWithOptionalNullableDecimalParameter")]
+        [InlineData("ExtensionMethodWithOptionalNullableLongParameter")]
+        [InlineData("ExtensionMethodWithOptionalNullableDoubleParameter")]
+        [InlineData("ExtensionMethodWithReservedKeywordParameter")]
+        [InlineData("ExtensionMethodWithOutputParameter")]
+        [InlineData("ExtensionMethodWithGenericCollectionOfNestedType")]
+        [InlineData("ExtensionMethodWithParameterAttributes")]
+        [InlineData("ExtensionMethodWithDynamicReturnValue")]
+        [InlineData("ExtensionMethodWithNullableParameter")]
+        [InlineData("ExtensionMethodWithNullableReturnValue")]
+        [InlineData("ExtensionMethodWithNotNullReturnValue")]
+        [InlineData("ExtensionMethodWithNotNullParameter")]
+        [InlineData("ExtensionMethodWithNotNullAndNullableParameters")]
+        [InlineData("ExtensionMethodWithNotNullParameterInDisabledContext")]
+        [InlineData("ExtensionMethodWithNullableArrayElements")]
+        [InlineData("ExtensionMethodWithNullableArray")]
+        [InlineData("ExtensionMethodWithNullableArrayAndElements")]
+        [InlineData("ExtensionMethodWithNullableGenericArgument")]
+        [InlineData("ExtensionMethodWithNullableGenericType")]
+        [InlineData("ExtensionMethodWithNullableGenericReturn")]
+        [InlineData("ExtensionMethodWithNullableTaskResult")]
+        [InlineData("ExtensionMethodWithNullableDictionaryValues")]
+        [InlineData("ExtensionMethodWithNullableParamsArray")]
+        public Task Should_Return_Correct_Generated_Code_For_Non_Generic_Methods(string name)
+        {
+            // Given / When
+            var result = _fixture.Generate("NonGeneric_" + name);
 
-            [Theory]
-            [InlineData("ExtensionMethodWithNoParameters")]
-            [InlineData("ExtensionMethodWithParameter")]
-            [InlineData("ExtensionMethodWithGenericParameter")]
-            [InlineData("ExtensionMethodWithGenericExpressionParameter")]
-            [InlineData("ExtensionMethodWithGenericExpressionArrayParameter")]
-            [InlineData("ExtensionMethodWithGenericExpressionParamsArrayParameter")]
-            [InlineData("ExtensionMethodWithReturnValue")]
-            [InlineData("ExtensionMethodWithParameterArray")]
-            [InlineData("ExtensionMethodWithOptionalObjectParameter")]
-            [InlineData("ExtensionMethodWithOptionalBooleanParameter")]
-            [InlineData("ExtensionMethodWithOptionalStringParameter")]
-            [InlineData("ExtensionMethodWithOptionalEnumParameter")]
-            [InlineData("ExtensionMethodWithOptionalCharParameter")]
-            [InlineData("ExtensionMethodWithOptionalDecimalParameter")]
-            [InlineData("ExtensionMethodWithOptionalNullableTParameter")]
-            [InlineData("ExtensionMethodWithOptionalNullableBooleanParameter")]
-            [InlineData("ExtensionMethodWithOptionalNullableCharParameter")]
-            [InlineData("ExtensionMethodWithOptionalNullableEnumParameter")]
-            [InlineData("ExtensionMethodWithOptionalNullableDecimalParameter")]
-            [InlineData("ExtensionMethodWithOptionalNullableLongParameter")]
-            [InlineData("ExtensionMethodWithOptionalNullableDoubleParameter")]
-            [InlineData("ExtensionMethodWithReservedKeywordParameter")]
-            [InlineData("ExtensionMethodWithOutputParameter")]
-            [InlineData("ExtensionMethodWithGenericCollectionOfNestedType")]
-            [InlineData("ExtensionMethodWithParameterAttributes")]
-            [InlineData("ExtensionMethodWithDynamicReturnValue")]
-            [InlineData("ExtensionMethodWithNullableParameter")]
-            [InlineData("ExtensionMethodWithNullableReturnValue")]
-            [InlineData("ExtensionMethodWithNotNullReturnValue")]
-            [InlineData("ExtensionMethodWithNotNullParameter")]
-            [InlineData("ExtensionMethodWithNotNullAndNullableParameters")]
-            [InlineData("ExtensionMethodWithNotNullParameterInDisabledContext")]
-            [InlineData("ExtensionMethodWithNullableArrayElements")]
-            [InlineData("ExtensionMethodWithNullableArray")]
-            [InlineData("ExtensionMethodWithNullableArrayAndElements")]
-            [InlineData("ExtensionMethodWithNullableGenericArgument")]
-            [InlineData("ExtensionMethodWithNullableGenericType")]
-            [InlineData("ExtensionMethodWithNullableGenericReturn")]
-            [InlineData("ExtensionMethodWithNullableTaskResult")]
-            [InlineData("ExtensionMethodWithNullableDictionaryValues")]
-            [InlineData("ExtensionMethodWithNullableParamsArray")]
-            public Task Should_Return_Correct_Generated_Code_For_Non_Generic_Methods(string name)
-            {
-                // Given / When
-                var result = _fixture.Generate("NonGeneric_" + name);
+            // Then
+            return VerifyCake(result)
+                .UseParameters(name);
+        }
 
-                // Then
-                return VerifyCake(result)
-                    .UseParameters(name);
-            }
+        [Theory]
+        [InlineData("Generic_ExtensionMethod")]
+        [InlineData("Generic_ExtensionMethodWithParameter")]
+        [InlineData("Generic_ExtensionMethodWithGenericReturnValue")]
+        [InlineData("Generic_ExtensionMethodWithGenericReturnValueAndTypeParamConstraints")]
+        [InlineData("Generic_ExtensionMethodWithUnconstrainedTypeParameter")]
+        [InlineData("Generic_ExtensionMethodWithUnconstrainedTypeParameterReturn")]
+        [InlineData("Generic_ExtensionMethodWithNullableTypeParameter")]
+        [InlineData("Generic_ExtensionMethodWithNullableClassConstraint")]
+        [InlineData("Generic_ExtensionMethodWithNotNullAndNewConstraints")]
+        [InlineData("Generic_ExtensionMethodWithNullableTypeParameterArgument")]
+        [InlineData("Generic_ExtensionMethodWithUnconstrainedTypeParameterArgument")]
+        public Task Should_Return_Correct_Generated_Code_For_Generic_Methods(string name)
+        {
+            // Given / When
+            var result = _fixture.Generate(name);
 
-            [Theory]
-            [InlineData("Generic_ExtensionMethod")]
-            [InlineData("Generic_ExtensionMethodWithParameter")]
-            [InlineData("Generic_ExtensionMethodWithGenericReturnValue")]
-            [InlineData("Generic_ExtensionMethodWithGenericReturnValueAndTypeParamConstraints")]
-            [InlineData("Generic_ExtensionMethodWithUnconstrainedTypeParameter")]
-            [InlineData("Generic_ExtensionMethodWithUnconstrainedTypeParameterReturn")]
-            [InlineData("Generic_ExtensionMethodWithNullableTypeParameter")]
-            [InlineData("Generic_ExtensionMethodWithNullableClassConstraint")]
-            [InlineData("Generic_ExtensionMethodWithNotNullAndNewConstraints")]
-            [InlineData("Generic_ExtensionMethodWithNullableTypeParameterArgument")]
-            [InlineData("Generic_ExtensionMethodWithUnconstrainedTypeParameterArgument")]
-            public Task Should_Return_Correct_Generated_Code_For_Generic_Methods(string name)
-            {
-                // Given / When
-                var result = _fixture.Generate(name);
+            // Then
+            return VerifyCake(result)
+                .UseParameters(name);
+        }
 
-                // Then
-                return VerifyCake(result)
-                    .UseParameters(name);
-            }
+        [Theory]
+        [InlineData("Obsolete_ImplicitWarning_NoMessage")]
+        [InlineData("Obsolete_ImplicitWarning_WithMessage")]
+        [InlineData("Obsolete_ExplicitWarning_WithMessage")]
+        [InlineData("Obsolete_ExplicitError_WithMessage")]
+        public Task Should_Return_Correct_Generated_Code_For_Obsolete_Methods(string name)
+        {
+            // Given / When
+            var result = _fixture.Generate(name);
 
-            [Theory]
-            [InlineData("Obsolete_ImplicitWarning_NoMessage")]
-            [InlineData("Obsolete_ImplicitWarning_WithMessage")]
-            [InlineData("Obsolete_ExplicitWarning_WithMessage")]
-            [InlineData("Obsolete_ExplicitError_WithMessage")]
-            public Task Should_Return_Correct_Generated_Code_For_Obsolete_Methods(string name)
-            {
-                // Given / When
-                var result = _fixture.Generate(name);
-
-                // Then
-                return VerifyCake(result)
-                    .UseParameters(name);
-            }
+            // Then
+            return VerifyCake(result)
+                .UseParameters(name);
         }
     }
 }

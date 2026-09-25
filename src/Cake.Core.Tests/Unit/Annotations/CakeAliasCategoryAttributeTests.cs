@@ -5,21 +5,20 @@
 using Cake.Core.Annotations;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Annotations
-{
-    public sealed class CakeAliasCategoryAttributeTests
-    {
-        public sealed class TheConstructor
-        {
-            [Fact]
-            public void Should_Throw_If_Category_Name_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => new CakeAliasCategoryAttribute(null));
+namespace Cake.Core.Tests.Unit.Annotations;
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "name");
-            }
+public sealed class CakeAliasCategoryAttributeTests
+{
+    public sealed class TheConstructor
+    {
+        [Fact]
+        public void Should_Throw_If_Category_Name_Is_Null()
+        {
+            // Given, When
+            var result = Record.Exception(() => new CakeAliasCategoryAttribute(null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "name");
         }
     }
 }

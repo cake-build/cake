@@ -6,18 +6,17 @@ using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 
-namespace Cake.NuGet.Tests.Fixtures
-{
-    internal sealed class NuGetLoadDirectiveProviderFixtureResult
-    {
-        public PackageReference Package { get; set; }
-        public PackageType PackageType { get; set; }
-        public DirectoryPath InstallPath { get; set; }
-        public List<FilePath> AnalyzedFiles { get; set; }
+namespace Cake.NuGet.Tests.Fixtures;
 
-        public NuGetLoadDirectiveProviderFixtureResult()
-        {
-            AnalyzedFiles = new List<FilePath>();
-        }
+internal sealed class NuGetLoadDirectiveProviderFixtureResult
+{
+    public PackageReference Package { get; set; }
+    public PackageType PackageType { get; set; }
+    public DirectoryPath InstallPath { get; set; }
+    public List<FilePath> AnalyzedFiles { get; set; }
+
+    public NuGetLoadDirectiveProviderFixtureResult()
+    {
+        AnalyzedFiles = new List<FilePath>();
     }
 }

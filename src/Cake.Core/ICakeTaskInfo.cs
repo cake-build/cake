@@ -4,35 +4,34 @@
 
 using System.Collections.Generic;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Provides descriptive properties about a cake task.
+/// </summary>
+public interface ICakeTaskInfo
 {
     /// <summary>
-    /// Provides descriptive properties about a cake task.
+    /// Gets the name of the task.
     /// </summary>
-    public interface ICakeTaskInfo
-    {
-        /// <summary>
-        /// Gets the name of the task.
-        /// </summary>
-        /// <value>The name of the task.</value>
-        string Name { get; }
+    /// <value>The name of the task.</value>
+    string Name { get; }
 
-        /// <summary>
-        /// Gets the description of the task.
-        /// </summary>
-        /// <value>The description of the task.</value>
-        string Description { get; }
+    /// <summary>
+    /// Gets the description of the task.
+    /// </summary>
+    /// <value>The description of the task.</value>
+    string Description { get; }
 
-        /// <summary>
-        /// Gets the task's dependencies.
-        /// </summary>
-        /// <value>The task's dependencies.</value>
-        IReadOnlyList<CakeTaskDependency> Dependencies { get; }
+    /// <summary>
+    /// Gets the task's dependencies.
+    /// </summary>
+    /// <value>The task's dependencies.</value>
+    IReadOnlyList<CakeTaskDependency> Dependencies { get; }
 
-        /// <summary>
-        /// Gets the tasks that the task want to be a dependency of.
-        /// </summary>
-        /// <value>The tasks that the task want to be a dependency of.</value>
-        IReadOnlyList<CakeTaskDependency> Dependees { get; }
-    }
+    /// <summary>
+    /// Gets the tasks that the task want to be a dependency of.
+    /// </summary>
+    /// <value>The tasks that the task want to be a dependency of.</value>
+    IReadOnlyList<CakeTaskDependency> Dependees { get; }
 }

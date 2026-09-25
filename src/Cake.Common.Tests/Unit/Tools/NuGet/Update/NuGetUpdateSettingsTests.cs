@@ -3,33 +3,31 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.NuGet.Update;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.NuGet.Update
+namespace Cake.Common.Tests.Unit.Tools.NuGet.Update;
+
+public sealed class NuGetUpdateSettingsTests
 {
-    public sealed class NuGetUpdateSettingsTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Set_Safe_To_False_By_Default()
         {
-            [Fact]
-            public void Should_Set_Safe_To_False_By_Default()
-            {
-                // Given, When
-                var settings = new NuGetUpdateSettings();
+            // Given, When
+            var settings = new NuGetUpdateSettings();
 
-                // Then
-                Assert.False(settings.Safe);
-            }
+            // Then
+            Assert.False(settings.Safe);
+        }
 
-            [Fact]
-            public void Should_Set_Prerelease_To_False_By_Default()
-            {
-                // Given, When
-                var settings = new NuGetUpdateSettings();
+        [Fact]
+        public void Should_Set_Prerelease_To_False_By_Default()
+        {
+            // Given, When
+            var settings = new NuGetUpdateSettings();
 
-                // Then
-                Assert.False(settings.Prerelease);
-            }
+            // Then
+            Assert.False(settings.Prerelease);
         }
     }
 }

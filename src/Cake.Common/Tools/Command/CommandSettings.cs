@@ -6,21 +6,20 @@ using System;
 using System.Collections.Generic;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.Command
+namespace Cake.Common.Tools.Command;
+
+/// <summary>
+/// Contains settings used by <see cref="CommandRunner" />.
+/// </summary>
+public class CommandSettings : ToolSettings
 {
     /// <summary>
-    /// Contains settings used by <see cref="CommandRunner" />.
+    /// Gets or sets the name of the tool.
     /// </summary>
-    public class CommandSettings : ToolSettings
-    {
-        /// <summary>
-        /// Gets or sets the name of the tool.
-        /// </summary>
-        public virtual string ToolName { get; set; }
+    public virtual string ToolName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the tool executable names.
-        /// </summary>
-        public virtual ICollection<string> ToolExecutableNames { get; set; } = Array.Empty<string>();
-    }
+    /// <summary>
+    /// Gets or sets the tool executable names.
+    /// </summary>
+    public virtual ICollection<string> ToolExecutableNames { get; set; } = Array.Empty<string>();
 }

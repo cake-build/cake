@@ -4,22 +4,21 @@
 
 using System.Diagnostics;
 
-namespace Cake.Core.IO.Globbing.Nodes
+namespace Cake.Core.IO.Globbing.Nodes;
+
+[DebuggerDisplay(@"\\")]
+internal sealed class UncRootNode : GlobNode
 {
-    [DebuggerDisplay(@"\\")]
-    internal sealed class UncRootNode : GlobNode
+    public string Server { get; }
+
+    public UncRootNode(string server)
     {
-        public string Server { get; }
+        Server = server;
+    }
 
-        public UncRootNode(string server)
-        {
-            Server = server;
-        }
-
-        [DebuggerStepThrough]
-        public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
-        {
-            visitor.VisitUncRoot(this, context);
-        }
+    [DebuggerStepThrough]
+    public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
+    {
+        visitor.VisitUncRoot(this, context);
     }
 }

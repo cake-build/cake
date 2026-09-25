@@ -5,488 +5,487 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+public static partial class CakeTaskBuilderExtensions
 {
-    public static partial class CakeTaskBuilderExtensions
+    /// <summary>
+    /// Defers all exceptions until after all actions for this task have completed.
+    /// </summary>
+    /// <param name="builder">The task builder.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .DeferOnError()
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder DeferOnError(this CakeTaskBuilder builder)
     {
-        /// <summary>
-        /// Defers all exceptions until after all actions for this task have completed.
-        /// </summary>
-        /// <param name="builder">The task builder.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .DeferOnError()
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder DeferOnError(this CakeTaskBuilder builder)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.SetDeferExceptions(true);
-            return builder;
-        }
+        builder.Target.SetDeferExceptions(true);
+        return builder;
+    }
 
-        /// <summary>
-        /// Adds an indication to the task that a thrown exception will not halt the script execution.
-        /// </summary>
-        /// <param name="builder">The task builder.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .ContinueOnError()
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder ContinueOnError(this CakeTaskBuilder builder)
-        {
-            return OnError(builder, () => { });
-        }
+    /// <summary>
+    /// Adds an indication to the task that a thrown exception will not halt the script execution.
+    /// </summary>
+    /// <param name="builder">The task builder.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .ContinueOnError()
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder ContinueOnError(this CakeTaskBuilder builder)
+    {
+        return OnError(builder, () => { });
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError(() => Information("failed"))
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Action errorHandler)
-        {
-            return OnError(builder, exception => errorHandler());
-        }
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError(() => Information("failed"))
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Action errorHandler)
+    {
+        return OnError(builder, exception => errorHandler());
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError(async () => await System.Threading.Tasks.Task.CompletedTask)
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Func<Task> errorHandler)
-        {
-            ArgumentNullException.ThrowIfNull(errorHandler);
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError(async () => await System.Threading.Tasks.Task.CompletedTask)
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Func<Task> errorHandler)
+    {
+        ArgumentNullException.ThrowIfNull(errorHandler);
 
-            return OnError(builder, async exception => await errorHandler());
-        }
+        return OnError(builder, async exception => await errorHandler());
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError(ex => Error(ex.Message))
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Action<Exception> errorHandler)
-        {
-            return OnError(builder, (exception, _) => errorHandler(exception));
-        }
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError(ex => Error(ex.Message))
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Action<Exception> errorHandler)
+    {
+        return OnError(builder, (exception, _) => errorHandler(exception));
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError(async ex =>
-        ///     {
-        ///         Error(ex.Message);
-        ///         await System.Threading.Tasks.Task.CompletedTask;
-        ///     })
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Func<Exception, Task> errorHandler)
-        {
-            ArgumentNullException.ThrowIfNull(errorHandler);
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError(async ex =>
+    ///     {
+    ///         Error(ex.Message);
+    ///         await System.Threading.Tasks.Task.CompletedTask;
+    ///     })
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Func<Exception, Task> errorHandler)
+    {
+        ArgumentNullException.ThrowIfNull(errorHandler);
 
-            return OnError(builder, async (exception, _) => await errorHandler(exception));
-        }
+        return OnError(builder, async (exception, _) => await errorHandler(exception));
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError((ex, context) => context.Log.Error(ex.Message))
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Action<Exception, ICakeContext> errorHandler)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError((ex, context) => context.Log.Error(ex.Message))
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Action<Exception, ICakeContext> errorHandler)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.SetErrorHandler(errorHandler);
-            return builder;
-        }
+        builder.Target.SetErrorHandler(errorHandler);
+        return builder;
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError(async (ex, context) =>
-        ///     {
-        ///         context.Log.Error(ex.Message);
-        ///         await System.Threading.Tasks.Task.CompletedTask;
-        ///     })
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Func<Exception, ICakeContext, Task> errorHandler)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError(async (ex, context) =>
+    ///     {
+    ///         context.Log.Error(ex.Message);
+    ///         await System.Threading.Tasks.Task.CompletedTask;
+    ///     })
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError(this CakeTaskBuilder builder, Func<Exception, ICakeContext, Task> errorHandler)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.SetErrorHandler(errorHandler);
-            return builder;
-        }
+        builder.Target.SetErrorHandler(errorHandler);
+        return builder;
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError&lt;Foo&gt;(data => Error(data.Place))
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<TData> errorHandler) where TData : class
-        {
-            return OnError<TData>(builder, (exception, data) => errorHandler(data));
-        }
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError&lt;Foo&gt;(data => Error(data.Place))
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<TData> errorHandler) where TData : class
+    {
+        return OnError<TData>(builder, (exception, data) => errorHandler(data));
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError&lt;Foo&gt;(async data =>
-        ///     {
-        ///         Error(data.Place);
-        ///         await System.Threading.Tasks.Task.CompletedTask;
-        ///     })
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<TData, Task> errorHandler) where TData : class
-        {
-            return OnError<TData>(builder, async (exception, data) => await errorHandler(data));
-        }
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError&lt;Foo&gt;(async data =>
+    ///     {
+    ///         Error(data.Place);
+    ///         await System.Threading.Tasks.Task.CompletedTask;
+    ///     })
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<TData, Task> errorHandler) where TData : class
+    {
+        return OnError<TData>(builder, async (exception, data) => await errorHandler(data));
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError&lt;Foo&gt;((ex, data) => Error("{0}: {1}", data.Place, ex.Message))
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<Exception, TData> errorHandler) where TData : class
-        {
-            return OnError<TData>(builder, (exception, _, data) => errorHandler(exception, data));
-        }
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError&lt;Foo&gt;((ex, data) => Error("{0}: {1}", data.Place, ex.Message))
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<Exception, TData> errorHandler) where TData : class
+    {
+        return OnError<TData>(builder, (exception, _, data) => errorHandler(exception, data));
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError&lt;Foo&gt;(async (ex, data) =>
-        ///     {
-        ///         Error("{0}: {1}", data.Place, ex.Message);
-        ///         await System.Threading.Tasks.Task.CompletedTask;
-        ///     })
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<Exception, TData, Task> errorHandler) where TData : class
-        {
-            return OnError<TData>(builder, async (exception, _, data) => await errorHandler(exception, data));
-        }
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError&lt;Foo&gt;(async (ex, data) =>
+    ///     {
+    ///         Error("{0}: {1}", data.Place, ex.Message);
+    ///         await System.Threading.Tasks.Task.CompletedTask;
+    ///     })
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<Exception, TData, Task> errorHandler) where TData : class
+    {
+        return OnError<TData>(builder, async (exception, _, data) => await errorHandler(exception, data));
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError&lt;Foo&gt;((ex, context, data) => context.Log.Error("{0}: {1}", data.Place, ex.Message))
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<Exception, ICakeContext, TData> errorHandler) where TData : class
-        {
-            return OnError(builder, (exception, context) => errorHandler(exception, context, context.Data.Get<TData>()));
-        }
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError&lt;Foo&gt;((ex, context, data) => context.Log.Error("{0}: {1}", data.Place, ex.Message))
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Action<Exception, ICakeContext, TData> errorHandler) where TData : class
+    {
+        return OnError(builder, (exception, context) => errorHandler(exception, context, context.Data.Get<TData>()));
+    }
 
-        /// <summary>
-        /// Adds an error handler to be executed if an exception occurs in the task.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorHandler">The error handler.</param>
-        /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .OnError&lt;Foo&gt;(async (ex, context, data) =>
-        ///     {
-        ///         context.Log.Error("{0}: {1}", data.Place, ex.Message);
-        ///         await System.Threading.Tasks.Task.CompletedTask;
-        ///     })
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<Exception, ICakeContext, TData, Task> errorHandler) where TData : class
-        {
-            return OnError(builder, async (exception, context) => await errorHandler(exception, context, context.Data.Get<TData>()));
-        }
+    /// <summary>
+    /// Adds an error handler to be executed if an exception occurs in the task.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorHandler">The error handler.</param>
+    /// <typeparam name="TData">The extra data to operate with inside the error handler.</typeparam>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .OnError&lt;Foo&gt;(async (ex, context, data) =>
+    ///     {
+    ///         context.Log.Error("{0}: {1}", data.Place, ex.Message);
+    ///         await System.Threading.Tasks.Task.CompletedTask;
+    ///     })
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder OnError<TData>(this CakeTaskBuilder builder, Func<Exception, ICakeContext, TData, Task> errorHandler) where TData : class
+    {
+        return OnError(builder, async (exception, context) => await errorHandler(exception, context, context.Data.Get<TData>()));
+    }
 
-        /// <summary>
-        /// Adds a finally handler to be executed after the task have finished executing.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="finallyHandler">The finally handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .Finally(() => Information("done"))
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Action finallyHandler)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+    /// <summary>
+    /// Adds a finally handler to be executed after the task have finished executing.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="finallyHandler">The finally handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .Finally(() => Information("done"))
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Action finallyHandler)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.SetFinallyHandler(finallyHandler);
-            return builder;
-        }
+        builder.Target.SetFinallyHandler(finallyHandler);
+        return builder;
+    }
 
-        /// <summary>
-        /// Adds a finally handler to be executed after the task have finished executing.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="finallyHandler">The finally handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .Finally(async () =>
-        ///     {
-        ///         Information("done");
-        ///         await System.Threading.Tasks.Task.CompletedTask;
-        ///     })
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Func<Task> finallyHandler)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+    /// <summary>
+    /// Adds a finally handler to be executed after the task have finished executing.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="finallyHandler">The finally handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .Finally(async () =>
+    ///     {
+    ///         Information("done");
+    ///         await System.Threading.Tasks.Task.CompletedTask;
+    ///     })
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Func<Task> finallyHandler)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.SetFinallyHandler(finallyHandler);
-            return builder;
-        }
+        builder.Target.SetFinallyHandler(finallyHandler);
+        return builder;
+    }
 
-        /// <summary>
-        /// Adds a finally handler to be executed after the task have finished executing.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="finallyHandler">The finally handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .Finally(context => context.Log.Information("done"))
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Action<ICakeContext> finallyHandler)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+    /// <summary>
+    /// Adds a finally handler to be executed after the task have finished executing.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="finallyHandler">The finally handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .Finally(context => context.Log.Information("done"))
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Action<ICakeContext> finallyHandler)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.SetFinallyHandler(finallyHandler);
-            return builder;
-        }
+        builder.Target.SetFinallyHandler(finallyHandler);
+        return builder;
+    }
 
-        /// <summary>
-        /// Adds a finally handler to be executed after the task have finished executing.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="finallyHandler">The finally handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .Finally(async context =>
-        ///     {
-        ///         context.Log.Information("done");
-        ///         await System.Threading.Tasks.Task.CompletedTask;
-        ///     })
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Func<ICakeContext, Task> finallyHandler)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+    /// <summary>
+    /// Adds a finally handler to be executed after the task have finished executing.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="finallyHandler">The finally handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .Finally(async context =>
+    ///     {
+    ///         context.Log.Information("done");
+    ///         await System.Threading.Tasks.Task.CompletedTask;
+    ///     })
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder Finally(this CakeTaskBuilder builder, Func<ICakeContext, Task> finallyHandler)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.SetFinallyHandler(finallyHandler);
-            return builder;
-        }
+        builder.Target.SetFinallyHandler(finallyHandler);
+        return builder;
+    }
 
-        /// <summary>
-        /// Adds a finally handler to be executed after the task have finished executing.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="finallyHandler">The finally handler.</param>
-        /// <typeparam name="TData">The extra data to operate with inside the finally handler.</typeparam>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .Finally&lt;Foo&gt;((context, data) => context.Log.Information("done {0}", data.Place))
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder Finally<TData>(this CakeTaskBuilder builder, Action<ICakeContext, TData> finallyHandler)
-             where TData : class
-        {
-            ArgumentNullException.ThrowIfNull(builder);
-            ArgumentNullException.ThrowIfNull(finallyHandler);
+    /// <summary>
+    /// Adds a finally handler to be executed after the task have finished executing.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="finallyHandler">The finally handler.</param>
+    /// <typeparam name="TData">The extra data to operate with inside the finally handler.</typeparam>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .Finally&lt;Foo&gt;((context, data) => context.Log.Information("done {0}", data.Place))
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder Finally<TData>(this CakeTaskBuilder builder, Action<ICakeContext, TData> finallyHandler)
+         where TData : class
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+        ArgumentNullException.ThrowIfNull(finallyHandler);
 
-            builder.Target.SetFinallyHandler(context => finallyHandler(context, context.Data.Get<TData>()));
-            return builder;
-        }
+        builder.Target.SetFinallyHandler(context => finallyHandler(context, context.Data.Get<TData>()));
+        return builder;
+    }
 
-        /// <summary>
-        /// Adds a finally handler to be executed after the task have finished executing.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="finallyHandler">The finally handler.</param>
-        /// <typeparam name="TData">The extra data to operate with inside the finally handler.</typeparam>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .Finally&lt;Foo&gt;(async (context, data) =>
-        ///     {
-        ///         context.Log.Information("done {0}", data.Place);
-        ///         await System.Threading.Tasks.Task.CompletedTask;
-        ///     })
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder Finally<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, Task> finallyHandler)
-             where TData : class
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+    /// <summary>
+    /// Adds a finally handler to be executed after the task have finished executing.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="finallyHandler">The finally handler.</param>
+    /// <typeparam name="TData">The extra data to operate with inside the finally handler.</typeparam>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .Finally&lt;Foo&gt;(async (context, data) =>
+    ///     {
+    ///         context.Log.Information("done {0}", data.Place);
+    ///         await System.Threading.Tasks.Task.CompletedTask;
+    ///     })
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder Finally<TData>(this CakeTaskBuilder builder, Func<ICakeContext, TData, Task> finallyHandler)
+         where TData : class
+    {
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.SetFinallyHandler(context => finallyHandler(context, context.Data.Get<TData>()));
-            return builder;
-        }
+        builder.Target.SetFinallyHandler(context => finallyHandler(context, context.Data.Get<TData>()));
+        return builder;
+    }
 
-        /// <summary>
-        /// Adds an error reporter for the task to be executed when an exception is thrown from the task.
-        /// This action is invoked before the error handler, but gives no opportunity to recover from the error.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorReporter">The finally handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .ReportError(ex => Error(ex.Message))
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder ReportError(this CakeTaskBuilder builder, Action<Exception> errorReporter)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+    /// <summary>
+    /// Adds an error reporter for the task to be executed when an exception is thrown from the task.
+    /// This action is invoked before the error handler, but gives no opportunity to recover from the error.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorReporter">The finally handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .ReportError(ex => Error(ex.Message))
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder ReportError(this CakeTaskBuilder builder, Action<Exception> errorReporter)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.SetErrorReporter(errorReporter);
-            return builder;
-        }
+        builder.Target.SetErrorReporter(errorReporter);
+        return builder;
+    }
 
-        /// <summary>
-        /// Adds an error reporter for the task to be executed when an exception is thrown from the task.
-        /// This action is invoked before the error handler, but gives no opportunity to recover from the error.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="errorReporter">The finally handler.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Risky")
-        ///     .ReportError(async ex =>
-        ///     {
-        ///         Error(ex.Message);
-        ///         await System.Threading.Tasks.Task.CompletedTask;
-        ///     })
-        ///     .Does(() => { });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder ReportError(this CakeTaskBuilder builder, Func<Exception, Task> errorReporter)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+    /// <summary>
+    /// Adds an error reporter for the task to be executed when an exception is thrown from the task.
+    /// This action is invoked before the error handler, but gives no opportunity to recover from the error.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="errorReporter">The finally handler.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Risky")
+    ///     .ReportError(async ex =>
+    ///     {
+    ///         Error(ex.Message);
+    ///         await System.Threading.Tasks.Task.CompletedTask;
+    ///     })
+    ///     .Does(() => { });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder ReportError(this CakeTaskBuilder builder, Func<Exception, Task> errorReporter)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.SetErrorReporter(errorReporter);
-            return builder;
-        }
+        builder.Target.SetErrorReporter(errorReporter);
+        return builder;
     }
 }

@@ -2,36 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotCover
+namespace Cake.Common.Tools.DotCover;
+
+/// <summary>
+/// Represents the granularity for including covering tests in reports.
+/// </summary>
+public enum DotCoverReportScope
 {
     /// <summary>
-    /// Represents the granularity for including covering tests in reports.
+    /// No covering tests included.
     /// </summary>
-    public enum DotCoverReportScope
-    {
-        /// <summary>
-        /// No covering tests included.
-        /// </summary>
-        None,
+    None,
 
-        /// <summary>
-        /// Include covering tests at assembly level.
-        /// </summary>
-        Assembly,
+    /// <summary>
+    /// Include covering tests at assembly level.
+    /// </summary>
+    Assembly,
 
-        /// <summary>
-        /// Include covering tests at type level.
-        /// </summary>
-        Type,
+    /// <summary>
+    /// Include covering tests at type level.
+    /// </summary>
+    Type,
 
-        /// <summary>
-        /// Include covering tests at method level.
-        /// </summary>
-        Method,
+    /// <summary>
+    /// Include covering tests at method level.
+    /// </summary>
+    Method,
 
-        /// <summary>
-        /// Include covering tests at statement level.
-        /// </summary>
-        Statement
-    }
+    /// <summary>
+    /// Include covering tests at statement level.
+    /// </summary>
+    Statement
 }

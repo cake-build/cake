@@ -2,71 +2,65 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cake.Testing.Xunit;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit
+namespace Cake.Core.Tests.Unit;
+
+public sealed class CakeRuntimeTests
 {
-    public sealed class CakeRuntimeTests
+    public sealed class TheBuiltFrameworkProperty
     {
-        public sealed class TheBuiltFrameworkProperty
+        private ITestOutputHelper TestOutputHelper { get; }
+
+        public TheBuiltFrameworkProperty(ITestOutputHelper testOutputHelper)
         {
-            private ITestOutputHelper TestOutputHelper { get; }
+            TestOutputHelper = testOutputHelper;
+        }
 
-            public TheBuiltFrameworkProperty(ITestOutputHelper testOutputHelper)
-            {
-                TestOutputHelper = testOutputHelper;
-            }
+        public void Should_Return_Correct_Result_For_CoreClr()
+        {
+            // Given
+            var runtime = new CakeRuntime();
 
-            public void Should_Return_Correct_Result_For_CoreClr()
-            {
-                // Given
-                var runtime = new CakeRuntime();
+            // When
+            var framework = runtime.BuiltFramework;
 
-                // When
-                var framework = runtime.BuiltFramework;
-
-                // Then
+            // Then
 #if NETFRAMEWORK
-                Assert.Equal(".NETFramework,Version=v4.6.1", framework.FullName);
+            Assert.Equal(".NETFramework,Version=v4.6.1", framework.FullName);
 #elif !NETCOREAPP
-                Assert.Equal(".NETStandard,Version=v2.0", framework.FullName);
+            Assert.Equal(".NETStandard,Version=v2.0", framework.FullName);
 #else
-                var expect = string.Concat(".NETCoreApp,Version=v",
+            var expect = string.Concat(".NETCoreApp,Version=v",
 #if NET11_0
-                                "11.0");
+                            "11.0");
 #elif NET10_0
-                                "10.0");
+                            "10.0");
 #elif NET9_0
-                                "9.0");
+                            "9.0");
 #elif NET8_0
-                                "8.0");
+                            "8.0");
 #elif NET7_0
-                                "7.0");
+                            "7.0");
 #elif NET6_0
-                                "6.0");
+                            "6.0");
 #elif NET5_0
-                                "5.0");
+                            "5.0");
 #elif NETCOREAPP2_0
-                                "2.0");
+                            "2.0");
 #elif NETCOREAPP2_1
-                                "2.1");
+                            "2.1");
 #elif NETCOREAPP2_2
-                                "2.2");
+                            "2.2");
 #elif NETCOREAPP3_0
-                                "3.0");
+                            "3.0");
 #elif NETCOREAPP3_1
-                                "3.1");
+                            "3.1");
 #endif
-                // ToDo: Enable mocking runtime resolution, temp work around for missing runtimes.
-                switch (expect)
-                {
-                    case ".NETCoreApp,Version=v2.0":
+            // ToDo: Enable mocking runtime resolution, temp work around for missing runtimes.
+            switch (expect)
+            {
+                case ".NETCoreApp,Version=v2.0":
                     {
                         switch (framework.FullName)
                         {
@@ -85,7 +79,7 @@ namespace Cake.Core.Tests.Unit
                         }
                         break;
                     }
-                    case ".NETCoreApp,Version=v2.1":
+                case ".NETCoreApp,Version=v2.1":
                     {
                         switch (framework.FullName)
                         {
@@ -95,15 +89,15 @@ namespace Cake.Core.Tests.Unit
                             case ".NETCoreApp,Version=v6.0":
                             case ".NETCoreApp,Version=v7.0":
                             case ".NETCoreApp,Version=v8.0":
-                            {
-                                TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
-                                expect = framework.FullName;
-                                break;
-                            }
+                                {
+                                    TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
+                                    expect = framework.FullName;
+                                    break;
+                                }
                         }
                         break;
                     }
-                    case ".NETCoreApp,Version=v3.0":
+                case ".NETCoreApp,Version=v3.0":
                     {
                         switch (framework.FullName)
                         {
@@ -112,15 +106,15 @@ namespace Cake.Core.Tests.Unit
                             case ".NETCoreApp,Version=v6.0":
                             case ".NETCoreApp,Version=v7.0":
                             case ".NETCoreApp,Version=v8.0":
-                            {
-                                TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
-                                expect = framework.FullName;
-                                break;
-                            }
+                                {
+                                    TestOutputHelper.WriteLine("Expect changed from {0} to {1}.", expect, framework.FullName);
+                                    expect = framework.FullName;
+                                    break;
+                                }
                         }
                         break;
                     }
-                    case ".NETCoreApp,Version=v3.1":
+                case ".NETCoreApp,Version=v3.1":
                     {
                         switch (framework.FullName)
                         {
@@ -136,7 +130,7 @@ namespace Cake.Core.Tests.Unit
                         }
                         break;
                     }
-                    case ".NETCoreApp,Version=v5.0":
+                case ".NETCoreApp,Version=v5.0":
                     {
                         switch (framework.FullName)
                         {
@@ -151,7 +145,7 @@ namespace Cake.Core.Tests.Unit
                         }
                         break;
                     }
-                    case ".NETCoreApp,Version=v6.0":
+                case ".NETCoreApp,Version=v6.0":
                     {
                         switch (framework.FullName)
                         {
@@ -165,10 +159,9 @@ namespace Cake.Core.Tests.Unit
                         }
                         break;
                     }
-                }
-                Assert.Equal(expect, framework.FullName);
-#endif
             }
+            Assert.Equal(expect, framework.FullName);
+#endif
         }
     }
 }

@@ -6,40 +6,39 @@ using Cake.Common.Build.BitbucketPipelines.Data;
 using Cake.Core;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Build
+namespace Cake.Common.Tests.Fixtures.Build;
+
+public class BitbucketPipelinesInfoFixture
 {
-    public class BitbucketPipelinesInfoFixture
+    public ICakeEnvironment Environment { get; set; }
+
+    public BitbucketPipelinesInfoFixture()
     {
-        public ICakeEnvironment Environment { get; set; }
+        Environment = Substitute.For<ICakeEnvironment>();
 
-        public BitbucketPipelinesInfoFixture()
-        {
-            Environment = Substitute.For<ICakeEnvironment>();
+        // BitbucketPipelines RepositoryInfo
+        Environment.GetEnvironmentVariable("BITBUCKET_COMMIT").Returns("4efbc1ffb993dfbcf024e6a9202865cc0b6d9c50");
+        Environment.GetEnvironmentVariable("BITBUCKET_REPO_SLUG").Returns("cake");
+        Environment.GetEnvironmentVariable("BITBUCKET_REPO_OWNER").Returns("cakebuild");
+        Environment.GetEnvironmentVariable("BITBUCKET_BRANCH").Returns("develop");
+        Environment.GetEnvironmentVariable("BITBUCKET_TAG").Returns("BitbucketPipelines");
 
-            // BitbucketPipelines RepositoryInfo
-            Environment.GetEnvironmentVariable("BITBUCKET_COMMIT").Returns("4efbc1ffb993dfbcf024e6a9202865cc0b6d9c50");
-            Environment.GetEnvironmentVariable("BITBUCKET_REPO_SLUG").Returns("cake");
-            Environment.GetEnvironmentVariable("BITBUCKET_REPO_OWNER").Returns("cakebuild");
-            Environment.GetEnvironmentVariable("BITBUCKET_BRANCH").Returns("develop");
-            Environment.GetEnvironmentVariable("BITBUCKET_TAG").Returns("BitbucketPipelines");
+        // BitbucketPipelines PullRequestInfo
+        Environment.GetEnvironmentVariable("BITBUCKET_PR_ID").Returns("1");
+    }
 
-            // BitbucketPipelines PullRequestInfo
-            Environment.GetEnvironmentVariable("BITBUCKET_PR_ID").Returns("1");
-        }
+    public BitbucketPipelinesEnvironmentInfo CreateEnvironmentInfo()
+    {
+        return new BitbucketPipelinesEnvironmentInfo(Environment);
+    }
 
-        public BitbucketPipelinesEnvironmentInfo CreateEnvironmentInfo()
-        {
-            return new BitbucketPipelinesEnvironmentInfo(Environment);
-        }
+    public BitbucketPipelinesRepositoryInfo CreateRepositoryInfo()
+    {
+        return new BitbucketPipelinesRepositoryInfo(Environment);
+    }
 
-        public BitbucketPipelinesRepositoryInfo CreateRepositoryInfo()
-        {
-            return new BitbucketPipelinesRepositoryInfo(Environment);
-        }
-
-        public BitbucketPipelinesPullRequestInfo CreatePullRequestInfo()
-        {
-            return new BitbucketPipelinesPullRequestInfo(Environment);
-        }
+    public BitbucketPipelinesPullRequestInfo CreatePullRequestInfo()
+    {
+        return new BitbucketPipelinesPullRequestInfo(Environment);
     }
 }

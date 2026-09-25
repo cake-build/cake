@@ -10,102 +10,101 @@ using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.VSTest
+namespace Cake.Common.Tools.VSTest;
+
+/// <summary>
+/// Contains functionality related to running VSTest unit tests.
+/// </summary>
+[CakeAliasCategory("VSTest")]
+public static class VSTestAliases
 {
     /// <summary>
-    /// Contains functionality related to running VSTest unit tests.
+    /// Runs all VSTest unit tests in the assemblies matching the specified pattern.
     /// </summary>
-    [CakeAliasCategory("VSTest")]
-    public static class VSTestAliases
+    /// <example>
+    /// <code>
+    /// VSTest("./Tests/*.UnitTests.dll");
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="pattern">The pattern.</param>
+    [CakeMethodAlias]
+    public static void VSTest(this ICakeContext context, GlobPattern pattern)
     {
-        /// <summary>
-        /// Runs all VSTest unit tests in the assemblies matching the specified pattern.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// VSTest("./Tests/*.UnitTests.dll");
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The pattern.</param>
-        [CakeMethodAlias]
-        public static void VSTest(this ICakeContext context, GlobPattern pattern)
+        ArgumentNullException.ThrowIfNull(context);
+
+        var assemblies = context.Globber.GetFiles(pattern).ToArray();
+        if (assemblies.Length == 0)
         {
-            ArgumentNullException.ThrowIfNull(context);
-
-            var assemblies = context.Globber.GetFiles(pattern).ToArray();
-            if (assemblies.Length == 0)
-            {
-                context.Log.Verbose("The provided pattern did not match any files.");
-                return;
-            }
-
-            VSTest(context, assemblies);
+            context.Log.Verbose("The provided pattern did not match any files.");
+            return;
         }
 
-        /// <summary>
-        /// Runs all VSTest unit tests in the assemblies matching the specified pattern.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// VSTest("./Tests/*.UnitTests.dll", new VSTestSettings() { Logger = "trx" });
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The pattern.</param>
-        /// <param name="settings">The settings.</param>
-        [CakeMethodAlias]
-        public static void VSTest(this ICakeContext context, GlobPattern pattern, VSTestSettings settings)
+        VSTest(context, assemblies);
+    }
+
+    /// <summary>
+    /// Runs all VSTest unit tests in the assemblies matching the specified pattern.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// VSTest("./Tests/*.UnitTests.dll", new VSTestSettings() { Logger = "trx" });
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="pattern">The pattern.</param>
+    /// <param name="settings">The settings.</param>
+    [CakeMethodAlias]
+    public static void VSTest(this ICakeContext context, GlobPattern pattern, VSTestSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        var assemblies = context.Globber.GetFiles(pattern).ToArray();
+        if (assemblies.Length == 0)
         {
-            ArgumentNullException.ThrowIfNull(context);
-
-            var assemblies = context.Globber.GetFiles(pattern).ToArray();
-            if (assemblies.Length == 0)
-            {
-                context.Log.Verbose("The provided pattern did not match any files.");
-                return;
-            }
-
-            VSTest(context, assemblies, settings);
+            context.Log.Verbose("The provided pattern did not match any files.");
+            return;
         }
 
-        /// <summary>
-        /// Runs all VSTest unit tests in the specified assemblies.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var paths = new List&lt;FilePath&gt;() { "./assemblydir1", "./assemblydir2" };
-        /// VSTest(paths);
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="assemblyPaths">The assembly paths.</param>
-        [CakeMethodAlias]
-        public static void VSTest(this ICakeContext context, IEnumerable<FilePath> assemblyPaths)
-        {
-            VSTest(context, assemblyPaths, new VSTestSettings());
-        }
+        VSTest(context, assemblies, settings);
+    }
 
-        /// <summary>
-        /// Runs all VSTest unit tests in the specified assemblies.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var paths = new List&lt;FilePath&gt;() { "./assemblydir1", "./assemblydir2" };
-        /// VSTest(paths, new VSTestSettings() { InIsolation = true });
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="assemblyPaths">The assembly paths.</param>
-        /// <param name="settings">The settings.</param>
-        [CakeMethodAlias]
-        public static void VSTest(this ICakeContext context, IEnumerable<FilePath> assemblyPaths, VSTestSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-            ArgumentNullException.ThrowIfNull(assemblyPaths);
+    /// <summary>
+    /// Runs all VSTest unit tests in the specified assemblies.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var paths = new List&lt;FilePath&gt;() { "./assemblydir1", "./assemblydir2" };
+    /// VSTest(paths);
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="assemblyPaths">The assembly paths.</param>
+    [CakeMethodAlias]
+    public static void VSTest(this ICakeContext context, IEnumerable<FilePath> assemblyPaths)
+    {
+        VSTest(context, assemblyPaths, new VSTestSettings());
+    }
 
-            var runner = new VSTestRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            runner.Run(assemblyPaths, settings);
-        }
+    /// <summary>
+    /// Runs all VSTest unit tests in the specified assemblies.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var paths = new List&lt;FilePath&gt;() { "./assemblydir1", "./assemblydir2" };
+    /// VSTest(paths, new VSTestSettings() { InIsolation = true });
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="assemblyPaths">The assembly paths.</param>
+    /// <param name="settings">The settings.</param>
+    [CakeMethodAlias]
+    public static void VSTest(this ICakeContext context, IEnumerable<FilePath> assemblyPaths, VSTestSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(assemblyPaths);
+
+        var runner = new VSTestRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        runner.Run(assemblyPaths, settings);
     }
 }

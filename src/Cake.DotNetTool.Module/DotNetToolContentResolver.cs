@@ -11,131 +11,131 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 
-namespace Cake.DotNetTool.Module
+namespace Cake.DotNetTool.Module;
+
+/// <summary>
+/// Locates and lists contents of dotnet Tool Packages.
+/// </summary>
+public class DotNetToolContentResolver : IDotNetToolContentResolver
 {
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+    private readonly IGlobber _globber;
+    private readonly ICakeLog _log;
+
+    private readonly ICakeConfiguration _config;
+
     /// <summary>
-    /// Locates and lists contents of dotnet Tool Packages.
+    /// Initializes a new instance of the <see cref="DotNetToolContentResolver"/> class.
     /// </summary>
-    public class DotNetToolContentResolver : IDotNetToolContentResolver
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="globber">The Globber.</param>
+    /// <param name="log">The Log.</param>
+    /// <param name="config">the configuration.</param>
+    public DotNetToolContentResolver(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IGlobber globber,
+        ICakeLog log,
+        ICakeConfiguration config)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
-        private readonly ICakeLog _log;
+        _fileSystem = fileSystem;
+        _environment = environment;
+        _globber = globber;
+        _log = log;
+        _config = config;
+    }
 
-        private readonly ICakeConfiguration _config;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetToolContentResolver"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="globber">The Globber.</param>
-        /// <param name="log">The Log.</param>
-        /// <param name="config">the configuration.</param>
-        public DotNetToolContentResolver(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IGlobber globber,
-            ICakeLog log,
-            ICakeConfiguration config)
+    /// <summary>
+    /// Collects all the files for the given dotnet Tool Package.
+    /// </summary>
+    /// <param name="package">The dotnet Tool Package.</param>
+    /// <param name="type">The type of dotnet Tool Package.</param>
+    /// <returns>All the files for the Package.</returns>
+    public IReadOnlyCollection<IFile> GetFiles(PackageReference package, PackageType type)
+    {
+        if (type == PackageType.Addin)
         {
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _globber = globber;
-            _log = log;
-            _config = config;
+            throw new InvalidOperationException("DotNetTool Module does not support Addins'");
         }
 
-        /// <summary>
-        /// Collects all the files for the given dotnet Tool Package.
-        /// </summary>
-        /// <param name="package">The dotnet Tool Package.</param>
-        /// <param name="type">The type of dotnet Tool Package.</param>
-        /// <returns>All the files for the Package.</returns>
-        public IReadOnlyCollection<IFile> GetFiles(PackageReference package, PackageType type)
+        if (type == PackageType.Tool)
         {
-            if (type == PackageType.Addin)
+            if (package.Parameters.ContainsKey("global"))
             {
-                throw new InvalidOperationException("DotNetTool Module does not support Addins'");
-            }
-
-            if (type == PackageType.Tool)
-            {
-                if (package.Parameters.ContainsKey("global"))
+                if (_environment.Platform.IsUnix())
                 {
-                    if (_environment.Platform.IsUnix())
-                    {
-                        return GetToolFiles(new DirectoryPath(_environment.GetEnvironmentVariable("HOME")).Combine(".dotnet/tools"), package);
-                    }
-                    else
-                    {
-                        return GetToolFiles(new DirectoryPath(_environment.GetEnvironmentVariable("USERPROFILE")).Combine(".dotnet/tools"), package);
-                    }
+                    return GetToolFiles(new DirectoryPath(_environment.GetEnvironmentVariable("HOME")).Combine(".dotnet/tools"), package);
                 }
                 else
                 {
-                    return GetToolFiles(_config.GetToolPath(_environment.WorkingDirectory, _environment), package);
+                    return GetToolFiles(new DirectoryPath(_environment.GetEnvironmentVariable("USERPROFILE")).Combine(".dotnet/tools"), package);
                 }
-            }
-
-            throw new InvalidOperationException("Unknown resource type.");
-        }
-
-        private IReadOnlyCollection<IFile> GetToolFiles(DirectoryPath installationLocation, PackageReference package)
-        {
-            var result = new List<IFile>();
-            var toolFolder = installationLocation.Combine(".store/" + package.Package.ToLowerInvariant());
-
-            _log.Debug("Tool Folder: {0}", toolFolder);
-            var toolDirectory = _fileSystem.GetDirectory(toolFolder);
-
-            if (toolDirectory.Exists)
-            {
-                result.AddRange(GetFiles(toolFolder, package));
             }
             else
             {
-                _log.Debug("Tool folder does not exist: {0}.", toolFolder);
+                return GetToolFiles(_config.GetToolPath(_environment.WorkingDirectory, _environment), package);
             }
-
-            _log.Debug("Found {0} files in tool folder", result.Count);
-            return result;
         }
 
-        private IEnumerable<IFile> GetFiles(DirectoryPath path, PackageReference package, string[] patterns = null)
+        throw new InvalidOperationException("Unknown resource type.");
+    }
+
+    private IReadOnlyCollection<IFile> GetToolFiles(DirectoryPath installationLocation, PackageReference package)
+    {
+        var result = new List<IFile>();
+        var toolFolder = installationLocation.Combine(".store/" + package.Package.ToLowerInvariant());
+
+        _log.Debug("Tool Folder: {0}", toolFolder);
+        var toolDirectory = _fileSystem.GetDirectory(toolFolder);
+
+        if (toolDirectory.Exists)
         {
-            var collection = new FilePathCollection(new PathComparer(_environment));
-
-            // Get default files (dll).
-            patterns = patterns ?? new[] { path.FullPath + "/**/*.dll" };
-            foreach (var pattern in patterns)
-            {
-                collection.Add(_globber.GetFiles(pattern));
-            }
-
-            // Include files.
-            if (package.Parameters.TryGetValue("include", out var includes))
-            {
-                foreach (var include in includes)
-                {
-                    var includePath = string.Concat(path.FullPath, "/", include.TrimStart('/'));
-                    collection.Add(_globber.GetFiles(includePath));
-                }
-            }
-
-            // Exclude files.
-            if (package.Parameters.TryGetValue("exclude", out var excludes))
-            {
-                foreach (var exclude in excludes)
-                {
-                    var excludePath = string.Concat(path.FullPath, "/", exclude.TrimStart('/'));
-                    collection.Remove(_globber.GetFiles(excludePath));
-                }
-            }
-
-            // Return the files.
-            return collection.Select(p => _fileSystem.GetFile(p)).ToArray();
+            result.AddRange(GetFiles(toolFolder, package));
         }
+        else
+        {
+            _log.Debug("Tool folder does not exist: {0}.", toolFolder);
+        }
+
+        _log.Debug("Found {0} files in tool folder", result.Count);
+        return result;
+    }
+
+    private IEnumerable<IFile> GetFiles(DirectoryPath path, PackageReference package, string[] patterns = null)
+    {
+        var collection = new FilePathCollection(new PathComparer(_environment));
+
+        // Get default files (dll).
+
+        patterns = patterns ?? [path.FullPath + "/**/*.dll"];
+        foreach (var pattern in patterns)
+        {
+            collection.Add(_globber.GetFiles(pattern));
+        }
+
+        // Include files.
+        if (package.Parameters.TryGetValue("include", out var includes))
+        {
+            foreach (var include in includes)
+            {
+                var includePath = string.Concat(path.FullPath, "/", include.TrimStart('/'));
+                collection.Add(_globber.GetFiles(includePath));
+            }
+        }
+
+        // Exclude files.
+        if (package.Parameters.TryGetValue("exclude", out var excludes))
+        {
+            foreach (var exclude in excludes)
+            {
+                var excludePath = string.Concat(path.FullPath, "/", exclude.TrimStart('/'));
+                collection.Remove(_globber.GetFiles(excludePath));
+            }
+        }
+
+        // Return the files.
+        return collection.Select(p => _fileSystem.GetFile(p)).ToArray();
     }
 }

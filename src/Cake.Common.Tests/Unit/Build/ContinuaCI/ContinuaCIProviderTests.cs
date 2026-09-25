@@ -6,83 +6,81 @@ using Cake.Common.Build.ContinuaCI;
 using Cake.Common.Tests.Fakes;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Testing;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.ContinuaCI
+namespace Cake.Common.Tests.Unit.Build.ContinuaCI;
+
+public sealed class ContinuaCIProviderTests
 {
-    public sealed class ContinuaCIProviderTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Throw_If_Environment_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given, When
-                var writer = new FakeBuildSystemServiceMessageWriter();
-                var result = Record.Exception(() => new ContinuaCIProvider(null, writer));
+            // Given, When
+            var writer = new FakeBuildSystemServiceMessageWriter();
+            var result = Record.Exception(() => new ContinuaCIProvider(null, writer));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "environment");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Writer_Is_Null()
-            {
-                // Given, When
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var result = Record.Exception(() => new ContinuaCIProvider(environment, null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "writer");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "environment");
         }
 
-        public sealed class TheIsRunningOnContinuaCIProperty
+        [Fact]
+        public void Should_Throw_If_Writer_Is_Null()
+        {
+            // Given, When
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var result = Record.Exception(() => new ContinuaCIProvider(environment, null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "writer");
+        }
+    }
+
+    public sealed class TheIsRunningOnContinuaCIProperty
+    {
+        [Fact]
+        public void Should_Return_True_If_Running_On_ContinuaCI()
+        {
+            // Given
+            var fixture = new ContinuaCIFixture();
+            fixture.IsRunningOnContinuaCI();
+            var continuaCI = fixture.CreateContinuaCIService();
+
+            // When
+            var result = continuaCI.IsRunningOnContinuaCI;
+
+            // Then
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void Should_Return_False_If_Not_Running_On_ContinuaCI()
+        {
+            // Given
+            var fixture = new ContinuaCIFixture();
+            var continuaCI = fixture.CreateContinuaCIService();
+
+            // When
+            var result = continuaCI.IsRunningOnContinuaCI;
+
+            // Then
+            Assert.False(result);
+        }
+
+        public sealed class TheEnvironmentProperty
         {
             [Fact]
-            public void Should_Return_True_If_Running_On_ContinuaCI()
-            {
-                // Given
-                var fixture = new ContinuaCIFixture();
-                fixture.IsRunningOnContinuaCI();
-                var continuaCI = fixture.CreateContinuaCIService();
-
-                // When
-                var result = continuaCI.IsRunningOnContinuaCI;
-
-                // Then
-                Assert.True(result);
-            }
-
-            [Fact]
-            public void Should_Return_False_If_Not_Running_On_ContinuaCI()
+            public void Should_Return_Non_Null_Reference()
             {
                 // Given
                 var fixture = new ContinuaCIFixture();
                 var continuaCI = fixture.CreateContinuaCIService();
 
                 // When
-                var result = continuaCI.IsRunningOnContinuaCI;
+                var result = continuaCI.Environment;
 
                 // Then
-                Assert.False(result);
-            }
-
-            public sealed class TheEnvironmentProperty
-            {
-                [Fact]
-                public void Should_Return_Non_Null_Reference()
-                {
-                    // Given
-                    var fixture = new ContinuaCIFixture();
-                    var continuaCI = fixture.CreateContinuaCIService();
-
-                    // When
-                    var result = continuaCI.Environment;
-
-                    // Then
-                    Assert.NotNull(result);
-                }
+                Assert.NotNull(result);
             }
         }
     }

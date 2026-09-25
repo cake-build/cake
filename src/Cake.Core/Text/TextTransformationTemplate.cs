@@ -8,118 +8,117 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Cake.Core.Text
+namespace Cake.Core.Text;
+
+/// <summary>
+/// Provides template functionality for simple text transformations.
+/// </summary>
+public sealed class TextTransformationTemplate : ITextTransformationTemplate
 {
+    private readonly Dictionary<string, object> _tokens;
+    private readonly string _template;
+    private readonly string _keyExpression;
+
+    private static readonly string[] _regexTokens =
+    [
+        ".", "$", "^", "{", "[", "(", "|", ")", "*", "+", "?"
+    ];
+
     /// <summary>
-    /// Provides template functionality for simple text transformations.
+    /// Initializes a new instance of the <see cref="TextTransformationTemplate"/> class.
     /// </summary>
-    public sealed class TextTransformationTemplate : ITextTransformationTemplate
+    /// <param name="template">The template.</param>
+    public TextTransformationTemplate(string template)
+        : this(template, null)
     {
-        private readonly Dictionary<string, object> _tokens;
-        private readonly string _template;
-        private readonly string _keyExpression;
+    }
 
-        private static readonly string[] _regexTokens =
-        {
-            ".", "$", "^", "{", "[", "(", "|", ")", "*", "+", "?"
-        };
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextTransformationTemplate"/> class.
+    /// </summary>
+    /// <param name="template">The template.</param>
+    /// <param name="placeholder">The key placeholder.</param>
+    public TextTransformationTemplate(string template, Tuple<string, string> placeholder)
+    {
+        ArgumentNullException.ThrowIfNull(template);
+        _template = template;
+        _tokens = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        _keyExpression = CreateKeyExpression(placeholder);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextTransformationTemplate"/> class.
-        /// </summary>
-        /// <param name="template">The template.</param>
-        public TextTransformationTemplate(string template)
-            : this(template, null)
+    /// <inheritdoc/>
+    public void Register(string key, object value)
+    {
+        ArgumentNullException.ThrowIfNull(key);
+        if (string.IsNullOrWhiteSpace(key))
         {
+            throw new ArgumentException("Key cannot be empty.", nameof(key));
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextTransformationTemplate"/> class.
-        /// </summary>
-        /// <param name="template">The template.</param>
-        /// <param name="placeholder">The key placeholder.</param>
-        public TextTransformationTemplate(string template, Tuple<string, string> placeholder)
+        if (_tokens.ContainsKey(key))
         {
-            ArgumentNullException.ThrowIfNull(template);
-            _template = template;
-            _tokens = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-            _keyExpression = CreateKeyExpression(placeholder);
+            const string format = "The key '{0}' has already been added.";
+            var message = string.Format(CultureInfo.InvariantCulture, format, key);
+            throw new InvalidOperationException(message);
         }
+        _tokens.Add(key, value);
+    }
 
-        /// <inheritdoc/>
-        public void Register(string key, object value)
+    /// <inheritdoc/>
+    public string Render()
+    {
+        return Regex.Replace(_template, _keyExpression, Replace);
+    }
+
+    private static string CreateKeyExpression(Tuple<string, string> placeholder)
+    {
+        placeholder = placeholder ?? new Tuple<string, string>("<%", "%>");
+        return string.Concat(
+            EscapeRegexCharacters(placeholder.Item1),
+            @"(?<key>[^",
+            placeholder.Item2[0],
+            "]+)",
+            EscapeRegexCharacters(placeholder.Item2));
+    }
+
+    private string Replace(Match match)
+    {
+        var expression = match.Groups["key"].Value;
+        var parts = expression.Split([':'], StringSplitOptions.None);
+        var key = parts[0].Trim();
+        if (_tokens.ContainsKey(key))
         {
-            ArgumentNullException.ThrowIfNull(key);
-            if (string.IsNullOrWhiteSpace(key))
+            // Get the value.
+            var value = _tokens[key];
+            if (value == null)
             {
-                throw new ArgumentException("Key cannot be empty.", nameof(key));
+                return string.Empty;
             }
-            if (_tokens.ContainsKey(key))
+            if (parts.Length > 1)
             {
-                const string format = "The key '{0}' has already been added.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, key);
-                throw new InvalidOperationException(message);
-            }
-            _tokens.Add(key, value);
-        }
-
-        /// <inheritdoc/>
-        public string Render()
-        {
-            return Regex.Replace(_template, _keyExpression, Replace);
-        }
-
-        private static string CreateKeyExpression(Tuple<string, string> placeholder)
-        {
-            placeholder = placeholder ?? new Tuple<string, string>("<%", "%>");
-            return string.Concat(
-                EscapeRegexCharacters(placeholder.Item1),
-                @"(?<key>[^",
-                placeholder.Item2[0],
-                "]+)",
-                EscapeRegexCharacters(placeholder.Item2));
-        }
-
-        private string Replace(Match match)
-        {
-            var expression = match.Groups["key"].Value;
-            var parts = expression.Split(new[] { ':' }, StringSplitOptions.None);
-            var key = parts[0].Trim();
-            if (_tokens.ContainsKey(key))
-            {
-                // Get the value.
-                var value = _tokens[key];
-                if (value == null)
+                // Formattable?
+                var format = string.Join(':', parts.Skip(1).Take(parts.Length - 1)).Trim();
+                var formattable = _tokens[key] as IFormattable;
+                if (formattable != null)
                 {
-                    return string.Empty;
+                    return formattable.ToString(format, CultureInfo.InvariantCulture);
                 }
-                if (parts.Length > 1)
-                {
-                    // Formattable?
-                    var format = string.Join(':', parts.Skip(1).Take(parts.Length - 1)).Trim();
-                    var formattable = _tokens[key] as IFormattable;
-                    if (formattable != null)
-                    {
-                        return formattable.ToString(format, CultureInfo.InvariantCulture);
-                    }
 
-                    // Return what we received.
-                    return match.Value;
-                }
-                return value.ToString();
+                // Return what we received.
+                return match.Value;
             }
-
-            // Return what we received.
-            return match.Value;
+            return value.ToString();
         }
 
-        private static string EscapeRegexCharacters(string text)
+        // Return what we received.
+        return match.Value;
+    }
+
+    private static string EscapeRegexCharacters(string text)
+    {
+        foreach (var token in _regexTokens)
         {
-            foreach (var token in _regexTokens)
-            {
-                text = text.Replace(token, string.Concat("\\", token));
-            }
-            return text;
+            text = text.Replace(token, string.Concat("\\", token));
         }
+        return text;
     }
 }

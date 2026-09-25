@@ -4,36 +4,35 @@
 
 using Cake.Core;
 
-namespace Cake.Common.Build.Rwx.Data
+namespace Cake.Common.Build.Rwx.Data;
+
+/// <summary>
+/// Provides RWX actor information for the current build.
+/// </summary>
+public sealed class RwxActorInfo : RwxInfo
 {
     /// <summary>
-    /// Provides RWX actor information for the current build.
+    /// Initializes a new instance of the <see cref="RwxActorInfo"/> class.
     /// </summary>
-    public sealed class RwxActorInfo : RwxInfo
+    /// <param name="environment">The environment.</param>
+    public RwxActorInfo(ICakeEnvironment environment)
+        : base(environment)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RwxActorInfo"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public RwxActorInfo(ICakeEnvironment environment)
-            : base(environment)
-        {
-        }
-
-        /// <summary>
-        /// Gets the identifier of the RWX actor that started the run.
-        /// </summary>
-        /// <value>
-        /// The actor identifier.
-        /// </value>
-        public string Id => GetEnvironmentString("RWX_ACTOR_ID");
-
-        /// <summary>
-        /// Gets the name of the RWX actor that started the run.
-        /// </summary>
-        /// <value>
-        /// The actor name.
-        /// </value>
-        public string Name => GetEnvironmentString("RWX_ACTOR");
     }
+
+    /// <summary>
+    /// Gets the identifier of the RWX actor that started the run.
+    /// </summary>
+    /// <value>
+    /// The actor identifier.
+    /// </value>
+    public string Id => GetEnvironmentString("RWX_ACTOR_ID");
+
+    /// <summary>
+    /// Gets the name of the RWX actor that started the run.
+    /// </summary>
+    /// <value>
+    /// The actor name.
+    /// </value>
+    public string Name => GetEnvironmentString("RWX_ACTOR");
 }

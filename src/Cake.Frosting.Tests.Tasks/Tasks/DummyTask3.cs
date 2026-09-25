@@ -4,12 +4,11 @@
 
 using Cake.Core;
 
-namespace Cake.Frosting.Tests
+namespace Cake.Frosting.Tests;
+
+public sealed class DummyTask3 : FrostingTask<ICakeContext>
 {
-    public sealed class DummyTask3 : FrostingTask<ICakeContext>
+    public override void Run(ICakeContext context)
     {
-        public override void Run(ICakeContext context)
-        {
-        }
     }
 }

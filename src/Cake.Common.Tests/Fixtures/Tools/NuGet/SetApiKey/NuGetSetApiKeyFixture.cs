@@ -4,23 +4,22 @@
 
 using Cake.Common.Tools.NuGet.SetApiKey;
 
-namespace Cake.Common.Tests.Fixtures.Tools.NuGet.SetApiKey
+namespace Cake.Common.Tests.Fixtures.Tools.NuGet.SetApiKey;
+
+internal class NuGetSetApiKeyFixture : NuGetFixture<NuGetSetApiKeySettings>
 {
-    internal class NuGetSetApiKeyFixture : NuGetFixture<NuGetSetApiKeySettings>
+    public string ApiKey { get; set; }
+    public string Source { get; set; }
+
+    public NuGetSetApiKeyFixture()
     {
-        public string ApiKey { get; set; }
-        public string Source { get; set; }
+        ApiKey = "SECRET";
+        Source = "http://a.com";
+    }
 
-        public NuGetSetApiKeyFixture()
-        {
-            ApiKey = "SECRET";
-            Source = "http://a.com";
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new NuGetSetApiKey(FileSystem, Environment, ProcessRunner, Tools, Resolver);
-            tool.SetApiKey(ApiKey, Source, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new NuGetSetApiKey(FileSystem, Environment, ProcessRunner, Tools, Resolver);
+        tool.SetApiKey(ApiKey, Source, Settings);
     }
 }

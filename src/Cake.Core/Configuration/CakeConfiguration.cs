@@ -5,29 +5,28 @@
 using System;
 using System.Collections.Generic;
 
-namespace Cake.Core.Configuration
+namespace Cake.Core.Configuration;
+
+/// <summary>
+/// The default implementation of the Cake configuration.
+/// </summary>
+public sealed class CakeConfiguration : ICakeConfiguration
 {
+    private readonly Dictionary<string, string> _lookup;
+
     /// <summary>
-    /// The default implementation of the Cake configuration.
+    /// Initializes a new instance of the <see cref="CakeConfiguration"/> class.
     /// </summary>
-    public sealed class CakeConfiguration : ICakeConfiguration
+    /// <param name="lookup">The initial configuration table.</param>
+    public CakeConfiguration(IDictionary<string, string> lookup)
     {
-        private readonly Dictionary<string, string> _lookup;
+        _lookup = new Dictionary<string, string>(lookup, StringComparer.OrdinalIgnoreCase);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeConfiguration"/> class.
-        /// </summary>
-        /// <param name="lookup">The initial configuration table.</param>
-        public CakeConfiguration(IDictionary<string, string> lookup)
-        {
-            _lookup = new Dictionary<string, string>(lookup, StringComparer.OrdinalIgnoreCase);
-        }
-
-        /// <inheritdoc/>
-        public string GetValue(string key)
-        {
-            key = KeyNormalizer.Normalize(key);
-            return _lookup.GetValueOrDefault(key);
-        }
+    /// <inheritdoc/>
+    public string GetValue(string key)
+    {
+        key = KeyNormalizer.Normalize(key);
+        return _lookup.GetValueOrDefault(key);
     }
 }

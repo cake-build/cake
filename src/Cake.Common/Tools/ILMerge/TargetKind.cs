@@ -2,31 +2,30 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.ILMerge
+namespace Cake.Common.Tools.ILMerge;
+
+/// <summary>
+/// Represents an ILMerge target.
+/// </summary>
+public enum TargetKind
 {
     /// <summary>
-    /// Represents an ILMerge target.
+    /// TargetKind: <c>Default</c>
     /// </summary>
-    public enum TargetKind
-    {
-        /// <summary>
-        /// TargetKind: <c>Default</c>
-        /// </summary>
-        Default,
+    Default,
 
-        /// <summary>
-        /// TargetKind: <c>Dynamic Link Library</c>
-        /// </summary>
-        Dll,
+    /// <summary>
+    /// TargetKind: <c>Dynamic Link Library</c>
+    /// </summary>
+    Dll,
 
-        /// <summary>
-        /// TargetKind: <c>Executable</c>
-        /// </summary>
-        Exe,
+    /// <summary>
+    /// TargetKind: <c>Executable</c>
+    /// </summary>
+    Exe,
 
-        /// <summary>
-        /// TargetKind: <c>Windows executable</c>
-        /// </summary>
-        WinExe
-    }
+    /// <summary>
+    /// TargetKind: <c>Windows executable</c>
+    /// </summary>
+    WinExe
 }

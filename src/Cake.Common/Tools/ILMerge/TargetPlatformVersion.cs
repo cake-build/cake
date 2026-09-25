@@ -4,32 +4,31 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace Cake.Common.Tools.ILMerge
+namespace Cake.Common.Tools.ILMerge;
+
+/// <summary>
+/// Represents the .NET Framework for the target assembly.
+/// </summary>
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+public enum TargetPlatformVersion
 {
     /// <summary>
-    /// Represents the .NET Framework for the target assembly.
+    /// NET Framework v1
     /// </summary>
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
-    public enum TargetPlatformVersion
-    {
-        /// <summary>
-        /// NET Framework v1
-        /// </summary>
-        v1,
+    v1,
 
-        /// <summary>
-        /// NET Framework v1.1
-        /// </summary>
-        v11,
+    /// <summary>
+    /// NET Framework v1.1
+    /// </summary>
+    v11,
 
-        /// <summary>
-        /// NET Framework v2
-        /// </summary>
-        v2,
+    /// <summary>
+    /// NET Framework v2
+    /// </summary>
+    v2,
 
-        /// <summary>
-        /// NET Framework v4
-        /// </summary>
-        v4
-    }
+    /// <summary>
+    /// NET Framework v4
+    /// </summary>
+    v4
 }

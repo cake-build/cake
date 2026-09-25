@@ -8,53 +8,52 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Cake.Core.IO.Globbing.Nodes.Segments;
 
-namespace Cake.Core.IO.Globbing.Nodes
+namespace Cake.Core.IO.Globbing.Nodes;
+
+[DebuggerDisplay("{GetPath(),nq}")]
+internal sealed class PathNode : MatchableNode
 {
-    [DebuggerDisplay("{GetPath(),nq}")]
-    internal sealed class PathNode : MatchableNode
+    private readonly Regex _regex;
+
+    public IReadOnlyList<PathSegment> Segments { get; }
+    public bool IsIdentifier { get; }
+
+    public PathNode(List<PathSegment> tokens, RegexOptions options)
     {
-        private readonly Regex _regex;
+        _regex = CreateRegex(tokens, options);
 
-        public IReadOnlyList<PathSegment> Segments { get; }
-        public bool IsIdentifier { get; }
+        Segments = tokens;
+        IsIdentifier = Segments.Count == 1 && Segments[0] is TextSegment;
+    }
 
-        public PathNode(List<PathSegment> tokens, RegexOptions options)
+    public override bool IsMatch(string value)
+    {
+        return _regex.IsMatch(value);
+    }
+
+    public string GetPath()
+    {
+        var builder = new StringBuilder();
+        foreach (var token in Segments)
         {
-            _regex = CreateRegex(tokens, options);
-
-            Segments = tokens;
-            IsIdentifier = Segments.Count == 1 && Segments[0] is TextSegment;
+            builder.Append(token.Value);
         }
+        return builder.ToString();
+    }
 
-        public override bool IsMatch(string value)
+    [DebuggerStepThrough]
+    public override void Accept(GlobVisitor globber, GlobVisitorContext context)
+    {
+        globber.VisitSegment(this, context);
+    }
+
+    private static Regex CreateRegex(List<PathSegment> tokens, RegexOptions options)
+    {
+        var builder = new StringBuilder();
+        foreach (var token in tokens)
         {
-            return _regex.IsMatch(value);
+            builder.Append(token.Regex);
         }
-
-        public string GetPath()
-        {
-            var builder = new StringBuilder();
-            foreach (var token in Segments)
-            {
-                builder.Append(token.Value);
-            }
-            return builder.ToString();
-        }
-
-        [DebuggerStepThrough]
-        public override void Accept(GlobVisitor globber, GlobVisitorContext context)
-        {
-            globber.VisitSegment(this, context);
-        }
-
-        private static Regex CreateRegex(List<PathSegment> tokens, RegexOptions options)
-        {
-            var builder = new StringBuilder();
-            foreach (var token in tokens)
-            {
-                builder.Append(token.Regex);
-            }
-            return new Regex(string.Concat("^", builder.ToString(), "$"), options);
-        }
+        return new Regex(string.Concat("^", builder.ToString(), "$"), options);
     }
 }

@@ -15,200 +15,200 @@ using Cake.Core.IO;
 using Cake.Core.Polyfill;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.Cake
+namespace Cake.Common.Tools.Cake;
+
+/// <summary>
+/// Cake out process runner.
+/// </summary>
+public sealed class CakeRunner : Tool<CakeSettings>
 {
+    private readonly ICakeEnvironment _environment;
+    private readonly IFileSystem _fileSystem;
+    private readonly IGlobber _globber;
+    private readonly DotNetExecutor _coreExecutor;
+    private static readonly IEnumerable<FilePath> _executingAssemblyToolPaths;
+
     /// <summary>
-    /// Cake out process runner.
+    /// Initializes static members of the <see cref="CakeRunner"/> class.
     /// </summary>
-    public sealed class CakeRunner : Tool<CakeSettings>
+    static CakeRunner()
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly IFileSystem _fileSystem;
-        private readonly IGlobber _globber;
-        private readonly DotNetExecutor _coreExecutor;
-        private static readonly IEnumerable<FilePath> _executingAssemblyToolPaths;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="CakeRunner"/> class.
-        /// </summary>
-        static CakeRunner()
+        var entryAssembly = AssemblyHelper.GetExecutingAssembly();
+        var executingAssemblyToolPath = ((FilePath)entryAssembly.Location).GetDirectory();
+        _executingAssemblyToolPaths = new[]
         {
-            var entryAssembly = AssemblyHelper.GetExecutingAssembly();
-            var executingAssemblyToolPath = ((FilePath)entryAssembly.Location).GetDirectory();
-            _executingAssemblyToolPaths = new[]
-            {
-                executingAssemblyToolPath.CombineWithFilePath("Cake.dll")
-            };
+            executingAssemblyToolPath.CombineWithFilePath("Cake.dll")
+        };
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakeRunner"/> class.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="globber">The globber.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public CakeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner, IToolLocator tools)
+        : base(fileSystem, environment, processRunner, tools)
+    {
+        _environment = environment;
+        _fileSystem = fileSystem;
+        _globber = globber;
+        _coreExecutor = new DotNetExecutor(fileSystem, environment, processRunner, tools);
+    }
+
+    /// <summary>
+    /// Executes supplied cake script in own process and supplied settings.
+    /// </summary>
+    /// <param name="scriptPath">Path to script to execute.</param>
+    /// <param name="settings">optional cake settings.</param>
+    public void ExecuteScript(FilePath scriptPath, CakeSettings settings = null)
+    {
+        ArgumentNullException.ThrowIfNull(scriptPath);
+
+        scriptPath = scriptPath.MakeAbsolute(_environment);
+        if (!_fileSystem.GetFile(scriptPath).Exists)
+        {
+            throw new FileNotFoundException("Cake script file not found.", scriptPath.FullPath);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeRunner"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="globber">The globber.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public CakeRunner(IFileSystem fileSystem, ICakeEnvironment environment, IGlobber globber, IProcessRunner processRunner, IToolLocator tools)
-            : base(fileSystem, environment, processRunner, tools)
+        settings = settings ?? new CakeSettings();
+        var toolPath = GetToolPath(settings);
+        if (toolPath?.GetFilename().FullPath == "Cake.dll")
         {
-            _environment = environment;
-            _fileSystem = fileSystem;
-            _globber = globber;
-            _coreExecutor = new DotNetExecutor(fileSystem, environment, processRunner, tools);
-        }
-
-        /// <summary>
-        /// Executes supplied cake script in own process and supplied settings.
-        /// </summary>
-        /// <param name="scriptPath">Path to script to execute.</param>
-        /// <param name="settings">optional cake settings.</param>
-        public void ExecuteScript(FilePath scriptPath, CakeSettings settings = null)
-        {
-            ArgumentNullException.ThrowIfNull(scriptPath);
-
-            scriptPath = scriptPath.MakeAbsolute(_environment);
-            if (!_fileSystem.GetFile(scriptPath).Exists)
-            {
-                throw new FileNotFoundException("Cake script file not found.", scriptPath.FullPath);
-            }
-
-            settings = settings ?? new CakeSettings();
-            var toolPath = GetToolPath(settings);
-            if (toolPath?.GetFilename().FullPath == "Cake.dll")
-            {
-                _coreExecutor.Execute(
-                    toolPath,
-                    GetArguments(scriptPath, settings),
-                    new DotNetExecuteSettings
-                    {
-                        ArgumentCustomization = settings.ArgumentCustomization,
-                        EnvironmentVariables = settings.EnvironmentVariables,
-                        HandleExitCode = settings.HandleExitCode,
-                        NoWorkingDirectory = settings.NoWorkingDirectory,
-                        PostAction = settings.PostAction,
-                        SetupProcessSettings = settings.SetupProcessSettings,
-                        ToolTimeout = settings.ToolTimeout,
-                        WorkingDirectory = settings.WorkingDirectory
-                    });
-            }
-            else
-            {
-                Run(settings, GetArguments(scriptPath, settings));
-            }
-        }
-
-        /// <summary>
-        /// Executes supplied cake code expression in own process and supplied settings.
-        /// </summary>
-        /// <param name="cakeExpression">Code expression to execute.</param>
-        /// <param name="settings">optional cake settings.</param>
-        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public void ExecuteExpression(string cakeExpression, CakeSettings settings = null)
-        {
-            if (string.IsNullOrWhiteSpace(cakeExpression))
-            {
-                throw new ArgumentNullException(nameof(cakeExpression));
-            }
-            DirectoryPath tempPath = _environment.GetEnvironmentVariable("TEMP") ?? "./";
-            var tempScriptFile = _fileSystem.GetFile(tempPath
-                .CombineWithFilePath(string.Format(CultureInfo.InvariantCulture, "{0}.cake", Guid.NewGuid()))
-                .MakeAbsolute(_environment));
-            try
-            {
-                using (var stream = tempScriptFile.OpenWrite())
+            _coreExecutor.Execute(
+                toolPath,
+                GetArguments(scriptPath, settings),
+                new DotNetExecuteSettings
                 {
-                    using (var streamWriter = new StreamWriter(stream, Encoding.UTF8))
-                    {
-                        streamWriter.WriteLine(cakeExpression);
-                    }
-                }
-                ExecuteScript(tempScriptFile.Path.FullPath, settings);
-            }
-            finally
+                    ArgumentCustomization = settings.ArgumentCustomization,
+                    EnvironmentVariables = settings.EnvironmentVariables,
+                    HandleExitCode = settings.HandleExitCode,
+                    NoWorkingDirectory = settings.NoWorkingDirectory,
+                    PostAction = settings.PostAction,
+                    SetupProcessSettings = settings.SetupProcessSettings,
+                    ToolTimeout = settings.ToolTimeout,
+                    WorkingDirectory = settings.WorkingDirectory
+                });
+        }
+        else
+        {
+            Run(settings, GetArguments(scriptPath, settings));
+        }
+    }
+
+    /// <summary>
+    /// Executes supplied cake code expression in own process and supplied settings.
+    /// </summary>
+    /// <param name="cakeExpression">Code expression to execute.</param>
+    /// <param name="settings">optional cake settings.</param>
+    [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+    public void ExecuteExpression(string cakeExpression, CakeSettings settings = null)
+    {
+        if (string.IsNullOrWhiteSpace(cakeExpression))
+        {
+            throw new ArgumentNullException(nameof(cakeExpression));
+        }
+        DirectoryPath tempPath = _environment.GetEnvironmentVariable("TEMP") ?? "./";
+        var tempScriptFile = _fileSystem.GetFile(tempPath
+            .CombineWithFilePath(string.Format(CultureInfo.InvariantCulture, "{0}.cake", Guid.NewGuid()))
+            .MakeAbsolute(_environment));
+        try
+        {
+            using (var stream = tempScriptFile.OpenWrite())
             {
-                if (tempScriptFile.Exists)
+                using (var streamWriter = new StreamWriter(stream, Encoding.UTF8))
                 {
-                    tempScriptFile.Delete();
+                    streamWriter.WriteLine(cakeExpression);
                 }
             }
+            ExecuteScript(tempScriptFile.Path.FullPath, settings);
         }
-
-        private ProcessArgumentBuilder GetArguments(FilePath scriptPath, CakeSettings settings)
+        finally
         {
-            var builder = new ProcessArgumentBuilder();
-            builder.AppendQuoted(scriptPath.MakeAbsolute(_environment).FullPath);
-
-            if (settings.Verbosity.HasValue)
+            if (tempScriptFile.Exists)
             {
-                builder.Append(string.Concat("--verbosity=", settings.Verbosity.Value.ToString()));
+                tempScriptFile.Delete();
             }
-
-            if (settings.Arguments != null)
-            {
-                foreach (var argument in settings.Arguments)
-                {
-                    var key = argument.Key.Length == 1
-                        ? $"-{argument.Key}" : $"--{argument.Key}";
-
-                    builder.Append(string.Format(
-                        CultureInfo.InvariantCulture,
-                        "{0}={1}",
-                        key,
-                        (argument.Value ?? string.Empty).Quote()));
-                }
-            }
-            return builder;
         }
+    }
 
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
+    private ProcessArgumentBuilder GetArguments(FilePath scriptPath, CakeSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+        builder.AppendQuoted(scriptPath.MakeAbsolute(_environment).FullPath);
+
+        if (settings.Verbosity.HasValue)
         {
-            return "Cake";
+            builder.Append(string.Concat("--verbosity=", settings.Verbosity.Value.ToString()));
         }
 
-        /// <summary>
-        /// Gets the name of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
+        if (settings.Arguments != null)
         {
-            return new[]
+            foreach (var argument in settings.Arguments)
             {
-                "Cake.dll",
-                "cake",
-                "Cake",
-                "Cake.exe"
-            };
-        }
+                var key = argument.Key.Length == 1
+                    ? $"-{argument.Key}" : $"--{argument.Key}";
 
-        /// <summary>
-        /// Gets alternative file paths which the tool may exist in.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override IEnumerable<FilePath> GetAlternativeToolPaths(CakeSettings settings)
+                builder.Append(string.Format(
+                    CultureInfo.InvariantCulture,
+                    "{0}={1}",
+                    key,
+                    (argument.Value ?? string.Empty).Quote()));
+            }
+        }
+        return builder;
+    }
+
+    /// <summary>
+    /// Gets the name of the tool.
+    /// </summary>
+    /// <returns>The name of the tool.</returns>
+    protected override string GetToolName()
+    {
+        return "Cake";
+    }
+
+    /// <summary>
+    /// Gets the name of the tool executable.
+    /// </summary>
+    /// <returns>The tool executable name.</returns>
+    protected override IEnumerable<string> GetToolExecutableNames()
+    {
+        return new[]
         {
-            const string homebrewCakePath = "/usr/local/Cellar/cake/";
+            "Cake.dll",
+            "cake",
+            "Cake",
+            "Cake.exe"
+        };
+    }
 
-            if (!_environment.Platform.IsUnix())
-            {
-                return _executingAssemblyToolPaths;
-            }
+    /// <summary>
+    /// Gets alternative file paths which the tool may exist in.
+    /// </summary>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The default tool path.</returns>
+    protected override IEnumerable<FilePath> GetAlternativeToolPaths(CakeSettings settings)
+    {
+        const string homebrewCakePath = "/usr/local/Cellar/cake/";
 
-            if (!_fileSystem.Exist(new DirectoryPath(homebrewCakePath)))
-            {
-                return _executingAssemblyToolPaths;
-            }
-
-            var files = _globber.GetFiles(homebrewCakePath + "**/Cake.exe");
-            var filePaths = files as FilePath[] ?? files.ToArray();
-            return filePaths.Length == 0
-                ? _executingAssemblyToolPaths
-                : filePaths.OrderByDescending(f => f.FullPath);
+        if (!_environment.Platform.IsUnix())
+        {
+            return _executingAssemblyToolPaths;
         }
+
+        if (!_fileSystem.Exist(new DirectoryPath(homebrewCakePath)))
+        {
+            return _executingAssemblyToolPaths;
+        }
+
+        var files = _globber.GetFiles(homebrewCakePath + "**/Cake.exe");
+
+        var filePaths = files as FilePath[] ?? [.. files];
+        return filePaths.Length == 0
+            ? _executingAssemblyToolPaths
+            : filePaths.OrderByDescending(f => f.FullPath);
     }
 }

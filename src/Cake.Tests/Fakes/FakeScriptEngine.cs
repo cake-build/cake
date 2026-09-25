@@ -1,21 +1,20 @@
 using Cake.Core.Scripting;
 
-namespace Cake.Tests.Fakes
+namespace Cake.Tests.Fakes;
+
+public sealed class FakeScriptEngine : IScriptEngine
 {
-    public sealed class FakeScriptEngine : IScriptEngine
+    public IScriptHost ScriptHost { get; set; }
+    public FakeScriptSession Session { get; }
+
+    public FakeScriptEngine()
     {
-        public IScriptHost ScriptHost { get; set; }
-        public FakeScriptSession Session { get; }
+        Session = new FakeScriptSession();
+    }
 
-        public FakeScriptEngine()
-        {
-            Session = new FakeScriptSession();
-        }
-
-        public IScriptSession CreateSession(IScriptHost host)
-        {
-            ScriptHost = host;
-            return Session;
-        }
+    public IScriptSession CreateSession(IScriptHost host)
+    {
+        ScriptHost = host;
+        return Session;
     }
 }

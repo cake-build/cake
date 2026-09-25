@@ -9,103 +9,102 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotNet.Reference.List
+namespace Cake.Common.Tools.DotNet.Reference.List;
+
+/// <summary>
+/// .NET reference lister.
+/// </summary>
+public sealed class DotNetReferenceLister : DotNetTool<DotNetReferenceListSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// .NET reference lister.
+    /// Initializes a new instance of the <see cref="DotNetReferenceLister" /> class.
     /// </summary>
-    public sealed class DotNetReferenceLister : DotNetTool<DotNetReferenceListSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotNetReferenceLister(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetReferenceLister" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public DotNetReferenceLister(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Lists project-to-project references.
+    /// </summary>
+    /// <param name="project">The target project file path. If not specified, the command searches the current directory for one.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The list of project-to-project references.</returns>
+    public IEnumerable<string> List(string project, DotNetReferenceListSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        var processSettings = new ProcessSettings
         {
-            _environment = environment;
+            RedirectStandardOutput = true
+        };
+
+        IEnumerable<string> result = null;
+        RunCommand(settings, GetArguments(project, settings), processSettings,
+            process => result = process.GetStandardOutput());
+
+        return ParseResult(result).ToList();
+    }
+
+    private ProcessArgumentBuilder GetArguments(string project, DotNetReferenceListSettings settings)
+    {
+        var builder = CreateArgumentBuilder(settings);
+
+        builder.Append("list");
+
+        // Project path
+        if (!string.IsNullOrWhiteSpace(project))
+        {
+            builder.AppendQuoted(project);
         }
 
-        /// <summary>
-        /// Lists project-to-project references.
-        /// </summary>
-        /// <param name="project">The target project file path. If not specified, the command searches the current directory for one.</param>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The list of project-to-project references.</returns>
-        public IEnumerable<string> List(string project, DotNetReferenceListSettings settings)
+        builder.Append("reference");
+
+        return builder;
+    }
+
+    private static IEnumerable<string> ParseResult(IEnumerable<string> result)
+    {
+        bool first = true;
+        foreach (var line in result)
         {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            var processSettings = new ProcessSettings
+            if (first)
             {
-                RedirectStandardOutput = true
-            };
+                if (line?.StartsWith("There are no Project to Project references") == true)
+                {
+                    yield break;
+                }
 
-            IEnumerable<string> result = null;
-            RunCommand(settings, GetArguments(project, settings), processSettings,
-                process => result = process.GetStandardOutput());
-
-            return ParseResult(result).ToList();
-        }
-
-        private ProcessArgumentBuilder GetArguments(string project, DotNetReferenceListSettings settings)
-        {
-            var builder = CreateArgumentBuilder(settings);
-
-            builder.Append("list");
-
-            // Project path
-            if (!string.IsNullOrWhiteSpace(project))
-            {
-                builder.AppendQuoted(project);
+                if (line?.StartsWith("Project reference(s)") == true)
+                {
+                    first = false;
+                }
+                continue;
             }
 
-            builder.Append("reference");
-
-            return builder;
-        }
-
-        private static IEnumerable<string> ParseResult(IEnumerable<string> result)
-        {
-            bool first = true;
-            foreach (var line in result)
+            if (string.IsNullOrWhiteSpace(line))
             {
-                if (first)
-                {
-                    if (line?.StartsWith("There are no Project to Project references") == true)
-                    {
-                        yield break;
-                    }
-
-                    if (line?.StartsWith("Project reference(s)") == true)
-                    {
-                        first = false;
-                    }
-                    continue;
-                }
-
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    break;
-                }
-
-                var trimmedLine = line.Trim();
-
-                if (trimmedLine.Trim().All(c => c == '-'))
-                {
-                    continue;
-                }
-
-                yield return trimmedLine;
+                break;
             }
+
+            var trimmedLine = line.Trim();
+
+            if (trimmedLine.Trim().All(c => c == '-'))
+            {
+                continue;
+            }
+
+            yield return trimmedLine;
         }
     }
 }

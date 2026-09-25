@@ -12,56 +12,55 @@ using Cake.Tests.Fakes;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 
-namespace Cake.Tests.Fixtures
+namespace Cake.Tests.Fixtures;
+
+public sealed class ProgramFixture
 {
-    public sealed class ProgramFixture
+    public List<Action<IServiceCollection>> Overrides { get; }
+
+    public FakeFileSystem FileSystem { get; }
+    public FakeEnvironment Environment { get; }
+    public TestContainerConfigurator Bootstrapper { get; }
+    public FakeLog Log { get; }
+    public FakeConsole Console { get; }
+    public IModuleSearcher ModuleSearcher { get; }
+    public BuildFeatureFixture Builder { get; }
+
+    public ProgramFixture()
     {
-        public List<Action<IServiceCollection>> Overrides { get; }
+        Bootstrapper = new TestContainerConfigurator();
+        Environment = FakeEnvironment.CreateUnixEnvironment();
+        FileSystem = new FakeFileSystem(Environment);
+        Log = new FakeLog();
+        Console = new FakeConsole();
+        ModuleSearcher = Substitute.For<IModuleSearcher>();
+        Builder = new BuildFeatureFixture(FileSystem, Environment, Bootstrapper, Log, Console, ModuleSearcher);
 
-        public FakeFileSystem FileSystem { get; }
-        public FakeEnvironment Environment { get; }
-        public TestContainerConfigurator Bootstrapper { get; }
-        public FakeLog Log { get; }
-        public FakeConsole Console { get; }
-        public IModuleSearcher ModuleSearcher { get; }
-        public BuildFeatureFixture Builder { get; }
-
-        public ProgramFixture()
+        // CLI overrides
+        Overrides = new List<Action<IServiceCollection>>()
         {
-            Bootstrapper = new TestContainerConfigurator();
-            Environment = FakeEnvironment.CreateUnixEnvironment();
-            FileSystem = new FakeFileSystem(Environment);
-            Log = new FakeLog();
-            Console = new FakeConsole();
-            ModuleSearcher = Substitute.For<IModuleSearcher>();
-            Builder = new BuildFeatureFixture(FileSystem, Environment, Bootstrapper, Log, Console, ModuleSearcher);
+            services => services.AddSingleton<IContainerConfigurator>(Bootstrapper),
+            services => services.AddSingleton<ICakeEnvironment>(Environment),
+            services => services.AddSingleton<IFileSystem>(FileSystem),
+            services => services.AddSingleton<ICakeLog>(Log),
+            services => services.AddSingleton<IConsole>(Console),
+            services => services.AddSingleton(ModuleSearcher),
+            services => services.AddSingleton<IBuildFeature>(Builder)
+        };
+    }
 
-            // CLI overrides
-            Overrides = new List<Action<IServiceCollection>>()
-            {
-                services => services.AddSingleton<IContainerConfigurator>(Bootstrapper),
-                services => services.AddSingleton<ICakeEnvironment>(Environment),
-                services => services.AddSingleton<IFileSystem>(FileSystem),
-                services => services.AddSingleton<ICakeLog>(Log),
-                services => services.AddSingleton<IConsole>(Console),
-                services => services.AddSingleton(ModuleSearcher),
-                services => services.AddSingleton<IBuildFeature>(Builder)
-            };
-        }
+    public async Task<ProgramFixtureResult> Run(params string[] args)
+    {
+        // Create the application and override registrations.
+        var application = new Program(
+            services => Overrides.ForEach(action => action(services)),
+            propagateExceptions: true);
 
-        public async Task<ProgramFixtureResult> Run(params string[] args)
+        // Execute the application with the provided arguments.
+        var exitCode = await application.Run(args);
+        return new ProgramFixtureResult
         {
-            // Create the application and override registrations.
-            var application = new Program(
-                services => Overrides.ForEach(action => action(services)),
-                propagateExceptions: true);
-
-            // Execute the application with the provided arguments.
-            var exitCode = await application.Run(args);
-            return new ProgramFixtureResult
-            {
-                ExitCode = exitCode
-            };
-        }
+            ExitCode = exitCode
+        };
     }
 }

@@ -3,106 +3,104 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.Bamboo.Data
+namespace Cake.Common.Tests.Unit.Build.Bamboo.Data;
+
+public sealed class BambooBuildInfoTests
 {
-    public sealed class BambooBuildInfoTests
+    public sealed class TheFolderProperty
     {
-        public sealed class TheFolderProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new BambooInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.Folder;
+            // When
+            var result = info.Folder;
 
-                // Then
-                Assert.Equal(@"C:\build\CAKE-CAKE-JOB1", result);
-            }
+            // Then
+            Assert.Equal(@"C:\build\CAKE-CAKE-JOB1", result);
         }
+    }
 
-        public sealed class TheNumberProperty
+    public sealed class TheNumberProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new BambooInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.Number;
+            // When
+            var result = info.Number;
 
-                // Then
-                Assert.Equal(28, result);
-            }
+            // Then
+            Assert.Equal(28, result);
         }
+    }
 
-        public sealed class TheBuildKeyProperty
+    public sealed class TheBuildKeyProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new BambooInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.BuildKey;
+            // When
+            var result = info.BuildKey;
 
-                // Then
-                Assert.Equal("CAKE-CAKE-JOB1", result);
-            }
+            // Then
+            Assert.Equal("CAKE-CAKE-JOB1", result);
         }
+    }
 
-        public sealed class TheResultKeyProperty
+    public sealed class TheResultKeyProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new BambooInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.ResultKey;
+            // When
+            var result = info.ResultKey;
 
-                // Then
-                Assert.Equal("CAKE-CAKE-JOB1-28", result);
-            }
+            // Then
+            Assert.Equal("CAKE-CAKE-JOB1-28", result);
         }
+    }
 
-        public sealed class TheResultUrlProperty
+    public sealed class TheResultUrlProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new BambooInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.ResultsUrl;
+            // When
+            var result = info.ResultsUrl;
 
-                // Then
-                Assert.Equal("https://cakebuild.atlassian.net/builds/browse/CAKE-CAKE-JOB1-28", result);
-            }
+            // Then
+            Assert.Equal("https://cakebuild.atlassian.net/builds/browse/CAKE-CAKE-JOB1-28", result);
         }
+    }
 
-        public sealed class TheBuildTimestampProperty
+    public sealed class TheBuildTimestampProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new BambooInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.BuildTimestamp;
+            // When
+            var result = info.BuildTimestamp;
 
-                // Then
-                Assert.Equal("2015-12-15T22:53:37.847+01:00", result);
-            }
+            // Then
+            Assert.Equal("2015-12-15T22:53:37.847+01:00", result);
         }
     }
 }

@@ -4,20 +4,19 @@
 
 using System.Diagnostics;
 
-namespace Cake.Core.IO.Globbing.Nodes
-{
-    [DebuggerDisplay("**")]
-    internal sealed class RecursiveWildcardNode : MatchableNode
-    {
-        [DebuggerStepThrough]
-        public override void Accept(GlobVisitor globber, GlobVisitorContext context)
-        {
-            globber.VisitRecursiveWildcardSegment(this, context);
-        }
+namespace Cake.Core.IO.Globbing.Nodes;
 
-        public override bool IsMatch(string value)
-        {
-            return true;
-        }
+[DebuggerDisplay("**")]
+internal sealed class RecursiveWildcardNode : MatchableNode
+{
+    [DebuggerStepThrough]
+    public override void Accept(GlobVisitor globber, GlobVisitorContext context)
+    {
+        globber.VisitRecursiveWildcardSegment(this, context);
+    }
+
+    public override bool IsMatch(string value)
+    {
+        return true;
     }
 }

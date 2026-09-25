@@ -4,18 +4,17 @@
 
 using Cake.Core;
 
-namespace Cake.Frosting.Internal
-{
-    internal static class FrostingLifetimeExtensions
-    {
-        public static bool IsSetupOverridden(this IFrostingLifetime lifetime, IFrostingContext context)
-        {
-            return lifetime.GetType().GetMethod("Setup", new[] { context.GetType() }).IsOverriden();
-        }
+namespace Cake.Frosting.Internal;
 
-        public static bool IsTeardownOverridden(this IFrostingLifetime lifetime, IFrostingContext context)
-        {
-            return lifetime.GetType().GetMethod("Teardown", new[] { context.GetType(), typeof(ITeardownContext) }).IsOverriden();
-        }
+internal static class FrostingLifetimeExtensions
+{
+    public static bool IsSetupOverridden(this IFrostingLifetime lifetime, IFrostingContext context)
+    {
+        return lifetime.GetType().GetMethod("Setup", [context.GetType()]).IsOverriden();
+    }
+
+    public static bool IsTeardownOverridden(this IFrostingLifetime lifetime, IFrostingContext context)
+    {
+        return lifetime.GetType().GetMethod("Teardown", [context.GetType(), typeof(ITeardownContext)]).IsOverriden();
     }
 }

@@ -5,44 +5,43 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 
-namespace Cake.Testing
+namespace Cake.Testing;
+
+internal sealed class FakeDirectoryContent
 {
-    internal sealed class FakeDirectoryContent
+    private readonly Dictionary<DirectoryPath, FakeDirectory> _directories;
+    private readonly Dictionary<FilePath, FakeFile> _files;
+
+    public FakeDirectory Owner { get; }
+
+    public IReadOnlyDictionary<DirectoryPath, FakeDirectory> Directories => _directories;
+
+    public IReadOnlyDictionary<FilePath, FakeFile> Files => _files;
+
+    public FakeDirectoryContent(FakeDirectory owner, PathComparer comparer)
     {
-        private readonly Dictionary<DirectoryPath, FakeDirectory> _directories;
-        private readonly Dictionary<FilePath, FakeFile> _files;
+        Owner = owner;
+        _directories = new Dictionary<DirectoryPath, FakeDirectory>(comparer);
+        _files = new Dictionary<FilePath, FakeFile>(comparer);
+    }
 
-        public FakeDirectory Owner { get; }
+    public void Add(FakeDirectory directory)
+    {
+        _directories.Add(directory.Path, directory);
+    }
 
-        public IReadOnlyDictionary<DirectoryPath, FakeDirectory> Directories => _directories;
+    public void Add(FakeFile file)
+    {
+        _files.Add(file.Path, file);
+    }
 
-        public IReadOnlyDictionary<FilePath, FakeFile> Files => _files;
+    public void Remove(FakeDirectory directory)
+    {
+        _directories.Remove(directory.Path);
+    }
 
-        public FakeDirectoryContent(FakeDirectory owner, PathComparer comparer)
-        {
-            Owner = owner;
-            _directories = new Dictionary<DirectoryPath, FakeDirectory>(comparer);
-            _files = new Dictionary<FilePath, FakeFile>(comparer);
-        }
-
-        public void Add(FakeDirectory directory)
-        {
-            _directories.Add(directory.Path, directory);
-        }
-
-        public void Add(FakeFile file)
-        {
-            _files.Add(file.Path, file);
-        }
-
-        public void Remove(FakeDirectory directory)
-        {
-            _directories.Remove(directory.Path);
-        }
-
-        public void Remove(FakeFile file)
-        {
-            _files.Remove(file.Path);
-        }
+    public void Remove(FakeFile file)
+    {
+        _files.Remove(file.Path);
     }
 }

@@ -4,40 +4,39 @@
 
 using System;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Represents Cake task criteria.
+/// </summary>
+public sealed class CakeTaskCriteria
 {
     /// <summary>
-    /// Represents Cake task criteria.
+    /// Gets or sets a value indicating whether this criteria caused the task to be skipped.
     /// </summary>
-    public sealed class CakeTaskCriteria
+    public bool CausedSkippingOfTask { get; set; }
+
+    /// <summary>
+    /// Gets the criteria predicate.
+    /// </summary>
+    /// <value>The criteria predicate.</value>
+    public Func<ICakeContext, bool> Predicate { get; }
+
+    /// <summary>
+    /// Gets the criteria message.
+    /// </summary>
+    /// <value>The criteria message.</value>
+    public string Message { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakeTaskCriteria"/> class.
+    /// </summary>
+    /// <param name="predicate">The criteria predicate.</param>
+    /// <param name="message">The criteria message if skipped.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
+    public CakeTaskCriteria(Func<ICakeContext, bool> predicate, string message = null)
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether this criteria caused the task to be skipped.
-        /// </summary>
-        public bool CausedSkippingOfTask { get; set; }
-
-        /// <summary>
-        /// Gets the criteria predicate.
-        /// </summary>
-        /// <value>The criteria predicate.</value>
-        public Func<ICakeContext, bool> Predicate { get; }
-
-        /// <summary>
-        /// Gets the criteria message.
-        /// </summary>
-        /// <value>The criteria message.</value>
-        public string Message { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeTaskCriteria"/> class.
-        /// </summary>
-        /// <param name="predicate">The criteria predicate.</param>
-        /// <param name="message">The criteria message if skipped.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
-        public CakeTaskCriteria(Func<ICakeContext, bool> predicate, string message = null)
-        {
-            Predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
-            Message = message ?? string.Empty;
-        }
+        Predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
+        Message = message ?? string.Empty;
     }
 }

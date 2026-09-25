@@ -3,163 +3,161 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build
+namespace Cake.Common.Tests.Unit.Build;
+
+public sealed class BuildSystemAliasesTests
 {
-    public sealed class BuildSystemAliasesTests
+    public sealed class TheBuildSystemMethod
     {
-        public sealed class TheBuildSystemMethod
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.BuildSystem(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.BuildSystem(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
-        public sealed class TheAppVeyorMethod
+    }
+    public sealed class TheAppVeyorMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.AppVeyor(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.AppVeyor(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
-        public sealed class TheTeamCityMethod
+    }
+    public sealed class TheTeamCityMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.TeamCity(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.TeamCity(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
-        public sealed class TheBambooMethod
+    }
+    public sealed class TheBambooMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.Bamboo(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.Bamboo(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
+    }
 
-        public sealed class TheJenkinsMethod
+    public sealed class TheJenkinsMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.Jenkins(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.Jenkins(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
+    }
 
-        public sealed class TheBitriseMethod
+    public sealed class TheBitriseMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.Bitrise(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.Bitrise(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
+    }
 
-        public sealed class TheTravisCIMethod
+    public sealed class TheTravisCIMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.TravisCI(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.TravisCI(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
+    }
 
-        public sealed class TheBitbucketPipelinesMethod
+    public sealed class TheBitbucketPipelinesMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.BitbucketPipelines(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.BitbucketPipelines(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
+    }
 
-        public sealed class TheGitLabCIMethod
+    public sealed class TheGitLabCIMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.GitLabCI(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.GitLabCI(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
+    }
 
-        public sealed class TheTFBuildMethod
+    public sealed class TheTFBuildMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.AzurePipelines(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.AzurePipelines(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
+    }
 
-        public sealed class TheGitHubActionsMethod
+    public sealed class TheGitHubActionsMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.GitHubActions(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.GitHubActions(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
+    }
 
-        public sealed class TheAzurePipelinesMethod
+    public sealed class TheAzurePipelinesMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => BuildSystemAliases.AzurePipelines(null));
+            // Given, When
+            var result = Record.Exception(() => BuildSystemAliases.AzurePipelines(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
     }
 }

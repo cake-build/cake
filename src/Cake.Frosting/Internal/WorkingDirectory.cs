@@ -5,15 +5,14 @@
 using System;
 using Cake.Core.IO;
 
-namespace Cake.Frosting.Internal
-{
-    internal sealed class WorkingDirectory
-    {
-        public DirectoryPath Path { get; }
+namespace Cake.Frosting.Internal;
 
-        public WorkingDirectory(DirectoryPath path)
-        {
-            Path = path ?? throw new ArgumentNullException(nameof(path));
-        }
+internal sealed class WorkingDirectory
+{
+    public DirectoryPath Path { get; }
+
+    public WorkingDirectory(DirectoryPath path)
+    {
+        Path = path ?? throw new ArgumentNullException(nameof(path));
     }
 }

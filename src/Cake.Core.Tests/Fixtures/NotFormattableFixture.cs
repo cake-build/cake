@@ -1,6 +1,5 @@
-namespace Cake.Core.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures;
+
+internal sealed class NotFormattableFixture
 {
-    internal sealed class NotFormattableFixture
-    {
-    }
 }

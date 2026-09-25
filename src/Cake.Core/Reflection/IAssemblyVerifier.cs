@@ -4,17 +4,16 @@
 
 using System.Reflection;
 
-namespace Cake.Core.Reflection
+namespace Cake.Core.Reflection;
+
+/// <summary>
+/// Represents an assembly verifier.
+/// </summary>
+public interface IAssemblyVerifier
 {
     /// <summary>
-    /// Represents an assembly verifier.
+    /// Verifies an assembly.
     /// </summary>
-    public interface IAssemblyVerifier
-    {
-        /// <summary>
-        /// Verifies an assembly.
-        /// </summary>
-        /// <param name="assembly">The target assembly.</param>
-        void Verify(Assembly assembly);
-    }
+    /// <param name="assembly">The target assembly.</param>
+    void Verify(Assembly assembly);
 }

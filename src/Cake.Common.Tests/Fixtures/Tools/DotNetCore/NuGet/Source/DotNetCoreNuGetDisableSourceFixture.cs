@@ -4,14 +4,13 @@
 
 using Cake.Common.Tools.DotNet.NuGet.Source;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Source
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Source;
+
+internal sealed class DotNetNuGetDisableSourceFixture : DotNetNuGetSourcerFixture
 {
-    internal sealed class DotNetNuGetDisableSourceFixture : DotNetNuGetSourcerFixture
+    protected override void RunTool()
     {
-        protected override void RunTool()
-        {
-            var tool = new DotNetNuGetSourcer(FileSystem, Environment, ProcessRunner, Tools);
-            tool.DisableSource(Name, Settings);
-        }
+        var tool = new DotNetNuGetSourcer(FileSystem, Environment, ProcessRunner, Tools);
+        tool.DisableSource(Name, Settings);
     }
 }

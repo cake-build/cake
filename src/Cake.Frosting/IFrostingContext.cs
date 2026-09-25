@@ -4,13 +4,12 @@
 
 using Cake.Core;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Represents the build context.
+/// </summary>
+/// <seealso cref="ICakeContext" />
+public interface IFrostingContext : ICakeContext
 {
-    /// <summary>
-    /// Represents the build context.
-    /// </summary>
-    /// <seealso cref="ICakeContext" />
-    public interface IFrostingContext : ICakeContext
-    {
-    }
 }

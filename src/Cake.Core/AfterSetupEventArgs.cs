@@ -4,25 +4,24 @@
 
 using System;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Event data for the <see cref="ICakeEngine.AfterSetup"/> event.
+/// </summary>
+public sealed class AfterSetupEventArgs : EventArgs
 {
     /// <summary>
-    /// Event data for the <see cref="ICakeEngine.AfterSetup"/> event.
+    /// Gets the Cake context.
     /// </summary>
-    public sealed class AfterSetupEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Gets the Cake context.
-        /// </summary>
-        public ICakeContext Context { get; }
+    public ICakeContext Context { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AfterSetupEventArgs"/> class.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        public AfterSetupEventArgs(ICakeContext context)
-        {
-            Context = context;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AfterSetupEventArgs"/> class.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    public AfterSetupEventArgs(ICakeContext context)
+    {
+        Context = context;
     }
 }

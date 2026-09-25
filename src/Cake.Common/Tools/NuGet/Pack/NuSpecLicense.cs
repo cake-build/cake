@@ -2,26 +2,25 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.NuGet.Pack
+namespace Cake.Common.Tools.NuGet.Pack;
+
+/// <summary>
+/// Specifies the package's SPDX license expression or path to a license file.
+/// </summary>
+public class NuSpecLicense
 {
     /// <summary>
-    /// Specifies the package's SPDX license expression or path to a license file.
+    /// Gets or sets the license type.
     /// </summary>
-    public class NuSpecLicense
-    {
-        /// <summary>
-        /// Gets or sets the license type.
-        /// </summary>
-        public string Type { get; set; }
+    public string Type { get; set; }
 
-        /// <summary>
-        /// Gets or sets the license version.
-        /// </summary>
-        public string Version { get; set; }
+    /// <summary>
+    /// Gets or sets the license version.
+    /// </summary>
+    public string Version { get; set; }
 
-        /// <summary>
-        /// Gets or sets SPDX license identifier.
-        /// </summary>
-        public string Value { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets SPDX license identifier.
+    /// </summary>
+    public string Value { get; set; }
 }

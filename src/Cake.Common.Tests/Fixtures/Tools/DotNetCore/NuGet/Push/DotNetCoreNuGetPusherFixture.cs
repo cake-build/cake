@@ -4,16 +4,15 @@
 
 using Cake.Common.Tools.DotNet.NuGet.Push;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Push
-{
-    internal sealed class DotNetNuGetPusherFixture : DotNetFixture<DotNetNuGetPushSettings>
-    {
-        public string PackageName { get; set; }
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Push;
 
-        protected override void RunTool()
-        {
-            var tool = new DotNetNuGetPusher(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Push(PackageName, Settings);
-        }
+internal sealed class DotNetNuGetPusherFixture : DotNetFixture<DotNetNuGetPushSettings>
+{
+    public string PackageName { get; set; }
+
+    protected override void RunTool()
+    {
+        var tool = new DotNetNuGetPusher(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Push(PackageName, Settings);
     }
 }

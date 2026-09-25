@@ -8,172 +8,171 @@ using System.Globalization;
 using System.Text;
 using Cake.Core;
 
-namespace Cake.Testing
+namespace Cake.Testing;
+
+/// <summary>
+/// Implementation of a fake <see cref="IConsole"/>.
+/// </summary>
+public sealed class FakeConsole : IConsole
 {
+    private readonly StringBuilder _builder;
+    private readonly StringBuilder _errorBuilder;
+
     /// <summary>
-    /// Implementation of a fake <see cref="IConsole"/>.
+    /// Gets or sets the messages.
     /// </summary>
-    public sealed class FakeConsole : IConsole
+    /// <value>The messages.</value>
+    public List<string> Messages { get; set; }
+
+    /// <summary>
+    /// Gets or sets the error messages.
+    /// </summary>
+    /// <value>The messages.</value>
+    public List<string> ErrorMessages { get; set; }
+
+    /// <inheritdoc/>
+    public ConsoleColor ForegroundColor { get; set; }
+
+    /// <inheritdoc/>
+    public ConsoleColor BackgroundColor { get; set; }
+
+    /// <inheritdoc/>
+    public bool SupportAnsiEscapeCodes { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether console color should be added to the text
+    /// string if <see cref="SupportAnsiEscapeCodes"/> is set to <c>false</c>.
+    /// </summary>
+    public bool OutputConsoleColor { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FakeConsole"/> class.
+    /// </summary>
+    public FakeConsole()
     {
-        private readonly StringBuilder _builder;
-        private readonly StringBuilder _errorBuilder;
+        _builder = new StringBuilder();
+        _errorBuilder = new StringBuilder();
 
-        /// <summary>
-        /// Gets or sets the messages.
-        /// </summary>
-        /// <value>The messages.</value>
-        public List<string> Messages { get; set; }
+        Messages = new List<string>();
+        ErrorMessages = new List<string>();
+        ForegroundColor = ConsoleColor.Gray;
+        BackgroundColor = ConsoleColor.Black;
+    }
 
-        /// <summary>
-        /// Gets or sets the error messages.
-        /// </summary>
-        /// <value>The messages.</value>
-        public List<string> ErrorMessages { get; set; }
-
-        /// <inheritdoc/>
-        public ConsoleColor ForegroundColor { get; set; }
-
-        /// <inheritdoc/>
-        public ConsoleColor BackgroundColor { get; set; }
-
-        /// <inheritdoc/>
-        public bool SupportAnsiEscapeCodes { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether console color should be added to the text
-        /// string if <see cref="SupportAnsiEscapeCodes"/> is set to <c>false</c>.
-        /// </summary>
-        public bool OutputConsoleColor { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FakeConsole"/> class.
-        /// </summary>
-        public FakeConsole()
+    /// <summary>
+    /// Creates a new fake console that supports ANSI escape codes.
+    /// </summary>
+    /// <returns>The created <see cref="FakeConsole"/>.</returns>
+    public static FakeConsole CreateAnsiConsole()
+    {
+        return new FakeConsole
         {
-            _builder = new StringBuilder();
-            _errorBuilder = new StringBuilder();
+            SupportAnsiEscapeCodes = true
+        };
+    }
 
-            Messages = new List<string>();
-            ErrorMessages = new List<string>();
-            ForegroundColor = ConsoleColor.Gray;
-            BackgroundColor = ConsoleColor.Black;
-        }
-
-        /// <summary>
-        /// Creates a new fake console that supports ANSI escape codes.
-        /// </summary>
-        /// <returns>The created <see cref="FakeConsole"/>.</returns>
-        public static FakeConsole CreateAnsiConsole()
+    /// <inheritdoc/>
+    public void Write(string format, params object[] arg)
+    {
+        if (!string.IsNullOrWhiteSpace(format))
         {
-            return new FakeConsole
+            var message = string.Format(CultureInfo.InvariantCulture, format, arg);
+
+            if (OutputConsoleColor && !SupportAnsiEscapeCodes)
             {
-                SupportAnsiEscapeCodes = true
-            };
-        }
-
-        /// <inheritdoc/>
-        public void Write(string format, params object[] arg)
-        {
-            if (!string.IsNullOrWhiteSpace(format))
+                var formatted = string.Format("#[{0}|{1}]{2}[/]", BackgroundColor, ForegroundColor, message);
+                _builder.Append(formatted);
+            }
+            else
             {
-                var message = string.Format(CultureInfo.InvariantCulture, format, arg);
-
-                if (OutputConsoleColor && !SupportAnsiEscapeCodes)
-                {
-                    var formatted = string.Format("#[{0}|{1}]{2}[/]", BackgroundColor, ForegroundColor, message);
-                    _builder.Append(formatted);
-                }
-                else
-                {
-                    _builder.Append(message);
-                }
+                _builder.Append(message);
             }
         }
+    }
 
-        /// <inheritdoc/>
-        public void Write(string value)
+    /// <inheritdoc/>
+    public void Write(string value)
+    {
+        Write("{0}", value);
+    }
+
+    /// <inheritdoc/>
+    public void WriteLine(string format, params object[] arg)
+    {
+        if (!string.IsNullOrWhiteSpace(format))
         {
-            Write("{0}", value);
+            Write(format, arg);
         }
 
-        /// <inheritdoc/>
-        public void WriteLine(string format, params object[] arg)
+        Messages.Add(_builder.ToString());
+        _builder.Clear();
+    }
+
+    /// <inheritdoc/>
+    public void WriteLine(string value)
+    {
+        if (string.IsNullOrEmpty(value))
         {
-            if (!string.IsNullOrWhiteSpace(format))
+            WriteLine(string.Empty, []);
+            return;
+        }
+
+        WriteLine("{0}", value);
+    }
+
+    /// <inheritdoc/>
+    public void WriteError(string format, params object[] arg)
+    {
+        if (!string.IsNullOrWhiteSpace(format))
+        {
+            var message = string.Format(CultureInfo.InvariantCulture, format, arg);
+
+            if (OutputConsoleColor && !SupportAnsiEscapeCodes)
             {
-                Write(format, arg);
+                var formatted = string.Format("#[{0}|{1}]{2}[/]", BackgroundColor, ForegroundColor, message);
+                _errorBuilder.Append(formatted);
             }
-
-            Messages.Add(_builder.ToString());
-            _builder.Clear();
-        }
-
-        /// <inheritdoc/>
-        public void WriteLine(string value)
-        {
-            if (string.IsNullOrEmpty(value))
+            else
             {
-                WriteLine(string.Empty, Array.Empty<object>());
-                return;
-            }
-
-            WriteLine("{0}", value);
-        }
-
-        /// <inheritdoc/>
-        public void WriteError(string format, params object[] arg)
-        {
-            if (!string.IsNullOrWhiteSpace(format))
-            {
-                var message = string.Format(CultureInfo.InvariantCulture, format, arg);
-
-                if (OutputConsoleColor && !SupportAnsiEscapeCodes)
-                {
-                    var formatted = string.Format("#[{0}|{1}]{2}[/]", BackgroundColor, ForegroundColor, message);
-                    _errorBuilder.Append(formatted);
-                }
-                else
-                {
-                    _errorBuilder.Append(message);
-                }
+                _errorBuilder.Append(message);
             }
         }
+    }
 
-        /// <inheritdoc/>
-        public void WriteError(string value)
+    /// <inheritdoc/>
+    public void WriteError(string value)
+    {
+        WriteError("{0}", value);
+    }
+
+    /// <inheritdoc/>
+    public void WriteErrorLine(string format, params object[] arg)
+    {
+        if (!string.IsNullOrWhiteSpace(format))
         {
-            WriteError("{0}", value);
+            WriteError(format, arg);
         }
 
-        /// <inheritdoc/>
-        public void WriteErrorLine(string format, params object[] arg)
-        {
-            if (!string.IsNullOrWhiteSpace(format))
-            {
-                WriteError(format, arg);
-            }
+        ErrorMessages.Add(_errorBuilder.ToString());
+        _errorBuilder.Clear();
+    }
 
-            ErrorMessages.Add(_errorBuilder.ToString());
-            _errorBuilder.Clear();
+    /// <inheritdoc/>
+    public void WriteErrorLine(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            WriteErrorLine(string.Empty, []);
+            return;
         }
 
-        /// <inheritdoc/>
-        public void WriteErrorLine(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                WriteErrorLine(string.Empty, Array.Empty<object>());
-                return;
-            }
+        WriteErrorLine("{0}", value);
+    }
 
-            WriteErrorLine("{0}", value);
-        }
-
-        /// <inheritdoc/>
-        public void ResetColor()
-        {
-            ForegroundColor = ConsoleColor.Gray;
-            BackgroundColor = ConsoleColor.Black;
-        }
+    /// <inheritdoc/>
+    public void ResetColor()
+    {
+        ForegroundColor = ConsoleColor.Gray;
+        BackgroundColor = ConsoleColor.Black;
     }
 }

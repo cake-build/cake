@@ -5,50 +5,49 @@
 using System;
 using System.Collections.Generic;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Implementation of <see cref="ICakeDataService"/>.
+/// </summary>
+// ReSharper disable once ClassNeverInstantiated.Global
+public sealed class CakeDataService : ICakeDataService
 {
+    private readonly Dictionary<Type, object> _data;
+
     /// <summary>
-    /// Implementation of <see cref="ICakeDataService"/>.
+    /// Initializes a new instance of the <see cref="CakeDataService"/> class.
     /// </summary>
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public sealed class CakeDataService : ICakeDataService
+    public CakeDataService()
     {
-        private readonly Dictionary<Type, object> _data;
+        _data = new Dictionary<Type, object>();
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeDataService"/> class.
-        /// </summary>
-        public CakeDataService()
+    /// <inheritdoc/>
+    public TData Get<TData>()
+        where TData : class
+    {
+        if (_data.TryGetValue(typeof(TData), out var data))
         {
-            _data = new Dictionary<Type, object>();
-        }
-
-        /// <inheritdoc/>
-        public TData Get<TData>()
-            where TData : class
-        {
-            if (_data.TryGetValue(typeof(TData), out var data))
+            if (data is TData typedData)
             {
-                if (data is TData typedData)
-                {
-                    return typedData;
-                }
-                var message = $"Context data exists but is of the wrong type ({data.GetType().FullName}).";
-                throw new InvalidOperationException(message);
+                return typedData;
             }
-            throw new InvalidOperationException("The context data has not been setup.");
+            var message = $"Context data exists but is of the wrong type ({data.GetType().FullName}).";
+            throw new InvalidOperationException(message);
         }
+        throw new InvalidOperationException("The context data has not been setup.");
+    }
 
-        /// <inheritdoc/>
-        public void Add<TData>(TData value)
-            where TData : class
+    /// <inheritdoc/>
+    public void Add<TData>(TData value)
+        where TData : class
+    {
+        if (_data.ContainsKey(typeof(TData)))
         {
-            if (_data.ContainsKey(typeof(TData)))
-            {
-                var message = $"Context data of type '{typeof(TData).FullName}' has already been registered.";
-                throw new InvalidOperationException(message);
-            }
-            _data.Add(typeof(TData), value);
+            var message = $"Context data of type '{typeof(TData).FullName}' has already been registered.";
+            throw new InvalidOperationException(message);
         }
+        _data.Add(typeof(TData), value);
     }
 }

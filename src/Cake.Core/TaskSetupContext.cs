@@ -4,25 +4,24 @@
 
 using System;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <inheritdoc/>
+public sealed class TaskSetupContext : CakeContextAdapter, ITaskSetupContext
 {
-    /// <inheritdoc/>
-    public sealed class TaskSetupContext : CakeContextAdapter, ITaskSetupContext
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TaskSetupContext"/> class.
+    /// </summary>
+    /// <param name="context">The Cake Context.</param>
+    /// <param name="task">The task.</param>
+    public TaskSetupContext(ICakeContext context, ICakeTaskInfo task)
+        : base(context)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TaskSetupContext"/> class.
-        /// </summary>
-        /// <param name="context">The Cake Context.</param>
-        /// <param name="task">The task.</param>
-        public TaskSetupContext(ICakeContext context, ICakeTaskInfo task)
-            : base(context)
-        {
-            ArgumentNullException.ThrowIfNull(task);
+        ArgumentNullException.ThrowIfNull(task);
 
-            Task = task;
-        }
-
-        /// <inheritdoc/>
-        public ICakeTaskInfo Task { get; }
+        Task = task;
     }
+
+    /// <inheritdoc/>
+    public ICakeTaskInfo Task { get; }
 }

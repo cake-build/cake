@@ -8,99 +8,98 @@ using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.NuGet.SetProxy
+namespace Cake.Common.Tools.NuGet.SetProxy;
+
+/// <summary>
+/// The NuGet set command used to set the proxy settings to be used while connecting to your NuGet feed.
+/// </summary>
+public sealed class NuGetSetProxy : NuGetTool<NuGetSetProxySettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// The NuGet set command used to set the proxy settings to be used while connecting to your NuGet feed.
+    /// Initializes a new instance of the <see cref="NuGetSetProxy"/> class.
     /// </summary>
-    public sealed class NuGetSetProxy : NuGetTool<NuGetSetProxySettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="resolver">The NuGet tool resolver.</param>
+    public NuGetSetProxy(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NuGetSetProxy"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The NuGet tool resolver.</param>
-        public NuGetSetProxy(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
+    /// <summary>
+    /// Set the proxy settings to be used while connecting to your NuGet feed.
+    /// </summary>
+    /// <param name="url">The url of the proxy.</param>
+    /// <param name="username">The username used to access the proxy.</param>
+    /// <param name="password">The password used to access the proxy.</param>
+    /// <param name="settings">The settings.</param>
+    public void SetProxy(string url, string username, string password, NuGetSetProxySettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(url))
         {
-            _environment = environment;
+            throw new ArgumentNullException(nameof(url));
         }
 
-        /// <summary>
-        /// Set the proxy settings to be used while connecting to your NuGet feed.
-        /// </summary>
-        /// <param name="url">The url of the proxy.</param>
-        /// <param name="username">The username used to access the proxy.</param>
-        /// <param name="password">The password used to access the proxy.</param>
-        /// <param name="settings">The settings.</param>
-        public void SetProxy(string url, string username, string password, NuGetSetProxySettings settings)
+        ArgumentNullException.ThrowIfNull(settings);
+
+        string output = null;
+        var processSettings = new ProcessSettings
         {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                throw new ArgumentNullException(nameof(url));
-            }
+            Arguments = GetArguments(url, username, password, settings),
+            RedirectStandardOutput = true
+        };
+        Run(settings, null, processSettings, process => output = string.Join("\r\n", process.GetStandardOutput()));
 
-            ArgumentNullException.ThrowIfNull(settings);
+        if (!string.IsNullOrWhiteSpace(output))
+        {
+            throw new CakeException("Set command returned unexpected response.");
+        }
+    }
 
-            string output = null;
-            var processSettings = new ProcessSettings
-            {
-                Arguments = GetArguments(url, username, password, settings),
-                RedirectStandardOutput = true
-            };
-            Run(settings, null, processSettings, process => output = string.Join("\r\n", process.GetStandardOutput()));
+    private ProcessArgumentBuilder GetArguments(string url, string username, string password, NuGetSetProxySettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
 
-            if (!string.IsNullOrWhiteSpace(output))
-            {
-                throw new CakeException("Set command returned unexpected response.");
-            }
+        builder.Append("config");
+
+        // Source
+        builder.Append("-Set http_proxy=" + url);
+
+        if (!string.IsNullOrEmpty(username))
+        {
+            builder.Append("-Set http_proxy.user=" + username);
         }
 
-        private ProcessArgumentBuilder GetArguments(string url, string username, string password, NuGetSetProxySettings settings)
+        if (!string.IsNullOrEmpty(password))
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("config");
-
-            // Source
-            builder.Append("-Set http_proxy=" + url);
-
-            if (!string.IsNullOrEmpty(username))
-            {
-                builder.Append("-Set http_proxy.user=" + username);
-            }
-
-            if (!string.IsNullOrEmpty(password))
-            {
-                builder.AppendSecret("-Set http_proxy.password=" + password);
-            }
-
-            // Verbosity?
-            if (settings.Verbosity.HasValue)
-            {
-                builder.Append("-Verbosity");
-                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
-            }
-
-            // Configuration file
-            if (settings.ConfigFile != null)
-            {
-                builder.Append("-ConfigFile");
-                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
-            }
-
-            builder.Append("-NonInteractive");
-
-            return builder;
+            builder.AppendSecret("-Set http_proxy.password=" + password);
         }
+
+        // Verbosity?
+        if (settings.Verbosity.HasValue)
+        {
+            builder.Append("-Verbosity");
+            builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+        }
+
+        // Configuration file
+        if (settings.ConfigFile != null)
+        {
+            builder.Append("-ConfigFile");
+            builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
+        }
+
+        builder.Append("-NonInteractive");
+
+        return builder;
     }
 }

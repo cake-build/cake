@@ -8,147 +8,146 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotNet.Pack
+namespace Cake.Common.Tools.DotNet.Pack;
+
+/// <summary>
+/// .NET project packer.
+/// </summary>
+public sealed class DotNetPacker : DotNetTool<DotNetPackSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// .NET project packer.
+    /// Initializes a new instance of the <see cref="DotNetPacker" /> class.
     /// </summary>
-    public sealed class DotNetPacker : DotNetTool<DotNetPackSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotNetPacker(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetPacker" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public DotNetPacker(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Pack the project using the specified path and settings.
+    /// </summary>
+    /// <param name="project">The target file path.</param>
+    /// <param name="settings">The settings.</param>
+    public void Pack(string project, DotNetPackSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        RunCommand(settings, GetArguments(project, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(string project, DotNetPackSettings settings)
+    {
+        var builder = CreateArgumentBuilder(settings);
+
+        builder.Append("pack");
+
+        // Specific path?
+        if (project != null)
         {
-            _environment = environment;
+            builder.AppendQuoted(project);
         }
 
-        /// <summary>
-        /// Pack the project using the specified path and settings.
-        /// </summary>
-        /// <param name="project">The target file path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Pack(string project, DotNetPackSettings settings)
+        // Output directory
+        if (settings.OutputDirectory != null)
         {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            RunCommand(settings, GetArguments(project, settings));
+            builder.Append("--output");
+            builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, DotNetPackSettings settings)
+        // No build
+        if (settings.NoBuild)
         {
-            var builder = CreateArgumentBuilder(settings);
-
-            builder.Append("pack");
-
-            // Specific path?
-            if (project != null)
-            {
-                builder.AppendQuoted(project);
-            }
-
-            // Output directory
-            if (settings.OutputDirectory != null)
-            {
-                builder.Append("--output");
-                builder.AppendQuoted(settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // No build
-            if (settings.NoBuild)
-            {
-                builder.Append("--no-build");
-            }
-
-            // No Dependencies
-            if (settings.NoDependencies)
-            {
-                builder.Append("--no-dependencies");
-            }
-
-            // No Restore
-            if (settings.NoRestore)
-            {
-                builder.Append("--no-restore");
-            }
-
-            // No Logo
-            if (settings.NoLogo)
-            {
-                builder.Append("--nologo");
-            }
-
-            // Include symbols
-            if (settings.IncludeSymbols)
-            {
-                builder.Append("--include-symbols");
-            }
-
-            // Symbol package format
-            if (!string.IsNullOrWhiteSpace(settings.SymbolPackageFormat))
-            {
-                builder.Append(string.Concat("-p:SymbolPackageFormat=", settings.SymbolPackageFormat));
-            }
-
-            // Include source
-            if (settings.IncludeSource)
-            {
-                builder.Append("--include-source");
-            }
-
-            // Configuration
-            if (!string.IsNullOrEmpty(settings.Configuration))
-            {
-                builder.Append("--configuration");
-                builder.Append(settings.Configuration);
-            }
-
-            // Version suffix
-            if (!string.IsNullOrEmpty(settings.VersionSuffix))
-            {
-                builder.Append("--version-suffix");
-                builder.Append(settings.VersionSuffix);
-            }
-
-            // Serviceable
-            if (settings.Serviceable)
-            {
-                builder.Append("--serviceable");
-            }
-
-            // Runtime
-            if (!string.IsNullOrEmpty(settings.Runtime))
-            {
-                builder.Append("--runtime");
-                builder.Append(settings.Runtime);
-            }
-
-            // Sources
-            if (settings.Sources != null)
-            {
-                foreach (var source in settings.Sources)
-                {
-                    builder.Append("--source");
-                    builder.AppendQuoted(source);
-                }
-            }
-
-            if (settings.MSBuildSettings != null)
-            {
-                builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
-            }
-
-            return builder;
+            builder.Append("--no-build");
         }
+
+        // No Dependencies
+        if (settings.NoDependencies)
+        {
+            builder.Append("--no-dependencies");
+        }
+
+        // No Restore
+        if (settings.NoRestore)
+        {
+            builder.Append("--no-restore");
+        }
+
+        // No Logo
+        if (settings.NoLogo)
+        {
+            builder.Append("--nologo");
+        }
+
+        // Include symbols
+        if (settings.IncludeSymbols)
+        {
+            builder.Append("--include-symbols");
+        }
+
+        // Symbol package format
+        if (!string.IsNullOrWhiteSpace(settings.SymbolPackageFormat))
+        {
+            builder.Append(string.Concat("-p:SymbolPackageFormat=", settings.SymbolPackageFormat));
+        }
+
+        // Include source
+        if (settings.IncludeSource)
+        {
+            builder.Append("--include-source");
+        }
+
+        // Configuration
+        if (!string.IsNullOrEmpty(settings.Configuration))
+        {
+            builder.Append("--configuration");
+            builder.Append(settings.Configuration);
+        }
+
+        // Version suffix
+        if (!string.IsNullOrEmpty(settings.VersionSuffix))
+        {
+            builder.Append("--version-suffix");
+            builder.Append(settings.VersionSuffix);
+        }
+
+        // Serviceable
+        if (settings.Serviceable)
+        {
+            builder.Append("--serviceable");
+        }
+
+        // Runtime
+        if (!string.IsNullOrEmpty(settings.Runtime))
+        {
+            builder.Append("--runtime");
+            builder.Append(settings.Runtime);
+        }
+
+        // Sources
+        if (settings.Sources != null)
+        {
+            foreach (var source in settings.Sources)
+            {
+                builder.Append("--source");
+                builder.AppendQuoted(source);
+            }
+        }
+
+        if (settings.MSBuildSettings != null)
+        {
+            builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
+        }
+
+        return builder;
     }
 }

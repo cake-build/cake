@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotNet.Sln.Remove
+namespace Cake.Common.Tools.DotNet.Sln.Remove;
+
+/// <summary>
+/// Contains settings used by <see cref="DotNetSlnRemover" />.
+/// </summary>
+public sealed class DotNetSlnRemoveSettings : DotNetSettings
 {
-    /// <summary>
-    /// Contains settings used by <see cref="DotNetSlnRemover" />.
-    /// </summary>
-    public sealed class DotNetSlnRemoveSettings : DotNetSettings
-    {
-    }
 }

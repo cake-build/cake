@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotCover.Merge
+namespace Cake.Common.Tools.DotCover.Merge;
+
+/// <summary>
+/// Contains settings used by <see cref="DotCoverMerger" />.
+/// </summary>
+public sealed class DotCoverMergeSettings : DotCoverSettings
 {
-    /// <summary>
-    /// Contains settings used by <see cref="DotCoverMerger" />.
-    /// </summary>
-    public sealed class DotCoverMergeSettings : DotCoverSettings
-    {
-    }
 }

@@ -5,35 +5,34 @@ using Cake.Core.Composition;
 using Cake.Core.Configuration;
 using Cake.Infrastructure;
 
-namespace Cake.Tests.Fakes
+namespace Cake.Tests.Fakes;
+
+public sealed class TestContainerConfigurator : IContainerConfigurator
 {
-    public sealed class TestContainerConfigurator : IContainerConfigurator
+    private readonly List<Action<ICakeContainerRegistrar>> _actions;
+    private readonly ContainerConfigurator _decorated;
+
+    public TestContainerConfigurator()
     {
-        private readonly List<Action<ICakeContainerRegistrar>> _actions;
-        private readonly ContainerConfigurator _decorated;
+        _actions = new List<Action<ICakeContainerRegistrar>>();
+        _decorated = new ContainerConfigurator();
+    }
 
-        public TestContainerConfigurator()
+    public void Configure(
+        ICakeContainerRegistrar registrar,
+        ICakeConfiguration configuration,
+        ICakeArguments arguments)
+    {
+        _decorated.Configure(registrar, configuration, arguments);
+
+        foreach (var action in _actions)
         {
-            _actions = new List<Action<ICakeContainerRegistrar>>();
-            _decorated = new ContainerConfigurator();
+            action(registrar);
         }
+    }
 
-        public void Configure(
-            ICakeContainerRegistrar registrar,
-            ICakeConfiguration configuration,
-            ICakeArguments arguments)
-        {
-            _decorated.Configure(registrar, configuration, arguments);
-
-            foreach (var action in _actions)
-            {
-                action(registrar);
-            }
-        }
-
-        public void RegisterOverrides(Action<ICakeContainerRegistrar> registration)
-        {
-            _actions.Add(registration);
-        }
+    public void RegisterOverrides(Action<ICakeContainerRegistrar> registration)
+    {
+        _actions.Add(registration);
     }
 }

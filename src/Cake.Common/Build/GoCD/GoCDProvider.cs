@@ -13,80 +13,79 @@ using Cake.Common.Build.GoCD.Data;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 
-namespace Cake.Common.Build.GoCD
+namespace Cake.Common.Build.GoCD;
+
+/// <summary>
+/// Responsible for communicating with GoCD.
+/// </summary>
+public sealed class GoCDProvider : IGoCDProvider
 {
+    private readonly ICakeEnvironment _environment;
+    private readonly ICakeLog _log;
+
     /// <summary>
-    /// Responsible for communicating with GoCD.
+    /// Initializes a new instance of the <see cref="GoCDProvider" /> class.
     /// </summary>
-    public sealed class GoCDProvider : IGoCDProvider
+    /// <param name="environment">The environment.</param>
+    /// <param name="log">The cake log.</param>
+    public GoCDProvider(ICakeEnvironment environment, ICakeLog log)
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
+        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+        _log = log ?? throw new ArgumentNullException(nameof(log));
+        Environment = new GoCDEnvironmentInfo(environment);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GoCDProvider" /> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        /// <param name="log">The cake log.</param>
-        public GoCDProvider(ICakeEnvironment environment, ICakeLog log)
+    /// <inheritdoc/>
+    public bool IsRunningOnGoCD => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("GO_SERVER_URL"));
+
+    /// <inheritdoc/>
+    public GoCDEnvironmentInfo Environment { get; }
+
+    /// <inheritdoc/>
+    public GoCDHistoryInfo GetHistory(string username, string password)
+    {
+        return GetHistory(username, password, Environment.GoCDUrl);
+    }
+
+    /// <inheritdoc/>
+    public GoCDHistoryInfo GetHistory(string username, string password, string serverUrl)
+    {
+        ArgumentNullException.ThrowIfNull(username);
+        ArgumentNullException.ThrowIfNull(password);
+        ArgumentNullException.ThrowIfNull(serverUrl);
+
+        if (!IsRunningOnGoCD)
         {
-            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            Environment = new GoCDEnvironmentInfo(environment);
+            throw new CakeException("The current build is not running on Go.CD.");
         }
 
-        /// <inheritdoc/>
-        public bool IsRunningOnGoCD => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("GO_SERVER_URL"));
+        var url = new Uri(string.Format(
+            CultureInfo.InvariantCulture,
+            "{0}/go/api/pipelines/{1}/history/0",
+            serverUrl,
+            Environment.Pipeline.Name).ToLowerInvariant());
 
-        /// <inheritdoc/>
-        public GoCDEnvironmentInfo Environment { get; }
-
-        /// <inheritdoc/>
-        public GoCDHistoryInfo GetHistory(string username, string password)
+        _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Getting [{0}]", url);
+        return Task.Run(async () =>
         {
-            return GetHistory(username, password, Environment.GoCDUrl);
-        }
-
-        /// <inheritdoc/>
-        public GoCDHistoryInfo GetHistory(string username, string password, string serverUrl)
-        {
-            ArgumentNullException.ThrowIfNull(username);
-            ArgumentNullException.ThrowIfNull(password);
-            ArgumentNullException.ThrowIfNull(serverUrl);
-
-            if (!IsRunningOnGoCD)
+            var encodedCredentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(
+                string.Format(CultureInfo.InvariantCulture, "{0}:{1}", username, password)));
+            using (var client = new HttpClient())
             {
-                throw new CakeException("The current build is not running on Go.CD.");
-            }
+                client.DefaultRequestHeaders.Add(
+                    "Authorization",
+                    string.Format(CultureInfo.InvariantCulture, "Basic {0}", encodedCredentials));
+                var response = await client.GetAsync(url);
+                var content = await response.Content.ReadAsStringAsync();
+                _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Server response [{0}:{1}]:\n\r{2}", response.StatusCode, response.ReasonPhrase, content);
 
-            var url = new Uri(string.Format(
-                CultureInfo.InvariantCulture,
-                "{0}/go/api/pipelines/{1}/history/0",
-                serverUrl,
-                Environment.Pipeline.Name).ToLowerInvariant());
+                var jsonSerializer = new DataContractJsonSerializer(typeof(GoCDHistoryInfo));
 
-            _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Getting [{0}]", url);
-            return Task.Run(async () =>
-            {
-                var encodedCredentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(
-                    string.Format(CultureInfo.InvariantCulture, "{0}:{1}", username, password)));
-                using (var client = new HttpClient())
+                using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(content)))
                 {
-                    client.DefaultRequestHeaders.Add(
-                        "Authorization",
-                        string.Format(CultureInfo.InvariantCulture, "Basic {0}", encodedCredentials));
-                    var response = await client.GetAsync(url);
-                    var content = await response.Content.ReadAsStringAsync();
-                    _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Server response [{0}:{1}]:\n\r{2}", response.StatusCode, response.ReasonPhrase, content);
-
-                    var jsonSerializer = new DataContractJsonSerializer(typeof(GoCDHistoryInfo));
-
-                    using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(content)))
-                    {
-                        return jsonSerializer.ReadObject(jsonStream) as GoCDHistoryInfo;
-                    }
+                    return jsonSerializer.ReadObject(jsonStream) as GoCDHistoryInfo;
                 }
-            }).GetAwaiter().GetResult();
-        }
+            }
+        }).GetAwaiter().GetResult();
     }
 }

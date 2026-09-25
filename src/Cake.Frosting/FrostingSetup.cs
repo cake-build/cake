@@ -5,37 +5,36 @@
 using System;
 using Cake.Core;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Base class for setup logic.
+/// </summary>
+public abstract class FrostingSetup : FrostingSetup<ICakeContext>
+{
+}
+
+/// <summary>
+/// Base class for setup logic.
+/// </summary>
+/// <typeparam name="TContext">The build context type.</typeparam>
+public abstract class FrostingSetup<TContext> : IFrostingSetup
+    where TContext : ICakeContext
 {
     /// <summary>
-    /// Base class for setup logic.
+    /// This method is executed before any tasks are run.
+    /// If setup fails, no tasks will be executed but teardown will be performed.
     /// </summary>
-    public abstract class FrostingSetup : FrostingSetup<ICakeContext>
+    /// <param name="context">The context.</param>
+    /// <param name="info">The setup infortation.</param>
+    public abstract void Setup(TContext context, ISetupContext info);
+
+    /// <inheritdoc cref="IFrostingSetup"/>
+    void IFrostingSetup.Setup(ICakeContext context, ISetupContext info)
     {
-    }
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(info);
 
-    /// <summary>
-    /// Base class for setup logic.
-    /// </summary>
-    /// <typeparam name="TContext">The build context type.</typeparam>
-    public abstract class FrostingSetup<TContext> : IFrostingSetup
-        where TContext : ICakeContext
-    {
-        /// <summary>
-        /// This method is executed before any tasks are run.
-        /// If setup fails, no tasks will be executed but teardown will be performed.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="info">The setup infortation.</param>
-        public abstract void Setup(TContext context, ISetupContext info);
-
-        /// <inheritdoc cref="IFrostingSetup"/>
-        void IFrostingSetup.Setup(ICakeContext context, ISetupContext info)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-            ArgumentNullException.ThrowIfNull(info);
-
-            Setup((TContext)context, info);
-        }
+        Setup((TContext)context, info);
     }
 }

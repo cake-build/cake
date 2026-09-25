@@ -4,14 +4,13 @@
 
 using Cake.Common.Tools.Chocolatey.Features;
 
-namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Features
+namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Features;
+
+internal sealed class ChocolateyEnableFeatureFixture : ChocolateyFeatureTogglerFixture
 {
-    internal sealed class ChocolateyEnableFeatureFixture : ChocolateyFeatureTogglerFixture
+    protected override void RunTool()
     {
-        protected override void RunTool()
-        {
-            var tool = new ChocolateyFeatureToggler(FileSystem, Environment, ProcessRunner, Tools, Resolver);
-            tool.EnableFeature(Name, Settings);
-        }
+        var tool = new ChocolateyFeatureToggler(FileSystem, Environment, ProcessRunner, Tools, Resolver);
+        tool.EnableFeature(Name, Settings);
     }
 }

@@ -5,18 +5,17 @@
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Core
+namespace Cake.Core;
+
+internal static class HashSetExtensions
 {
-    internal static class HashSetExtensions
+    public static void AddRange<T>(this HashSet<T> set, IEnumerable<T> items)
     {
-        public static void AddRange<T>(this HashSet<T> set, IEnumerable<T> items)
+        if (items != null)
         {
-            if (items != null)
+            foreach (var item in items)
             {
-                foreach (var item in items)
-                {
-                    set.Add(item);
-                }
+                set.Add(item);
             }
         }
     }

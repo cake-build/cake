@@ -10,71 +10,70 @@ using Cake.DotNetTool.Module;
 using Cake.NuGet;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cake.Cli
+namespace Cake.Cli;
+
+/// <summary>
+/// Contains extension methods for <see cref="IServiceCollection"/>.
+/// </summary>
+public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Contains extension methods for <see cref="IServiceCollection"/>.
+    /// Registers the specified Cake module.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    /// <param name="services">The service collection.</param>
+    /// <param name="module">The module to register.</param>
+    /// <returns>The same <see cref="IServiceCollection"/> instance so that multiple calls can be chained.</returns>
+    public static IServiceCollection UseModule(this IServiceCollection services, ICakeModule module)
     {
-        /// <summary>
-        /// Registers the specified Cake module.
-        /// </summary>
-        /// <param name="services">The service collection.</param>
-        /// <param name="module">The module to register.</param>
-        /// <returns>The same <see cref="IServiceCollection"/> instance so that multiple calls can be chained.</returns>
-        public static IServiceCollection UseModule(this IServiceCollection services, ICakeModule module)
-        {
-            ArgumentNullException.ThrowIfNull(services);
-            ArgumentNullException.ThrowIfNull(module);
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(module);
 
-            var registrar = new ContainerRegistrar(services);
-            module.Register(registrar);
-            registrar.Transfer();
-            return services;
-        }
+        var registrar = new ContainerRegistrar(services);
+        module.Register(registrar);
+        registrar.Transfer();
+        return services;
+    }
 
-        /// <summary>
-        /// Registers the specified Cake module.
-        /// </summary>
-        /// <typeparam name="TModule">The type of the module.</typeparam>
-        /// <param name="services">The service collection.</param>
-        /// <returns>The same <see cref="IServiceCollection"/> instance so that multiple calls can be chained.</returns>
-        public static IServiceCollection UseModule<TModule>(this IServiceCollection services)
-            where TModule : ICakeModule, new()
-        {
-            return services.UseModule(new TModule());
-        }
+    /// <summary>
+    /// Registers the specified Cake module.
+    /// </summary>
+    /// <typeparam name="TModule">The type of the module.</typeparam>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The same <see cref="IServiceCollection"/> instance so that multiple calls can be chained.</returns>
+    public static IServiceCollection UseModule<TModule>(this IServiceCollection services)
+        where TModule : ICakeModule, new()
+    {
+        return services.UseModule(new TModule());
+    }
 
-        /// <summary>
-        /// Registers the default Cake diagnostics services.
-        /// </summary>
-        /// <param name="services">The service collection.</param>
-        /// <returns>The same <see cref="IServiceCollection"/> instance so that multiple calls can be chained.</returns>
-        public static IServiceCollection AddCakeDiagnostics(this IServiceCollection services)
-        {
-            ArgumentNullException.ThrowIfNull(services);
+    /// <summary>
+    /// Registers the default Cake diagnostics services.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The same <see cref="IServiceCollection"/> instance so that multiple calls can be chained.</returns>
+    public static IServiceCollection AddCakeDiagnostics(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
 
-            var registrar = new ContainerRegistrar(services);
-            registrar.AddCakeDiagnostics();
-            registrar.Transfer();
-            return services;
-        }
+        var registrar = new ContainerRegistrar(services);
+        registrar.AddCakeDiagnostics();
+        registrar.Transfer();
+        return services;
+    }
 
-        /// <summary>
-        /// Registers the default Cake modules.
-        /// </summary>
-        /// <param name="services">The service collection.</param>
-        /// <returns>The same <see cref="IServiceCollection"/> instance so that multiple calls can be chained.</returns>
-        public static IServiceCollection UseCakeDefaultModules(this IServiceCollection services)
-        {
-            ArgumentNullException.ThrowIfNull(services);
+    /// <summary>
+    /// Registers the default Cake modules.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The same <see cref="IServiceCollection"/> instance so that multiple calls can be chained.</returns>
+    public static IServiceCollection UseCakeDefaultModules(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
 
-            return services
-                .UseModule<CoreModule>()
-                .UseModule<CommonModule>()
-                .UseModule<NuGetModule>()
-                .UseModule<DotNetToolModule>();
-        }
+        return services
+            .UseModule<CoreModule>()
+            .UseModule<CommonModule>()
+            .UseModule<NuGetModule>()
+            .UseModule<DotNetToolModule>();
     }
 }

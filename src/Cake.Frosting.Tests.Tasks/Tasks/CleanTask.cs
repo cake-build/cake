@@ -4,9 +4,8 @@
 
 using Cake.Core;
 
-namespace Cake.Frosting.Tests
+namespace Cake.Frosting.Tests;
+
+public sealed class CleanTask : FrostingTask<ICakeContext>
 {
-    public sealed class CleanTask : FrostingTask<ICakeContext>
-    {
-    }
 }

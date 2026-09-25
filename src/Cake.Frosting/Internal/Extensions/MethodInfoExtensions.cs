@@ -4,13 +4,12 @@
 
 using System.Reflection;
 
-namespace Cake.Frosting.Internal
+namespace Cake.Frosting.Internal;
+
+internal static class MethodInfoExtensions
 {
-    internal static class MethodInfoExtensions
+    public static bool IsOverriden(this MethodInfo method)
     {
-        public static bool IsOverriden(this MethodInfo method)
-        {
-            return method.GetBaseDefinition().DeclaringType != method.DeclaringType;
-        }
+        return method.GetBaseDefinition().DeclaringType != method.DeclaringType;
     }
 }

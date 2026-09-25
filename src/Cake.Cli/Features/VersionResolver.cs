@@ -5,57 +5,56 @@
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Cake.Cli
+namespace Cake.Cli;
+
+/// <summary>
+/// Represents a version resolver.
+/// </summary>
+public interface IVersionResolver
 {
     /// <summary>
-    /// Represents a version resolver.
+    /// Gets the version.
     /// </summary>
-    public interface IVersionResolver
-    {
-        /// <summary>
-        /// Gets the version.
-        /// </summary>
-        /// <returns>The version.</returns>
-        string GetVersion();
-
-        /// <summary>
-        /// Gets the product version.
-        /// </summary>
-        /// <returns>The product version.</returns>
-        string GetProductVersion();
-    }
+    /// <returns>The version.</returns>
+    string GetVersion();
 
     /// <summary>
-    /// The Cake version resolver.
+    /// Gets the product version.
     /// </summary>
-    public sealed class VersionResolver : IVersionResolver
+    /// <returns>The product version.</returns>
+    string GetProductVersion();
+}
+
+/// <summary>
+/// The Cake version resolver.
+/// </summary>
+public sealed class VersionResolver : IVersionResolver
+{
+    /// <inheritdoc/>
+    public string GetVersion()
     {
-        /// <inheritdoc/>
-        public string GetVersion()
+        var assembly = Assembly.GetEntryAssembly();
+        var version = FileVersionInfo.GetVersionInfo(assembly.Location).Comments;
+
+        if (string.IsNullOrWhiteSpace(version))
         {
-            var assembly = Assembly.GetEntryAssembly();
-            var version = FileVersionInfo.GetVersionInfo(assembly.Location).Comments;
-
-            if (string.IsNullOrWhiteSpace(version))
-            {
-                version = "Unknown";
-            }
-
-            return version;
+            version = "Unknown";
         }
 
-        /// <inheritdoc/>
-        public string GetProductVersion()
+        return version;
+    }
+
+    /// <inheritdoc/>
+    public string GetProductVersion()
+    {
+        var assembly = Assembly.GetEntryAssembly();
+        var version = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
+
+        if (string.IsNullOrWhiteSpace(version))
         {
-            var assembly = Assembly.GetEntryAssembly();
-            var version = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
-
-            if (string.IsNullOrWhiteSpace(version))
-            {
-                version = "Unknown";
-            }
-
-            return version;
+            version = "Unknown";
         }
+
+        return version;
     }
 }

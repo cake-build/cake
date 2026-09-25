@@ -4,48 +4,47 @@
 
 using System.Runtime.Serialization;
 
-namespace Cake.Common.Build.GoCD.Data
+namespace Cake.Common.Build.GoCD.Data;
+
+/// <summary>
+/// The Go.CD pipeline history.
+/// </summary>
+[DataContract]
+public class GoCDPipelineHistoryInfo
 {
     /// <summary>
-    /// The Go.CD pipeline history.
+    /// Gets or sets the build cause.
     /// </summary>
-    [DataContract]
-    public class GoCDPipelineHistoryInfo
-    {
-        /// <summary>
-        /// Gets or sets the build cause.
-        /// </summary>
-        /// <value>
-        /// The build cause.
-        /// </value>
-        [DataMember(Name = "build_cause")]
-        public GoCDBuildCauseInfo BuildCause { get; set; }
+    /// <value>
+    /// The build cause.
+    /// </value>
+    [DataMember(Name = "build_cause")]
+    public GoCDBuildCauseInfo BuildCause { get; set; }
 
-        /// <summary>
-        /// Gets or sets the comment.
-        /// </summary>
-        /// <value>
-        /// The comment.
-        /// </value>
-        [DataMember(Name = "comment")]
-        public string Comment { get; set; }
+    /// <summary>
+    /// Gets or sets the comment.
+    /// </summary>
+    /// <value>
+    /// The comment.
+    /// </value>
+    [DataMember(Name = "comment")]
+    public string Comment { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        [DataMember(Name = "name")]
-        public string Name { get; set; }
+    /// <summary>
+    /// Gets or sets the name.
+    /// </summary>
+    /// <value>
+    /// The name.
+    /// </value>
+    [DataMember(Name = "name")]
+    public string Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the natural order.
-        /// </summary>
-        /// <value>
-        /// The natural order.
-        /// </value>
-        [DataMember(Name = "natural_order")]
-        public string NaturalOrder { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the natural order.
+    /// </summary>
+    /// <value>
+    /// The natural order.
+    /// </value>
+    [DataMember(Name = "natural_order")]
+    public string NaturalOrder { get; set; }
 }

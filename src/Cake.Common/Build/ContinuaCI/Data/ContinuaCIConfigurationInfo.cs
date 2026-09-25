@@ -5,39 +5,38 @@
 using System.Globalization;
 using Cake.Core;
 
-namespace Cake.Common.Build.ContinuaCI.Data
+namespace Cake.Common.Build.ContinuaCI.Data;
+
+/// <summary>
+/// Provides Continua CI configuration information for a current build.
+/// </summary>
+public sealed class ContinuaCIConfigurationInfo : ContinuaCIInfo
 {
+    private readonly string _prefix;
+
     /// <summary>
-    /// Provides Continua CI configuration information for a current build.
+    /// Initializes a new instance of the <see cref="ContinuaCIConfigurationInfo"/> class.
     /// </summary>
-    public sealed class ContinuaCIConfigurationInfo : ContinuaCIInfo
+    /// <param name="environment">The environment.</param>
+    /// <param name="prefix">The environment variable key prefix.</param>
+    public ContinuaCIConfigurationInfo(ICakeEnvironment environment, string prefix)
+        : base(environment)
     {
-        private readonly string _prefix;
+        _prefix = prefix;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ContinuaCIConfigurationInfo"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        /// <param name="prefix">The environment variable key prefix.</param>
-        public ContinuaCIConfigurationInfo(ICakeEnvironment environment, string prefix)
-            : base(environment)
+    /// <summary>
+    /// Gets the Continua CI Configuration Name.
+    /// </summary>
+    /// <value>
+    ///   The Continua CI Configuration Name.
+    /// </value>
+    public string Name
+    {
+        get
         {
-            _prefix = prefix;
-        }
-
-        /// <summary>
-        /// Gets the Continua CI Configuration Name.
-        /// </summary>
-        /// <value>
-        ///   The Continua CI Configuration Name.
-        /// </value>
-        public string Name
-        {
-            get
-            {
-                var key = string.Format(CultureInfo.InvariantCulture, "{0}.Name", _prefix);
-                return GetEnvironmentString(key);
-            }
+            var key = string.Format(CultureInfo.InvariantCulture, "{0}.Name", _prefix);
+            return GetEnvironmentString(key);
         }
     }
 }

@@ -4,28 +4,27 @@
 
 using System;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Represents a dependency.
+/// </summary>
+/// <seealso cref="Attribute" />
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public sealed class IsDependentOnAttribute : Attribute, ITaskDependency
 {
     /// <summary>
-    /// Represents a dependency.
+    /// Gets the dependency task type.
     /// </summary>
-    /// <seealso cref="Attribute" />
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public sealed class IsDependentOnAttribute : Attribute, ITaskDependency
-    {
-        /// <summary>
-        /// Gets the dependency task type.
-        /// </summary>
-        /// <value>The dependency task type.</value>
-        public Type Task { get; }
+    /// <value>The dependency task type.</value>
+    public Type Task { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IsDependentOnAttribute"/> class.
-        /// </summary>
-        /// <param name="type">The dependency type.</param>
-        public IsDependentOnAttribute(Type type)
-        {
-            Task = type;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IsDependentOnAttribute"/> class.
+    /// </summary>
+    /// <param name="type">The dependency type.</param>
+    public IsDependentOnAttribute(Type type)
+    {
+        Task = type;
     }
 }

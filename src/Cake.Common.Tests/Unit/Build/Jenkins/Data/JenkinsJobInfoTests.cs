@@ -3,58 +3,56 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
+namespace Cake.Common.Tests.Unit.Build.Jenkins.Data;
+
+public sealed class JenkinsJobInfoTests
 {
-    public sealed class JenkinsJobInfoTests
+    public sealed class TheJobNameProperty
     {
-        public sealed class TheJobNameProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateJobInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateJobInfo();
 
-                // When
-                var result = info.JobName;
+            // When
+            var result = info.JobName;
 
-                // Then
-                Assert.Equal("JOB1", result);
-            }
+            // Then
+            Assert.Equal("JOB1", result);
         }
+    }
 
-        public sealed class TheJobBaseNameProperty
+    public sealed class TheJobBaseNameProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateJobInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateJobInfo();
 
-                // When
-                var result = info.JobBaseName;
+            // When
+            var result = info.JobBaseName;
 
-                // Then
-                Assert.Equal("JOB1BASE", result);
-            }
+            // Then
+            Assert.Equal("JOB1BASE", result);
         }
+    }
 
-        public sealed class TheJobUrlProperty
+    public sealed class TheJobUrlProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateJobInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateJobInfo();
 
-                // When
-                var result = info.JobUrl;
+            // When
+            var result = info.JobUrl;
 
-                // Then
-                Assert.Equal("http://localhost:8080/jenkins/job/cake/", result);
-            }
+            // Then
+            Assert.Equal("http://localhost:8080/jenkins/job/cake/", result);
         }
     }
 }

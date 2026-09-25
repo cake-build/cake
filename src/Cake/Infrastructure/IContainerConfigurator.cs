@@ -6,23 +6,22 @@ using Cake.Core;
 using Cake.Core.Composition;
 using Cake.Core.Configuration;
 
-namespace Cake.Infrastructure
+namespace Cake.Infrastructure;
+
+/// <summary>
+/// Responsible for registering all dependencies
+/// that is required for executing a script.
+/// </summary>
+public interface IContainerConfigurator
 {
     /// <summary>
-    /// Responsible for registering all dependencies
-    /// that is required for executing a script.
+    /// Configures the container with the specified registrar, configuration, and arguments.
     /// </summary>
-    public interface IContainerConfigurator
-    {
-        /// <summary>
-        /// Configures the container with the specified registrar, configuration, and arguments.
-        /// </summary>
-        /// <param name="registrar">The container registrar.</param>
-        /// <param name="configuration">The Cake configuration.</param>
-        /// <param name="arguments">The Cake arguments.</param>
-        void Configure(
-            ICakeContainerRegistrar registrar,
-            ICakeConfiguration configuration,
-            ICakeArguments arguments);
-    }
+    /// <param name="registrar">The container registrar.</param>
+    /// <param name="configuration">The Cake configuration.</param>
+    /// <param name="arguments">The Cake arguments.</param>
+    void Configure(
+        ICakeContainerRegistrar registrar,
+        ICakeConfiguration configuration,
+        ICakeArguments arguments);
 }

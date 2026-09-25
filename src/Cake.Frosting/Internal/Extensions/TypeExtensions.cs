@@ -5,16 +5,15 @@
 using System;
 using System.Reflection;
 
-namespace Cake.Frosting.Internal
-{
-    internal static class TypeExtensions
-    {
-        public static string GetTaskName(this Type task)
-        {
-            ArgumentNullException.ThrowIfNull(task);
+namespace Cake.Frosting.Internal;
 
-            var attribute = task.GetCustomAttribute<TaskNameAttribute>();
-            return attribute != null ? attribute.Name : task.Name;
-        }
+internal static class TypeExtensions
+{
+    public static string GetTaskName(this Type task)
+    {
+        ArgumentNullException.ThrowIfNull(task);
+
+        var attribute = task.GetCustomAttribute<TaskNameAttribute>();
+        return attribute != null ? attribute.Name : task.Name;
     }
 }

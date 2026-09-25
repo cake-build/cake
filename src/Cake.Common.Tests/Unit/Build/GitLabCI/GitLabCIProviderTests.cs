@@ -6,102 +6,100 @@ using Cake.Common.Build.GitLabCI;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
 using NSubstitute;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.GitLabCI
+namespace Cake.Common.Tests.Unit.Build.GitLabCI;
+
+public sealed class GitLabCIProviderTests
 {
-    public sealed class GitLabCIProviderTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Throw_If_Environment_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => new GitLabCIProvider(null, null));
+            // Given, When
+            var result = Record.Exception(() => new GitLabCIProvider(null, null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "environment");
-            }
-
-            [Fact]
-            public void Should_Throw_If_FileSystem_Is_Null()
-            {
-                // Given
-                var environment = Substitute.For<ICakeEnvironment>();
-
-                // When
-                var result = Record.Exception(() => new GitLabCIProvider(environment, null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "fileSystem");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "environment");
         }
 
-        public sealed class TheIsRunningOnGitLabCIProperty
+        [Fact]
+        public void Should_Throw_If_FileSystem_Is_Null()
         {
-            [Fact]
-            public void Should_Return_True_If_Running_On_GitLabCI()
-            {
-                // Given
-                var fixture = new GitLabCIFixture();
-                fixture.IsRunningOnGitLabCI();
-                var gitLabCI = fixture.CreateGitLabCIService();
+            // Given
+            var environment = Substitute.For<ICakeEnvironment>();
 
-                // When
-                var result = gitLabCI.IsRunningOnGitLabCI;
+            // When
+            var result = Record.Exception(() => new GitLabCIProvider(environment, null));
 
-                // Then
-                Assert.True(result);
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "fileSystem");
+        }
+    }
 
-            [Fact]
-            public void Should_Return_False_If_Not_Running_On_GitLabCI()
-            {
-                // Given
-                var fixture = new GitLabCIFixture();
-                var gitLabCI = fixture.CreateGitLabCIService();
+    public sealed class TheIsRunningOnGitLabCIProperty
+    {
+        [Fact]
+        public void Should_Return_True_If_Running_On_GitLabCI()
+        {
+            // Given
+            var fixture = new GitLabCIFixture();
+            fixture.IsRunningOnGitLabCI();
+            var gitLabCI = fixture.CreateGitLabCIService();
 
-                // When
-                var result = gitLabCI.IsRunningOnGitLabCI;
+            // When
+            var result = gitLabCI.IsRunningOnGitLabCI;
 
-                // Then
-                Assert.False(result);
-            }
+            // Then
+            Assert.True(result);
         }
 
-        public sealed class TheEnvironmentProperty
+        [Fact]
+        public void Should_Return_False_If_Not_Running_On_GitLabCI()
         {
-            [Fact]
-            public void Should_Return_Non_Null_Reference()
-            {
-                // Given
-                var fixture = new GitLabCIFixture();
-                var gitLabCI = fixture.CreateGitLabCIService();
+            // Given
+            var fixture = new GitLabCIFixture();
+            var gitLabCI = fixture.CreateGitLabCIService();
 
-                // When
-                var result = gitLabCI.Environment;
+            // When
+            var result = gitLabCI.IsRunningOnGitLabCI;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.False(result);
         }
+    }
 
-        public sealed class TheCommandsProperty
+    public sealed class TheEnvironmentProperty
+    {
+        [Fact]
+        public void Should_Return_Non_Null_Reference()
         {
-            [Fact]
-            public void Should_Return_Non_Null_Reference()
-            {
-                // Given
-                var fixture = new GitLabCIFixture();
-                var gitLabCI = fixture.CreateGitLabCIService();
+            // Given
+            var fixture = new GitLabCIFixture();
+            var gitLabCI = fixture.CreateGitLabCIService();
 
-                // When
-                var result = gitLabCI.Commands;
+            // When
+            var result = gitLabCI.Environment;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
+        }
+    }
+
+    public sealed class TheCommandsProperty
+    {
+        [Fact]
+        public void Should_Return_Non_Null_Reference()
+        {
+            // Given
+            var fixture = new GitLabCIFixture();
+            var gitLabCI = fixture.CreateGitLabCIService();
+
+            // When
+            var result = gitLabCI.Commands;
+
+            // Then
+            Assert.NotNull(result);
         }
     }
 }

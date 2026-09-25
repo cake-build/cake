@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.GitReleaseManager.Close
+namespace Cake.Common.Tools.GitReleaseManager.Close;
+
+/// <summary>
+/// Contains settings used by <see cref="GitReleaseManagerMilestoneCloser"/>.
+/// </summary>
+public sealed class GitReleaseManagerCloseMilestoneSettings : GitReleaseManagerSettings
 {
-    /// <summary>
-    /// Contains settings used by <see cref="GitReleaseManagerMilestoneCloser"/>.
-    /// </summary>
-    public sealed class GitReleaseManagerCloseMilestoneSettings : GitReleaseManagerSettings
-    {
-    }
 }

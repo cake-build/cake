@@ -4,14 +4,13 @@
 
 using Cake.Common.Tools.VSWhere.Latest;
 
-namespace Cake.Common.Tests.Fixtures.Tools.VSWhere.Latest
+namespace Cake.Common.Tests.Fixtures.Tools.VSWhere.Latest;
+
+internal sealed class VSWhereLatestFixture : VSWhereFixture<VSWhereLatestSettings>
 {
-    internal sealed class VSWhereLatestFixture : VSWhereFixture<VSWhereLatestSettings>
+    protected override void RunTool()
     {
-        protected override void RunTool()
-        {
-            var tool = new VSWhereLatest(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Latest(Settings);
-        }
+        var tool = new VSWhereLatest(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Latest(Settings);
     }
 }

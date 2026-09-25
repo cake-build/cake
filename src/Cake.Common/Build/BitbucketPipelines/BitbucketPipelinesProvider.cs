@@ -5,28 +5,27 @@
 using Cake.Common.Build.BitbucketPipelines.Data;
 using Cake.Core;
 
-namespace Cake.Common.Build.BitbucketPipelines
+namespace Cake.Common.Build.BitbucketPipelines;
+
+/// <summary>
+/// Responsible for communicating with Pipelines.
+/// </summary>
+public sealed class BitbucketPipelinesProvider : IBitbucketPipelinesProvider
 {
+    /// <inheritdoc/>
+    public bool IsRunningOnBitbucketPipelines => !string.IsNullOrWhiteSpace(Environment.Repository.RepoOwner) &&
+                                                 !string.IsNullOrWhiteSpace(Environment.Repository.RepoSlug) &&
+                                                 !string.IsNullOrWhiteSpace(Environment.Repository.Commit);
+
+    /// <inheritdoc/>
+    public BitbucketPipelinesEnvironmentInfo Environment { get; }
+
     /// <summary>
-    /// Responsible for communicating with Pipelines.
+    /// Initializes a new instance of the <see cref="BitbucketPipelinesProvider"/> class.
     /// </summary>
-    public sealed class BitbucketPipelinesProvider : IBitbucketPipelinesProvider
+    /// <param name="environment">The environment.</param>
+    public BitbucketPipelinesProvider(ICakeEnvironment environment)
     {
-        /// <inheritdoc/>
-        public bool IsRunningOnBitbucketPipelines => !string.IsNullOrWhiteSpace(Environment.Repository.RepoOwner) &&
-                                                     !string.IsNullOrWhiteSpace(Environment.Repository.RepoSlug) &&
-                                                     !string.IsNullOrWhiteSpace(Environment.Repository.Commit);
-
-        /// <inheritdoc/>
-        public BitbucketPipelinesEnvironmentInfo Environment { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BitbucketPipelinesProvider"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public BitbucketPipelinesProvider(ICakeEnvironment environment)
-        {
-            Environment = new BitbucketPipelinesEnvironmentInfo(environment);
-        }
+        Environment = new BitbucketPipelinesEnvironmentInfo(environment);
     }
 }

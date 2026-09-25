@@ -2,40 +2,39 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Core.IO.Arguments
+namespace Cake.Core.IO.Arguments;
+
+/// <summary>
+/// Represents a text argument.
+/// </summary>
+public sealed class TextArgument : IProcessArgument
 {
+    private readonly string _text;
+
     /// <summary>
-    /// Represents a text argument.
+    /// Initializes a new instance of the <see cref="TextArgument"/> class.
     /// </summary>
-    public sealed class TextArgument : IProcessArgument
+    /// <param name="text">The text.</param>
+    public TextArgument(string text)
     {
-        private readonly string _text;
+        _text = text;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextArgument"/> class.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        public TextArgument(string text)
-        {
-            _text = text;
-        }
+    /// <inheritdoc/>
+    public string Render()
+    {
+        return _text ?? string.Empty;
+    }
 
-        /// <inheritdoc/>
-        public string Render()
-        {
-            return _text ?? string.Empty;
-        }
+    /// <inheritdoc/>
+    public string RenderSafe()
+    {
+        return Render();
+    }
 
-        /// <inheritdoc/>
-        public string RenderSafe()
-        {
-            return Render();
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return RenderSafe();
-        }
+    /// <inheritdoc/>
+    public override string ToString()
+    {
+        return RenderSafe();
     }
 }

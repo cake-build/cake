@@ -4,25 +4,23 @@
 
 using Cake.Common.Solution.Project.Properties;
 using Cake.Common.Tests.Fixtures;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Solution.Project.Properties
+namespace Cake.Common.Tests.Unit.Solution.Project.Properties;
+
+public sealed class AssemblyInfoExtensionTests_VB
 {
-    public sealed class AssemblyInfoExtensionTests_VB
+    [Fact]
+    public void Should_Add_CustomAttributes_If_Set_VB()
     {
-        [Fact]
-        public void Should_Add_CustomAttributes_If_Set_VB()
-        {
-            // Given
-            var fixture = new AssemblyInfoFixture_VB();
-            fixture.Settings.AddCustomAttribute("TestAttribute", "Test.NameSpace", "TestValue");
+        // Given
+        var fixture = new AssemblyInfoFixture_VB();
+        fixture.Settings.AddCustomAttribute("TestAttribute", "Test.NameSpace", "TestValue");
 
-            // When
-            var result = fixture.CreateAndReturnContent();
+        // When
+        var result = fixture.CreateAndReturnContent();
 
-            // Then
-            Assert.Contains("Imports Test.NameSpace", result);
-            Assert.Contains("<Assembly: TestAttribute(\"TestValue\")>", result);
-        }
+        // Then
+        Assert.Contains("Imports Test.NameSpace", result);
+        Assert.Contains("<Assembly: TestAttribute(\"TestValue\")>", result);
     }
 }

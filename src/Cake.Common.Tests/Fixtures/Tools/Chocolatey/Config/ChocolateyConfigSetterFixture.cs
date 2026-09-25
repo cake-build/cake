@@ -4,23 +4,22 @@
 
 using Cake.Common.Tools.Chocolatey.Config;
 
-namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Config
+namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Config;
+
+internal sealed class ChocolateyConfigSetterFixture : ChocolateyFixture<ChocolateyConfigSettings>
 {
-    internal sealed class ChocolateyConfigSetterFixture : ChocolateyFixture<ChocolateyConfigSettings>
+    public string Name { get; set; }
+    public string Value { get; set; }
+
+    public ChocolateyConfigSetterFixture()
     {
-        public string Name { get; set; }
-        public string Value { get; set; }
+        Name = "cacheLocation";
+        Value = @"c:\temp";
+    }
 
-        public ChocolateyConfigSetterFixture()
-        {
-            Name = "cacheLocation";
-            Value = @"c:\temp";
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new ChocolateyConfigSetter(FileSystem, Environment, ProcessRunner, Tools, Resolver);
-            tool.Set(Name, Value, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new ChocolateyConfigSetter(FileSystem, Environment, ProcessRunner, Tools, Resolver);
+        tool.Set(Name, Value, Settings);
     }
 }

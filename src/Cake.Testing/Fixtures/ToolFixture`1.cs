@@ -5,28 +5,27 @@
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Testing.Fixtures
+namespace Cake.Testing.Fixtures;
+
+/// <summary>
+/// Base class for tool fixtures.
+/// </summary>
+/// <typeparam name="TToolSettings">The type of the tool settings.</typeparam>
+public abstract class ToolFixture<TToolSettings> : ToolFixture<TToolSettings, ToolFixtureResult>
+    where TToolSettings : ToolSettings, new()
 {
     /// <summary>
-    /// Base class for tool fixtures.
+    /// Initializes a new instance of the <see cref="ToolFixture{TToolSettings}"/> class.
     /// </summary>
-    /// <typeparam name="TToolSettings">The type of the tool settings.</typeparam>
-    public abstract class ToolFixture<TToolSettings> : ToolFixture<TToolSettings, ToolFixtureResult>
-        where TToolSettings : ToolSettings, new()
+    /// <param name="toolFilename">The tool filename.</param>
+    protected ToolFixture(string toolFilename)
+        : base(toolFilename)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ToolFixture{TToolSettings}"/> class.
-        /// </summary>
-        /// <param name="toolFilename">The tool filename.</param>
-        protected ToolFixture(string toolFilename)
-            : base(toolFilename)
-        {
-        }
+    }
 
-        /// <inheritdoc/>
-        protected sealed override ToolFixtureResult CreateResult(FilePath path, ProcessSettings process)
-        {
-            return new ToolFixtureResult(path, process);
-        }
+    /// <inheritdoc/>
+    protected sealed override ToolFixtureResult CreateResult(FilePath path, ProcessSettings process)
+    {
+        return new ToolFixtureResult(path, process);
     }
 }

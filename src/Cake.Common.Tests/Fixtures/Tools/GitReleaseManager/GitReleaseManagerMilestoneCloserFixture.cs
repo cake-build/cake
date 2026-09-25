@@ -4,46 +4,45 @@
 
 using Cake.Common.Tools.GitReleaseManager.Close;
 
-namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
+namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager;
+
+internal sealed class GitReleaseManagerMilestoneCloserFixture : GitReleaseManagerFixture<GitReleaseManagerCloseMilestoneSettings>
 {
-    internal sealed class GitReleaseManagerMilestoneCloserFixture : GitReleaseManagerFixture<GitReleaseManagerCloseMilestoneSettings>
+    private bool _useToken = false;
+
+    public string UserName { get; set; }
+    public string Password { get; set; }
+    public string Token { get; set; }
+    public string Owner { get; set; }
+    public string Repository { get; set; }
+    public string Milestone { get; set; }
+
+    public GitReleaseManagerMilestoneCloserFixture()
     {
-        private bool _useToken = false;
+        UserName = "bob";
+        Password = "password";
+        Token = "token";
+        Owner = "repoOwner";
+        Repository = "repo";
+        Milestone = "0.1.0";
+    }
 
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string Token { get; set; }
-        public string Owner { get; set; }
-        public string Repository { get; set; }
-        public string Milestone { get; set; }
+    public void UseToken()
+    {
+        _useToken = true;
+    }
 
-        public GitReleaseManagerMilestoneCloserFixture()
+    protected override void RunTool()
+    {
+        var tool = new GitReleaseManagerMilestoneCloser(FileSystem, Environment, ProcessRunner, Tools);
+
+        if (_useToken)
         {
-            UserName = "bob";
-            Password = "password";
-            Token = "token";
-            Owner = "repoOwner";
-            Repository = "repo";
-            Milestone = "0.1.0";
+            tool.Close(Token, Owner, Repository, Milestone, Settings);
         }
-
-        public void UseToken()
+        else
         {
-            _useToken = true;
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new GitReleaseManagerMilestoneCloser(FileSystem, Environment, ProcessRunner, Tools);
-
-            if (_useToken)
-            {
-                tool.Close(Token, Owner, Repository, Milestone, Settings);
-            }
-            else
-            {
-                tool.Close(UserName, Password, Owner, Repository, Milestone, Settings);
-            }
+            tool.Close(UserName, Password, Owner, Repository, Milestone, Settings);
         }
     }
 }

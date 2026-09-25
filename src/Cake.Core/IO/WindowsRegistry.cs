@@ -4,33 +4,32 @@
 
 using System;
 
-namespace Cake.Core.IO
+namespace Cake.Core.IO;
+
+/// <summary>
+/// Represents an Windows implementation of <see cref="IRegistry"/>.
+/// </summary>
+public sealed class WindowsRegistry : IRegistry
 {
-    /// <summary>
-    /// Represents an Windows implementation of <see cref="IRegistry"/>.
-    /// </summary>
-    public sealed class WindowsRegistry : IRegistry
-    {
 #pragma warning disable CA1416
-        /// <inheritdoc/>
-        public IRegistryKey CurrentUser => CreateKey(() => Microsoft.Win32.Registry.CurrentUser);
+    /// <inheritdoc/>
+    public IRegistryKey CurrentUser => CreateKey(() => Microsoft.Win32.Registry.CurrentUser);
 
-        /// <inheritdoc/>
-        public IRegistryKey LocalMachine => CreateKey(() => Microsoft.Win32.Registry.LocalMachine);
+    /// <inheritdoc/>
+    public IRegistryKey LocalMachine => CreateKey(() => Microsoft.Win32.Registry.LocalMachine);
 
-        /// <inheritdoc/>
-        public IRegistryKey ClassesRoot => CreateKey(() => Microsoft.Win32.Registry.ClassesRoot);
+    /// <inheritdoc/>
+    public IRegistryKey ClassesRoot => CreateKey(() => Microsoft.Win32.Registry.ClassesRoot);
 
-        /// <inheritdoc/>
-        public IRegistryKey Users => CreateKey(() => Microsoft.Win32.Registry.Users);
+    /// <inheritdoc/>
+    public IRegistryKey Users => CreateKey(() => Microsoft.Win32.Registry.Users);
 
-        /// <inheritdoc/>
-        public IRegistryKey PerformanceData => CreateKey(() => Microsoft.Win32.Registry.PerformanceData);
+    /// <inheritdoc/>
+    public IRegistryKey PerformanceData => CreateKey(() => Microsoft.Win32.Registry.PerformanceData);
 
-        /// <inheritdoc/>
-        public IRegistryKey CurrentConfig => CreateKey(() => Microsoft.Win32.Registry.CurrentConfig);
+    /// <inheritdoc/>
+    public IRegistryKey CurrentConfig => CreateKey(() => Microsoft.Win32.Registry.CurrentConfig);
 
-        private static IRegistryKey CreateKey(Func<Microsoft.Win32.RegistryKey> keyFactory) => new WindowsRegistryKey(keyFactory);
+    private static IRegistryKey CreateKey(Func<Microsoft.Win32.RegistryKey> keyFactory) => new WindowsRegistryKey(keyFactory);
 #pragma warning restore CA1416
-    }
 }

@@ -1,18 +1,17 @@
-namespace Cake.Core.Polyfill
+namespace Cake.Core.Polyfill;
+
+/// <summary>
+/// The current Runtime Cake is executing on.
+/// </summary>
+public enum Runtime
 {
     /// <summary>
-    /// The current Runtime Cake is executing on.
+    /// Full Framework or Mono.
     /// </summary>
-    public enum Runtime
-    {
-        /// <summary>
-        /// Full Framework or Mono.
-        /// </summary>
-        Clr,
+    Clr,
 
-        /// <summary>
-        /// .NET Core or .NET 5+.
-        /// </summary>
-        CoreClr
-    }
+    /// <summary>
+    /// .NET Core or .NET 5+.
+    /// </summary>
+    CoreClr
 }

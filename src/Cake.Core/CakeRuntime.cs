@@ -6,32 +6,31 @@ using System;
 using System.Runtime.Versioning;
 using Cake.Core.Polyfill;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <inheritdoc/>
+public sealed class CakeRuntime : ICakeRuntime
 {
     /// <inheritdoc/>
-    public sealed class CakeRuntime : ICakeRuntime
+    public FrameworkName BuiltFramework { get; }
+
+    /// <inheritdoc/>
+    public Runtime Runtime { get; }
+
+    /// <inheritdoc/>
+    public Version CakeVersion { get; }
+
+    /// <inheritdoc/>
+    public bool IsCoreClr { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakeRuntime"/> class.
+    /// </summary>
+    public CakeRuntime()
     {
-        /// <inheritdoc/>
-        public FrameworkName BuiltFramework { get; }
-
-        /// <inheritdoc/>
-        public Runtime Runtime { get; }
-
-        /// <inheritdoc/>
-        public Version CakeVersion { get; }
-
-        /// <inheritdoc/>
-        public bool IsCoreClr { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeRuntime"/> class.
-        /// </summary>
-        public CakeRuntime()
-        {
-            BuiltFramework = EnvironmentHelper.GetBuiltFramework();
-            Runtime = EnvironmentHelper.GetRuntime();
-            CakeVersion = AssemblyHelper.GetExecutingAssembly().GetName().Version;
-            IsCoreClr = EnvironmentHelper.IsCoreClr();
-        }
+        BuiltFramework = EnvironmentHelper.GetBuiltFramework();
+        Runtime = EnvironmentHelper.GetRuntime();
+        CakeVersion = AssemblyHelper.GetExecutingAssembly().GetName().Version;
+        IsCoreClr = EnvironmentHelper.IsCoreClr();
     }
 }

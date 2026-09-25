@@ -5,23 +5,22 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Cake.Common.Tools.DotNet.Package.List
+namespace Cake.Common.Tools.DotNet.Package.List;
+
+/// <summary>
+/// The project information.
+/// </summary>
+public sealed class DotNetPackageListProjectItem
 {
     /// <summary>
-    /// The project information.
+    /// Gets the project path.
     /// </summary>
-    public sealed class DotNetPackageListProjectItem
-    {
-        /// <summary>
-        /// Gets the project path.
-        /// </summary>
-        [JsonInclude]
-        public string Path { get; private set; }
+    [JsonInclude]
+    public string Path { get; private set; }
 
-        /// <summary>
-        /// Gets the list of frameworks.
-        /// </summary>
-        [JsonInclude]
-        public IEnumerable<DotNetPackageListFrameworkItem> Frameworks { get; private set; }
-    }
+    /// <summary>
+    /// Gets the list of frameworks.
+    /// </summary>
+    [JsonInclude]
+    public IEnumerable<DotNetPackageListFrameworkItem> Frameworks { get; private set; }
 }

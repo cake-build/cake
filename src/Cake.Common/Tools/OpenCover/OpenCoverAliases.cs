@@ -7,59 +7,58 @@ using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.OpenCover
+namespace Cake.Common.Tools.OpenCover;
+
+/// <summary>
+/// <para>Contains functionality related to <see href="https://github.com/opencover/opencover">OpenCover</see>.</para>
+/// <para>
+/// In order to use the commands for this alias, include the following in your build.cake file to download and
+/// install from nuget.org, or specify the ToolPath within the <see cref="OpenCoverSettings" /> class:
+/// <code>
+/// #tool "nuget:?package=OpenCover"
+/// </code>
+/// </para>
+/// </summary>
+[CakeAliasCategory("OpenCover")]
+public static class OpenCoverAliases
 {
     /// <summary>
-    /// <para>Contains functionality related to <see href="https://github.com/opencover/opencover">OpenCover</see>.</para>
-    /// <para>
-    /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from nuget.org, or specify the ToolPath within the <see cref="OpenCoverSettings" /> class:
-    /// <code>
-    /// #tool "nuget:?package=OpenCover"
-    /// </code>
-    /// </para>
+    /// Runs <see href="https://github.com/OpenCover/opencover">OpenCover</see>
+    /// for the specified action and settings.
     /// </summary>
-    [CakeAliasCategory("OpenCover")]
-    public static class OpenCoverAliases
+    /// <param name="context">The context.</param>
+    /// <param name="action">The action to run OpenCover for.</param>
+    /// <param name="outputFile">The OpenCover output file.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// OpenCover(tool => {
+    ///   tool.XUnit2("./**/App.Tests.dll",
+    ///     new XUnit2Settings {
+    ///       ShadowCopy = false
+    ///     });
+    ///   },
+    ///   new FilePath("./result.xml"),
+    ///   new OpenCoverSettings()
+    ///     .WithFilter("+[App]*")
+    ///     .WithFilter("-[App.Tests]*"));
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    public static void OpenCover(
+        this ICakeContext context,
+        Action<ICakeContext> action,
+        FilePath outputFile,
+        OpenCoverSettings settings)
     {
-        /// <summary>
-        /// Runs <see href="https://github.com/OpenCover/opencover">OpenCover</see>
-        /// for the specified action and settings.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="action">The action to run OpenCover for.</param>
-        /// <param name="outputFile">The OpenCover output file.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// OpenCover(tool => {
-        ///   tool.XUnit2("./**/App.Tests.dll",
-        ///     new XUnit2Settings {
-        ///       ShadowCopy = false
-        ///     });
-        ///   },
-        ///   new FilePath("./result.xml"),
-        ///   new OpenCoverSettings()
-        ///     .WithFilter("+[App]*")
-        ///     .WithFilter("-[App.Tests]*"));
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        public static void OpenCover(
-            this ICakeContext context,
-            Action<ICakeContext> action,
-            FilePath outputFile,
-            OpenCoverSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(context);
 
-            // Create the OpenCover runner.
-            var runner = new OpenCoverRunner(
-                context.FileSystem, context.Environment,
-                context.ProcessRunner, context.Tools);
+        // Create the OpenCover runner.
+        var runner = new OpenCoverRunner(
+            context.FileSystem, context.Environment,
+            context.ProcessRunner, context.Tools);
 
-            // Run OpenCover.
-            runner.Run(context, action, outputFile, settings);
-        }
+        // Run OpenCover.
+        runner.Run(context, action, outputFile, settings);
     }
 }

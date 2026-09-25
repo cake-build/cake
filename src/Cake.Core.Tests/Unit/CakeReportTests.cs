@@ -2,174 +2,173 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Core.Tests.Unit
+namespace Cake.Core.Tests.Unit;
+
+using System;
+using System.Linq;
+using Xunit;
+
+public sealed class CakeReportTests
 {
-    using System;
-    using System.Linq;
-    using Xunit;
-
-    public sealed class CakeReportTests
+    public sealed class TheAddMethod
     {
-        public sealed class TheAddMethod
+        [Fact]
+        public void Should_Add_A_New_Task()
         {
-            [Fact]
-            public void Should_Add_A_New_Task()
-            {
-                // Given
-                var report = new CakeReport();
-                var taskName = "task";
-                var duration = TimeSpan.FromMilliseconds(100);
+            // Given
+            var report = new CakeReport();
+            var taskName = "task";
+            var duration = TimeSpan.FromMilliseconds(100);
 
-                // When
-                report.Add("task", duration);
+            // When
+            report.Add("task", duration);
 
-                // Then
-                var firstTask = report.First();
-                Assert.Equal(taskName, firstTask.TaskName);
-                Assert.Equal(duration, firstTask.Duration);
-                Assert.Equal(CakeTaskExecutionStatus.Executed, firstTask.ExecutionStatus);
-            }
-
-            [Fact]
-            public void Should_Add_To_End_Of_Sequence()
-            {
-                // Given
-                var report = new CakeReport();
-                report.Add("task 1", TimeSpan.FromMilliseconds(100));
-
-                var taskName = "task";
-                var duration = TimeSpan.FromMilliseconds(200);
-
-                // When
-                report.Add(taskName, duration);
-
-                // Then
-                var lastTask = report.Last();
-                Assert.Equal(taskName, lastTask.TaskName);
-                Assert.Equal(duration, lastTask.Duration);
-                Assert.Equal(CakeTaskExecutionStatus.Executed, lastTask.ExecutionStatus);
-            }
+            // Then
+            var firstTask = report.First();
+            Assert.Equal(taskName, firstTask.TaskName);
+            Assert.Equal(duration, firstTask.Duration);
+            Assert.Equal(CakeTaskExecutionStatus.Executed, firstTask.ExecutionStatus);
         }
 
-        public sealed class TheAddSkippedMethod
+        [Fact]
+        public void Should_Add_To_End_Of_Sequence()
         {
-            [Fact]
-            public void Should_Add_A_New_Task()
-            {
-                // Given
-                var report = new CakeReport();
-                var taskName = "task";
+            // Given
+            var report = new CakeReport();
+            report.Add("task 1", TimeSpan.FromMilliseconds(100));
 
-                // When
-                report.AddSkipped(taskName, "This task was skipped for a great reason!");
+            var taskName = "task";
+            var duration = TimeSpan.FromMilliseconds(200);
 
-                // Then
-                var firstTask = report.First();
-                Assert.Equal(taskName, firstTask.TaskName);
-                Assert.Equal(TimeSpan.Zero, firstTask.Duration);
-                Assert.Equal(CakeTaskExecutionStatus.Skipped, firstTask.ExecutionStatus);
-            }
+            // When
+            report.Add(taskName, duration);
 
-            [Fact]
-            public void Should_Add_To_End_Of_Sequence()
-            {
-                // Given
-                var report = new CakeReport();
-                report.AddSkipped("task 1", "This task was skipped for a great reason!");
+            // Then
+            var lastTask = report.Last();
+            Assert.Equal(taskName, lastTask.TaskName);
+            Assert.Equal(duration, lastTask.Duration);
+            Assert.Equal(CakeTaskExecutionStatus.Executed, lastTask.ExecutionStatus);
+        }
+    }
 
-                var taskName = "task 2";
+    public sealed class TheAddSkippedMethod
+    {
+        [Fact]
+        public void Should_Add_A_New_Task()
+        {
+            // Given
+            var report = new CakeReport();
+            var taskName = "task";
 
-                // When
-                report.AddSkipped(taskName, "This task was skipped for a great reason!");
+            // When
+            report.AddSkipped(taskName, "This task was skipped for a great reason!");
 
-                // Then
-                var lastTask = report.Last();
-                Assert.Equal(taskName, lastTask.TaskName);
-                Assert.Equal(TimeSpan.Zero, lastTask.Duration);
-                Assert.Equal(CakeTaskExecutionStatus.Skipped, lastTask.ExecutionStatus);
-            }
+            // Then
+            var firstTask = report.First();
+            Assert.Equal(taskName, firstTask.TaskName);
+            Assert.Equal(TimeSpan.Zero, firstTask.Duration);
+            Assert.Equal(CakeTaskExecutionStatus.Skipped, firstTask.ExecutionStatus);
         }
 
-        public sealed class TheAddDelegatedMethod
+        [Fact]
+        public void Should_Add_To_End_Of_Sequence()
         {
-            [Fact]
-            public void Should_Add_A_New_Task()
-            {
-                // Given
-                var report = new CakeReport();
-                var taskName = "task";
-                var duration = TimeSpan.FromMilliseconds(100);
+            // Given
+            var report = new CakeReport();
+            report.AddSkipped("task 1", "This task was skipped for a great reason!");
 
-                // When
-                report.AddDelegated(taskName, duration);
+            var taskName = "task 2";
 
-                // Then
-                var firstTask = report.First();
-                Assert.Equal(taskName, firstTask.TaskName);
-                Assert.Equal(duration, firstTask.Duration);
-                Assert.Equal(CakeTaskExecutionStatus.Delegated, firstTask.ExecutionStatus);
-            }
+            // When
+            report.AddSkipped(taskName, "This task was skipped for a great reason!");
 
-            [Fact]
-            public void Should_Add_To_End_Of_Sequence()
-            {
-                // Given
-                var report = new CakeReport();
-                report.AddSkipped("task 1", "This task was skipped for a great reason!");
+            // Then
+            var lastTask = report.Last();
+            Assert.Equal(taskName, lastTask.TaskName);
+            Assert.Equal(TimeSpan.Zero, lastTask.Duration);
+            Assert.Equal(CakeTaskExecutionStatus.Skipped, lastTask.ExecutionStatus);
+        }
+    }
 
-                var taskName = "task 2";
-                var duration = TimeSpan.FromMilliseconds(100);
+    public sealed class TheAddDelegatedMethod
+    {
+        [Fact]
+        public void Should_Add_A_New_Task()
+        {
+            // Given
+            var report = new CakeReport();
+            var taskName = "task";
+            var duration = TimeSpan.FromMilliseconds(100);
 
-                // When
-                report.AddDelegated(taskName, duration);
+            // When
+            report.AddDelegated(taskName, duration);
 
-                // Then
-                var lastTask = report.Last();
-                Assert.Equal(taskName, lastTask.TaskName);
-                Assert.Equal(duration, lastTask.Duration);
-                Assert.Equal(CakeTaskExecutionStatus.Delegated, lastTask.ExecutionStatus);
-            }
+            // Then
+            var firstTask = report.First();
+            Assert.Equal(taskName, firstTask.TaskName);
+            Assert.Equal(duration, firstTask.Duration);
+            Assert.Equal(CakeTaskExecutionStatus.Delegated, firstTask.ExecutionStatus);
         }
 
-        public sealed class TheAddFailedMethod
+        [Fact]
+        public void Should_Add_To_End_Of_Sequence()
         {
-            [Fact]
-            public void Should_Add_A_New_Task()
-            {
-                // Given
-                var report = new CakeReport();
-                var taskName = "task";
-                var duration = TimeSpan.FromMilliseconds(100);
+            // Given
+            var report = new CakeReport();
+            report.AddSkipped("task 1", "This task was skipped for a great reason!");
 
-                // When
-                report.AddFailed(taskName, duration);
+            var taskName = "task 2";
+            var duration = TimeSpan.FromMilliseconds(100);
 
-                // Then
-                var firstTask = report.First();
-                Assert.Equal(taskName, firstTask.TaskName);
-                Assert.Equal(duration, firstTask.Duration);
-                Assert.Equal(CakeTaskExecutionStatus.Failed, firstTask.ExecutionStatus);
-            }
+            // When
+            report.AddDelegated(taskName, duration);
 
-            [Fact]
-            public void Should_Add_To_End_Of_Sequence()
-            {
-                // Given
-                var report = new CakeReport();
-                report.AddSkipped("task 1", "This task was skipped for a great reason!");
+            // Then
+            var lastTask = report.Last();
+            Assert.Equal(taskName, lastTask.TaskName);
+            Assert.Equal(duration, lastTask.Duration);
+            Assert.Equal(CakeTaskExecutionStatus.Delegated, lastTask.ExecutionStatus);
+        }
+    }
 
-                var taskName = "task 2";
-                var duration = TimeSpan.FromMilliseconds(100);
+    public sealed class TheAddFailedMethod
+    {
+        [Fact]
+        public void Should_Add_A_New_Task()
+        {
+            // Given
+            var report = new CakeReport();
+            var taskName = "task";
+            var duration = TimeSpan.FromMilliseconds(100);
 
-                // When
-                report.AddFailed(taskName, duration);
+            // When
+            report.AddFailed(taskName, duration);
 
-                // Then
-                var lastTask = report.Last();
-                Assert.Equal(taskName, lastTask.TaskName);
-                Assert.Equal(duration, lastTask.Duration);
-                Assert.Equal(CakeTaskExecutionStatus.Failed, lastTask.ExecutionStatus);
-            }
+            // Then
+            var firstTask = report.First();
+            Assert.Equal(taskName, firstTask.TaskName);
+            Assert.Equal(duration, firstTask.Duration);
+            Assert.Equal(CakeTaskExecutionStatus.Failed, firstTask.ExecutionStatus);
+        }
+
+        [Fact]
+        public void Should_Add_To_End_Of_Sequence()
+        {
+            // Given
+            var report = new CakeReport();
+            report.AddSkipped("task 1", "This task was skipped for a great reason!");
+
+            var taskName = "task 2";
+            var duration = TimeSpan.FromMilliseconds(100);
+
+            // When
+            report.AddFailed(taskName, duration);
+
+            // Then
+            var lastTask = report.Last();
+            Assert.Equal(taskName, lastTask.TaskName);
+            Assert.Equal(duration, lastTask.Duration);
+            Assert.Equal(CakeTaskExecutionStatus.Failed, lastTask.ExecutionStatus);
         }
     }
 }

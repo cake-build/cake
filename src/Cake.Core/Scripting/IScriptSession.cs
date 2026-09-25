@@ -5,35 +5,34 @@
 using System.Reflection;
 using Cake.Core.IO;
 
-namespace Cake.Core.Scripting
+namespace Cake.Core.Scripting;
+
+/// <summary>
+/// Represents a script session.
+/// </summary>
+public interface IScriptSession
 {
     /// <summary>
-    /// Represents a script session.
+    /// Adds a reference path to the session.
     /// </summary>
-    public interface IScriptSession
-    {
-        /// <summary>
-        /// Adds a reference path to the session.
-        /// </summary>
-        /// <param name="path">The reference path.</param>
-        void AddReference(FilePath path);
+    /// <param name="path">The reference path.</param>
+    void AddReference(FilePath path);
 
-        /// <summary>
-        /// Adds an assembly reference to the session.
-        /// </summary>
-        /// <param name="assembly">The assembly reference.</param>
-        void AddReference(Assembly assembly);
+    /// <summary>
+    /// Adds an assembly reference to the session.
+    /// </summary>
+    /// <param name="assembly">The assembly reference.</param>
+    void AddReference(Assembly assembly);
 
-        /// <summary>
-        /// Imports a namespace to the session.
-        /// </summary>
-        /// <param name="namespace">The namespace to import.</param>
-        void ImportNamespace(string @namespace);
+    /// <summary>
+    /// Imports a namespace to the session.
+    /// </summary>
+    /// <param name="namespace">The namespace to import.</param>
+    void ImportNamespace(string @namespace);
 
-        /// <summary>
-        /// Executes the specified script.
-        /// </summary>
-        /// <param name="script">The script to execute.</param>
-        void Execute(Script script);
-    }
+    /// <summary>
+    /// Executes the specified script.
+    /// </summary>
+    /// <param name="script">The script to execute.</param>
+    void Execute(Script script);
 }

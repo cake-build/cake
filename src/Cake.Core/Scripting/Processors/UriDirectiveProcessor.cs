@@ -9,100 +9,99 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Cake.Core.Scripting.Analysis;
 
-namespace Cake.Core.Scripting.Processors
+namespace Cake.Core.Scripting.Processors;
+
+internal abstract class UriDirectiveProcessor : LineProcessor
 {
-    internal abstract class UriDirectiveProcessor : LineProcessor
+    private readonly Regex _uriPrefixPattern;
+
+    protected abstract IEnumerable<string> GetDirectiveNames();
+
+    protected abstract void AddToContext(IScriptAnalyzerContext context, Uri uri);
+
+    protected UriDirectiveProcessor()
     {
-        private readonly Regex _uriPrefixPattern;
+        _uriPrefixPattern = new Regex("^([a-zA-Z]{2,}:)");
+    }
 
-        protected abstract IEnumerable<string> GetDirectiveNames();
+    public sealed override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-        protected abstract void AddToContext(IScriptAnalyzerContext context, Uri uri);
+        replacement = null;
 
-        protected UriDirectiveProcessor()
+        var tokens = Split(line);
+        var directive = tokens.FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(directive))
         {
-            _uriPrefixPattern = new Regex("^([a-zA-Z]{2,}:)");
-        }
-
-        public sealed override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-
-            replacement = null;
-
-            var tokens = Split(line);
-            var directive = tokens.FirstOrDefault();
-            if (!string.IsNullOrWhiteSpace(directive))
+            if (GetDirectiveNames().Any(n => directive.Equals(n, StringComparison.OrdinalIgnoreCase)))
             {
-                if (GetDirectiveNames().Any(n => directive.Equals(n, StringComparison.OrdinalIgnoreCase)))
+                if (tokens.Length >= 2)
                 {
-                    if (tokens.Length >= 2)
+                    // Try to parse an URI.
+                    var uri = ParseUriFromTokens(tokens);
+                    if (uri != null)
                     {
-                        // Try to parse an URI.
-                        var uri = ParseUriFromTokens(tokens);
-                        if (uri != null)
+                        try
                         {
-                            try
-                            {
-                                // Add the URI to the context.
-                                AddToContext(context, uri);
-                            }
-                            catch (Exception e)
-                            {
-                                // Add any errors to context
-                                context.AddScriptError(e.Message);
-                            }
-
-                            // Return success.
-                            return true;
+                            // Add the URI to the context.
+                            AddToContext(context, uri);
                         }
+                        catch (Exception e)
+                        {
+                            // Add any errors to context
+                            context.AddScriptError(e.Message);
+                        }
+
+                        // Return success.
+                        return true;
                     }
                 }
             }
-            return false;
         }
+        return false;
+    }
 
-        private Uri ParseUriFromTokens(string[] tokens)
+    private Uri ParseUriFromTokens(string[] tokens)
+    {
+        Uri uri;
+        if (IsUriFromLegacyPattern(tokens))
         {
-            Uri uri;
-            if (IsUriFromLegacyPattern(tokens))
-            {
-                uri = CreateUriFromLegacyFormat(tokens);
-            }
-            else
-            {
-                uri = new Uri(tokens[1].UnQuote(), UriKind.Absolute);
-            }
-            return uri;
+            uri = CreateUriFromLegacyFormat(tokens);
         }
-
-        private bool IsUriFromLegacyPattern(string[] tokens)
+        else
         {
-            return !_uriPrefixPattern.IsMatch(tokens[1].UnQuote());
+            uri = new Uri(tokens[1].UnQuote(), UriKind.Absolute);
         }
+        return uri;
+    }
 
-        protected virtual Uri CreateUriFromLegacyFormat(string[] tokens)
+    private bool IsUriFromLegacyPattern(string[] tokens)
+    {
+        return !_uriPrefixPattern.IsMatch(tokens[1].UnQuote());
+    }
+
+    protected virtual Uri CreateUriFromLegacyFormat(string[] tokens)
+    {
+        var builder = new StringBuilder();
+        builder.Append("nuget:");
+
+        // Fetch optional NuGet source.
+        var source = tokens.Skip(2).Select(value => value.UnQuote()).FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(source) &&
+            !source.StartsWith("//", StringComparison.Ordinal))
         {
-            var builder = new StringBuilder();
-            builder.Append("nuget:");
-
-            // Fetch optional NuGet source.
-            var source = tokens.Skip(2).Select(value => value.UnQuote()).FirstOrDefault();
-            if (!string.IsNullOrWhiteSpace(source) &&
-                !source.StartsWith("//", StringComparison.Ordinal))
-            {
-                builder.Append(string.Concat(source, "/"));
-            }
-
-            // Fetch the addin NuGet ID.
-            var id = tokens.Select(value => value.UnQuote()).Skip(1).FirstOrDefault();
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                builder.Append("?package=" + id);
-            }
-
-            // Add the package definition for the addin.
-            return new Uri(builder.ToString());
+            builder.Append(string.Concat(source, "/"));
         }
+
+        // Fetch the addin NuGet ID.
+        var id = tokens.Select(value => value.UnQuote()).Skip(1).FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(id))
+        {
+            builder.Append("?package=" + id);
+        }
+
+        // Add the package definition for the addin.
+        return new Uri(builder.ToString());
     }
 }

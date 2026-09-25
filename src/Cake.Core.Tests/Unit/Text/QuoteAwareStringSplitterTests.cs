@@ -6,101 +6,100 @@ using System.Linq;
 using Cake.Core.Text;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Text
+namespace Cake.Core.Tests.Unit.Text;
+
+public sealed class QuoteAwareStringSplitterTests
 {
-    public sealed class QuoteAwareStringSplitterTests
+    public sealed class TheTokenizeMethod
     {
-        public sealed class TheTokenizeMethod
+        [Fact]
+        public void Should_Return_Zero_Results_If_Input_String_Is_Null()
         {
-            [Fact]
-            public void Should_Return_Zero_Results_If_Input_String_Is_Null()
-            {
-                // Given
-                var input = string.Empty;
+            // Given
+            var input = string.Empty;
 
-                // When
-                var result = QuoteAwareStringSplitter.Split(input).ToArray();
+            // When
+            var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
-                // Then
-                Assert.Empty(result);
-            }
+            // Then
+            Assert.Empty(result);
+        }
 
-            [Fact]
-            public void Should_Parse_Single_Quoted_Argument_Without_Space_In_It()
-            {
-                // Given
-                const string input = "\"C:\\cake-walk\\cake.exe\"";
+        [Fact]
+        public void Should_Parse_Single_Quoted_Argument_Without_Space_In_It()
+        {
+            // Given
+            const string input = "\"C:\\cake-walk\\cake.exe\"";
 
-                // When
-                var result = QuoteAwareStringSplitter.Split(input).ToArray();
+            // When
+            var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
-                // Then
-                Assert.Single(result);
-                Assert.Equal("\"C:\\cake-walk\\cake.exe\"", result[0]);
-            }
+            // Then
+            Assert.Single(result);
+            Assert.Equal("\"C:\\cake-walk\\cake.exe\"", result[0]);
+        }
 
-            [Fact]
-            public void Should_Parse_Single_Quoted_Argument_With_Space_In_It()
-            {
-                // Given
-                const string input = "\"C:\\cake walk\\cake.exe\"";
+        [Fact]
+        public void Should_Parse_Single_Quoted_Argument_With_Space_In_It()
+        {
+            // Given
+            const string input = "\"C:\\cake walk\\cake.exe\"";
 
-                // When
-                var result = QuoteAwareStringSplitter.Split(input).ToArray();
+            // When
+            var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
-                // Then
-                Assert.Single(result);
-                Assert.Equal("\"C:\\cake walk\\cake.exe\"", result[0]);
-            }
+            // Then
+            Assert.Single(result);
+            Assert.Equal("\"C:\\cake walk\\cake.exe\"", result[0]);
+        }
 
-            [Fact]
-            public void Should_Parse_Multiple_Quoted_Arguments()
-            {
-                // Given
-                const string input = "\"C:\\cake-walk\\cake.exe\" \"build.cake\" \"-dryrun\"";
+        [Fact]
+        public void Should_Parse_Multiple_Quoted_Arguments()
+        {
+            // Given
+            const string input = "\"C:\\cake-walk\\cake.exe\" \"build.cake\" \"-dryrun\"";
 
-                // When
-                var result = QuoteAwareStringSplitter.Split(input).ToArray();
+            // When
+            var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
-                // Then
-                Assert.Equal(3, result.Length);
-                Assert.Equal("\"C:\\cake-walk\\cake.exe\"", result[0]);
-                Assert.Equal("\"build.cake\"", result[1]);
-                Assert.Equal("\"-dryrun\"", result[2]);
-            }
+            // Then
+            Assert.Equal(3, result.Length);
+            Assert.Equal("\"C:\\cake-walk\\cake.exe\"", result[0]);
+            Assert.Equal("\"build.cake\"", result[1]);
+            Assert.Equal("\"-dryrun\"", result[2]);
+        }
 
-            [Fact]
-            public void Should_Parse_Multiple_Mixed_Arguments()
-            {
-                // Given
-                const string input = "\"C:\\cake-walk\\cake.exe\" build.cake -verbosity \"diagnostic\"";
+        [Fact]
+        public void Should_Parse_Multiple_Mixed_Arguments()
+        {
+            // Given
+            const string input = "\"C:\\cake-walk\\cake.exe\" build.cake -verbosity \"diagnostic\"";
 
-                // When
-                var result = QuoteAwareStringSplitter.Split(input).ToArray();
+            // When
+            var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
-                // Then
-                Assert.Equal(4, result.Length);
-                Assert.Equal("\"C:\\cake-walk\\cake.exe\"", result[0]);
-                Assert.Equal("build.cake", result[1]);
-                Assert.Equal("-verbosity", result[2]);
-                Assert.Equal("\"diagnostic\"", result[3]);
-            }
+            // Then
+            Assert.Equal(4, result.Length);
+            Assert.Equal("\"C:\\cake-walk\\cake.exe\"", result[0]);
+            Assert.Equal("build.cake", result[1]);
+            Assert.Equal("-verbosity", result[2]);
+            Assert.Equal("\"diagnostic\"", result[3]);
+        }
 
-            [Fact]
-            public void Should_Parse_Part_That_Contains_Quotes_With_Space_In_It()
-            {
-                // Given
-                const string input = @"cake.exe build.cake -target=""te st""";
+        [Fact]
+        public void Should_Parse_Part_That_Contains_Quotes_With_Space_In_It()
+        {
+            // Given
+            const string input = @"cake.exe build.cake -target=""te st""";
 
-                // When
-                var result = QuoteAwareStringSplitter.Split(input).ToArray();
+            // When
+            var result = QuoteAwareStringSplitter.Split(input).ToArray();
 
-                // Then
-                Assert.Equal(3, result.Length);
-                Assert.Equal("cake.exe", result[0]);
-                Assert.Equal("build.cake", result[1]);
-                Assert.Equal("-target=\"te st\"", result[2]);
-            }
+            // Then
+            Assert.Equal(3, result.Length);
+            Assert.Equal("cake.exe", result[0]);
+            Assert.Equal("build.cake", result[1]);
+            Assert.Equal("-target=\"te st\"", result[2]);
         }
     }
 }

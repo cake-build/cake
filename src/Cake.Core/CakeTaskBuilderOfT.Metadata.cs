@@ -4,64 +4,63 @@
 
 using System;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Contains extension methods for <see cref="CakeTaskBuilder{TData}"/>.
+/// </summary>
+public static partial class CakeTaskBuilderOfTExtensions
 {
-    /// <summary>
-    /// Contains extension methods for <see cref="CakeTaskBuilder{TData}"/>.
-    /// </summary>
-    public static partial class CakeTaskBuilderOfTExtensions
+    internal static CakeTaskBuilder<TData> Process<TData>(
+        this CakeTaskBuilder<TData> builder,
+        Action<CakeTaskBuilder> action)
+        where TData : class
     {
-        internal static CakeTaskBuilder<TData> Process<TData>(
-            this CakeTaskBuilder<TData> builder,
-            Action<CakeTaskBuilder> action)
-            where TData : class
-        {
-            ArgumentNullException.ThrowIfNull(builder);
-            action(builder.Builder);
-            return builder;
-        }
-
-        /// <summary>
-        /// Gives a <see cref="CakeTaskBuilder{TData}"/> bound to specific data context type.
-        /// </summary>
-        /// <param name="builder">The task builder.</param>
-        /// <returns>A <see cref="CakeTaskBuilder{TData}"/>.</returns>
-        /// <typeparam name="TData">The type of the data context.</typeparam>
-        /// <example>
-        /// <code>
-        /// Task("Hello")
-        ///     .Of&lt;Foo&gt;()
-        ///     .Does((context, data) =>
-        /// {
-        ///     context.Log.Information("Hello {0}", data.Place);
-        /// });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder<TData> Of<TData>(this CakeTaskBuilder builder)
-            where TData : class
-            => new(builder);
-
-        /// <summary>
-        /// Adds a description to the task.
-        /// </summary>
-        /// <typeparam name="TData">The type of the data context.</typeparam>
-        /// <param name="builder">The task builder.</param>
-        /// <param name="description">The description.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// TaskOf&lt;Foo&gt;("Hello")
-        ///     .Description("Writes a greeting")
-        ///     .Does((context, data) =>
-        /// {
-        ///     context.Log.Information("Hello {0}", data.Place);
-        /// });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder<TData> Description<TData>(
-            this CakeTaskBuilder<TData> builder,
-            string description)
-            where TData : class
-            => builder.Process(builder => builder.Description(description));
+        ArgumentNullException.ThrowIfNull(builder);
+        action(builder.Builder);
+        return builder;
     }
+
+    /// <summary>
+    /// Gives a <see cref="CakeTaskBuilder{TData}"/> bound to specific data context type.
+    /// </summary>
+    /// <param name="builder">The task builder.</param>
+    /// <returns>A <see cref="CakeTaskBuilder{TData}"/>.</returns>
+    /// <typeparam name="TData">The type of the data context.</typeparam>
+    /// <example>
+    /// <code>
+    /// Task("Hello")
+    ///     .Of&lt;Foo&gt;()
+    ///     .Does((context, data) =>
+    /// {
+    ///     context.Log.Information("Hello {0}", data.Place);
+    /// });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder<TData> Of<TData>(this CakeTaskBuilder builder)
+        where TData : class
+        => new(builder);
+
+    /// <summary>
+    /// Adds a description to the task.
+    /// </summary>
+    /// <typeparam name="TData">The type of the data context.</typeparam>
+    /// <param name="builder">The task builder.</param>
+    /// <param name="description">The description.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder{TData}"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// TaskOf&lt;Foo&gt;("Hello")
+    ///     .Description("Writes a greeting")
+    ///     .Does((context, data) =>
+    /// {
+    ///     context.Log.Information("Hello {0}", data.Place);
+    /// });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder<TData> Description<TData>(
+        this CakeTaskBuilder<TData> builder,
+        string description)
+        where TData : class
+        => builder.Process(builder => builder.Description(description));
 }

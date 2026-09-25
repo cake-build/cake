@@ -9,31 +9,30 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common.IO
+namespace Cake.Common.IO;
+
+internal static class DirectoryMover
 {
-    internal static class DirectoryMover
+    public static void MoveDirectory(ICakeContext context, DirectoryPath directoryPath, DirectoryPath targetDirectoryPath)
     {
-        public static void MoveDirectory(ICakeContext context, DirectoryPath directoryPath, DirectoryPath targetDirectoryPath)
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(directoryPath);
+        ArgumentNullException.ThrowIfNull(targetDirectoryPath);
+
+        directoryPath = directoryPath.MakeAbsolute(context.Environment);
+        targetDirectoryPath = targetDirectoryPath.MakeAbsolute(context.Environment);
+
+        // Get the directory and verify it exist.
+        var directory = context.FileSystem.GetDirectory(directoryPath);
+        if (!directory.Exists)
         {
-            ArgumentNullException.ThrowIfNull(context);
-            ArgumentNullException.ThrowIfNull(directoryPath);
-            ArgumentNullException.ThrowIfNull(targetDirectoryPath);
-
-            directoryPath = directoryPath.MakeAbsolute(context.Environment);
-            targetDirectoryPath = targetDirectoryPath.MakeAbsolute(context.Environment);
-
-            // Get the directory and verify it exist.
-            var directory = context.FileSystem.GetDirectory(directoryPath);
-            if (!directory.Exists)
-            {
-                const string format = "The directory '{0}' does not exist.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, directoryPath.FullPath);
-                throw new DirectoryNotFoundException(message);
-            }
-
-            // Move the directory.
-            context.Log.Verbose("Moving directory {0} to {1}", directoryPath.GetDirectoryName(), targetDirectoryPath);
-            directory.Move(targetDirectoryPath);
+            const string format = "The directory '{0}' does not exist.";
+            var message = string.Format(CultureInfo.InvariantCulture, format, directoryPath.FullPath);
+            throw new DirectoryNotFoundException(message);
         }
+
+        // Move the directory.
+        context.Log.Verbose("Moving directory {0} to {1}", directoryPath.GetDirectoryName(), targetDirectoryPath);
+        directory.Move(targetDirectoryPath);
     }
 }

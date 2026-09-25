@@ -7,46 +7,45 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.VSWhere.All
+namespace Cake.Common.Tools.VSWhere.All;
+
+/// <summary>
+/// The VSWhere tool that finds all instances regardless if they are complete.
+/// </summary>
+public sealed class VSWhereAll : VSWhereTool<VSWhereAllSettings>
 {
     /// <summary>
-    /// The VSWhere tool that finds all instances regardless if they are complete.
+    /// Initializes a new instance of the <see cref="VSWhereAll"/> class.
     /// </summary>
-    public sealed class VSWhereAll : VSWhereTool<VSWhereAllSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="toolLocator">The tool locator.</param>
+    public VSWhereAll(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
+        IToolLocator toolLocator) : base(fileSystem, environment, processRunner, toolLocator)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VSWhereAll"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="toolLocator">The tool locator.</param>
-        public VSWhereAll(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
-            IToolLocator toolLocator) : base(fileSystem, environment, processRunner, toolLocator)
-        {
-        }
+    }
 
-        /// <summary>
-        /// Finds all instances regardless if they are complete.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>Installation paths for all instances.</returns>
-        public DirectoryPathCollection All(VSWhereAllSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(settings);
+    /// <summary>
+    /// Finds all instances regardless if they are complete.
+    /// </summary>
+    /// <param name="settings">The settings.</param>
+    /// <returns>Installation paths for all instances.</returns>
+    public DirectoryPathCollection All(VSWhereAllSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
 
-            return RunVSWhere(settings, GetArguments(settings));
-        }
+        return RunVSWhere(settings, GetArguments(settings));
+    }
 
-        private ProcessArgumentBuilder GetArguments(VSWhereAllSettings settings)
-        {
-            var builder = new ProcessArgumentBuilder();
+    private ProcessArgumentBuilder GetArguments(VSWhereAllSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
 
-            builder.Append("-all");
+        builder.Append("-all");
 
-            AddCommonArguments(settings, builder);
+        AddCommonArguments(settings, builder);
 
-            return builder;
-        }
+        return builder;
     }
 }

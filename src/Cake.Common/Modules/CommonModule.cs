@@ -4,17 +4,16 @@
 
 using Cake.Core.Composition;
 
-namespace Cake.Common.Modules
+namespace Cake.Common.Modules;
+
+/// <summary>
+/// The module responsible for registering
+/// default types in the Cake.Common assembly.
+/// </summary>
+public sealed class CommonModule : ICakeModule
 {
-    /// <summary>
-    /// The module responsible for registering
-    /// default types in the Cake.Common assembly.
-    /// </summary>
-    public sealed class CommonModule : ICakeModule
+    /// <inheritdoc/>
+    public void Register(ICakeContainerRegistrar registrar)
     {
-        /// <inheritdoc/>
-        public void Register(ICakeContainerRegistrar registrar)
-        {
-        }
     }
 }

@@ -2,36 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.InspectCode
+namespace Cake.Common.Tools.InspectCode;
+
+/// <summary>
+/// Represents InspectCode's minimal severity report.
+/// </summary>
+public enum InspectCodeSeverity
 {
     /// <summary>
-    /// Represents InspectCode's minimal severity report.
+    /// Severity: INFO.
     /// </summary>
-    public enum InspectCodeSeverity
-    {
-        /// <summary>
-        /// Severity: INFO.
-        /// </summary>
-        Info = 1,
+    Info = 1,
 
-        /// <summary>
-        /// Severity: HINT.
-        /// </summary>
-        Hint = 2,
+    /// <summary>
+    /// Severity: HINT.
+    /// </summary>
+    Hint = 2,
 
-        /// <summary>
-        /// Severity: SUGGESTION.
-        /// </summary>
-        Suggestion = 3,
+    /// <summary>
+    /// Severity: SUGGESTION.
+    /// </summary>
+    Suggestion = 3,
 
-        /// <summary>
-        /// Severity: WARNING.
-        /// </summary>
-        Warning = 4,
+    /// <summary>
+    /// Severity: WARNING.
+    /// </summary>
+    Warning = 4,
 
-        /// <summary>
-        /// Severity: ERROR.
-        /// </summary>
-        Error = 5
-    }
+    /// <summary>
+    /// Severity: ERROR.
+    /// </summary>
+    Error = 5
 }

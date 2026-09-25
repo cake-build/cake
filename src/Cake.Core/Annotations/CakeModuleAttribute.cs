@@ -4,29 +4,28 @@
 
 using System;
 
-namespace Cake.Core.Annotations
+namespace Cake.Core.Annotations;
+
+/// <summary>
+/// An attribute used to identify a module implementation in an assembly.
+/// </summary>
+[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false, Inherited = false)]
+public sealed class CakeModuleAttribute : Attribute
 {
     /// <summary>
-    /// An attribute used to identify a module implementation in an assembly.
+    /// Gets the module type.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false, Inherited = false)]
-    public sealed class CakeModuleAttribute : Attribute
+    /// <value>The module type.</value>
+    public Type ModuleType { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakeModuleAttribute"/> class.
+    /// </summary>
+    /// <param name="moduleType">The module type.</param>
+    public CakeModuleAttribute(Type moduleType)
     {
-        /// <summary>
-        /// Gets the module type.
-        /// </summary>
-        /// <value>The module type.</value>
-        public Type ModuleType { get; }
+        ArgumentNullException.ThrowIfNull(moduleType);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeModuleAttribute"/> class.
-        /// </summary>
-        /// <param name="moduleType">The module type.</param>
-        public CakeModuleAttribute(Type moduleType)
-        {
-            ArgumentNullException.ThrowIfNull(moduleType);
-
-            ModuleType = moduleType;
-        }
+        ModuleType = moduleType;
     }
 }

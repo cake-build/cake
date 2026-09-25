@@ -4,16 +4,15 @@
 
 using Cake.Common.Tools.DotNet.Build;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Build
-{
-    internal sealed class DotNetBuilderFixture : DotNetFixture<DotNetBuildSettings>
-    {
-        public string Project { get; set; }
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Build;
 
-        protected override void RunTool()
-        {
-            var tool = new DotNetBuilder(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Build(Project, Settings);
-        }
+internal sealed class DotNetBuilderFixture : DotNetFixture<DotNetBuildSettings>
+{
+    public string Project { get; set; }
+
+    protected override void RunTool()
+    {
+        var tool = new DotNetBuilder(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Build(Project, Settings);
     }
 }

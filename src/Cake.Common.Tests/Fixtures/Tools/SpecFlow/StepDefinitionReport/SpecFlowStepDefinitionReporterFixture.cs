@@ -5,22 +5,21 @@
 using Cake.Common.Tools.SpecFlow.StepDefinitionReport;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tests.Fixtures.Tools.SpecFlow.StepDefinitionReport
+namespace Cake.Common.Tests.Fixtures.Tools.SpecFlow.StepDefinitionReport;
+
+internal sealed class SpecFlowStepDefinitionReporterFixture : SpecFlowFixture<SpecFlowStepDefinitionReportSettings>
 {
-    internal sealed class SpecFlowStepDefinitionReporterFixture : SpecFlowFixture<SpecFlowStepDefinitionReportSettings>
+    public FilePath ProjectFile { get; set; }
+
+    public SpecFlowStepDefinitionReporterFixture()
     {
-        public FilePath ProjectFile { get; set; }
+        // Set the project file.
+        ProjectFile = new FilePath("./Tests.csproj");
+    }
 
-        public SpecFlowStepDefinitionReporterFixture()
-        {
-            // Set the project file.
-            ProjectFile = new FilePath("./Tests.csproj");
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new SpecFlowStepDefinitionReporter(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Run(ProjectFile, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new SpecFlowStepDefinitionReporter(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Run(ProjectFile, Settings);
     }
 }

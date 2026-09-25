@@ -9,102 +9,101 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotNet.Sln.List
+namespace Cake.Common.Tools.DotNet.Sln.List;
+
+/// <summary>
+/// .NET projects lister.
+/// </summary>
+public sealed class DotNetSlnLister : DotNetTool<DotNetSlnListSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// .NET projects lister.
+    /// Initializes a new instance of the <see cref="DotNetSlnLister" /> class.
     /// </summary>
-    public sealed class DotNetSlnLister : DotNetTool<DotNetSlnListSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotNetSlnLister(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetSlnLister" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public DotNetSlnLister(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Lists all projects in a solution file.
+    /// </summary>
+    /// <param name="solution">The solution file to use. If not specified, the command searches the current directory for one. If it finds no solution file or multiple solution files, the command fails.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The list of project-to-project references.</returns>
+    public IEnumerable<string> List(FilePath solution, DotNetSlnListSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        var processSettings = new ProcessSettings
         {
-            _environment = environment;
+            RedirectStandardOutput = true,
+            EnvironmentVariables = new Dictionary<string, string>(settings.EnvironmentVariables)
+                                    {
+                                        { "DOTNET_CLI_UI_LANGUAGE",  "en" }
+                                    }
+        };
+
+        IEnumerable<string> result = null;
+        RunCommand(settings, GetArguments(solution, settings), processSettings,
+            process => result = process.GetStandardOutput());
+
+        return ParseResult(result).ToList();
+    }
+
+    private ProcessArgumentBuilder GetArguments(FilePath solution, DotNetSlnListSettings settings)
+    {
+        var builder = CreateArgumentBuilder(settings);
+
+        builder.Append("sln");
+
+        // Solution path
+        if (solution != null)
+        {
+            builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
         }
 
-        /// <summary>
-        /// Lists all projects in a solution file.
-        /// </summary>
-        /// <param name="solution">The solution file to use. If not specified, the command searches the current directory for one. If it finds no solution file or multiple solution files, the command fails.</param>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The list of project-to-project references.</returns>
-        public IEnumerable<string> List(FilePath solution, DotNetSlnListSettings settings)
+        builder.Append("list");
+
+        return builder;
+    }
+
+    private static IEnumerable<string> ParseResult(IEnumerable<string> result)
+    {
+        bool first = true;
+        foreach (var line in result)
         {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            var processSettings = new ProcessSettings
+            if (first)
             {
-                RedirectStandardOutput = true,
-                EnvironmentVariables = new Dictionary<string, string>(settings.EnvironmentVariables)
-                                        {
-                                            { "DOTNET_CLI_UI_LANGUAGE",  "en" }
-                                        }
-            };
-
-            IEnumerable<string> result = null;
-            RunCommand(settings, GetArguments(solution, settings), processSettings,
-                process => result = process.GetStandardOutput());
-
-            return ParseResult(result).ToList();
-        }
-
-        private ProcessArgumentBuilder GetArguments(FilePath solution, DotNetSlnListSettings settings)
-        {
-            var builder = CreateArgumentBuilder(settings);
-
-            builder.Append("sln");
-
-            // Solution path
-            if (solution != null)
-            {
-                builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
+                if (line?.StartsWith("Project(s)") == true)
+                {
+                    first = false;
+                }
+                continue;
             }
 
-            builder.Append("list");
-
-            return builder;
-        }
-
-        private static IEnumerable<string> ParseResult(IEnumerable<string> result)
-        {
-            bool first = true;
-            foreach (var line in result)
+            if (string.IsNullOrWhiteSpace(line))
             {
-                if (first)
-                {
-                    if (line?.StartsWith("Project(s)") == true)
-                    {
-                        first = false;
-                    }
-                    continue;
-                }
-
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    break;
-                }
-
-                var trimmedLine = line.Trim();
-
-                if (trimmedLine.Trim().All(c => c == '-'))
-                {
-                    continue;
-                }
-
-                yield return trimmedLine;
+                break;
             }
+
+            var trimmedLine = line.Trim();
+
+            if (trimmedLine.Trim().All(c => c == '-'))
+            {
+                continue;
+            }
+
+            yield return trimmedLine;
         }
     }
 }
