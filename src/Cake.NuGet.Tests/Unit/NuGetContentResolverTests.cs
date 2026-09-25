@@ -332,11 +332,11 @@ namespace Cake.NuGet.Tests.Unit
                 // Then
                 Assert.Empty(result);
             }
-
+            [Fact]
             public void Should_Return_Runtimes_Assemblies_If_CoreCLR()
             {
                 // Given
-                var framework = ".NETCoreApp,Version=v2.0";
+                var framework = ".NETCoreApp,Version=v10.0";
                 var runtime = Runtime.CoreClr;
                 var fixture = new NuGetAddinContentResolverFixture(framework, runtime);
 
@@ -352,6 +352,7 @@ namespace Cake.NuGet.Tests.Unit
                 Assert.Single(result);
             }
 
+            [Fact]
             public void Should_Return_Native_Runtimes_Assemblies_If_CoreCLR()
             {
                 // Given
