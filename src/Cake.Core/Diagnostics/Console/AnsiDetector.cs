@@ -8,44 +8,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace Cake.Core.Diagnostics;
 
-internal static class AnsiDetector
+internal static partial class AnsiDetector
 {
-    private static readonly Regex[] _regexes;
-    private static readonly Regex _teamCityVersionWithAnsiSupportRegEx;
+    [GeneratedRegex(@"^(?:xterm|rxvt|eterm|screen|vt100|vt102|vt220|vt320)|(?:tmux|ansi|scoansi|cygwin|linux|konsole|bvterm)", RegexOptions.CultureInvariant)]
+    private static partial Regex TermAnsiPattern();
 
-    static AnsiDetector()
-    {
-
-        _regexes =
-        [
-            new Regex("^xterm"), // xterm, PuTTY, Mintty
-            new Regex("^rxvt"), // RXVT
-            new Regex("^eterm"), // Eterm
-            new Regex("^screen"), // GNU screen, tmux
-            new Regex("tmux"), // tmux
-            new Regex("^vt100"), // DEC VT series
-            new Regex("^vt102"), // DEC VT series
-            new Regex("^vt220"), // DEC VT series
-            new Regex("^vt320"), // DEC VT series
-            new Regex("ansi"), // ANSI
-            new Regex("scoansi"), // SCO ANSI
-            new Regex("cygwin"), // Cygwin, MinGW
-            new Regex("linux"), // Linux console
-            new Regex("konsole"), // Konsole
-            new Regex("bvterm"), // Bitvise SSH Client
-        ];
-
-        // TeamCity old version numbers look like 9.1.2, 9.1.6, 10.0.5, etc.
-        // TeamCity current version numbers look like 2017.1, 2019.2.1, 2020.2, etc.
-        // https://confluence.jetbrains.com/display/TW/Previous+Releases+Downloads
-        _teamCityVersionWithAnsiSupportRegEx = new Regex(@"^(\d{2,4}\.|9\.([1-9]\d*))");
-    }
+    // TeamCity old version numbers look like 9.1.2, 9.1.6, 10.0.5, etc.
+    // TeamCity current version numbers look like 2017.1, 2019.2.1, 2020.2, etc.
+    // https://confluence.jetbrains.com/display/TW/Previous+Releases+Downloads
+    [GeneratedRegex(@"^(\d{2,4}\.|9\.([1-9]\d*))", RegexOptions.CultureInvariant)]
+    private static partial Regex TeamCityVersionWithAnsiSupport();
 
     public static bool SupportsAnsi(ICakeEnvironment environment)
     {
@@ -72,7 +49,7 @@ internal static class AnsiDetector
         // TeamCity doesn't set the TERM environment variable but supports ANSI since 9.1
         // https://blog.jetbrains.com/teamcity/2015/07/teamcity-9-1-release-truly-historical-and-very-personal-builds/
         var teamCityVersion = environment.GetEnvironmentVariable("TEAMCITY_VERSION");
-        if (!string.IsNullOrWhiteSpace(teamCityVersion) && _teamCityVersionWithAnsiSupportRegEx.IsMatch(teamCityVersion))
+        if (!string.IsNullOrWhiteSpace(teamCityVersion) && TeamCityVersionWithAnsiSupport().IsMatch(teamCityVersion))
         {
             return true;
         }
@@ -81,7 +58,7 @@ internal static class AnsiDetector
         var term = environment.GetEnvironmentVariable("TERM");
         if (!string.IsNullOrWhiteSpace(term))
         {
-            if (_regexes.Any(regex => regex.IsMatch(term)))
+            if (TermAnsiPattern().IsMatch(term))
             {
                 return true;
             }

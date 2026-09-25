@@ -15,10 +15,8 @@ namespace Cake.Core.Tooling;
 /// <summary>
 /// Implementation of the default tool resolution strategy.
 /// </summary>
-public sealed class ToolResolutionStrategy : IToolResolutionStrategy
+public sealed partial class ToolResolutionStrategy : IToolResolutionStrategy
 {
-    private static readonly Regex _windowsExtRegex = new Regex(@"\.(?:bat|cmd|exe)$", RegexOptions.IgnoreCase);
-
     private readonly IFileSystem _fileSystem;
     private readonly ICakeEnvironment _environment;
     private readonly IGlobber _globber;
@@ -112,7 +110,7 @@ public sealed class ToolResolutionStrategy : IToolResolutionStrategy
     private bool HasPlatformAffinity(string tool)
     {
         // Platform affinity matches runtime platform with tool platform determined by file extension.
-        return _environment.Platform.IsWindows() == _windowsExtRegex.IsMatch(tool);
+        return _environment.Platform.IsWindows() == WindowsToolExtension.Pattern().IsMatch(tool);
     }
 
     private static FilePath LookInRegistrations(IToolRepository repository, string tool)
@@ -190,5 +188,11 @@ public sealed class ToolResolutionStrategy : IToolResolutionStrategy
         }
 
         return result;
+    }
+
+    private static partial class WindowsToolExtension
+    {
+        [GeneratedRegex(@"\.(?:bat|cmd|exe)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+        internal static partial Regex Pattern();
     }
 }

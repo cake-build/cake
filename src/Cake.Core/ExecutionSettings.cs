@@ -61,7 +61,7 @@ public sealed class ExecutionSettings
     /// <remarks>Targets consisting of whitespace only will be ignored.</remarks>
     public ExecutionSettings SetTargets(IEnumerable<string> targets)
     {
-        Targets = targets?.ToArray().Where(s => !string.IsNullOrWhiteSpace(s)) ?? Array.Empty<string>();
+        Targets = targets?.Where(s => !string.IsNullOrWhiteSpace(s)).ToArray() ?? [];
         return this;
     }
 

@@ -135,7 +135,8 @@ public sealed class CakeEngine : ICakeEngine
     public async Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, ExecutionSettings settings)
     {
         ArgumentNullException.ThrowIfNull(settings);
-        if (settings.Targets.Count() == 0)
+        var targets = settings.Targets as string[] ?? [.. settings.Targets];
+        if (targets.Length == 0)
         {
             throw new ArgumentException("No target specified.", nameof(settings));
         }
@@ -148,13 +149,13 @@ public sealed class CakeEngine : ICakeEngine
         var graph = CakeGraphBuilder.Build(_tasks);
 
         // Make sure each target exists, prior to attempting to execute them.
-        var missingTargets = settings.Targets.Where(target => !graph.Exist(target)).ToArray();
-        if (missingTargets.Count() == 1)
+        var missingTargets = targets.Where(target => !graph.Exist(target)).ToArray();
+        if (missingTargets.Length == 1)
         {
             const string format = "The target '{0}' was not found.";
             throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, missingTargets[0]));
         }
-        else if (missingTargets.Count() > 1)
+        else if (missingTargets.Length > 1)
         {
             const string format = "The targets {0} were not found.";
             throw new CakeException(string.Format(CultureInfo.InvariantCulture, format, string.Join(", ", missingTargets.Select(s => $"'{s}'"))));
@@ -171,11 +172,9 @@ public sealed class CakeEngine : ICakeEngine
 
         try
         {
-            var targetsList = settings.Targets.ToList();
-
-            if (targetsList.Count == 1)
+            if (targets.Length == 1)
             {
-                var target = targetsList[0];
+                var target = targets[0];
                 var orderedTasks = graph.Traverse(target)
                     .Select(y => _tasks.FirstOrDefault(x =>
                         x.Name.Equals(y, StringComparison.OrdinalIgnoreCase)))
@@ -187,21 +186,21 @@ public sealed class CakeEngine : ICakeEngine
             else if (settings.UnifiedDependencyGraphForMultipleTargets)
             {
                 // Opt-in: single traversal for all targets so shared dependencies run only once.
-                var orderedTasks = graph.Traverse(settings.Targets)
+                var orderedTasks = graph.Traverse(targets)
                     .Select(y => _tasks.FirstOrDefault(x =>
                         x.Name.Equals(y, StringComparison.OrdinalIgnoreCase)))
                     .Where(t => t != null)
                     .ToArray();
-                var targetNamesSet = new HashSet<string>(targetsList, StringComparer.OrdinalIgnoreCase);
-                PerformSetup(context, strategy, orderedTasks, targetsList[0], stopWatch, report);
+                var targetNamesSet = new HashSet<string>(targets, StringComparer.OrdinalIgnoreCase);
+                PerformSetup(context, strategy, orderedTasks, targets[0], stopWatch, report);
                 await RunTargets(context, strategy, orderedTasks, targetNamesSet, settings.Exclusive, stopWatch, report);
             }
             else
             {
                 // Legacy: each target traversed separately (shared dependencies may run multiple times).
-                for (int i = 0; i < targetsList.Count; i++)
+                for (int i = 0; i < targets.Length; i++)
                 {
-                    var target = targetsList[i];
+                    var target = targets[i];
                     var orderedTasks = graph.Traverse(target)
                         .Select(y => _tasks.FirstOrDefault(x =>
                             x.Name.Equals(y, StringComparison.OrdinalIgnoreCase)))

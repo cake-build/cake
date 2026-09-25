@@ -9,9 +9,10 @@ namespace Cake.Core;
 /// <summary>
 /// Contains extensions for <see cref="ICakeEnvironment"/>.
 /// </summary>
-public static class CakeEnvironmentExtensions
+public static partial class CakeEnvironmentExtensions
 {
-    private static readonly Regex _regex = new Regex("%(.*?)%");
+    [GeneratedRegex("%(.*?)%")]
+    private static partial Regex EnvironmentVariableRegex();
 
     /// <summary>
     /// Expands the environment variables in the provided text.
@@ -28,7 +29,7 @@ public static class CakeEnvironmentExtensions
     {
         var variables = environment.GetEnvironmentVariables();
 
-        var matches = _regex.Matches(text);
+        var matches = EnvironmentVariableRegex().Matches(text);
         foreach (Match match in matches)
         {
             string value = match.Groups[1].Value;

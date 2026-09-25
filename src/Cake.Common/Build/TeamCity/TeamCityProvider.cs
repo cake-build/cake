@@ -3,9 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using Cake.Common.Build.TeamCity.Data;
 using Cake.Core;
 using Cake.Core.IO;
@@ -20,7 +22,8 @@ public sealed class TeamCityProvider : ITeamCityProvider
     private const string MessagePrefix = "##teamcity[";
     private const string MessagePostfix = "]";
 
-    private static readonly Dictionary<string, string> _sanitizationTokens;
+    private static readonly FrozenDictionary<char, string> _sanitizationTokens;
+    private static readonly char[] _specialCharacters;
 
     private readonly ICakeEnvironment _environment;
     private readonly IFileSystem _fileSystem;
@@ -34,15 +37,16 @@ public sealed class TeamCityProvider : ITeamCityProvider
 
     static TeamCityProvider()
     {
-        _sanitizationTokens = new Dictionary<string, string>
+        _sanitizationTokens = new Dictionary<char, string>
         {
-            { "|", "||" },
-            { "\'", "|\'" },
-            { "\n", "|n" },
-            { "\r", "|r" },
-            { "[", "|[" },
-            { "]", "|]" }
-        };
+            { '|', "||" },
+            { '\'', "|\'" },
+            { '\n', "|n" },
+            { '\r', "|r" },
+            { '[', "|[" },
+            { ']', "|]" }
+        }.ToFrozenDictionary();
+        _specialCharacters = [.. _sanitizationTokens.Keys];
     }
 
     /// <summary>
@@ -275,10 +279,29 @@ public sealed class TeamCityProvider : ITeamCityProvider
 
     private static string Sanitize(string source)
     {
-        foreach (var charPair in _sanitizationTokens)
+        if (string.IsNullOrEmpty(source))
         {
-            source = source.Replace(charPair.Key, charPair.Value);
+            return string.Empty;
         }
-        return source;
+
+        if (source.IndexOfAny(_specialCharacters) < 0)
+        {
+            return source;
+        }
+
+        var stringBuilder = new StringBuilder(source.Length * 2);
+        foreach (var sourceChar in source)
+        {
+            if (_sanitizationTokens.TryGetValue(sourceChar, out var replacement))
+            {
+                stringBuilder.Append(replacement);
+            }
+            else
+            {
+                stringBuilder.Append(sourceChar);
+            }
+        }
+
+        return stringBuilder.ToString();
     }
 }

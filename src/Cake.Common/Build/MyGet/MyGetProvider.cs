@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -19,7 +20,7 @@ public sealed class MyGetProvider : IMyGetProvider
     private const string MessagePrefix = "##myget[";
     private const string MessagePostfix = "]";
 
-    private static readonly Dictionary<char, string> _sanitizationTokens;
+    private static readonly FrozenDictionary<char, string> _sanitizationTokens;
     private static readonly char[] _specialCharacters;
 
     private readonly ICakeEnvironment _environment;
@@ -35,8 +36,7 @@ public sealed class MyGetProvider : IMyGetProvider
             { '\r', "|r" },
             { '[', "|[" },
             { ']', "|]" }
-        };
-
+        }.ToFrozenDictionary();
 
         _specialCharacters = [.. _sanitizationTokens.Keys];
     }

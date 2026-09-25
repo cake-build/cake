@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 
 namespace Cake.Core.Diagnostics;
@@ -12,7 +13,7 @@ namespace Cake.Core.Diagnostics;
 /// </summary>
 public static class VerbosityParser
 {
-    private static readonly Dictionary<string, Verbosity> Lookup =
+    private static readonly FrozenDictionary<string, Verbosity> Lookup =
         new Dictionary<string, Verbosity>(StringComparer.OrdinalIgnoreCase)
         {
             { "q", Verbosity.Quiet },
@@ -25,7 +26,7 @@ public static class VerbosityParser
             { "verbose", Verbosity.Verbose },
             { "d", Verbosity.Diagnostic },
             { "diagnostic", Verbosity.Diagnostic }
-        };
+        }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// Tries to parse a verbosity value from a string.

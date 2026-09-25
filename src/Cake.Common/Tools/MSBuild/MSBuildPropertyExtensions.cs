@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,20 +10,18 @@ namespace Cake.Common.Tools.MSBuild;
 
 internal static class MSBuildPropertyExtensions
 {
-    private static readonly IReadOnlyDictionary<char, string> _escapeLookup = new Dictionary<char, string>
+    private static readonly FrozenDictionary<char, string> _escapeLookup = new Dictionary<char, string>
     {
         { ';', "%3B" },
         { ',', "%2C" },
         { ' ', "%20" },
         { '\r', "%0D" },
         { '\n', "%0A" }
-    };
+    }.ToFrozenDictionary();
 
-    private static readonly HashSet<string> _propertiesNotEscapeSemicolons = new HashSet<string>
-    {
+    private static readonly FrozenSet<string> _propertiesNotEscapeSemicolons = FrozenSet.Create(
         "DefineConstants",
-        "ExcludeFilesFromDeployment"
-    };
+        "ExcludeFilesFromDeployment");
 
     internal static string BuildMSBuildPropertyParameterString<TValue>(this KeyValuePair<string, TValue> property)
         where TValue : ICollection<string>
