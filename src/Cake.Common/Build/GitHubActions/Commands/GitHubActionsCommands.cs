@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Cake.Common.Build.GitHubActions.Commands.Artifact;
+using Cake.Common.Build.GitHubActions.Commands.Azure;
 using Cake.Common.Build.GitHubActions.Commands.NuGet;
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Core;
@@ -28,6 +29,7 @@ public sealed class GitHubActionsCommands
     private readonly GitHubActionsEnvironmentInfo _actionsEnvironment;
     private readonly GitHubActionsArtifactService _artifactsService;
     private readonly GitHubNuGetLoginService _nuGetLoginService;
+    private readonly GitHubAzureLoginService _azureLoginService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubActionsCommands"/> class.
@@ -53,6 +55,7 @@ public sealed class GitHubActionsCommands
         var createClient = createHttpClient ?? throw new ArgumentNullException(nameof(createHttpClient));
         _artifactsService = new GitHubActionsArtifactService(environment, fileSystem, actionsEnvironment, createClient);
         _nuGetLoginService = new GitHubNuGetLoginService(environment, createClient, SetSecret);
+        _azureLoginService = new GitHubAzureLoginService(environment, fileSystem, createClient, SetSecret);
     }
 
     /// <summary>
@@ -464,6 +467,157 @@ public sealed class GitHubActionsCommands
         ArgumentNullException.ThrowIfNull(settings);
 
         return _nuGetLoginService.LoginAsync(settings, cancellationToken);
+    }
+
+    /// <summary>
+    /// Exchanges a GitHub Actions OIDC identity token for an Azure AD access token (workload identity federation).
+    /// Default scope is <c>https://management.azure.com/.default</c>, default OIDC audience is <c>api://AzureADTokenExchange</c>,
+    /// and default token authority is <c>https://login.microsoftonline.com</c>.
+    /// Requires <c>permissions: id-token: write</c> in the GitHub Actions workflow.
+    /// OIDC tokens and the returned access token are automatically masked in the build log.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var tenantId = EnvironmentVariable("AZURE_TENANT_ID");
+    /// var clientId = EnvironmentVariable("AZURE_CLIENT_ID");
+    /// var accessToken = await GitHubActions.Commands.AzureLogin(tenantId, clientId);
+    /// </code>
+    /// </example>
+    /// <param name="tenantId">The Entra ID tenant ID.</param>
+    /// <param name="clientId">The application (client) ID.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The Azure AD access token.</returns>
+    public Task<string> AzureLogin(string tenantId, string clientId, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(tenantId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(clientId);
+
+        return AzureLogin(new GitHubAzureLoginSettings(tenantId, clientId), cancellationToken);
+    }
+
+    /// <summary>
+    /// Exchanges a GitHub Actions OIDC identity token for an Azure AD access token using the specified scope, audience, and authority.
+    /// Requires <c>permissions: id-token: write</c> in the GitHub Actions workflow.
+    /// OIDC tokens and the returned access token are automatically masked in the build log.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var loginSettings = new GitHubAzureLoginSettings(
+    ///     tenantId: EnvironmentVariable("AZURE_TENANT_ID"),
+    ///     clientId: EnvironmentVariable("AZURE_CLIENT_ID"),
+    ///     scope: "https://management.azure.com/.default",
+    ///     audience: "api://AzureADTokenExchange",
+    ///     tokenAuthority: "https://login.microsoftonline.com");
+    ///
+    /// var accessToken = await GitHubActions.Commands.AzureLogin(loginSettings);
+    /// </code>
+    /// </example>
+    /// <param name="settings">The tenant, client, scope, OIDC audience, and optional token authority.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The Azure AD access token.</returns>
+    public Task<string> AzureLogin(GitHubAzureLoginSettings settings, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        return _azureLoginService.LoginAsync(settings, cancellationToken);
+    }
+
+    /// <summary>
+    /// Fetches the GitHub Actions OIDC JWT and writes it to a file for Azure.Identity <c>WorkloadIdentityCredential</c>.
+    /// Default OIDC audience is <c>api://AzureADTokenExchange</c>.
+    /// Requires <c>permissions: id-token: write</c> in the GitHub Actions workflow.
+    /// The OIDC JWT is automatically masked in the build log.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var tenantId = EnvironmentVariable("AZURE_TENANT_ID");
+    /// var clientId = EnvironmentVariable("AZURE_CLIENT_ID");
+    /// var workload = await GitHubActions.Commands.AzurePrepareWorkloadIdentity(tenantId, clientId);
+    ///
+    /// InstallTool("dotnet:?package=ARI&amp;version=2026.9.9.1110");
+    /// Command(
+    ///     new CommandSettings
+    ///     {
+    ///         ToolName = "ari",
+    ///         ToolExecutableNames = ["ari", "ari.exe"],
+    ///         EnvironmentVariables =
+    ///         {
+    ///             { "AZURE_TENANT_ID", workload.TenantId },
+    ///             { "AZURE_CLIENT_ID", workload.ClientId },
+    ///             { "AZURE_FEDERATED_TOKEN_FILE", workload.FederatedTokenFile.FullPath }
+    ///         }
+    ///     },
+    ///     new ProcessArgumentBuilder()
+    ///         .Append("inventory")
+    ///         .AppendQuotedSecret(workload.TenantId)
+    ///         .AppendQuoted("./artifacts/inventory")
+    ///         .Append("--skip-tenant-overview")
+    ///         .Append("--include-site-application-settings"));
+    /// </code>
+    /// </example>
+    /// <param name="tenantId">The Entra ID tenant ID.</param>
+    /// <param name="clientId">The application (client) ID.</param>
+    /// <param name="federatedTokenFile">Optional destination path; default is a unique file under the local temp directory.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>Tenant ID, client ID, and federated token file path.</returns>
+    public Task<GitHubAzureWorkloadIdentityInfo> AzurePrepareWorkloadIdentity(
+        string tenantId,
+        string clientId,
+        FilePath federatedTokenFile = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(tenantId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(clientId);
+
+        return AzurePrepareWorkloadIdentity(new GitHubAzureLoginSettings(tenantId, clientId), federatedTokenFile, cancellationToken);
+    }
+
+    /// <summary>
+    /// Fetches the GitHub Actions OIDC JWT and writes it to a file for Azure.Identity <c>WorkloadIdentityCredential</c>.
+    /// Requires <c>permissions: id-token: write</c> in the GitHub Actions workflow.
+    /// The OIDC JWT is automatically masked in the build log.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var loginSettings = new GitHubAzureLoginSettings(
+    ///     tenantId: EnvironmentVariable("AZURE_TENANT_ID"),
+    ///     clientId: EnvironmentVariable("AZURE_CLIENT_ID"));
+    ///
+    /// var workload = await GitHubActions.Commands.AzurePrepareWorkloadIdentity(loginSettings);
+    ///
+    /// InstallTool("dotnet:?package=ARI&amp;version=2026.9.9.1110");
+    /// Command(
+    ///     new CommandSettings
+    ///     {
+    ///         ToolName = "ari",
+    ///         ToolExecutableNames = ["ari", "ari.exe"],
+    ///         EnvironmentVariables =
+    ///         {
+    ///             { "AZURE_TENANT_ID", workload.TenantId },
+    ///             { "AZURE_CLIENT_ID", workload.ClientId },
+    ///             { "AZURE_FEDERATED_TOKEN_FILE", workload.FederatedTokenFile.FullPath }
+    ///         }
+    ///     },
+    ///     new ProcessArgumentBuilder()
+    ///         .Append("inventory")
+    ///         .AppendQuotedSecret(workload.TenantId)
+    ///         .AppendQuoted("./artifacts/inventory")
+    ///         .Append("--skip-tenant-overview")
+    ///         .Append("--include-site-application-settings"));
+    /// </code>
+    /// </example>
+    /// <param name="settings">The tenant, client, and OIDC audience; scope and token authority are ignored.</param>
+    /// <param name="federatedTokenFile">Optional destination path; default is a unique file under the local temp directory.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>Tenant ID, client ID, and federated token file path.</returns>
+    public Task<GitHubAzureWorkloadIdentityInfo> AzurePrepareWorkloadIdentity(
+        GitHubAzureLoginSettings settings,
+        FilePath federatedTokenFile = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        return _azureLoginService.PrepareWorkloadIdentityAsync(settings, federatedTokenFile, cancellationToken);
     }
 
     internal void WriteCommand(string command, string message = null)

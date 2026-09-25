@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using Cake.Common.Build;
 using Cake.Common.Build.GitHubActions.Commands;
+using Cake.Common.Build.GitHubActions.Commands.Azure;
 using Cake.Common.Build.GitHubActions.Commands.NuGet;
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Common.Tests.Fixtures.Build;
@@ -1020,6 +1021,425 @@ CAKEEOF
 
                 return base.HandleAsync(request, cancellationToken);
             }
+        }
+    }
+
+    /// <summary>
+    /// Tests for <see cref="GitHubActionsCommands.AzureLogin(string, string, System.Threading.CancellationToken)"/> and
+    /// <see cref="GitHubActionsCommands.AzureLogin(GitHubAzureLoginSettings, System.Threading.CancellationToken)"/>.
+    /// </summary>
+    public sealed class TheAzureLoginMethod
+    {
+        [Fact]
+        public async Task Should_Return_Access_Token_When_Login_With_Tenant_And_Client()
+        {
+            // Given
+            var fixture = new GitHubAzureLoginCommandsFixture();
+            var commands = fixture.CreateGitHubActionsCommands();
+
+            // When
+            var accessToken = await commands.AzureLogin(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                TestContext.Current.CancellationToken);
+
+            // Then
+            Assert.Equal("expected-access-token", accessToken);
+        }
+
+        [Fact]
+        public async Task Should_Mask_Sensitive_Values()
+        {
+            // Given
+            var fixture = new GitHubAzureLoginCommandsFixture();
+            var commands = fixture.CreateGitHubActionsCommands();
+
+            // When
+            var accessToken = await commands.AzureLogin(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                TestContext.Current.CancellationToken);
+
+            // Then
+            Assert.Equal("expected-access-token", accessToken);
+            Assert.Equal(3, fixture.Writer.Entries.Count);
+            Assert.Contains($"::add-mask::{GitHubAzureLoginCommandsFixture.ActionsIdTokenRequestToken}", fixture.Writer.Entries);
+            Assert.Contains("::add-mask::mock-oidc-jwt", fixture.Writer.Entries);
+            Assert.Contains("::add-mask::expected-access-token", fixture.Writer.Entries);
+        }
+
+        [Fact]
+        public async Task Should_Return_Access_Token_When_Settings_Use_Custom_Authority()
+        {
+            // Given
+            var fixture = new GitHubAzureLoginCommandsFixture();
+            var commands = fixture.CreateGitHubActionsCommands();
+            var settings = new GitHubAzureLoginSettings(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                Audience: GitHubAzureLoginCommandsFixture.DefaultAudience,
+                TokenAuthority: GitHubAzureLoginCommandsFixture.CustomTokenAuthority);
+
+            // When
+            var accessToken = await commands.AzureLogin(settings, TestContext.Current.CancellationToken);
+
+            // Then
+            Assert.Equal("expected-access-token-custom-authority", accessToken);
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Settings_Is_Null()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+            GitHubAzureLoginSettings settings = null;
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(settings, TestContext.Current.CancellationToken));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "settings");
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_TenantId_Is_Null()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(null, GitHubAzureLoginCommandsFixture.ClientId, TestContext.Current.CancellationToken));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "tenantId");
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_TenantId_Is_Whitespace()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin("  ", GitHubAzureLoginCommandsFixture.ClientId, TestContext.Current.CancellationToken));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+            Assert.Equal("tenantId", ((ArgumentException)result).ParamName);
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_ClientId_Is_Null()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(GitHubAzureLoginCommandsFixture.TenantId, null, TestContext.Current.CancellationToken));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "clientId");
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_ClientId_Is_Whitespace()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(GitHubAzureLoginCommandsFixture.TenantId, "  ", TestContext.Current.CancellationToken));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+            Assert.Equal("clientId", ((ArgumentException)result).ParamName);
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Settings_TenantId_Is_Whitespace()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+            var settings = new GitHubAzureLoginSettings("  ", GitHubAzureLoginCommandsFixture.ClientId);
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(settings, TestContext.Current.CancellationToken));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+            Assert.Equal("tenantId", ((ArgumentException)result).ParamName);
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Settings_ClientId_Is_Whitespace()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+            var settings = new GitHubAzureLoginSettings(GitHubAzureLoginCommandsFixture.TenantId, "  ");
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(settings, TestContext.Current.CancellationToken));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+            Assert.Equal("clientId", ((ArgumentException)result).ParamName);
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Scope_Is_Null()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+            var settings = new GitHubAzureLoginSettings(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                Scope: null);
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(settings, TestContext.Current.CancellationToken));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "scope");
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Scope_Is_Whitespace()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+            var settings = new GitHubAzureLoginSettings(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                Scope: "  ");
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(settings, TestContext.Current.CancellationToken));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+            Assert.Equal("scope", ((ArgumentException)result).ParamName);
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Audience_Is_Null()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+            var settings = new GitHubAzureLoginSettings(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                Audience: null);
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(settings, TestContext.Current.CancellationToken));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "audience");
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Audience_Is_Whitespace()
+        {
+            // Given
+            var commands = new GitHubAzureLoginCommandsFixture().CreateGitHubActionsCommands();
+            var settings = new GitHubAzureLoginSettings(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                Audience: "  ");
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(settings, TestContext.Current.CancellationToken));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+            Assert.Equal("audience", ((ArgumentException)result).ParamName);
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Missing_Oidc_Request_Token()
+        {
+            // Given
+            var fixture = new GitHubAzureLoginCommandsFixture();
+            fixture.Environment.GetEnvironmentVariable("ACTIONS_ID_TOKEN_REQUEST_TOKEN").Returns((string)null);
+            var commands = fixture.CreateGitHubActionsCommands();
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                TestContext.Current.CancellationToken));
+
+            // Then
+            AssertEx.IsCakeException(result, "Missing GitHub OIDC request environment variables.");
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Missing_Oidc_Request_Url()
+        {
+            // Given
+            var fixture = new GitHubAzureLoginCommandsFixture();
+            fixture.Environment.GetEnvironmentVariable("ACTIONS_ID_TOKEN_REQUEST_URL").Returns((string)null);
+            var commands = fixture.CreateGitHubActionsCommands();
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                TestContext.Current.CancellationToken));
+
+            // Then
+            AssertEx.IsCakeException(result, "Missing GitHub OIDC request environment variables.");
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Oidc_Request_Fails()
+        {
+            // Given
+            var fixture = new BrokenOidcGitHubAzureLoginFixture();
+            var commands = fixture.CreateGitHubActionsCommands();
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                TestContext.Current.CancellationToken));
+
+            // Then
+            AssertEx.IsCakeException(result, "Failed to retrieve OIDC token from GitHub (401 Unauthorized): oidc-failed");
+        }
+
+        [Fact]
+        public async Task Should_Throw_If_Token_Exchange_Fails_With_Json_Error()
+        {
+            // Given
+            var fixture = new FailingAzureTokenGitHubAzureLoginFixture();
+            var commands = fixture.CreateGitHubActionsCommands();
+
+            // When
+            var result = await Record.ExceptionAsync(() => commands.AzureLogin(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                TestContext.Current.CancellationToken));
+
+            // Then
+            AssertEx.IsCakeException(result, "Azure token request failed (400 BadRequest): invalid_client: bad assertion");
+        }
+
+        private sealed class BrokenOidcGitHubAzureLoginFixture : GitHubAzureLoginCommandsFixture
+        {
+            protected override Task<HttpResponseMessage> HandleAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                if (request.Method == HttpMethod.Get && request.RequestUri?.AbsoluteUri == ExpectedOidcGetUriDefaultAudience)
+                {
+                    return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                    {
+                        Content = new StringContent("oidc-failed", Encoding.UTF8, "text/plain")
+                    });
+                }
+
+                return base.HandleAsync(request, cancellationToken);
+            }
+        }
+
+        private sealed class FailingAzureTokenGitHubAzureLoginFixture : GitHubAzureLoginCommandsFixture
+        {
+            protected override Task<HttpResponseMessage> HandleAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                if (request.Method == HttpMethod.Post && request.RequestUri?.AbsoluteUri == DefaultTokenEndpoint)
+                {
+                    return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent(
+                            """
+                            {
+                                "error":"invalid_client",
+                                "error_description":"bad assertion"
+                            }
+                            """,
+                            Encoding.UTF8,
+                            "application/json")
+                    });
+                }
+
+                return base.HandleAsync(request, cancellationToken);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Tests for <see cref="GitHubActionsCommands.AzurePrepareWorkloadIdentity(string, string, Cake.Core.IO.FilePath, System.Threading.CancellationToken)"/> and
+    /// <see cref="GitHubActionsCommands.AzurePrepareWorkloadIdentity(GitHubAzureLoginSettings, Cake.Core.IO.FilePath, System.Threading.CancellationToken)"/>.
+    /// </summary>
+    public sealed class TheAzurePrepareWorkloadIdentityMethod
+    {
+        [Fact]
+        public async Task Should_Write_Default_Federated_Token_File()
+        {
+            // Given
+            var fixture = new GitHubAzureLoginCommandsFixture();
+            var commands = fixture.CreateGitHubActionsCommands();
+
+            // When
+            var info = await commands.AzurePrepareWorkloadIdentity(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                federatedTokenFile: null,
+                TestContext.Current.CancellationToken);
+
+            // Then
+            Assert.Equal(GitHubAzureLoginCommandsFixture.TenantId, info.TenantId);
+            Assert.Equal(GitHubAzureLoginCommandsFixture.ClientId, info.ClientId);
+            Assert.StartsWith("/tmp/cake-azure-fed-", info.FederatedTokenFile.FullPath);
+            Assert.EndsWith(".jwt", info.FederatedTokenFile.FullPath);
+
+            var file = fixture.FileSystem.GetFile(info.FederatedTokenFile);
+            Assert.True(file.Exists);
+            Assert.Equal("mock-oidc-jwt", file.GetTextContent());
+        }
+
+        [Fact]
+        public async Task Should_Write_Explicit_Federated_Token_File()
+        {
+            // Given
+            var fixture = new GitHubAzureLoginCommandsFixture();
+            var commands = fixture.CreateGitHubActionsCommands();
+            var dest = FilePath.FromString("/tmp/fed/token.jwt");
+
+            // When
+            var info = await commands.AzurePrepareWorkloadIdentity(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                dest,
+                TestContext.Current.CancellationToken);
+
+            // Then
+            Assert.Equal(GitHubAzureLoginCommandsFixture.TenantId, info.TenantId);
+            Assert.Equal(GitHubAzureLoginCommandsFixture.ClientId, info.ClientId);
+            Assert.Equal(dest.FullPath, info.FederatedTokenFile.FullPath);
+
+            var file = fixture.FileSystem.GetFile(dest);
+            Assert.True(file.Exists);
+            Assert.Equal("mock-oidc-jwt", file.GetTextContent());
+        }
+
+        [Fact]
+        public async Task Should_Mask_Oidc_Jwt()
+        {
+            // Given
+            var fixture = new GitHubAzureLoginCommandsFixture();
+            var commands = fixture.CreateGitHubActionsCommands();
+
+            // When
+            await commands.AzurePrepareWorkloadIdentity(
+                GitHubAzureLoginCommandsFixture.TenantId,
+                GitHubAzureLoginCommandsFixture.ClientId,
+                federatedTokenFile: null,
+                TestContext.Current.CancellationToken);
+
+            // Then
+            Assert.Equal(2, fixture.Writer.Entries.Count);
+            Assert.Contains($"::add-mask::{GitHubAzureLoginCommandsFixture.ActionsIdTokenRequestToken}", fixture.Writer.Entries);
+            Assert.Contains("::add-mask::mock-oidc-jwt", fixture.Writer.Entries);
         }
     }
 }
