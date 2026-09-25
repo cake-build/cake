@@ -73,12 +73,8 @@ internal sealed class NuGetContentResolver : INuGetContentResolver
 
         // Get current runtime identifier.
         var rid = _environment.Runtime.IsCoreClr
-#if NETCOREAPP3_1
-            ? Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment.GetRuntimeIdentifier()
-#else
             ? System.Runtime.InteropServices.RuntimeInformation.RuntimeIdentifier
-#endif
-                : null;
+            : null;
 
         // Get all candidate files.
         var pathComparer = PathComparer.Default;

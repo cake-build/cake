@@ -14,8 +14,6 @@
     <PackageProjectUrl>https://cakebuild.net</PackageProjectUrl>
     <LangVersion>14.0</LangVersion>
     <PackageReadmeFile>NuGet.org.md</PackageReadmeFile>
-    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
-    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     <DebugType>portable</DebugType>
     
     <!--
