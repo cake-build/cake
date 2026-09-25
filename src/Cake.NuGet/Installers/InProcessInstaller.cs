@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -27,7 +28,12 @@ namespace Cake.NuGet;
 
 internal sealed class InProcessInstaller : IDisposable
 {
-    private static readonly ISet<string> _denyListPackages;
+    private static readonly FrozenSet<string> _denyListPackages = FrozenSet.Create(
+        StringComparer.OrdinalIgnoreCase,
+        "Cake",
+        "Cake.Common",
+        "Cake.Core",
+        "Cake.NuGet");
 
     private readonly IFileSystem _fileSystem;
     private readonly ICakeEnvironment _environment;
@@ -43,15 +49,6 @@ internal sealed class InProcessInstaller : IDisposable
     {
         // Set User Agent string
         UserAgent.SetUserAgentString(new UserAgentStringBuilder("Cake NuGet Client"));
-
-        // Define packages we don't want to install
-        _denyListPackages = new HashSet<string>(new[]
-        {
-            "Cake",
-            "Cake.Common",
-            "Cake.Core",
-            "Cake.NuGet"
-        }, StringComparer.OrdinalIgnoreCase);
     }
 
     /// <summary>
