@@ -4,10 +4,9 @@
 
 using System;
 using System.Globalization;
-using System.IO;
 using System.Net.Http;
-using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Cake.Common.Build.GoCD.Data;
 using Cake.Core;
@@ -79,12 +78,7 @@ public sealed class GoCDProvider : IGoCDProvider
                 var content = await response.Content.ReadAsStringAsync();
                 _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Server response [{0}:{1}]:\n\r{2}", response.StatusCode, response.ReasonPhrase, content);
 
-                var jsonSerializer = new DataContractJsonSerializer(typeof(GoCDHistoryInfo));
-
-                using (var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(content)))
-                {
-                    return jsonSerializer.ReadObject(jsonStream) as GoCDHistoryInfo;
-                }
+                return JsonSerializer.Deserialize(content, GoCDJsonContext.Default.GoCDHistoryInfo);
             }
         }).GetAwaiter().GetResult();
     }

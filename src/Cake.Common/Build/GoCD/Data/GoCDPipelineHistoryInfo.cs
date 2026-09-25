@@ -2,14 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Cake.Common.Build.GoCD.Data;
 
 /// <summary>
 /// The Go.CD pipeline history.
 /// </summary>
-[DataContract]
 public class GoCDPipelineHistoryInfo
 {
     /// <summary>
@@ -18,7 +17,7 @@ public class GoCDPipelineHistoryInfo
     /// <value>
     /// The build cause.
     /// </value>
-    [DataMember(Name = "build_cause")]
+    [JsonPropertyName("build_cause")]
     public GoCDBuildCauseInfo BuildCause { get; set; }
 
     /// <summary>
@@ -27,7 +26,7 @@ public class GoCDPipelineHistoryInfo
     /// <value>
     /// The comment.
     /// </value>
-    [DataMember(Name = "comment")]
+    [JsonPropertyName("comment")]
     public string Comment { get; set; }
 
     /// <summary>
@@ -36,7 +35,7 @@ public class GoCDPipelineHistoryInfo
     /// <value>
     /// The name.
     /// </value>
-    [DataMember(Name = "name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; }
 
     /// <summary>
@@ -45,6 +44,7 @@ public class GoCDPipelineHistoryInfo
     /// <value>
     /// The natural order.
     /// </value>
-    [DataMember(Name = "natural_order")]
+    [JsonPropertyName("natural_order")]
+    [JsonConverter(typeof(GoCDStringOrNumberConverter))]
     public string NaturalOrder { get; set; }
 }

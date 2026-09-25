@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Cake.Common.Build.GoCD.Data;
 
 /// <summary>
 /// The Go.CD build cause.
 /// </summary>
-[DataContract]
 public class GoCDBuildCauseInfo
 {
     /// <summary>
@@ -19,7 +18,7 @@ public class GoCDBuildCauseInfo
     /// <value>
     /// The approver.
     /// </value>
-    [DataMember(Name = "approver")]
+    [JsonPropertyName("approver")]
     public string Approver { get; set; }
 
     /// <summary>
@@ -28,7 +27,7 @@ public class GoCDBuildCauseInfo
     /// <value>
     /// The material revisions.
     /// </value>
-    [DataMember(Name = "material_revisions")]
+    [JsonPropertyName("material_revisions")]
     public IEnumerable<GoCDMaterialRevisionsInfo> MaterialRevisions { get; set; }
 
     /// <summary>
@@ -37,7 +36,7 @@ public class GoCDBuildCauseInfo
     /// <value>
     /// <c>true</c> if the trigger was forced; otherwise, <c>false</c>.
     /// </value>
-    [DataMember(Name = "trigger_forced")]
+    [JsonPropertyName("trigger_forced")]
     public bool TriggerForced { get; set; }
 
     /// <summary>
@@ -46,6 +45,6 @@ public class GoCDBuildCauseInfo
     /// <value>
     /// The trigger message.
     /// </value>
-    [DataMember(Name = "trigger_message")]
+    [JsonPropertyName("trigger_message")]
     public string TriggerMessage { get; set; }
 }

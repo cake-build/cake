@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Cake.Common.Build.GoCD.Data;
 
 /// <summary>
 /// A change made in the repository since the last time the Go.CD pipeline was run.
 /// </summary>
-[DataContract]
 public class GoCDModificationInfo
 {
     /// <summary>
@@ -19,7 +18,7 @@ public class GoCDModificationInfo
     /// <value>
     /// The email address.
     /// </value>
-    [DataMember(Name = "email_address")]
+    [JsonPropertyName("email_address")]
     public string EmailAddress { get; set; }
 
     /// <summary>
@@ -28,7 +27,7 @@ public class GoCDModificationInfo
     /// <value>
     /// The identifier.
     /// </value>
-    [DataMember(Name = "id")]
+    [JsonPropertyName("id")]
     public int Id { get; set; }
 
     /// <summary>
@@ -37,7 +36,7 @@ public class GoCDModificationInfo
     /// <value>
     /// The modified time in milliseconds from the Unix epoch.
     /// </value>
-    [DataMember(Name = "modified_time")]
+    [JsonPropertyName("modified_time")]
     public long ModifiedTimeUnixMilliseconds { get; set; }
 
     /// <summary>
@@ -46,10 +45,17 @@ public class GoCDModificationInfo
     /// <value>
     /// The modified time.
     /// </value>
+    [JsonIgnore]
     public DateTime ModifiedTime
     {
-        get { return FromUnixTimeMilliseconds(ModifiedTimeUnixMilliseconds); }
-        set { ModifiedTimeUnixMilliseconds = ToUnixTimeMilliseconds(value); }
+        get { return DateTimeOffset.FromUnixTimeMilliseconds(ModifiedTimeUnixMilliseconds).UtcDateTime; }
+        set
+        {
+            var dateTime = value.Kind == DateTimeKind.Unspecified
+                ? DateTime.SpecifyKind(value, DateTimeKind.Utc)
+                : value;
+            ModifiedTimeUnixMilliseconds = new DateTimeOffset(dateTime).ToUnixTimeMilliseconds();
+        }
     }
 
     /// <summary>
@@ -58,7 +64,7 @@ public class GoCDModificationInfo
     /// <value>
     /// The username.
     /// </value>
-    [DataMember(Name = "user_name")]
+    [JsonPropertyName("user_name")]
     public string Username { get; set; }
 
     /// <summary>
@@ -67,7 +73,7 @@ public class GoCDModificationInfo
     /// <value>
     /// The comment.
     /// </value>
-    [DataMember(Name = "comment")]
+    [JsonPropertyName("comment")]
     public string Comment { get; set; }
 
     /// <summary>
@@ -76,22 +82,6 @@ public class GoCDModificationInfo
     /// <value>
     /// The revision.
     /// </value>
-    [DataMember(Name = "revision")]
+    [JsonPropertyName("revision")]
     public string Revision { get; set; }
-
-    private static DateTime FromUnixTimeMilliseconds(long milliseconds)
-    {
-        if ((milliseconds < -62135596800000L) || (milliseconds > 0xe677d21fdbffL))
-        {
-            throw new ArgumentOutOfRangeException(nameof(milliseconds));
-        }
-
-        return new DateTime((milliseconds * 0x2710L) + 0x89f7ff5f7b58000L);
-    }
-
-    private static long ToUnixTimeMilliseconds(DateTime dateTime)
-    {
-        long num = dateTime.Ticks / 0x2710L;
-        return num - 0x3883122cd800L;
-    }
 }
