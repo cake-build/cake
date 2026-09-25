@@ -4,11 +4,11 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Cake.Cli.Infrastructure;
 using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
+using Constants = Cake.Cli.Infrastructure.Constants;
 
 namespace Cake.Cli;
 
