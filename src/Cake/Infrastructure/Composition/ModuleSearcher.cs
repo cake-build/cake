@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -35,11 +36,12 @@ public interface IModuleSearcher
 /// </summary>
 public sealed class ModuleSearcher : IModuleSearcher
 {
-    private static readonly Dictionary<string, string> _excludedModules = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    private static readonly FrozenDictionary<string, string> _excludedModules =
+        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "Cake.DotNetTool.Module", "Cake.DotNetTool.Module is now included with Cake, so should no longer be installed separately to module directory or using #module directive" },
             { "Cake.NuGet", "Cake.NuGet is included with Cake, so should not be installed separately to module directory or using #module directive" }
-        };
+        }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
 
     private readonly IFileSystem _fileSystem;
     private readonly ICakeEnvironment _environment;

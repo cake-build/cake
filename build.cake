@@ -363,6 +363,9 @@ Task("Prepare-Integration-Tests")
 });
 
 Task("Frosting-Integration-Tests")
+    .WithCriteria(
+        () => !HasArgument("integration-tests-target"),
+        "Frosting suite when integration-tests-target is omitted or includes Run-All-Tests")
     .DeferOnError()
     .DoesForEach<BuildParameters, (string Framework, FilePath Project)>(
         (parameters, context) => {
@@ -509,8 +512,9 @@ Task("Run-Integration-Tests")
                     ["MyEnvironmentVariable"] = "Hello World",
                     ["CAKE_INTEGRATION_TEST_ROOT"] = "../.."
                 },
-                ArgumentCustomization = args => args
-                    .AppendSwitchQuoted("--target", " ", Argument("integration-tests-target", "Run-All-Tests"))
+                ArgumentCustomization = args =>
+                    Arguments<string>("integration-tests-target", ["Run-All-Tests"])
+                        .Aggregate(args, (builder, target) => builder.AppendSwitchQuoted("--target", " ", target))
                     .AppendSwitchQuoted("--verbosity", " ", Argument("integration-tests-verbosity", verbosity))
                     .AppendSwitchQuoted("--platform", " ", parameters.IsRunningOnWindows ? "windows" : "posix")
                     .AppendSwitchQuoted("--customarg", " ", "hello")
