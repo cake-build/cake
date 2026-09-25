@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Cake.Common.Build.GoCD.Data;
 
 /// <summary>
 /// The Go.CD history.
 /// </summary>
-[DataContract]
 public class GoCDHistoryInfo
 {
     /// <summary>
@@ -19,6 +18,6 @@ public class GoCDHistoryInfo
     /// <value>
     /// The pipelines.
     /// </value>
-    [DataMember(Name = "pipelines")]
+    [JsonPropertyName("pipelines")]
     public IEnumerable<GoCDPipelineHistoryInfo> Pipelines { get; set; }
 }

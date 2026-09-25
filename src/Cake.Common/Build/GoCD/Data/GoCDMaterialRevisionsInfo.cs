@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Cake.Common.Build.GoCD.Data;
 
 /// <summary>
 /// The Go.CD material revision information.
 /// </summary>
-[DataContract]
 public class GoCDMaterialRevisionsInfo
 {
     /// <summary>
@@ -19,7 +18,7 @@ public class GoCDMaterialRevisionsInfo
     /// <value>
     /// <c>true</c> if changed; otherwise, <c>false</c>.
     /// </value>
-    [DataMember(Name = "changed")]
+    [JsonPropertyName("changed")]
     public bool Changed { get; set; }
 
     /// <summary>
@@ -28,6 +27,6 @@ public class GoCDMaterialRevisionsInfo
     /// <value>
     /// The modifications.
     /// </value>
-    [DataMember(Name = "modifications")]
+    [JsonPropertyName("modifications")]
     public IEnumerable<GoCDModificationInfo> Modifications { get; set; }
 }
