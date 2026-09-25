@@ -117,7 +117,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.Default")
                                 .AppendSwitchQuoted("--target", "=", "B")
                                 .AppendSwitchQuoted("--target", "=", "C")
                                 .AppendSwitchQuoted("--target", "=", "D")
-                                .AppendSwitchQuoted("--expected", "=", "F,A,F,B,F,C,E,D")
+                                .AppendSwitchQuoted("--expected", "=", "E,D,F,A,B,C")
      });
 });
 
@@ -136,7 +136,7 @@ Task("Cake.Common.Tools.Cake.CakeAliases.CakeExecuteScript.RunTargets.Exclusive"
                                 .AppendSwitchQuoted("--target", "=", "C")
                                 .AppendSwitchQuoted("--target", "=", "D")
                                 .Append("--exclusive")
-                                .AppendSwitchQuoted("--expected", "=", "A,B,C,D")
+                                .AppendSwitchQuoted("--expected", "=", "D,A,B,C")
      });
 });
 

@@ -1,5 +1,3 @@
-using System;
-
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -14,12 +12,15 @@ public static class CakeConfigurationExtensions
 {
     /// <summary>
     /// Gets the value for the specified key as a boolean.
-    /// Returns <c>true</c> only when the value equals "true" (case-insensitive).
     /// </summary>
     /// <param name="configuration">The Cake configuration.</param>
     /// <param name="key">The configuration key.</param>
     /// <param name="defaultValue">The value to return when the key is missing or not a recognized boolean.</param>
-    /// <returns><c>true</c> when the configuration value is "true" (case-insensitive); otherwise <paramref name="defaultValue"/>.</returns>
+    /// <returns>
+    /// <c>true</c> when the configuration value is "true" (case-insensitive);
+    /// <c>false</c> when the configuration value is "false" (case-insensitive);
+    /// otherwise <paramref name="defaultValue"/>.
+    /// </returns>
     public static bool GetBoolValue(this ICakeConfiguration configuration, string key, bool defaultValue = false)
     {
         if (configuration == null)
@@ -28,7 +29,12 @@ public static class CakeConfigurationExtensions
         }
 
         var value = configuration.GetValue(key);
-        return value != null && value.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ? true : defaultValue;
+        if (value != null && bool.TryParse(value, out var parsed))
+        {
+            return parsed;
+        }
+
+        return defaultValue;
     }
 
     /// <summary>

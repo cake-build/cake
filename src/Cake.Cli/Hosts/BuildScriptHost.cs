@@ -94,9 +94,11 @@ public class BuildScriptHost<TContext> : ScriptHost
     {
         try
         {
-            if (_configuration.GetBoolValue(Constants.Settings.UnifiedDependencyGraphForMultipleTargets))
+            var unifiedGraph = _configuration.GetValue(Constants.Settings.UnifiedDependencyGraphForMultipleTargets);
+            if (unifiedGraph != null)
             {
-                Settings.UseUnifiedDependencyGraphForMultipleTargets(true);
+                Settings.UseUnifiedDependencyGraphForMultipleTargets(
+                    _configuration.GetBoolValue(Constants.Settings.UnifiedDependencyGraphForMultipleTargets, defaultValue: true));
             }
 
             var report = await Engine.RunTargetAsync(_context, _executionStrategy, Settings).ConfigureAwait(false);

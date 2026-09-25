@@ -426,7 +426,7 @@ public sealed partial class CakeHostTests
     [InlineData(nameof(DummyTask2), nameof(DummyTask), nameof(DummyTask3))]
     [InlineData(nameof(DummyTask3), nameof(DummyTask2), nameof(DummyTask))]
     [InlineData(nameof(DummyTask3), nameof(DummyTask), nameof(DummyTask2))]
-    public void Should_Execute_Multiple_Targets_In_Correct_Order(string task0, string task1, string task2)
+    public void Should_Execute_Multiple_Targets_In_Unified_Graph_Order(string task0, string task1, string task2)
     {
         // Given
         var fixture = new CakeHostFixture();
@@ -437,6 +437,38 @@ public sealed partial class CakeHostTests
 
         // When
         fixture.Run("--target", task0, "--target", task1, "--target", task2);
+
+        // Then: independent targets are ordered by name in the unified graph
+        Received.InOrder(() =>
+        {
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == nameof(DummyTask)), Arg.Any<ICakeContext>());
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == nameof(DummyTask2)), Arg.Any<ICakeContext>());
+            fixture.Strategy.ExecuteAsync(Arg.Is<CakeTask>(t => t.Name == nameof(DummyTask3)), Arg.Any<ICakeContext>());
+        });
+    }
+
+    [Theory]
+    [InlineData(nameof(DummyTask), nameof(DummyTask2), nameof(DummyTask3))]
+    [InlineData(nameof(DummyTask), nameof(DummyTask3), nameof(DummyTask2))]
+    [InlineData(nameof(DummyTask2), nameof(DummyTask3), nameof(DummyTask))]
+    [InlineData(nameof(DummyTask2), nameof(DummyTask), nameof(DummyTask3))]
+    [InlineData(nameof(DummyTask3), nameof(DummyTask2), nameof(DummyTask))]
+    [InlineData(nameof(DummyTask3), nameof(DummyTask), nameof(DummyTask2))]
+    public void Should_Execute_Multiple_Targets_In_Specified_Order_When_Unified_Graph_Is_Disabled(string task0, string task1, string task2)
+    {
+        // Given
+        var fixture = new CakeHostFixture();
+        fixture.RegisterTask<DummyTask>();
+        fixture.RegisterTask<DummyTask2>();
+        fixture.RegisterTask<DummyTask3>();
+        fixture.Strategy = Substitute.For<IExecutionStrategy>();
+
+        // When
+        fixture.Run(
+            "--target", task0,
+            "--target", task1,
+            "--target", task2,
+            "--Settings_UnifiedDependencyGraphForMultipleTargets=false");
 
         // Then
         Received.InOrder(() =>

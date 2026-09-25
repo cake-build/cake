@@ -21,6 +21,7 @@ internal static class Constants
 
         /// <summary>
         /// Configuration key for using a unified dependency graph when running multiple targets.
+        /// Defaults to enabled; set to <c>false</c> to restore isolated per-target graphs.
         /// </summary>
         public const string UnifiedDependencyGraphForMultipleTargets = "Settings_UnifiedDependencyGraphForMultipleTargets";
     }

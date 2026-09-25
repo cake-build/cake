@@ -185,7 +185,7 @@ public sealed class CakeEngine : ICakeEngine
             }
             else if (settings.UnifiedDependencyGraphForMultipleTargets)
             {
-                // Opt-in: single traversal for all targets so shared dependencies run only once.
+                // Default: single traversal for all targets so shared dependencies run only once.
                 var orderedTasks = graph.Traverse(targets)
                     .Select(y => _tasks.FirstOrDefault(x =>
                         x.Name.Equals(y, StringComparison.OrdinalIgnoreCase)))
@@ -197,7 +197,7 @@ public sealed class CakeEngine : ICakeEngine
             }
             else
             {
-                // Legacy: each target traversed separately (shared dependencies may run multiple times).
+                // Opt-out: each target traversed separately (shared dependencies may run multiple times).
                 for (int i = 0; i < targets.Length; i++)
                 {
                     var target = targets[i];
