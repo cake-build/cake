@@ -3,106 +3,104 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
+namespace Cake.Common.Tests.Unit.Build.Jenkins.Data;
+
+public sealed class JenkinsRepositoryInfoTests
 {
-    public sealed class JenkinsRepositoryInfoTests
+    public sealed class TheBranchNameProperty
     {
-        public sealed class TheBranchNameProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.BranchName;
+            // When
+            var result = info.BranchName;
 
-                // Then
-                Assert.Equal("CAKE-BRANCH", result);
-            }
+            // Then
+            Assert.Equal("CAKE-BRANCH", result);
         }
+    }
 
-        public sealed class TheGitBranchProperty
+    public sealed class TheGitBranchProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.GitBranch;
+            // When
+            var result = info.GitBranch;
 
-                // Then
-                Assert.Equal("CAKE-BRANCH", result);
-            }
+            // Then
+            Assert.Equal("CAKE-BRANCH", result);
         }
+    }
 
-        public sealed class TheGitCommitShaProperty
+    public sealed class TheGitCommitShaProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.GitCommitSha;
+            // When
+            var result = info.GitCommitSha;
 
-                // Then
-                Assert.Equal("67d423d36dd15b191a53ab3ddb613dc4b95be8b3", result);
-            }
+            // Then
+            Assert.Equal("67d423d36dd15b191a53ab3ddb613dc4b95be8b3", result);
         }
+    }
 
-        public sealed class TheSvnRevisionProperty
+    public sealed class TheSvnRevisionProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.SvnRevision;
+            // When
+            var result = info.SvnRevision;
 
-                // Then
-                Assert.Equal("REVISION-NUMBER", result);
-            }
+            // Then
+            Assert.Equal("REVISION-NUMBER", result);
         }
+    }
 
-        public sealed class TheSvnUrlProperty
+    public sealed class TheSvnUrlProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.SvnUrl;
+            // When
+            var result = info.SvnUrl;
 
-                // Then
-                Assert.Equal("svn://127.0.0.1/cake-build", result);
-            }
+            // Then
+            Assert.Equal("svn://127.0.0.1/cake-build", result);
         }
+    }
 
-        public sealed class TheCvsBranchProperty
+    public sealed class TheCvsBranchProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.CvsBranch;
+            // When
+            var result = info.CvsBranch;
 
-                // Then
-                Assert.Equal("DEVBRANCH", result);
-            }
+            // Then
+            Assert.Equal("DEVBRANCH", result);
         }
     }
 }

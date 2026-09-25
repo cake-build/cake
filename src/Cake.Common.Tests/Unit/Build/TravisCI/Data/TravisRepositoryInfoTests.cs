@@ -3,74 +3,72 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.TravisCI.Data
+namespace Cake.Common.Tests.Unit.Build.TravisCI.Data;
+
+public sealed class TravisRepositoryInfoTests
 {
-    public sealed class TravisRepositoryInfoTests
+    public sealed class TheCommitProperty
     {
-        public sealed class TheCommitProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new TravisCIInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new TravisCIInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.Commit;
+            // When
+            var result = info.Commit;
 
-                // Then
-                Assert.Equal("6cbdbe8", result);
-            }
+            // Then
+            Assert.Equal("6cbdbe8", result);
         }
+    }
 
-        public sealed class TheCommitRangeProperty
+    public sealed class TheCommitRangeProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new TravisCIInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new TravisCIInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.CommitRange;
+            // When
+            var result = info.CommitRange;
 
-                // Then
-                Assert.Equal("6cb4d6...5ba6dbe8", result);
-            }
+            // Then
+            Assert.Equal("6cb4d6...5ba6dbe8", result);
         }
+    }
 
-        public sealed class ThePullRequestProperty
+    public sealed class ThePullRequestProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new TravisCIInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new TravisCIInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.PullRequest;
+            // When
+            var result = info.PullRequest;
 
-                // Then
-                Assert.Equal("1", result);
-            }
+            // Then
+            Assert.Equal("1", result);
         }
+    }
 
-        public sealed class TheSlugProperty
+    public sealed class TheSlugProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new TravisCIInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new TravisCIInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.Slug;
+            // When
+            var result = info.Slug;
 
-                // Then
-                Assert.Equal("4d65ba6", result);
-            }
+            // Then
+            Assert.Equal("4d65ba6", result);
         }
     }
 }

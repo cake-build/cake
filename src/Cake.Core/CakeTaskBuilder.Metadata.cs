@@ -4,35 +4,34 @@
 
 using System;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Contains extension methods for <see cref="CakeTaskBuilder"/>.
+/// </summary>
+public static partial class CakeTaskBuilderExtensions
 {
     /// <summary>
-    /// Contains extension methods for <see cref="CakeTaskBuilder"/>.
+    /// Adds a description to the task.
     /// </summary>
-    public static partial class CakeTaskBuilderExtensions
+    /// <param name="builder">The task builder.</param>
+    /// <param name="description">The description.</param>
+    /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Task("Hello")
+    ///     .Description("Writes a greeting")
+    ///     .Does(() =>
+    /// {
+    ///     Information("Hello World");
+    /// });
+    /// </code>
+    /// </example>
+    public static CakeTaskBuilder Description(this CakeTaskBuilder builder, string description)
     {
-        /// <summary>
-        /// Adds a description to the task.
-        /// </summary>
-        /// <param name="builder">The task builder.</param>
-        /// <param name="description">The description.</param>
-        /// <returns>The same <see cref="CakeTaskBuilder"/> instance so that multiple calls can be chained.</returns>
-        /// <example>
-        /// <code>
-        /// Task("Hello")
-        ///     .Description("Writes a greeting")
-        ///     .Does(() =>
-        /// {
-        ///     Information("Hello World");
-        /// });
-        /// </code>
-        /// </example>
-        public static CakeTaskBuilder Description(this CakeTaskBuilder builder, string description)
-        {
-            ArgumentNullException.ThrowIfNull(builder);
+        ArgumentNullException.ThrowIfNull(builder);
 
-            builder.Target.Description = description;
-            return builder;
-        }
+        builder.Target.Description = description;
+        return builder;
     }
 }

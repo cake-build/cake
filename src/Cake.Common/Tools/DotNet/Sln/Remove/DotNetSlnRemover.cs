@@ -9,69 +9,68 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotNet.Sln.Remove
+namespace Cake.Common.Tools.DotNet.Sln.Remove;
+
+/// <summary>
+/// .NET project remover.
+/// </summary>
+public sealed class DotNetSlnRemover : DotNetTool<DotNetSlnRemoveSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// .NET project remover.
+    /// Initializes a new instance of the <see cref="DotNetSlnRemover" /> class.
     /// </summary>
-    public sealed class DotNetSlnRemover : DotNetTool<DotNetSlnRemoveSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotNetSlnRemover(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetSlnRemover" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public DotNetSlnRemover(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Removes a project or multiple projects from the solution file.
+    /// </summary>
+    /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
+    /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
+    /// <param name="settings">The settings.</param>
+    public void Remove(FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnRemoveSettings settings)
+    {
+        if (projectPath == null || !projectPath.Any())
         {
-            _environment = environment;
+            throw new ArgumentNullException(nameof(projectPath));
+        }
+        ArgumentNullException.ThrowIfNull(settings);
+
+        RunCommand(settings, GetArguments(solution, projectPath, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnRemoveSettings settings)
+    {
+        var builder = CreateArgumentBuilder(settings);
+
+        builder.Append("sln");
+
+        // Solution path
+        if (solution != null)
+        {
+            builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
         }
 
-        /// <summary>
-        /// Removes a project or multiple projects from the solution file.
-        /// </summary>
-        /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
-        /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
-        /// <param name="settings">The settings.</param>
-        public void Remove(FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnRemoveSettings settings)
-        {
-            if (projectPath == null || !projectPath.Any())
-            {
-                throw new ArgumentNullException(nameof(projectPath));
-            }
-            ArgumentNullException.ThrowIfNull(settings);
+        builder.Append("remove");
 
-            RunCommand(settings, GetArguments(solution, projectPath, settings));
+        // Project path
+        foreach (var project in projectPath)
+        {
+            builder.AppendQuoted(project.MakeAbsolute(_environment).FullPath);
         }
 
-        private ProcessArgumentBuilder GetArguments(FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnRemoveSettings settings)
-        {
-            var builder = CreateArgumentBuilder(settings);
-
-            builder.Append("sln");
-
-            // Solution path
-            if (solution != null)
-            {
-                builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
-            }
-
-            builder.Append("remove");
-
-            // Project path
-            foreach (var project in projectPath)
-            {
-                builder.AppendQuoted(project.MakeAbsolute(_environment).FullPath);
-            }
-
-            return builder;
-        }
+        return builder;
     }
 }

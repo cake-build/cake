@@ -7,45 +7,44 @@ using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Core.Tests.Stubs
+namespace Cake.Core.Tests.Stubs;
+
+public sealed class DummyTool : Tool<DummySettings>
 {
-    public sealed class DummyTool : Tool<DummySettings>
+    private readonly Action<int> _exitCodeValidation;
+
+    public DummyTool(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        Action<int> exitCodeValidation) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly Action<int> _exitCodeValidation;
+        _exitCodeValidation = exitCodeValidation;
+    }
 
-        public DummyTool(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            Action<int> exitCodeValidation) : base(fileSystem, environment, processRunner, tools)
-        {
-            _exitCodeValidation = exitCodeValidation;
-        }
+    public void Run(DummySettings settings)
+    {
+        Run(settings, new ProcessArgumentBuilder().Append("--foo"), new ProcessSettings(), null);
+    }
 
-        public void Run(DummySettings settings)
+    protected override void ProcessExitCode(int exitCode)
+    {
+        if (_exitCodeValidation == null)
         {
-            Run(settings, new ProcessArgumentBuilder().Append("--foo"), new ProcessSettings(), null);
+            base.ProcessExitCode(exitCode);
+            return;
         }
+        _exitCodeValidation(exitCode);
+    }
 
-        protected override void ProcessExitCode(int exitCode)
-        {
-            if (_exitCodeValidation == null)
-            {
-                base.ProcessExitCode(exitCode);
-                return;
-            }
-            _exitCodeValidation(exitCode);
-        }
+    protected override string GetToolName()
+    {
+        return "dummy";
+    }
 
-        protected override string GetToolName()
-        {
-            return "dummy";
-        }
-
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return new[] { "dummy.exe" };
-        }
+    protected override IEnumerable<string> GetToolExecutableNames()
+    {
+        return new[] { "dummy.exe" };
     }
 }

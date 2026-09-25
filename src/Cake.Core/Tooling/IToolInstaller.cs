@@ -6,18 +6,17 @@ using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
 
-namespace Cake.Core.Tooling
+namespace Cake.Core.Tooling;
+
+/// <summary>
+/// Represents a tool installer.
+/// </summary>
+public interface IToolInstaller
 {
     /// <summary>
-    /// Represents a tool installer.
+    /// Installs a tool using the specified package reference.
     /// </summary>
-    public interface IToolInstaller
-    {
-        /// <summary>
-        /// Installs a tool using the specified package reference.
-        /// </summary>
-        /// <param name="tool">The package reference for the tool to install.</param>
-        /// <returns>An enumerable of file paths where the tool was installed.</returns>
-        IEnumerable<FilePath> Install(PackageReference tool);
-    }
+    /// <param name="tool">The package reference for the tool to install.</param>
+    /// <returns>An enumerable of file paths where the tool was installed.</returns>
+    IEnumerable<FilePath> Install(PackageReference tool);
 }

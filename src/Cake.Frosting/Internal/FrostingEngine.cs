@@ -8,170 +8,169 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.Scripting;
 
-namespace Cake.Frosting.Internal
+namespace Cake.Frosting.Internal;
+
+internal interface IFrostingEngine
 {
-    internal interface IFrostingEngine
+    ExecutionSettings Settings { get; }
+    CakeReport Run(IEnumerable<string> targets);
+}
+
+internal abstract class FrostingEngine<THost> : IFrostingEngine
+    where THost : IScriptHost
+{
+    private readonly List<IFrostingTask> _tasks;
+    private readonly IFrostingContext _context;
+    private readonly ICakeLog _log;
+    private readonly IFrostingSetup _setup;
+    private readonly IFrostingTeardown _teardown;
+    private readonly IFrostingTaskSetup _taskSetup;
+    private readonly IFrostingTaskTeardown _taskTeardown;
+    private readonly THost _host;
+    private readonly ICakeEngine _engine;
+
+    public ExecutionSettings Settings => _host.Settings;
+
+    protected FrostingEngine(
+        THost host,
+        ICakeEngine engine, IFrostingContext context, ICakeLog log,
+        IEnumerable<IFrostingTask> tasks,
+        IFrostingSetup setup = null,
+        IFrostingTeardown teardown = null,
+        IFrostingTaskSetup taskSetup = null,
+        IFrostingTaskTeardown taskTeardown = null)
     {
-        ExecutionSettings Settings { get; }
-        CakeReport Run(IEnumerable<string> targets);
+        _host = host;
+        _engine = engine;
+        _context = context;
+        _log = log;
+        _setup = setup;
+        _teardown = teardown;
+        _taskSetup = taskSetup;
+        _taskTeardown = taskTeardown;
+        _tasks = new List<IFrostingTask>(tasks ?? Array.Empty<IFrostingTask>());
     }
 
-    internal abstract class FrostingEngine<THost> : IFrostingEngine
-        where THost : IScriptHost
+    public CakeReport Run(IEnumerable<string> targets)
     {
-        private readonly List<IFrostingTask> _tasks;
-        private readonly IFrostingContext _context;
-        private readonly ICakeLog _log;
-        private readonly IFrostingSetup _setup;
-        private readonly IFrostingTeardown _teardown;
-        private readonly IFrostingTaskSetup _taskSetup;
-        private readonly IFrostingTaskTeardown _taskTeardown;
-        private readonly THost _host;
-        private readonly ICakeEngine _engine;
+        ConfigureTasks();
+        ConfigureLifetime();
+        ConfigureTaskLifetime();
 
-        public ExecutionSettings Settings => _host.Settings;
+        return _host.RunTargets(targets);
+    }
 
-        protected FrostingEngine(
-            THost host,
-            ICakeEngine engine, IFrostingContext context, ICakeLog log,
-            IEnumerable<IFrostingTask> tasks,
-            IFrostingSetup setup = null,
-            IFrostingTeardown teardown = null,
-            IFrostingTaskSetup taskSetup = null,
-            IFrostingTaskTeardown taskTeardown = null)
+    private void ConfigureTaskLifetime()
+    {
+        if (_taskSetup != null)
         {
-            _host = host;
-            _engine = engine;
-            _context = context;
-            _log = log;
-            _setup = setup;
-            _teardown = teardown;
-            _taskSetup = taskSetup;
-            _taskTeardown = taskTeardown;
-            _tasks = new List<IFrostingTask>(tasks ?? Array.Empty<IFrostingTask>());
+            _log.Debug("Registering task setup: {0}", _taskSetup.GetType().Name);
+            _engine.RegisterTaskSetupAction(info => _taskSetup.Setup(_context, info));
         }
 
-        public CakeReport Run(IEnumerable<string> targets)
+        if (_taskTeardown != null)
         {
-            ConfigureTasks();
-            ConfigureLifetime();
-            ConfigureTaskLifetime();
+            _log.Debug("Registering task setup: {0}", _taskTeardown.GetType().Name);
+            _engine.RegisterTaskTeardownAction(info => _taskTeardown.Teardown(_context, info));
+        }
+    }
 
-            return _host.RunTargets(targets);
+    private void ConfigureLifetime()
+    {
+        if (_setup != null)
+        {
+            _log.Debug("Registering setup: {0}", _setup.GetType().Name);
+            _engine.RegisterSetupAction(info => _setup.Setup(_context, info));
         }
 
-        private void ConfigureTaskLifetime()
+        if (_teardown != null)
         {
-            if (_taskSetup != null)
-            {
-                _log.Debug("Registering task setup: {0}", _taskSetup.GetType().Name);
-                _engine.RegisterTaskSetupAction(info => _taskSetup.Setup(_context, info));
-            }
+            _log.Debug("Registering teardown: {0}", _teardown.GetType().Name);
+            _engine.RegisterTeardownAction(info => _teardown.Teardown(_context, info));
+        }
+    }
 
-            if (_taskTeardown != null)
-            {
-                _log.Debug("Registering task setup: {0}", _taskTeardown.GetType().Name);
-                _engine.RegisterTaskTeardownAction(info => _taskTeardown.Teardown(_context, info));
-            }
+    private void ConfigureTasks()
+    {
+        if (_tasks == null)
+        {
+            return;
         }
 
-        private void ConfigureLifetime()
+        foreach (var task in _tasks)
         {
-            if (_setup != null)
+            var name = task.GetTaskName();
+            _log.Debug("Registering task: {0}", name);
+
+            // Get the task's context type.
+            if (!task.HasCompatibleContext(_context))
             {
-                _log.Debug("Registering setup: {0}", _setup.GetType().Name);
-                _engine.RegisterSetupAction(info => _setup.Setup(_context, info));
+                const string format = "Task cannot be used since the context isn't convertible to {0}.";
+                _log.Warning(format, task.GetContextType().FullName);
             }
-
-            if (_teardown != null)
+            else
             {
-                _log.Debug("Registering teardown: {0}", _teardown.GetType().Name);
-                _engine.RegisterTeardownAction(info => _teardown.Teardown(_context, info));
-            }
-        }
+                // Register task with the Cake engine.
+                var cakeTask = _engine.RegisterTask(name);
 
-        private void ConfigureTasks()
-        {
-            if (_tasks == null)
-            {
-                return;
-            }
-
-            foreach (var task in _tasks)
-            {
-                var name = task.GetTaskName();
-                _log.Debug("Registering task: {0}", name);
-
-                // Get the task's context type.
-                if (!task.HasCompatibleContext(_context))
+                var description = task.GetTaskDescription();
+                if (!string.IsNullOrWhiteSpace(description))
                 {
-                    const string format = "Task cannot be used since the context isn't convertible to {0}.";
-                    _log.Warning(format, task.GetContextType().FullName);
+                    cakeTask.Description(description);
                 }
-                else
+
+                // Is the run method overridden?
+                if (task.IsRunOverridden(_context))
                 {
-                    // Register task with the Cake engine.
-                    var cakeTask = _engine.RegisterTask(name);
+                    cakeTask.Does(task.RunAsync);
+                }
 
-                    var description = task.GetTaskDescription();
-                    if (!string.IsNullOrWhiteSpace(description))
+                // Is the criteria method overridden?
+                if (task.IsShouldRunOverridden(_context))
+                {
+                    cakeTask.WithCriteria(task.ShouldRun, task.SkippedMessage);
+                }
+
+                // Continue on error?
+                if (task.IsContinueOnError())
+                {
+                    cakeTask.ContinueOnError();
+                }
+
+                // Is the on error method overridden?
+                if (task.IsOnErrorOverridden(_context))
+                {
+                    cakeTask.OnError(exception => task.OnError(exception, _context));
+                }
+
+                // Is the finally method overridden?
+                if (task.IsFinallyOverridden(_context))
+                {
+                    cakeTask.Finally(() => task.Finally(_context));
+                }
+
+                // Add dependencies
+                foreach (var dependency in task.GetDependencies())
+                {
+                    var dependencyName = dependency.GetTaskName();
+                    if (!typeof(IFrostingTask).IsAssignableFrom(dependency.Task))
                     {
-                        cakeTask.Description(description);
+                        throw new FrostingException($"The dependency '{dependencyName}' is not a valid task.");
                     }
 
-                    // Is the run method overridden?
-                    if (task.IsRunOverridden(_context))
+                    cakeTask.IsDependentOn(dependencyName);
+                }
+
+                // Add reverse dependencies
+                foreach (var dependee in task.GetReverseDependencies())
+                {
+                    var dependeeName = dependee.GetTaskName();
+                    if (!typeof(IFrostingTask).IsAssignableFrom(dependee.Task))
                     {
-                        cakeTask.Does(task.RunAsync);
+                        throw new FrostingException($"The reverse dependency '{dependeeName}' is not a valid task.");
                     }
 
-                    // Is the criteria method overridden?
-                    if (task.IsShouldRunOverridden(_context))
-                    {
-                        cakeTask.WithCriteria(task.ShouldRun, task.SkippedMessage);
-                    }
-
-                    // Continue on error?
-                    if (task.IsContinueOnError())
-                    {
-                        cakeTask.ContinueOnError();
-                    }
-
-                    // Is the on error method overridden?
-                    if (task.IsOnErrorOverridden(_context))
-                    {
-                        cakeTask.OnError(exception => task.OnError(exception, _context));
-                    }
-
-                    // Is the finally method overridden?
-                    if (task.IsFinallyOverridden(_context))
-                    {
-                        cakeTask.Finally(() => task.Finally(_context));
-                    }
-
-                    // Add dependencies
-                    foreach (var dependency in task.GetDependencies())
-                    {
-                        var dependencyName = dependency.GetTaskName();
-                        if (!typeof(IFrostingTask).IsAssignableFrom(dependency.Task))
-                        {
-                            throw new FrostingException($"The dependency '{dependencyName}' is not a valid task.");
-                        }
-
-                        cakeTask.IsDependentOn(dependencyName);
-                    }
-
-                    // Add reverse dependencies
-                    foreach (var dependee in task.GetReverseDependencies())
-                    {
-                        var dependeeName = dependee.GetTaskName();
-                        if (!typeof(IFrostingTask).IsAssignableFrom(dependee.Task))
-                        {
-                            throw new FrostingException($"The reverse dependency '{dependeeName}' is not a valid task.");
-                        }
-
-                        cakeTask.IsDependeeOf(dependeeName);
-                    }
+                    cakeTask.IsDependeeOf(dependeeName);
                 }
             }
         }

@@ -2,164 +2,161 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using Cake.Common.Build.TeamCity;
 using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core.IO;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.TeamCity
+namespace Cake.Common.Tests.Unit.Build.TeamCity;
+
+public sealed class TeamCityProviderTests
 {
-    public sealed class TeamCityProviderTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Throw_If_Environment_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => new TeamCityProvider(null, null, null));
+            // Given, When
+            var result = Record.Exception(() => new TeamCityProvider(null, null, null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "environment");
-            }
-
-            [Fact]
-            public void Should_Throw_If_FileSystem_Is_Null()
-            {
-                // Given
-                var fixture = new TeamCityFixture();
-
-                // When
-                var result = Record.Exception(() => new TeamCityProvider(fixture.Environment, null, null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "fileSystem");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Writer_Is_Null()
-            {
-                // Given
-                var fixture = new TeamCityFixture();
-
-                // When
-                var result = Record.Exception(() => new TeamCityProvider(fixture.Environment, fixture.FileSystem, null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "writer");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "environment");
         }
 
-        public sealed class TheIsRunningOnTeamCityProperty
+        [Fact]
+        public void Should_Throw_If_FileSystem_Is_Null()
         {
-            [Fact]
-            public void Should_Return_True_If_Running_On_TeamCity()
-            {
-                // Given
-                var fixture = new TeamCityFixture();
-                fixture.IsRunningOnTeamCity();
-                var teamCity = fixture.CreateTeamCityService();
+            // Given
+            var fixture = new TeamCityFixture();
 
-                // When
-                var result = teamCity.IsRunningOnTeamCity;
+            // When
+            var result = Record.Exception(() => new TeamCityProvider(fixture.Environment, null, null));
 
-                // Then
-                Assert.True(result);
-            }
-
-            [Fact]
-            public void Should_Return_False_If_Not_Running_On_TeamCity()
-            {
-                // Given
-                var fixture = new TeamCityFixture();
-                var teamCity = fixture.CreateTeamCityService();
-
-                // When
-                var result = teamCity.IsRunningOnTeamCity;
-
-                // Then
-                Assert.False(result);
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "fileSystem");
         }
 
-        public sealed class TheImportDotCoverCoverageMethod
+        [Fact]
+        public void Should_Throw_If_Writer_Is_Null()
         {
-            [Fact]
-            public void Should_Use_Bundled_DotCover_If_ToolPath_Is_Null()
-            {
-                // Given
-                var fixture = new TeamCityFixture();
-                fixture.IsRunningOnTeamCity();
-                var teamCity = fixture.CreateTeamCityService();
-                var snapshot = new FilePath("/path/to/result.dcvr");
+            // Given
+            var fixture = new TeamCityFixture();
 
-                // When
-                teamCity.ImportDotCoverCoverage(snapshot);
+            // When
+            var result = Record.Exception(() => new TeamCityProvider(fixture.Environment, fixture.FileSystem, null));
 
-                // Then
-                Assert.Equal("##teamcity[dotNetCoverage ]" + Environment.NewLine +
-                    "##teamcity[importData type='dotNetCoverage' tool='dotcover' path='/path/to/result.dcvr']" + Environment.NewLine,
-                    fixture.Writer.GetOutput());
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "writer");
+        }
+    }
 
-            [Fact]
-            public void Should_Use_Provided_DotCover_If_ToolPath_Is_Not_Null()
-            {
-                // Given
-                var fixture = new TeamCityFixture();
-                fixture.IsRunningOnTeamCity();
-                var teamCity = fixture.CreateTeamCityService();
-                var snapshot = new FilePath("/path/to/result.dcvr");
-                var dotCoverHome = new DirectoryPath("/path/to/dotcover_home");
+    public sealed class TheIsRunningOnTeamCityProperty
+    {
+        [Fact]
+        public void Should_Return_True_If_Running_On_TeamCity()
+        {
+            // Given
+            var fixture = new TeamCityFixture();
+            fixture.IsRunningOnTeamCity();
+            var teamCity = fixture.CreateTeamCityService();
 
-                // When
-                teamCity.ImportDotCoverCoverage(snapshot, dotCoverHome);
+            // When
+            var result = teamCity.IsRunningOnTeamCity;
 
-                // Then
-                Assert.Equal("##teamcity[dotNetCoverage dotcover_home='/path/to/dotcover_home']" + Environment.NewLine +
-                    "##teamcity[importData type='dotNetCoverage' tool='dotcover' path='/path/to/result.dcvr']" + Environment.NewLine,
-                    fixture.Writer.GetOutput());
-            }
+            // Then
+            Assert.True(result);
         }
 
-        public sealed class TheSetParameterMethod
+        [Fact]
+        public void Should_Return_False_If_Not_Running_On_TeamCity()
         {
-            [Fact]
-            public void SetParameter_Should_Write_To_The_Log_Correctly()
-            {
-                // Given
-                var fixture = new TeamCityFixture();
-                var teamCity = fixture.CreateTeamCityService();
+            // Given
+            var fixture = new TeamCityFixture();
+            var teamCity = fixture.CreateTeamCityService();
 
-                // When
-                teamCity.SetParameter("internal.artifactVersion", "1.2.3.4");
+            // When
+            var result = teamCity.IsRunningOnTeamCity;
 
-                // Then
-                Assert.Equal("##teamcity[setParameter name='internal.artifactVersion' value='1.2.3.4']" + Environment.NewLine,
-                    fixture.Writer.GetOutput());
-            }
+            // Then
+            Assert.False(result);
+        }
+    }
+
+    public sealed class TheImportDotCoverCoverageMethod
+    {
+        [Fact]
+        public void Should_Use_Bundled_DotCover_If_ToolPath_Is_Null()
+        {
+            // Given
+            var fixture = new TeamCityFixture();
+            fixture.IsRunningOnTeamCity();
+            var teamCity = fixture.CreateTeamCityService();
+            var snapshot = new FilePath("/path/to/result.dcvr");
+
+            // When
+            teamCity.ImportDotCoverCoverage(snapshot);
+
+            // Then
+            Assert.Equal("##teamcity[dotNetCoverage ]" + Environment.NewLine +
+                "##teamcity[importData type='dotNetCoverage' tool='dotcover' path='/path/to/result.dcvr']" + Environment.NewLine,
+                fixture.Writer.GetOutput());
         }
 
-        public sealed class TheBuildProblemMethod
+        [Fact]
+        public void Should_Use_Provided_DotCover_If_ToolPath_Is_Not_Null()
         {
-            [Theory]
-            [InlineData("A build problem", "identity_id", "description='A build problem' identity='identity_id'")]
-            [InlineData("A build problem", "", "description='A build problem'")]
-            [InlineData("A build problem", null, "description='A build problem'")]
-            public void BuildProblem_Should_Write_To_The_Log_Correctly(string description, string identity, string expected)
-            {
-                // Given
-                var fixture = new TeamCityFixture();
-                var teamCity = fixture.CreateTeamCityService();
+            // Given
+            var fixture = new TeamCityFixture();
+            fixture.IsRunningOnTeamCity();
+            var teamCity = fixture.CreateTeamCityService();
+            var snapshot = new FilePath("/path/to/result.dcvr");
+            var dotCoverHome = new DirectoryPath("/path/to/dotcover_home");
 
-                // When
-                teamCity.BuildProblem(description, identity);
+            // When
+            teamCity.ImportDotCoverCoverage(snapshot, dotCoverHome);
 
-                // Then
-                Assert.Equal($"##teamcity[buildProblem {expected}]" + Environment.NewLine,
-                    fixture.Writer.GetOutput());
-            }
+            // Then
+            Assert.Equal("##teamcity[dotNetCoverage dotcover_home='/path/to/dotcover_home']" + Environment.NewLine +
+                "##teamcity[importData type='dotNetCoverage' tool='dotcover' path='/path/to/result.dcvr']" + Environment.NewLine,
+                fixture.Writer.GetOutput());
+        }
+    }
+
+    public sealed class TheSetParameterMethod
+    {
+        [Fact]
+        public void SetParameter_Should_Write_To_The_Log_Correctly()
+        {
+            // Given
+            var fixture = new TeamCityFixture();
+            var teamCity = fixture.CreateTeamCityService();
+
+            // When
+            teamCity.SetParameter("internal.artifactVersion", "1.2.3.4");
+
+            // Then
+            Assert.Equal("##teamcity[setParameter name='internal.artifactVersion' value='1.2.3.4']" + Environment.NewLine,
+                fixture.Writer.GetOutput());
+        }
+    }
+
+    public sealed class TheBuildProblemMethod
+    {
+        [Theory]
+        [InlineData("A build problem", "identity_id", "description='A build problem' identity='identity_id'")]
+        [InlineData("A build problem", "", "description='A build problem'")]
+        [InlineData("A build problem", null, "description='A build problem'")]
+        public void BuildProblem_Should_Write_To_The_Log_Correctly(string description, string identity, string expected)
+        {
+            // Given
+            var fixture = new TeamCityFixture();
+            var teamCity = fixture.CreateTeamCityService();
+
+            // When
+            teamCity.BuildProblem(description, identity);
+
+            // Then
+            Assert.Equal($"##teamcity[buildProblem {expected}]" + Environment.NewLine,
+                fixture.Writer.GetOutput());
         }
     }
 }

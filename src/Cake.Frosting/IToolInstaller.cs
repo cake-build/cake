@@ -4,18 +4,17 @@
 
 using Cake.Core.Packaging;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Represents the tool installer.
+/// </summary>
+public interface IToolInstaller
 {
     /// <summary>
-    /// Represents the tool installer.
+    /// Tries to install the specified <see cref="PackageReference"/> using
+    /// the most suitable <see cref="IPackageInstaller"/>.
     /// </summary>
-    public interface IToolInstaller
-    {
-        /// <summary>
-        /// Tries to install the specified <see cref="PackageReference"/> using
-        /// the most suitable <see cref="IPackageInstaller"/>.
-        /// </summary>
-        /// <param name="tool">Tool to install.</param>
-        void Install(PackageReference tool);
-    }
+    /// <param name="tool">Tool to install.</param>
+    void Install(PackageReference tool);
 }

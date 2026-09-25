@@ -7,28 +7,27 @@ using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Build
+namespace Cake.Common.Tests.Fixtures.Build;
+
+internal sealed class RwxFixture
 {
-    internal sealed class RwxFixture
+    public ICakeEnvironment Environment { get; set; }
+
+    public IFileSystem FileSystem { get; set; }
+
+    public RwxFixture()
     {
-        public ICakeEnvironment Environment { get; set; }
+        Environment = Substitute.For<ICakeEnvironment>();
+        FileSystem = Substitute.For<IFileSystem>();
+    }
 
-        public IFileSystem FileSystem { get; set; }
+    public void IsRunningOnRwx()
+    {
+        Environment.GetEnvironmentVariable("RWX").Returns("true");
+    }
 
-        public RwxFixture()
-        {
-            Environment = Substitute.For<ICakeEnvironment>();
-            FileSystem = Substitute.For<IFileSystem>();
-        }
-
-        public void IsRunningOnRwx()
-        {
-            Environment.GetEnvironmentVariable("RWX").Returns("true");
-        }
-
-        public RwxProvider CreateRwxProvider()
-        {
-            return new RwxProvider(Environment, FileSystem);
-        }
+    public RwxProvider CreateRwxProvider()
+    {
+        return new RwxProvider(Environment, FileSystem);
     }
 }

@@ -8,114 +8,113 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotNet.Workload.Restore
+namespace Cake.Common.Tools.DotNet.Workload.Restore;
+
+/// <summary>
+/// .NET workloads restorer.
+/// </summary>
+public sealed class DotNetWorkloadRestorer : DotNetTool<DotNetWorkloadRestoreSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// .NET workloads restorer.
+    /// Initializes a new instance of the <see cref="DotNetWorkloadRestorer" /> class.
     /// </summary>
-    public sealed class DotNetWorkloadRestorer : DotNetTool<DotNetWorkloadRestoreSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotNetWorkloadRestorer(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetWorkloadRestorer" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public DotNetWorkloadRestorer(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Installs workloads needed for a project or a solution.
+    /// </summary>
+    /// <param name="project">The target project or solution file path.</param>
+    /// <param name="settings">The settings.</param>
+    public void Restore(string project, DotNetWorkloadRestoreSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(project);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        RunCommand(settings, GetArguments(project, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(string project, DotNetWorkloadRestoreSettings settings)
+    {
+        var builder = CreateArgumentBuilder(settings);
+
+        builder.Append("workload restore");
+
+        // Specific path?
+        if (project != null)
         {
-            _environment = environment;
+            builder.AppendQuoted(project);
         }
 
-        /// <summary>
-        /// Installs workloads needed for a project or a solution.
-        /// </summary>
-        /// <param name="project">The target project or solution file path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Restore(string project, DotNetWorkloadRestoreSettings settings)
+        // Config File
+        if (settings.ConfigFile != null)
         {
-            ArgumentNullException.ThrowIfNull(project);
-            ArgumentNullException.ThrowIfNull(settings);
-
-            RunCommand(settings, GetArguments(project, settings));
+            builder.AppendSwitchQuoted("--configfile", settings.ConfigFile.MakeAbsolute(_environment).FullPath);
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, DotNetWorkloadRestoreSettings settings)
+        // Disable Parallel
+        if (settings.DisableParallel)
         {
-            var builder = CreateArgumentBuilder(settings);
-
-            builder.Append("workload restore");
-
-            // Specific path?
-            if (project != null)
-            {
-                builder.AppendQuoted(project);
-            }
-
-            // Config File
-            if (settings.ConfigFile != null)
-            {
-                builder.AppendSwitchQuoted("--configfile", settings.ConfigFile.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Disable Parallel
-            if (settings.DisableParallel)
-            {
-                builder.Append("--disable-parallel");
-            }
-
-            // Ignore Failed Sources
-            if (settings.IgnoreFailedSources)
-            {
-                builder.Append("--ignore-failed-sources");
-            }
-
-            // Include Previews
-            if (settings.IncludePreviews)
-            {
-                builder.Append("--include-previews");
-            }
-
-            // Interactive
-            if (settings.Interactive)
-            {
-                builder.Append("--interactive");
-            }
-
-            // No Cache
-            if (settings.NoCache)
-            {
-                builder.Append("--no-cache");
-            }
-
-            // Skip Manifest Update
-            if (settings.SkipManifestUpdate)
-            {
-                builder.Append("--skip-manifest-update");
-            }
-
-            // Source
-            if (settings.Source != null && settings.Source.Any())
-            {
-                foreach (var source in settings.Source)
-                {
-                    builder.AppendSwitchQuoted("--source", source);
-                }
-            }
-
-            // Temp Dir
-            if (settings.TempDir != null)
-            {
-                builder.AppendSwitchQuoted("--temp-dir", settings.TempDir.MakeAbsolute(_environment).FullPath);
-            }
-
-            return builder;
+            builder.Append("--disable-parallel");
         }
+
+        // Ignore Failed Sources
+        if (settings.IgnoreFailedSources)
+        {
+            builder.Append("--ignore-failed-sources");
+        }
+
+        // Include Previews
+        if (settings.IncludePreviews)
+        {
+            builder.Append("--include-previews");
+        }
+
+        // Interactive
+        if (settings.Interactive)
+        {
+            builder.Append("--interactive");
+        }
+
+        // No Cache
+        if (settings.NoCache)
+        {
+            builder.Append("--no-cache");
+        }
+
+        // Skip Manifest Update
+        if (settings.SkipManifestUpdate)
+        {
+            builder.Append("--skip-manifest-update");
+        }
+
+        // Source
+        if (settings.Source != null && settings.Source.Any())
+        {
+            foreach (var source in settings.Source)
+            {
+                builder.AppendSwitchQuoted("--source", source);
+            }
+        }
+
+        // Temp Dir
+        if (settings.TempDir != null)
+        {
+            builder.AppendSwitchQuoted("--temp-dir", settings.TempDir.MakeAbsolute(_environment).FullPath);
+        }
+
+        return builder;
     }
 }

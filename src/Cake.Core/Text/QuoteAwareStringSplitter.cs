@@ -6,81 +6,80 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Cake.Core.Text
+namespace Cake.Core.Text;
+
+/// <summary>
+/// Utility that that respect quotes when splitting a string.
+/// </summary>
+public static class QuoteAwareStringSplitter
 {
     /// <summary>
-    /// Utility that that respect quotes when splitting a string.
+    /// Splits the provided string on spaces while respecting quoted strings.
     /// </summary>
-    public static class QuoteAwareStringSplitter
+    /// <param name="text">The string to split.</param>
+    /// <returns>The split, individual parts.</returns>
+    public static IEnumerable<string> Split(string text)
     {
-        /// <summary>
-        /// Splits the provided string on spaces while respecting quoted strings.
-        /// </summary>
-        /// <param name="text">The string to split.</param>
-        /// <returns>The split, individual parts.</returns>
-        public static IEnumerable<string> Split(string text)
-        {
-            return Split(new StringReader(text));
-        }
+        return Split(new StringReader(text));
+    }
 
-        private static IEnumerable<string> Split(StringReader reader)
+    private static IEnumerable<string> Split(StringReader reader)
+    {
+        while (reader.Peek() != -1)
         {
-            while (reader.Peek() != -1)
+            var character = (char)reader.Peek();
+            switch (character)
             {
-                var character = (char)reader.Peek();
-                switch (character)
-                {
-                    case '\"':
-                        yield return ReadQuote(reader);
-                        break;
-                    case ' ':
-                        reader.Read();
-                        break;
-                    default:
-                        yield return Read(reader);
-                        break;
-                }
-            }
-        }
-
-        private static string ReadQuote(StringReader reader)
-        {
-            var accumulator = new StringBuilder();
-            accumulator.Append((char)reader.Read());
-            while (reader.Peek() != -1)
-            {
-                var character = (char)reader.Peek();
-                if (character == '\"')
-                {
-                    accumulator.Append((char)reader.Read());
+                case '\"':
+                    yield return ReadQuote(reader);
                     break;
-                }
-                reader.Read();
-                accumulator.Append(character);
-            }
-            return accumulator.ToString();
-        }
-
-        private static string Read(StringReader reader)
-        {
-            var accumulator = new StringBuilder();
-            accumulator.Append((char)reader.Read());
-            while (reader.Peek() != -1)
-            {
-                if ((char)reader.Peek() == '\"')
-                {
-                    accumulator.Append(ReadQuote(reader));
-                }
-                else if ((char)reader.Peek() == ' ')
-                {
+                case ' ':
+                    reader.Read();
                     break;
-                }
-                else
-                {
-                    accumulator.Append((char)reader.Read());
-                }
+                default:
+                    yield return Read(reader);
+                    break;
             }
-            return accumulator.ToString();
         }
+    }
+
+    private static string ReadQuote(StringReader reader)
+    {
+        var accumulator = new StringBuilder();
+        accumulator.Append((char)reader.Read());
+        while (reader.Peek() != -1)
+        {
+            var character = (char)reader.Peek();
+            if (character == '\"')
+            {
+                accumulator.Append((char)reader.Read());
+                break;
+            }
+            reader.Read();
+            accumulator.Append(character);
+        }
+        return accumulator.ToString();
+    }
+
+    private static string Read(StringReader reader)
+    {
+        var accumulator = new StringBuilder();
+        accumulator.Append((char)reader.Read());
+        while (reader.Peek() != -1)
+        {
+            if ((char)reader.Peek() == '\"')
+            {
+                accumulator.Append(ReadQuote(reader));
+            }
+            else if ((char)reader.Peek() == ' ')
+            {
+                break;
+            }
+            else
+            {
+                accumulator.Append((char)reader.Read());
+            }
+        }
+        return accumulator.ToString();
     }
 }

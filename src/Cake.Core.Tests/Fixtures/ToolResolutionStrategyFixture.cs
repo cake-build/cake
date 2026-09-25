@@ -8,35 +8,34 @@ using Cake.Core.IO;
 using Cake.Core.Tooling;
 using Cake.Testing;
 
-namespace Cake.Core.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures;
+
+internal sealed class ToolResolutionStrategyFixture
 {
-    internal sealed class ToolResolutionStrategyFixture
+    public FakeFileSystem FileSystem { get; set; }
+    public FakeEnvironment Environment { get; set; }
+    public IGlobber Globber { get; set; }
+    public FakeConfiguration Configuration { get; set; }
+    public IToolRepository Repository { get; set; }
+
+    public ToolResolutionStrategyFixture(FakeEnvironment environment = null)
     {
-        public FakeFileSystem FileSystem { get; set; }
-        public FakeEnvironment Environment { get; set; }
-        public IGlobber Globber { get; set; }
-        public FakeConfiguration Configuration { get; set; }
-        public IToolRepository Repository { get; set; }
+        Environment = environment ?? FakeEnvironment.CreateUnixEnvironment();
+        FileSystem = new FakeFileSystem(Environment);
+        Globber = new Globber(FileSystem, Environment);
+        Configuration = new FakeConfiguration();
+        Repository = new ToolRepository(Environment);
+    }
 
-        public ToolResolutionStrategyFixture(FakeEnvironment environment = null)
-        {
-            Environment = environment ?? FakeEnvironment.CreateUnixEnvironment();
-            FileSystem = new FakeFileSystem(Environment);
-            Globber = new Globber(FileSystem, Environment);
-            Configuration = new FakeConfiguration();
-            Repository = new ToolRepository(Environment);
-        }
+    public FilePath Resolve(string name)
+    {
+        var strategy = new ToolResolutionStrategy(FileSystem, Environment, Globber, Configuration, new NullLog());
+        return strategy.Resolve(Repository, name);
+    }
 
-        public FilePath Resolve(string name)
-        {
-            var strategy = new ToolResolutionStrategy(FileSystem, Environment, Globber, Configuration, new NullLog());
-            return strategy.Resolve(Repository, name);
-        }
-
-        public FilePath Resolve(IEnumerable<string> toolExeNames)
-        {
-            var strategy = new ToolResolutionStrategy(FileSystem, Environment, Globber, Configuration, new NullLog());
-            return strategy.Resolve(Repository, toolExeNames);
-        }
+    public FilePath Resolve(IEnumerable<string> toolExeNames)
+    {
+        var strategy = new ToolResolutionStrategy(FileSystem, Environment, Globber, Configuration, new NullLog());
+        return strategy.Resolve(Repository, toolExeNames);
     }
 }

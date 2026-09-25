@@ -5,27 +5,26 @@
 using System;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.DotCover
+namespace Cake.Common.Tools.DotCover;
+
+/// <summary>
+/// Contains extensions for <see cref="DotCoverSettings"/>.
+/// </summary>
+public static class DotCoverSettingsExtensions
 {
     /// <summary>
-    /// Contains extensions for <see cref="DotCoverSettings"/>.
+    /// Adds the scope.
     /// </summary>
-    public static class DotCoverSettingsExtensions
+    /// <param name="settings">The settings.</param>
+    /// <param name="configFile">The DotCover configuration file.</param>
+    /// <typeparam name="T">The settings type, derived from <see cref="DotCoverSettings"/>.</typeparam>
+    /// <returns>The same <see cref="DotCoverSettings"/> instance so that multiple calls can be chained.</returns>
+    public static T WithConfigFile<T>(this T settings, FilePath configFile)
+        where T : DotCoverSettings
     {
-        /// <summary>
-        /// Adds the scope.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <param name="configFile">The DotCover configuration file.</param>
-        /// <typeparam name="T">The settings type, derived from <see cref="DotCoverSettings"/>.</typeparam>
-        /// <returns>The same <see cref="DotCoverSettings"/> instance so that multiple calls can be chained.</returns>
-        public static T WithConfigFile<T>(this T settings, FilePath configFile)
-            where T : DotCoverSettings
-        {
-            ArgumentNullException.ThrowIfNull(settings);
+        ArgumentNullException.ThrowIfNull(settings);
 
-            settings.ConfigFile = configFile;
-            return settings;
-        }
+        settings.ConfigFile = configFile;
+        return settings;
     }
 }

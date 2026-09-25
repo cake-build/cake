@@ -8,29 +8,28 @@ using Cake.Core.Text;
 using Cake.Testing;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures
+namespace Cake.Common.Tests.Fixtures;
+
+internal sealed class TextTransformationFixture
 {
-    internal sealed class TextTransformationFixture
+    public FakeFileSystem FileSystem { get; set; }
+    public ICakeEnvironment Environment { get; set; }
+    public ITextTransformationTemplate TransformationTemplate { get; set; }
+
+    public TextTransformationFixture()
     {
-        public FakeFileSystem FileSystem { get; set; }
-        public ICakeEnvironment Environment { get; set; }
-        public ITextTransformationTemplate TransformationTemplate { get; set; }
+        Environment = Substitute.For<ICakeEnvironment>();
+        Environment.WorkingDirectory.Returns("/Working");
 
-        public TextTransformationFixture()
-        {
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.WorkingDirectory.Returns("/Working");
+        FileSystem = new FakeFileSystem(Environment);
+        FileSystem.CreateDirectory(Environment.WorkingDirectory);
 
-            FileSystem = new FakeFileSystem(Environment);
-            FileSystem.CreateDirectory(Environment.WorkingDirectory);
+        TransformationTemplate = Substitute.For<ITextTransformationTemplate>();
+    }
 
-            TransformationTemplate = Substitute.For<ITextTransformationTemplate>();
-        }
-
-        public TextTransformation<ITextTransformationTemplate> CreateTextTransformation()
-        {
-            return new TextTransformation<ITextTransformationTemplate>(
-                FileSystem, Environment, TransformationTemplate);
-        }
+    public TextTransformation<ITextTransformationTemplate> CreateTextTransformation()
+    {
+        return new TextTransformation<ITextTransformationTemplate>(
+            FileSystem, Environment, TransformationTemplate);
     }
 }

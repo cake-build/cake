@@ -6,30 +6,29 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Cake.Common.Tools.OpenCover
+namespace Cake.Common.Tools.OpenCover;
+
+/// <summary>
+/// Extensions class for <see cref="OpenCoverHideSkippedOption"/>.
+/// </summary>
+public static class OpenCoverHideSkippedOptionExtensions
 {
     /// <summary>
-    /// Extensions class for <see cref="OpenCoverHideSkippedOption"/>.
+    /// Get flags.
     /// </summary>
-    public static class OpenCoverHideSkippedOptionExtensions
+    /// <param name="openCoverHideSkippedOption">
+    /// The input.
+    /// </param>
+    /// <returns>
+    /// The <see cref="IEnumerable"/>.
+    /// </returns>
+    public static IEnumerable<OpenCoverHideSkippedOption> GetFlags(this OpenCoverHideSkippedOption openCoverHideSkippedOption)
     {
-        /// <summary>
-        /// Get flags.
-        /// </summary>
-        /// <param name="openCoverHideSkippedOption">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        public static IEnumerable<OpenCoverHideSkippedOption> GetFlags(this OpenCoverHideSkippedOption openCoverHideSkippedOption)
+        foreach (OpenCoverHideSkippedOption value in Enum.GetValues(openCoverHideSkippedOption.GetType()))
         {
-            foreach (OpenCoverHideSkippedOption value in Enum.GetValues(openCoverHideSkippedOption.GetType()))
+            if (openCoverHideSkippedOption.HasFlag(value))
             {
-                if (openCoverHideSkippedOption.HasFlag(value))
-                {
-                    yield return value;
-                }
+                yield return value;
             }
         }
     }

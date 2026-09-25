@@ -4,27 +4,26 @@
 
 using System;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Represents a task description.
+/// </summary>
+/// <seealso cref="Attribute" />
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+public sealed class TaskDescriptionAttribute : Attribute
 {
     /// <summary>
-    /// Represents a task description.
+    /// Gets the task description.
     /// </summary>
-    /// <seealso cref="Attribute" />
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public sealed class TaskDescriptionAttribute : Attribute
-    {
-        /// <summary>
-        /// Gets the task description.
-        /// </summary>
-        public string Description { get; }
+    public string Description { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDescriptionAttribute"/> class.
-        /// </summary>
-        /// <param name="description">The task description.</param>
-        public TaskDescriptionAttribute(string description)
-        {
-            Description = description;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TaskDescriptionAttribute"/> class.
+    /// </summary>
+    /// <param name="description">The task description.</param>
+    public TaskDescriptionAttribute(string description)
+    {
+        Description = description;
     }
 }

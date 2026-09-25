@@ -16,149 +16,148 @@ using Cake.Infrastructure.Composition;
 using Cake.Infrastructure.Scripting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cake.Features.Building
+namespace Cake.Features.Building;
+
+/// <summary>
+/// Represents a feature for building Cake scripts.
+/// </summary>
+public interface IBuildFeature
 {
     /// <summary>
-    /// Represents a feature for building Cake scripts.
+    /// Runs the build feature with the specified arguments and settings.
     /// </summary>
-    public interface IBuildFeature
+    /// <param name="arguments">The Cake arguments.</param>
+    /// <param name="settings">The build feature settings.</param>
+    /// <returns>The exit code.</returns>
+    int Run(ICakeArguments arguments, BuildFeatureSettings settings);
+}
+
+/// <summary>
+/// Represents a feature for building Cake scripts.
+/// </summary>
+public sealed class BuildFeature : Feature, IBuildFeature
+{
+    private readonly ICakeEnvironment _environment;
+    private readonly IModuleSearcher _searcher;
+    private readonly ICakeLog _log;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BuildFeature"/> class.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The Cake environment.</param>
+    /// <param name="configurator">The container configurator.</param>
+    /// <param name="searcher">The module searcher.</param>
+    /// <param name="log">The log.</param>
+    public BuildFeature(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IContainerConfigurator configurator,
+        IModuleSearcher searcher,
+        ICakeLog log) : base(fileSystem, environment, configurator)
     {
-        /// <summary>
-        /// Runs the build feature with the specified arguments and settings.
-        /// </summary>
-        /// <param name="arguments">The Cake arguments.</param>
-        /// <param name="settings">The build feature settings.</param>
-        /// <returns>The exit code.</returns>
-        int Run(ICakeArguments arguments, BuildFeatureSettings settings);
+        _environment = environment;
+        _searcher = searcher;
+        _log = log;
     }
 
     /// <summary>
-    /// Represents a feature for building Cake scripts.
+    /// Runs the build feature with the specified arguments and settings.
     /// </summary>
-    public sealed class BuildFeature : Feature, IBuildFeature
+    /// <param name="arguments">The Cake arguments.</param>
+    /// <param name="settings">The build feature settings.</param>
+    /// <returns>The exit code.</returns>
+    public int Run(ICakeArguments arguments, BuildFeatureSettings settings)
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly IModuleSearcher _searcher;
-        private readonly ICakeLog _log;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BuildFeature"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The Cake environment.</param>
-        /// <param name="configurator">The container configurator.</param>
-        /// <param name="searcher">The module searcher.</param>
-        /// <param name="log">The log.</param>
-        public BuildFeature(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IContainerConfigurator configurator,
-            IModuleSearcher searcher,
-            ICakeLog log) : base(fileSystem, environment, configurator)
+        using (new ScriptAssemblyResolver(_environment, _log))
         {
-            _environment = environment;
-            _searcher = searcher;
-            _log = log;
+            return RunCore(arguments, settings);
+        }
+    }
+
+    private int RunCore(ICakeArguments arguments, BuildFeatureSettings settings)
+    {
+        // Fix the script path.
+        settings.Script = settings.Script ?? new FilePath("build.cake");
+        settings.Script = settings.Script.MakeAbsolute(_environment);
+
+        // Read the configuration.
+        var configuration = ReadConfiguration(arguments, settings.Script.GetDirectory());
+
+        // Set log verbosity.
+        var verbosity = configuration.GetVerbosity(settings.Verbosity);
+        _log.Verbosity = verbosity;
+
+        // Define the callback for modifying the scope.
+        void ModifyScope(ICakeContainerRegistrar registrar)
+        {
+            LoadModules(registrar);
+            registrar.RegisterInstance(settings).As<IScriptHostSettings>();
         }
 
-        /// <summary>
-        /// Runs the build feature with the specified arguments and settings.
-        /// </summary>
-        /// <param name="arguments">The Cake arguments.</param>
-        /// <param name="settings">The build feature settings.</param>
-        /// <returns>The exit code.</returns>
-        public int Run(ICakeArguments arguments, BuildFeatureSettings settings)
+        // Define a local method for loading modules into a registrar.
+        void LoadModules(ICakeContainerRegistrar registrar)
         {
-            using (new ScriptAssemblyResolver(_environment, _log))
+            var root = settings.Script.GetDirectory();
+            var moduleTypes = _searcher.FindModuleTypes(root, configuration).ToArray();
+            if (moduleTypes.Length > 0)
             {
-                return RunCore(arguments, settings);
-            }
-        }
-
-        private int RunCore(ICakeArguments arguments, BuildFeatureSettings settings)
-        {
-            // Fix the script path.
-            settings.Script = settings.Script ?? new FilePath("build.cake");
-            settings.Script = settings.Script.MakeAbsolute(_environment);
-
-            // Read the configuration.
-            var configuration = ReadConfiguration(arguments, settings.Script.GetDirectory());
-
-            // Set log verbosity.
-            var verbosity = configuration.GetVerbosity(settings.Verbosity);
-            _log.Verbosity = verbosity;
-
-            // Define the callback for modifying the scope.
-            void ModifyScope(ICakeContainerRegistrar registrar)
-            {
-                LoadModules(registrar);
-                registrar.RegisterInstance(settings).As<IScriptHostSettings>();
-            }
-
-            // Define a local method for loading modules into a registrar.
-            void LoadModules(ICakeContainerRegistrar registrar)
-            {
-                var root = settings.Script.GetDirectory();
-                var moduleTypes = _searcher.FindModuleTypes(root, configuration).ToArray();
-                if (moduleTypes.Length > 0)
+                using (var scope = CreateScope(configuration, arguments))
                 {
-                    using (var scope = CreateScope(configuration, arguments))
-                    {
-                        var loader = new ModuleLoader(scope);
-                        var modules = loader.LoadModules(moduleTypes);
+                    var loader = new ModuleLoader(scope);
+                    var modules = loader.LoadModules(moduleTypes);
 
-                        foreach (var module in modules)
-                        {
-                            module.Register(registrar);
-                        }
+                    foreach (var module in modules)
+                    {
+                        module.Register(registrar);
                     }
                 }
             }
-
-            // Create the scope where we're going to execute the script.
-            using (var scope = CreateScope(configuration, arguments, ModifyScope))
-            {
-                var runner = scope.GetRequiredService<IScriptRunner>();
-
-                // Set log verbosity for log in new scope.
-                var log = scope.GetRequiredService<ICakeLog>();
-                log.Verbosity = verbosity;
-
-                // Create the script host.
-                var host = CreateScriptHost(settings, scope);
-                if (settings.Exclusive)
-                {
-                    host.Settings.UseExclusiveTarget();
-                }
-
-                // Debug?
-                if (settings.Debug)
-                {
-                    var debugger = scope.GetRequiredService<ICakeDebugger>();
-                    debugger.WaitForAttach(Timeout.InfiniteTimeSpan);
-                }
-
-                runner.Run(host, settings.Script);
-            }
-
-            return 0;
         }
 
-        private ScriptHost CreateScriptHost(BuildFeatureSettings settings, IServiceProvider scope)
+        // Create the scope where we're going to execute the script.
+        using (var scope = CreateScope(configuration, arguments, ModifyScope))
         {
-            switch (settings.BuildHostKind)
+            var runner = scope.GetRequiredService<IScriptRunner>();
+
+            // Set log verbosity for log in new scope.
+            var log = scope.GetRequiredService<ICakeLog>();
+            log.Verbosity = verbosity;
+
+            // Create the script host.
+            var host = CreateScriptHost(settings, scope);
+            if (settings.Exclusive)
             {
-                case BuildHostKind.Build:
-                    return scope.GetRequiredService<BuildScriptHost>();
-                case BuildHostKind.DryRun:
-                    return scope.GetRequiredService<DryRunScriptHost>();
-                case BuildHostKind.Tree:
-                    return scope.GetRequiredService<TreeScriptHost>();
-                case BuildHostKind.Description:
-                    return scope.GetRequiredService<DescriptionScriptHost>();
+                host.Settings.UseExclusiveTarget();
             }
 
-            throw new NotSupportedException($"Specified script host not supported.");
+            // Debug?
+            if (settings.Debug)
+            {
+                var debugger = scope.GetRequiredService<ICakeDebugger>();
+                debugger.WaitForAttach(Timeout.InfiniteTimeSpan);
+            }
+
+            runner.Run(host, settings.Script);
         }
+
+        return 0;
+    }
+
+    private ScriptHost CreateScriptHost(BuildFeatureSettings settings, IServiceProvider scope)
+    {
+        switch (settings.BuildHostKind)
+        {
+            case BuildHostKind.Build:
+                return scope.GetRequiredService<BuildScriptHost>();
+            case BuildHostKind.DryRun:
+                return scope.GetRequiredService<DryRunScriptHost>();
+            case BuildHostKind.Tree:
+                return scope.GetRequiredService<TreeScriptHost>();
+            case BuildHostKind.Description:
+                return scope.GetRequiredService<DescriptionScriptHost>();
+        }
+
+        throw new NotSupportedException($"Specified script host not supported.");
     }
 }

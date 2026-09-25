@@ -2,18 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Core.IO.Globbing.Nodes.Segments
+namespace Cake.Core.IO.Globbing.Nodes.Segments;
+
+internal sealed class BraceExpansionSegment : PathSegment
 {
-    internal sealed class BraceExpansionSegment : PathSegment
+    public override string Value { get; }
+
+    public override string Regex { get; }
+
+    public BraceExpansionSegment(string value)
     {
-        public override string Value { get; }
-
-        public override string Regex { get; }
-
-        public BraceExpansionSegment(string value)
-        {
-            Value = $"{{{value}}}";
-            Regex = $"({value})".Replace(",", "|");
-        }
+        Value = $"{{{value}}}";
+        Regex = $"({value})".Replace(",", "|");
     }
 }

@@ -5,35 +5,34 @@
 using System;
 using Cake.Core;
 
-namespace Cake.Common.Build.Jenkins.Data
+namespace Cake.Common.Build.Jenkins.Data;
+
+/// <summary>
+/// Provides Jenkins node information for a current build.
+/// </summary>
+public class JenkinsNodeInfo : JenkinsInfo
 {
     /// <summary>
-    /// Provides Jenkins node information for a current build.
+    /// Gets the name of the node.
     /// </summary>
-    public class JenkinsNodeInfo : JenkinsInfo
+    /// <value>
+    /// The name of the node.
+    /// </value>
+    public string NodeName => GetEnvironmentString("NODE_NAME");
+
+    /// <summary>
+    /// Gets the node labels.
+    /// </summary>
+    /// <value>
+    /// The node labels.
+    /// </value>
+    public string[] NodeLabels => GetEnvironmentString("NODE_LABELS").Split([" "], StringSplitOptions.RemoveEmptyEntries);
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="JenkinsNodeInfo"/> class.
+    /// </summary>
+    /// <param name="environment">The environment.</param>
+    public JenkinsNodeInfo(ICakeEnvironment environment) : base(environment)
     {
-        /// <summary>
-        /// Gets the name of the node.
-        /// </summary>
-        /// <value>
-        /// The name of the node.
-        /// </value>
-        public string NodeName => GetEnvironmentString("NODE_NAME");
-
-        /// <summary>
-        /// Gets the node labels.
-        /// </summary>
-        /// <value>
-        /// The node labels.
-        /// </value>
-        public string[] NodeLabels => GetEnvironmentString("NODE_LABELS").Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JenkinsNodeInfo"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public JenkinsNodeInfo(ICakeEnvironment environment) : base(environment)
-        {
-        }
     }
 }

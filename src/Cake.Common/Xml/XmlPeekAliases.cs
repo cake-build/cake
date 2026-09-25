@@ -10,135 +10,134 @@ using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common.Xml
+namespace Cake.Common.Xml;
+
+/// <summary>
+/// Contains functionality related to XML XPath queries.
+/// </summary>
+[CakeAliasCategory("XML")]
+public static class XmlPeekAliases
 {
     /// <summary>
-    /// Contains functionality related to XML XPath queries.
+    /// Gets the value of a target node.
     /// </summary>
-    [CakeAliasCategory("XML")]
-    public static class XmlPeekAliases
+    /// <returns>The value found at the given XPath query.</returns>
+    /// <param name="context">The context.</param>
+    /// <param name="filePath">The target file.</param>
+    /// <param name="xpath">The xpath of the node to get.</param>
+    /// <example>
+    /// <code>
+    /// string autoFacVersion = XmlPeek("./src/Cake/packages.config", "/packages/package[@id='Autofac']/@version");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    public static string XmlPeek(this ICakeContext context, FilePath filePath, string xpath)
     {
-        /// <summary>
-        /// Gets the value of a target node.
-        /// </summary>
-        /// <returns>The value found at the given XPath query.</returns>
-        /// <param name="context">The context.</param>
-        /// <param name="filePath">The target file.</param>
-        /// <param name="xpath">The xpath of the node to get.</param>
-        /// <example>
-        /// <code>
-        /// string autoFacVersion = XmlPeek("./src/Cake/packages.config", "/packages/package[@id='Autofac']/@version");
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        public static string XmlPeek(this ICakeContext context, FilePath filePath, string xpath)
+        return context.XmlPeek(filePath, xpath, new XmlPeekSettings());
+    }
+
+    /// <summary>
+    /// Get the value of a target node.
+    /// </summary>
+    /// <returns>The value found at the given XPath query.</returns>
+    /// <param name="context">The context.</param>
+    /// <param name="filePath">The target file.</param>
+    /// <param name="xpath">The xpath of the nodes to set.</param>
+    /// <param name="settings">Additional settings to tweak Xml Peek behavior.</param>
+    /// <example>
+    /// <code>
+    /// <para>XML document:</para>
+    /// <![CDATA[
+    /// <?xml version="1.0" encoding="UTF-8"?>
+    /// <pastery xmlns = "https://cakebuild.net/pastery" >
+    ///     <cake price="1.62" />
+    /// </pastery>
+    /// ]]>
+    /// </code>
+    /// <para>XmlPeek usage:</para>
+    /// <code>
+    /// string version = XmlPeek("./pastry.xml", "/pastry:pastry/pastry:cake/@price",
+    ///     new XmlPeekSettings {
+    ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastry", "https://cakebuild.net/pastry" }}
+    ///     });
+    /// string unknown = XmlPeek("./pastry.xml", "/pastry:pastry/pastry:cake/@recipe",
+    ///     new XmlPeekSettings {
+    ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastry", "https://cakebuild.net/pastry" }},
+    ///         SuppressWarning = true
+    ///     });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+    public static string XmlPeek(this ICakeContext context, FilePath filePath, string xpath, XmlPeekSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        ArgumentNullException.ThrowIfNull(filePath);
+
+        ArgumentNullException.ThrowIfNull(settings);
+
+        var file = context.FileSystem.GetFile(filePath);
+        if (!file.Exists)
         {
-            return context.XmlPeek(filePath, xpath, new XmlPeekSettings());
+            throw new FileNotFoundException("Source File not found.", file.Path.FullPath);
         }
 
-        /// <summary>
-        /// Get the value of a target node.
-        /// </summary>
-        /// <returns>The value found at the given XPath query.</returns>
-        /// <param name="context">The context.</param>
-        /// <param name="filePath">The target file.</param>
-        /// <param name="xpath">The xpath of the nodes to set.</param>
-        /// <param name="settings">Additional settings to tweak Xml Peek behavior.</param>
-        /// <example>
-        /// <code>
-        /// <para>XML document:</para>
-        /// <![CDATA[
-        /// <?xml version="1.0" encoding="UTF-8"?>
-        /// <pastery xmlns = "https://cakebuild.net/pastery" >
-        ///     <cake price="1.62" />
-        /// </pastery>
-        /// ]]>
-        /// </code>
-        /// <para>XmlPeek usage:</para>
-        /// <code>
-        /// string version = XmlPeek("./pastry.xml", "/pastry:pastry/pastry:cake/@price",
-        ///     new XmlPeekSettings {
-        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastry", "https://cakebuild.net/pastry" }}
-        ///     });
-        /// string unknown = XmlPeek("./pastry.xml", "/pastry:pastry/pastry:cake/@recipe",
-        ///     new XmlPeekSettings {
-        ///         Namespaces = new Dictionary&lt;string, string&gt; {{ "pastry", "https://cakebuild.net/pastry" }},
-        ///         SuppressWarning = true
-        ///     });
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public static string XmlPeek(this ICakeContext context, FilePath filePath, string xpath, XmlPeekSettings settings)
+        using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
+        using (var xmlReader = XmlReader.Create(fileStream, GetXmlReaderSettings(settings)))
         {
-            ArgumentNullException.ThrowIfNull(context);
-
-            ArgumentNullException.ThrowIfNull(filePath);
-
-            ArgumentNullException.ThrowIfNull(settings);
-
-            var file = context.FileSystem.GetFile(filePath);
-            if (!file.Exists)
+            var xmlValue = XmlPeek(xmlReader, xpath, settings);
+            if (xmlValue == null && !settings.SuppressWarning)
             {
-                throw new FileNotFoundException("Source File not found.", file.Path.FullPath);
+                context.Log.Warning("Warning: Failed to find node matching the XPath '{0}'", xpath);
             }
+            return xmlValue;
+        }
+    }
 
-            using (var fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var xmlReader = XmlReader.Create(fileStream, GetXmlReaderSettings(settings)))
-            {
-                var xmlValue = XmlPeek(xmlReader, xpath, settings);
-                if (xmlValue == null && !settings.SuppressWarning)
-                {
-                    context.Log.Warning("Warning: Failed to find node matching the XPath '{0}'", xpath);
-                }
-                return xmlValue;
-            }
+    /// <summary>
+    /// Gets the value of a target node.
+    /// </summary>
+    /// <returns>The value found at the given XPath query (or the first, if multiple eligible nodes are found).</returns>
+    /// <param name="source">The source xml to transform.</param>
+    /// <param name="xpath">The xpath of the nodes to set.</param>
+    /// <param name="settings">Additional settings to tweak Xml Peek behavior.</param>
+    private static string XmlPeek(XmlReader source, string xpath, XmlPeekSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+
+        if (string.IsNullOrWhiteSpace(xpath))
+        {
+            throw new ArgumentNullException(nameof(xpath));
         }
 
-        /// <summary>
-        /// Gets the value of a target node.
-        /// </summary>
-        /// <returns>The value found at the given XPath query (or the first, if multiple eligible nodes are found).</returns>
-        /// <param name="source">The source xml to transform.</param>
-        /// <param name="xpath">The xpath of the nodes to set.</param>
-        /// <param name="settings">Additional settings to tweak Xml Peek behavior.</param>
-        private static string XmlPeek(XmlReader source, string xpath, XmlPeekSettings settings)
+        ArgumentNullException.ThrowIfNull(settings);
+
+        var document = new XmlDocument();
+        document.PreserveWhitespace = settings.PreserveWhitespace;
+        document.Load(source);
+
+        var navigator = document.CreateNavigator();
+        var namespaceManager = new XmlNamespaceManager(navigator.NameTable);
+
+        foreach (var xmlNamespace in settings.Namespaces)
         {
-            ArgumentNullException.ThrowIfNull(source);
-
-            if (string.IsNullOrWhiteSpace(xpath))
-            {
-                throw new ArgumentNullException(nameof(xpath));
-            }
-
-            ArgumentNullException.ThrowIfNull(settings);
-
-            var document = new XmlDocument();
-            document.PreserveWhitespace = settings.PreserveWhitespace;
-            document.Load(source);
-
-            var navigator = document.CreateNavigator();
-            var namespaceManager = new XmlNamespaceManager(navigator.NameTable);
-
-            foreach (var xmlNamespace in settings.Namespaces)
-            {
-                namespaceManager.AddNamespace(xmlNamespace.Key /* Prefix */, xmlNamespace.Value /* URI */);
-            }
-
-            var node = navigator.SelectSingleNode(xpath, namespaceManager);
-            return node?.Value;
+            namespaceManager.AddNamespace(xmlNamespace.Key /* Prefix */, xmlNamespace.Value /* URI */);
         }
 
-        /// <summary>
-        /// Gets a XmlReaderSettings from a XmlPeekSettings.
-        /// </summary>
-        /// <returns>The xml reader settings.</returns>
-        /// <param name="settings">Additional settings to tweak Xml Peek behavior.</param>
-        private static XmlReaderSettings GetXmlReaderSettings(XmlPeekSettings settings)
-        {
-            var xmlReaderSettings = new XmlReaderSettings();
-            xmlReaderSettings.DtdProcessing = (DtdProcessing)settings.DtdProcessing;
-            return xmlReaderSettings;
-        }
+        var node = navigator.SelectSingleNode(xpath, namespaceManager);
+        return node?.Value;
+    }
+
+    /// <summary>
+    /// Gets a XmlReaderSettings from a XmlPeekSettings.
+    /// </summary>
+    /// <returns>The xml reader settings.</returns>
+    /// <param name="settings">Additional settings to tweak Xml Peek behavior.</param>
+    private static XmlReaderSettings GetXmlReaderSettings(XmlPeekSettings settings)
+    {
+        var xmlReaderSettings = new XmlReaderSettings();
+        xmlReaderSettings.DtdProcessing = (DtdProcessing)settings.DtdProcessing;
+        return xmlReaderSettings;
     }
 }

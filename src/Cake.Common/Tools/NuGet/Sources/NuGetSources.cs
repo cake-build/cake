@@ -10,206 +10,205 @@ using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.NuGet.Sources
+namespace Cake.Common.Tools.NuGet.Sources;
+
+/// <summary>
+/// The NuGet sources is used to work with user config feeds &amp; credentials.
+/// </summary>
+public sealed class NuGetSources : NuGetTool<NuGetSourcesSettings>
 {
     /// <summary>
-    /// The NuGet sources is used to work with user config feeds &amp; credentials.
+    /// Initializes a new instance of the <see cref="NuGetSources"/> class.
     /// </summary>
-    public sealed class NuGetSources : NuGetTool<NuGetSourcesSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="resolver">The NuGet tool resolver.</param>
+    public NuGetSources(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NuGetSources"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The NuGet tool resolver.</param>
-        public NuGetSources(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
+    }
+
+    /// <summary>
+    /// Adds NuGet package source using the specified settings to global user config.
+    /// </summary>
+    /// <param name="name">Name of the source.</param>
+    /// <param name="source">Path to the package(s) source.</param>
+    /// <param name="settings">The settings.</param>
+    public void AddSource(string name, string source, NuGetSourcesSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        if (string.IsNullOrWhiteSpace(name))
         {
+            throw new ArgumentException("Source name cannot be empty.", nameof(name));
+        }
+        ArgumentNullException.ThrowIfNull(source);
+        if (string.IsNullOrWhiteSpace(source))
+        {
+            throw new ArgumentException("Source cannot be empty.", nameof(source));
+        }
+        ArgumentNullException.ThrowIfNull(settings);
+
+        if (HasSource(source, settings))
+        {
+            var message = string.Format(CultureInfo.InvariantCulture, "The source '{0}' already exist.", source);
+            throw new InvalidOperationException(message);
         }
 
-        /// <summary>
-        /// Adds NuGet package source using the specified settings to global user config.
-        /// </summary>
-        /// <param name="name">Name of the source.</param>
-        /// <param name="source">Path to the package(s) source.</param>
-        /// <param name="settings">The settings.</param>
-        public void AddSource(string name, string source, NuGetSourcesSettings settings)
+        Run(settings, GetAddArguments(name, source, settings));
+    }
+
+    /// <summary>
+    /// Remove specified NuGet package source.
+    /// </summary>
+    /// <param name="name">Name of the source.</param>
+    /// <param name="source">Path to the package(s) source.</param>
+    /// <param name="settings">The settings.</param>
+    public void RemoveSource(string name, string source, NuGetSourcesSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        if (string.IsNullOrWhiteSpace(name))
         {
-            ArgumentNullException.ThrowIfNull(name);
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException("Source name cannot be empty.", nameof(name));
-            }
-            ArgumentNullException.ThrowIfNull(source);
-            if (string.IsNullOrWhiteSpace(source))
-            {
-                throw new ArgumentException("Source cannot be empty.", nameof(source));
-            }
-            ArgumentNullException.ThrowIfNull(settings);
+            throw new ArgumentException("Source name cannot be empty.", nameof(name));
+        }
+        ArgumentNullException.ThrowIfNull(source);
+        if (string.IsNullOrWhiteSpace(source))
+        {
+            throw new ArgumentException("Source cannot be empty.", nameof(source));
+        }
+        ArgumentNullException.ThrowIfNull(settings);
 
-            if (HasSource(source, settings))
-            {
-                var message = string.Format(CultureInfo.InvariantCulture, "The source '{0}' already exist.", source);
-                throw new InvalidOperationException(message);
-            }
-
-            Run(settings, GetAddArguments(name, source, settings));
+        if (!HasSource(source, settings))
+        {
+            var message = string.Format(CultureInfo.InvariantCulture, "The source '{0}' does not exist.", source);
+            throw new InvalidOperationException(message);
         }
 
-        /// <summary>
-        /// Remove specified NuGet package source.
-        /// </summary>
-        /// <param name="name">Name of the source.</param>
-        /// <param name="source">Path to the package(s) source.</param>
-        /// <param name="settings">The settings.</param>
-        public void RemoveSource(string name, string source, NuGetSourcesSettings settings)
+        Run(settings, GetRemoveArguments(name, source, settings));
+    }
+
+    /// <summary>
+    /// Determines whether the specified NuGet package source exist.
+    /// </summary>
+    /// <param name="source">Path to the package(s) source.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>Whether the specified NuGet package source exist.</returns>
+    public bool HasSource(string source, NuGetSourcesSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        if (string.IsNullOrWhiteSpace(source))
         {
-            ArgumentNullException.ThrowIfNull(name);
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException("Source name cannot be empty.", nameof(name));
-            }
-            ArgumentNullException.ThrowIfNull(source);
-            if (string.IsNullOrWhiteSpace(source))
-            {
-                throw new ArgumentException("Source cannot be empty.", nameof(source));
-            }
-            ArgumentNullException.ThrowIfNull(settings);
+            throw new ArgumentException("Source cannot be empty.", nameof(source));
+        }
+        ArgumentNullException.ThrowIfNull(settings);
 
-            if (!HasSource(source, settings))
-            {
-                var message = string.Format(CultureInfo.InvariantCulture, "The source '{0}' does not exist.", source);
-                throw new InvalidOperationException(message);
-            }
+        var processSettings = new ProcessSettings
+        {
+            RedirectStandardOutput = true
+        };
 
-            Run(settings, GetRemoveArguments(name, source, settings));
+        var result = false;
+
+        Run(settings, GetHasArguments(settings), processSettings,
+            process => result = process.GetStandardOutput().Any(line => line.TrimStart().Equals(source, StringComparison.OrdinalIgnoreCase)));
+
+        // Return whether or not the source exist.
+        return result;
+    }
+
+    private static ProcessArgumentBuilder GetHasArguments(NuGetSourcesSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("sources List");
+
+        if (settings.ConfigFile != null)
+        {
+            builder.Append("-ConfigFile");
+            builder.AppendQuoted(settings.ConfigFile.FullPath);
         }
 
-        /// <summary>
-        /// Determines whether the specified NuGet package source exist.
-        /// </summary>
-        /// <param name="source">Path to the package(s) source.</param>
-        /// <param name="settings">The settings.</param>
-        /// <returns>Whether the specified NuGet package source exist.</returns>
-        public bool HasSource(string source, NuGetSourcesSettings settings)
+        builder.Append("-NonInteractive");
+
+        return builder;
+    }
+
+    private static ProcessArgumentBuilder GetAddArguments(string name, string source, NuGetSourcesSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("sources Add");
+
+        AddCommonParameters(name, source, settings, builder);
+
+        // User name specified?
+        if (!string.IsNullOrWhiteSpace(settings.UserName))
         {
-            ArgumentNullException.ThrowIfNull(source);
-            if (string.IsNullOrWhiteSpace(source))
-            {
-                throw new ArgumentException("Source cannot be empty.", nameof(source));
-            }
-            ArgumentNullException.ThrowIfNull(settings);
-
-            var processSettings = new ProcessSettings
-            {
-                RedirectStandardOutput = true
-            };
-
-            var result = false;
-
-            Run(settings, GetHasArguments(settings), processSettings,
-                process => result = process.GetStandardOutput().Any(line => line.TrimStart().Equals(source, StringComparison.OrdinalIgnoreCase)));
-
-            // Return whether or not the source exist.
-            return result;
+            builder.Append("-UserName");
+            builder.AppendQuoted(settings.UserName);
         }
 
-        private static ProcessArgumentBuilder GetHasArguments(NuGetSourcesSettings settings)
+        // Password specified?
+        if (!string.IsNullOrWhiteSpace(settings.Password))
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("sources List");
-
-            if (settings.ConfigFile != null)
-            {
-                builder.Append("-ConfigFile");
-                builder.AppendQuoted(settings.ConfigFile.FullPath);
-            }
-
-            builder.Append("-NonInteractive");
-
-            return builder;
+            builder.Append("-Password");
+            builder.AppendQuotedSecret(settings.Password);
         }
 
-        private static ProcessArgumentBuilder GetAddArguments(string name, string source, NuGetSourcesSettings settings)
+        // Store password in plain text?
+        if (settings.StorePasswordInClearText)
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("sources Add");
-
-            AddCommonParameters(name, source, settings, builder);
-
-            // User name specified?
-            if (!string.IsNullOrWhiteSpace(settings.UserName))
-            {
-                builder.Append("-UserName");
-                builder.AppendQuoted(settings.UserName);
-            }
-
-            // Password specified?
-            if (!string.IsNullOrWhiteSpace(settings.Password))
-            {
-                builder.Append("-Password");
-                builder.AppendQuotedSecret(settings.Password);
-            }
-
-            // Store password in plain text?
-            if (settings.StorePasswordInClearText)
-            {
-                builder.Append("-StorePasswordInClearText");
-            }
-
-            return builder;
+            builder.Append("-StorePasswordInClearText");
         }
 
-        private static ProcessArgumentBuilder GetRemoveArguments(string name, string source, NuGetSourcesSettings settings)
+        return builder;
+    }
+
+    private static ProcessArgumentBuilder GetRemoveArguments(string name, string source, NuGetSourcesSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("sources Remove");
+
+        AddCommonParameters(name, source, settings, builder);
+
+        return builder;
+    }
+
+    private static void AddCommonParameters(string name, string source, NuGetSourcesSettings settings, ProcessArgumentBuilder builder)
+    {
+        builder.Append("-Name");
+        builder.AppendQuoted(name);
+
+        builder.Append("-Source");
+        if (settings.IsSensitiveSource)
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("sources Remove");
-
-            AddCommonParameters(name, source, settings, builder);
-
-            return builder;
+            // Sensitive information in source.
+            builder.AppendQuotedSecret(source);
+        }
+        else
+        {
+            builder.AppendQuoted(source);
         }
 
-        private static void AddCommonParameters(string name, string source, NuGetSourcesSettings settings, ProcessArgumentBuilder builder)
+        // Verbosity?
+        if (settings.Verbosity.HasValue)
         {
-            builder.Append("-Name");
-            builder.AppendQuoted(name);
-
-            builder.Append("-Source");
-            if (settings.IsSensitiveSource)
-            {
-                // Sensitive information in source.
-                builder.AppendQuotedSecret(source);
-            }
-            else
-            {
-                builder.AppendQuoted(source);
-            }
-
-            // Verbosity?
-            if (settings.Verbosity.HasValue)
-            {
-                builder.Append("-Verbosity");
-                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
-            }
-
-            if (settings.ConfigFile != null)
-            {
-                builder.Append("-ConfigFile");
-                builder.AppendQuoted(settings.ConfigFile.FullPath);
-            }
-
-            builder.Append("-NonInteractive");
+            builder.Append("-Verbosity");
+            builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
         }
+
+        if (settings.ConfigFile != null)
+        {
+            builder.Append("-ConfigFile");
+            builder.AppendQuoted(settings.ConfigFile.FullPath);
+        }
+
+        builder.Append("-NonInteractive");
     }
 }

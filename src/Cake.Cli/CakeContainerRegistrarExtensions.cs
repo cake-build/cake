@@ -12,43 +12,42 @@ using Cake.DotNetTool.Module;
 using Cake.NuGet;
 using Spectre.Console;
 
-namespace Cake.Cli
+namespace Cake.Cli;
+
+/// <summary>
+/// Contains extension methods for <see cref="ICakeContainerRegistrar"/>.
+/// </summary>
+public static class CakeContainerRegistrarExtensions
 {
     /// <summary>
-    /// Contains extension methods for <see cref="ICakeContainerRegistrar"/>.
+    /// Registers the default Cake diagnostics services.
     /// </summary>
-    public static class CakeContainerRegistrarExtensions
+    /// <param name="registrar">The container registrar.</param>
+    /// <returns>The same <see cref="ICakeContainerRegistrar"/> instance so that multiple calls can be chained.</returns>
+    public static ICakeContainerRegistrar AddCakeDiagnostics(this ICakeContainerRegistrar registrar)
     {
-        /// <summary>
-        /// Registers the default Cake diagnostics services.
-        /// </summary>
-        /// <param name="registrar">The container registrar.</param>
-        /// <returns>The same <see cref="ICakeContainerRegistrar"/> instance so that multiple calls can be chained.</returns>
-        public static ICakeContainerRegistrar AddCakeDiagnostics(this ICakeContainerRegistrar registrar)
-        {
-            ArgumentNullException.ThrowIfNull(registrar);
+        ArgumentNullException.ThrowIfNull(registrar);
 
-            registrar.RegisterType<CakeBuildLog>().As<ICakeLog>().Singleton();
-            registrar.RegisterType<CakeConsole>().As<IConsole>().Singleton();
-            registrar.RegisterInstance(AnsiConsole.Console).As<IAnsiConsole>().Singleton();
-            registrar.RegisterType<CakeSpectreReportPrinter>().As<ICakeReportPrinter>().Singleton();
-            return registrar;
-        }
+        registrar.RegisterType<CakeBuildLog>().As<ICakeLog>().Singleton();
+        registrar.RegisterType<CakeConsole>().As<IConsole>().Singleton();
+        registrar.RegisterInstance(AnsiConsole.Console).As<IAnsiConsole>().Singleton();
+        registrar.RegisterType<CakeSpectreReportPrinter>().As<ICakeReportPrinter>().Singleton();
+        return registrar;
+    }
 
-        /// <summary>
-        /// Registers the default Cake modules.
-        /// </summary>
-        /// <param name="registrar">The container registrar.</param>
-        /// <returns>The same <see cref="ICakeContainerRegistrar"/> instance so that multiple calls can be chained.</returns>
-        public static ICakeContainerRegistrar UseCakeDefaultModules(this ICakeContainerRegistrar registrar)
-        {
-            ArgumentNullException.ThrowIfNull(registrar);
+    /// <summary>
+    /// Registers the default Cake modules.
+    /// </summary>
+    /// <param name="registrar">The container registrar.</param>
+    /// <returns>The same <see cref="ICakeContainerRegistrar"/> instance so that multiple calls can be chained.</returns>
+    public static ICakeContainerRegistrar UseCakeDefaultModules(this ICakeContainerRegistrar registrar)
+    {
+        ArgumentNullException.ThrowIfNull(registrar);
 
-            new CoreModule().Register(registrar);
-            new CommonModule().Register(registrar);
-            new NuGetModule().Register(registrar);
-            new DotNetToolModule().Register(registrar);
-            return registrar;
-        }
+        new CoreModule().Register(registrar);
+        new CommonModule().Register(registrar);
+        new NuGetModule().Register(registrar);
+        new DotNetToolModule().Register(registrar);
+        return registrar;
     }
 }

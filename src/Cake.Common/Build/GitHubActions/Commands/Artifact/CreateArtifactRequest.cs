@@ -4,17 +4,14 @@
 
 using System.Text.Json.Serialization;
 
-namespace Cake.Common.Build.GitHubActions.Commands.Artifact
-{
-#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
-    internal record CreateArtifactRequest(
-        [property: JsonPropertyName("version")]
-        int Version,
-        [property: JsonPropertyName("name")]
-        string Name,
-        [property: JsonPropertyName("workflow_run_backend_id")]
-        string WorkflowRunBackendId,
-        [property: JsonPropertyName("workflow_job_run_backend_id")]
-        string WorkflowJobRunBackendId);
-#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
-}
+namespace Cake.Common.Build.GitHubActions.Commands.Artifact;
+
+internal record CreateArtifactRequest(
+    [property: JsonPropertyName("version")]
+    int Version,
+    [property: JsonPropertyName("name")]
+    string Name,
+    [property: JsonPropertyName("workflow_run_backend_id")]
+    string WorkflowRunBackendId,
+    [property: JsonPropertyName("workflow_job_run_backend_id")]
+    string WorkflowJobRunBackendId);

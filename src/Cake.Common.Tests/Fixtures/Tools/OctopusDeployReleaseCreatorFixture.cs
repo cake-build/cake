@@ -5,32 +5,31 @@
 using Cake.Common.Tools.OctopusDeploy;
 using Cake.Testing.Fixtures;
 
-namespace Cake.Common.Tests.Fixtures.Tools
+namespace Cake.Common.Tests.Fixtures.Tools;
+
+internal sealed class OctopusDeployReleaseCreatorFixture : ToolFixture<CreateReleaseSettings>
 {
-    internal sealed class OctopusDeployReleaseCreatorFixture : ToolFixture<CreateReleaseSettings>
+    public string ProjectName { get; set; }
+
+    public OctopusDeployReleaseCreatorFixture()
+        : base("Octo.exe")
     {
-        public string ProjectName { get; set; }
+        ProjectName = "testProject";
 
-        public OctopusDeployReleaseCreatorFixture()
-            : base("Octo.exe")
-        {
-            ProjectName = "testProject";
+        Settings.Server = "http://octopus";
+        Settings.ApiKey = "API-12345";
+    }
 
-            Settings.Server = "http://octopus";
-            Settings.ApiKey = "API-12345";
-        }
+    public string GetDefaultArguments()
+    {
+        return string.Format(
+            System.Globalization.CultureInfo.InvariantCulture,
+            "create-release --project \"{0}\" --server {1} --apiKey {2}", ProjectName, Settings.Server, Settings.ApiKey);
+    }
 
-        public string GetDefaultArguments()
-        {
-            return string.Format(
-                System.Globalization.CultureInfo.InvariantCulture,
-                "create-release --project \"{0}\" --server {1} --apiKey {2}", ProjectName, Settings.Server, Settings.ApiKey);
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new OctopusDeployReleaseCreator(FileSystem, Environment, ProcessRunner, Tools);
-            tool.CreateRelease(ProjectName, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new OctopusDeployReleaseCreator(FileSystem, Environment, ProcessRunner, Tools);
+        tool.CreateRelease(ProjectName, Settings);
     }
 }

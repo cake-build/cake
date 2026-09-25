@@ -3,58 +3,56 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
+namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data;
+
+public sealed class GitHubActionsEnvironmentInfoTests
 {
-    public sealed class GitHubActionsEnvironmentInfoTests
+    public sealed class TheHomeProperty
     {
-        public sealed class TheHomeProperty
+        [Fact]
+        public void Should_Return_Correct_Values()
         {
-            [Fact]
-            public void Should_Return_Correct_Values()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Home.FullPath;
+            // When
+            var result = info.Home.FullPath;
 
-                // Then
-                Assert.Equal("/home/runner", result);
-            }
+            // Then
+            Assert.Equal("/home/runner", result);
         }
+    }
 
-        public sealed class TheWorkflowProperty
+    public sealed class TheWorkflowProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Workflow;
+            // When
+            var result = info.Workflow;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
         }
+    }
 
-        public sealed class ThePullRequestProperty
+    public sealed class ThePullRequestProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.PullRequest;
+            // When
+            var result = info.PullRequest;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
         }
     }
 }

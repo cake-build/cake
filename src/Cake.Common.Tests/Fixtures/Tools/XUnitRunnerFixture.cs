@@ -6,22 +6,21 @@ using Cake.Common.Tools.XUnit;
 using Cake.Core.IO;
 using Cake.Testing.Fixtures;
 
-namespace Cake.Common.Tests.Fixtures.Tools
+namespace Cake.Common.Tests.Fixtures.Tools;
+
+internal sealed class XUnitRunnerFixture : ToolFixture<XUnitSettings>
 {
-    internal sealed class XUnitRunnerFixture : ToolFixture<XUnitSettings>
+    public FilePath AssemblyPath { get; set; }
+
+    public XUnitRunnerFixture()
+        : base("xunit.console.clr4.exe")
     {
-        public FilePath AssemblyPath { get; set; }
+        AssemblyPath = "./Test1.dll";
+    }
 
-        public XUnitRunnerFixture()
-            : base("xunit.console.clr4.exe")
-        {
-            AssemblyPath = "./Test1.dll";
-        }
-
-        protected override void RunTool()
-        {
-            var runner = new XUnitRunner(FileSystem, Environment, ProcessRunner, Tools);
-            runner.Run(AssemblyPath, Settings);
-        }
+    protected override void RunTool()
+    {
+        var runner = new XUnitRunner(FileSystem, Environment, ProcessRunner, Tools);
+        runner.Run(AssemblyPath, Settings);
     }
 }

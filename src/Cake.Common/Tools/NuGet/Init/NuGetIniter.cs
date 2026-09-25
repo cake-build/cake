@@ -8,89 +8,88 @@ using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.NuGet.Init
+namespace Cake.Common.Tools.NuGet.Init;
+
+/// <summary>
+/// The NuGet package init tool copies all the packages from the source to the hierarchical destination.
+/// </summary>
+public sealed class NuGetIniter : NuGetTool<NuGetInitSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// The NuGet package init tool copies all the packages from the source to the hierarchical destination.
+    /// Initializes a new instance of the <see cref="NuGetIniter"/> class.
     /// </summary>
-    public sealed class NuGetIniter : NuGetTool<NuGetInitSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="resolver">The NuGet tool resolver.</param>
+    public NuGetIniter(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NuGetIniter"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The NuGet tool resolver.</param>
-        public NuGetIniter(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
+    /// <summary>
+    /// Init adds all the packages from the source to the hierarchical destination.
+    /// </summary>
+    /// <param name="sourcePackageSourcePath">Package source to be copied from.</param>
+    /// <param name="destinationPackageSourcePath">Package destination to be copied to.</param>
+    /// <param name="settings">The settings.</param>
+    public void Init(string sourcePackageSourcePath, string destinationPackageSourcePath,
+        NuGetInitSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(sourcePackageSourcePath))
         {
-            _environment = environment;
+            throw new ArgumentNullException(nameof(sourcePackageSourcePath));
+        }
+        if (string.IsNullOrWhiteSpace(destinationPackageSourcePath))
+        {
+            throw new ArgumentNullException(nameof(destinationPackageSourcePath));
+        }
+        ArgumentNullException.ThrowIfNull(settings);
+
+        var sourcePackagePath = sourcePackageSourcePath;
+        var destinationPackagePath = destinationPackageSourcePath;
+
+        Run(settings, GetArguments(sourcePackagePath, destinationPackagePath, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(string sourcePackageSourcePath, string destinationPackageSourcePath, NuGetInitSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("init");
+        builder.AppendQuoted(sourcePackageSourcePath);
+        builder.AppendQuoted(destinationPackageSourcePath);
+
+        // Expand package?
+        if (settings.Expand)
+        {
+            builder.Append("-Expand");
         }
 
-        /// <summary>
-        /// Init adds all the packages from the source to the hierarchical destination.
-        /// </summary>
-        /// <param name="sourcePackageSourcePath">Package source to be copied from.</param>
-        /// <param name="destinationPackageSourcePath">Package destination to be copied to.</param>
-        /// <param name="settings">The settings.</param>
-        public void Init(string sourcePackageSourcePath, string destinationPackageSourcePath,
-            NuGetInitSettings settings)
+        // Verbosity?
+        if (settings.Verbosity.HasValue)
         {
-            if (string.IsNullOrWhiteSpace(sourcePackageSourcePath))
-            {
-                throw new ArgumentNullException(nameof(sourcePackageSourcePath));
-            }
-            if (string.IsNullOrWhiteSpace(destinationPackageSourcePath))
-            {
-                throw new ArgumentNullException(nameof(destinationPackageSourcePath));
-            }
-            ArgumentNullException.ThrowIfNull(settings);
-
-            var sourcePackagePath = sourcePackageSourcePath;
-            var destinationPackagePath = destinationPackageSourcePath;
-
-            Run(settings, GetArguments(sourcePackagePath, destinationPackagePath, settings));
+            builder.Append("-Verbosity");
+            builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
         }
 
-        private ProcessArgumentBuilder GetArguments(string sourcePackageSourcePath, string destinationPackageSourcePath, NuGetInitSettings settings)
+        // Configuration file.
+        if (settings.ConfigFile != null)
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("init");
-            builder.AppendQuoted(sourcePackageSourcePath);
-            builder.AppendQuoted(destinationPackageSourcePath);
-
-            // Expand package?
-            if (settings.Expand)
-            {
-                builder.Append("-Expand");
-            }
-
-            // Verbosity?
-            if (settings.Verbosity.HasValue)
-            {
-                builder.Append("-Verbosity");
-                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
-            }
-
-            // Configuration file.
-            if (settings.ConfigFile != null)
-            {
-                builder.Append("-ConfigFile");
-                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
-            }
-
-            builder.Append("-NonInteractive");
-
-            return builder;
+            builder.Append("-ConfigFile");
+            builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
         }
+
+        builder.Append("-NonInteractive");
+
+        return builder;
     }
 }

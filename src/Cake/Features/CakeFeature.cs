@@ -12,67 +12,66 @@ using Cake.Core.IO;
 using Cake.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cake.Features
+namespace Cake.Features;
+
+/// <summary>
+/// Represents a base feature for Cake.
+/// </summary>
+public abstract class Feature
 {
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+    private readonly IContainerConfigurator _configurator;
+
     /// <summary>
-    /// Represents a base feature for Cake.
+    /// Initializes a new instance of the <see cref="Feature"/> class.
     /// </summary>
-    public abstract class Feature
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The Cake environment.</param>
+    /// <param name="configurator">The container configurator.</param>
+    public Feature(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IContainerConfigurator configurator)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly IContainerConfigurator _configurator;
+        _fileSystem = fileSystem;
+        _environment = environment;
+        _configurator = configurator;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Feature"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The Cake environment.</param>
-        /// <param name="configurator">The container configurator.</param>
-        public Feature(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IContainerConfigurator configurator)
-        {
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _configurator = configurator;
-        }
+    /// <summary>
+    /// Creates a container scope with the specified configuration and arguments.
+    /// </summary>
+    /// <param name="configuration">The Cake configuration.</param>
+    /// <param name="arguments">The Cake arguments.</param>
+    /// <param name="action">An optional action to configure the container registrar.</param>
+    /// <returns>A container scope.</returns>
+    protected ServiceProvider CreateScope(
+        ICakeConfiguration configuration,
+        ICakeArguments arguments,
+        Action<ICakeContainerRegistrar> action = null)
+    {
+        var services = new ServiceCollection();
+        var registrar = new ContainerRegistrar(services);
 
-        /// <summary>
-        /// Creates a container scope with the specified configuration and arguments.
-        /// </summary>
-        /// <param name="configuration">The Cake configuration.</param>
-        /// <param name="arguments">The Cake arguments.</param>
-        /// <param name="action">An optional action to configure the container registrar.</param>
-        /// <returns>A container scope.</returns>
-        protected ServiceProvider CreateScope(
-            ICakeConfiguration configuration,
-            ICakeArguments arguments,
-            Action<ICakeContainerRegistrar> action = null)
-        {
-            var services = new ServiceCollection();
-            var registrar = new ContainerRegistrar(services);
+        _configurator.Configure(registrar, configuration, arguments);
+        action?.Invoke(registrar);
 
-            _configurator.Configure(registrar, configuration, arguments);
-            action?.Invoke(registrar);
+        return registrar.BuildServiceProvider();
+    }
 
-            return registrar.BuildServiceProvider();
-        }
+    /// <summary>
+    /// Reads the Cake configuration from the specified arguments and root directory.
+    /// </summary>
+    /// <param name="arguments">The Cake arguments.</param>
+    /// <param name="root">The root directory.</param>
+    /// <returns>The Cake configuration.</returns>
+    protected ICakeConfiguration ReadConfiguration(
+        ICakeArguments arguments, DirectoryPath root)
+    {
+        var provider = new CakeConfigurationProvider(_fileSystem, _environment);
+        var args = arguments.GetArguments().ToDictionary(x => x.Key, x => x.Value?.FirstOrDefault() ?? string.Empty);
 
-        /// <summary>
-        /// Reads the Cake configuration from the specified arguments and root directory.
-        /// </summary>
-        /// <param name="arguments">The Cake arguments.</param>
-        /// <param name="root">The root directory.</param>
-        /// <returns>The Cake configuration.</returns>
-        protected ICakeConfiguration ReadConfiguration(
-            ICakeArguments arguments, DirectoryPath root)
-        {
-            var provider = new CakeConfigurationProvider(_fileSystem, _environment);
-            var args = arguments.GetArguments().ToDictionary(x => x.Key, x => x.Value?.FirstOrDefault() ?? string.Empty);
-
-            return provider.CreateConfiguration(root, args);
-        }
+        return provider.CreateConfiguration(root, args);
     }
 }

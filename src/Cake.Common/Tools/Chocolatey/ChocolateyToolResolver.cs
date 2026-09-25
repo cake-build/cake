@@ -7,72 +7,71 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.Chocolatey
+namespace Cake.Common.Tools.Chocolatey;
+
+/// <summary>
+/// Contains Chocolatey path resolver functionality.
+/// </summary>
+public sealed class ChocolateyToolResolver : IChocolateyToolResolver
 {
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+    private IFile _cachedPath;
+
     /// <summary>
-    /// Contains Chocolatey path resolver functionality.
+    /// Initializes a new instance of the <see cref="ChocolateyToolResolver" /> class.
     /// </summary>
-    public sealed class ChocolateyToolResolver : IChocolateyToolResolver
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    public ChocolateyToolResolver(IFileSystem fileSystem, ICakeEnvironment environment)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private IFile _cachedPath;
+        _fileSystem = fileSystem;
+        _environment = environment;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChocolateyToolResolver" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        public ChocolateyToolResolver(IFileSystem fileSystem, ICakeEnvironment environment)
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        ArgumentNullException.ThrowIfNull(environment);
+    }
+
+    /// <inheritdoc/>
+    public FilePath ResolvePath()
+    {
+        // Check if path already resolved
+        if (_cachedPath != null && _cachedPath.Exists)
         {
-            _fileSystem = fileSystem;
-            _environment = environment;
-
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            ArgumentNullException.ThrowIfNull(environment);
+            return _cachedPath.Path;
         }
 
-        /// <inheritdoc/>
-        public FilePath ResolvePath()
+        // Check if path set to environment variable
+        var chocolateyInstallationFolder = _environment.GetEnvironmentVariable("ChocolateyInstall");
+        if (!string.IsNullOrWhiteSpace(chocolateyInstallationFolder))
         {
-            // Check if path already resolved
-            if (_cachedPath != null && _cachedPath.Exists)
+            var envFile = _fileSystem.GetFile(PathHelper.Combine(chocolateyInstallationFolder, "choco.exe"));
+            if (envFile.Exists)
             {
+                _cachedPath = envFile;
                 return _cachedPath.Path;
             }
-
-            // Check if path set to environment variable
-            var chocolateyInstallationFolder = _environment.GetEnvironmentVariable("ChocolateyInstall");
-            if (!string.IsNullOrWhiteSpace(chocolateyInstallationFolder))
-            {
-                var envFile = _fileSystem.GetFile(PathHelper.Combine(chocolateyInstallationFolder, "choco.exe"));
-                if (envFile.Exists)
-                {
-                    _cachedPath = envFile;
-                    return _cachedPath.Path;
-                }
-            }
-
-            // Last resort try path
-            var envPath = _environment.GetEnvironmentVariable("path");
-            if (!string.IsNullOrWhiteSpace(envPath))
-            {
-                var pathFile = envPath
-                    .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(path => _fileSystem.GetDirectory(path))
-                    .Where(path => path.Exists)
-                    .Select(path => path.Path.CombineWithFilePath("choco.exe"))
-                    .Select(_fileSystem.GetFile)
-                    .FirstOrDefault(file => file.Exists);
-
-                if (pathFile != null)
-                {
-                    _cachedPath = pathFile;
-                    return _cachedPath.Path;
-                }
-            }
-
-            throw new CakeException("Could not locate choco.exe.");
         }
+
+        // Last resort try path
+        var envPath = _environment.GetEnvironmentVariable("path");
+        if (!string.IsNullOrWhiteSpace(envPath))
+        {
+            var pathFile = envPath
+                .Split([';'], StringSplitOptions.RemoveEmptyEntries)
+                .Select(path => _fileSystem.GetDirectory(path))
+                .Where(path => path.Exists)
+                .Select(path => path.Path.CombineWithFilePath("choco.exe"))
+                .Select(_fileSystem.GetFile)
+                .FirstOrDefault(file => file.Exists);
+
+            if (pathFile != null)
+            {
+                _cachedPath = pathFile;
+                return _cachedPath.Path;
+            }
+        }
+
+        throw new CakeException("Could not locate choco.exe.");
     }
 }

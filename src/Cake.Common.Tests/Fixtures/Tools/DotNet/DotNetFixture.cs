@@ -6,20 +6,19 @@ using Cake.Common.Tools.DotNet;
 using Cake.Core.IO;
 using Cake.Testing.Fixtures;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet
-{
-    internal abstract class DotNetFixture<TSettings> : ToolFixture<TSettings, ToolFixtureResult>
-       where TSettings : DotNetSettings, new()
-    {
-        protected DotNetFixture()
-            : base("dotnet.exe")
-        {
-            ProcessRunner.Process.SetStandardOutput(new string[] { });
-        }
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet;
 
-        protected override ToolFixtureResult CreateResult(FilePath path, ProcessSettings process)
-        {
-            return new ToolFixtureResult(path, process);
-        }
+internal abstract class DotNetFixture<TSettings> : ToolFixture<TSettings, ToolFixtureResult>
+   where TSettings : DotNetSettings, new()
+{
+    protected DotNetFixture()
+        : base("dotnet.exe")
+    {
+        ProcessRunner.Process.SetStandardOutput(new string[] { });
+    }
+
+    protected override ToolFixtureResult CreateResult(FilePath path, ProcessSettings process)
+    {
+        return new ToolFixtureResult(path, process);
     }
 }

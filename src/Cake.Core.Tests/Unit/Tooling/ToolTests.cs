@@ -8,193 +8,192 @@ using Cake.Core.Tests.Fixtures;
 using Cake.Testing;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Tooling
+namespace Cake.Core.Tests.Unit.Tooling;
+
+public sealed class ToolTests
 {
-    public sealed class ToolTests
+    public sealed class TheRunProcessMethod
     {
-        public sealed class TheRunProcessMethod
+        [Fact]
+        public void Should_Use_Arguments_Provided_In_Tool_Settings()
         {
-            [Fact]
-            public void Should_Use_Arguments_Provided_In_Tool_Settings()
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.Settings.ArgumentCustomization = builder => builder.Append("--bar");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("--foo --bar", result.Args);
+        }
+
+        [Fact]
+        public void Should_Replace_Arguments_Provided_In_Tool_Settings_If_Returning_A_New_Builder()
+        {
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.Settings.ArgumentCustomization = builder =>
             {
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.Settings.ArgumentCustomization = builder => builder.Append("--bar");
+                var newBuilder = new ProcessArgumentBuilder();
+                newBuilder.Append("--bar");
+                return newBuilder;
+            };
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("--foo --bar", result.Args);
-            }
+            // Then
+            Assert.Equal("--bar", result.Args);
+        }
 
-            [Fact]
-            public void Should_Replace_Arguments_Provided_In_Tool_Settings_If_Returning_A_New_Builder()
+        [Fact]
+        public void Should_Replace_Arguments_Provided_In_Tool_Settings_If_Returning_A_String()
+        {
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.Settings.ArgumentCustomization = builder => "--bar";
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("--bar", result.Args);
+        }
+
+        [Fact]
+        public void Should_Set_Working_Directory_If_Provided_In_Tool_Settings()
+        {
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.Settings.WorkingDirectory = "/Other";
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("/Other", result.Process.WorkingDirectory.FullPath);
+        }
+
+        [Fact]
+        public void Should_Succeed_On_Zero_ExitCode_Without_Custom_Validation()
+        {
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.GivenProcessExitsWithCode(0);
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.IsNotType<Exception>(result);
+        }
+
+        [Fact]
+        public void Should_Throw_On_NonZero_ExitCode_Without_Custom_Validation()
+        {
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.GivenProcessExitsWithCode(11);
+
+            // When
+            var result = Record.Exception(() => fixture.Run());
+
+            // Then
+            AssertEx.IsCakeException(result, "dummy: Process returned an error (exit code 11).");
+        }
+
+        [Fact]
+        public void Should_Succeed_On_NonZero_ExitCode_Validated_By_Custom_Validator()
+        {
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.ExitCodeValidation = ec =>
             {
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.Settings.ArgumentCustomization = builder =>
+                if (ec >= 10)
                 {
-                    var newBuilder = new ProcessArgumentBuilder();
-                    newBuilder.Append("--bar");
-                    return newBuilder;
-                };
+                    throw new CakeException("UnitTest");
+                }
+            };
+            fixture.GivenProcessExitsWithCode(7);
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("--bar", result.Args);
-            }
+            // Then
+            Assert.IsNotType<Exception>(result);
+        }
 
-            [Fact]
-            public void Should_Replace_Arguments_Provided_In_Tool_Settings_If_Returning_A_String()
+        [Fact]
+        public void Should_Throw_On_Invalid_ExitCode_Validated_By_Custom_Validator()
+        {
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.ExitCodeValidation = ec =>
             {
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.Settings.ArgumentCustomization = builder => "--bar";
-
-                // When
-                var result = fixture.Run();
-
-                // Then
-                Assert.Equal("--bar", result.Args);
-            }
-
-            [Fact]
-            public void Should_Set_Working_Directory_If_Provided_In_Tool_Settings()
-            {
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.Settings.WorkingDirectory = "/Other";
-
-                // When
-                var result = fixture.Run();
-
-                // Then
-                Assert.Equal("/Other", result.Process.WorkingDirectory.FullPath);
-            }
-
-            [Fact]
-            public void Should_Succeed_On_Zero_ExitCode_Without_Custom_Validation()
-            {
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.GivenProcessExitsWithCode(0);
-
-                // When
-                var result = fixture.Run();
-
-                // Then
-                Assert.IsNotType<Exception>(result);
-            }
-
-            [Fact]
-            public void Should_Throw_On_NonZero_ExitCode_Without_Custom_Validation()
-            {
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.GivenProcessExitsWithCode(11);
-
-                // When
-                var result = Record.Exception(() => fixture.Run());
-
-                // Then
-                AssertEx.IsCakeException(result, "dummy: Process returned an error (exit code 11).");
-            }
-
-            [Fact]
-            public void Should_Succeed_On_NonZero_ExitCode_Validated_By_Custom_Validator()
-            {
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.ExitCodeValidation = ec =>
+                if (ec != 1)
                 {
-                    if (ec >= 10)
-                    {
-                        throw new CakeException("UnitTest");
-                    }
-                };
-                fixture.GivenProcessExitsWithCode(7);
+                    throw new CakeException("UnitTest");
+                }
+            };
+            fixture.GivenProcessExitsWithCode(10);
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = Record.Exception(() => fixture.Run());
 
-                // Then
-                Assert.IsNotType<Exception>(result);
-            }
+            // Then
+            AssertEx.IsCakeException(result, "UnitTest");
+        }
 
-            [Fact]
-            public void Should_Throw_On_Invalid_ExitCode_Validated_By_Custom_Validator()
-            {
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.ExitCodeValidation = ec =>
-                {
-                    if (ec != 1)
-                    {
-                        throw new CakeException("UnitTest");
-                    }
-                };
-                fixture.GivenProcessExitsWithCode(10);
+        [Fact]
+        public void Should_Not_Throw_On_Invalid_ExitCode_When_HandleExitCode_Returns_True()
+        {
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.Settings.HandleExitCode = _ => true;
+            fixture.GivenProcessExitsWithCode(10);
 
-                // When
-                var result = Record.Exception(() => fixture.Run());
+            // When
+            var result = fixture.Run();
 
-                // Then
-                AssertEx.IsCakeException(result, "UnitTest");
-            }
+            // Then
+            Assert.IsNotType<Exception>(result);
+        }
 
-            [Fact]
-            public void Should_Not_Throw_On_Invalid_ExitCode_When_HandleExitCode_Returns_True()
-            {
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.Settings.HandleExitCode = _ => true;
-                fixture.GivenProcessExitsWithCode(10);
+        [Fact]
+        public void Executes_PostAction()
+        {
+            var wasExecuted = false;
 
-                // When
-                var result = fixture.Run();
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.Settings.PostAction = (p) => wasExecuted = true;
 
-                // Then
-                Assert.IsNotType<Exception>(result);
-            }
+            fixture.GivenProcessExitsWithCode(0);
 
-            [Fact]
-            public void Executes_PostAction()
-            {
-                var wasExecuted = false;
+            // When
+            _ = fixture.Run();
 
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.Settings.PostAction = (p) => wasExecuted = true;
+            // Then
+            Assert.True(wasExecuted);
+        }
 
-                fixture.GivenProcessExitsWithCode(0);
+        [Fact]
+        public void Executes_SetupProcessSettings()
+        {
+            var wasExecuted = false;
 
-                // When
-                _ = fixture.Run();
+            // Given
+            var fixture = new DummyToolFixture();
+            fixture.Settings.SetupProcessSettings = (p) => wasExecuted = true;
 
-                // Then
-                Assert.True(wasExecuted);
-            }
+            fixture.GivenProcessExitsWithCode(0);
 
-            [Fact]
-            public void Executes_SetupProcessSettings()
-            {
-                var wasExecuted = false;
+            // When
+            _ = fixture.Run();
 
-                // Given
-                var fixture = new DummyToolFixture();
-                fixture.Settings.SetupProcessSettings = (p) => wasExecuted = true;
-
-                fixture.GivenProcessExitsWithCode(0);
-
-                // When
-                _ = fixture.Run();
-
-                // Then
-                Assert.True(wasExecuted);
-            }
+            // Then
+            Assert.True(wasExecuted);
         }
     }
 }

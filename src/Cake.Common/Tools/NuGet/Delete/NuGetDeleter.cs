@@ -9,97 +9,96 @@ using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.NuGet.Delete
+namespace Cake.Common.Tools.NuGet.Delete;
+
+/// <summary>
+/// The NuGet package pusher.
+/// </summary>
+public sealed class NuGetDeleter : NuGetTool<NuGetDeleteSettings>
 {
+    private readonly ICakeEnvironment _environment;
+    private readonly ICakeLog _log;
+
     /// <summary>
-    /// The NuGet package pusher.
+    /// Initializes a new instance of the <see cref="NuGetDeleter"/> class.
     /// </summary>
-    public sealed class NuGetDeleter : NuGetTool<NuGetDeleteSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="resolver">The NuGet tool resolver.</param>
+    /// <param name="log">The logger.</param>
+    public NuGetDeleter(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        INuGetToolResolver resolver,
+        ICakeLog log) : base(fileSystem, environment, processRunner, tools, resolver)
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
+        _environment = environment;
+        _log = log;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NuGetDeleter"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The NuGet tool resolver.</param>
-        /// <param name="log">The logger.</param>
-        public NuGetDeleter(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            INuGetToolResolver resolver,
-            ICakeLog log) : base(fileSystem, environment, processRunner, tools, resolver)
+    /// <summary>
+    /// Deletes or unlists a package from a package source.
+    /// </summary>
+    /// <param name="packageID">The package ID (name).</param>
+    /// <param name="packageVersion">The package version.</param>
+    /// <param name="settings">The settings.</param>
+    public void Delete(string packageID, string packageVersion, NuGetDeleteSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(packageID))
         {
-            _environment = environment;
-            _log = log;
+            throw new ArgumentNullException(nameof(packageID));
+        }
+        if (string.IsNullOrWhiteSpace(packageVersion))
+        {
+            throw new ArgumentNullException(nameof(packageVersion));
+        }
+        ArgumentNullException.ThrowIfNull(settings);
+
+        Run(settings, GetArguments(packageID, packageVersion, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(string packageID, string packageVersion, NuGetDeleteSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+        builder.Append("delete");
+
+        builder.Append(packageID);
+
+        builder.Append(packageVersion);
+
+        if (settings.ApiKey != null)
+        {
+            builder.AppendSecret(settings.ApiKey);
         }
 
-        /// <summary>
-        /// Deletes or unlists a package from a package source.
-        /// </summary>
-        /// <param name="packageID">The package ID (name).</param>
-        /// <param name="packageVersion">The package version.</param>
-        /// <param name="settings">The settings.</param>
-        public void Delete(string packageID, string packageVersion, NuGetDeleteSettings settings)
-        {
-            if (string.IsNullOrWhiteSpace(packageID))
-            {
-                throw new ArgumentNullException(nameof(packageID));
-            }
-            if (string.IsNullOrWhiteSpace(packageVersion))
-            {
-                throw new ArgumentNullException(nameof(packageVersion));
-            }
-            ArgumentNullException.ThrowIfNull(settings);
+        builder.Append("-NonInteractive");
 
-            Run(settings, GetArguments(packageID, packageVersion, settings));
+        if (settings.ConfigFile != null)
+        {
+            builder.Append("-ConfigFile");
+            builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
         }
 
-        private ProcessArgumentBuilder GetArguments(string packageID, string packageVersion, NuGetDeleteSettings settings)
+        if (settings.Source != null)
         {
-            var builder = new ProcessArgumentBuilder();
-            builder.Append("delete");
-
-            builder.Append(packageID);
-
-            builder.Append(packageVersion);
-
-            if (settings.ApiKey != null)
-            {
-                builder.AppendSecret(settings.ApiKey);
-            }
-
-            builder.Append("-NonInteractive");
-
-            if (settings.ConfigFile != null)
-            {
-                builder.Append("-ConfigFile");
-                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
-            }
-
-            if (settings.Source != null)
-            {
-                builder.Append("-Source");
-                builder.AppendQuoted(settings.Source);
-            }
-            else
-            {
-                _log.Verbose("No Source property has been set.  Depending on your configuration, this may cause problems.");
-            }
-
-            if (settings.Verbosity != null)
-            {
-                builder.Append("-Verbosity");
-                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
-            }
-
-            return builder;
+            builder.Append("-Source");
+            builder.AppendQuoted(settings.Source);
         }
+        else
+        {
+            _log.Verbose("No Source property has been set.  Depending on your configuration, this may cause problems.");
+        }
+
+        if (settings.Verbosity != null)
+        {
+            builder.Append("-Verbosity");
+            builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+        }
+
+        return builder;
     }
 }

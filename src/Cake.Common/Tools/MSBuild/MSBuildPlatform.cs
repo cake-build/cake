@@ -2,28 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.MSBuild
+namespace Cake.Common.Tools.MSBuild;
+
+/// <summary>
+/// Represents an MSBuild exe platform.
+/// </summary>
+public enum MSBuildPlatform
 {
     /// <summary>
-    /// Represents an MSBuild exe platform.
+    /// Will build using MSBuild version based on PlatformTarget/Host OS.
     /// </summary>
-    public enum MSBuildPlatform
-    {
-        /// <summary>
-        /// Will build using MSBuild version based on PlatformTarget/Host OS.
-        /// </summary>
-        Automatic = 0,
+    Automatic = 0,
 
-        /// <summary>
-        /// MSBuildPlatform: <c>x86</c>
-        /// </summary>
-        // ReSharper disable once InconsistentNaming
-        x86 = 1,
+    /// <summary>
+    /// MSBuildPlatform: <c>x86</c>
+    /// </summary>
+    // ReSharper disable once InconsistentNaming
+    x86 = 1,
 
-        /// <summary>
-        /// MSBuildPlatform: <c>x64</c>
-        /// </summary>
-        // ReSharper disable once InconsistentNaming
-        x64 = 2
-    }
+    /// <summary>
+    /// MSBuildPlatform: <c>x64</c>
+    /// </summary>
+    // ReSharper disable once InconsistentNaming
+    x64 = 2
 }

@@ -9,34 +9,33 @@ using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.IO;
 
-namespace Cake.Frosting.Internal
+namespace Cake.Frosting.Internal;
+
+internal sealed class FrostingConfiguration : ICakeConfiguration
 {
-    internal sealed class FrostingConfiguration : ICakeConfiguration
+    private readonly ICakeConfiguration _cakeConfiguration;
+
+    public FrostingConfiguration(IEnumerable<FrostingConfigurationValue> values, IFileSystem fileSystem, ICakeEnvironment environment, ICakeArguments arguments)
     {
-        private readonly ICakeConfiguration _cakeConfiguration;
+        ArgumentNullException.ThrowIfNull(values);
 
-        public FrostingConfiguration(IEnumerable<FrostingConfigurationValue> values, IFileSystem fileSystem, ICakeEnvironment environment, ICakeArguments arguments)
+        ArgumentNullException.ThrowIfNull(fileSystem);
+
+        ArgumentNullException.ThrowIfNull(environment);
+
+        ArgumentNullException.ThrowIfNull(arguments);
+
+        var baseConfiguration = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var value in values)
         {
-            ArgumentNullException.ThrowIfNull(values);
-
-            ArgumentNullException.ThrowIfNull(fileSystem);
-
-            ArgumentNullException.ThrowIfNull(environment);
-
-            ArgumentNullException.ThrowIfNull(arguments);
-
-            var baseConfiguration = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            foreach (var value in values)
-            {
-                baseConfiguration[value.Key] = value.Value;
-            }
-
-            var provider = new CakeConfigurationProvider(fileSystem, environment);
-            var args = arguments.GetArguments().ToDictionary(x => x.Key, x => x.Value?.FirstOrDefault() ?? string.Empty);
-
-            _cakeConfiguration = provider.CreateConfiguration(environment.WorkingDirectory, baseConfiguration, args);
+            baseConfiguration[value.Key] = value.Value;
         }
 
-        public string GetValue(string key) => _cakeConfiguration.GetValue(key);
+        var provider = new CakeConfigurationProvider(fileSystem, environment);
+        var args = arguments.GetArguments().ToDictionary(x => x.Key, x => x.Value?.FirstOrDefault() ?? string.Empty);
+
+        _cakeConfiguration = provider.CreateConfiguration(environment.WorkingDirectory, baseConfiguration, args);
     }
+
+    public string GetValue(string key) => _cakeConfiguration.GetValue(key);
 }

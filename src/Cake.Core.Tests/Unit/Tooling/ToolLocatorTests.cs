@@ -10,177 +10,176 @@ using Cake.Testing;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Tooling
+namespace Cake.Core.Tests.Unit.Tooling;
+
+public sealed class ToolLocatorTests
 {
-    public sealed class ToolLocatorTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Throw_If_Environment_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given
-                var repository = Substitute.For<IToolRepository>();
-                var strategy = Substitute.For<IToolResolutionStrategy>();
+            // Given
+            var repository = Substitute.For<IToolRepository>();
+            var strategy = Substitute.For<IToolResolutionStrategy>();
 
-                // When
-                var result = Record.Exception(() => new ToolLocator(null, repository, strategy));
+            // When
+            var result = Record.Exception(() => new ToolLocator(null, repository, strategy));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "environment");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Tool_Repository_Is_Null()
-            {
-                // Given
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var strategy = Substitute.For<IToolResolutionStrategy>();
-
-                // When
-                var result = Record.Exception(() => new ToolLocator(environment, null, strategy));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "repository");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Tool_Resolution_Strategy_Is_Null()
-            {
-                // Given
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var repository = Substitute.For<IToolRepository>();
-
-                // When
-                var result = Record.Exception(() => new ToolLocator(environment, repository, null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "strategy");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "environment");
         }
 
-        public sealed class TheRegisterFileMethod
+        [Fact]
+        public void Should_Throw_If_Tool_Repository_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_File_Path_Is_Null()
-            {
-                // Given
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var repository = Substitute.For<IToolRepository>();
-                var strategy = Substitute.For<IToolResolutionStrategy>();
-                var locator = new ToolLocator(environment, repository, strategy);
+            // Given
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var strategy = Substitute.For<IToolResolutionStrategy>();
 
-                // When
-                var result = Record.Exception(() => locator.RegisterFile(null));
+            // When
+            var result = Record.Exception(() => new ToolLocator(environment, null, strategy));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "path");
-            }
-
-            [Fact]
-            public void Should_Register_File_Path_With_Tool_Repository()
-            {
-                // Given
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var repository = Substitute.For<IToolRepository>();
-                var strategy = Substitute.For<IToolResolutionStrategy>();
-                var locator = new ToolLocator(environment, repository, strategy);
-
-                // When
-                locator.RegisterFile("./mytools/test.exe");
-
-                // Then
-                repository.Received(1)
-                    .Register(Arg.Is<FilePath>(path => path.FullPath == "/Working/mytools/test.exe"));
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "repository");
         }
 
-        public sealed class TheResolveMethod
+        [Fact]
+        public void Should_Throw_If_Tool_Resolution_Strategy_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Tool_Is_Null()
-            {
-                // Given
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var repository = Substitute.For<IToolRepository>();
-                var strategy = Substitute.For<IToolResolutionStrategy>();
-                var locator = new ToolLocator(environment, repository, strategy);
+            // Given
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var repository = Substitute.For<IToolRepository>();
 
-                // When
-                var result = Record.Exception(() => locator.Resolve((string)null));
+            // When
+            var result = Record.Exception(() => new ToolLocator(environment, repository, null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "tool");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "strategy");
+        }
+    }
 
-            [Theory]
-            [InlineData("")]
-            [InlineData("\t")]
-            [InlineData(" ")]
-            public void Should_Throw_If_Tool_Is_Empty(string tool)
-            {
-                // Given
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var repository = Substitute.For<IToolRepository>();
-                var strategy = Substitute.For<IToolResolutionStrategy>();
-                var locator = new ToolLocator(environment, repository, strategy);
+    public sealed class TheRegisterFileMethod
+    {
+        [Fact]
+        public void Should_Throw_If_File_Path_Is_Null()
+        {
+            // Given
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var repository = Substitute.For<IToolRepository>();
+            var strategy = Substitute.For<IToolResolutionStrategy>();
+            var locator = new ToolLocator(environment, repository, strategy);
 
-                // When
-                var result = Record.Exception(() => locator.Resolve(tool));
+            // When
+            var result = Record.Exception(() => locator.RegisterFile(null));
 
-                // Then
-                AssertEx.IsArgumentException(result, "tool", "Tool name cannot be empty.");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "path");
+        }
 
-            [Fact]
-            public void Should_Throw_If_ToolExeNames_Is_Null()
-            {
-                // Given
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var repository = Substitute.For<IToolRepository>();
-                var strategy = Substitute.For<IToolResolutionStrategy>();
-                var locator = new ToolLocator(environment, repository, strategy);
+        [Fact]
+        public void Should_Register_File_Path_With_Tool_Repository()
+        {
+            // Given
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var repository = Substitute.For<IToolRepository>();
+            var strategy = Substitute.For<IToolResolutionStrategy>();
+            var locator = new ToolLocator(environment, repository, strategy);
 
-                // When
-                var result = Record.Exception(() => locator.Resolve((IEnumerable<string>)null));
+            // When
+            locator.RegisterFile("./mytools/test.exe");
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "toolExeNames");
-            }
+            // Then
+            repository.Received(1)
+                .Register(Arg.Is<FilePath>(path => path.FullPath == "/Working/mytools/test.exe"));
+        }
+    }
 
-            [Fact]
-            public void Should_Resolve_Tool_Using_The_Tool_Resolution_Strategy()
-            {
-                // Given
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var repository = Substitute.For<IToolRepository>();
-                var strategy = Substitute.For<IToolResolutionStrategy>();
-                var locator = new ToolLocator(environment, repository, strategy);
+    public sealed class TheResolveMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Tool_Is_Null()
+        {
+            // Given
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var repository = Substitute.For<IToolRepository>();
+            var strategy = Substitute.For<IToolResolutionStrategy>();
+            var locator = new ToolLocator(environment, repository, strategy);
 
-                // When
-                locator.Resolve("test.exe");
+            // When
+            var result = Record.Exception(() => locator.Resolve((string)null));
 
-                // Then
-                strategy.Received(1)
-                    .Resolve(Arg.Is(repository), Arg.Is("test.exe"));
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "tool");
+        }
 
-            [Fact]
-            public void Should_Resolve_ToolExeNames_Using_The_Tool_Resolution_Strategy()
-            {
-                // Given
-                var environment = FakeEnvironment.CreateUnixEnvironment();
-                var repository = Substitute.For<IToolRepository>();
-                var strategy = Substitute.For<IToolResolutionStrategy>();
-                var locator = new ToolLocator(environment, repository, strategy);
+        [Theory]
+        [InlineData("")]
+        [InlineData("\t")]
+        [InlineData(" ")]
+        public void Should_Throw_If_Tool_Is_Empty(string tool)
+        {
+            // Given
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var repository = Substitute.For<IToolRepository>();
+            var strategy = Substitute.For<IToolResolutionStrategy>();
+            var locator = new ToolLocator(environment, repository, strategy);
 
-                // When
-                locator.Resolve(new[] { "test.exe", "dotnet-test", "dotnet-test.exe" });
+            // When
+            var result = Record.Exception(() => locator.Resolve(tool));
 
-                // Then
-                strategy.Received(1)
-                    .Resolve(Arg.Is(repository), Arg.Is<IEnumerable<string>>(arg => arg.SequenceEqual(new[] { "test.exe", "dotnet-test", "dotnet-test.exe" })));
-            }
+            // Then
+            AssertEx.IsArgumentException(result, "tool", "Tool name cannot be empty.");
+        }
+
+        [Fact]
+        public void Should_Throw_If_ToolExeNames_Is_Null()
+        {
+            // Given
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var repository = Substitute.For<IToolRepository>();
+            var strategy = Substitute.For<IToolResolutionStrategy>();
+            var locator = new ToolLocator(environment, repository, strategy);
+
+            // When
+            var result = Record.Exception(() => locator.Resolve((IEnumerable<string>)null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "toolExeNames");
+        }
+
+        [Fact]
+        public void Should_Resolve_Tool_Using_The_Tool_Resolution_Strategy()
+        {
+            // Given
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var repository = Substitute.For<IToolRepository>();
+            var strategy = Substitute.For<IToolResolutionStrategy>();
+            var locator = new ToolLocator(environment, repository, strategy);
+
+            // When
+            locator.Resolve("test.exe");
+
+            // Then
+            strategy.Received(1)
+                .Resolve(Arg.Is(repository), Arg.Is("test.exe"));
+        }
+
+        [Fact]
+        public void Should_Resolve_ToolExeNames_Using_The_Tool_Resolution_Strategy()
+        {
+            // Given
+            var environment = FakeEnvironment.CreateUnixEnvironment();
+            var repository = Substitute.For<IToolRepository>();
+            var strategy = Substitute.For<IToolResolutionStrategy>();
+            var locator = new ToolLocator(environment, repository, strategy);
+
+            // When
+            locator.Resolve(new[] { "test.exe", "dotnet-test", "dotnet-test.exe" });
+
+            // Then
+            strategy.Received(1)
+                .Resolve(Arg.Is(repository), Arg.Is<IEnumerable<string>>(arg => arg.SequenceEqual(new[] { "test.exe", "dotnet-test", "dotnet-test.exe" })));
         }
     }
 }

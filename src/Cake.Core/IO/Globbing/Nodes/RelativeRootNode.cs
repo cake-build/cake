@@ -4,15 +4,14 @@
 
 using System.Diagnostics;
 
-namespace Cake.Core.IO.Globbing.Nodes
+namespace Cake.Core.IO.Globbing.Nodes;
+
+[DebuggerDisplay("./")]
+internal sealed class RelativeRootNode : GlobNode
 {
-    [DebuggerDisplay("./")]
-    internal sealed class RelativeRootNode : GlobNode
+    [DebuggerStepThrough]
+    public override void Accept(GlobVisitor globber, GlobVisitorContext context)
     {
-        [DebuggerStepThrough]
-        public override void Accept(GlobVisitor globber, GlobVisitorContext context)
-        {
-            globber.VisitRelativeRoot(this, context);
-        }
+        globber.VisitRelativeRoot(this, context);
     }
 }

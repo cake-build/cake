@@ -4,41 +4,39 @@
 
 using Cake.Common.Tests.Fixtures.Tools.DotNet.SDKCheck;
 using Cake.Testing;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.DotNet.SDKCheck
+namespace Cake.Common.Tests.Unit.Tools.DotNet.SDKCheck;
+
+public sealed class DotNetSDKCheckTests
 {
-    public sealed class DotNetSDKCheckTests
+    public sealed class TheSDKCheckMethod
     {
-        public sealed class TheSDKCheckMethod
+        [Fact]
+        public void Should_Throw_If_Process_Was_Not_Started()
         {
-            [Fact]
-            public void Should_Throw_If_Process_Was_Not_Started()
-            {
-                // Given
-                var fixture = new DotNetSDKCheckerFixture();
-                fixture.GivenProcessCannotStart();
+            // Given
+            var fixture = new DotNetSDKCheckerFixture();
+            fixture.GivenProcessCannotStart();
 
-                // When
-                var result = Record.Exception(() => fixture.Run());
+            // When
+            var result = Record.Exception(() => fixture.Run());
 
-                // Then
-                AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
-            }
+            // Then
+            AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
+        }
 
-            [Fact]
-            public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
-            {
-                // Given
-                var fixture = new DotNetSDKCheckerFixture();
-                fixture.GivenProcessExitsWithCode(1);
+        [Fact]
+        public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
+        {
+            // Given
+            var fixture = new DotNetSDKCheckerFixture();
+            fixture.GivenProcessExitsWithCode(1);
 
-                // When
-                var result = Record.Exception(() => fixture.Run());
+            // When
+            var result = Record.Exception(() => fixture.Run());
 
-                // Then
-                AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
-            }
+            // Then
+            AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
         }
     }
 }

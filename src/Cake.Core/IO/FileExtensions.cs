@@ -6,184 +6,183 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Cake.Core.IO
+namespace Cake.Core.IO;
+
+/// <summary>
+/// Contains extension methods for <see cref="IFile"/>.
+/// </summary>
+public static class FileExtensions
 {
     /// <summary>
-    /// Contains extension methods for <see cref="IFile"/>.
+    /// Opens the file using the specified options.
     /// </summary>
-    public static class FileExtensions
+    /// <param name="file">The file.</param>
+    /// <param name="mode">The mode.</param>
+    /// <returns>A <see cref="Stream"/> to the file.</returns>
+    public static Stream Open(this IFile file, FileMode mode)
     {
-        /// <summary>
-        /// Opens the file using the specified options.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <param name="mode">The mode.</param>
-        /// <returns>A <see cref="Stream"/> to the file.</returns>
-        public static Stream Open(this IFile file, FileMode mode)
-        {
-            ArgumentNullException.ThrowIfNull(file);
-            return file.Open(mode,
-                mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite,
-                FileShare.None);
-        }
+        ArgumentNullException.ThrowIfNull(file);
+        return file.Open(mode,
+            mode == FileMode.Append ? FileAccess.Write : FileAccess.ReadWrite,
+            FileShare.None);
+    }
 
-        /// <summary>
-        /// Opens the file using the specified options.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <param name="mode">The mode.</param>
-        /// <param name="access">The access.</param>
-        /// <returns>A <see cref="Stream"/> to the file.</returns>
-        public static Stream Open(this IFile file, FileMode mode, FileAccess access)
-        {
-            ArgumentNullException.ThrowIfNull(file);
-            return file.Open(mode, access, FileShare.None);
-        }
+    /// <summary>
+    /// Opens the file using the specified options.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <param name="mode">The mode.</param>
+    /// <param name="access">The access.</param>
+    /// <returns>A <see cref="Stream"/> to the file.</returns>
+    public static Stream Open(this IFile file, FileMode mode, FileAccess access)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        return file.Open(mode, access, FileShare.None);
+    }
 
-        /// <summary>
-        /// Opens the file for reading.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <returns>A <see cref="Stream"/> to the file.</returns>
-        /// <example>
-        /// <code>
-        /// var file = context.FileSystem.GetFile("./README.md");
-        /// using (var stream = file.OpenRead())
-        /// {
-        /// }
-        /// </code>
-        /// </example>
-        public static Stream OpenRead(this IFile file)
-        {
-            ArgumentNullException.ThrowIfNull(file);
-            return file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
-        }
+    /// <summary>
+    /// Opens the file for reading.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <returns>A <see cref="Stream"/> to the file.</returns>
+    /// <example>
+    /// <code>
+    /// var file = context.FileSystem.GetFile("./README.md");
+    /// using (var stream = file.OpenRead())
+    /// {
+    /// }
+    /// </code>
+    /// </example>
+    public static Stream OpenRead(this IFile file)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        return file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+    }
 
-        /// <summary>
-        /// Opens the file for writing.
-        /// If the file already exists, it will be overwritten.
-        /// </summary>
-        /// <param name="file">The file to be opened.</param>
-        /// <returns>A <see cref="Stream"/> to the file.</returns>
-        /// <example>
-        /// <code>
-        /// var file = context.FileSystem.GetFile("./artifacts/out.txt");
-        /// using (var stream = file.OpenWrite())
-        /// {
-        /// }
-        /// </code>
-        /// </example>
-        public static Stream OpenWrite(this IFile file)
-        {
-            ArgumentNullException.ThrowIfNull(file);
-            return file.Open(FileMode.Create, FileAccess.Write, FileShare.None);
-        }
+    /// <summary>
+    /// Opens the file for writing.
+    /// If the file already exists, it will be overwritten.
+    /// </summary>
+    /// <param name="file">The file to be opened.</param>
+    /// <returns>A <see cref="Stream"/> to the file.</returns>
+    /// <example>
+    /// <code>
+    /// var file = context.FileSystem.GetFile("./artifacts/out.txt");
+    /// using (var stream = file.OpenWrite())
+    /// {
+    /// }
+    /// </code>
+    /// </example>
+    public static Stream OpenWrite(this IFile file)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        return file.Open(FileMode.Create, FileAccess.Write, FileShare.None);
+    }
 
-        /// <summary>
-        /// Enumerates line in file.
-        /// </summary>
-        /// <param name="file">The file to be read from.</param>
-        /// <param name="encoding">The encoding that is applied to the content of the file.</param>
-        /// <returns>A <see cref="IEnumerable{T}"/> of file line content.</returns>
-        /// <example>
-        /// <code>
-        /// var file = context.FileSystem.GetFile("./README.md");
-        /// foreach (var line in file.ReadLines(System.Text.Encoding.UTF8))
-        /// {
-        ///     Information(line);
-        /// }
-        /// </code>
-        /// </example>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public static IEnumerable<string> ReadLines(this IFile file, System.Text.Encoding encoding)
+    /// <summary>
+    /// Enumerates line in file.
+    /// </summary>
+    /// <param name="file">The file to be read from.</param>
+    /// <param name="encoding">The encoding that is applied to the content of the file.</param>
+    /// <returns>A <see cref="IEnumerable{T}"/> of file line content.</returns>
+    /// <example>
+    /// <code>
+    /// var file = context.FileSystem.GetFile("./README.md");
+    /// foreach (var line in file.ReadLines(System.Text.Encoding.UTF8))
+    /// {
+    ///     Information(line);
+    /// }
+    /// </code>
+    /// </example>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+    public static IEnumerable<string> ReadLines(this IFile file, System.Text.Encoding encoding)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        using (var stream = file.OpenRead())
+        using (var reader = new StreamReader(stream, encoding))
         {
-            ArgumentNullException.ThrowIfNull(file);
-            using (var stream = file.OpenRead())
-            using (var reader = new StreamReader(stream, encoding))
+            var result = new List<string>();
+            string line;
+            while ((line = reader.ReadLine()) != null)
             {
-                var result = new List<string>();
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    result.Add(line);
-                }
-                return result;
+                result.Add(line);
             }
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// Checks if file has CLR PE Header.
+    /// </summary>
+    /// <param name="file">The file to be read from.</param>
+    /// <returns><c>true</c> if file is CLR assembly; otherwise, <c>false</c>.</returns>
+    /// <remarks>
+    /// See <a href="https://docs.microsoft.com/en-us/windows/desktop/Debug/pe-format">https://docs.microsoft.com/en-us/windows/desktop/Debug/pe-format</a> for more information.
+    /// </remarks>
+    public static bool IsClrAssembly(this IFile file)
+    {
+        if (!file.Exists || file.Length < 365)
+        {
+            return false;
         }
 
-        /// <summary>
-        /// Checks if file has CLR PE Header.
-        /// </summary>
-        /// <param name="file">The file to be read from.</param>
-        /// <returns><c>true</c> if file is CLR assembly; otherwise, <c>false</c>.</returns>
-        /// <remarks>
-        /// See <a href="https://docs.microsoft.com/en-us/windows/desktop/Debug/pe-format">https://docs.microsoft.com/en-us/windows/desktop/Debug/pe-format</a> for more information.
-        /// </remarks>
-        public static bool IsClrAssembly(this IFile file)
+        // Is known extension?
+        switch (file.Path?.GetExtension().ToLowerInvariant())
         {
-            if (!file.Exists || file.Length < 365)
-            {
+            case ".dll":
+            case ".exe":
+            case ".sys":
+            case ".tsp":
+            case ".acm":
+            case ".ax":
+            case ".cpl":
+            case ".drv":
+            case ".efi":
+            case ".mui":
+            case ".ocx":
+            case ".scr":
+            case null:
+                break;
+
+            default:
                 return false;
-            }
+        }
 
-            // Is known extension?
-            switch (file.Path?.GetExtension().ToLowerInvariant())
+        using (var fs = file.OpenRead())
+        {
+            using (var reader = new System.IO.BinaryReader(fs))
             {
-                case ".dll":
-                case ".exe":
-                case ".sys":
-                case ".tsp":
-                case ".acm":
-                case ".ax":
-                case ".cpl":
-                case ".drv":
-                case ".efi":
-                case ".mui":
-                case ".ocx":
-                case ".scr":
-                case null:
-                    break;
+                const uint MagicOffset = 0x18;
+                const uint Magic32Bit = 0x10b;
+                const int Offset32Bit = 0x5e;
+                const int Offset64Bit = 0x6e;
+                const int OffsetDictionary = 0x70;
 
-                default:
-                    return false;
-            }
+                // PE Header Start
+                fs.Position = 0x3C;
 
-            using (var fs = file.OpenRead())
-            {
-                using (var reader = new System.IO.BinaryReader(fs))
+                // Go to Magic header
+                long offset = reader.ReadUInt32() + MagicOffset;
+
+                if (offset + sizeof(UInt16) > fs.Length)
                 {
-                    const uint MagicOffset = 0x18;
-                    const uint Magic32Bit = 0x10b;
-                    const int Offset32Bit = 0x5e;
-                    const int Offset64Bit = 0x6e;
-                    const int OffsetDictionary = 0x70;
-
-                    // PE Header Start
-                    fs.Position = 0x3C;
-
-                    // Go to Magic header
-                    long offset = reader.ReadUInt32() + MagicOffset;
-
-                    if (offset + sizeof(UInt16) > fs.Length)
-                    {
-                        return false;
-                    }
-
-                    fs.Position = offset;
-
-                    // Check magic to get 32 / 64 bit offset
-                    var is32Bit = reader.ReadUInt16() == Magic32Bit;
-                    offset = fs.Position + (is32Bit ? Offset32Bit : Offset64Bit) + OffsetDictionary;
-
-                    if (offset + 4 > fs.Length)
-                    {
-                        return false;
-                    }
-
-                    // Go to dictionary start
-                    fs.Position = offset;
-                    return reader.ReadUInt32() > 0;
+                    return false;
                 }
+
+                fs.Position = offset;
+
+                // Check magic to get 32 / 64 bit offset
+                var is32Bit = reader.ReadUInt16() == Magic32Bit;
+                offset = fs.Position + (is32Bit ? Offset32Bit : Offset64Bit) + OffsetDictionary;
+
+                if (offset + 4 > fs.Length)
+                {
+                    return false;
+                }
+
+                // Go to dictionary start
+                fs.Position = offset;
+                return reader.ReadUInt32() > 0;
             }
         }
     }

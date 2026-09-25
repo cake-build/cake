@@ -8,33 +8,32 @@ using System.Globalization;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 
-namespace Cake.Cli
-{
-    /// <summary>
-    /// A type converter for <see cref="Verbosity"/>.
-    /// </summary>
-    public sealed class VerbosityConverter : TypeConverter
-    {
-        /// <inheritdoc/>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-        {
-            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
-        }
+namespace Cake.Cli;
 
-        /// <inheritdoc/>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+/// <summary>
+/// A type converter for <see cref="Verbosity"/>.
+/// </summary>
+public sealed class VerbosityConverter : TypeConverter
+{
+    /// <inheritdoc/>
+    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+    {
+        return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+    }
+
+    /// <inheritdoc/>
+    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+    {
+        if (value is string stringValue)
         {
-            if (value is string stringValue)
+            if (!VerbosityParser.TryParse(stringValue, out var verbosity))
             {
-                if (!VerbosityParser.TryParse(stringValue, out var verbosity))
-                {
-                    const string format = "The value '{0}' is not a valid verbosity.";
-                    var message = string.Format(CultureInfo.InvariantCulture, format, value);
-                    throw new CakeException(message);
-                }
-                return verbosity;
+                const string format = "The value '{0}' is not a valid verbosity.";
+                var message = string.Format(CultureInfo.InvariantCulture, format, value);
+                throw new CakeException(message);
             }
-            throw new NotSupportedException("Can't convert value to verbosity.");
+            return verbosity;
         }
+        throw new NotSupportedException("Can't convert value to verbosity.");
     }
 }

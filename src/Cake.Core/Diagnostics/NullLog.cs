@@ -2,23 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Core.Diagnostics
-{
-    /// <summary>
-    /// A log that discards messages written to it.
-    /// </summary>
-    public sealed class NullLog : ICakeLog
-    {
-        /// <inheritdoc/>
-        public Verbosity Verbosity
-        {
-            get { return Verbosity.Quiet; }
-            set { }
-        }
+namespace Cake.Core.Diagnostics;
 
-        /// <inheritdoc/>
-        public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
-        {
-        }
+/// <summary>
+/// A log that discards messages written to it.
+/// </summary>
+public sealed class NullLog : ICakeLog
+{
+    /// <inheritdoc/>
+    public Verbosity Verbosity
+    {
+        get { return Verbosity.Quiet; }
+        set { }
+    }
+
+    /// <inheritdoc/>
+    public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
+    {
     }
 }

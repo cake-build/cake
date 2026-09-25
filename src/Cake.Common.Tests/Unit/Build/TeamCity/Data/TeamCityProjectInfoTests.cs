@@ -3,26 +3,24 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
+namespace Cake.Common.Tests.Unit.Build.TeamCity.Data;
+
+public sealed class TeamCityProjectInfoTests
 {
-    public sealed class TeamCityProjectInfoTests
+    public sealed class TheNameProperty
     {
-        public sealed class TheNameProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new TeamCityInfoFixture().CreateProjectInfo();
+            // Given
+            var info = new TeamCityInfoFixture().CreateProjectInfo();
 
-                // When
-                var result = info.Name;
+            // When
+            var result = info.Name;
 
-                // Then
-                Assert.Equal("Cake", result);
-            }
+            // Then
+            Assert.Equal("Cake", result);
         }
     }
 }

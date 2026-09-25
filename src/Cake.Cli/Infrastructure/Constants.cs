@@ -2,27 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Cli.Infrastructure
+namespace Cake.Cli.Infrastructure;
+
+/// <summary>
+/// Constants used by the Cake CLI.
+/// </summary>
+internal static class Constants
 {
     /// <summary>
-    /// Constants used by the Cake CLI.
+    /// Configuration key names for CLI settings.
     /// </summary>
-    internal static class Constants
+    public static class Settings
     {
         /// <summary>
-        /// Configuration key names for CLI settings.
+        /// Configuration key for disabling the build report.
         /// </summary>
-        public static class Settings
-        {
-            /// <summary>
-            /// Configuration key for disabling the build report.
-            /// </summary>
-            public const string NoReport = "Settings_NoReport";
+        public const string NoReport = "Settings_NoReport";
 
-            /// <summary>
-            /// Configuration key for using a unified dependency graph when running multiple targets.
-            /// </summary>
-            public const string UnifiedDependencyGraphForMultipleTargets = "Settings_UnifiedDependencyGraphForMultipleTargets";
-        }
+        /// <summary>
+        /// Configuration key for using a unified dependency graph when running multiple targets.
+        /// </summary>
+        public const string UnifiedDependencyGraphForMultipleTargets = "Settings_UnifiedDependencyGraphForMultipleTargets";
     }
 }

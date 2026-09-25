@@ -9,401 +9,200 @@ using Cake.Core.Tests.Fixtures;
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.IO.Globbing
+namespace Cake.Core.Tests.Unit.IO.Globbing;
+
+public sealed class GlobberTests
 {
-    public sealed class GlobberTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Throw_If_File_System_Is_Null()
+        {
+            // Given, When
+            var environment = Substitute.For<ICakeEnvironment>();
+            var result = Record.Exception(() => new Globber(null, environment));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "fileSystem");
+        }
+
+        [Fact]
+        public void Should_Throw_If_Environment_Is_Null()
+        {
+            // Given
+            var fileSystem = Substitute.For<IFileSystem>();
+
+            // When
+            var result = Record.Exception(() => new Globber(fileSystem, null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "environment");
+        }
+    }
+
+    public sealed class TheGetFileSystemInfosMethod
+    {
+        [Fact]
+        public void Should_Return_Empty_Result_If_Pattern_Is_Empty()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+            var globber = new Globber(fixture.FileSystem, fixture.Environment);
+
+            // When
+            var result = globber.GetFileSystemInfos(fixture.FileSystem, new GlobPattern(string.Empty));
+
+            // Then
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void Should_Use_The_Same_Case_Sensitivity_As_Match()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+            var globber = new Globber(fixture.FileSystem, fixture.Environment);
+            var pattern = new GlobPattern("/working/*");
+
+            // When
+            var matches = globber.Match(pattern, new GlobberSettings()).ToList();
+            var result = globber.GetFileSystemInfos(fixture.FileSystem, pattern).Select(info => info.Path).ToList();
+
+            // Then
+            Assert.Equal(matches, result);
+        }
+
+        [Fact]
+        public void Should_Return_Matching_Files_And_Directories()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+            var globber = new Globber(fixture.FileSystem, fixture.Environment);
+
+            // When
+            var result = globber.GetFileSystemInfos(fixture.FileSystem, new GlobPattern("/Working/*")).ToList();
+
+            // Then
+            Assert.Equal(9, result.Count);
+            Assert.Equal(6, result.OfType<IFile>().Count());
+            Assert.Equal(3, result.OfType<IDirectory>().Count());
+        }
+
+        [Fact]
+        public void Should_Apply_Settings_And_Predicates()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+            var globber = new Globber(fixture.FileSystem, fixture.Environment);
+            var settings = new GlobberSettings
+            {
+                Predicate = info => info.Path.FullPath == "/Working" || info.Path.FullPath.EndsWith("/Foo", StringComparison.Ordinal),
+                FilePredicate = file => file.Path.FullPath.EndsWith("/foobar.rs", StringComparison.Ordinal)
+            };
+
+            // When
+            var result = globber.GetFileSystemInfos(fixture.FileSystem, new GlobPattern("/Working/*"), settings).ToList();
+
+            // Then
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, entry => entry.Path.FullPath == "/Working/Foo");
+            Assert.Contains(result, entry => entry.Path.FullPath == "/Working/foobar.rs");
+        }
+    }
+
+    public sealed class TheMatchMethod
+    {
+        public sealed class WithDirectoryPredicate
         {
             [Fact]
-            public void Should_Throw_If_File_System_Is_Null()
+            public void Should_Return_Paths_Not_Affected_By_Walker_Hints()
             {
-                // Given, When
-                var environment = Substitute.For<ICakeEnvironment>();
-                var result = Record.Exception(() => new Globber(null, environment));
+                // Given
+                var fixture = GlobberFixture.UnixLike();
+                var predicate = new Func<IFileSystemInfo, bool>(i =>
+                    i.Path.FullPath != "/Working/Bar");
+
+                // When
+                var result = fixture.Match("./**/Qux.h", predicate);
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "fileSystem");
+                Assert.Single(result);
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
             }
 
             [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
+            public void Should_Not_Return_Path_If_Walker_Hint_Matches_Part_Of_Pattern()
             {
                 // Given
-                var fileSystem = Substitute.For<IFileSystem>();
+                var fixture = GlobberFixture.UnixLike();
+                var predicate = new Func<IFileSystemInfo, bool>(i =>
+                    i.Path.FullPath != "/Working/Bar");
 
                 // When
-                var result = Record.Exception(() => new Globber(fileSystem, null));
+                var result = fixture.Match("/Working/Bar/Qux.h", predicate);
 
                 // Then
-                AssertEx.IsArgumentNullException(result, "environment");
+                Assert.Empty(result);
+            }
+
+            [Fact]
+            public void Should_Not_Return_Path_If_Walker_Hint_Exactly_Match_Pattern()
+            {
+                // Given
+                var fixture = GlobberFixture.UnixLike();
+                var predicate = new Func<IFileSystemInfo, bool>(i =>
+                    i.Path.FullPath != "/Working/Bar");
+
+                // When
+                var result = fixture.Match("/Working/Bar", predicate);
+
+                // Then
+                Assert.Empty(result);
             }
         }
 
-        public sealed class TheGetFileSystemInfosMethod
+        public sealed class WithFilePredicate
         {
             [Fact]
-            public void Should_Return_Empty_Result_If_Pattern_Is_Empty()
+            public void Should_Return_Only_Files_Matching_Predicate()
             {
                 // Given
                 var fixture = GlobberFixture.UnixLike();
-                var globber = new Globber(fixture.FileSystem, fixture.Environment);
+                var predicate = new Func<IFile, bool>(i => i.Path.FullPath.EndsWith(".c"));
 
                 // When
-                var result = globber.GetFileSystemInfos(fixture.FileSystem, new GlobPattern(string.Empty));
-
-                // Then
-                Assert.Empty(result);
-            }
-
-            [Fact]
-            public void Should_Use_The_Same_Case_Sensitivity_As_Match()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-                var globber = new Globber(fixture.FileSystem, fixture.Environment);
-                var pattern = new GlobPattern("/working/*");
-
-                // When
-                var matches = globber.Match(pattern, new GlobberSettings()).ToList();
-                var result = globber.GetFileSystemInfos(fixture.FileSystem, pattern).Select(info => info.Path).ToList();
-
-                // Then
-                Assert.Equal(matches, result);
-            }
-
-            [Fact]
-            public void Should_Return_Matching_Files_And_Directories()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-                var globber = new Globber(fixture.FileSystem, fixture.Environment);
-
-                // When
-                var result = globber.GetFileSystemInfos(fixture.FileSystem, new GlobPattern("/Working/*")).ToList();
-
-                // Then
-                Assert.Equal(9, result.Count);
-                Assert.Equal(6, result.OfType<IFile>().Count());
-                Assert.Equal(3, result.OfType<IDirectory>().Count());
-            }
-
-            [Fact]
-            public void Should_Apply_Settings_And_Predicates()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-                var globber = new Globber(fixture.FileSystem, fixture.Environment);
-                var settings = new GlobberSettings
-                {
-                    Predicate = info => info.Path.FullPath == "/Working" || info.Path.FullPath.EndsWith("/Foo", StringComparison.Ordinal),
-                    FilePredicate = file => file.Path.FullPath.EndsWith("/foobar.rs", StringComparison.Ordinal)
-                };
-
-                // When
-                var result = globber.GetFileSystemInfos(fixture.FileSystem, new GlobPattern("/Working/*"), settings).ToList();
-
-                // Then
-                Assert.Equal(2, result.Count);
-                Assert.Contains(result, entry => entry.Path.FullPath == "/Working/Foo");
-                Assert.Contains(result, entry => entry.Path.FullPath == "/Working/foobar.rs");
-            }
-        }
-
-        public sealed class TheMatchMethod
-        {
-            public sealed class WithDirectoryPredicate
-            {
-                [Fact]
-                public void Should_Return_Paths_Not_Affected_By_Walker_Hints()
-                {
-                    // Given
-                    var fixture = GlobberFixture.UnixLike();
-                    var predicate = new Func<IFileSystemInfo, bool>(i =>
-                        i.Path.FullPath != "/Working/Bar");
-
-                    // When
-                    var result = fixture.Match("./**/Qux.h", predicate);
-
-                    // Then
-                    Assert.Single(result);
-                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
-                }
-
-                [Fact]
-                public void Should_Not_Return_Path_If_Walker_Hint_Matches_Part_Of_Pattern()
-                {
-                    // Given
-                    var fixture = GlobberFixture.UnixLike();
-                    var predicate = new Func<IFileSystemInfo, bool>(i =>
-                        i.Path.FullPath != "/Working/Bar");
-
-                    // When
-                    var result = fixture.Match("/Working/Bar/Qux.h", predicate);
-
-                    // Then
-                    Assert.Empty(result);
-                }
-
-                [Fact]
-                public void Should_Not_Return_Path_If_Walker_Hint_Exactly_Match_Pattern()
-                {
-                    // Given
-                    var fixture = GlobberFixture.UnixLike();
-                    var predicate = new Func<IFileSystemInfo, bool>(i =>
-                        i.Path.FullPath != "/Working/Bar");
-
-                    // When
-                    var result = fixture.Match("/Working/Bar", predicate);
-
-                    // Then
-                    Assert.Empty(result);
-                }
-            }
-
-            public sealed class WithFilePredicate
-            {
-                [Fact]
-                public void Should_Return_Only_Files_Matching_Predicate()
-                {
-                    // Given
-                    var fixture = GlobberFixture.UnixLike();
-                    var predicate = new Func<IFile, bool>(i => i.Path.FullPath.EndsWith(".c"));
-
-                    // When
-                    var result = fixture.Match("/Working/**/*.*", null, predicate);
-
-                    // Then
-                    Assert.Equal(5, result.Length);
-                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
-                    AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
-                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
-                    AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
-                }
-            }
-
-            public sealed class WithDirectoryAndFilePredicate
-            {
-                [Fact]
-                public void Should_Return_Only_Files_Matching_Predicate()
-                {
-                    // Given
-                    var fixture = GlobberFixture.UnixLike();
-                    var directoryPredicate = new Func<IFileSystemInfo, bool>(i => i.Path.FullPath.Contains("/Working"));
-                    var filePredicate = new Func<IFile, bool>(i => !i.Path.FullPath.EndsWith(".dll"));
-
-                    // When
-                    var result = fixture.Match("./**/*.*", directoryPredicate, filePredicate);
-
-                    // Then
-                    Assert.Equal(14, result.Length);
-                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
-                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
-                    AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
-                    AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
-                    AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
-                    AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.h");
-                    AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
-                    AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
-                    AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
-                    AssertEx.ContainsFilePath(result, "/Working/Project/package.json");
-                    AssertEx.ContainsFilePath(result, "/Working/Project/package-lock.json");
-                    AssertEx.ContainsFilePath(result, "/Working/Project/tsconfig.json");
-                    AssertEx.ContainsFilePath(result, "/Working/Project/.npmrc");
-                }
-            }
-
-            [Fact]
-            public void Should_Throw_If_Pattern_Is_Null()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-
-                // When
-                var result = Record.Exception(() => fixture.Match(null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "pattern");
-            }
-
-            [Fact]
-            public void Should_Return_Empty_Result_If_Pattern_Is_Empty()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-
-                // When
-                var result = fixture.Match(string.Empty);
-
-                // Then
-                Assert.Empty(result);
-            }
-
-            [Fact]
-            public void Should_Return_Empty_Result_If_Pattern_Is_Invalid()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-
-                // When
-                var result = fixture.Match("pattern/");
-
-                // Then
-                Assert.Empty(result);
-            }
-
-            [Fact]
-            public void Can_Traverse_Recursively()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-
-                // When
-                var result = fixture.Match("/Working/**/*.c");
+                var result = fixture.Match("/Working/**/*.*", null, predicate);
 
                 // Then
                 Assert.Equal(5, result.Length);
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+                AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
                 AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
             }
+        }
 
+        public sealed class WithDirectoryAndFilePredicate
+        {
             [Fact]
-            public void Will_Append_Relative_Root_With_Implicit_Working_Directory()
+            public void Should_Return_Only_Files_Matching_Predicate()
             {
                 // Given
                 var fixture = GlobberFixture.UnixLike();
+                var directoryPredicate = new Func<IFileSystemInfo, bool>(i => i.Path.FullPath.Contains("/Working"));
+                var filePredicate = new Func<IFile, bool>(i => !i.Path.FullPath.EndsWith(".dll"));
 
                 // When
-                var result = fixture.Match("Foo/Bar/Qux.c");
+                var result = fixture.Match("./**/*.*", directoryPredicate, filePredicate);
 
                 // Then
-                Assert.Single(result);
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-            }
-
-            [Fact]
-            public void Should_Be_Able_To_Visit_Parent_Using_Double_Dots()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-
-                // When
-                var result = fixture.Match("/Working/Foo/../Foo/Bar/Qux.c");
-
-                // Then
-                Assert.Single(result);
-                Assert.IsType<FilePath>(result[0]);
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Visiting_Parent_That_Is_Recursive_Wildcard()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-
-                // When
-                var result = Record.Exception(() => fixture.Match("/Working/Foo/**/../Foo/Bar/Qux.c"));
-
-                // Then
-                Assert.NotNull(result);
-                Assert.IsType<NotSupportedException>(result);
-                Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result?.Message);
-            }
-
-            [Theory]
-            [InlineData("/RootFile.sh")]
-            [InlineData("/Working/Foo/Bar/Qux.c")]
-            public void Should_Return_Single_Path_For_Absolute_File_Path_Without_Glob_Pattern(string pattern)
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-
-                // When
-                var result = fixture.Match(pattern);
-
-                // Then
-                Assert.Single(result);
-                Assert.IsType<FilePath>(result[0]);
-                AssertEx.ContainsFilePath(result, pattern);
-            }
-
-            [Theory]
-            [InlineData("/RootDir")]
-            [InlineData("/Working/Foo/Bar")]
-            public void Should_Return_Single_Path_For_Absolute_Directory_Path_Without_Glob_Pattern(string pattern)
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-
-                // When
-                var result = fixture.Match(pattern);
-
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsDirectoryPath(result, pattern);
-            }
-
-            [Fact]
-            public void Should_Return_Single_Path_For_Relative_File_Path_Without_Glob_Pattern()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-                fixture.SetWorkingDirectory("/Working/Foo");
-
-                // When
-                var result = fixture.Match("./Bar/Qux.c");
-
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-            }
-
-            [Fact]
-            public void Should_Return_Single_Path_For_Relative_Directory_Path_Without_Glob_Pattern()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-                fixture.SetWorkingDirectory("/Working/Foo");
-
-                // When
-                var result = fixture.Match("./Bar");
-
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
-            }
-
-            [Fact]
-            public void Should_Return_Files_And_Folders_For_Pattern_Ending_With_Wildcard()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
-
-                // When
-                var result = fixture.Match("/Working/**/*");
-
-                // Then
-                Assert.Equal(23, result.Length);
-                AssertEx.ContainsDirectoryPath(result, "/Working/Foo");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Baz");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Bar");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Project");
+                Assert.Equal(14, result.Length);
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
                 AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
-                AssertEx.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
-                AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
-                AssertEx.ContainsFilePath(result, "/Working/Quz.FooTest.dll");
                 AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
                 AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.h");
                 AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
@@ -414,299 +213,499 @@ namespace Cake.Core.Tests.Unit.IO.Globbing
                 AssertEx.ContainsFilePath(result, "/Working/Project/tsconfig.json");
                 AssertEx.ContainsFilePath(result, "/Working/Project/.npmrc");
             }
+        }
 
-            [Fact]
-            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Wildcard()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Throw_If_Pattern_Is_Null()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/Foo/*/Qux.c");
+            // When
+            var result = Record.Exception(() => fixture.Match(null));
 
-                // Then
-                Assert.Equal(2, result.Length);
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "pattern");
+        }
 
-            [Fact]
-            public void Should_Return_Files_And_Folders_For_Pattern_Ending_With_Character_Wildcard()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_Empty_Result_If_Pattern_Is_Empty()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/Foo/Bar/Q?x.c");
+            // When
+            var result = fixture.Match(string.Empty);
 
-                // Then
-                Assert.Equal(2, result.Length);
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
-            }
+            // Then
+            Assert.Empty(result);
+        }
 
-            [Fact]
-            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Character_Wildcard()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_Empty_Result_If_Pattern_Is_Invalid()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/Foo/Ba?/Qux.c");
+            // When
+            var result = fixture.Match("pattern/");
 
-                // Then
-                Assert.Equal(2, result.Length);
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
-            }
+            // Then
+            Assert.Empty(result);
+        }
 
-            [Fact]
-            public void Should_Return_Files_For_Pattern_Ending_With_Character_Wildcard_And_Dot()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Can_Traverse_Recursively()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/*.Test.dll");
+            // When
+            var result = fixture.Match("/Working/**/*.c");
 
-                // Then
-                Assert.Equal(2, result.Length);
-                AssertEx.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
-                AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
-            }
+            // Then
+            Assert.Equal(5, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
+        }
 
-            [Fact]
-            public void Should_Return_File_For_Recursive_Wildcard_Pattern_Ending_With_Wildcard_Regex()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Will_Append_Relative_Root_With_Implicit_Working_Directory()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/**/*.c");
+            // When
+            var result = fixture.Match("Foo/Bar/Qux.c");
 
-                // Then
-                Assert.Equal(5, result.Length);
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
-                AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
-                AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
-            }
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+        }
 
-            [Fact]
-            public void Should_Return_Only_Folders_For_Pattern_Ending_With_Recursive_Wildcard()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Be_Able_To_Visit_Parent_Using_Double_Dots()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/**");
+            // When
+            var result = fixture.Match("/Working/Foo/../Foo/Bar/Qux.c");
 
-                // Then
-                Assert.Equal(7, result.Length);
-                AssertEx.ContainsDirectoryPath(result, "/Working");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Foo");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Baz");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Bar");
-                AssertEx.ContainsDirectoryPath(result, "/Working/Project");
-            }
+            // Then
+            Assert.Single(result);
+            Assert.IsType<FilePath>(result[0]);
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+        }
 
-            [Theory]
-            [InlineData("/*.sh", "/RootFile.sh")]
-            [InlineData("/Foo/*.baz", "/Foo/Bar.baz")]
-            public void Should_Include_Files_In_Root_Folder_When_Using_Wildcard(string pattern, string file)
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Throw_If_Visiting_Parent_That_Is_Recursive_Wildcard()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match(pattern);
+            // When
+            var result = Record.Exception(() => fixture.Match("/Working/Foo/**/../Foo/Bar/Qux.c"));
 
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsFilePath(result, file);
-            }
+            // Then
+            Assert.NotNull(result);
+            Assert.IsType<NotSupportedException>(result);
+            Assert.Equal("Visiting a parent that is a recursive wildcard is not supported.", result?.Message);
+        }
 
-            [Theory]
-            [InlineData("/**/RootFile.sh", "/RootFile.sh")]
-            [InlineData("/Foo/**/Bar.baz", "/Foo/Bar.baz")]
-            public void Should_Include_Files_In_Root_Folder_When_Using_Recursive_Wildcard(string pattern, string file)
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Theory]
+        [InlineData("/RootFile.sh")]
+        [InlineData("/Working/Foo/Bar/Qux.c")]
+        public void Should_Return_Single_Path_For_Absolute_File_Path_Without_Glob_Pattern(string pattern)
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match(pattern);
+            // When
+            var result = fixture.Match(pattern);
 
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsFilePath(result, file);
-            }
+            // Then
+            Assert.Single(result);
+            Assert.IsType<FilePath>(result[0]);
+            AssertEx.ContainsFilePath(result, pattern);
+        }
 
-            [Theory]
-            [InlineData("/**/RootDir", "/RootDir")]
-            [InlineData("/Foo/**/Bar", "/Foo/Bar")]
-            public void Should_Include_Folder_In_Root_Folder_When_Using_Recursive_Wildcard(string pattern, string folder)
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Theory]
+        [InlineData("/RootDir")]
+        [InlineData("/Working/Foo/Bar")]
+        public void Should_Return_Single_Path_For_Absolute_Directory_Path_Without_Glob_Pattern(string pattern)
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match(pattern);
+            // When
+            var result = fixture.Match(pattern);
 
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsDirectoryPath(result, folder);
-            }
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsDirectoryPath(result, pattern);
+        }
 
-            [Fact]
-            public void Should_Parse_Glob_Expressions_With_Parenthesis_In_Them()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_Single_Path_For_Relative_File_Path_Without_Glob_Pattern()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+            fixture.SetWorkingDirectory("/Working/Foo");
 
-                // When
-                var result = fixture.Match("/Foo (Bar)/Baz.*");
+            // When
+            var result = fixture.Match("./Bar/Qux.c");
 
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsFilePath(result, "/Foo (Bar)/Baz.c");
-            }
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+        }
 
-            [Fact]
-            public void Should_Parse_Glob_Expressions_With_AtSign_In_Them()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_Single_Path_For_Relative_Directory_Path_Without_Glob_Pattern()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+            fixture.SetWorkingDirectory("/Working/Foo");
 
-                // When
-                var result = fixture.Match("/Foo@Bar/Baz.*");
+            // When
+            var result = fixture.Match("./Bar");
 
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsFilePath(result, "/Foo@Bar/Baz.c");
-            }
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
+        }
 
-            [Fact]
-            public void Should_Parse_Glob_Expressions_With_Relative_Directory_Not_At_The_Beginning()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_Files_And_Folders_For_Pattern_Ending_With_Wildcard()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/./*.Test.dll");
+            // When
+            var result = fixture.Match("/Working/**/*");
 
-                // Then
-                Assert.Equal(2, result.Length);
-                AssertEx.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
-                AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
-            }
+            // Then
+            Assert.Equal(23, result.Length);
+            AssertEx.ContainsDirectoryPath(result, "/Working/Foo");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Baz");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Bar");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Project");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.h");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
+            AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
+            AssertEx.ContainsFilePath(result, "/Working/Quz.FooTest.dll");
+            AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.h");
+            AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+            AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
+            AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
+            AssertEx.ContainsFilePath(result, "/Working/Project/package.json");
+            AssertEx.ContainsFilePath(result, "/Working/Project/package-lock.json");
+            AssertEx.ContainsFilePath(result, "/Working/Project/tsconfig.json");
+            AssertEx.ContainsFilePath(result, "/Working/Project/.npmrc");
+        }
 
-            [Fact]
-            public void Should_Parse_Glob_Expressions_With_Unicode_Characters_And_Ending_With_Identifier()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_Files_And_Folders_For_Pattern_Containing_Wildcard()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/嵌套/**/文件.延期");
+            // When
+            var result = fixture.Match("/Working/Foo/*/Qux.c");
 
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsFilePath(result, "/嵌套/目录/文件.延期");
-            }
+            // Then
+            Assert.Equal(2, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+        }
 
-            [Fact]
-            public void Should_Parse_Glob_Expressions_With_Unicode_Characters_And_Not_Ending_With_Identifier()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_Files_And_Folders_For_Pattern_Ending_With_Character_Wildcard()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/嵌套/**/文件.*");
+            // When
+            var result = fixture.Match("/Working/Foo/Bar/Q?x.c");
 
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsFilePath(result, "/嵌套/目录/文件.延期");
-            }
+            // Then
+            Assert.Equal(2, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+        }
 
-            [Fact]
-            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Bracket_Wildcard()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_Files_And_Folders_For_Pattern_Containing_Character_Wildcard()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/fooba[rz].rs");
+            // When
+            var result = fixture.Match("/Working/Foo/Ba?/Qux.c");
 
-                // Then
-                Assert.Equal(2, result.Length);
-                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
-                AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
-            }
+            // Then
+            Assert.Equal(2, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+        }
 
-            [Fact]
-            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Brace_Expansion()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_Files_For_Pattern_Ending_With_Character_Wildcard_And_Dot()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/foo{bar,bax}.rs");
+            // When
+            var result = fixture.Match("/Working/*.Test.dll");
 
-                // Then
-                Assert.Equal(2, result.Length);
-                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
-                AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
-            }
+            // Then
+            Assert.Equal(2, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
+            AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
+        }
 
-            [Fact]
-            public void Should_Return_File_When_Brace_Expansion_Is_Only_Segment_Single_Alternative()
-            {
-                // Given (reproduces GitHub issue #2666: GetFiles with glob curly braces gave empty result)
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_File_For_Recursive_Wildcard_Pattern_Ending_With_Wildcard_Regex()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/Project/{package.json}");
+            // When
+            var result = fixture.Match("/Working/**/*.c");
 
-                // Then
-                Assert.Single(result);
-                AssertEx.ContainsFilePath(result, "/Working/Project/package.json");
-            }
+            // Then
+            Assert.Equal(5, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Qex.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Baz/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Foo/Bar/Baz/Qux.c");
+            AssertEx.ContainsFilePath(result, "/Working/Bar/Qux.c");
+        }
 
-            [Fact]
-            public void Should_Return_Files_When_Brace_Expansion_Is_Only_Segment_Multiple_Alternatives()
-            {
-                // Given (reproduces GitHub issue #2666: GetFiles with glob curly braces gave empty result)
-                var fixture = GlobberFixture.UnixLike();
+        [Fact]
+        public void Should_Return_Only_Folders_For_Pattern_Ending_With_Recursive_Wildcard()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/Project/{package.json,package-lock.json,tsconfig.json,.npmrc}");
+            // When
+            var result = fixture.Match("/Working/**");
 
-                // Then
-                Assert.Equal(4, result.Length);
-                AssertEx.ContainsFilePath(result, "/Working/Project/package.json");
-                AssertEx.ContainsFilePath(result, "/Working/Project/package-lock.json");
-                AssertEx.ContainsFilePath(result, "/Working/Project/tsconfig.json");
-                AssertEx.ContainsFilePath(result, "/Working/Project/.npmrc");
-            }
+            // Then
+            Assert.Equal(7, result.Length);
+            AssertEx.ContainsDirectoryPath(result, "/Working");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Foo");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Baz");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Foo/Bar/Baz");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Bar");
+            AssertEx.ContainsDirectoryPath(result, "/Working/Project");
+        }
 
-            [Fact]
-            public void Should_Return_Files_And_Folders_For_Pattern_Containing_Negated_Bracket_Wildcard()
-            {
-                // Given
-                var fixture = GlobberFixture.UnixLike();
+        [Theory]
+        [InlineData("/*.sh", "/RootFile.sh")]
+        [InlineData("/Foo/*.baz", "/Foo/Bar.baz")]
+        public void Should_Include_Files_In_Root_Folder_When_Using_Wildcard(string pattern, string file)
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
 
-                // When
-                var result = fixture.Match("/Working/fooba[!x].rs");
+            // When
+            var result = fixture.Match(pattern);
 
-                // Then
-                Assert.Equal(2, result.Length);
-                AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
-                AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
-            }
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsFilePath(result, file);
+        }
+
+        [Theory]
+        [InlineData("/**/RootFile.sh", "/RootFile.sh")]
+        [InlineData("/Foo/**/Bar.baz", "/Foo/Bar.baz")]
+        public void Should_Include_Files_In_Root_Folder_When_Using_Recursive_Wildcard(string pattern, string file)
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match(pattern);
+
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsFilePath(result, file);
+        }
+
+        [Theory]
+        [InlineData("/**/RootDir", "/RootDir")]
+        [InlineData("/Foo/**/Bar", "/Foo/Bar")]
+        public void Should_Include_Folder_In_Root_Folder_When_Using_Recursive_Wildcard(string pattern, string folder)
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match(pattern);
+
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsDirectoryPath(result, folder);
+        }
+
+        [Fact]
+        public void Should_Parse_Glob_Expressions_With_Parenthesis_In_Them()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match("/Foo (Bar)/Baz.*");
+
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsFilePath(result, "/Foo (Bar)/Baz.c");
+        }
+
+        [Fact]
+        public void Should_Parse_Glob_Expressions_With_AtSign_In_Them()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match("/Foo@Bar/Baz.*");
+
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsFilePath(result, "/Foo@Bar/Baz.c");
+        }
+
+        [Fact]
+        public void Should_Parse_Glob_Expressions_With_Relative_Directory_Not_At_The_Beginning()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match("/Working/./*.Test.dll");
+
+            // Then
+            Assert.Equal(2, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/Foo.Bar.Test.dll");
+            AssertEx.ContainsFilePath(result, "/Working/Bar.Qux.Test.dll");
+        }
+
+        [Fact]
+        public void Should_Parse_Glob_Expressions_With_Unicode_Characters_And_Ending_With_Identifier()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match("/嵌套/**/文件.延期");
+
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsFilePath(result, "/嵌套/目录/文件.延期");
+        }
+
+        [Fact]
+        public void Should_Parse_Glob_Expressions_With_Unicode_Characters_And_Not_Ending_With_Identifier()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match("/嵌套/**/文件.*");
+
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsFilePath(result, "/嵌套/目录/文件.延期");
+        }
+
+        [Fact]
+        public void Should_Return_Files_And_Folders_For_Pattern_Containing_Bracket_Wildcard()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match("/Working/fooba[rz].rs");
+
+            // Then
+            Assert.Equal(2, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+            AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
+        }
+
+        [Fact]
+        public void Should_Return_Files_And_Folders_For_Pattern_Containing_Brace_Expansion()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match("/Working/foo{bar,bax}.rs");
+
+            // Then
+            Assert.Equal(2, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+            AssertEx.ContainsFilePath(result, "/Working/foobax.rs");
+        }
+
+        [Fact]
+        public void Should_Return_File_When_Brace_Expansion_Is_Only_Segment_Single_Alternative()
+        {
+            // Given (reproduces GitHub issue #2666: GetFiles with glob curly braces gave empty result)
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match("/Working/Project/{package.json}");
+
+            // Then
+            Assert.Single(result);
+            AssertEx.ContainsFilePath(result, "/Working/Project/package.json");
+        }
+
+        [Fact]
+        public void Should_Return_Files_When_Brace_Expansion_Is_Only_Segment_Multiple_Alternatives()
+        {
+            // Given (reproduces GitHub issue #2666: GetFiles with glob curly braces gave empty result)
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match("/Working/Project/{package.json,package-lock.json,tsconfig.json,.npmrc}");
+
+            // Then
+            Assert.Equal(4, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/Project/package.json");
+            AssertEx.ContainsFilePath(result, "/Working/Project/package-lock.json");
+            AssertEx.ContainsFilePath(result, "/Working/Project/tsconfig.json");
+            AssertEx.ContainsFilePath(result, "/Working/Project/.npmrc");
+        }
+
+        [Fact]
+        public void Should_Return_Files_And_Folders_For_Pattern_Containing_Negated_Bracket_Wildcard()
+        {
+            // Given
+            var fixture = GlobberFixture.UnixLike();
+
+            // When
+            var result = fixture.Match("/Working/fooba[!x].rs");
+
+            // Then
+            Assert.Equal(2, result.Length);
+            AssertEx.ContainsFilePath(result, "/Working/foobar.rs");
+            AssertEx.ContainsFilePath(result, "/Working/foobaz.rs");
         }
     }
 }

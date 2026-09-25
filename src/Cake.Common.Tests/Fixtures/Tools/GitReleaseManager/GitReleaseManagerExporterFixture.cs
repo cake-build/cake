@@ -5,46 +5,45 @@
 using Cake.Common.Tools.GitReleaseManager.Export;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
+namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager;
+
+internal sealed class GitReleaseManagerExporterFixture : GitReleaseManagerFixture<GitReleaseManagerExportSettings>
 {
-    internal sealed class GitReleaseManagerExporterFixture : GitReleaseManagerFixture<GitReleaseManagerExportSettings>
+    private bool _useToken = false;
+
+    public string UserName { get; set; }
+    public string Password { get; set; }
+    public string Token { get; set; }
+    public string Owner { get; set; }
+    public string Repository { get; set; }
+    public FilePath FileOutputPath { get; set; }
+
+    public GitReleaseManagerExporterFixture()
     {
-        private bool _useToken = false;
+        UserName = "bob";
+        Password = "password";
+        Token = "token";
+        Owner = "repoOwner";
+        Repository = "repo";
+        FileOutputPath = "/temp";
+    }
 
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string Token { get; set; }
-        public string Owner { get; set; }
-        public string Repository { get; set; }
-        public FilePath FileOutputPath { get; set; }
+    public void UseToken()
+    {
+        _useToken = true;
+    }
 
-        public GitReleaseManagerExporterFixture()
+    protected override void RunTool()
+    {
+        var tool = new GitReleaseManagerExporter(FileSystem, Environment, ProcessRunner, Tools);
+
+        if (_useToken)
         {
-            UserName = "bob";
-            Password = "password";
-            Token = "token";
-            Owner = "repoOwner";
-            Repository = "repo";
-            FileOutputPath = "/temp";
+            tool.Export(Token, Owner, Repository, FileOutputPath, Settings);
         }
-
-        public void UseToken()
+        else
         {
-            _useToken = true;
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new GitReleaseManagerExporter(FileSystem, Environment, ProcessRunner, Tools);
-
-            if (_useToken)
-            {
-                tool.Export(Token, Owner, Repository, FileOutputPath, Settings);
-            }
-            else
-            {
-                tool.Export(UserName, Password, Owner, Repository, FileOutputPath, Settings);
-            }
+            tool.Export(UserName, Password, Owner, Repository, FileOutputPath, Settings);
         }
     }
 }

@@ -8,33 +8,32 @@ using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Build
+namespace Cake.Common.Tests.Fixtures.Build;
+
+internal sealed class AppVeyorFixture
 {
-    internal sealed class AppVeyorFixture
+    public ICakeEnvironment Environment { get; set; }
+    public IProcessRunner ProcessRunner { get; set; }
+
+    public FakeLog CakeLog { get; set; }
+
+    public AppVeyorFixture()
     {
-        public ICakeEnvironment Environment { get; set; }
-        public IProcessRunner ProcessRunner { get; set; }
+        Environment = Substitute.For<ICakeEnvironment>();
+        Environment.WorkingDirectory.Returns("/Working");
+        Environment.GetEnvironmentVariable("APPVEYOR").Returns((string)null);
 
-        public FakeLog CakeLog { get; set; }
+        ProcessRunner = Substitute.For<IProcessRunner>();
+        CakeLog = new FakeLog();
+    }
 
-        public AppVeyorFixture()
-        {
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.WorkingDirectory.Returns("/Working");
-            Environment.GetEnvironmentVariable("APPVEYOR").Returns((string)null);
+    public void IsRunningOnAppVeyor()
+    {
+        Environment.GetEnvironmentVariable("APPVEYOR").Returns("True");
+    }
 
-            ProcessRunner = Substitute.For<IProcessRunner>();
-            CakeLog = new FakeLog();
-        }
-
-        public void IsRunningOnAppVeyor()
-        {
-            Environment.GetEnvironmentVariable("APPVEYOR").Returns("True");
-        }
-
-        public AppVeyorProvider CreateAppVeyorService()
-        {
-            return new AppVeyorProvider(Environment, ProcessRunner, CakeLog);
-        }
+    public AppVeyorProvider CreateAppVeyorService()
+    {
+        return new AppVeyorProvider(Environment, ProcessRunner, CakeLog);
     }
 }

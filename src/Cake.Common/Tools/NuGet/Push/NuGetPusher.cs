@@ -10,98 +10,97 @@ using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.NuGet.Push
+namespace Cake.Common.Tools.NuGet.Push;
+
+/// <summary>
+/// The NuGet package pusher.
+/// </summary>
+public sealed class NuGetPusher : NuGetTool<NuGetPushSettings>
 {
+    private readonly ICakeEnvironment _environment;
+    private readonly ICakeLog _log;
+
     /// <summary>
-    /// The NuGet package pusher.
+    /// Initializes a new instance of the <see cref="NuGetPusher"/> class.
     /// </summary>
-    public sealed class NuGetPusher : NuGetTool<NuGetPushSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="resolver">The NuGet tool resolver.</param>
+    /// <param name="log">The logger.</param>
+    public NuGetPusher(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        INuGetToolResolver resolver,
+        ICakeLog log) : base(fileSystem, environment, processRunner, tools, resolver)
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
+        _environment = environment;
+        _log = log;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NuGetPusher"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The NuGet tool resolver.</param>
-        /// <param name="log">The logger.</param>
-        public NuGetPusher(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            INuGetToolResolver resolver,
-            ICakeLog log) : base(fileSystem, environment, processRunner, tools, resolver)
+    /// <summary>
+    /// Pushes a NuGet package to a NuGet server and publishes it.
+    /// </summary>
+    /// <param name="packageFilePath">The package file path.</param>
+    /// <param name="settings">The settings.</param>
+    public void Push(FilePath packageFilePath, NuGetPushSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(packageFilePath);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        Run(settings, GetArguments(packageFilePath, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(FilePath packageFilePath, NuGetPushSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+        builder.Append("push");
+
+        builder.AppendQuoted(packageFilePath.MakeAbsolute(_environment).FullPath);
+
+        if (settings.ApiKey != null)
         {
-            _environment = environment;
-            _log = log;
+            builder.AppendQuotedSecret(settings.ApiKey);
         }
 
-        /// <summary>
-        /// Pushes a NuGet package to a NuGet server and publishes it.
-        /// </summary>
-        /// <param name="packageFilePath">The package file path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Push(FilePath packageFilePath, NuGetPushSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(packageFilePath);
-            ArgumentNullException.ThrowIfNull(settings);
+        builder.Append("-NonInteractive");
 
-            Run(settings, GetArguments(packageFilePath, settings));
+        if (settings.ConfigFile != null)
+        {
+            builder.Append("-ConfigFile");
+            builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
         }
 
-        private ProcessArgumentBuilder GetArguments(FilePath packageFilePath, NuGetPushSettings settings)
+        if (settings.Source != null)
         {
-            var builder = new ProcessArgumentBuilder();
-            builder.Append("push");
-
-            builder.AppendQuoted(packageFilePath.MakeAbsolute(_environment).FullPath);
-
-            if (settings.ApiKey != null)
-            {
-                builder.AppendQuotedSecret(settings.ApiKey);
-            }
-
-            builder.Append("-NonInteractive");
-
-            if (settings.ConfigFile != null)
-            {
-                builder.Append("-ConfigFile");
-                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
-            }
-
-            if (settings.Source != null)
-            {
-                builder.Append("-Source");
-                builder.AppendQuoted(settings.Source);
-            }
-            else
-            {
-                _log.Verbose("No Source property has been set.  Depending on your configuration, this may cause problems.");
-            }
-
-            if (settings.SkipDuplicate)
-            {
-                builder.Append("-SkipDuplicate");
-            }
-
-            if (settings.Timeout != null)
-            {
-                builder.Append("-Timeout");
-                builder.Append(Convert.ToInt32(settings.Timeout.Value.TotalSeconds).ToString(CultureInfo.InvariantCulture));
-            }
-
-            if (settings.Verbosity != null)
-            {
-                builder.Append("-Verbosity");
-                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
-            }
-
-            return builder;
+            builder.Append("-Source");
+            builder.AppendQuoted(settings.Source);
         }
+        else
+        {
+            _log.Verbose("No Source property has been set.  Depending on your configuration, this may cause problems.");
+        }
+
+        if (settings.SkipDuplicate)
+        {
+            builder.Append("-SkipDuplicate");
+        }
+
+        if (settings.Timeout != null)
+        {
+            builder.Append("-Timeout");
+            builder.Append(Convert.ToInt32(settings.Timeout.Value.TotalSeconds).ToString(CultureInfo.InvariantCulture));
+        }
+
+        if (settings.Verbosity != null)
+        {
+            builder.Append("-Verbosity");
+            builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
+        }
+
+        return builder;
     }
 }

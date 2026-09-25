@@ -4,19 +4,18 @@
 
 using System.Diagnostics;
 
-namespace Cake.Core.IO.Globbing
+namespace Cake.Core.IO.Globbing;
+
+[DebuggerDisplay("{Value,nq} ({Kind,nq})")]
+internal sealed class GlobToken
 {
-    [DebuggerDisplay("{Value,nq} ({Kind,nq})")]
-    internal sealed class GlobToken
+    public GlobTokenKind Kind { get; }
+
+    public string Value { get; }
+
+    public GlobToken(GlobTokenKind kind, string value)
     {
-        public GlobTokenKind Kind { get; }
-
-        public string Value { get; }
-
-        public GlobToken(GlobTokenKind kind, string value)
-        {
-            Kind = kind;
-            Value = value;
-        }
+        Kind = kind;
+        Value = value;
     }
 }

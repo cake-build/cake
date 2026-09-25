@@ -2,40 +2,39 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Core.IO.Arguments
+namespace Cake.Core.IO.Arguments;
+
+/// <summary>
+/// Represents a secret argument.
+/// </summary>
+public sealed class SecretArgument : IProcessArgument
 {
+    private readonly IProcessArgument _argument;
+
     /// <summary>
-    /// Represents a secret argument.
+    /// Initializes a new instance of the <see cref="SecretArgument"/> class.
     /// </summary>
-    public sealed class SecretArgument : IProcessArgument
+    /// <param name="argument">The argument.</param>
+    public SecretArgument(IProcessArgument argument)
     {
-        private readonly IProcessArgument _argument;
+        _argument = argument;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SecretArgument"/> class.
-        /// </summary>
-        /// <param name="argument">The argument.</param>
-        public SecretArgument(IProcessArgument argument)
-        {
-            _argument = argument;
-        }
+    /// <inheritdoc/>
+    public string Render()
+    {
+        return _argument.Render();
+    }
 
-        /// <inheritdoc/>
-        public string Render()
-        {
-            return _argument.Render();
-        }
+    /// <inheritdoc/>
+    public string RenderSafe()
+    {
+        return "[REDACTED]";
+    }
 
-        /// <inheritdoc/>
-        public string RenderSafe()
-        {
-            return "[REDACTED]";
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return RenderSafe();
-        }
+    /// <inheritdoc/>
+    public override string ToString()
+    {
+        return RenderSafe();
     }
 }

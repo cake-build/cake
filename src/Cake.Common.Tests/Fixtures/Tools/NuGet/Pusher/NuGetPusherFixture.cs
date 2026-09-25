@@ -5,21 +5,20 @@
 using Cake.Common.Tools.NuGet.Push;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Pusher
+namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Pusher;
+
+internal sealed class NuGetPusherFixture : NuGetFixture<NuGetPushSettings>
 {
-    internal sealed class NuGetPusherFixture : NuGetFixture<NuGetPushSettings>
+    public FilePath PackageFilePath { get; set; }
+
+    public NuGetPusherFixture()
     {
-        public FilePath PackageFilePath { get; set; }
+        PackageFilePath = "./existing.nupkg";
+    }
 
-        public NuGetPusherFixture()
-        {
-            PackageFilePath = "./existing.nupkg";
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new NuGetPusher(FileSystem, Environment, ProcessRunner, Tools, Resolver, Log);
-            tool.Push(PackageFilePath, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new NuGetPusher(FileSystem, Environment, ProcessRunner, Tools, Resolver, Log);
+        tool.Push(PackageFilePath, Settings);
     }
 }

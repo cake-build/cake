@@ -2,31 +2,30 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Core.Packaging
+namespace Cake.Core.Packaging;
+
+/// <summary>
+/// Represents a package type.
+/// </summary>
+public enum PackageType
 {
     /// <summary>
-    /// Represents a package type.
+    /// Represents an unspecified package type.
     /// </summary>
-    public enum PackageType
-    {
-        /// <summary>
-        /// Represents an unspecified package type.
-        /// </summary>
-        Unspecified = 0,
+    Unspecified = 0,
 
-        /// <summary>
-        /// Represents an addin.
-        /// </summary>
-        Addin = 1,
+    /// <summary>
+    /// Represents an addin.
+    /// </summary>
+    Addin = 1,
 
-        /// <summary>
-        /// Represents a tool.
-        /// </summary>
-        Tool = 2,
+    /// <summary>
+    /// Represents a tool.
+    /// </summary>
+    Tool = 2,
 
-        /// <summary>
-        /// Represents a module.
-        /// </summary>
-        Module = 3
-    }
+    /// <summary>
+    /// Represents a module.
+    /// </summary>
+    Module = 3
 }

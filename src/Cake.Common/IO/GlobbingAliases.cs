@@ -9,228 +9,227 @@ using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 
-namespace Cake.Common.IO
+namespace Cake.Common.IO;
+
+/// <summary>
+/// Contains functionality related to file system globbing.
+/// </summary>
+[CakeAliasCategory("Globbing")]
+public static class GlobbingAliases
 {
     /// <summary>
-    /// Contains functionality related to file system globbing.
+    /// Gets all files matching the specified pattern.
     /// </summary>
-    [CakeAliasCategory("Globbing")]
-    public static class GlobbingAliases
+    /// <example>
+    /// <code>
+    /// var files = GetFiles("./**/Cake.*.dll");
+    /// foreach (var file in files)
+    /// {
+    ///     Information("File: {0}", file);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="pattern">The glob pattern to match.</param>
+    /// <returns>A <see cref="FilePathCollection" />.</returns>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Files")]
+    public static FilePathCollection GetFiles(this ICakeContext context, GlobPattern pattern)
     {
-        /// <summary>
-        /// Gets all files matching the specified pattern.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var files = GetFiles("./**/Cake.*.dll");
-        /// foreach (var file in files)
-        /// {
-        ///     Information("File: {0}", file);
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The glob pattern to match.</param>
-        /// <returns>A <see cref="FilePathCollection" />.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Files")]
-        public static FilePathCollection GetFiles(this ICakeContext context, GlobPattern pattern)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(context);
 
-            return new FilePathCollection(context.Globber.Match(pattern).OfType<FilePath>());
-        }
+        return new FilePathCollection(context.Globber.Match(pattern).OfType<FilePath>());
+    }
 
-        /// <summary>
-        /// Gets all files matching the specified pattern.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
-        ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
-        ///         "node_modules", StringComparison.OrdinalIgnoreCase);
-        ///
-        /// var files = GetFiles("./**/Cake.*.dll", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach (var file in files)
-        /// {
-        ///     Information("File: {0}", file);
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The glob pattern to match.</param>
-        /// <param name="settings">The globber settings.</param>
-        /// <returns>A <see cref="FilePathCollection" />.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Files")]
-        public static FilePathCollection GetFiles(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Gets all files matching the specified pattern.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
+    ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
+    ///         "node_modules", StringComparison.OrdinalIgnoreCase);
+    ///
+    /// var files = GetFiles("./**/Cake.*.dll", new GlobberSettings { Predicate = exclude_node_modules });
+    /// foreach (var file in files)
+    /// {
+    ///     Information("File: {0}", file);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="pattern">The glob pattern to match.</param>
+    /// <param name="settings">The globber settings.</param>
+    /// <returns>A <see cref="FilePathCollection" />.</returns>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Files")]
+    public static FilePathCollection GetFiles(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            return new FilePathCollection(context.Globber.Match(pattern, settings).OfType<FilePath>());
-        }
+        return new FilePathCollection(context.Globber.Match(pattern, settings).OfType<FilePath>());
+    }
 
-        /// <summary>
-        /// Gets all directories matching the specified pattern.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var directories = GetDirectories("./src/**/obj/*");
-        /// foreach (var directory in directories)
-        /// {
-        ///     Information("Directory: {0}", directory);
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The glob pattern to match.</param>
-        /// <returns>A <see cref="DirectoryPathCollection" />.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Directories")]
-        public static DirectoryPathCollection GetDirectories(this ICakeContext context, GlobPattern pattern)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Gets all directories matching the specified pattern.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var directories = GetDirectories("./src/**/obj/*");
+    /// foreach (var directory in directories)
+    /// {
+    ///     Information("Directory: {0}", directory);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="pattern">The glob pattern to match.</param>
+    /// <returns>A <see cref="DirectoryPathCollection" />.</returns>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Directories")]
+    public static DirectoryPathCollection GetDirectories(this ICakeContext context, GlobPattern pattern)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>());
-        }
+        return new DirectoryPathCollection(context.Globber.Match(pattern).OfType<DirectoryPath>());
+    }
 
-        /// <summary>
-        /// Gets all directories matching the specified pattern.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
-        ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
-        ///         "node_modules", StringComparison.OrdinalIgnoreCase);
-        ///
-        /// var directories = GetDirectories("./src/**/obj/*", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach (var directory in directories)
-        /// {
-        ///     Information("Directory: {0}", directory);
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The glob pattern to match.</param>
-        /// <param name="settings">The globber settings.</param>
-        /// <returns>A <see cref="DirectoryPathCollection" />.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Directories")]
-        public static DirectoryPathCollection GetDirectories(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Gets all directories matching the specified pattern.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
+    ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
+    ///         "node_modules", StringComparison.OrdinalIgnoreCase);
+    ///
+    /// var directories = GetDirectories("./src/**/obj/*", new GlobberSettings { Predicate = exclude_node_modules });
+    /// foreach (var directory in directories)
+    /// {
+    ///     Information("Directory: {0}", directory);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="pattern">The glob pattern to match.</param>
+    /// <param name="settings">The globber settings.</param>
+    /// <returns>A <see cref="DirectoryPathCollection" />.</returns>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Directories")]
+    public static DirectoryPathCollection GetDirectories(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            return new DirectoryPathCollection(context.Globber.Match(pattern, settings).OfType<DirectoryPath>());
-        }
+        return new DirectoryPathCollection(context.Globber.Match(pattern, settings).OfType<DirectoryPath>());
+    }
 
-        /// <summary>
-        /// Gets all files and directories matching the specified pattern.
-        /// This is the entry point for scripts and Frosting, when it is not known
-        /// whether the matched paths are files or directories.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var entries = GetFileSystemInfos("./artifacts/*");
-        /// foreach (var entry in entries)
-        /// {
-        ///     Information("{0}: {1}", entry is IDirectory ? "Directory" : "File", entry.Path);
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The glob pattern to match.</param>
-        /// <returns>The file system entries matching the specified pattern.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Paths")]
-        public static IEnumerable<IFileSystemInfo> GetFileSystemInfos(this ICakeContext context, GlobPattern pattern)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Gets all files and directories matching the specified pattern.
+    /// This is the entry point for scripts and Frosting, when it is not known
+    /// whether the matched paths are files or directories.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var entries = GetFileSystemInfos("./artifacts/*");
+    /// foreach (var entry in entries)
+    /// {
+    ///     Information("{0}: {1}", entry is IDirectory ? "Directory" : "File", entry.Path);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="pattern">The glob pattern to match.</param>
+    /// <returns>The file system entries matching the specified pattern.</returns>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Paths")]
+    public static IEnumerable<IFileSystemInfo> GetFileSystemInfos(this ICakeContext context, GlobPattern pattern)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            return context.Globber.GetFileSystemInfos(context.FileSystem, pattern);
-        }
+        return context.Globber.GetFileSystemInfos(context.FileSystem, pattern);
+    }
 
-        /// <summary>
-        /// Gets all files and directories matching the specified pattern.
-        /// This is the entry point for scripts and Frosting, when it is not known
-        /// whether the matched paths are files or directories.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
-        ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
-        ///         "node_modules", StringComparison.OrdinalIgnoreCase);
-        ///
-        /// var entries = GetFileSystemInfos("./src/**/*", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach (var entry in entries)
-        /// {
-        ///     Information("{0}: {1}", entry is IDirectory ? "Directory" : "File", entry.Path);
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The glob pattern to match.</param>
-        /// <param name="settings">The globber settings.</param>
-        /// <returns>The file system entries matching the specified pattern.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Paths")]
-        public static IEnumerable<IFileSystemInfo> GetFileSystemInfos(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Gets all files and directories matching the specified pattern.
+    /// This is the entry point for scripts and Frosting, when it is not known
+    /// whether the matched paths are files or directories.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
+    ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
+    ///         "node_modules", StringComparison.OrdinalIgnoreCase);
+    ///
+    /// var entries = GetFileSystemInfos("./src/**/*", new GlobberSettings { Predicate = exclude_node_modules });
+    /// foreach (var entry in entries)
+    /// {
+    ///     Information("{0}: {1}", entry is IDirectory ? "Directory" : "File", entry.Path);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="pattern">The glob pattern to match.</param>
+    /// <param name="settings">The globber settings.</param>
+    /// <returns>The file system entries matching the specified pattern.</returns>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Paths")]
+    public static IEnumerable<IFileSystemInfo> GetFileSystemInfos(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            return context.Globber.GetFileSystemInfos(context.FileSystem, pattern, settings);
-        }
+        return context.Globber.GetFileSystemInfos(context.FileSystem, pattern, settings);
+    }
 
-        /// <summary>
-        /// Gets all paths matching the specified pattern.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var paths = GetPaths("./src/**/obj/*");
-        /// foreach (var path in paths)
-        /// {
-        ///     Information("Path: {0}", path);
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The glob pattern to match.</param>
-        /// <returns>A <see cref="PathCollection" />.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Paths")]
-        public static PathCollection GetPaths(this ICakeContext context, GlobPattern pattern)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Gets all paths matching the specified pattern.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var paths = GetPaths("./src/**/obj/*");
+    /// foreach (var path in paths)
+    /// {
+    ///     Information("Path: {0}", path);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="pattern">The glob pattern to match.</param>
+    /// <returns>A <see cref="PathCollection" />.</returns>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Paths")]
+    public static PathCollection GetPaths(this ICakeContext context, GlobPattern pattern)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            return new PathCollection(context.Globber.Match(pattern));
-        }
+        return new PathCollection(context.Globber.Match(pattern));
+    }
 
-        /// <summary>
-        /// Gets all paths matching the specified pattern.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
-        ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
-        ///         "node_modules", StringComparison.OrdinalIgnoreCase);
-        ///
-        /// var paths = GetPaths("./src/**/obj/*", new GlobberSettings { Predicate = exclude_node_modules });
-        /// foreach (var path in paths)
-        /// {
-        ///     Information("Path: {0}", path);
-        /// }
-        /// </code>
-        /// </example>
-        /// <param name="context">The context.</param>
-        /// <param name="pattern">The glob pattern to match.</param>
-        /// <param name="settings">The globber settings.</param>
-        /// <returns>A <see cref="PathCollection" />.</returns>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Paths")]
-        public static PathCollection GetPaths(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Gets all paths matching the specified pattern.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// Func&lt;IFileSystemInfo, bool&gt; exclude_node_modules =
+    ///     fileSystemInfo => !fileSystemInfo.Path.FullPath.EndsWith(
+    ///         "node_modules", StringComparison.OrdinalIgnoreCase);
+    ///
+    /// var paths = GetPaths("./src/**/obj/*", new GlobberSettings { Predicate = exclude_node_modules });
+    /// foreach (var path in paths)
+    /// {
+    ///     Information("Path: {0}", path);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="context">The context.</param>
+    /// <param name="pattern">The glob pattern to match.</param>
+    /// <param name="settings">The globber settings.</param>
+    /// <returns>A <see cref="PathCollection" />.</returns>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Paths")]
+    public static PathCollection GetPaths(this ICakeContext context, GlobPattern pattern, GlobberSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            return new PathCollection(context.Globber.Match(pattern, settings));
-        }
+        return new PathCollection(context.Globber.Match(pattern, settings));
     }
 }

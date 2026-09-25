@@ -7,62 +7,61 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotNet.BuildServer
+namespace Cake.Common.Tools.DotNet.BuildServer;
+
+/// <summary>
+/// .NET Core project builder.
+/// </summary>
+public sealed class DotNetBuildServer : DotNetTool<DotNetBuildServerShutdownSettings>
 {
     /// <summary>
-    /// .NET Core project builder.
+    /// Initializes a new instance of the <see cref="DotNetBuildServer" /> class.
     /// </summary>
-    public sealed class DotNetBuildServer : DotNetTool<DotNetBuildServerShutdownSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotNetBuildServer(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetBuildServer" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public DotNetBuildServer(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    }
+
+    /// <summary>
+    /// Build the project using the specified path and settings.
+    /// </summary>
+    /// <param name="settings">The settings.</param>
+    public void Shutdown(DotNetBuildServerShutdownSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        RunCommand(settings, GetArguments(settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(DotNetBuildServerShutdownSettings settings)
+    {
+        var builder = CreateArgumentBuilder(settings);
+
+        builder.Append("build-server");
+        builder.Append("shutdown");
+
+        if (settings.MSBuild ?? false)
         {
+            builder.Append("--msbuild");
         }
 
-        /// <summary>
-        /// Build the project using the specified path and settings.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        public void Shutdown(DotNetBuildServerShutdownSettings settings)
+        if (settings.Razor ?? false)
         {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            RunCommand(settings, GetArguments(settings));
+            builder.Append("--razor");
         }
 
-        private ProcessArgumentBuilder GetArguments(DotNetBuildServerShutdownSettings settings)
+        if (settings.VBCSCompiler ?? false)
         {
-            var builder = CreateArgumentBuilder(settings);
-
-            builder.Append("build-server");
-            builder.Append("shutdown");
-
-            if (settings.MSBuild ?? false)
-            {
-                builder.Append("--msbuild");
-            }
-
-            if (settings.Razor ?? false)
-            {
-                builder.Append("--razor");
-            }
-
-            if (settings.VBCSCompiler ?? false)
-            {
-                builder.Append("--vbcscompiler");
-            }
-
-            return builder;
+            builder.Append("--vbcscompiler");
         }
+
+        return builder;
     }
 }

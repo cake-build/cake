@@ -5,41 +5,40 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Cake.Common.Tools.DotNet.Package.List
+namespace Cake.Common.Tools.DotNet.Package.List;
+
+/// <summary>
+/// An result as returned by <see cref="DotNetPackageLister"/>.
+/// </summary>
+public sealed class DotNetPackageList
 {
     /// <summary>
-    /// An result as returned by <see cref="DotNetPackageLister"/>.
+    /// Gets the output version.
     /// </summary>
-    public sealed class DotNetPackageList
-    {
-        /// <summary>
-        /// Gets the output version.
-        /// </summary>
-        [JsonInclude]
-        public int Version { get; private set; }
+    [JsonInclude]
+    public int Version { get; private set; }
 
-        /// <summary>
-        /// Gets the specified parameters.
-        /// </summary>
-        [JsonInclude]
-        public string Parameters { get; private set; }
+    /// <summary>
+    /// Gets the specified parameters.
+    /// </summary>
+    [JsonInclude]
+    public string Parameters { get; private set; }
 
-        /// <summary>
-        /// Gets the problems.
-        /// </summary>
-        [JsonInclude]
-        public IEnumerable<DotNetPackageListProblemItem> Problems { get; private set; }
+    /// <summary>
+    /// Gets the problems.
+    /// </summary>
+    [JsonInclude]
+    public IEnumerable<DotNetPackageListProblemItem> Problems { get; private set; }
 
-        /// <summary>
-        /// Gets the used sources.
-        /// </summary>
-        [JsonInclude]
-        public IEnumerable<string> Sources { get; private set; }
+    /// <summary>
+    /// Gets the used sources.
+    /// </summary>
+    [JsonInclude]
+    public IEnumerable<string> Sources { get; private set; }
 
-        /// <summary>
-        /// Gets the projects.
-        /// </summary>
-        [JsonInclude]
-        public IEnumerable<DotNetPackageListProjectItem> Projects { get; private set; }
-    }
+    /// <summary>
+    /// Gets the projects.
+    /// </summary>
+    [JsonInclude]
+    public IEnumerable<DotNetPackageListProjectItem> Projects { get; private set; }
 }

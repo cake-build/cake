@@ -7,38 +7,37 @@ using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.WiX
+namespace Cake.Common.Tools.WiX;
+
+/// <summary>
+/// Contains settings used by the <see cref="LightRunner"/>.
+/// </summary>
+public sealed class LightSettings : ToolSettings
 {
     /// <summary>
-    /// Contains settings used by the <see cref="LightRunner"/>.
+    /// Gets or sets the defined WiX variables.
     /// </summary>
-    public sealed class LightSettings : ToolSettings
-    {
-        /// <summary>
-        /// Gets or sets the defined WiX variables.
-        /// </summary>
-        // Variable names are case-sensitive. http://wixtoolset.org/documentation/manual/v3/overview/preprocessor.html#custom-variables-define
-        public IDictionary<string, string> Defines { get; set; } =
-            new Dictionary<string, string>(StringComparer.Ordinal);
+    // Variable names are case-sensitive. http://wixtoolset.org/documentation/manual/v3/overview/preprocessor.html#custom-variables-define
+    public IDictionary<string, string> Defines { get; set; } =
+        new Dictionary<string, string>(StringComparer.Ordinal);
 
-        /// <summary>
-        /// Gets or sets the WiX extensions to use.
-        /// </summary>
-        public IEnumerable<string> Extensions { get; set; }
+    /// <summary>
+    /// Gets or sets the WiX extensions to use.
+    /// </summary>
+    public IEnumerable<string> Extensions { get; set; }
 
-        /// <summary>
-        /// Gets or sets raw command line arguments to pass through to the linker.
-        /// </summary>
-        public string RawArguments { get; set; }
+    /// <summary>
+    /// Gets or sets raw command line arguments to pass through to the linker.
+    /// </summary>
+    public string RawArguments { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to show the logo information.
-        /// </summary>
-        public bool NoLogo { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether to show the logo information.
+    /// </summary>
+    public bool NoLogo { get; set; }
 
-        /// <summary>
-        /// Gets or sets the path to the output file (i.e. the resulting MSI package).
-        /// </summary>
-        public FilePath OutputFile { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the path to the output file (i.e. the resulting MSI package).
+    /// </summary>
+    public FilePath OutputFile { get; set; }
 }

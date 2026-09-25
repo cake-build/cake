@@ -2,32 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Cake.Common.Build.GitLabCI;
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
+namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data;
+
+public sealed class GitLabCIServerInfoTests
 {
-    public sealed class GitLabCIServerInfoTests
-    {
-        public sealed class TheNameProperty
-        {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitLabCIInfoFixture().CreateServerInfo();
-
-                // When
-                var result = info.Name;
-
-                // Then
-                Assert.Equal("GitLab", result);
-            }
-        }
-    }
-
-    public sealed class TheRevisionProperty
+    public sealed class TheNameProperty
     {
         [Fact]
         public void Should_Return_Correct_Value()
@@ -36,42 +17,58 @@ namespace Cake.Common.Tests.Unit.Build.GitLabCI.Data
             var info = new GitLabCIInfoFixture().CreateServerInfo();
 
             // When
-            var result = info.Revision;
+            var result = info.Name;
 
             // Then
-            Assert.Equal("70606bf", result);
+            Assert.Equal("GitLab", result);
         }
     }
+}
 
-    public sealed class TheVersionProperty
+public sealed class TheRevisionProperty
+{
+    [Fact]
+    public void Should_Return_Correct_Value()
     {
-        [Fact]
-        public void Should_Return_Correct_Value()
-        {
-            // Given
-            var info = new GitLabCIInfoFixture().CreateServerInfo();
+        // Given
+        var info = new GitLabCIInfoFixture().CreateServerInfo();
 
-            // When
-            var result = info.Version;
+        // When
+        var result = info.Revision;
 
-            // Then
-            Assert.Equal("8.9.0", result);
-        }
+        // Then
+        Assert.Equal("70606bf", result);
     }
+}
 
-    public sealed class TheUrlProperty
+public sealed class TheVersionProperty
+{
+    [Fact]
+    public void Should_Return_Correct_Value()
     {
-        [Fact]
-        public void Should_Return_Correct_Value()
-        {
-            // Given
-            var info = new GitLabCIInfoFixture().CreateServerInfo();
+        // Given
+        var info = new GitLabCIInfoFixture().CreateServerInfo();
 
-            // When
-            var result = info.Url;
+        // When
+        var result = info.Version;
 
-            // Then
-            Assert.Equal("https://gitlab.example.com:8080", result);
-        }
+        // Then
+        Assert.Equal("8.9.0", result);
+    }
+}
+
+public sealed class TheUrlProperty
+{
+    [Fact]
+    public void Should_Return_Correct_Value()
+    {
+        // Given
+        var info = new GitLabCIInfoFixture().CreateServerInfo();
+
+        // When
+        var result = info.Url;
+
+        // Then
+        Assert.Equal("https://gitlab.example.com:8080", result);
     }
 }

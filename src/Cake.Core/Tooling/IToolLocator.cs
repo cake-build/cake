@@ -5,31 +5,30 @@
 using System.Collections.Generic;
 using Cake.Core.IO;
 
-namespace Cake.Core.Tooling
+namespace Cake.Core.Tooling;
+
+/// <summary>
+/// Represents a tool locator.
+/// </summary>
+public interface IToolLocator
 {
     /// <summary>
-    /// Represents a tool locator.
+    /// Registers the specified tool file path.
     /// </summary>
-    public interface IToolLocator
-    {
-        /// <summary>
-        /// Registers the specified tool file path.
-        /// </summary>
-        /// <param name="path">The tool path.</param>
-        void RegisterFile(FilePath path);
+    /// <param name="path">The tool path.</param>
+    void RegisterFile(FilePath path);
 
-        /// <summary>
-        /// Resolves the path to the specified tool.
-        /// </summary>
-        /// <param name="tool">The tool.</param>
-        /// <returns>A path if the tool was found; otherwise <c>null</c>.</returns>
-        FilePath Resolve(string tool);
+    /// <summary>
+    /// Resolves the path to the specified tool.
+    /// </summary>
+    /// <param name="tool">The tool.</param>
+    /// <returns>A path if the tool was found; otherwise <c>null</c>.</returns>
+    FilePath Resolve(string tool);
 
-        /// <summary>
-        /// Resolves the path to the specified tool.
-        /// </summary>
-        /// <param name="toolExeNames">The possible names of the tool executable.</param>
-        /// <returns>A path if the tool was found; otherwise <c>null</c>.</returns>
-        FilePath Resolve(IEnumerable<string> toolExeNames);
-    }
+    /// <summary>
+    /// Resolves the path to the specified tool.
+    /// </summary>
+    /// <param name="toolExeNames">The possible names of the tool executable.</param>
+    /// <returns>A path if the tool was found; otherwise <c>null</c>.</returns>
+    FilePath Resolve(IEnumerable<string> toolExeNames);
 }

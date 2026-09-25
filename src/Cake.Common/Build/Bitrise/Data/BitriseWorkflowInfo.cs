@@ -4,35 +4,34 @@
 
 using Cake.Core;
 
-namespace Cake.Common.Build.Bitrise.Data
+namespace Cake.Common.Build.Bitrise.Data;
+
+/// <summary>
+/// Provides Bitrise workflow information for the current build.
+/// </summary>
+public class BitriseWorkflowInfo : BitriseInfo
 {
     /// <summary>
-    /// Provides Bitrise workflow information for the current build.
+    /// Gets the workflow identifier.
     /// </summary>
-    public class BitriseWorkflowInfo : BitriseInfo
+    /// <value>
+    /// The workflow identifier.
+    /// </value>
+    public string WorkflowId => GetEnvironmentString("BITRISE_TRIGGERED_WORKFLOW_ID");
+
+    /// <summary>
+    /// Gets the workflow title.
+    /// </summary>
+    /// <value>
+    /// The workflow title.
+    /// </value>
+    public string WorkflowTitle => GetEnvironmentString("BITRISE_TRIGGERED_WORKFLOW_TITLE");
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BitriseWorkflowInfo"/> class.
+    /// </summary>
+    /// <param name="environment">The environment.</param>
+    public BitriseWorkflowInfo(ICakeEnvironment environment) : base(environment)
     {
-        /// <summary>
-        /// Gets the workflow identifier.
-        /// </summary>
-        /// <value>
-        /// The workflow identifier.
-        /// </value>
-        public string WorkflowId => GetEnvironmentString("BITRISE_TRIGGERED_WORKFLOW_ID");
-
-        /// <summary>
-        /// Gets the workflow title.
-        /// </summary>
-        /// <value>
-        /// The workflow title.
-        /// </value>
-        public string WorkflowTitle => GetEnvironmentString("BITRISE_TRIGGERED_WORKFLOW_TITLE");
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BitriseWorkflowInfo"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public BitriseWorkflowInfo(ICakeEnvironment environment) : base(environment)
-        {
-        }
     }
 }

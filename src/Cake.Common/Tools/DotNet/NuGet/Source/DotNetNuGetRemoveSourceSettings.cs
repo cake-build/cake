@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotNet.NuGet.Source
+namespace Cake.Common.Tools.DotNet.NuGet.Source;
+
+/// <summary>
+/// Contains settings used by <see cref="DotNetNuGetSourcer" /> for removing a NuGet source.
+/// </summary>
+public class DotNetNuGetRemoveSourceSettings : DotNetNuGetSourceSettings
 {
-    /// <summary>
-    /// Contains settings used by <see cref="DotNetNuGetSourcer" /> for removing a NuGet source.
-    /// </summary>
-    public class DotNetNuGetRemoveSourceSettings : DotNetNuGetSourceSettings
-    {
-    }
 }

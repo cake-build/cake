@@ -4,10 +4,9 @@
 
 using Cake.Common.Tools.DotNet.NuGet.Source;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Source
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Source;
+
+internal abstract class DotNetNuGetSourcerFixture : DotNetFixture<DotNetNuGetSourceSettings>
 {
-    internal abstract class DotNetNuGetSourcerFixture : DotNetFixture<DotNetNuGetSourceSettings>
-    {
-        public string Name { get; set; } = "name";
-    }
+    public string Name { get; set; } = "name";
 }

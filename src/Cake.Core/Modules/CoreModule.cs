@@ -12,56 +12,55 @@ using Cake.Core.Scripting.Analysis;
 using Cake.Core.Scripting.Processors.Loading;
 using Cake.Core.Tooling;
 
-namespace Cake.Core.Modules
+namespace Cake.Core.Modules;
+
+/// <summary>
+/// The module responsible for registering
+/// default types in the Cake.Core assembly.
+/// </summary>
+public sealed class CoreModule : ICakeModule
 {
-    /// <summary>
-    /// The module responsible for registering
-    /// default types in the Cake.Core assembly.
-    /// </summary>
-    public sealed class CoreModule : ICakeModule
+    /// <inheritdoc/>
+    public void Register(ICakeContainerRegistrar registrar)
     {
-        /// <inheritdoc/>
-        public void Register(ICakeContainerRegistrar registrar)
-        {
-            ArgumentNullException.ThrowIfNull(registrar);
+        ArgumentNullException.ThrowIfNull(registrar);
 
-            // Execution
-            registrar.RegisterType<CakeEngine>().As<ICakeEngine>().Singleton();
-            registrar.RegisterType<CakeContext>().As<ICakeContext>().Singleton();
-            registrar.RegisterType<CakeDataService>().As<ICakeDataResolver>().As<ICakeDataService>().Singleton();
-            registrar.RegisterType<DefaultExecutionStrategy>().As<IExecutionStrategy>().Singleton();
+        // Execution
+        registrar.RegisterType<CakeEngine>().As<ICakeEngine>().Singleton();
+        registrar.RegisterType<CakeContext>().As<ICakeContext>().Singleton();
+        registrar.RegisterType<CakeDataService>().As<ICakeDataResolver>().As<ICakeDataService>().Singleton();
+        registrar.RegisterType<DefaultExecutionStrategy>().As<IExecutionStrategy>().Singleton();
 
-            // Environment
-            registrar.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();
-            registrar.RegisterType<CakeRuntime>().As<ICakeRuntime>().Singleton();
-            registrar.RegisterType<CakePlatform>().As<ICakePlatform>().Singleton();
+        // Environment
+        registrar.RegisterType<CakeEnvironment>().As<ICakeEnvironment>().Singleton();
+        registrar.RegisterType<CakeRuntime>().As<ICakeRuntime>().Singleton();
+        registrar.RegisterType<CakePlatform>().As<ICakePlatform>().Singleton();
 
-            // IO
-            registrar.RegisterType<FileSystem>().As<IFileSystem>().Singleton();
-            registrar.RegisterType<Globber>().As<IGlobber>().Singleton();
-            registrar.RegisterType<ProcessRunner>().As<IProcessRunner>().Singleton();
-            registrar.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().Singleton();
-            registrar.RegisterType<WindowsRegistry>().As<IRegistry>().Singleton();
+        // IO
+        registrar.RegisterType<FileSystem>().As<IFileSystem>().Singleton();
+        registrar.RegisterType<Globber>().As<IGlobber>().Singleton();
+        registrar.RegisterType<ProcessRunner>().As<IProcessRunner>().Singleton();
+        registrar.RegisterType<NuGetToolResolver>().As<INuGetToolResolver>().Singleton();
+        registrar.RegisterType<WindowsRegistry>().As<IRegistry>().Singleton();
 
-            // Reflection
-            registrar.RegisterType<AssemblyLoader>().As<IAssemblyLoader>().Singleton();
-            registrar.RegisterType<AssemblyVerifier>().As<IAssemblyVerifier>().Singleton();
+        // Reflection
+        registrar.RegisterType<AssemblyLoader>().As<IAssemblyLoader>().Singleton();
+        registrar.RegisterType<AssemblyVerifier>().As<IAssemblyVerifier>().Singleton();
 
-            // Tooling
-            registrar.RegisterType<ToolRepository>().As<IToolRepository>().Singleton();
-            registrar.RegisterType<ToolResolutionStrategy>().As<IToolResolutionStrategy>().Singleton();
-            registrar.RegisterType<ToolLocator>().As<IToolLocator>().Singleton();
-            registrar.RegisterType<ToolInstaller>().As<IToolInstaller>().Singleton();
+        // Tooling
+        registrar.RegisterType<ToolRepository>().As<IToolRepository>().Singleton();
+        registrar.RegisterType<ToolResolutionStrategy>().As<IToolResolutionStrategy>().Singleton();
+        registrar.RegisterType<ToolLocator>().As<IToolLocator>().Singleton();
+        registrar.RegisterType<ToolInstaller>().As<IToolInstaller>().Singleton();
 
-            // Scripting
-            registrar.RegisterType<ScriptAliasFinder>().As<IScriptAliasFinder>().Singleton();
-            registrar.RegisterType<ScriptAnalyzer>().As<IScriptAnalyzer>().Singleton();
-            registrar.RegisterType<ScriptProcessor>().As<IScriptProcessor>().Singleton();
-            registrar.RegisterType<ScriptConventions>().As<IScriptConventions>().Singleton();
-            registrar.RegisterType<ScriptRunner>().As<IScriptRunner>().Singleton();
+        // Scripting
+        registrar.RegisterType<ScriptAliasFinder>().As<IScriptAliasFinder>().Singleton();
+        registrar.RegisterType<ScriptAnalyzer>().As<IScriptAnalyzer>().Singleton();
+        registrar.RegisterType<ScriptProcessor>().As<IScriptProcessor>().Singleton();
+        registrar.RegisterType<ScriptConventions>().As<IScriptConventions>().Singleton();
+        registrar.RegisterType<ScriptRunner>().As<IScriptRunner>().Singleton();
 
-            // Load directive providers.
-            registrar.RegisterType<FileLoadDirectiveProvider>().As<ILoadDirectiveProvider>().Singleton();
-        }
+        // Load directive providers.
+        registrar.RegisterType<FileLoadDirectiveProvider>().As<ILoadDirectiveProvider>().Singleton();
     }
 }

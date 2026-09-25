@@ -7,17 +7,16 @@ using Cake.Cli;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 
-namespace Cake.Frosting.Internal
+namespace Cake.Frosting.Internal;
+
+internal sealed class FrostingTreeRunner : FrostingEngine<TreeScriptHost>
 {
-    internal sealed class FrostingTreeRunner : FrostingEngine<TreeScriptHost>
+    public FrostingTreeRunner(TreeScriptHost host,
+        ICakeEngine engine, IFrostingContext context, ICakeLog log,
+        IEnumerable<IFrostingTask> tasks,
+        IFrostingSetup setup = null, IFrostingTeardown teardown = null,
+        IFrostingTaskSetup taskSetup = null, IFrostingTaskTeardown taskTeardown = null)
+            : base(host, engine, context, log, tasks, setup, teardown, taskSetup, taskTeardown)
     {
-        public FrostingTreeRunner(TreeScriptHost host,
-            ICakeEngine engine, IFrostingContext context, ICakeLog log,
-            IEnumerable<IFrostingTask> tasks,
-            IFrostingSetup setup = null, IFrostingTeardown teardown = null,
-            IFrostingTaskSetup taskSetup = null, IFrostingTaskTeardown taskTeardown = null)
-                : base(host, engine, context, log, tasks, setup, teardown, taskSetup, taskTeardown)
-        {
-        }
     }
 }

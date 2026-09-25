@@ -5,304 +5,302 @@
 using Cake.Common.Tests.Fixtures.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet;
 using Cake.Testing;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.DotNet.Publish
+namespace Cake.Common.Tests.Unit.Tools.DotNet.Publish;
+
+public sealed class DotNetPublisherTests
 {
-    public sealed class DotNetPublisherTests
+    public sealed class ThePublishMethod
     {
-        public sealed class ThePublishMethod
+        [Fact]
+        public void Should_Throw_If_Settings_Are_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Settings_Are_Null()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings = null;
-                fixture.GivenDefaultToolDoNotExist();
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings = null;
+            fixture.GivenDefaultToolDoNotExist();
 
-                // When
-                var result = Record.Exception(() => fixture.Run());
+            // When
+            var result = Record.Exception(() => fixture.Run());
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "settings");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "settings");
+        }
 
-            [Fact]
-            public void Should_Throw_If_Process_Was_Not_Started()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.GivenProcessCannotStart();
+        [Fact]
+        public void Should_Throw_If_Process_Was_Not_Started()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.GivenProcessCannotStart();
 
-                // When
-                var result = Record.Exception(() => fixture.Run());
+            // When
+            var result = Record.Exception(() => fixture.Run());
 
-                // Then
-                AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
-            }
+            // Then
+            AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
+        }
 
-            [Fact]
-            public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.GivenProcessExitsWithCode(1);
+        [Fact]
+        public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.GivenProcessExitsWithCode(1);
 
-                // When
-                var result = Record.Exception(() => fixture.Run());
+            // When
+            var result = Record.Exception(() => fixture.Run());
 
-                // Then
-                AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
-            }
+            // Then
+            AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
+        }
 
-            [Fact]
-            public void Should_Add_Mandatory_Arguments()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
+        [Fact]
+        public void Should_Add_Mandatory_Arguments()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish", result.Args);
-            }
+            // Then
+            Assert.Equal("publish", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_Path()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Project = "./src/*";
+        [Fact]
+        public void Should_Add_Path()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Project = "./src/*";
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish \"./src/*\"", result.Args);
-            }
+            // Then
+            Assert.Equal("publish \"./src/*\"", result.Args);
+        }
 
-            [Theory]
-            [InlineData("./src/*", "publish \"./src/*\"")]
-            [InlineData("./src/cake artifacts/", "publish \"./src/cake artifacts/\"")]
-            [InlineData("./src/cake artifacts/cake binaries", "publish \"./src/cake artifacts/cake binaries\"")]
-            public void Should_Quote_Project_Path(string text, string expected)
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Project = text;
+        [Theory]
+        [InlineData("./src/*", "publish \"./src/*\"")]
+        [InlineData("./src/cake artifacts/", "publish \"./src/cake artifacts/\"")]
+        [InlineData("./src/cake artifacts/cake binaries", "publish \"./src/cake artifacts/cake binaries\"")]
+        public void Should_Quote_Project_Path(string text, string expected)
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Project = text;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal(expected, result.Args);
-            }
+            // Then
+            Assert.Equal(expected, result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_Settings()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.NoBuild = true;
-                fixture.Settings.NoDependencies = true;
-                fixture.Settings.NoRestore = true;
-                fixture.Settings.NoLogo = true;
-                fixture.Settings.Framework = "dnxcore50";
-                fixture.Settings.Configuration = "Release";
-                fixture.Settings.Runtime = "runtime1";
-                fixture.Settings.OutputDirectory = "./artifacts/";
-                fixture.Settings.VersionSuffix = "rc1";
-                fixture.Settings.Verbosity = DotNetVerbosity.Minimal;
-                fixture.Settings.Force = true;
-                fixture.Settings.SelfContained = true;
-                fixture.Settings.Sources = new[] { "https://api.nuget.org/v3/index.json" };
+        [Fact]
+        public void Should_Add_Settings()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.NoBuild = true;
+            fixture.Settings.NoDependencies = true;
+            fixture.Settings.NoRestore = true;
+            fixture.Settings.NoLogo = true;
+            fixture.Settings.Framework = "dnxcore50";
+            fixture.Settings.Configuration = "Release";
+            fixture.Settings.Runtime = "runtime1";
+            fixture.Settings.OutputDirectory = "./artifacts/";
+            fixture.Settings.VersionSuffix = "rc1";
+            fixture.Settings.Verbosity = DotNetVerbosity.Minimal;
+            fixture.Settings.Force = true;
+            fixture.Settings.SelfContained = true;
+            fixture.Settings.Sources = new[] { "https://api.nuget.org/v3/index.json" };
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-build --no-dependencies --no-restore --nologo --force --self-contained --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
-            }
+            // Then
+            Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-build --no-dependencies --no-restore --nologo --force --self-contained --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_SelfContained_False_Settings()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.NoDependencies = true;
-                fixture.Settings.NoRestore = true;
-                fixture.Settings.Framework = "dnxcore50";
-                fixture.Settings.Configuration = "Release";
-                fixture.Settings.Runtime = "runtime1";
-                fixture.Settings.OutputDirectory = "./artifacts/";
-                fixture.Settings.VersionSuffix = "rc1";
-                fixture.Settings.Verbosity = DotNetVerbosity.Minimal;
-                fixture.Settings.Force = true;
-                fixture.Settings.SelfContained = false;
-                fixture.Settings.Sources = new[] { "https://api.nuget.org/v3/index.json" };
+        [Fact]
+        public void Should_Add_SelfContained_False_Settings()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.NoDependencies = true;
+            fixture.Settings.NoRestore = true;
+            fixture.Settings.Framework = "dnxcore50";
+            fixture.Settings.Configuration = "Release";
+            fixture.Settings.Runtime = "runtime1";
+            fixture.Settings.OutputDirectory = "./artifacts/";
+            fixture.Settings.VersionSuffix = "rc1";
+            fixture.Settings.Verbosity = DotNetVerbosity.Minimal;
+            fixture.Settings.Force = true;
+            fixture.Settings.SelfContained = false;
+            fixture.Settings.Sources = new[] { "https://api.nuget.org/v3/index.json" };
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-dependencies --no-restore --force --no-self-contained --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
-            }
+            // Then
+            Assert.Equal("publish --output \"/Working/artifacts\" --runtime runtime1 --framework dnxcore50 --configuration Release --version-suffix rc1 --no-dependencies --no-restore --force --no-self-contained --source \"https://api.nuget.org/v3/index.json\" --verbosity minimal", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_Host_Arguments()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.DiagnosticOutput = true;
+        [Fact]
+        public void Should_Add_Host_Arguments()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.DiagnosticOutput = true;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("--diagnostics publish", result.Args);
-            }
+            // Then
+            Assert.Equal("--diagnostics publish", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_PublishSingleFile()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.PublishSingleFile = true;
+        [Fact]
+        public void Should_Add_PublishSingleFile()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.PublishSingleFile = true;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish -p:PublishSingleFile=true", result.Args);
-            }
+            // Then
+            Assert.Equal("publish -p:PublishSingleFile=true", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_PublishTrimmed()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.PublishTrimmed = true;
+        [Fact]
+        public void Should_Add_PublishTrimmed()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.PublishTrimmed = true;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish -p:PublishTrimmed=true", result.Args);
-            }
+            // Then
+            Assert.Equal("publish -p:PublishTrimmed=true", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_TieredCompilationQuickJit()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.TieredCompilationQuickJit = false;
+        [Fact]
+        public void Should_Add_TieredCompilationQuickJit()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.TieredCompilationQuickJit = false;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish -p:TieredCompilationQuickJit=false", result.Args);
-            }
+            // Then
+            Assert.Equal("publish -p:TieredCompilationQuickJit=false", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_TieredCompilation()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.TieredCompilation = false;
+        [Fact]
+        public void Should_Add_TieredCompilation()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.TieredCompilation = false;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish -p:TieredCompilation=false", result.Args);
-            }
+            // Then
+            Assert.Equal("publish -p:TieredCompilation=false", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_PublishReadyToRun()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.PublishReadyToRun = true;
+        [Fact]
+        public void Should_Add_PublishReadyToRun()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.PublishReadyToRun = true;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish -p:PublishReadyToRun=true", result.Args);
-            }
+            // Then
+            Assert.Equal("publish -p:PublishReadyToRun=true", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_PublishReadyToRunShowWarnings()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.PublishReadyToRunShowWarnings = true;
+        [Fact]
+        public void Should_Add_PublishReadyToRunShowWarnings()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.PublishReadyToRunShowWarnings = true;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish -p:PublishReadyToRunShowWarnings=true", result.Args);
-            }
+            // Then
+            Assert.Equal("publish -p:PublishReadyToRunShowWarnings=true", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_IncludeNativeLibrariesForSelfExtract()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.IncludeNativeLibrariesForSelfExtract = true;
+        [Fact]
+        public void Should_Add_IncludeNativeLibrariesForSelfExtract()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.IncludeNativeLibrariesForSelfExtract = true;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish -p:IncludeNativeLibrariesForSelfExtract=true", result.Args);
-            }
+            // Then
+            Assert.Equal("publish -p:IncludeNativeLibrariesForSelfExtract=true", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_IncludeAllContentForSelfExtract()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.IncludeAllContentForSelfExtract = true;
+        [Fact]
+        public void Should_Add_IncludeAllContentForSelfExtract()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.IncludeAllContentForSelfExtract = true;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish -p:IncludeAllContentForSelfExtract=true", result.Args);
-            }
+            // Then
+            Assert.Equal("publish -p:IncludeAllContentForSelfExtract=true", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_EnableCompressionInSingleFile()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.EnableCompressionInSingleFile = true;
+        [Fact]
+        public void Should_Add_EnableCompressionInSingleFile()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.EnableCompressionInSingleFile = true;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish -p:EnableCompressionInSingleFile=true", result.Args);
-            }
+            // Then
+            Assert.Equal("publish -p:EnableCompressionInSingleFile=true", result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_Os()
-            {
-                // Given
-                var fixture = new DotNetPublisherFixture();
-                fixture.Settings.OS = "linux";
+        [Fact]
+        public void Should_Add_Os()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.OS = "linux";
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("publish --os linux", result.Args);
-            }
+            // Then
+            Assert.Equal("publish --os linux", result.Args);
         }
     }
 }

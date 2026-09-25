@@ -7,144 +7,142 @@ using Cake.Common.Tests.Fixtures.Build;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using NSubstitute;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.GoCD
+namespace Cake.Common.Tests.Unit.Build.GoCD;
+
+public sealed class GoCDProviderTests
 {
-    public sealed class GoCDProviderTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Throw_If_Environment_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Environment_Is_Null()
-            {
-                // Given, When
-                var cakeLog = Substitute.For<ICakeLog>();
-                var result = Record.Exception(() => new GoCDProvider(null, cakeLog));
+            // Given, When
+            var cakeLog = Substitute.For<ICakeLog>();
+            var result = Record.Exception(() => new GoCDProvider(null, cakeLog));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "environment");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Log_Is_Null()
-            {
-                // Given, When
-                var environment = Substitute.For<ICakeEnvironment>();
-                var result = Record.Exception(() => new GoCDProvider(environment, null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "log");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "environment");
         }
 
-        public sealed class TheIsRunningOnGoCDProperty
+        [Fact]
+        public void Should_Throw_If_Log_Is_Null()
         {
-            [Fact]
-            public void Should_Return_True_If_Running_On_GoCD()
-            {
-                // Given
-                var fixture = new GoCDFixture();
-                fixture.IsRunningOnGoCD();
-                var gocd = fixture.CreateGoCDService();
+            // Given, When
+            var environment = Substitute.For<ICakeEnvironment>();
+            var result = Record.Exception(() => new GoCDProvider(environment, null));
 
-                // When
-                var result = gocd.IsRunningOnGoCD;
+            // Then
+            AssertEx.IsArgumentNullException(result, "log");
+        }
+    }
 
-                // Then
-                Assert.True(result);
-            }
+    public sealed class TheIsRunningOnGoCDProperty
+    {
+        [Fact]
+        public void Should_Return_True_If_Running_On_GoCD()
+        {
+            // Given
+            var fixture = new GoCDFixture();
+            fixture.IsRunningOnGoCD();
+            var gocd = fixture.CreateGoCDService();
 
-            [Fact]
-            public void Should_Return_False_If_Not_Running_On_GoCD()
-            {
-                // Given
-                var fixture = new GoCDFixture();
-                var gocd = fixture.CreateGoCDService();
+            // When
+            var result = gocd.IsRunningOnGoCD;
 
-                // When
-                var result = gocd.IsRunningOnGoCD;
-
-                // Then
-                Assert.False(result);
-            }
+            // Then
+            Assert.True(result);
         }
 
-        public sealed class TheEnvironmentProperty
+        [Fact]
+        public void Should_Return_False_If_Not_Running_On_GoCD()
         {
-            [Fact]
-            public void Should_Return_Non_Null_Reference()
-            {
-                // Given
-                var fixture = new GoCDFixture();
-                var gocd = fixture.CreateGoCDService();
+            // Given
+            var fixture = new GoCDFixture();
+            var gocd = fixture.CreateGoCDService();
 
-                // When
-                var result = gocd.Environment;
+            // When
+            var result = gocd.IsRunningOnGoCD;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.False(result);
+        }
+    }
+
+    public sealed class TheEnvironmentProperty
+    {
+        [Fact]
+        public void Should_Return_Non_Null_Reference()
+        {
+            // Given
+            var fixture = new GoCDFixture();
+            var gocd = fixture.CreateGoCDService();
+
+            // When
+            var result = gocd.Environment;
+
+            // Then
+            Assert.NotNull(result);
+        }
+    }
+
+    public sealed class TheGetHistoryMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Username_Is_Null()
+        {
+            // Given
+            var fixture = new GoCDFixture();
+            var appVeyor = fixture.CreateGoCDService();
+
+            // When
+            var result = Record.Exception(() => appVeyor.GetHistory(null, "password"));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "username");
         }
 
-        public sealed class TheGetHistoryMethod
+        [Fact]
+        public void Should_Throw_If_Password_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Username_Is_Null()
-            {
-                // Given
-                var fixture = new GoCDFixture();
-                var appVeyor = fixture.CreateGoCDService();
+            // Given
+            var fixture = new GoCDFixture();
+            var appVeyor = fixture.CreateGoCDService();
 
-                // When
-                var result = Record.Exception(() => appVeyor.GetHistory(null, "password"));
+            // When
+            var result = Record.Exception(() => appVeyor.GetHistory("username", null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "username");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "password");
+        }
 
-            [Fact]
-            public void Should_Throw_If_Password_Is_Null()
-            {
-                // Given
-                var fixture = new GoCDFixture();
-                var appVeyor = fixture.CreateGoCDService();
+        [Fact]
+        public void Should_Throw_If_Server_Url_Is_Null()
+        {
+            // Given
+            var fixture = new GoCDFixture();
+            var appVeyor = fixture.CreateGoCDService();
 
-                // When
-                var result = Record.Exception(() => appVeyor.GetHistory("username", null));
+            // When
+            var result = Record.Exception(() => appVeyor.GetHistory("username", "password", null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "password");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "serverUrl");
+        }
 
-            [Fact]
-            public void Should_Throw_If_Server_Url_Is_Null()
-            {
-                // Given
-                var fixture = new GoCDFixture();
-                var appVeyor = fixture.CreateGoCDService();
+        [Fact]
+        public void Should_Throw_If_Not_Running_On_GoCD()
+        {
+            // Given
+            var fixture = new GoCDFixture();
+            var appVeyor = fixture.CreateGoCDService();
 
-                // When
-                var result = Record.Exception(() => appVeyor.GetHistory("username", "password", null));
+            // When
+            var result = Record.Exception(() => appVeyor.GetHistory("username", "password"));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "serverUrl");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Not_Running_On_GoCD()
-            {
-                // Given
-                var fixture = new GoCDFixture();
-                var appVeyor = fixture.CreateGoCDService();
-
-                // When
-                var result = Record.Exception(() => appVeyor.GetHistory("username", "password"));
-
-                // Then
-                AssertEx.IsExceptionWithMessage<CakeException>(result,
-                    "The current build is not running on Go.CD.");
-            }
+            // Then
+            AssertEx.IsExceptionWithMessage<CakeException>(result,
+                "The current build is not running on Go.CD.");
         }
     }
 }

@@ -7,55 +7,54 @@ using Cake.Common.Build.Bitrise.Data;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Build.Bitrise
+namespace Cake.Common.Build.Bitrise;
+
+/// <summary>
+/// Responsible for communicating with Bitrise.
+/// </summary>
+public sealed class BitriseProvider : IBitriseProvider
 {
+    private readonly ICakeEnvironment _environment;
+    private readonly IProcessRunner _processRunner;
+
+    /// <inheritdoc/>
+    public bool IsRunningOnBitrise => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("BITRISE_BUILD_URL"));
+
+    /// <inheritdoc/>
+    public BitriseEnvironmentInfo Environment { get; }
+
     /// <summary>
-    /// Responsible for communicating with Bitrise.
+    /// Initializes a new instance of the <see cref="BitriseProvider"/> class.
     /// </summary>
-    public sealed class BitriseProvider : IBitriseProvider
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    public BitriseProvider(ICakeEnvironment environment, IProcessRunner processRunner)
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly IProcessRunner _processRunner;
+        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+        _processRunner = processRunner ?? throw new ArgumentNullException(nameof(processRunner));
+        Environment = new BitriseEnvironmentInfo(_environment);
+    }
 
-        /// <inheritdoc/>
-        public bool IsRunningOnBitrise => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("BITRISE_BUILD_URL"));
+    /// <inheritdoc/>
+    public void SetEnvironmentString(string variable, string value)
+    {
+        var arguments = new ProcessArgumentBuilder()
+            .Append("add")
+            .Append("--key")
+            .Append(variable)
+            .Append("--value")
+            .AppendQuoted(value);
 
-        /// <inheritdoc/>
-        public BitriseEnvironmentInfo Environment { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BitriseProvider"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        public BitriseProvider(ICakeEnvironment environment, IProcessRunner processRunner)
+        var process = _processRunner.Start("envman", new ProcessSettings
         {
-            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            _processRunner = processRunner ?? throw new ArgumentNullException(nameof(processRunner));
-            Environment = new BitriseEnvironmentInfo(_environment);
-        }
+            Arguments = arguments
+        });
 
-        /// <inheritdoc/>
-        public void SetEnvironmentString(string variable, string value)
+        process.WaitForExit();
+        var exitCode = process.GetExitCode();
+        if (exitCode != 0)
         {
-            var arguments = new ProcessArgumentBuilder()
-                .Append("add")
-                .Append("--key")
-                .Append(variable)
-                .Append("--value")
-                .AppendQuoted(value);
-
-            var process = _processRunner.Start("envman", new ProcessSettings
-            {
-                Arguments = arguments
-            });
-
-            process.WaitForExit();
-            var exitCode = process.GetExitCode();
-            if (exitCode != 0)
-            {
-                throw new CakeException($"BitriseProvider SetEnvironmentString failed ({exitCode}).");
-            }
+            throw new CakeException($"BitriseProvider SetEnvironmentString failed ({exitCode}).");
         }
     }
 }

@@ -3,106 +3,104 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.Bamboo.Data
+namespace Cake.Common.Tests.Unit.Build.Bamboo.Data;
+
+public sealed class BambooPlanInfoTests
 {
-    public sealed class BambooPlanInfoTests
+    public sealed class ThePlanNameProperty
     {
-        public sealed class ThePlanNameProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreatePlanInfo();
+            // Given
+            var info = new BambooInfoFixture().CreatePlanInfo();
 
-                // When
-                var result = info.PlanName;
+            // When
+            var result = info.PlanName;
 
-                // Then
-                Assert.Equal("cake-bamboo - dev", result);
-            }
+            // Then
+            Assert.Equal("cake-bamboo - dev", result);
         }
+    }
 
-        public sealed class ThePlanKeyProperty
+    public sealed class ThePlanKeyProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreatePlanInfo();
+            // Given
+            var info = new BambooInfoFixture().CreatePlanInfo();
 
-                // When
-                var result = info.PlanKey;
+            // When
+            var result = info.PlanKey;
 
-                // Then
-                Assert.Equal("CAKE-CAKE", result);
-            }
+            // Then
+            Assert.Equal("CAKE-CAKE", result);
         }
+    }
 
-        public sealed class TheShortJobKeyProperty
+    public sealed class TheShortJobKeyProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreatePlanInfo();
+            // Given
+            var info = new BambooInfoFixture().CreatePlanInfo();
 
-                // When
-                var result = info.ShortJobKey;
+            // When
+            var result = info.ShortJobKey;
 
-                // Then
-                Assert.Equal("JOB1", result);
-            }
+            // Then
+            Assert.Equal("JOB1", result);
         }
+    }
 
-        public sealed class TheShortJobNameProperty
+    public sealed class TheShortJobNameProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreatePlanInfo();
+            // Given
+            var info = new BambooInfoFixture().CreatePlanInfo();
 
-                // When
-                var result = info.ShortJobName;
+            // When
+            var result = info.ShortJobName;
 
-                // Then
-                Assert.Equal("Build Cake", result);
-            }
+            // Then
+            Assert.Equal("Build Cake", result);
         }
+    }
 
-        public sealed class TheShortPlanKeyProperty
+    public sealed class TheShortPlanKeyProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreatePlanInfo();
+            // Given
+            var info = new BambooInfoFixture().CreatePlanInfo();
 
-                // When
-                var result = info.ShortPlanKey;
+            // When
+            var result = info.ShortPlanKey;
 
-                // Then
-                Assert.Equal("CAKE", result);
-            }
+            // Then
+            Assert.Equal("CAKE", result);
         }
+    }
 
-        public sealed class TheShortPlanNameProperty
+    public sealed class TheShortPlanNameProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BambooInfoFixture().CreatePlanInfo();
+            // Given
+            var info = new BambooInfoFixture().CreatePlanInfo();
 
-                // When
-                var result = info.ShortPlanName;
+            // When
+            var result = info.ShortPlanName;
 
-                // Then
-                Assert.Equal("Cake", result);
-            }
+            // Then
+            Assert.Equal("Cake", result);
         }
     }
 }

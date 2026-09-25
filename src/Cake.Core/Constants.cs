@@ -4,30 +4,29 @@
 
 using System;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+internal static class Constants
 {
-    internal static class Constants
+    public const ConsoleColor DefaultConsoleColor = (ConsoleColor)(-1);
+
+    public static readonly Version LatestBreakingChange = new Version(0, 26, 0);
+    public static readonly Version LatestPotentialBreakingChange = new Version(7, 0, 0);
+
+    public static class Settings
     {
-        public const ConsoleColor DefaultConsoleColor = (ConsoleColor)(-1);
+        public const string SkipVerification = "Settings_SkipVerification";
+        public const string SkipPackageVersionCheck = "Settings_SkipPackageVersionCheck";
+        public const string NoMonoCoersion = "Settings_NoMonoCoersion";
+        public const string ShowProcessCommandLine = "Settings_ShowProcessCommandLine";
+        public const string UnifiedDependencyGraphForMultipleTargets = "Settings_UnifiedDependencyGraphForMultipleTargets";
+        public const string Verbosity = "Settings_Verbosity";
+    }
 
-        public static readonly Version LatestBreakingChange = new Version(0, 26, 0);
-        public static readonly Version LatestPotentialBreakingChange = new Version(7, 0, 0);
-
-        public static class Settings
-        {
-            public const string SkipVerification = "Settings_SkipVerification";
-            public const string SkipPackageVersionCheck = "Settings_SkipPackageVersionCheck";
-            public const string NoMonoCoersion = "Settings_NoMonoCoersion";
-            public const string ShowProcessCommandLine = "Settings_ShowProcessCommandLine";
-            public const string UnifiedDependencyGraphForMultipleTargets = "Settings_UnifiedDependencyGraphForMultipleTargets";
-            public const string Verbosity = "Settings_Verbosity";
-        }
-
-        public static class Paths
-        {
-            public const string Tools = "Paths_Tools";
-            public const string Addins = "Paths_Addins";
-            public const string Modules = "Paths_Modules";
-        }
+    public static class Paths
+    {
+        public const string Tools = "Paths_Tools";
+        public const string Addins = "Paths_Addins";
+        public const string Modules = "Paths_Modules";
     }
 }

@@ -6,95 +6,94 @@ using Cake.Core.IO;
 using Cake.Core.IO.Arguments;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.IO.Arguments
+namespace Cake.Core.Tests.Unit.IO.Arguments;
+
+public sealed class QuotedArgumentTests
 {
-    public sealed class QuotedArgumentTests
+    private sealed class TestingArgument : IProcessArgument
     {
-        private sealed class TestingArgument : IProcessArgument
+        public string Render()
         {
-            public string Render()
-            {
-                return "RENDER";
-            }
-
-            public string RenderSafe()
-            {
-                return "RENDERSAFE";
-            }
+            return "RENDER";
         }
 
-        public sealed class TheRenderMethod
+        public string RenderSafe()
         {
-            [Theory]
-            [InlineData("Hello World", "\"Hello World\"")]
-            [InlineData("", "\"\"")]
-            [InlineData(" \t ", "\" \t \"")]
-            [InlineData(null, "\"\"")]
-            [InlineData("123\\", "\"123\\\\\"")]
-            [InlineData(" 1 2 3 \\", "\" 1 2 3 \\\\\"")]
-            [InlineData("\"1\"2\"3\"", "\"\\\"1\\\"2\\\"3\\\"\"")]
-            [InlineData("\\\\\"", "\"\\\\\\\\\\\"\"")]
-            public void Should_Render_The_Provided_Text(string text, string expected)
-            {
-                // Given
-                var argument = new QuotedArgument(new TextArgument(text));
+            return "RENDERSAFE";
+        }
+    }
 
-                // When
-                var result = argument.Render();
+    public sealed class TheRenderMethod
+    {
+        [Theory]
+        [InlineData("Hello World", "\"Hello World\"")]
+        [InlineData("", "\"\"")]
+        [InlineData(" \t ", "\" \t \"")]
+        [InlineData(null, "\"\"")]
+        [InlineData("123\\", "\"123\\\\\"")]
+        [InlineData(" 1 2 3 \\", "\" 1 2 3 \\\\\"")]
+        [InlineData("\"1\"2\"3\"", "\"\\\"1\\\"2\\\"3\\\"\"")]
+        [InlineData("\\\\\"", "\"\\\\\\\\\\\"\"")]
+        public void Should_Render_The_Provided_Text(string text, string expected)
+        {
+            // Given
+            var argument = new QuotedArgument(new TextArgument(text));
 
-                // Then
-                Assert.Equal(expected, result);
-            }
+            // When
+            var result = argument.Render();
 
-            [Fact]
-            public void Should_Call_Child_Arguments_RenderSafe_Method()
-            {
-                // Given
-                var argument = new QuotedArgument(new TestingArgument());
-
-                // When
-                var result = argument.Render();
-
-                // Then
-                Assert.Equal("\"RENDER\"", result);
-            }
+            // Then
+            Assert.Equal(expected, result);
         }
 
-        public sealed class TheRenderSafeMethod
+        [Fact]
+        public void Should_Call_Child_Arguments_RenderSafe_Method()
         {
-            [Theory]
-            [InlineData("Hello World", "\"Hello World\"")]
-            [InlineData("", "\"\"")]
-            [InlineData(" \t ", "\" \t \"")]
-            [InlineData(null, "\"\"")]
-            [InlineData("123\\", "\"123\\\\\"")]
-            [InlineData(" 1 2 3 \\", "\" 1 2 3 \\\\\"")]
-            [InlineData("\"1\"2\"3\"", "\"\\\"1\\\"2\\\"3\\\"\"")]
-            [InlineData("\\\\\"", "\"\\\\\\\\\\\"\"")]
-            public void Should_Render_The_Provided_Text_As_Normal(string text, string expected)
-            {
-                // Given
-                var argument = new QuotedArgument(new TextArgument(text));
+            // Given
+            var argument = new QuotedArgument(new TestingArgument());
 
-                // When
-                var result = argument.RenderSafe();
+            // When
+            var result = argument.Render();
 
-                // Then
-                Assert.Equal(expected, result);
-            }
+            // Then
+            Assert.Equal("\"RENDER\"", result);
+        }
+    }
 
-            [Fact]
-            public void Should_Call_Child_Arguments_RenderSafe_Method()
-            {
-                // Given
-                var argument = new QuotedArgument(new TestingArgument());
+    public sealed class TheRenderSafeMethod
+    {
+        [Theory]
+        [InlineData("Hello World", "\"Hello World\"")]
+        [InlineData("", "\"\"")]
+        [InlineData(" \t ", "\" \t \"")]
+        [InlineData(null, "\"\"")]
+        [InlineData("123\\", "\"123\\\\\"")]
+        [InlineData(" 1 2 3 \\", "\" 1 2 3 \\\\\"")]
+        [InlineData("\"1\"2\"3\"", "\"\\\"1\\\"2\\\"3\\\"\"")]
+        [InlineData("\\\\\"", "\"\\\\\\\\\\\"\"")]
+        public void Should_Render_The_Provided_Text_As_Normal(string text, string expected)
+        {
+            // Given
+            var argument = new QuotedArgument(new TextArgument(text));
 
-                // When
-                var result = argument.RenderSafe();
+            // When
+            var result = argument.RenderSafe();
 
-                // Then
-                Assert.Equal("\"RENDERSAFE\"", result);
-            }
+            // Then
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void Should_Call_Child_Arguments_RenderSafe_Method()
+        {
+            // Given
+            var argument = new QuotedArgument(new TestingArgument());
+
+            // When
+            var result = argument.RenderSafe();
+
+            // Then
+            Assert.Equal("\"RENDERSAFE\"", result);
         }
     }
 }

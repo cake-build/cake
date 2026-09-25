@@ -8,89 +8,88 @@ using Cake.Core.IO;
 using Cake.Core.IO.NuGet;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.NuGet.SetApiKey
+namespace Cake.Common.Tools.NuGet.SetApiKey;
+
+/// <summary>
+/// The NuGet set API key used to set API key used for API/feed authentication.
+/// </summary>
+public sealed class NuGetSetApiKey : NuGetTool<NuGetSetApiKeySettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// The NuGet set API key used to set API key used for API/feed authentication.
+    /// Initializes a new instance of the <see cref="NuGetSetApiKey"/> class.
     /// </summary>
-    public sealed class NuGetSetApiKey : NuGetTool<NuGetSetApiKeySettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="resolver">The NuGet tool resolver.</param>
+    public NuGetSetApiKey(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NuGetSetApiKey"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The NuGet tool resolver.</param>
-        public NuGetSetApiKey(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            INuGetToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
+    /// <summary>
+    /// Installs NuGet packages using the specified package id and settings.
+    /// </summary>
+    /// <param name="apiKey">The API key.</param>
+    /// <param name="source">The Server URL where the API key is valid.</param>
+    /// <param name="settings">The settings.</param>
+    public void SetApiKey(string apiKey, string source, NuGetSetApiKeySettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(apiKey))
         {
-            _environment = environment;
+            throw new ArgumentNullException(nameof(apiKey));
+        }
+        if (string.IsNullOrWhiteSpace(source))
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+        ArgumentNullException.ThrowIfNull(settings);
+
+        // Read but do not validate redirected standard output.
+        // Process wrapper logs redacted output at diagnostic verbosity.
+        var processSettings = new ProcessSettings
+        {
+            Arguments = GetArguments(apiKey, source, settings),
+            RedirectStandardOutput = true
+        };
+        Run(settings, null, processSettings, process => string.Join(Environment.NewLine, process.GetStandardOutput()));
+    }
+
+    private ProcessArgumentBuilder GetArguments(string apiKey, string source, NuGetSetApiKeySettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("setapikey");
+        builder.AppendQuotedSecret(apiKey);
+
+        // Source
+        builder.Append("-Source");
+        builder.AppendQuoted(source);
+
+        // Verbosity?
+        if (settings.Verbosity.HasValue)
+        {
+            builder.Append("-Verbosity");
+            builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
         }
 
-        /// <summary>
-        /// Installs NuGet packages using the specified package id and settings.
-        /// </summary>
-        /// <param name="apiKey">The API key.</param>
-        /// <param name="source">The Server URL where the API key is valid.</param>
-        /// <param name="settings">The settings.</param>
-        public void SetApiKey(string apiKey, string source, NuGetSetApiKeySettings settings)
+        // Configuration file
+        if (settings.ConfigFile != null)
         {
-            if (string.IsNullOrWhiteSpace(apiKey))
-            {
-                throw new ArgumentNullException(nameof(apiKey));
-            }
-            if (string.IsNullOrWhiteSpace(source))
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            ArgumentNullException.ThrowIfNull(settings);
-
-            // Read but do not validate redirected standard output.
-            // Process wrapper logs redacted output at diagnostic verbosity.
-            var processSettings = new ProcessSettings
-            {
-                Arguments = GetArguments(apiKey, source, settings),
-                RedirectStandardOutput = true
-            };
-            Run(settings, null, processSettings, process => string.Join(Environment.NewLine, process.GetStandardOutput()));
+            builder.Append("-ConfigFile");
+            builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
         }
 
-        private ProcessArgumentBuilder GetArguments(string apiKey, string source, NuGetSetApiKeySettings settings)
-        {
-            var builder = new ProcessArgumentBuilder();
+        builder.Append("-NonInteractive");
 
-            builder.Append("setapikey");
-            builder.AppendQuotedSecret(apiKey);
-
-            // Source
-            builder.Append("-Source");
-            builder.AppendQuoted(source);
-
-            // Verbosity?
-            if (settings.Verbosity.HasValue)
-            {
-                builder.Append("-Verbosity");
-                builder.Append(settings.Verbosity.Value.ToString().ToLowerInvariant());
-            }
-
-            // Configuration file
-            if (settings.ConfigFile != null)
-            {
-                builder.Append("-ConfigFile");
-                builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
-            }
-
-            builder.Append("-NonInteractive");
-
-            return builder;
-        }
+        return builder;
     }
 }

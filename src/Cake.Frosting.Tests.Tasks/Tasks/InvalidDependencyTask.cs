@@ -5,10 +5,9 @@
 using System;
 using Cake.Core;
 
-namespace Cake.Frosting.Tests
+namespace Cake.Frosting.Tests;
+
+[IsDependentOn(typeof(DateTime))]
+public sealed class InvalidDependencyTask : FrostingTask<ICakeContext>
 {
-    [IsDependentOn(typeof(DateTime))]
-    public sealed class InvalidDependencyTask : FrostingTask<ICakeContext>
-    {
-    }
 }

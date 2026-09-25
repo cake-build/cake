@@ -6,106 +6,105 @@ using System.Diagnostics;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.XBuild
+namespace Cake.Common.Tools.XBuild;
+
+internal static class XBuildResolver
 {
-    internal static class XBuildResolver
+    private static ICakeEnvironment _environment;
+    private static IFileSystem _fileSystem;
+
+    public static FilePath GetXBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, XBuildToolVersion version)
     {
-        private static ICakeEnvironment _environment;
-        private static IFileSystem _fileSystem;
+        _environment = environment;
+        _fileSystem = fileSystem;
 
-        public static FilePath GetXBuildPath(IFileSystem fileSystem, ICakeEnvironment environment, XBuildToolVersion version)
+        if (_environment.Platform.IsUnix())
         {
-            _environment = environment;
-            _fileSystem = fileSystem;
-
-            if (_environment.Platform.IsUnix())
-            {
-                return GetWhichXBuild();
-            }
-            else
-            {
-                return GetWindowsXBuild();
-            }
+            return GetWhichXBuild();
         }
-
-        private static FilePath GetWindowsXBuild()
+        else
         {
-            var whereMono = GetWhereMono();
+            return GetWindowsXBuild();
+        }
+    }
 
-            if (whereMono != null)
-            {
-                return whereMono.GetDirectory().CombineWithFilePath("xbuild.bat");
-            }
-            else
-            {
-                var monoPath = GetMonoPathWindows();
+    private static FilePath GetWindowsXBuild()
+    {
+        var whereMono = GetWhereMono();
 
-                if (monoPath != null)
+        if (whereMono != null)
+        {
+            return whereMono.GetDirectory().CombineWithFilePath("xbuild.bat");
+        }
+        else
+        {
+            var monoPath = GetMonoPathWindows();
+
+            if (monoPath != null)
+            {
+                var xbuild = monoPath.CombineWithFilePath("xbuild.bat");
+
+                if (_fileSystem.GetFile(xbuild).Exists)
                 {
-                    var xbuild = monoPath.CombineWithFilePath("xbuild.bat");
-
-                    if (_fileSystem.GetFile(xbuild).Exists)
-                    {
-                        return xbuild;
-                    }
+                    return xbuild;
                 }
             }
-
-            return null;
         }
 
-        private static FilePath GetWhichXBuild()
+        return null;
+    }
+
+    private static FilePath GetWhichXBuild()
+    {
+        var startInfo = new ProcessStartInfo
         {
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "/usr/bin/which",
-                Arguments = "xbuild",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
-            };
+            FileName = "/usr/bin/which",
+            Arguments = "xbuild",
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            CreateNoWindow = true
+        };
 
-            string which;
-            using (var process = new Process { StartInfo = startInfo })
-            {
-                process.Start();
-                which = process.StandardOutput.ReadToEnd();
-            }
-
-            return string.IsNullOrEmpty(which) ? null : new FilePath(which.Trim());
-        }
-
-        private static FilePath GetWhereMono()
+        string which;
+        using (var process = new Process { StartInfo = startInfo })
         {
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "where",
-                Arguments = "mono",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
-            };
-
-            string path;
-            using (var process = new Process { StartInfo = startInfo })
-            {
-                process.Start();
-                path = process.StandardOutput.ReadToEnd();
-            }
-
-            return string.IsNullOrEmpty(path) ? null : new FilePath(path.Trim());
+            process.Start();
+            which = process.StandardOutput.ReadToEnd();
         }
 
-        private static DirectoryPath GetMonoPathWindows()
+        return string.IsNullOrEmpty(which) ? null : new FilePath(which.Trim());
+    }
+
+    private static FilePath GetWhereMono()
+    {
+        var startInfo = new ProcessStartInfo
         {
-            var programFiles = _environment.Platform.Is64Bit
-                ? SpecialPath.ProgramFilesX86
-                : SpecialPath.ProgramFiles;
+            FileName = "where",
+            Arguments = "mono",
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            CreateNoWindow = true
+        };
 
-            var programFilesPath = _environment.GetSpecialPath(programFiles);
-            var monoPath = programFilesPath.Combine("Mono").Combine("bin").MakeAbsolute(_environment);
-
-            return _fileSystem.GetDirectory(monoPath).Exists ? monoPath : null;
+        string path;
+        using (var process = new Process { StartInfo = startInfo })
+        {
+            process.Start();
+            path = process.StandardOutput.ReadToEnd();
         }
+
+        return string.IsNullOrEmpty(path) ? null : new FilePath(path.Trim());
+    }
+
+    private static DirectoryPath GetMonoPathWindows()
+    {
+        var programFiles = _environment.Platform.Is64Bit
+            ? SpecialPath.ProgramFilesX86
+            : SpecialPath.ProgramFiles;
+
+        var programFilesPath = _environment.GetSpecialPath(programFiles);
+        var monoPath = programFilesPath.Combine("Mono").Combine("bin").MakeAbsolute(_environment);
+
+        return _fileSystem.GetDirectory(monoPath).Exists ? monoPath : null;
     }
 }

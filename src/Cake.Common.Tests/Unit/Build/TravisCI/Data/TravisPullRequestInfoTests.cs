@@ -4,46 +4,44 @@
 
 using Cake.Common.Tests.Fixtures.Build;
 using NSubstitute;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.TravisCI.Data
+namespace Cake.Common.Tests.Unit.Build.TravisCI.Data;
+
+public sealed class TravisPullRequestInfoTests
 {
-    public sealed class TravisPullRequestInfoTests
+    public sealed class TheIsPullRequestProperty
     {
-        public sealed class TheIsPullRequestProperty
+        [Theory]
+        [InlineData("1", true)]
+        [InlineData("0", false)]
+        public void Should_Return_Correct_Value(string value, bool expected)
         {
-            [Theory]
-            [InlineData("1", true)]
-            [InlineData("0", false)]
-            public void Should_Return_Correct_Value(string value, bool expected)
-            {
-                // Given
-                var fixture = new TravisCIInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("TRAVIS_PULL_REQUEST").Returns(value);
-                var info = fixture.CreatePullRequestInfo();
+            // Given
+            var fixture = new TravisCIInfoFixture();
+            fixture.Environment.GetEnvironmentVariable("TRAVIS_PULL_REQUEST").Returns(value);
+            var info = fixture.CreatePullRequestInfo();
 
-                // When
-                var result = info.IsPullRequest;
+            // When
+            var result = info.IsPullRequest;
 
-                // Then
-                Assert.Equal(expected, result);
-            }
+            // Then
+            Assert.Equal(expected, result);
         }
+    }
 
-        public sealed class TheIdProperty
+    public sealed class TheIdProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new TravisCIInfoFixture().CreatePullRequestInfo();
+            // Given
+            var info = new TravisCIInfoFixture().CreatePullRequestInfo();
 
-                // When
-                var result = info.Id;
+            // When
+            var result = info.Id;
 
-                // Then
-                Assert.Equal(1, result);
-            }
+            // Then
+            Assert.Equal(1, result);
         }
     }
 }

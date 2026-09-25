@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotNet.Workload.Search
+namespace Cake.Common.Tools.DotNet.Workload.Search;
+
+/// <summary>
+/// Contains settings used by <see cref="DotNetWorkloadSearcher" />.
+/// </summary>
+public sealed class DotNetWorkloadSearchSettings : DotNetSettings
 {
-    /// <summary>
-    /// Contains settings used by <see cref="DotNetWorkloadSearcher" />.
-    /// </summary>
-    public sealed class DotNetWorkloadSearchSettings : DotNetSettings
-    {
-    }
 }

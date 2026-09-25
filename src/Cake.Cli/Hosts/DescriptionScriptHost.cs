@@ -8,69 +8,68 @@ using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Scripting;
 
-namespace Cake.Cli
+namespace Cake.Cli;
+
+/// <summary>
+/// The script host used for showing task descriptions.
+/// </summary>
+public class DescriptionScriptHost : ScriptHost
 {
+    private readonly IConsole _console;
+    private readonly Dictionary<string, string> _descriptions;
+
     /// <summary>
-    /// The script host used for showing task descriptions.
+    /// Initializes a new instance of the <see cref="DescriptionScriptHost"/> class.
     /// </summary>
-    public class DescriptionScriptHost : ScriptHost
+    /// <param name="engine">The engine.</param>
+    /// <param name="context">The context.</param>
+    /// <param name="console">The console.</param>
+    public DescriptionScriptHost(ICakeEngine engine, ICakeContext context, IConsole console)
+        : base(engine, context)
     {
-        private readonly IConsole _console;
-        private readonly Dictionary<string, string> _descriptions;
+        _console = console ?? throw new ArgumentNullException(nameof(console));
+        _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DescriptionScriptHost"/> class.
-        /// </summary>
-        /// <param name="engine">The engine.</param>
-        /// <param name="context">The context.</param>
-        /// <param name="console">The console.</param>
-        public DescriptionScriptHost(ICakeEngine engine, ICakeContext context, IConsole console)
-            : base(engine, context)
+    /// <inheritdoc/>
+    public override Task<CakeReport> RunTargetAsync(string target)
+    {
+        PrintTaskDescriptions();
+
+        return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
+    }
+
+    /// <inheritdoc/>
+    public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
+    {
+        PrintTaskDescriptions();
+
+        return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
+    }
+
+    private void PrintTaskDescriptions()
+    {
+        var maxTaskNameLength = 29;
+
+        foreach (var task in Tasks)
         {
-            _console = console ?? throw new ArgumentNullException(nameof(console));
-            _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        }
-
-        /// <inheritdoc/>
-        public override Task<CakeReport> RunTargetAsync(string target)
-        {
-            PrintTaskDescriptions();
-
-            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
-        }
-
-        /// <inheritdoc/>
-        public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
-        {
-            PrintTaskDescriptions();
-
-            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
-        }
-
-        private void PrintTaskDescriptions()
-        {
-            var maxTaskNameLength = 29;
-
-            foreach (var task in Tasks)
+            if (task.Name.Length > maxTaskNameLength)
             {
-                if (task.Name.Length > maxTaskNameLength)
-                {
-                    maxTaskNameLength = task.Name.Length;
-                }
-
-                _descriptions.Add(task.Name, task.Description);
+                maxTaskNameLength = task.Name.Length;
             }
 
-            maxTaskNameLength++;
-            string lineFormat = "{0,-" + maxTaskNameLength + "}{1}";
+            _descriptions.Add(task.Name, task.Description);
+        }
 
-            _console.WriteLine();
-            _console.WriteLine(lineFormat, "Task", "Description");
-            _console.WriteLine(new String('=', maxTaskNameLength + 50));
-            foreach (var (key, value) in _descriptions)
-            {
-                _console.WriteLine(lineFormat, key, value);
-            }
+        maxTaskNameLength++;
+        string lineFormat = "{0,-" + maxTaskNameLength + "}{1}";
+
+        _console.WriteLine();
+        _console.WriteLine(lineFormat, "Task", "Description");
+        _console.WriteLine(new String('=', maxTaskNameLength + 50));
+        foreach (var (key, value) in _descriptions)
+        {
+            _console.WriteLine(lineFormat, key, value);
         }
     }
 }

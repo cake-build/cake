@@ -5,23 +5,22 @@
 using System;
 using Cake.Core.Scripting.Analysis;
 
-namespace Cake.Core.Scripting.Processors
+namespace Cake.Core.Scripting.Processors;
+
+internal sealed class BreakDirectiveProcessor : LineProcessor
 {
-    internal sealed class BreakDirectiveProcessor : LineProcessor
+    public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
     {
-        public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
+        ArgumentNullException.ThrowIfNull(context);
+
+        replacement = null;
+
+        if (!line.Trim().Equals("#break", StringComparison.Ordinal))
         {
-            ArgumentNullException.ThrowIfNull(context);
-
-            replacement = null;
-
-            if (!line.Trim().Equals("#break", StringComparison.Ordinal))
-            {
-                return false;
-            }
-
-            replacement = @"if (System.Diagnostics.Debugger.IsAttached) { System.Diagnostics.Debugger.Break(); }";
-            return true;
+            return false;
         }
+
+        replacement = @"if (System.Diagnostics.Debugger.IsAttached) { System.Diagnostics.Debugger.Break(); }";
+        return true;
     }
 }

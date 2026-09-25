@@ -4,15 +4,14 @@
 
 using System.Diagnostics;
 
-namespace Cake.Core.IO.Globbing.Nodes
+namespace Cake.Core.IO.Globbing.Nodes;
+
+[DebuggerDisplay(".")]
+internal sealed class CurrentDirectoryNode : GlobNode
 {
-    [DebuggerDisplay(".")]
-    internal sealed class CurrentDirectoryNode : GlobNode
+    [DebuggerStepThrough]
+    public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
     {
-        [DebuggerStepThrough]
-        public override void Accept(GlobVisitor visitor, GlobVisitorContext context)
-        {
-            visitor.VisitCurrent(this, context);
-        }
+        visitor.VisitCurrent(this, context);
     }
 }

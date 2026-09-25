@@ -4,22 +4,21 @@
 
 using System;
 
-namespace Cake.Frosting.Internal
+namespace Cake.Frosting.Internal;
+
+internal static class TaskNameHelper
 {
-    internal static class TaskNameHelper
+    public static string GetTaskName(this ITaskDependency dependency)
     {
-        public static string GetTaskName(this ITaskDependency dependency)
-        {
-            ArgumentNullException.ThrowIfNull(dependency);
+        ArgumentNullException.ThrowIfNull(dependency);
 
-            return dependency.Task.GetTaskName();
-        }
+        return dependency.Task.GetTaskName();
+    }
 
-        public static string GetTaskName(this IReverseTaskDependency dependency)
-        {
-            ArgumentNullException.ThrowIfNull(dependency);
+    public static string GetTaskName(this IReverseTaskDependency dependency)
+    {
+        ArgumentNullException.ThrowIfNull(dependency);
 
-            return dependency.Task.GetTaskName();
-        }
+        return dependency.Task.GetTaskName();
     }
 }

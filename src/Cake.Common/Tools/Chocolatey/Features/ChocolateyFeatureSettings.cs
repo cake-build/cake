@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.Chocolatey.Features
+namespace Cake.Common.Tools.Chocolatey.Features;
+
+/// <summary>
+/// Contains settings used by <see cref="ChocolateyFeatureToggler"/>.
+/// </summary>
+public sealed class ChocolateyFeatureSettings : ChocolateySettings
 {
-    /// <summary>
-    /// Contains settings used by <see cref="ChocolateyFeatureToggler"/>.
-    /// </summary>
-    public sealed class ChocolateyFeatureSettings : ChocolateySettings
-    {
-    }
 }

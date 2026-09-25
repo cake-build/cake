@@ -10,186 +10,185 @@ using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Core.Tooling
+namespace Cake.Core.Tooling;
+
+/// <summary>
+/// Implementation of the default tool resolution strategy.
+/// </summary>
+public sealed class ToolResolutionStrategy : IToolResolutionStrategy
 {
+    private static readonly Regex _windowsExtRegex = new Regex(@"\.(?:bat|cmd|exe)$", RegexOptions.IgnoreCase);
+
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+    private readonly IGlobber _globber;
+    private readonly ICakeConfiguration _configuration;
+    private readonly ICakeLog _log;
+    private readonly object _lock;
+    private List<DirectoryPath> _path;
+
     /// <summary>
-    /// Implementation of the default tool resolution strategy.
+    /// Initializes a new instance of the <see cref="ToolResolutionStrategy"/> class.
     /// </summary>
-    public sealed class ToolResolutionStrategy : IToolResolutionStrategy
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="globber">The globber.</param>
+    /// <param name="configuration">The configuration.</param>
+    /// <param name="log">The log.</param>
+    public ToolResolutionStrategy(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IGlobber globber,
+        ICakeConfiguration configuration,
+        ICakeLog log)
     {
-        private static readonly Regex _windowsExtRegex = new Regex(@"\.(?:bat|cmd|exe)$", RegexOptions.IgnoreCase);
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        ArgumentNullException.ThrowIfNull(environment);
+        ArgumentNullException.ThrowIfNull(globber);
 
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly IGlobber _globber;
-        private readonly ICakeConfiguration _configuration;
-        private readonly ICakeLog _log;
-        private readonly object _lock;
-        private List<DirectoryPath> _path;
+        _fileSystem = fileSystem;
+        _environment = environment;
+        _globber = globber;
+        _configuration = configuration;
+        _log = log;
+        _lock = new object();
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ToolResolutionStrategy"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="globber">The globber.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <param name="log">The log.</param>
-        public ToolResolutionStrategy(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IGlobber globber,
-            ICakeConfiguration configuration,
-            ICakeLog log)
+    /// <inheritdoc/>
+    public FilePath Resolve(IToolRepository repository, string tool)
+    {
+        ArgumentNullException.ThrowIfNull(repository);
+        ArgumentNullException.ThrowIfNull(tool);
+        if (string.IsNullOrWhiteSpace(tool))
         {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            ArgumentNullException.ThrowIfNull(environment);
-            ArgumentNullException.ThrowIfNull(globber);
-
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _globber = globber;
-            _configuration = configuration;
-            _log = log;
-            _lock = new object();
+            throw new ArgumentException("Tool name cannot be empty.", nameof(tool));
         }
 
-        /// <inheritdoc/>
-        public FilePath Resolve(IToolRepository repository, string tool)
+        // Does this tool already have registrations?
+        var resolve = LookInRegistrations(repository, tool);
+        if (resolve == null)
         {
-            ArgumentNullException.ThrowIfNull(repository);
-            ArgumentNullException.ThrowIfNull(tool);
-            if (string.IsNullOrWhiteSpace(tool))
-            {
-                throw new ArgumentException("Tool name cannot be empty.", nameof(tool));
-            }
-
-            // Does this tool already have registrations?
-            var resolve = LookInRegistrations(repository, tool);
+            // Look in ./tools/
+            resolve = LookInToolsDirectory(tool);
             if (resolve == null)
             {
-                // Look in ./tools/
-                resolve = LookInToolsDirectory(tool);
-                if (resolve == null)
-                {
-                    // Look in the path environment variable.
-                    resolve = LookInPath(tool);
-                }
+                // Look in the path environment variable.
+                resolve = LookInPath(tool);
             }
-
-            return resolve;
         }
 
-        /// <inheritdoc/>
-        public FilePath Resolve(IToolRepository repository, IEnumerable<string> toolExeNames)
+        return resolve;
+    }
+
+    /// <inheritdoc/>
+    public FilePath Resolve(IToolRepository repository, IEnumerable<string> toolExeNames)
+    {
+        ArgumentNullException.ThrowIfNull(repository);
+        ArgumentNullException.ThrowIfNull(toolExeNames);
+
+        // Prefer tools with platform affinity
+        var toolNames = toolExeNames.OrderByDescending(HasPlatformAffinity).ToArray();
+        if (toolNames.Any(string.IsNullOrWhiteSpace))
         {
-            ArgumentNullException.ThrowIfNull(repository);
-            ArgumentNullException.ThrowIfNull(toolExeNames);
+            throw new ArgumentException("Tool names cannot be empty.", nameof(toolExeNames));
+        }
 
-            // Prefer tools with platform affinity
-            var toolNames = toolExeNames.OrderByDescending(HasPlatformAffinity).ToArray();
-            if (toolNames.Any(string.IsNullOrWhiteSpace))
-            {
-                throw new ArgumentException("Tool names cannot be empty.", nameof(toolExeNames));
-            }
-
-            // Does this tool already have registrations?
-            var resolve = toolNames.Select(tool => LookInRegistrations(repository, tool)).FirstOrDefault(tool => tool != null);
+        // Does this tool already have registrations?
+        var resolve = toolNames.Select(tool => LookInRegistrations(repository, tool)).FirstOrDefault(tool => tool != null);
+        if (resolve == null)
+        {
+            // Look in ./tools/
+            resolve = toolNames.Select(LookInToolsDirectory).FirstOrDefault(tool => tool != null);
             if (resolve == null)
             {
-                // Look in ./tools/
-                resolve = toolNames.Select(LookInToolsDirectory).FirstOrDefault(tool => tool != null);
-                if (resolve == null)
-                {
-                    // Look in the path environment variable.
-                    resolve = toolNames.Select(LookInPath).FirstOrDefault(tool => tool != null);
-                }
+                // Look in the path environment variable.
+                resolve = toolNames.Select(LookInPath).FirstOrDefault(tool => tool != null);
             }
-
-            return resolve;
         }
 
-        private bool HasPlatformAffinity(string tool)
-        {
-            // Platform affinity matches runtime platform with tool platform determined by file extension.
-            return _environment.Platform.IsWindows() == _windowsExtRegex.IsMatch(tool);
-        }
+        return resolve;
+    }
 
-        private static FilePath LookInRegistrations(IToolRepository repository, string tool)
-        {
-            return repository.Resolve(tool).LastOrDefault();
-        }
+    private bool HasPlatformAffinity(string tool)
+    {
+        // Platform affinity matches runtime platform with tool platform determined by file extension.
+        return _environment.Platform.IsWindows() == _windowsExtRegex.IsMatch(tool);
+    }
 
-        private FilePath LookInToolsDirectory(string tool)
-        {
-            var pattern = string.Concat(GetToolsDirectory().FullPath, "/**/", tool);
-            var toolPath = _globber.GetFiles(pattern).FirstOrDefault();
-            return toolPath?.MakeAbsolute(_environment);
-        }
+    private static FilePath LookInRegistrations(IToolRepository repository, string tool)
+    {
+        return repository.Resolve(tool).LastOrDefault();
+    }
 
-        private FilePath LookInPath(string tool)
+    private FilePath LookInToolsDirectory(string tool)
+    {
+        var pattern = string.Concat(GetToolsDirectory().FullPath, "/**/", tool);
+        var toolPath = _globber.GetFiles(pattern).FirstOrDefault();
+        return toolPath?.MakeAbsolute(_environment);
+    }
+
+    private FilePath LookInPath(string tool)
+    {
+        lock (_lock)
         {
-            lock (_lock)
+            if (_path == null)
             {
-                if (_path == null)
-                {
-                    _path = GetPathDirectories();
-                }
-
-                foreach (var pathDir in _path)
-                {
-                    var file = pathDir.CombineWithFilePath(tool);
-                    try
-                    {
-                        if (_fileSystem.Exist(file))
-                        {
-                            _log.Debug($"Resolved tool to path {file}");
-                            return file.MakeAbsolute(_environment);
-                        }
-                    }
-                    catch
-                    {
-                    }
-                }
-
-                var allPaths = string.Join(",", _path);
-                _log.Debug($"Could not resolve path for tool \"{tool}\" using these directories: {allPaths}");
-                return null;
+                _path = GetPathDirectories();
             }
-        }
 
-        private DirectoryPath GetToolsDirectory()
-        {
-            var toolPath = _configuration.GetValue(Constants.Paths.Tools);
-            if (!string.IsNullOrWhiteSpace(toolPath))
+            foreach (var pathDir in _path)
             {
-                return new DirectoryPath(toolPath).ExpandShortPath();
-            }
-
-            return new DirectoryPath("./tools");
-        }
-
-        private List<DirectoryPath> GetPathDirectories()
-        {
-            var result = new List<DirectoryPath>();
-            var path = _environment.GetEnvironmentVariable("PATH");
-            if (!string.IsNullOrEmpty(path))
-            {
-                var separator = new[] { _environment.Platform.IsUnix() ? ':' : ';' };
-                var paths = path.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var p in paths)
+                var file = pathDir.CombineWithFilePath(tool);
+                try
                 {
-                    try
+                    if (_fileSystem.Exist(file))
                     {
-                        result.Add(new DirectoryPath(p.Trim(' ', '"', '\'')));
+                        _log.Debug($"Resolved tool to path {file}");
+                        return file.MakeAbsolute(_environment);
                     }
-                    catch
-                    {
-                    }
+                }
+                catch
+                {
                 }
             }
 
-            return result;
+            var allPaths = string.Join(",", _path);
+            _log.Debug($"Could not resolve path for tool \"{tool}\" using these directories: {allPaths}");
+            return null;
         }
+    }
+
+    private DirectoryPath GetToolsDirectory()
+    {
+        var toolPath = _configuration.GetValue(Constants.Paths.Tools);
+        if (!string.IsNullOrWhiteSpace(toolPath))
+        {
+            return new DirectoryPath(toolPath).ExpandShortPath();
+        }
+
+        return new DirectoryPath("./tools");
+    }
+
+    private List<DirectoryPath> GetPathDirectories()
+    {
+        var result = new List<DirectoryPath>();
+        var path = _environment.GetEnvironmentVariable("PATH");
+        if (!string.IsNullOrEmpty(path))
+        {
+            var separator = new[] { _environment.Platform.IsUnix() ? ':' : ';' };
+            var paths = path.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var p in paths)
+            {
+                try
+                {
+                    result.Add(new DirectoryPath(p.Trim(' ', '"', '\'')));
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        return result;
     }
 }

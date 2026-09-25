@@ -6,61 +6,60 @@ using System;
 using System.Linq;
 using Cake.Core.Scripting.Analysis;
 
-namespace Cake.Core.Scripting.Processors
+namespace Cake.Core.Scripting.Processors;
+
+internal sealed class UsingStatementProcessor : LineProcessor
 {
-    internal sealed class UsingStatementProcessor : LineProcessor
+    public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
     {
-        public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
+        ArgumentNullException.ThrowIfNull(context);
+
+        replacement = null;
+
+        var tokens = Split(line);
+        if (tokens.Length <= 1)
         {
-            ArgumentNullException.ThrowIfNull(context);
+            return false;
+        }
 
-            replacement = null;
+        if (!tokens[0].Equals("using", StringComparison.Ordinal))
+        {
+            return false;
+        }
 
-            var tokens = Split(line);
-            if (tokens.Length <= 1)
-            {
-                return false;
-            }
+        // Using disposable block?
+        var @namespace = tokens[1].TrimEnd(';');
+        if (@namespace.StartsWith("("))
+        {
+            return false;
+        }
 
-            if (!tokens[0].Equals("using", StringComparison.Ordinal))
-            {
-                return false;
-            }
+        // Using disposable statement?
+        const int usingLength = 5;
+        int openParentheses = line.IndexOf('(', usingLength),
+            closeParentheses = openParentheses < usingLength ? -1 : line.IndexOf(')', openParentheses);
 
-            // Using disposable block?
-            var @namespace = tokens[1].TrimEnd(';');
-            if (@namespace.StartsWith("("))
-            {
-                return false;
-            }
+        if (closeParentheses > openParentheses)
+        {
+            return false;
+        }
 
-            // Using disposable statement?
-            const int usingLength = 5;
-            int openParentheses = line.IndexOf('(', usingLength),
-                closeParentheses = openParentheses < usingLength ? -1 : line.IndexOf(')', openParentheses);
-
-            if (closeParentheses > openParentheses)
-            {
-                return false;
-            }
-
-            // Using alias directive?
-            if (tokens.Any(t => t == "="))
-            {
-                context.Current.UsingAliases.Add(string.Join(" ", tokens));
-                return true;
-            }
-
-            // Using static directive?
-            if (tokens.Length == 3 && tokens[1].Equals("static", StringComparison.Ordinal))
-            {
-                context.Current.UsingStaticDirectives.Add(string.Join(" ", tokens));
-                return true;
-            }
-
-            // Namespace
-            context.Current.Namespaces.Add(@namespace);
+        // Using alias directive?
+        if (tokens.Any(t => t == "="))
+        {
+            context.Current.UsingAliases.Add(string.Join(" ", tokens));
             return true;
         }
+
+        // Using static directive?
+        if (tokens.Length == 3 && tokens[1].Equals("static", StringComparison.Ordinal))
+        {
+            context.Current.UsingStaticDirectives.Add(string.Join(" ", tokens));
+            return true;
+        }
+
+        // Namespace
+        context.Current.Namespaces.Add(@namespace);
+        return true;
     }
 }

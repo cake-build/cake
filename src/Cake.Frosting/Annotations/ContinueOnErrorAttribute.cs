@@ -4,14 +4,13 @@
 
 using System;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Used for hinting at Cake that exceptions thrown by a task
+/// decorated with this attribute should continue running.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+public sealed class ContinueOnErrorAttribute : Attribute
 {
-    /// <summary>
-    /// Used for hinting at Cake that exceptions thrown by a task
-    /// decorated with this attribute should continue running.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public sealed class ContinueOnErrorAttribute : Attribute
-    {
-    }
 }

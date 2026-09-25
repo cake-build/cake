@@ -1,25 +1,24 @@
 using System.Linq;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Contains extension methods for <see cref="ICakeArguments"/>.
+/// </summary>
+public static class CakeArgumentsExtensions
 {
     /// <summary>
-    /// Contains extension methods for <see cref="ICakeArguments"/>.
+    /// Gets the value for an argument.
     /// </summary>
-    public static class CakeArgumentsExtensions
+    /// <remarks>
+    /// If multiple arguments with the same name are
+    /// specified, the last argument value is returned.
+    /// </remarks>
+    /// <param name="arguments">The arguments.</param>
+    /// <param name="name">The argument name.</param>
+    /// <returns>The argument value.</returns>
+    public static string GetArgument(this ICakeArguments arguments, string name)
     {
-        /// <summary>
-        /// Gets the value for an argument.
-        /// </summary>
-        /// <remarks>
-        /// If multiple arguments with the same name are
-        /// specified, the last argument value is returned.
-        /// </remarks>
-        /// <param name="arguments">The arguments.</param>
-        /// <param name="name">The argument name.</param>
-        /// <returns>The argument value.</returns>
-        public static string GetArgument(this ICakeArguments arguments, string name)
-        {
-            return arguments.GetArguments(name).LastOrDefault();
-        }
+        return arguments.GetArguments(name).LastOrDefault();
     }
 }

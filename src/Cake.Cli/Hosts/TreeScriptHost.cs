@@ -10,123 +10,122 @@ using Cake.Core;
 using Cake.Core.Graph;
 using Cake.Core.Scripting;
 
-namespace Cake.Cli
+namespace Cake.Cli;
+
+/// <summary>
+/// The script host used for showing task descriptions.
+/// </summary>
+public sealed class TreeScriptHost : ScriptHost
 {
+    private const int _maxDepth = 0;
+    private const string _cross = "├─";
+    private const string _corner = "└─";
+    private const string _vertical = "│ ";
+    private readonly IConsole _console;
+
     /// <summary>
-    /// The script host used for showing task descriptions.
+    /// Initializes a new instance of the <see cref="TreeScriptHost"/> class.
     /// </summary>
-    public sealed class TreeScriptHost : ScriptHost
+    /// <param name="engine">The engine.</param>
+    /// <param name="context">The context.</param>
+    /// <param name="console">The console.</param>
+    public TreeScriptHost(ICakeEngine engine, ICakeContext context, IConsole console)
+        : base(engine, context)
     {
-        private const int _maxDepth = 0;
-        private const string _cross = "├─";
-        private const string _corner = "└─";
-        private const string _vertical = "│ ";
-        private readonly IConsole _console;
+        _console = console ?? throw new ArgumentNullException(nameof(console));
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TreeScriptHost"/> class.
-        /// </summary>
-        /// <param name="engine">The engine.</param>
-        /// <param name="context">The context.</param>
-        /// <param name="console">The console.</param>
-        public TreeScriptHost(ICakeEngine engine, ICakeContext context, IConsole console)
-            : base(engine, context)
+    /// <inheritdoc/>
+    public override Task<CakeReport> RunTargetAsync(string target)
+    {
+        PrintTaskTree();
+
+        return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
+    }
+
+    /// <inheritdoc/>
+    public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
+    {
+        PrintTaskTree();
+
+        return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
+    }
+
+    private void PrintTaskTree()
+    {
+        var topLevelTasks = GetTopLevelTasks();
+        _console.WriteLine();
+
+        foreach (ICakeTaskInfo task in topLevelTasks)
         {
-            _console = console ?? throw new ArgumentNullException(nameof(console));
-        }
-
-        /// <inheritdoc/>
-        public override Task<CakeReport> RunTargetAsync(string target)
-        {
-            PrintTaskTree();
-
-            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
-        }
-
-        /// <inheritdoc/>
-        public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
-        {
-            PrintTaskTree();
-
-            return System.Threading.Tasks.Task.FromResult<CakeReport>(null);
-        }
-
-        private void PrintTaskTree()
-        {
-            var topLevelTasks = GetTopLevelTasks();
+            PrintTask(task, string.Empty, false, 0);
             _console.WriteLine();
-
-            foreach (ICakeTaskInfo task in topLevelTasks)
-            {
-                PrintTask(task, string.Empty, false, 0);
-                _console.WriteLine();
-            }
         }
+    }
 
-        private List<ICakeTaskInfo> GetTopLevelTasks()
+    private List<ICakeTaskInfo> GetTopLevelTasks()
+    {
+        // Display "Default" first, then alphabetical
+        var graph = CakeGraphBuilder.Build(Tasks);
+
+        return [.. Tasks.Where(task => !graph.Edges.Any(
+            edge => edge.Start.Equals(task.Name, StringComparison.OrdinalIgnoreCase)))
+            .OrderByDescending(task => task.Name.Equals("Default", StringComparison.OrdinalIgnoreCase))
+            .ThenBy(task => task.Name, StringComparer.OrdinalIgnoreCase)];
+    }
+
+    private void PrintTask(ICakeTaskInfo task, string indent, bool isLast, int depth)
+    {
+        // Builds ASCII graph
+        _console.Write(indent);
+        if (isLast)
         {
-            // Display "Default" first, then alphabetical
-            var graph = CakeGraphBuilder.Build(Tasks);
-            return Tasks.Where(task => !graph.Edges.Any(
-                edge => edge.Start.Equals(task.Name, StringComparison.OrdinalIgnoreCase)))
-                .OrderByDescending(task => task.Name.Equals("Default", StringComparison.OrdinalIgnoreCase))
-                .ThenBy(task => task.Name, StringComparer.OrdinalIgnoreCase)
-                .ToList();
+            _console.Write(_corner);
+            indent += "   ";
         }
-
-        private void PrintTask(ICakeTaskInfo task, string indent, bool isLast, int depth)
+        else if (depth > 0)
         {
-            // Builds ASCII graph
-            _console.Write(indent);
-            if (isLast)
-            {
-                _console.Write(_corner);
-                indent += "   ";
-            }
-            else if (depth > 0)
-            {
-                _console.Write(_cross);
-                indent += _vertical;
-            }
-
-            PrintName(task, depth);
-
-            if ((_maxDepth > 0) && (depth >= _maxDepth))
-            {
-                return;
-            }
-
-            for (var i = 0; i < task.Dependencies.Count; i++)
-            {
-                // First() is safe as CakeGraphBuilder has already validated graph is valid
-                var childTask = Tasks
-                    .Where(x => x.Name.Equals(task.Dependencies[i].Name, StringComparison.OrdinalIgnoreCase))
-                    .First();
-
-                PrintTask(childTask, indent, i == (task.Dependencies.Count - 1), depth + 1);
-            }
+            _console.Write(_cross);
+            indent += _vertical;
         }
 
-        private void PrintName(ICakeTaskInfo task, int depth)
+        PrintName(task, depth);
+
+        if ((_maxDepth > 0) && (depth >= _maxDepth))
         {
-            var originalColor = _console.ForegroundColor;
-
-            if (depth == 0)
-            {
-                _console.ForegroundColor = ConsoleColor.Cyan;
-            }
-            else if (task is CakeTask cakeTask &&
-                (cakeTask.Actions.Any() || cakeTask.DelayedActions.Any()))
-            {
-                _console.ForegroundColor = ConsoleColor.Green;
-            }
-            else
-            {
-                _console.ForegroundColor = ConsoleColor.Gray;
-            }
-
-            _console.WriteLine(task.Name);
-            _console.ForegroundColor = originalColor;
+            return;
         }
+
+        for (var i = 0; i < task.Dependencies.Count; i++)
+        {
+            // First() is safe as CakeGraphBuilder has already validated graph is valid
+            var childTask = Tasks
+                .Where(x => x.Name.Equals(task.Dependencies[i].Name, StringComparison.OrdinalIgnoreCase))
+                .First();
+
+            PrintTask(childTask, indent, i == (task.Dependencies.Count - 1), depth + 1);
+        }
+    }
+
+    private void PrintName(ICakeTaskInfo task, int depth)
+    {
+        var originalColor = _console.ForegroundColor;
+
+        if (depth == 0)
+        {
+            _console.ForegroundColor = ConsoleColor.Cyan;
+        }
+        else if (task is CakeTask cakeTask &&
+            (cakeTask.Actions.Any() || cakeTask.DelayedActions.Any()))
+        {
+            _console.ForegroundColor = ConsoleColor.Green;
+        }
+        else
+        {
+            _console.ForegroundColor = ConsoleColor.Gray;
+        }
+
+        _console.WriteLine(task.Name);
+        _console.ForegroundColor = originalColor;
     }
 }

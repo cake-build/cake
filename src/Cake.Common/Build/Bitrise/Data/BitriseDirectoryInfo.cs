@@ -4,35 +4,34 @@
 
 using Cake.Core;
 
-namespace Cake.Common.Build.Bitrise.Data
+namespace Cake.Common.Build.Bitrise.Data;
+
+/// <summary>
+/// Provides Bitrise directory information for the current build.
+/// </summary>
+public class BitriseDirectoryInfo : BitriseInfo
 {
     /// <summary>
-    /// Provides Bitrise directory information for the current build.
+    /// Gets the source directory.
     /// </summary>
-    public class BitriseDirectoryInfo : BitriseInfo
+    /// <value>
+    /// The source directory.
+    /// </value>
+    public string SourceDirectory => GetEnvironmentString("BITRISE_SOURCE_DIR");
+
+    /// <summary>
+    /// Gets the deploy directory.
+    /// </summary>
+    /// <value>
+    /// The deploy directory.
+    /// </value>
+    public string DeployDirectory => GetEnvironmentString("BITRISE_DEPLOY_DIR");
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BitriseDirectoryInfo"/> class.
+    /// </summary>
+    /// <param name="environment">The environment.</param>
+    public BitriseDirectoryInfo(ICakeEnvironment environment) : base(environment)
     {
-        /// <summary>
-        /// Gets the source directory.
-        /// </summary>
-        /// <value>
-        /// The source directory.
-        /// </value>
-        public string SourceDirectory => GetEnvironmentString("BITRISE_SOURCE_DIR");
-
-        /// <summary>
-        /// Gets the deploy directory.
-        /// </summary>
-        /// <value>
-        /// The deploy directory.
-        /// </value>
-        public string DeployDirectory => GetEnvironmentString("BITRISE_DEPLOY_DIR");
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BitriseDirectoryInfo"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public BitriseDirectoryInfo(ICakeEnvironment environment) : base(environment)
-        {
-        }
     }
 }

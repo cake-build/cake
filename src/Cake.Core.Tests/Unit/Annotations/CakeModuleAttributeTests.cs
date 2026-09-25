@@ -5,18 +5,17 @@
 using Cake.Core.Annotations;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Annotations
-{
-    public sealed class CakeModuleAttributeTests
-    {
-        [Fact]
-        public void Should_Throw_If_Module_Type_Is_Null()
-        {
-            // Given, When
-            var result = Record.Exception(() => new CakeModuleAttribute(null));
+namespace Cake.Core.Tests.Unit.Annotations;
 
-            // Then
-            AssertEx.IsArgumentNullException(result, "moduleType");
-        }
+public sealed class CakeModuleAttributeTests
+{
+    [Fact]
+    public void Should_Throw_If_Module_Type_Is_Null()
+    {
+        // Given, When
+        var result = Record.Exception(() => new CakeModuleAttribute(null));
+
+        // Then
+        AssertEx.IsArgumentNullException(result, "moduleType");
     }
 }

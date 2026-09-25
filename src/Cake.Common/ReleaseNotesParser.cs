@@ -7,143 +7,142 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Cake.Core;
 
-namespace Cake.Common
+namespace Cake.Common;
+
+/// <summary>
+/// The release notes parser.
+/// </summary>
+public sealed class ReleaseNotesParser
 {
+    private readonly Regex _versionRegex;
+
     /// <summary>
-    /// The release notes parser.
+    /// Initializes a new instance of the <see cref="ReleaseNotesParser"/> class.
     /// </summary>
-    public sealed class ReleaseNotesParser
+    public ReleaseNotesParser()
     {
-        private readonly Regex _versionRegex;
+        _versionRegex = new Regex(@"(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[a-z][0-9a-z-]*)?");
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReleaseNotesParser"/> class.
-        /// </summary>
-        public ReleaseNotesParser()
+    /// <summary>
+    /// Parses all release notes.
+    /// </summary>
+    /// <param name="content">The content.</param>
+    /// <returns>All release notes.</returns>
+    public IReadOnlyList<ReleaseNotes> Parse(string content)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+
+        var lines = content.SplitLines();
+        if (lines.Length > 0)
         {
-            _versionRegex = new Regex(@"(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[a-z][0-9a-z-]*)?");
-        }
+            var line = lines[0].Trim();
 
-        /// <summary>
-        /// Parses all release notes.
-        /// </summary>
-        /// <param name="content">The content.</param>
-        /// <returns>All release notes.</returns>
-        public IReadOnlyList<ReleaseNotes> Parse(string content)
-        {
-            ArgumentNullException.ThrowIfNull(content);
-
-            var lines = content.SplitLines();
-            if (lines.Length > 0)
+            if (line.StartsWith("#", StringComparison.OrdinalIgnoreCase))
             {
-                var line = lines[0].Trim();
-
-                if (line.StartsWith("#", StringComparison.OrdinalIgnoreCase))
-                {
-                    return ParseComplexFormat(lines);
-                }
-
-                if (line.StartsWith("*", StringComparison.OrdinalIgnoreCase))
-                {
-                    return ParseSimpleFormat(lines);
-                }
+                return ParseComplexFormat(lines);
             }
 
-            throw new CakeException("Unknown release notes format.");
+            if (line.StartsWith("*", StringComparison.OrdinalIgnoreCase))
+            {
+                return ParseSimpleFormat(lines);
+            }
         }
 
-        private IReadOnlyList<ReleaseNotes> ParseComplexFormat(string[] lines)
-        {
-            var lineIndex = 0;
-            var result = new List<ReleaseNotes>();
+        throw new CakeException("Unknown release notes format.");
+    }
 
+    private IReadOnlyList<ReleaseNotes> ParseComplexFormat(string[] lines)
+    {
+        var lineIndex = 0;
+        var result = new List<ReleaseNotes>();
+
+        while (true)
+        {
+            if (lineIndex >= lines.Length)
+            {
+                break;
+            }
+
+            // Create release notes.
+            var semVer = SemVersion.Zero;
+            var version = SemVersion.TryParse(lines[lineIndex], out semVer);
+            if (!version)
+            {
+                throw new CakeException("Could not parse version from release notes header.");
+            }
+
+            var rawVersionLine = lines[lineIndex];
+
+            // Increase the line index.
+            lineIndex++;
+
+            // Parse content.
+            var notes = new List<string>();
             while (true)
             {
+                // Sanity checks.
                 if (lineIndex >= lines.Length)
                 {
                     break;
                 }
-
-                // Create release notes.
-                var semVer = SemVersion.Zero;
-                var version = SemVersion.TryParse(lines[lineIndex], out semVer);
-                if (!version)
-                {
-                    throw new CakeException("Could not parse version from release notes header.");
-                }
-
-                var rawVersionLine = lines[lineIndex];
-
-                // Increase the line index.
-                lineIndex++;
-
-                // Parse content.
-                var notes = new List<string>();
-                while (true)
-                {
-                    // Sanity checks.
-                    if (lineIndex >= lines.Length)
-                    {
-                        break;
-                    }
-                    if (lines[lineIndex].StartsWith("#", StringComparison.OrdinalIgnoreCase))
-                    {
-                        break;
-                    }
-
-                    // Get the current line.
-                    var line = (lines[lineIndex] ?? string.Empty).Trim('*').Trim();
-                    if (!string.IsNullOrWhiteSpace(line))
-                    {
-                        notes.Add(line);
-                    }
-
-                    lineIndex++;
-                }
-
-                result.Add(new ReleaseNotes(semVer, notes, rawVersionLine));
-            }
-
-            return result.OrderByDescending(x => x.SemVersion).ToArray();
-        }
-
-        private IReadOnlyList<ReleaseNotes> ParseSimpleFormat(string[] lines)
-        {
-            var lineIndex = 0;
-            var result = new List<ReleaseNotes>();
-
-            while (true)
-            {
-                if (lineIndex >= lines.Length)
+                if (lines[lineIndex].StartsWith("#", StringComparison.OrdinalIgnoreCase))
                 {
                     break;
                 }
 
-                // Trim the current line.
-                var line = (lines[lineIndex] ?? string.Empty).Trim('*', ' ');
-                if (string.IsNullOrWhiteSpace(line))
+                // Get the current line.
+                var line = (lines[lineIndex] ?? string.Empty).Trim('*').Trim();
+                if (!string.IsNullOrWhiteSpace(line))
                 {
-                    lineIndex++;
-                    continue;
+                    notes.Add(line);
                 }
-
-                // Parse header.
-                var semVer = SemVersion.Zero;
-                var version = SemVersion.TryParse(lines[lineIndex], out semVer);
-                if (!version)
-                {
-                    throw new CakeException("Could not parse version from release notes header.");
-                }
-                // Parse the description.
-                line = line.Substring(semVer.ToString().Length).Trim('-', ' ');
-
-                // Add the release notes to the result.
-                result.Add(new ReleaseNotes(semVer, new[] { line }, line));
 
                 lineIndex++;
             }
 
-            return result.OrderByDescending(x => x.SemVersion).ToArray();
+            result.Add(new ReleaseNotes(semVer, notes, rawVersionLine));
         }
+
+        return result.OrderByDescending(x => x.SemVersion).ToArray();
+    }
+
+    private IReadOnlyList<ReleaseNotes> ParseSimpleFormat(string[] lines)
+    {
+        var lineIndex = 0;
+        var result = new List<ReleaseNotes>();
+
+        while (true)
+        {
+            if (lineIndex >= lines.Length)
+            {
+                break;
+            }
+
+            // Trim the current line.
+            var line = (lines[lineIndex] ?? string.Empty).Trim('*', ' ');
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                lineIndex++;
+                continue;
+            }
+
+            // Parse header.
+            var semVer = SemVersion.Zero;
+            var version = SemVersion.TryParse(lines[lineIndex], out semVer);
+            if (!version)
+            {
+                throw new CakeException("Could not parse version from release notes header.");
+            }
+            // Parse the description.
+            line = line.Substring(semVer.ToString().Length).Trim('-', ' ');
+
+            // Add the release notes to the result.
+            result.Add(new ReleaseNotes(semVer, new[] { line }, line));
+
+            lineIndex++;
+        }
+
+        return result.OrderByDescending(x => x.SemVersion).ToArray();
     }
 }

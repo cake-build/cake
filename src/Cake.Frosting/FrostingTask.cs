@@ -6,94 +6,93 @@ using System;
 using System.Threading.Tasks;
 using Cake.Core;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Base class for a Frosting task using the standard context.
+/// </summary>
+/// <seealso cref="ICakeContext" />
+public abstract class FrostingTask : FrostingTask<ICakeContext>
+{
+}
+
+/// <summary>
+/// Base class for a Frosting task using a custom context.
+/// </summary>
+/// <typeparam name="T">The context type.</typeparam>
+/// <seealso cref="IFrostingTask" />
+public abstract class FrostingTask<T> : IFrostingTask
+    where T : ICakeContext
 {
     /// <summary>
-    /// Base class for a Frosting task using the standard context.
+    /// Runs the task using the specified context.
     /// </summary>
-    /// <seealso cref="ICakeContext" />
-    public abstract class FrostingTask : FrostingTask<ICakeContext>
+    /// <param name="context">The context.</param>
+    public virtual void Run(T context)
     {
     }
 
     /// <summary>
-    /// Base class for a Frosting task using a custom context.
+    /// Gets whether or not the task should be run.
     /// </summary>
-    /// <typeparam name="T">The context type.</typeparam>
-    /// <seealso cref="IFrostingTask" />
-    public abstract class FrostingTask<T> : IFrostingTask
-        where T : ICakeContext
+    /// <param name="context">The context.</param>
+    /// <returns>
+    ///   <c>true</c> if the task should run; otherwise <c>false</c>.
+    /// </returns>
+    public virtual bool ShouldRun(T context)
     {
-        /// <summary>
-        /// Runs the task using the specified context.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        public virtual void Run(T context)
-        {
-        }
+        return true;
+    }
 
-        /// <summary>
-        /// Gets whether or not the task should be run.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns>
-        ///   <c>true</c> if the task should run; otherwise <c>false</c>.
-        /// </returns>
-        public virtual bool ShouldRun(T context)
-        {
-            return true;
-        }
+    /// <summary>
+    /// The error handler to be executed using the specified context if an exception occurs in the task.
+    /// </summary>
+    /// <param name="exception">The exception.</param>
+    /// <param name="context">The context.</param>
+    public virtual void OnError(Exception exception, T context)
+    {
+    }
 
-        /// <summary>
-        /// The error handler to be executed using the specified context if an exception occurs in the task.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <param name="context">The context.</param>
-        public virtual void OnError(Exception exception, T context)
-        {
-        }
+    /// <summary>
+    /// The finally handler to be executed using the specified context after the task has finished executing.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    public virtual void Finally(T context)
+    {
+    }
 
-        /// <summary>
-        /// The finally handler to be executed using the specified context after the task has finished executing.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        public virtual void Finally(T context)
-        {
-        }
+    /// <inheritdoc/>
+    Task IFrostingTask.RunAsync(ICakeContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-        /// <inheritdoc/>
-        Task IFrostingTask.RunAsync(ICakeContext context)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+        Run((T)context);
+        return Task.CompletedTask;
+    }
 
-            Run((T)context);
-            return Task.CompletedTask;
-        }
+    /// <inheritdoc/>
+    bool IFrostingTask.ShouldRun(ICakeContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-        /// <inheritdoc/>
-        bool IFrostingTask.ShouldRun(ICakeContext context)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+        return ShouldRun((T)context);
+    }
 
-            return ShouldRun((T)context);
-        }
+    /// <inheritdoc/>
+    void IFrostingTask.OnError(Exception exception, ICakeContext context)
+    {
+        ArgumentNullException.ThrowIfNull(exception);
 
-        /// <inheritdoc/>
-        void IFrostingTask.OnError(Exception exception, ICakeContext context)
-        {
-            ArgumentNullException.ThrowIfNull(exception);
+        ArgumentNullException.ThrowIfNull(context);
 
-            ArgumentNullException.ThrowIfNull(context);
+        OnError(exception, (T)context);
+    }
 
-            OnError(exception, (T)context);
-        }
+    /// <inheritdoc/>
+    void IFrostingTask.Finally(ICakeContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-        /// <inheritdoc/>
-        void IFrostingTask.Finally(ICakeContext context)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-
-            Finally((T)context);
-        }
+        Finally((T)context);
     }
 }

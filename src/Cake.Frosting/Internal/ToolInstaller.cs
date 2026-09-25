@@ -12,59 +12,58 @@ using Cake.Core.Diagnostics;
 using Cake.Core.Packaging;
 using Cake.Core.Tooling;
 
-namespace Cake.Frosting.Internal
-{
-    internal sealed class ToolInstaller : IToolInstaller
-    {
-        private readonly ICakeEnvironment _environment;
-        private readonly IToolLocator _locator;
-        private readonly ICakeConfiguration _configuration;
-        private readonly ICakeLog _log;
-        private readonly List<IPackageInstaller> _installers;
+namespace Cake.Frosting.Internal;
 
-        public ToolInstaller(
-            ICakeEnvironment environment,
-            IToolLocator locator,
-            ICakeConfiguration configuration,
-            ICakeLog log,
-            IEnumerable<IPackageInstaller> installers)
+internal sealed class ToolInstaller : IToolInstaller
+{
+    private readonly ICakeEnvironment _environment;
+    private readonly IToolLocator _locator;
+    private readonly ICakeConfiguration _configuration;
+    private readonly ICakeLog _log;
+    private readonly List<IPackageInstaller> _installers;
+
+    public ToolInstaller(
+        ICakeEnvironment environment,
+        IToolLocator locator,
+        ICakeConfiguration configuration,
+        ICakeLog log,
+        IEnumerable<IPackageInstaller> installers)
+    {
+        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+        _locator = locator ?? throw new ArgumentNullException(nameof(locator));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _log = log ?? throw new ArgumentNullException(nameof(log));
+        _installers = new List<IPackageInstaller>(installers ?? []);
+    }
+
+    public void Install(PackageReference tool)
+    {
+        // Get the tool path.
+        var root = _configuration.GetToolPath(".", _environment);
+
+        // Get the installer.
+        var installer = _installers.FirstOrDefault(i => i.CanInstall(tool, PackageType.Tool));
+        if (installer == null)
         {
-            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            _locator = locator ?? throw new ArgumentNullException(nameof(locator));
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _installers = new List<IPackageInstaller>(installers ?? Enumerable.Empty<IPackageInstaller>());
+            const string format = "Could not find an installer for the '{0}' scheme.";
+            var message = string.Format(CultureInfo.InvariantCulture, format, tool.Scheme);
+            throw new FrostingException(message);
         }
 
-        public void Install(PackageReference tool)
+        // Install the tool.
+        _log.Debug("Installing tool '{0}'...", tool.Package);
+        var result = installer.Install(tool, PackageType.Tool, root);
+        if (result.Count == 0)
         {
-            // Get the tool path.
-            var root = _configuration.GetToolPath(".", _environment);
+            const string format = "Failed to install tool '{0}'.";
+            var message = string.Format(CultureInfo.InvariantCulture, format, tool.Package);
+            throw new FrostingException(message);
+        }
 
-            // Get the installer.
-            var installer = _installers.FirstOrDefault(i => i.CanInstall(tool, PackageType.Tool));
-            if (installer == null)
-            {
-                const string format = "Could not find an installer for the '{0}' scheme.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, tool.Scheme);
-                throw new FrostingException(message);
-            }
-
-            // Install the tool.
-            _log.Debug("Installing tool '{0}'...", tool.Package);
-            var result = installer.Install(tool, PackageType.Tool, root);
-            if (result.Count == 0)
-            {
-                const string format = "Failed to install tool '{0}'.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, tool.Package);
-                throw new FrostingException(message);
-            }
-
-            // Register the tools.
-            foreach (var item in result)
-            {
-                _locator.RegisterFile(item.Path);
-            }
+        // Register the tools.
+        foreach (var item in result)
+        {
+            _locator.RegisterFile(item.Path);
         }
     }
 }

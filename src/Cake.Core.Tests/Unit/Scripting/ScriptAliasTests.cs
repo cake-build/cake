@@ -8,34 +8,33 @@ using System.Reflection;
 using Cake.Core.Scripting;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.Scripting
+namespace Cake.Core.Tests.Unit.Scripting;
+
+public sealed class ScriptAliasTests
 {
-    public sealed class ScriptAliasTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Throw_If_Method_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Method_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => new ScriptAlias(null, ScriptAliasType.Method, new HashSet<string>()));
+            // Given, When
+            var result = Record.Exception(() => new ScriptAlias(null, ScriptAliasType.Method, new HashSet<string>()));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "method");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "method");
+        }
 
-            [Fact]
-            public void Should_Not_Throw_If_Method_Is_Null()
-            {
-                // Given
-                var method = typeof(TheConstructor).GetTypeInfo().GetMethods().First();
+        [Fact]
+        public void Should_Not_Throw_If_Method_Is_Null()
+        {
+            // Given
+            var method = typeof(TheConstructor).GetTypeInfo().GetMethods().First();
 
-                // When
-                var result = new ScriptAlias(method, ScriptAliasType.Method, null);
+            // When
+            var result = new ScriptAlias(method, ScriptAliasType.Method, null);
 
-                // Then
-                Assert.Empty(result.Namespaces);
-            }
+            // Then
+            Assert.Empty(result.Namespaces);
         }
     }
 }

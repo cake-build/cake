@@ -8,35 +8,34 @@ using Cake.Common.Build.GitHubActions.Data;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Build.GitHubActions
+namespace Cake.Common.Build.GitHubActions;
+
+/// <summary>
+/// Responsible for communicating with GitHub Actions.
+/// </summary>
+public class GitHubActionsProvider : IGitHubActionsProvider
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// Responsible for communicating with GitHub Actions.
+    /// Initializes a new instance of the <see cref="GitHubActionsProvider"/> class.
     /// </summary>
-    public class GitHubActionsProvider : IGitHubActionsProvider
+    /// <param name="environment">The environment.</param>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="writer">The build system service message writer.</param>
+    public GitHubActionsProvider(ICakeEnvironment environment, IFileSystem fileSystem, IBuildSystemServiceMessageWriter writer)
     {
-        private readonly ICakeEnvironment _environment;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GitHubActionsProvider"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="writer">The build system service message writer.</param>
-        public GitHubActionsProvider(ICakeEnvironment environment, IFileSystem fileSystem, IBuildSystemServiceMessageWriter writer)
-        {
-            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            Environment = new GitHubActionsEnvironmentInfo(environment);
-            Commands = new GitHubActionsCommands(environment, fileSystem, writer, Environment, _ => new System.Net.Http.HttpClient());
-        }
-
-        /// <inheritdoc/>
-        public bool IsRunningOnGitHubActions => _environment.GetEnvironmentVariable("GITHUB_ACTIONS")?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
-
-        /// <inheritdoc/>
-        public GitHubActionsEnvironmentInfo Environment { get; }
-
-        /// <inheritdoc/>
-        public GitHubActionsCommands Commands { get; }
+        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+        Environment = new GitHubActionsEnvironmentInfo(environment);
+        Commands = new GitHubActionsCommands(environment, fileSystem, writer, Environment, _ => new System.Net.Http.HttpClient());
     }
+
+    /// <inheritdoc/>
+    public bool IsRunningOnGitHubActions => _environment.GetEnvironmentVariable("GITHUB_ACTIONS")?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
+
+    /// <inheritdoc/>
+    public GitHubActionsEnvironmentInfo Environment { get; }
+
+    /// <inheritdoc/>
+    public GitHubActionsCommands Commands { get; }
 }

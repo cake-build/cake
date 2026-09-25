@@ -4,16 +4,15 @@
 
 using Cake.Common.Tools.DotNet.Clean;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Clean
-{
-    internal sealed class DotNetCleanerFixture : DotNetFixture<DotNetCleanSettings>
-    {
-        public string Project { get; set; }
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Clean;
 
-        protected override void RunTool()
-        {
-            var tool = new DotNetCleaner(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Clean(Project, Settings);
-        }
+internal sealed class DotNetCleanerFixture : DotNetFixture<DotNetCleanSettings>
+{
+    public string Project { get; set; }
+
+    protected override void RunTool()
+    {
+        var tool = new DotNetCleaner(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Clean(Project, Settings);
     }
 }

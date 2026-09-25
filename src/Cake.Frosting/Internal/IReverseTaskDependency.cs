@@ -4,10 +4,9 @@
 
 using System;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+internal interface IReverseTaskDependency
 {
-    internal interface IReverseTaskDependency
-    {
-        Type Task { get; }
-    }
+    Type Task { get; }
 }

@@ -5,37 +5,36 @@
 using System;
 using System.Globalization;
 
-namespace Cake.Core.Diagnostics.Formatting
+namespace Cake.Core.Diagnostics.Formatting;
+
+internal sealed class PropertyToken : FormatToken
 {
-    internal sealed class PropertyToken : FormatToken
+    public string Format { get; }
+
+    public int Position { get; }
+
+    public PropertyToken(int position, string format)
     {
-        public string Format { get; }
+        Position = position;
+        Format = format;
+    }
 
-        public int Position { get; }
-
-        public PropertyToken(int position, string format)
+    public override string Render(object[] args)
+    {
+        if (Position < 0 || Position >= args.Length)
         {
-            Position = position;
-            Format = format;
+            throw new FormatException("Index (zero based) must be greater than or equal to zero and less than the size of the argument list.");
         }
 
-        public override string Render(object[] args)
+        var value = args[Position];
+        if (!string.IsNullOrWhiteSpace(Format))
         {
-            if (Position < 0 || Position >= args.Length)
+            var formattable = value as IFormattable;
+            if (formattable != null)
             {
-                throw new FormatException("Index (zero based) must be greater than or equal to zero and less than the size of the argument list.");
+                return formattable.ToString(Format, CultureInfo.InvariantCulture);
             }
-
-            var value = args[Position];
-            if (!string.IsNullOrWhiteSpace(Format))
-            {
-                var formattable = value as IFormattable;
-                if (formattable != null)
-                {
-                    return formattable.ToString(Format, CultureInfo.InvariantCulture);
-                }
-            }
-            return value == null ? "[NULL]" : value.ToString();
         }
+        return value == null ? "[NULL]" : value.ToString();
     }
 }

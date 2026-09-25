@@ -12,56 +12,56 @@ using Cake.Core.Tooling;
 using Cake.Testing;
 using NSubstitute;
 
-namespace Cake.Core.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures;
+
+public sealed class ToolInstallerFixture
 {
-    public sealed class ToolInstallerFixture
+    public ICakeEnvironment Environment { get; set; }
+    public IToolLocator Locator { get; set; }
+    public ICakeConfiguration Configuration { get; set; }
+    public ICakeLog Log { get; set; }
+    public IPackageInstaller Installer { get; set; }
+    public FakeFileSystem FileSystem { get; set; }
+    public PackageReference Tool { get; set; }
+
+    public ToolInstallerFixture()
     {
-        public ICakeEnvironment Environment { get; set; }
-        public IToolLocator Locator { get; set; }
-        public ICakeConfiguration Configuration { get; set; }
-        public ICakeLog Log { get; set; }
-        public IPackageInstaller Installer { get; set; }
-        public FakeFileSystem FileSystem { get; set; }
-        public PackageReference Tool { get; set; }
+        Environment = FakeEnvironment.CreateUnixEnvironment();
+        FileSystem = new FakeFileSystem(Environment);
+        Locator = Substitute.For<IToolLocator>();
+        Configuration = Substitute.For<ICakeConfiguration>();
+        Log = Substitute.For<ICakeLog>();
+        Installer = Substitute.For<IPackageInstaller>();
+        Installer.CanInstall(Arg.Any<PackageReference>(), Arg.Any<PackageType>()).Returns(true);
+        Tool = new PackageReference("custom:?package=tool");
+    }
 
-        public ToolInstallerFixture()
+    public void GivenFilesWillBeInstalled()
+    {
+        Installer
+            .Install(Arg.Any<PackageReference>(), Arg.Any<PackageType>(), Arg.Any<DirectoryPath>())
+            .Returns(_ => new[] { FileSystem.CreateFile("/Working/tools/tool.exe") });
+    }
+
+    public void GivenNoInstallerCouldBeResolved()
+    {
+        Installer = null;
+    }
+
+    public ToolInstaller CreateInstaller()
+    {
+        var installers = new List<IPackageInstaller>();
+        if (Installer != null)
         {
-            Environment = FakeEnvironment.CreateUnixEnvironment();
-            FileSystem = new FakeFileSystem(Environment);
-            Locator = Substitute.For<IToolLocator>();
-            Configuration = Substitute.For<ICakeConfiguration>();
-            Log = Substitute.For<ICakeLog>();
-            Installer = Substitute.For<IPackageInstaller>();
-            Installer.CanInstall(Arg.Any<PackageReference>(), Arg.Any<PackageType>()).Returns(true);
-            Tool = new PackageReference("custom:?package=tool");
+            installers.Add(Installer);
         }
 
-        public void GivenFilesWillBeInstalled()
-        {
-            Installer
-                .Install(Arg.Any<PackageReference>(), Arg.Any<PackageType>(), Arg.Any<DirectoryPath>())
-                .Returns(_ => new[] { FileSystem.CreateFile("/Working/tools/tool.exe") });
-        }
+        return new ToolInstaller(Environment, Locator, Configuration, Log, installers);
+    }
 
-        public void GivenNoInstallerCouldBeResolved()
-        {
-            Installer = null;
-        }
+    public FilePath[] Install()
+    {
 
-        public ToolInstaller CreateInstaller()
-        {
-            var installers = new List<IPackageInstaller>();
-            if (Installer != null)
-            {
-                installers.Add(Installer);
-            }
-
-            return new ToolInstaller(Environment, Locator, Configuration, Log, installers);
-        }
-
-        public FilePath[] Install()
-        {
-            return CreateInstaller().Install(Tool).ToArray();
-        }
+        return [.. CreateInstaller().Install(Tool)];
     }
 }

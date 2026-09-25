@@ -4,25 +4,24 @@
 
 using System;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Event data for the <see cref="ICakeEngine.AfterTeardown"/> event.
+/// </summary>
+public sealed class AfterTeardownEventArgs : EventArgs
 {
     /// <summary>
-    /// Event data for the <see cref="ICakeEngine.AfterTeardown"/> event.
+    /// Gets the teardown context.
     /// </summary>
-    public sealed class AfterTeardownEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Gets the teardown context.
-        /// </summary>
-        public ITeardownContext TeardownContext { get; }
+    public ITeardownContext TeardownContext { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AfterTeardownEventArgs"/> class.
-        /// </summary>
-        /// <param name="teardownContext">The teardown context.</param>
-        public AfterTeardownEventArgs(ITeardownContext teardownContext)
-        {
-            TeardownContext = teardownContext;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AfterTeardownEventArgs"/> class.
+    /// </summary>
+    /// <param name="teardownContext">The teardown context.</param>
+    public AfterTeardownEventArgs(ITeardownContext teardownContext)
+    {
+        TeardownContext = teardownContext;
     }
 }

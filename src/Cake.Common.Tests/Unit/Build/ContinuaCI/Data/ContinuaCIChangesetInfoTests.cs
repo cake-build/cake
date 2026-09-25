@@ -2,161 +2,157 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Linq;
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.ContinuaCI.Data
+namespace Cake.Common.Tests.Unit.Build.ContinuaCI.Data;
+
+public sealed class ContinuaCIChangesetInfoTests
 {
-    public sealed class ContinuaCIChangesetInfoTests
+    public sealed class TheRevisionProperty
     {
-        public sealed class TheRevisionProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
+            // Given
+            var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
-                // When
-                var result = info.Revision;
+            // When
+            var result = info.Revision;
 
-                // Then
-                Assert.Equal("55", result);
-            }
+            // Then
+            Assert.Equal("55", result);
         }
+    }
 
-        public sealed class TheBranchProperty
+    public sealed class TheBranchProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
+            // Given
+            var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
-                // When
-                var result = info.Branch;
+            // When
+            var result = info.Branch;
 
-                // Then
-                Assert.Equal("master", result);
-            }
+            // Then
+            Assert.Equal("master", result);
         }
+    }
 
-        public sealed class TheCreatedProperty
+    public sealed class TheCreatedProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
+            // Given
+            var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
-                // When
-                var result = info.Created;
+            // When
+            var result = info.Created;
 
-                // Then
-                Assert.Equal(DateTime.Parse("2016-01-02T12:00:16.666+11:00"), result);
-            }
+            // Then
+            Assert.Equal(DateTime.Parse("2016-01-02T12:00:16.666+11:00"), result);
         }
+    }
 
-        public sealed class TheFileCountProperty
+    public sealed class TheFileCountProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
+            // Given
+            var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
-                // When
-                var result = info.FileCount;
+            // When
+            var result = info.FileCount;
 
-                // Then
-                Assert.Equal(77, result);
-            }
+            // Then
+            Assert.Equal(77, result);
         }
+    }
 
-        public sealed class TheUserNameProperty
+    public sealed class TheUserNameProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
+            // Given
+            var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
-                // When
-                var result = info.UserName;
+            // When
+            var result = info.UserName;
 
-                // Then
-                Assert.Equal("georgedawes", result);
-            }
+            // Then
+            Assert.Equal("georgedawes", result);
         }
+    }
 
-        public sealed class TheTagCountProperty
+    public sealed class TheTagCountProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
+            // Given
+            var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
-                // When
-                var result = info.TagCount;
+            // When
+            var result = info.TagCount;
 
-                // Then
-                Assert.Equal(2, result);
-            }
+            // Then
+            Assert.Equal(2, result);
         }
+    }
 
-        public sealed class TheIssueCountProperty
+    public sealed class TheIssueCountProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
+            // Given
+            var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
-                // When
-                var result = info.IssueCount;
+            // When
+            var result = info.IssueCount;
 
-                // Then
-                Assert.Equal(3, result);
-            }
+            // Then
+            Assert.Equal(3, result);
         }
+    }
 
-        public sealed class TheTagNamesProperty
+    public sealed class TheTagNamesProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
+            // Given
+            var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
-                // When
-                var result = info.TagNames.ToArray();
+            // When
+            var result = info.TagNames.ToArray();
 
-                // Then
-                Assert.Equal(2, result.Length);
-                Assert.Equal("the tag", result[0]);
-                Assert.Equal("the other tag", result[1]);
-            }
+            // Then
+            Assert.Equal(2, result.Length);
+            Assert.Equal("the tag", result[0]);
+            Assert.Equal("the other tag", result[1]);
         }
+    }
 
-        public sealed class TheIssueNamesProperty
+    public sealed class TheIssueNamesProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
+            // Given
+            var info = new ContinuaCIInfoFixture().CreateChangesetInfo();
 
-                // When
-                var result = info.IssueNames.ToArray();
+            // When
+            var result = info.IssueNames.ToArray();
 
-                // Then
-                Assert.Equal(3, result.Length);
-                Assert.Equal("an important issue", result[0]);
-                Assert.Equal("a not so important issue", result[2]);
-            }
+            // Then
+            Assert.Equal(3, result.Length);
+            Assert.Equal("an important issue", result[0]);
+            Assert.Equal("a not so important issue", result[2]);
         }
     }
 }

@@ -4,29 +4,28 @@
 
 using Cake.Common.Tools.GitReleaseManager.Discard;
 
-namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
+namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager;
+
+internal sealed class GitReleaseManagerDiscarderFixture : GitReleaseManagerFixture<GitReleaseManagerDiscardSettings>
 {
-    internal sealed class GitReleaseManagerDiscarderFixture : GitReleaseManagerFixture<GitReleaseManagerDiscardSettings>
+    public string Token { get; set; }
+    public string Owner { get; set; }
+    public string Repository { get; set; }
+
+    public string Milestone { get; set; }
+
+    public GitReleaseManagerDiscarderFixture()
     {
-        public string Token { get; set; }
-        public string Owner { get; set; }
-        public string Repository { get; set; }
+        Token = "token";
+        Owner = "repoOwner";
+        Repository = "repo";
+        Milestone = "0.1.0";
+    }
 
-        public string Milestone { get; set; }
+    protected override void RunTool()
+    {
+        var tool = new GitReleaseManagerDiscarder(FileSystem, Environment, ProcessRunner, Tools);
 
-        public GitReleaseManagerDiscarderFixture()
-        {
-            Token = "token";
-            Owner = "repoOwner";
-            Repository = "repo";
-            Milestone = "0.1.0";
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new GitReleaseManagerDiscarder(FileSystem, Environment, ProcessRunner, Tools);
-
-            tool.Discard(Token, Owner, Repository, Milestone, Settings);
-        }
+        tool.Discard(Token, Owner, Repository, Milestone, Settings);
     }
 }

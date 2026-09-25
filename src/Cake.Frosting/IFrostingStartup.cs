@@ -4,17 +4,16 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Represents a startup configuration.
+/// </summary>
+public interface IFrostingStartup
 {
     /// <summary>
-    /// Represents a startup configuration.
+    /// Configures services used by Cake.
     /// </summary>
-    public interface IFrostingStartup
-    {
-        /// <summary>
-        /// Configures services used by Cake.
-        /// </summary>
-        /// <param name="services">The services to configure.</param>
-        void Configure(IServiceCollection services);
-    }
+    /// <param name="services">The services to configure.</param>
+    void Configure(IServiceCollection services);
 }

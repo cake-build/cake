@@ -4,22 +4,21 @@
 
 using Cake.Common.Tools.NuGet.Add;
 
-namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Add
+namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Add;
+
+internal sealed class NuGetAdderFixture : NuGetFixture<NuGetAddSettings>
 {
-    internal sealed class NuGetAdderFixture : NuGetFixture<NuGetAddSettings>
+    public string PackageId { get; set; }
+
+    public NuGetAdderFixture()
     {
-        public string PackageId { get; set; }
+        PackageId = "Cake";
+        Settings.Source = "/Working/NuGet/localfeed";
+    }
 
-        public NuGetAdderFixture()
-        {
-            PackageId = "Cake";
-            Settings.Source = "/Working/NuGet/localfeed";
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new NuGetAdder(FileSystem, Environment, ProcessRunner, Tools, Resolver);
-            tool.Add(PackageId, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new NuGetAdder(FileSystem, Environment, ProcessRunner, Tools, Resolver);
+        tool.Add(PackageId, Settings);
     }
 }

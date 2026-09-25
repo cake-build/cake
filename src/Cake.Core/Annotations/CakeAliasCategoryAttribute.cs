@@ -4,28 +4,27 @@
 
 using System;
 
-namespace Cake.Core.Annotations
+namespace Cake.Core.Annotations;
+
+/// <summary>
+/// An attribute used for documentation of alias methods/properties.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
+public sealed class CakeAliasCategoryAttribute : Attribute
 {
     /// <summary>
-    /// An attribute used for documentation of alias methods/properties.
+    /// Gets the category name.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
-    public sealed class CakeAliasCategoryAttribute : Attribute
-    {
-        /// <summary>
-        /// Gets the category name.
-        /// </summary>
-        /// <value>The category name.</value>
-        public string Name { get; }
+    /// <value>The category name.</value>
+    public string Name { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeAliasCategoryAttribute"/> class.
-        /// </summary>
-        /// <param name="name">The category name.</param>
-        public CakeAliasCategoryAttribute(string name)
-        {
-            ArgumentNullException.ThrowIfNull(name);
-            Name = name;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakeAliasCategoryAttribute"/> class.
+    /// </summary>
+    /// <param name="name">The category name.</param>
+    public CakeAliasCategoryAttribute(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        Name = name;
     }
 }

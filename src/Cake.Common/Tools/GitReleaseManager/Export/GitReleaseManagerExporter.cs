@@ -7,152 +7,151 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.GitReleaseManager.Export
+namespace Cake.Common.Tools.GitReleaseManager.Export;
+
+/// <summary>
+/// The GitReleaseManager Release Publisher used to publish releases.
+/// </summary>
+public sealed class GitReleaseManagerExporter : GitReleaseManagerTool<GitReleaseManagerExportSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// The GitReleaseManager Release Publisher used to publish releases.
+    /// Initializes a new instance of the <see cref="GitReleaseManagerExporter"/> class.
     /// </summary>
-    public sealed class GitReleaseManagerExporter : GitReleaseManagerTool<GitReleaseManagerExportSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public GitReleaseManagerExporter(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GitReleaseManagerExporter"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public GitReleaseManagerExporter(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Creates a Release using the specified and settings.
+    /// </summary>
+    /// <param name="userName">The user name.</param>
+    /// <param name="password">The password.</param>
+    /// <param name="owner">The owner.</param>
+    /// <param name="repository">The repository.</param>
+    /// <param name="fileOutputPath">The output path.</param>
+    /// <param name="settings">The settings.</param>
+    public void Export(string userName, string password, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(userName))
         {
-            _environment = environment;
+            throw new ArgumentNullException(nameof(userName));
         }
 
-        /// <summary>
-        /// Creates a Release using the specified and settings.
-        /// </summary>
-        /// <param name="userName">The user name.</param>
-        /// <param name="password">The password.</param>
-        /// <param name="owner">The owner.</param>
-        /// <param name="repository">The repository.</param>
-        /// <param name="fileOutputPath">The output path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Export(string userName, string password, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+        if (string.IsNullOrWhiteSpace(password))
         {
-            if (string.IsNullOrWhiteSpace(userName))
-            {
-                throw new ArgumentNullException(nameof(userName));
-            }
-
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
-
-            if (string.IsNullOrWhiteSpace(owner))
-            {
-                throw new ArgumentNullException(nameof(owner));
-            }
-
-            if (string.IsNullOrWhiteSpace(repository))
-            {
-                throw new ArgumentNullException(nameof(repository));
-            }
-
-            ArgumentNullException.ThrowIfNull(fileOutputPath);
-
-            ArgumentNullException.ThrowIfNull(settings);
-
-            Run(settings, GetArguments(userName, password, owner, repository, fileOutputPath, settings));
+            throw new ArgumentNullException(nameof(password));
         }
 
-        /// <summary>
-        /// Creates a Release using the specified and settings.
-        /// </summary>
-        /// <param name="token">The token.</param>
-        /// <param name="owner">The owner.</param>
-        /// <param name="repository">The repository.</param>
-        /// <param name="fileOutputPath">The output path.</param>
-        /// <param name="settings">The settings.</param>
-        public void Export(string token, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+        if (string.IsNullOrWhiteSpace(owner))
         {
-            if (string.IsNullOrWhiteSpace(token))
-            {
-                throw new ArgumentNullException(nameof(token));
-            }
-
-            if (string.IsNullOrWhiteSpace(owner))
-            {
-                throw new ArgumentNullException(nameof(owner));
-            }
-
-            if (string.IsNullOrWhiteSpace(repository))
-            {
-                throw new ArgumentNullException(nameof(repository));
-            }
-
-            ArgumentNullException.ThrowIfNull(fileOutputPath);
-
-            ArgumentNullException.ThrowIfNull(settings);
-
-            Run(settings, GetArguments(token, owner, repository, fileOutputPath, settings));
+            throw new ArgumentNullException(nameof(owner));
         }
 
-        private ProcessArgumentBuilder GetArguments(string userName, string password, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+        if (string.IsNullOrWhiteSpace(repository))
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("export");
-
-            builder.Append("-u");
-            builder.AppendQuoted(userName);
-
-            builder.Append("-p");
-            builder.AppendQuotedSecret(password);
-
-            ParseCommonArguments(builder, owner, repository, fileOutputPath, settings);
-
-            AddBaseArguments(settings, builder);
-
-            return builder;
+            throw new ArgumentNullException(nameof(repository));
         }
 
-        private ProcessArgumentBuilder GetArguments(string token, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+        ArgumentNullException.ThrowIfNull(fileOutputPath);
+
+        ArgumentNullException.ThrowIfNull(settings);
+
+        Run(settings, GetArguments(userName, password, owner, repository, fileOutputPath, settings));
+    }
+
+    /// <summary>
+    /// Creates a Release using the specified and settings.
+    /// </summary>
+    /// <param name="token">The token.</param>
+    /// <param name="owner">The owner.</param>
+    /// <param name="repository">The repository.</param>
+    /// <param name="fileOutputPath">The output path.</param>
+    /// <param name="settings">The settings.</param>
+    public void Export(string token, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(token))
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("export");
-
-            builder.Append("--token");
-            builder.AppendQuotedSecret(token);
-
-            ParseCommonArguments(builder, owner, repository, fileOutputPath, settings);
-
-            AddBaseArguments(settings, builder);
-
-            return builder;
+            throw new ArgumentNullException(nameof(token));
         }
 
-        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+        if (string.IsNullOrWhiteSpace(owner))
         {
-            builder.Append("-o");
-            builder.AppendQuoted(owner);
+            throw new ArgumentNullException(nameof(owner));
+        }
 
-            builder.Append("-r");
-            builder.AppendQuoted(repository);
+        if (string.IsNullOrWhiteSpace(repository))
+        {
+            throw new ArgumentNullException(nameof(repository));
+        }
 
-            builder.Append("-f");
-            builder.AppendQuoted(fileOutputPath.MakeAbsolute(_environment).FullPath);
+        ArgumentNullException.ThrowIfNull(fileOutputPath);
 
-            if (!string.IsNullOrWhiteSpace(settings.TagName))
-            {
-                builder.Append("-t");
-                builder.AppendQuoted(settings.TagName);
-            }
+        ArgumentNullException.ThrowIfNull(settings);
+
+        Run(settings, GetArguments(token, owner, repository, fileOutputPath, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(string userName, string password, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("export");
+
+        builder.Append("-u");
+        builder.AppendQuoted(userName);
+
+        builder.Append("-p");
+        builder.AppendQuotedSecret(password);
+
+        ParseCommonArguments(builder, owner, repository, fileOutputPath, settings);
+
+        AddBaseArguments(settings, builder);
+
+        return builder;
+    }
+
+    private ProcessArgumentBuilder GetArguments(string token, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("export");
+
+        builder.Append("--token");
+        builder.AppendQuotedSecret(token);
+
+        ParseCommonArguments(builder, owner, repository, fileOutputPath, settings);
+
+        AddBaseArguments(settings, builder);
+
+        return builder;
+    }
+
+    private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository, FilePath fileOutputPath, GitReleaseManagerExportSettings settings)
+    {
+        builder.Append("-o");
+        builder.AppendQuoted(owner);
+
+        builder.Append("-r");
+        builder.AppendQuoted(repository);
+
+        builder.Append("-f");
+        builder.AppendQuoted(fileOutputPath.MakeAbsolute(_environment).FullPath);
+
+        if (!string.IsNullOrWhiteSpace(settings.TagName))
+        {
+            builder.Append("-t");
+            builder.AppendQuoted(settings.TagName);
         }
     }
 }

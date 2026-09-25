@@ -3,121 +3,119 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.Jenkins.Data
+namespace Cake.Common.Tests.Unit.Build.Jenkins.Data;
+
+public sealed class JenkinsBuildInfoTests
 {
-    public sealed class JenkinsBuildInfoTests
+    public sealed class TheBuildNumberProperty
     {
-        public sealed class TheBuildNumberProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.BuildNumber;
+            // When
+            var result = info.BuildNumber;
 
-                // Then
-                Assert.Equal(456, result);
-            }
+            // Then
+            Assert.Equal(456, result);
         }
+    }
 
-        public sealed class TheBuildIdProperty
+    public sealed class TheBuildIdProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.BuildId;
+            // When
+            var result = info.BuildId;
 
-                // Then
-                Assert.Equal("456", result);
-            }
+            // Then
+            Assert.Equal("456", result);
         }
+    }
 
-        public sealed class TheBuildDisplayNameProperty
+    public sealed class TheBuildDisplayNameProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.BuildDisplayName;
+            // When
+            var result = info.BuildDisplayName;
 
-                // Then
-                Assert.Equal("#456", result);
-            }
+            // Then
+            Assert.Equal("#456", result);
         }
+    }
 
-        public sealed class TheBuildTagProperty
+    public sealed class TheBuildTagProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.BuildTag;
+            // When
+            var result = info.BuildTag;
 
-                // Then
-                Assert.Equal("jenkins-JOB1-456", result);
-            }
+            // Then
+            Assert.Equal("jenkins-JOB1-456", result);
         }
+    }
 
-        public sealed class TheBuildUrlProperty
+    public sealed class TheBuildUrlProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateBuildInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateBuildInfo();
 
-                // When
-                var result = info.BuildUrl;
+            // When
+            var result = info.BuildUrl;
 
-                // Then
-                Assert.Equal("http://localhost:8080/jenkins/job/cake/456/", result);
-            }
+            // Then
+            Assert.Equal("http://localhost:8080/jenkins/job/cake/456/", result);
         }
-        public sealed class TheExecutorNumberProperty
+    }
+    public sealed class TheExecutorNumberProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Build.ExecutorNumber;
+            // When
+            var result = info.Build.ExecutorNumber;
 
-                // Then
-                Assert.Equal(2112, result);
-            }
+            // Then
+            Assert.Equal(2112, result);
         }
+    }
 
-        public sealed class TheWorkspaceProperty
+    public sealed class TheWorkspaceProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new JenkinsInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Build.Workspace;
+            // When
+            var result = info.Build.Workspace;
 
-                // Then
-                Assert.Equal("C:\\Jenkins\\build\\456", result);
-            }
+            // Then
+            Assert.Equal("C:\\Jenkins\\build\\456", result);
         }
     }
 }

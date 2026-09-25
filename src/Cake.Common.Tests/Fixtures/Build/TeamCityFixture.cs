@@ -8,31 +8,30 @@ using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Build
+namespace Cake.Common.Tests.Fixtures.Build;
+
+internal sealed class TeamCityFixture
 {
-    internal sealed class TeamCityFixture
+    public ICakeEnvironment Environment { get; set; }
+    public IFileSystem FileSystem { get; set; }
+    public FakeBuildSystemServiceMessageWriter Writer { get; set; }
+
+    public TeamCityFixture()
     {
-        public ICakeEnvironment Environment { get; set; }
-        public IFileSystem FileSystem { get; set; }
-        public FakeBuildSystemServiceMessageWriter Writer { get; set; }
+        Environment = Substitute.For<ICakeEnvironment>();
+        Environment.WorkingDirectory.Returns("C:\\build\\CAKE-CAKE-JOB1");
+        Environment.GetEnvironmentVariable("TEAMCITY_VERSION").Returns((string)null);
+        FileSystem = Substitute.For<IFileSystem>();
+        Writer = new FakeBuildSystemServiceMessageWriter();
+    }
 
-        public TeamCityFixture()
-        {
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.WorkingDirectory.Returns("C:\\build\\CAKE-CAKE-JOB1");
-            Environment.GetEnvironmentVariable("TEAMCITY_VERSION").Returns((string)null);
-            FileSystem = Substitute.For<IFileSystem>();
-            Writer = new FakeBuildSystemServiceMessageWriter();
-        }
+    public void IsRunningOnTeamCity()
+    {
+        Environment.GetEnvironmentVariable("TEAMCITY_VERSION").Returns("9.1.6");
+    }
 
-        public void IsRunningOnTeamCity()
-        {
-            Environment.GetEnvironmentVariable("TEAMCITY_VERSION").Returns("9.1.6");
-        }
-
-        public TeamCityProvider CreateTeamCityService()
-        {
-            return new TeamCityProvider(Environment, FileSystem, Writer);
-        }
+    public TeamCityProvider CreateTeamCityService()
+    {
+        return new TeamCityProvider(Environment, FileSystem, Writer);
     }
 }

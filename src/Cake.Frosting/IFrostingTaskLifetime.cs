@@ -4,40 +4,39 @@
 
 using Cake.Core;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Represents a task setup action.
+/// </summary>
+public interface IFrostingTaskSetup
 {
     /// <summary>
-    /// Represents a task setup action.
+    /// This method is executed before each task is run.
+    /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
     /// </summary>
-    public interface IFrostingTaskSetup
-    {
-        /// <summary>
-        /// This method is executed before each task is run.
-        /// If the task setup fails, the task will not be executed but the task's teardown will be performed.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="info">The setup information.</param>
-        void Setup(ICakeContext context, ITaskSetupContext info);
-    }
+    /// <param name="context">The context.</param>
+    /// <param name="info">The setup information.</param>
+    void Setup(ICakeContext context, ITaskSetupContext info);
+}
 
+/// <summary>
+/// Represents a task teardown action.
+/// </summary>
+public interface IFrostingTaskTeardown
+{
     /// <summary>
-    /// Represents a task teardown action.
+    /// This method is executed after each task have been run.
+    /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
     /// </summary>
-    public interface IFrostingTaskTeardown
-    {
-        /// <summary>
-        /// This method is executed after each task have been run.
-        /// If a task setup action or a task fails with or without recovery, the specified task teardown action will still be executed.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="info">The teardown information.</param>
-        void Teardown(ICakeContext context, ITaskTeardownContext info);
-    }
+    /// <param name="context">The context.</param>
+    /// <param name="info">The teardown information.</param>
+    void Teardown(ICakeContext context, ITaskTeardownContext info);
+}
 
-    /// <summary>
-    /// Represents the lifetime for all tasks.
-    /// </summary>
-    public interface IFrostingTaskLifetime : IFrostingTaskSetup, IFrostingTaskTeardown
-    {
-    }
+/// <summary>
+/// Represents the lifetime for all tasks.
+/// </summary>
+public interface IFrostingTaskLifetime : IFrostingTaskSetup, IFrostingTaskTeardown
+{
 }

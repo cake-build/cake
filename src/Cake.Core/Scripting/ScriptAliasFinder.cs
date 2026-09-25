@@ -10,171 +10,170 @@ using System.Runtime.CompilerServices;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 
-namespace Cake.Core.Scripting
+namespace Cake.Core.Scripting;
+
+/// <summary>
+/// The script alias finder.
+/// </summary>
+public sealed class ScriptAliasFinder : IScriptAliasFinder
 {
+    private readonly ICakeLog _log;
+
     /// <summary>
-    /// The script alias finder.
+    /// Initializes a new instance of the <see cref="ScriptAliasFinder"/> class.
     /// </summary>
-    public sealed class ScriptAliasFinder : IScriptAliasFinder
+    /// <param name="log">The log.</param>
+    public ScriptAliasFinder(ICakeLog log)
     {
-        private readonly ICakeLog _log;
+        _log = log;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScriptAliasFinder"/> class.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        public ScriptAliasFinder(ICakeLog log)
+    /// <inheritdoc/>
+    public IReadOnlyList<ScriptAlias> FindAliases(IEnumerable<Assembly> assemblies)
+    {
+        var result = new List<ScriptAlias>();
+        if (assemblies != null)
         {
-            _log = log;
-        }
-
-        /// <inheritdoc/>
-        public IReadOnlyList<ScriptAlias> FindAliases(IEnumerable<Assembly> assemblies)
-        {
-            var result = new List<ScriptAlias>();
-            if (assemblies != null)
+            foreach (var reference in assemblies)
             {
-                foreach (var reference in assemblies)
+                try
                 {
-                    try
+                    foreach (var typeInfo in reference.DefinedTypes)
                     {
-                        foreach (var typeInfo in reference.DefinedTypes)
+                        var type = typeInfo.AsType();
+                        if (type.IsStatic())
                         {
-                            var type = typeInfo.AsType();
-                            if (type.IsStatic())
+                            foreach (var method in GetAliasMethods(type))
                             {
-                                foreach (var method in GetAliasMethods(type))
+                                var alias = CreateAlias(method);
+                                if (alias != null)
                                 {
-                                    var alias = CreateAlias(method);
-                                    if (alias != null)
-                                    {
-                                        result.Add(alias);
-                                    }
+                                    result.Add(alias);
                                 }
                             }
                         }
                     }
-                    catch (ReflectionTypeLoadException ex)
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    HashSet<string> notFound = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (Exception loaderException in ex.LoaderExceptions)
                     {
-                        HashSet<string> notFound = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                        foreach (Exception loaderException in ex.LoaderExceptions)
+                        _log.Debug(loaderException.Message);
+                        FileNotFoundException fileNotFoundException = loaderException as FileNotFoundException;
+                        if (fileNotFoundException != null)
                         {
-                            _log.Debug(loaderException.Message);
-                            FileNotFoundException fileNotFoundException = loaderException as FileNotFoundException;
-                            if (fileNotFoundException != null)
+                            if (!notFound.Contains(fileNotFoundException.FileName))
                             {
-                                if (!notFound.Contains(fileNotFoundException.FileName))
-                                {
-                                    notFound.Add(fileNotFoundException.FileName);
-                                }
+                                notFound.Add(fileNotFoundException.FileName);
                             }
-                            _log.Debug(string.Empty);
                         }
-
-                        foreach (var file in notFound)
-                        {
-                            _log.Warning("Could not load {0} (missing {1})", reference.Location, file);
-                        }
+                        _log.Debug(string.Empty);
                     }
-                    catch (FileNotFoundException ex)
+
+                    foreach (var file in notFound)
                     {
-                        _log.Warning("Could not load {0} (missing {1}))", reference.Location, ex.FileName);
+                        _log.Warning("Could not load {0} (missing {1})", reference.Location, file);
                     }
                 }
+                catch (FileNotFoundException ex)
+                {
+                    _log.Warning("Could not load {0} (missing {1}))", reference.Location, ex.FileName);
+                }
             }
-            return result;
         }
+        return result;
+    }
 
-        private ScriptAlias CreateAlias(Tuple<MethodInfo, ScriptAliasType> alias)
+    private ScriptAlias CreateAlias(Tuple<MethodInfo, ScriptAliasType> alias)
+    {
+        var method = alias.Item1;
+        var type = alias.Item2;
+
+        try
         {
-            var method = alias.Item1;
-            var type = alias.Item2;
+            var namespaces = new HashSet<string>(StringComparer.Ordinal);
 
-            try
+            // Import the method's namespace to the session.
+            var methodNamespace = method.GetNamespace();
+            if (!string.IsNullOrWhiteSpace(methodNamespace))
             {
-                var namespaces = new HashSet<string>(StringComparer.Ordinal);
-
-                // Import the method's namespace to the session.
-                var methodNamespace = method.GetNamespace();
-                if (!string.IsNullOrWhiteSpace(methodNamespace))
-                {
-                    namespaces.Add(methodNamespace);
-                }
-
-                // Find out if the method want us to import more namespaces.
-                var namespaceAttributes = method.GetCustomAttributes<CakeNamespaceImportAttribute>();
-                foreach (var namespaceAttribute in namespaceAttributes)
-                {
-                    namespaces.Add(namespaceAttribute.Namespace);
-                }
-
-                // Find out if the class contains any more namespaces.
-                namespaceAttributes = method.DeclaringType.GetTypeInfo().GetCustomAttributes<CakeNamespaceImportAttribute>();
-                foreach (var namespaceAttribute in namespaceAttributes)
-                {
-                    namespaces.Add(namespaceAttribute.Namespace);
-                }
-
-                // Find out if the assembly has been decorated with any more namespaces
-                namespaceAttributes = method.DeclaringType.GetTypeInfo().Assembly.GetCustomAttributes<CakeNamespaceImportAttribute>();
-                foreach (var namespaceAttribute in namespaceAttributes)
-                {
-                    namespaces.Add(namespaceAttribute.Namespace);
-                }
-
-                return new ScriptAlias(method, type, namespaces);
-            }
-            catch (Exception ex)
-            {
-                // Log this error.
-                const string format = "An error occurred while generating code for alias {0}.";
-                _log.Error(format, method.GetSignature(false));
-                _log.Error("Error: {0}", ex.Message);
+                namespaces.Add(methodNamespace);
             }
 
-            return null;
+            // Find out if the method want us to import more namespaces.
+            var namespaceAttributes = method.GetCustomAttributes<CakeNamespaceImportAttribute>();
+            foreach (var namespaceAttribute in namespaceAttributes)
+            {
+                namespaces.Add(namespaceAttribute.Namespace);
+            }
+
+            // Find out if the class contains any more namespaces.
+            namespaceAttributes = method.DeclaringType.GetTypeInfo().GetCustomAttributes<CakeNamespaceImportAttribute>();
+            foreach (var namespaceAttribute in namespaceAttributes)
+            {
+                namespaces.Add(namespaceAttribute.Namespace);
+            }
+
+            // Find out if the assembly has been decorated with any more namespaces
+            namespaceAttributes = method.DeclaringType.GetTypeInfo().Assembly.GetCustomAttributes<CakeNamespaceImportAttribute>();
+            foreach (var namespaceAttribute in namespaceAttributes)
+            {
+                namespaces.Add(namespaceAttribute.Namespace);
+            }
+
+            return new ScriptAlias(method, type, namespaces);
         }
-
-        private static IEnumerable<Tuple<MethodInfo, ScriptAliasType>> GetAliasMethods(Type type)
+        catch (Exception ex)
         {
-            var methods = type.GetTypeInfo().DeclaredMethods;
-            foreach (var method in methods)
-            {
-                if (!method.IsDefined(typeof(ExtensionAttribute)))
-                {
-                    continue;
-                }
-
-                var scriptAliasType = GetScriptAliasType(method);
-                if (scriptAliasType == ScriptAliasType.Unknown)
-                {
-                    continue;
-                }
-
-                var parameters = method.GetParameters();
-                if (parameters.Length == 0)
-                {
-                    continue;
-                }
-
-                if (parameters[0].ParameterType == typeof(ICakeContext))
-                {
-                    yield return Tuple.Create(method, scriptAliasType);
-                }
-            }
+            // Log this error.
+            const string format = "An error occurred while generating code for alias {0}.";
+            _log.Error(format, method.GetSignature(false));
+            _log.Error("Error: {0}", ex.Message);
         }
 
-        private static ScriptAliasType GetScriptAliasType(MethodInfo method)
+        return null;
+    }
+
+    private static IEnumerable<Tuple<MethodInfo, ScriptAliasType>> GetAliasMethods(Type type)
+    {
+        var methods = type.GetTypeInfo().DeclaredMethods;
+        foreach (var method in methods)
         {
-            if (method.IsDefined(typeof(CakeMethodAliasAttribute)))
+            if (!method.IsDefined(typeof(ExtensionAttribute)))
             {
-                return ScriptAliasType.Method;
+                continue;
             }
-            if (method.IsDefined(typeof(CakePropertyAliasAttribute)))
+
+            var scriptAliasType = GetScriptAliasType(method);
+            if (scriptAliasType == ScriptAliasType.Unknown)
             {
-                return ScriptAliasType.Property;
+                continue;
             }
-            return ScriptAliasType.Unknown;
+
+            var parameters = method.GetParameters();
+            if (parameters.Length == 0)
+            {
+                continue;
+            }
+
+            if (parameters[0].ParameterType == typeof(ICakeContext))
+            {
+                yield return Tuple.Create(method, scriptAliasType);
+            }
         }
+    }
+
+    private static ScriptAliasType GetScriptAliasType(MethodInfo method)
+    {
+        if (method.IsDefined(typeof(CakeMethodAliasAttribute)))
+        {
+            return ScriptAliasType.Method;
+        }
+        if (method.IsDefined(typeof(CakePropertyAliasAttribute)))
+        {
+            return ScriptAliasType.Property;
+        }
+        return ScriptAliasType.Unknown;
     }
 }

@@ -9,198 +9,197 @@ using System.Linq;
 using System.Xml;
 using Cake.Core;
 
-namespace Cake.Common.Tools.Chocolatey.Pack
+namespace Cake.Common.Tools.Chocolatey.Pack;
+
+internal static class ChocolateyNuSpecTransformer
 {
-    internal static class ChocolateyNuSpecTransformer
+    private const string ChocolateyNuSpecXsd = "http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd";
+
+    private static readonly Dictionary<string, Func<ChocolateyPackSettings, string>> _mappings;
+    private static readonly List<string> _cdataElements;
+
+    static ChocolateyNuSpecTransformer()
     {
-        private const string ChocolateyNuSpecXsd = "http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd";
-
-        private static readonly Dictionary<string, Func<ChocolateyPackSettings, string>> _mappings;
-        private static readonly List<string> _cdataElements;
-
-        static ChocolateyNuSpecTransformer()
+        _mappings = new Dictionary<string, Func<ChocolateyPackSettings, string>>
         {
-            _mappings = new Dictionary<string, Func<ChocolateyPackSettings, string>>
-            {
-                { "id", settings => ToString(settings.Id) },
-                { "title", settings => ToString(settings.Title) },
-                { "version", settings => ToString(settings.Version) },
-                { "authors", settings => ToCommaSeparatedString(settings.Authors) },
-                { "owners", settings => ToCommaSeparatedString(settings.Owners) },
-                { "summary", settings => ToString(settings.Summary) },
-                { "description", settings => ToString(settings.Description) },
-                { "projectUrl", settings => ToString(settings.ProjectUrl) },
-                { "packageSourceUrl", settings => ToString(settings.PackageSourceUrl) },
-                { "projectSourceUrl", settings => ToString(settings.ProjectSourceUrl) },
-                { "docsUrl", settings => ToString(settings.DocsUrl) },
-                { "mailingListUrl", settings => ToString(settings.MailingListUrl) },
-                { "bugTrackerUrl", settings => ToString(settings.BugTrackerUrl) },
-                { "tags", settings => ToSpaceSeparatedString(settings.Tags) },
-                { "copyright", settings => ToString(settings.Copyright) },
-                { "licenseUrl", settings => ToString(settings.LicenseUrl) },
-                { "requireLicenseAcceptance", settings => ToString(settings.RequireLicenseAcceptance) },
-                { "iconUrl", settings => ToString(settings.IconUrl) },
-                { "releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes) }
-            };
+            { "id", settings => ToString(settings.Id) },
+            { "title", settings => ToString(settings.Title) },
+            { "version", settings => ToString(settings.Version) },
+            { "authors", settings => ToCommaSeparatedString(settings.Authors) },
+            { "owners", settings => ToCommaSeparatedString(settings.Owners) },
+            { "summary", settings => ToString(settings.Summary) },
+            { "description", settings => ToString(settings.Description) },
+            { "projectUrl", settings => ToString(settings.ProjectUrl) },
+            { "packageSourceUrl", settings => ToString(settings.PackageSourceUrl) },
+            { "projectSourceUrl", settings => ToString(settings.ProjectSourceUrl) },
+            { "docsUrl", settings => ToString(settings.DocsUrl) },
+            { "mailingListUrl", settings => ToString(settings.MailingListUrl) },
+            { "bugTrackerUrl", settings => ToString(settings.BugTrackerUrl) },
+            { "tags", settings => ToSpaceSeparatedString(settings.Tags) },
+            { "copyright", settings => ToString(settings.Copyright) },
+            { "licenseUrl", settings => ToString(settings.LicenseUrl) },
+            { "requireLicenseAcceptance", settings => ToString(settings.RequireLicenseAcceptance) },
+            { "iconUrl", settings => ToString(settings.IconUrl) },
+            { "releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes) }
+        };
 
-            _cdataElements = new List<string>
-                                {
-                                    "releaseNotes"
-                                };
-        }
+        _cdataElements = new List<string>
+                            {
+                                "releaseNotes"
+                            };
+    }
 
-        public static void Transform(XmlDocument document, ChocolateyPackSettings settings)
+    public static void Transform(XmlDocument document, ChocolateyPackSettings settings)
+    {
+        // Create the namespace manager.
+        var namespaceManager = new XmlNamespaceManager(document.NameTable);
+        namespaceManager.AddNamespace("nu", ChocolateyNuSpecXsd);
+
+        foreach (var (elementName, element) in _mappings)
         {
-            // Create the namespace manager.
-            var namespaceManager = new XmlNamespaceManager(document.NameTable);
-            namespaceManager.AddNamespace("nu", ChocolateyNuSpecXsd);
-
-            foreach (var (elementName, element) in _mappings)
+            var content = element(settings);
+            if (content != null)
             {
-                var content = element(settings);
-                if (content != null)
-                {
-                    // Replace the node content.
-                    var node = FindOrCreateElement(document, namespaceManager, elementName);
+                // Replace the node content.
+                var node = FindOrCreateElement(document, namespaceManager, elementName);
 
-                    if (_cdataElements.Contains(elementName))
-                    {
-                        node.AppendChild(document.CreateCDataSection(content));
-                    }
-                    else
-                    {
-                        node.InnerText = content;
-                    }
+                if (_cdataElements.Contains(elementName))
+                {
+                    node.AppendChild(document.CreateCDataSection(content));
                 }
-            }
-
-            if (settings.Files != null && settings.Files.Count > 0)
-            {
-                var filesPath = string.Format(CultureInfo.InvariantCulture, "//*[local-name()='package']//*[local-name()='files']");
-                var filesElement = document.SelectSingleNode(filesPath, namespaceManager);
-                if (filesElement == null)
+                else
                 {
-                    // Get the package element.
-                    var package = GetPackageElement(document);
-                    filesElement = document.CreateAndAppendElement(package, "files");
-                }
-
-                // Add the files
-                filesElement.RemoveAll();
-                foreach (var file in settings.Files)
-                {
-                    var fileElement = document.CreateAndAppendElement(filesElement, "file");
-                    fileElement.AddAttributeIfSpecified(file.Source, "src");
-                    fileElement.AddAttributeIfSpecified(file.Exclude, "exclude");
-                    fileElement.AddAttributeIfSpecified(file.Target, "target");
-                }
-            }
-
-            if (settings.Dependencies != null && settings.Dependencies.Count > 0)
-            {
-                var dependenciesElement = FindOrCreateElement(document, namespaceManager, "dependencies");
-
-                // Add or update the dependency references
-                dependenciesElement.RemoveAll();
-                foreach (var dependency in settings.Dependencies)
-                {
-                    var dependencyElement = document.CreateAndAppendElement(dependenciesElement, "dependency");
-                    dependencyElement.AddAttributeIfSpecified(dependency.Id, "id");
-                    dependencyElement.AddAttributeIfSpecified(dependency.Version, "version");
+                    node.InnerText = content;
                 }
             }
         }
 
-        private static XmlNode GetPackageElement(XmlDocument document)
+        if (settings.Files != null && settings.Files.Count > 0)
         {
-            var package = document.SelectSingleNode("//*[local-name()='package']");
-            if (package == null)
+            var filesPath = string.Format(CultureInfo.InvariantCulture, "//*[local-name()='package']//*[local-name()='files']");
+            var filesElement = document.SelectSingleNode(filesPath, namespaceManager);
+            if (filesElement == null)
             {
-                throw new CakeException("Nuspec file is missing package root.");
+                // Get the package element.
+                var package = GetPackageElement(document);
+                filesElement = document.CreateAndAppendElement(package, "files");
             }
-            return package;
-        }
 
-        private static XmlNode FindOrCreateElement(XmlDocument document, XmlNamespaceManager ns, string name)
-        {
-            var path = string.Format(CultureInfo.InvariantCulture, "//*[local-name()='package']//*[local-name()='metadata']//*[local-name()='{0}']", name);
-            var node = document.SelectSingleNode(path, ns);
-            if (node == null)
+            // Add the files
+            filesElement.RemoveAll();
+            foreach (var file in settings.Files)
             {
-                var parent = document.SelectSingleNode("//*[local-name()='package']//*[local-name()='metadata']", ns);
-                if (parent == null)
-                {
-                    // Get the package element.
-                    var package = GetPackageElement(document);
-
-                    // Create the metadata element.
-                    parent = document.CreateElement("metadata", ChocolateyNuSpecXsd);
-                    package.PrependChild(parent);
-                }
-
-                node = document.CreateAndAppendElement(parent, name);
+                var fileElement = document.CreateAndAppendElement(filesElement, "file");
+                fileElement.AddAttributeIfSpecified(file.Source, "src");
+                fileElement.AddAttributeIfSpecified(file.Exclude, "exclude");
+                fileElement.AddAttributeIfSpecified(file.Target, "target");
             }
-            return node;
         }
 
-        private static XmlNode CreateAndAppendElement(this XmlDocument document, XmlNode parent, string name)
+        if (settings.Dependencies != null && settings.Dependencies.Count > 0)
         {
-            // If the parent didn't have a namespace specified, then skip adding one.
-            // Otherwise add the parent's namespace. This is a little hackish, but it
-            // will avoid empty namespaces. This should probably be done better...
-            return parent.AppendChild(
-                string.IsNullOrWhiteSpace(parent.NamespaceURI)
-                    ? document.CreateElement(name)
-                    : document.CreateElement(name, parent.NamespaceURI));
-        }
+            var dependenciesElement = FindOrCreateElement(document, namespaceManager, "dependencies");
 
-        private static void AddAttributeIfSpecified(this XmlNode element, string value, string name)
-        {
-            if (string.IsNullOrWhiteSpace(value) || element.OwnerDocument == null || element.Attributes == null)
+            // Add or update the dependency references
+            dependenciesElement.RemoveAll();
+            foreach (var dependency in settings.Dependencies)
             {
-                return;
+                var dependencyElement = document.CreateAndAppendElement(dependenciesElement, "dependency");
+                dependencyElement.AddAttributeIfSpecified(dependency.Id, "id");
+                dependencyElement.AddAttributeIfSpecified(dependency.Version, "version");
             }
-            var attr = element.OwnerDocument.CreateAttribute(name);
-            attr.Value = value;
-            element.Attributes.Append(attr);
         }
+    }
 
-        private static string ToString(string value)
+    private static XmlNode GetPackageElement(XmlDocument document)
+    {
+        var package = document.SelectSingleNode("//*[local-name()='package']");
+        if (package == null)
         {
-            return string.IsNullOrWhiteSpace(value)
-                ? null
-                : value;
+            throw new CakeException("Nuspec file is missing package root.");
         }
+        return package;
+    }
 
-        private static string ToString(Uri value)
+    private static XmlNode FindOrCreateElement(XmlDocument document, XmlNamespaceManager ns, string name)
+    {
+        var path = string.Format(CultureInfo.InvariantCulture, "//*[local-name()='package']//*[local-name()='metadata']//*[local-name()='{0}']", name);
+        var node = document.SelectSingleNode(path, ns);
+        if (node == null)
         {
-            return value?.ToString().TrimEnd('/');
-        }
+            var parent = document.SelectSingleNode("//*[local-name()='package']//*[local-name()='metadata']", ns);
+            if (parent == null)
+            {
+                // Get the package element.
+                var package = GetPackageElement(document);
 
-        private static string ToString(bool value)
-        {
-            return value.ToString().ToLowerInvariant();
-        }
+                // Create the metadata element.
+                parent = document.CreateElement("metadata", ChocolateyNuSpecXsd);
+                package.PrependChild(parent);
+            }
 
-        private static string ToCommaSeparatedString(ICollection<string> values)
-        {
-            return values != null && values.Count != 0
-                ? string.Join(',', values)
-                : null;
+            node = document.CreateAndAppendElement(parent, name);
         }
+        return node;
+    }
 
-        private static string ToMultiLineString(ICollection<string> values)
-        {
-            return values != null && values.Count != 0
-                ? string.Join("\r\n", values).NormalizeLineEndings()
-                : null;
-        }
+    private static XmlNode CreateAndAppendElement(this XmlDocument document, XmlNode parent, string name)
+    {
+        // If the parent didn't have a namespace specified, then skip adding one.
+        // Otherwise add the parent's namespace. This is a little hackish, but it
+        // will avoid empty namespaces. This should probably be done better...
+        return parent.AppendChild(
+            string.IsNullOrWhiteSpace(parent.NamespaceURI)
+                ? document.CreateElement(name)
+                : document.CreateElement(name, parent.NamespaceURI));
+    }
 
-        private static string ToSpaceSeparatedString(ICollection<string> values)
+    private static void AddAttributeIfSpecified(this XmlNode element, string value, string name)
+    {
+        if (string.IsNullOrWhiteSpace(value) || element.OwnerDocument == null || element.Attributes == null)
         {
-            return values != null && values.Count != 0
-                ? string.Join(' ', values.Select(x => x.Replace(" ", "-")))
-                : null;
+            return;
         }
+        var attr = element.OwnerDocument.CreateAttribute(name);
+        attr.Value = value;
+        element.Attributes.Append(attr);
+    }
+
+    private static string ToString(string value)
+    {
+        return string.IsNullOrWhiteSpace(value)
+            ? null
+            : value;
+    }
+
+    private static string ToString(Uri value)
+    {
+        return value?.ToString().TrimEnd('/');
+    }
+
+    private static string ToString(bool value)
+    {
+        return value.ToString().ToLowerInvariant();
+    }
+
+    private static string ToCommaSeparatedString(ICollection<string> values)
+    {
+        return values != null && values.Count != 0
+            ? string.Join(',', values)
+            : null;
+    }
+
+    private static string ToMultiLineString(ICollection<string> values)
+    {
+        return values != null && values.Count != 0
+            ? string.Join("\r\n", values).NormalizeLineEndings()
+            : null;
+    }
+
+    private static string ToSpaceSeparatedString(ICollection<string> values)
+    {
+        return values != null && values.Count != 0
+            ? string.Join(' ', values.Select(x => x.Replace(" ", "-")))
+            : null;
     }
 }

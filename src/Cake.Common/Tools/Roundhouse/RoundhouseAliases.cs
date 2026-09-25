@@ -6,64 +6,63 @@ using System;
 using Cake.Core;
 using Cake.Core.Annotations;
 
-namespace Cake.Common.Tools.Roundhouse
+namespace Cake.Common.Tools.Roundhouse;
+
+/// <summary>
+/// <para>Contains functionality related to <see href="https://github.com/chucknorris/roundhouse">RoundhousE</see>.</para>
+/// <para>
+/// In order to use the commands for this alias, include the following in your build.cake file to download and
+/// install from nuget.org, or specify the ToolPath within the <see cref="RoundhouseSettings" /> class:
+/// <code>
+/// #tool "nuget:?package=roundhouse"
+/// </code>
+/// </para>
+/// </summary>
+[CakeAliasCategory("Roundhouse")]
+public static class RoundhouseAliases
 {
     /// <summary>
-    /// <para>Contains functionality related to <see href="https://github.com/chucknorris/roundhouse">RoundhousE</see>.</para>
-    /// <para>
-    /// In order to use the commands for this alias, include the following in your build.cake file to download and
-    /// install from nuget.org, or specify the ToolPath within the <see cref="RoundhouseSettings" /> class:
-    /// <code>
-    /// #tool "nuget:?package=roundhouse"
-    /// </code>
-    /// </para>
+    /// Executes Roundhouse with the given configured settings.
     /// </summary>
-    [CakeAliasCategory("Roundhouse")]
-    public static class RoundhouseAliases
+    /// <param name="context">The context.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// RoundhouseMigrate(new RoundhouseSettings{
+    ///     ServerName = "Sql2008R2",
+    ///     DatabaseName = "AdventureWorks2008R2",
+    ///     SqlFilesDirectory = "./src/sql"
+    ///     });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    public static void RoundhouseMigrate(this ICakeContext context, RoundhouseSettings settings)
     {
-        /// <summary>
-        /// Executes Roundhouse with the given configured settings.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// RoundhouseMigrate(new RoundhouseSettings{
-        ///     ServerName = "Sql2008R2",
-        ///     DatabaseName = "AdventureWorks2008R2",
-        ///     SqlFilesDirectory = "./src/sql"
-        ///     });
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        public static void RoundhouseMigrate(this ICakeContext context, RoundhouseSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(context);
 
-            var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            runner.Run(settings, settings.Drop);
-        }
+        var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        runner.Run(settings, settings.Drop);
+    }
 
-        /// <summary>
-        /// Executes Roundhouse migration to drop the database using the provided settings.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// RoundhouseDrop(new RoundhouseSettings{
-        ///     ServerName = "Sql2008R2",
-        ///     DatabaseName = "AdventureWorks2008R2"
-        ///     });
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        public static void RoundhouseDrop(this ICakeContext context, RoundhouseSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Executes Roundhouse migration to drop the database using the provided settings.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// RoundhouseDrop(new RoundhouseSettings{
+    ///     ServerName = "Sql2008R2",
+    ///     DatabaseName = "AdventureWorks2008R2"
+    ///     });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    public static void RoundhouseDrop(this ICakeContext context, RoundhouseSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            runner.Run(settings, true);
-        }
+        var runner = new RoundhouseRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        runner.Run(settings, true);
     }
 }

@@ -5,74 +5,73 @@
 using System;
 using Cake.Core.IO;
 
-namespace Cake.Common.IO.Paths
+namespace Cake.Common.IO.Paths;
+
+/// <summary>
+/// Represents a <see cref="FilePath" /> that can be easily converted.
+/// </summary>
+public sealed class ConvertableFilePath
 {
     /// <summary>
-    /// Represents a <see cref="FilePath" /> that can be easily converted.
+    /// Initializes a new instance of the <see cref="ConvertableFilePath"/> class.
     /// </summary>
-    public sealed class ConvertableFilePath
+    /// <param name="path">The path.</param>
+    internal ConvertableFilePath(FilePath path)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConvertableFilePath"/> class.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        internal ConvertableFilePath(FilePath path)
-        {
-            ArgumentNullException.ThrowIfNull(path);
-            Path = path;
-        }
+        ArgumentNullException.ThrowIfNull(path);
+        Path = path;
+    }
 
-        /// <summary>
-        /// Gets the path.
-        /// </summary>
-        /// <value>The actual path.</value>
-        public FilePath Path { get; }
+    /// <summary>
+    /// Gets the path.
+    /// </summary>
+    /// <value>The actual path.</value>
+    public FilePath Path { get; }
 
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="ConvertableFilePath"/> to <see cref="FilePath"/>.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>The result of the conversion. </returns>
-        public static implicit operator FilePath(ConvertableFilePath path)
-        {
-            return path?.Path;
-        }
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="ConvertableFilePath"/> to <see cref="FilePath"/>.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <returns>The result of the conversion. </returns>
+    public static implicit operator FilePath(ConvertableFilePath path)
+    {
+        return path?.Path;
+    }
 
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="ConvertableFilePath"/> to <see cref="System.String"/>.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>The result of the conversion.</returns>
-        public static implicit operator string(ConvertableFilePath path)
-        {
-            return path?.Path.FullPath;
-        }
+    /// <summary>
+    /// Performs an implicit conversion from <see cref="ConvertableFilePath"/> to <see cref="System.String"/>.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <returns>The result of the conversion.</returns>
+    public static implicit operator string(ConvertableFilePath path)
+    {
+        return path?.Path.FullPath;
+    }
 
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
-        /// </returns>
-        public override string ToString()
-        {
-            return Path.FullPath;
-        }
+    /// <summary>
+    /// Returns a <see cref="System.String" /> that represents this instance.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="System.String" /> that represents this instance.
+    /// </returns>
+    public override string ToString()
+    {
+        return Path.FullPath;
+    }
 
-        /// <summary>
-        /// Combines the directory path and file path with the separator.
-        /// </summary>
-        /// <param name="dir">DirectoryPath.</param>
-        /// <param name="file">ConvertableFilePath.</param>
-        /// <returns>
-        /// A <see cref="ConvertableFilePath" /> that represents this instance.
-        /// </returns>
-        public static ConvertableFilePath operator +(DirectoryPath dir, ConvertableFilePath file)
-        {
-            ArgumentNullException.ThrowIfNull(dir);
-            ArgumentNullException.ThrowIfNull(file);
+    /// <summary>
+    /// Combines the directory path and file path with the separator.
+    /// </summary>
+    /// <param name="dir">DirectoryPath.</param>
+    /// <param name="file">ConvertableFilePath.</param>
+    /// <returns>
+    /// A <see cref="ConvertableFilePath" /> that represents this instance.
+    /// </returns>
+    public static ConvertableFilePath operator +(DirectoryPath dir, ConvertableFilePath file)
+    {
+        ArgumentNullException.ThrowIfNull(dir);
+        ArgumentNullException.ThrowIfNull(file);
 
-            return new ConvertableFilePath(dir.CombineWithFilePath(file));
-        }
+        return new ConvertableFilePath(dir.CombineWithFilePath(file));
     }
 }

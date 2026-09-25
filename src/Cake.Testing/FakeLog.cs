@@ -6,37 +6,36 @@ using System.Collections.Generic;
 using System.Globalization;
 using Cake.Core.Diagnostics;
 
-namespace Cake.Testing
+namespace Cake.Testing;
+
+/// <summary>
+/// Implementation of a <see cref="ICakeLog"/> that saves all messages written to it.
+/// </summary>
+public sealed class FakeLog : ICakeLog
 {
+    private readonly List<FakeLogMessage> _entries;
+
     /// <summary>
-    /// Implementation of a <see cref="ICakeLog"/> that saves all messages written to it.
+    /// Gets the messages.
     /// </summary>
-    public sealed class FakeLog : ICakeLog
+    /// <value>The messages.</value>
+    public IReadOnlyList<FakeLogMessage> Entries => _entries;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FakeLog"/> class.
+    /// </summary>
+    public FakeLog()
     {
-        private readonly List<FakeLogMessage> _entries;
+        _entries = new List<FakeLogMessage>();
+        Verbosity = Verbosity.Quiet;
+    }
 
-        /// <summary>
-        /// Gets the messages.
-        /// </summary>
-        /// <value>The messages.</value>
-        public IReadOnlyList<FakeLogMessage> Entries => _entries;
+    /// <inheritdoc/>
+    public Verbosity Verbosity { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FakeLog"/> class.
-        /// </summary>
-        public FakeLog()
-        {
-            _entries = new List<FakeLogMessage>();
-            Verbosity = Verbosity.Quiet;
-        }
-
-        /// <inheritdoc/>
-        public Verbosity Verbosity { get; set; }
-
-        /// <inheritdoc/>
-        public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
-        {
-            _entries.Add(new FakeLogMessage(verbosity, level, string.Format(CultureInfo.InvariantCulture, format, args)));
-        }
+    /// <inheritdoc/>
+    public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
+    {
+        _entries.Add(new FakeLogMessage(verbosity, level, string.Format(CultureInfo.InvariantCulture, format, args)));
     }
 }

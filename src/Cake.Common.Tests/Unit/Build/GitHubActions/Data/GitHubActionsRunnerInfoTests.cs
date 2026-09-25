@@ -4,198 +4,196 @@
 
 using Cake.Common.Build.GitHubActions.Data;
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data
+namespace Cake.Common.Tests.Unit.Build.GitHubActions.Data;
+
+public sealed class GitHubActionsRunnerInfoTests
 {
-    public sealed class GitHubActionsRunnerInfoTests
+    public sealed class TheNameProperty
     {
-        public sealed class TheNameProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
 
-                // When
-                var result = info.Name;
+            // When
+            var result = info.Name;
 
-                // Then
-                Assert.Equal("RunnerName", result);
-            }
+            // Then
+            Assert.Equal("RunnerName", result);
         }
+    }
 
-        // ReSharper disable once InconsistentNaming
-        public sealed class TheOSProperty
+    // ReSharper disable once InconsistentNaming
+    public sealed class TheOSProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
 
-                // When
-                var result = info.OS;
+            // When
+            var result = info.OS;
 
-                // Then
-                Assert.Equal("Linux", result);
-            }
+            // Then
+            Assert.Equal("Linux", result);
         }
+    }
 
-        public sealed class TheTempProperty
+    public sealed class TheTempProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
 
-                // When
-                var result = info.Temp.FullPath;
+            // When
+            var result = info.Temp.FullPath;
 
-                // Then
-                Assert.Equal("/home/runner/work/_temp", result);
-            }
+            // Then
+            Assert.Equal("/home/runner/work/_temp", result);
         }
+    }
 
-        public sealed class TheToolCacheProperty
+    public sealed class TheToolCacheProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
 
-                // When
-                var result = info.ToolCache.FullPath;
+            // When
+            var result = info.ToolCache.FullPath;
 
-                // Then
-                Assert.Equal("/opt/hostedtoolcache", result);
-            }
+            // Then
+            Assert.Equal("/opt/hostedtoolcache", result);
         }
+    }
 
-        public sealed class TheWorkspaceProperty
+    public sealed class TheWorkspaceProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
 
-                // When
-                var result = info.Workspace.FullPath;
+            // When
+            var result = info.Workspace.FullPath;
 
-                // Then
-                Assert.Equal("/home/runner/work/cake", result);
-            }
+            // Then
+            Assert.Equal("/home/runner/work/cake", result);
         }
+    }
 
-        public sealed class TheImageOSProperty
+    public sealed class TheImageOSProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
 
-                // When
-                var result = info.ImageOS;
+            // When
+            var result = info.ImageOS;
 
-                // Then
-                Assert.Equal("ubuntu20", result);
-            }
+            // Then
+            Assert.Equal("ubuntu20", result);
         }
+    }
 
-        public sealed class TheImageVersionProperty
+    public sealed class TheImageVersionProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
 
-                // When
-                var result = info.ImageVersion;
+            // When
+            var result = info.ImageVersion;
 
-                // Then
-                Assert.Equal("20211209.3", result);
-            }
+            // Then
+            Assert.Equal("20211209.3", result);
         }
+    }
 
-        public sealed class TheUserProperty
+    public sealed class TheUserProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo();
 
-                // When
-                var result = info.User;
+            // When
+            var result = info.User;
 
-                // Then
-                Assert.Equal("runner", result);
-            }
+            // Then
+            Assert.Equal("runner", result);
         }
+    }
 
-        public sealed class TheArchitectureProperty
+    public sealed class TheArchitectureProperty
+    {
+        [Theory]
+        [InlineData("X86", GitHubActionsArchitecture.X86)]
+        [InlineData("X64", GitHubActionsArchitecture.X64)]
+        [InlineData("ARM", GitHubActionsArchitecture.ARM)]
+        [InlineData("ARM64", GitHubActionsArchitecture.ARM64)]
+        [InlineData("", GitHubActionsArchitecture.Unknown)]
+        public void Should_Return_Correct_Value(string value, GitHubActionsArchitecture expected)
         {
-            [Theory]
-            [InlineData("X86", GitHubActionsArchitecture.X86)]
-            [InlineData("X64", GitHubActionsArchitecture.X64)]
-            [InlineData("ARM", GitHubActionsArchitecture.ARM)]
-            [InlineData("ARM64", GitHubActionsArchitecture.ARM64)]
-            [InlineData("", GitHubActionsArchitecture.Unknown)]
-            public void Should_Return_Correct_Value(string value, GitHubActionsArchitecture expected)
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo(architecture: value);
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo(architecture: value);
 
-                // When
-                var result = info.Architecture;
+            // When
+            var result = info.Architecture;
 
-                // Then
-                Assert.Equal(expected, result);
-            }
+            // Then
+            Assert.Equal(expected, result);
         }
+    }
 
-        public sealed class TheIsDebugProperty
+    public sealed class TheIsDebugProperty
+    {
+        [Theory]
+        [InlineData("1", true)]
+        [InlineData("", false)]
+        [InlineData("true", false)]
+        public void Should_Return_Correct_Value(string value, bool expected)
         {
-            [Theory]
-            [InlineData("1", true)]
-            [InlineData("", false)]
-            [InlineData("true", false)]
-            public void Should_Return_Correct_Value(string value, bool expected)
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo(debug: value);
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo(debug: value);
 
-                // When
-                var result = info.IsDebug;
+            // When
+            var result = info.IsDebug;
 
-                // Then
-                Assert.Equal(expected, result);
-            }
+            // Then
+            Assert.Equal(expected, result);
         }
+    }
 
-        public sealed class TheEnvironmentProperty
+    public sealed class TheEnvironmentProperty
+    {
+        [Theory]
+        [InlineData("github-hosted", GitHubActionsRunnerEnvironment.GitHubHosted)]
+        [InlineData("self-hosted", GitHubActionsRunnerEnvironment.SelfHosted)]
+        [InlineData("", GitHubActionsRunnerEnvironment.Unknown)]
+        public void Should_Return_Correct_Value(string value, GitHubActionsRunnerEnvironment expected)
         {
-            [Theory]
-            [InlineData("github-hosted", GitHubActionsRunnerEnvironment.GitHubHosted)]
-            [InlineData("self-hosted", GitHubActionsRunnerEnvironment.SelfHosted)]
-            [InlineData("", GitHubActionsRunnerEnvironment.Unknown)]
-            public void Should_Return_Correct_Value(string value, GitHubActionsRunnerEnvironment expected)
-            {
-                // Given
-                var info = new GitHubActionsInfoFixture().CreateRunnerInfo(environment: value);
+            // Given
+            var info = new GitHubActionsInfoFixture().CreateRunnerInfo(environment: value);
 
-                // When
-                var result = info.Environment;
+            // When
+            var result = info.Environment;
 
-                // Then
-                Assert.Equal(expected, result);
-            }
+            // Then
+            Assert.Equal(expected, result);
         }
     }
 }

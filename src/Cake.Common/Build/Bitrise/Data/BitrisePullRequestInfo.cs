@@ -4,36 +4,35 @@
 
 using Cake.Core;
 
-namespace Cake.Common.Build.Bitrise.Data
+namespace Cake.Common.Build.Bitrise.Data;
+
+/// <summary>
+/// Provides Bitrise pull request information for a current build.
+/// </summary>
+public sealed class BitrisePullRequestInfo : BitriseInfo
 {
     /// <summary>
-    /// Provides Bitrise pull request information for a current build.
+    /// Initializes a new instance of the <see cref="BitrisePullRequestInfo"/> class.
     /// </summary>
-    public sealed class BitrisePullRequestInfo : BitriseInfo
+    /// <param name="environment">The environment.</param>
+    public BitrisePullRequestInfo(ICakeEnvironment environment)
+        : base(environment)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BitrisePullRequestInfo"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public BitrisePullRequestInfo(ICakeEnvironment environment)
-            : base(environment)
-        {
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the current build was started by a pull request.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsPullRequest => Id > 0;
-
-        /// <summary>
-        /// Gets the pull request id.
-        /// </summary>
-        /// <value>
-        ///   The pull request id.
-        /// </value>
-        public int Id => GetEnvironmentInteger("BITRISE_PULL_REQUEST");
     }
+
+    /// <summary>
+    /// Gets a value indicating whether the current build was started by a pull request.
+    /// </summary>
+    /// <value>
+    ///   <c>true</c> if the current build was started by a pull request; otherwise, <c>false</c>.
+    /// </value>
+    public bool IsPullRequest => Id > 0;
+
+    /// <summary>
+    /// Gets the pull request id.
+    /// </summary>
+    /// <value>
+    ///   The pull request id.
+    /// </value>
+    public int Id => GetEnvironmentInteger("BITRISE_PULL_REQUEST");
 }

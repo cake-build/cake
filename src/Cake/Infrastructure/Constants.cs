@@ -2,30 +2,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Infrastructure
+namespace Cake.Infrastructure;
+
+internal static class Constants
 {
-    internal static class Constants
+    public static class Settings
     {
-        public static class Settings
-        {
-            public const string EnableScriptCache = "Settings_EnableScriptCache";
-            public const string UseSpectreConsoleForConsoleOutput = "Settings_UseSpectreConsoleForConsoleOutput";
-            public const string NoReport = "Settings_NoReport";
-        }
+        public const string EnableScriptCache = "Settings_EnableScriptCache";
+        public const string UseSpectreConsoleForConsoleOutput = "Settings_UseSpectreConsoleForConsoleOutput";
+        public const string NoReport = "Settings_NoReport";
+    }
 
-        public static class Paths
-        {
-            public const string Cache = "Paths_Cache";
-        }
+    public static class Paths
+    {
+        public const string Cache = "Paths_Cache";
+    }
 
-        public static class Cache
-        {
-            public const string InvalidateScriptCache = "invalidate-script-cache";
-        }
+    public static class Cache
+    {
+        public const string InvalidateScriptCache = "invalidate-script-cache";
+    }
 
-        public static class CakeExecution
-        {
-            public const string NoReport = "no-report";
-        }
+    public static class CakeExecution
+    {
+        public const string NoReport = "no-report";
     }
 }

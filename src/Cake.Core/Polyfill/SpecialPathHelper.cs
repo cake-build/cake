@@ -6,43 +6,42 @@ using System;
 using System.Globalization;
 using Cake.Core.IO;
 
-namespace Cake.Core.Polyfill
+namespace Cake.Core.Polyfill;
+
+internal static class SpecialPathHelper
 {
-    internal static class SpecialPathHelper
+    public static DirectoryPath GetFolderPath(ICakePlatform platform, SpecialPath path)
     {
-        public static DirectoryPath GetFolderPath(ICakePlatform platform, SpecialPath path)
+        if (path == SpecialPath.LocalTemp)
         {
-            if (path == SpecialPath.LocalTemp)
-            {
-                return new DirectoryPath(System.IO.Path.GetTempPath());
-            }
-
-            if (path == SpecialPath.UserProfile)
-            {
-                return new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
-            }
-
-            var result = GetXPlatFolderPath(platform, path);
-            if (result != null)
-            {
-                return new DirectoryPath(result);
-            }
-
-            const string format = "The special path '{0}' is not supported.";
-            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, format, path));
+            return new DirectoryPath(System.IO.Path.GetTempPath());
         }
 
-        private static string GetXPlatFolderPath(ICakePlatform platform, SpecialPath path)
+        if (path == SpecialPath.UserProfile)
         {
-            if (platform.IsUnix())
-            {
-                return Native.Unix.GetFolder(path);
-            }
-            else if (platform.Family == PlatformFamily.Windows)
-            {
-                return Native.Windows.GetFolder(path);
-            }
-            throw new PlatformNotSupportedException();
+            return new DirectoryPath(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
         }
+
+        var result = GetXPlatFolderPath(platform, path);
+        if (result != null)
+        {
+            return new DirectoryPath(result);
+        }
+
+        const string format = "The special path '{0}' is not supported.";
+        throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, format, path));
+    }
+
+    private static string GetXPlatFolderPath(ICakePlatform platform, SpecialPath path)
+    {
+        if (platform.IsUnix())
+        {
+            return Native.Unix.GetFolder(path);
+        }
+        else if (platform.Family == PlatformFamily.Windows)
+        {
+            return Native.Windows.GetFolder(path);
+        }
+        throw new PlatformNotSupportedException();
     }
 }

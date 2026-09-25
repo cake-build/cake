@@ -5,27 +5,26 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Cake.Common.Tools.GitVersion
+namespace Cake.Common.Tools.GitVersion;
+
+/// <summary>
+/// Source-generated JSON serializer context for GitVersion types.
+/// Uses static options that include <see cref="JsonStringOrNumberConverter"/> so CLI number/string values deserialize to string properties.
+/// </summary>
+[JsonSerializable(typeof(GitVersionInternal))]
+internal partial class GitVersionJsonContext : JsonSerializerContext
 {
     /// <summary>
-    /// Source-generated JSON serializer context for GitVersion types.
-    /// Uses static options that include <see cref="JsonStringOrNumberConverter"/> so CLI number/string values deserialize to string properties.
+    /// Gets the static serializer options used for GitVersion JSON (includes <see cref="JsonStringOrNumberConverter"/>).
     /// </summary>
-    [JsonSerializable(typeof(GitVersionInternal))]
-    internal partial class GitVersionJsonContext : JsonSerializerContext
+    public static JsonSerializerOptions SerializerOptions { get; } = new()
     {
-        /// <summary>
-        /// Gets the static serializer options used for GitVersion JSON (includes <see cref="JsonStringOrNumberConverter"/>).
-        /// </summary>
-        public static JsonSerializerOptions SerializerOptions { get; } = new()
-        {
-            Converters = { new JsonStringOrNumberConverter() }
-        };
+        Converters = { new JsonStringOrNumberConverter() }
+    };
 
-        /// <summary>
-        /// Gets the context instance with options that allow number-or-string for string properties (uses <see cref="SerializerOptions"/>).
-        /// Use this instead of <see cref="Default"/> when deserializing GitVersion CLI output.
-        /// </summary>
-        public static GitVersionJsonContext DefaultWithConverter { get; } = new(SerializerOptions);
-    }
+    /// <summary>
+    /// Gets the context instance with options that allow number-or-string for string properties (uses <see cref="SerializerOptions"/>).
+    /// Use this instead of <see cref="Default"/> when deserializing GitVersion CLI output.
+    /// </summary>
+    public static GitVersionJsonContext DefaultWithConverter { get; } = new(SerializerOptions);
 }

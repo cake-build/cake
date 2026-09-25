@@ -9,108 +9,107 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.Fixie
+namespace Cake.Common.Tools.Fixie;
+
+/// <summary>
+/// The Fixie test runner.
+/// </summary>
+public sealed class FixieRunner : Tool<FixieSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// The Fixie test runner.
+    /// Initializes a new instance of the <see cref="FixieRunner"/> class.
     /// </summary>
-    public sealed class FixieRunner : Tool<FixieSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The globber.</param>
+    public FixieRunner(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FixieRunner"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The globber.</param>
-        public FixieRunner(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Runs the tests in the specified assemblies, using the specified settings.
+    /// </summary>
+    /// <param name="assemblyPaths">The assembly paths.</param>
+    /// <param name="settings">The settings.</param>
+    public void Run(IEnumerable<FilePath> assemblyPaths, FixieSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(assemblyPaths);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        Run(settings, GetArguments(assemblyPaths, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, FixieSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        // Add the assemblies to build.
+        foreach (var assemblyPath in assemblyPaths)
         {
-            _environment = environment;
+            builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
         }
 
-        /// <summary>
-        /// Runs the tests in the specified assemblies, using the specified settings.
-        /// </summary>
-        /// <param name="assemblyPaths">The assembly paths.</param>
-        /// <param name="settings">The settings.</param>
-        public void Run(IEnumerable<FilePath> assemblyPaths, FixieSettings settings)
+        // Add NUnit style reporting if necessary.
+        if (settings.NUnitXml != null)
         {
-            ArgumentNullException.ThrowIfNull(assemblyPaths);
-            ArgumentNullException.ThrowIfNull(settings);
-
-            Run(settings, GetArguments(assemblyPaths, settings));
+            builder.Append("--NUnitXml");
+            builder.AppendQuoted(settings.NUnitXml.MakeAbsolute(_environment).FullPath);
         }
 
-        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, FixieSettings settings)
+        // Add xUnit style reporting if necessary.
+        if (settings.XUnitXml != null)
         {
-            var builder = new ProcessArgumentBuilder();
+            builder.Append("--xUnitXml");
+            builder.AppendQuoted(settings.XUnitXml.MakeAbsolute(_environment).FullPath);
+        }
 
-            // Add the assemblies to build.
-            foreach (var assemblyPath in assemblyPaths)
-            {
-                builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
-            }
+        // Check if TeamCity output should be enabled.
+        // Note that even if this variable hasn't been set, Fixie itself
+        // will enable this if the environment variable TEAMCITY_PROJECT_NAME is present.
+        if (settings.TeamCity != null)
+        {
+            builder.Append("--TeamCity");
+            builder.Append(settings.TeamCity.Value ? "on" : "off");
+        }
 
-            // Add NUnit style reporting if necessary.
-            if (settings.NUnitXml != null)
+        if (settings.Options != null && settings.Options.Any())
+        {
+            foreach (var optionGroup in settings.Options.Select(x => new { x.Key, Options = x.Value }))
             {
-                builder.Append("--NUnitXml");
-                builder.AppendQuoted(settings.NUnitXml.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Add xUnit style reporting if necessary.
-            if (settings.XUnitXml != null)
-            {
-                builder.Append("--xUnitXml");
-                builder.AppendQuoted(settings.XUnitXml.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Check if TeamCity output should be enabled.
-            // Note that even if this variable hasn't been set, Fixie itself
-            // will enable this if the environment variable TEAMCITY_PROJECT_NAME is present.
-            if (settings.TeamCity != null)
-            {
-                builder.Append("--TeamCity");
-                builder.Append(settings.TeamCity.Value ? "on" : "off");
-            }
-
-            if (settings.Options != null && settings.Options.Any())
-            {
-                foreach (var optionGroup in settings.Options.Select(x => new { x.Key, Options = x.Value }))
+                foreach (var option in optionGroup.Options)
                 {
-                    foreach (var option in optionGroup.Options)
-                    {
-                        builder.Append(optionGroup.Key);
-                        builder.Append(option);
-                    }
+                    builder.Append(optionGroup.Key);
+                    builder.Append(option);
                 }
             }
-
-            return builder;
         }
 
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
-        {
-            return "Fixie";
-        }
+        return builder;
+    }
 
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return new[] { "Fixie.Console.exe" };
-        }
+    /// <summary>
+    /// Gets the name of the tool.
+    /// </summary>
+    /// <returns>The name of the tool.</returns>
+    protected override string GetToolName()
+    {
+        return "Fixie";
+    }
+
+    /// <summary>
+    /// Gets the possible names of the tool executable.
+    /// </summary>
+    /// <returns>The tool executable name.</returns>
+    protected override IEnumerable<string> GetToolExecutableNames()
+    {
+        return new[] { "Fixie.Console.exe" };
     }
 }

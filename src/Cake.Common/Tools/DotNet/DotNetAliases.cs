@@ -4,18 +4,17 @@
 
 using Cake.Core.Annotations;
 
-namespace Cake.Common.Tools.DotNet
+namespace Cake.Common.Tools.DotNet;
+
+/// <summary>
+/// <para>Contains functionality related to <see href="https://github.com/dotnet/cli">.NET CLI</see>.</para>
+/// <para>
+/// In order to use the commands for this alias, the .NET CLI tools will need to be installed on the machine where
+/// the Cake script is being executed.  See this <see href="https://www.microsoft.com/net/core">page</see> for information
+/// on how to install.
+/// </para>
+/// </summary>
+[CakeAliasCategory("DotNet")]
+public static partial class DotNetAliases
 {
-    /// <summary>
-    /// <para>Contains functionality related to <see href="https://github.com/dotnet/cli">.NET CLI</see>.</para>
-    /// <para>
-    /// In order to use the commands for this alias, the .NET CLI tools will need to be installed on the machine where
-    /// the Cake script is being executed.  See this <see href="https://www.microsoft.com/net/core">page</see> for information
-    /// on how to install.
-    /// </para>
-    /// </summary>
-    [CakeAliasCategory("DotNet")]
-    public static partial class DotNetAliases
-    {
-    }
 }

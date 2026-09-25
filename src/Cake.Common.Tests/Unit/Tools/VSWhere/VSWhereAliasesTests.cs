@@ -5,117 +5,115 @@
 using Cake.Common.Tools.VSWhere;
 using Cake.Core;
 using NSubstitute;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.VSWhere
+namespace Cake.Common.Tests.Unit.Tools.VSWhere;
+
+public sealed class VSWhereAliasesTests
 {
-    public sealed class VSWhereAliasesTests
+    public sealed class TheLegacyMethod
     {
-        public sealed class TheLegacyMethod
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // When
-                var result = Record.Exception(() => VSWhereAliases.VSWhereLegacy(null, true));
+            // When
+            var result = Record.Exception(() => VSWhereAliases.VSWhereLegacy(null, true));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
-
-            [Fact]
-            public void Should_Throw_If_Settings_Is_Null()
-            {
-                // Given
-                var context = Substitute.For<ICakeContext>();
-
-                // When
-                var result = Record.Exception(() => VSWhereAliases.VSWhereLegacy(context, null));
-
-                // Then
-                AssertEx.IsArgumentNullException(result, "settings");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
 
-        public sealed class TheLatestMethod
+        [Fact]
+        public void Should_Throw_If_Settings_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // When
-                var result = Record.Exception(() => VSWhereAliases.VSWhereLatest(null));
+            // Given
+            var context = Substitute.For<ICakeContext>();
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // When
+            var result = Record.Exception(() => VSWhereAliases.VSWhereLegacy(context, null));
 
-            [Fact]
-            public void Should_Throw_If_Settings_Is_Null()
-            {
-                // Given
-                var context = Substitute.For<ICakeContext>();
+            // Then
+            AssertEx.IsArgumentNullException(result, "settings");
+        }
+    }
 
-                // When
-                var result = Record.Exception(() => VSWhereAliases.VSWhereLatest(context, null));
+    public sealed class TheLatestMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
+        {
+            // When
+            var result = Record.Exception(() => VSWhereAliases.VSWhereLatest(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "settings");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
 
-        public sealed class TheAllMethod
+        [Fact]
+        public void Should_Throw_If_Settings_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // When
-                var result = Record.Exception(() => VSWhereAliases.VSWhereAll(null));
+            // Given
+            var context = Substitute.For<ICakeContext>();
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // When
+            var result = Record.Exception(() => VSWhereAliases.VSWhereLatest(context, null));
 
-            [Fact]
-            public void Should_Throw_If_Settings_Is_Null()
-            {
-                // Given
-                var context = Substitute.For<ICakeContext>();
+            // Then
+            AssertEx.IsArgumentNullException(result, "settings");
+        }
+    }
 
-                // When
-                var result = Record.Exception(() => VSWhereAliases.VSWhereAll(context, null));
+    public sealed class TheAllMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
+        {
+            // When
+            var result = Record.Exception(() => VSWhereAliases.VSWhereAll(null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "settings");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
         }
 
-        public sealed class TheProductMethod
+        [Fact]
+        public void Should_Throw_If_Settings_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Products_Are_Null()
-            {
-                // Given
-                var context = Substitute.For<ICakeContext>();
+            // Given
+            var context = Substitute.For<ICakeContext>();
 
-                // When
-                var result = Record.Exception(() => VSWhereAliases.VSWhereProducts(context, null));
+            // When
+            var result = Record.Exception(() => VSWhereAliases.VSWhereAll(context, null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "products");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "settings");
+        }
+    }
 
-            [Fact]
-            public void Should_Throw_If_Settings_Are_Null()
-            {
-                // Given
-                var context = Substitute.For<ICakeContext>();
+    public sealed class TheProductMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Products_Are_Null()
+        {
+            // Given
+            var context = Substitute.For<ICakeContext>();
 
-                // When
-                var result = Record.Exception(() => VSWhereAliases.VSWhereProducts(context, "Community", null));
+            // When
+            var result = Record.Exception(() => VSWhereAliases.VSWhereProducts(context, null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "settings");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "products");
+        }
+
+        [Fact]
+        public void Should_Throw_If_Settings_Are_Null()
+        {
+            // Given
+            var context = Substitute.For<ICakeContext>();
+
+            // When
+            var result = Record.Exception(() => VSWhereAliases.VSWhereProducts(context, "Community", null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "settings");
         }
     }
 }

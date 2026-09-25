@@ -5,22 +5,21 @@
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Features.Bootstrapping
+namespace Cake.Features.Bootstrapping;
+
+/// <summary>
+/// Settings for the bootstrap feature.
+/// </summary>
+public class BootstrapFeatureSettings
 {
     /// <summary>
-    /// Settings for the bootstrap feature.
+    /// Gets or sets the script file path.
     /// </summary>
-    public class BootstrapFeatureSettings
-    {
-        /// <summary>
-        /// Gets or sets the script file path.
-        /// </summary>
-        public FilePath Script { get; set; }
+    public FilePath Script { get; set; }
 
-        /// <summary>
-        /// Gets or sets the verbosity level.
-        /// When unset, verbosity is taken from configuration (environment, cake.config, remaining arguments).
-        /// </summary>
-        public Verbosity? Verbosity { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the verbosity level.
+    /// When unset, verbosity is taken from configuration (environment, cake.config, remaining arguments).
+    /// </summary>
+    public Verbosity? Verbosity { get; set; }
 }

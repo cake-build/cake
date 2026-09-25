@@ -4,17 +4,16 @@
 
 using Cake.Common.Tools.DotNet.NuGet.Delete;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Delete
-{
-    internal sealed class DotNetNuGetDeleterFixture : DotNetFixture<DotNetNuGetDeleteSettings>
-    {
-        public string PackageName { get; set; }
-        public string PackageVersion { get; set; }
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Delete;
 
-        protected override void RunTool()
-        {
-            var tool = new DotNetNuGetDeleter(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Delete(PackageName, PackageVersion, Settings);
-        }
+internal sealed class DotNetNuGetDeleterFixture : DotNetFixture<DotNetNuGetDeleteSettings>
+{
+    public string PackageName { get; set; }
+    public string PackageVersion { get; set; }
+
+    protected override void RunTool()
+    {
+        var tool = new DotNetNuGetDeleter(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Delete(PackageName, PackageVersion, Settings);
     }
 }

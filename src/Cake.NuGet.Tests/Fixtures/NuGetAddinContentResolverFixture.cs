@@ -4,13 +4,12 @@
 
 using Cake.Core.Polyfill;
 
-namespace Cake.NuGet.Tests.Fixtures
+namespace Cake.NuGet.Tests.Fixtures;
+
+internal sealed class NuGetAddinContentResolverFixture : NuGetContentResolverFixture
 {
-    internal sealed class NuGetAddinContentResolverFixture : NuGetContentResolverFixture
+    public NuGetAddinContentResolverFixture(string framework, Runtime runtime)
+        : base(framework, runtime)
     {
-        public NuGetAddinContentResolverFixture(string framework, Runtime runtime)
-            : base(framework, runtime)
-        {
-        }
     }
 }

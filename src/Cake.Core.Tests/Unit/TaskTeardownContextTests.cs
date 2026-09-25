@@ -5,37 +5,36 @@
 using NSubstitute;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit
+namespace Cake.Core.Tests.Unit;
+
+public sealed class TaskTeardownContextTests
 {
-    public sealed class TaskTeardownContextTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Context_Is_Null()
-            {
-                // Given
-                var task = Substitute.For<ICakeTaskInfo>();
+            // Given
+            var task = Substitute.For<ICakeTaskInfo>();
 
-                // When
-                var result = Record.Exception(() => new TaskSetupContext(null, task));
+            // When
+            var result = Record.Exception(() => new TaskSetupContext(null, task));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "context");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
+        }
 
-            [Fact]
-            public void Should_Throw_If_Task_Is_Null()
-            {
-                // Given
-                var context = Substitute.For<ICakeContext>();
+        [Fact]
+        public void Should_Throw_If_Task_Is_Null()
+        {
+            // Given
+            var context = Substitute.For<ICakeContext>();
 
-                // When
-                var result = Record.Exception(() => new TaskSetupContext(context, null));
+            // When
+            var result = Record.Exception(() => new TaskSetupContext(context, null));
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "task");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "task");
         }
     }
 }

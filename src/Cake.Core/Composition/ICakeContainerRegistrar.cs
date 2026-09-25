@@ -4,26 +4,25 @@
 
 using System;
 
-namespace Cake.Core.Composition
+namespace Cake.Core.Composition;
+
+/// <summary>
+/// Represents a container registry used to register types and instances with Cake.
+/// </summary>
+public interface ICakeContainerRegistrar
 {
     /// <summary>
-    /// Represents a container registry used to register types and instances with Cake.
+    /// Registers a type with the container registry.
     /// </summary>
-    public interface ICakeContainerRegistrar
-    {
-        /// <summary>
-        /// Registers a type with the container registry.
-        /// </summary>
-        /// <param name="type">The implementation type to register.</param>
-        /// <returns>A registration builder used to configure the registration.</returns>
-        ICakeRegistrationBuilder RegisterType(Type type);
+    /// <param name="type">The implementation type to register.</param>
+    /// <returns>A registration builder used to configure the registration.</returns>
+    ICakeRegistrationBuilder RegisterType(Type type);
 
-        /// <summary>
-        /// Registers an instance with the container registry.
-        /// </summary>
-        /// <typeparam name="TImplementation">The instance's implementation type to register.</typeparam>
-        /// <param name="instance">The instance to register.</param>
-        /// <returns>A registration builder used to configure the registration.</returns>
-        ICakeRegistrationBuilder RegisterInstance<TImplementation>(TImplementation instance) where TImplementation : class;
-    }
+    /// <summary>
+    /// Registers an instance with the container registry.
+    /// </summary>
+    /// <typeparam name="TImplementation">The instance's implementation type to register.</typeparam>
+    /// <param name="instance">The instance to register.</param>
+    /// <returns>A registration builder used to configure the registration.</returns>
+    ICakeRegistrationBuilder RegisterInstance<TImplementation>(TImplementation instance) where TImplementation : class;
 }

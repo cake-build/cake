@@ -6,22 +6,21 @@ using Cake.Common.Tools.GitLink;
 using Cake.Core.IO;
 using Cake.Testing.Fixtures;
 
-namespace Cake.Common.Tests.Fixtures.Tools
+namespace Cake.Common.Tests.Fixtures.Tools;
+
+internal sealed class GitLink3Fixture : ToolFixture<GitLink3Settings>
 {
-    internal sealed class GitLink3Fixture : ToolFixture<GitLink3Settings>
+    public FilePath PdbFilePath { get; set; }
+
+    public GitLink3Fixture()
+        : base("gitlink.exe")
     {
-        public FilePath PdbFilePath { get; set; }
+        PdbFilePath = new FilePath("c:/temp/my.pdb");
+    }
 
-        public GitLink3Fixture()
-            : base("gitlink.exe")
-        {
-            PdbFilePath = new FilePath("c:/temp/my.pdb");
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new GitLink3Runner(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Run(PdbFilePath, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new GitLink3Runner(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Run(PdbFilePath, Settings);
     }
 }

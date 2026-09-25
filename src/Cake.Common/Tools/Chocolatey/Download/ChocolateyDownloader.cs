@@ -8,197 +8,196 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.Chocolatey.Download
+namespace Cake.Common.Tools.Chocolatey.Download;
+
+/// <summary>
+/// The Chocolatey package downloader used to download Chocolatey packages.
+/// </summary>
+public sealed class ChocolateyDownloader : ChocolateyTool<ChocolateyDownloadSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// The Chocolatey package downloader used to download Chocolatey packages.
+    /// Initializes a new instance of the <see cref="ChocolateyDownloader"/> class.
     /// </summary>
-    public sealed class ChocolateyDownloader : ChocolateyTool<ChocolateyDownloadSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="resolver">The Chocolatey tool resolver.</param>
+    public ChocolateyDownloader(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChocolateyDownloader"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The Chocolatey tool resolver.</param>
-        public ChocolateyDownloader(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
+    /// <summary>
+    /// Downloads Chocolatey packages using the specified package id and settings.
+    /// Requires Chocolatey licensed edition.
+    /// Features requiring Chocolatey for Business or a minimum version are documented
+    /// in <see cref="ChocolateyDownloadSettings"/>.
+    /// </summary>
+    /// <param name="packageId">The source package id.</param>
+    /// <param name="settings">The settings.</param>
+    public void Download(string packageId, ChocolateyDownloadSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(packageId))
         {
-            _environment = environment;
+            throw new ArgumentNullException(nameof(packageId));
         }
 
-        /// <summary>
-        /// Downloads Chocolatey packages using the specified package id and settings.
-        /// Requires Chocolatey licensed edition.
-        /// Features requiring Chocolatey for Business or a minimum version are documented
-        /// in <see cref="ChocolateyDownloadSettings"/>.
-        /// </summary>
-        /// <param name="packageId">The source package id.</param>
-        /// <param name="settings">The settings.</param>
-        public void Download(string packageId, ChocolateyDownloadSettings settings)
+        ArgumentNullException.ThrowIfNull(settings);
+
+        Run(settings, GetArguments(packageId, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(string packageId, ChocolateyDownloadSettings settings)
+    {
+        const string separator = "=";
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("download");
+        builder.AppendQuoted(packageId);
+
+        // Add common arguments using the inherited method
+        AddGlobalArguments(settings, builder);
+
+        // Source
+        if (!string.IsNullOrEmpty(settings.Source))
         {
-            if (string.IsNullOrWhiteSpace(packageId))
-            {
-                throw new ArgumentNullException(nameof(packageId));
-            }
-
-            ArgumentNullException.ThrowIfNull(settings);
-
-            Run(settings, GetArguments(packageId, settings));
+            builder.AppendSwitchQuoted("--source", separator, settings.Source);
         }
 
-        private ProcessArgumentBuilder GetArguments(string packageId, ChocolateyDownloadSettings settings)
+        // Version
+        if (!string.IsNullOrEmpty(settings.Version))
         {
-            const string separator = "=";
-            var builder = new ProcessArgumentBuilder();
+            builder.AppendSwitchQuoted("--version", separator, settings.Version);
+        }
 
-            builder.Append("download");
-            builder.AppendQuoted(packageId);
+        // Prerelease
+        if (settings.Prerelease)
+        {
+            builder.Append("--pre");
+        }
 
-            // Add common arguments using the inherited method
-            AddGlobalArguments(settings, builder);
+        // User
+        if (!string.IsNullOrWhiteSpace(settings.User))
+        {
+            builder.AppendSwitchQuoted("--user", separator, settings.User);
+        }
 
-            // Source
-            if (!string.IsNullOrEmpty(settings.Source))
+        // Password
+        if (!string.IsNullOrWhiteSpace(settings.Password))
+        {
+            builder.AppendSwitchQuoted("--password", separator, settings.Password);
+        }
+
+        // Certificate
+        if (settings.Certificate != null)
+        {
+            builder.AppendSwitchQuoted("--cert", separator, settings.Certificate.MakeAbsolute(_environment).FullPath);
+        }
+
+        // Certificate Password
+        if (!string.IsNullOrEmpty(settings.CertificatePassword))
+        {
+            builder.AppendSwitchQuoted("--certpassword", separator, settings.CertificatePassword);
+        }
+
+        // Output directory
+        if (settings.OutputDirectory != null)
+        {
+            builder.AppendSwitchQuoted("--output-directory", separator, settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
+        }
+
+        // Ignore Dependencies
+        if (settings.IgnoreDependencies)
+        {
+            builder.Append("--ignore-dependencies");
+        }
+
+        // Installed
+        if (settings.Installed)
+        {
+            builder.Append("--installed-packages");
+        }
+
+        // Ignore Unfound
+        if (settings.IgnoreUnfound)
+        {
+            builder.Append("--ignore-unfound");
+        }
+
+        // Disable Repository Optimizations
+        if (settings.DisableRepositoryOptimizations)
+        {
+            builder.Append("--disable-repository-optimizations");
+        }
+
+        // Internalize
+        if (settings.Internalize)
+        {
+            builder.Append("--internalize");
+
+            // Internalize All
+            if (settings.InternalizeAllUrls)
             {
-                builder.AppendSwitchQuoted("--source", separator, settings.Source);
+                builder.Append("--internalize-all-urls");
             }
 
-            // Version
-            if (!string.IsNullOrEmpty(settings.Version))
+            // Resources Location
+            if (!string.IsNullOrWhiteSpace(settings.ResourcesLocation))
             {
-                builder.AppendSwitchQuoted("--version", separator, settings.Version);
-            }
+                builder.AppendSwitchQuoted("--resources-location", separator, settings.ResourcesLocation);
 
-            // Prerelease
-            if (settings.Prerelease)
-            {
-                builder.Append("--pre");
-            }
-
-            // User
-            if (!string.IsNullOrWhiteSpace(settings.User))
-            {
-                builder.AppendSwitchQuoted("--user", separator, settings.User);
-            }
-
-            // Password
-            if (!string.IsNullOrWhiteSpace(settings.Password))
-            {
-                builder.AppendSwitchQuoted("--password", separator, settings.Password);
-            }
-
-            // Certificate
-            if (settings.Certificate != null)
-            {
-                builder.AppendSwitchQuoted("--cert", separator, settings.Certificate.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Certificate Password
-            if (!string.IsNullOrEmpty(settings.CertificatePassword))
-            {
-                builder.AppendSwitchQuoted("--certpassword", separator, settings.CertificatePassword);
-            }
-
-            // Output directory
-            if (settings.OutputDirectory != null)
-            {
-                builder.AppendSwitchQuoted("--output-directory", separator, settings.OutputDirectory.MakeAbsolute(_environment).FullPath);
-            }
-
-            // Ignore Dependencies
-            if (settings.IgnoreDependencies)
-            {
-                builder.Append("--ignore-dependencies");
-            }
-
-            // Installed
-            if (settings.Installed)
-            {
-                builder.Append("--installed-packages");
-            }
-
-            // Ignore Unfound
-            if (settings.IgnoreUnfound)
-            {
-                builder.Append("--ignore-unfound");
-            }
-
-            // Disable Repository Optimizations
-            if (settings.DisableRepositoryOptimizations)
-            {
-                builder.Append("--disable-repository-optimizations");
-            }
-
-            // Internalize
-            if (settings.Internalize)
-            {
-                builder.Append("--internalize");
-
-                // Internalize All
-                if (settings.InternalizeAllUrls)
+                // Download Location
+                if (!string.IsNullOrWhiteSpace(settings.DownloadLocation))
                 {
-                    builder.Append("--internalize-all-urls");
-                }
-
-                // Resources Location
-                if (!string.IsNullOrWhiteSpace(settings.ResourcesLocation))
-                {
-                    builder.AppendSwitchQuoted("--resources-location", separator, settings.ResourcesLocation);
-
-                    // Download Location
-                    if (!string.IsNullOrWhiteSpace(settings.DownloadLocation))
-                    {
-                        builder.AppendSwitchQuoted("--download-location", separator, settings.DownloadLocation);
-                    }
-                }
-
-                // Append -UseOriginalLocation
-                if (settings.AppendUseOriginalLocation)
-                {
-                    builder.Append("--append-use-original-location");
+                    builder.AppendSwitchQuoted("--download-location", separator, settings.DownloadLocation);
                 }
             }
 
-            // Skip Download Cache
-            if (settings.SkipDownloadCache)
+            // Append -UseOriginalLocation
+            if (settings.AppendUseOriginalLocation)
             {
-                builder.Append("--skip-download-cache");
+                builder.Append("--append-use-original-location");
             }
-
-            // Use Download Cache
-            if (settings.UseDownloadCache)
-            {
-                builder.Append("--use-download-cache");
-            }
-
-            // Skip Virus Check
-            if (settings.SkipVirusCheck)
-            {
-                builder.Append("--skip-virus-check");
-            }
-
-            // Virus Check
-            if (settings.VirusCheck)
-            {
-                builder.Append("--virus-check");
-            }
-
-            // Virus Positive Minimum
-            if (settings.VirusPositivesMinimum != 0)
-            {
-                builder.AppendSwitchQuoted("--virus-positives-minimum", separator, settings.VirusPositivesMinimum.ToString(CultureInfo.InvariantCulture));
-            }
-
-            return builder;
         }
+
+        // Skip Download Cache
+        if (settings.SkipDownloadCache)
+        {
+            builder.Append("--skip-download-cache");
+        }
+
+        // Use Download Cache
+        if (settings.UseDownloadCache)
+        {
+            builder.Append("--use-download-cache");
+        }
+
+        // Skip Virus Check
+        if (settings.SkipVirusCheck)
+        {
+            builder.Append("--skip-virus-check");
+        }
+
+        // Virus Check
+        if (settings.VirusCheck)
+        {
+            builder.Append("--virus-check");
+        }
+
+        // Virus Positive Minimum
+        if (settings.VirusPositivesMinimum != 0)
+        {
+            builder.AppendSwitchQuoted("--virus-positives-minimum", separator, settings.VirusPositivesMinimum.ToString(CultureInfo.InvariantCulture));
+        }
+
+        return builder;
     }
 }

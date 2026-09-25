@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.GitReleaseManager.AddAssets
+namespace Cake.Common.Tools.GitReleaseManager.AddAssets;
+
+/// <summary>
+/// Contains settings used by <see cref="GitReleaseManagerAssetsAdder"/>.
+/// </summary>
+public sealed class GitReleaseManagerAddAssetsSettings : GitReleaseManagerSettings
 {
-    /// <summary>
-    /// Contains settings used by <see cref="GitReleaseManagerAssetsAdder"/>.
-    /// </summary>
-    public sealed class GitReleaseManagerAddAssetsSettings : GitReleaseManagerSettings
-    {
-    }
 }

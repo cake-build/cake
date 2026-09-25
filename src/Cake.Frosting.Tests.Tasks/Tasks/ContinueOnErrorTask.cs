@@ -5,22 +5,21 @@
 using System;
 using Cake.Core;
 
-namespace Cake.Frosting.Tests
-{
-    [ContinueOnError]
-    public sealed class ContinueOnErrorTask : FrostingTask
-    {
-        public override void Run(ICakeContext context)
-        {
-            throw new InvalidOperationException();
-        }
-    }
+namespace Cake.Frosting.Tests;
 
-    public sealed class ThrowingTask : FrostingTask
+[ContinueOnError]
+public sealed class ContinueOnErrorTask : FrostingTask
+{
+    public override void Run(ICakeContext context)
     {
-        public override void Run(ICakeContext context)
-        {
-            throw new InvalidOperationException();
-        }
+        throw new InvalidOperationException();
+    }
+}
+
+public sealed class ThrowingTask : FrostingTask
+{
+    public override void Run(ICakeContext context)
+    {
+        throw new InvalidOperationException();
     }
 }

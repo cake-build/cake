@@ -4,14 +4,13 @@
 
 using Cake.Common.Tools.VSWhere.Legacy;
 
-namespace Cake.Common.Tests.Fixtures.Tools.VSWhere.Legacy
+namespace Cake.Common.Tests.Fixtures.Tools.VSWhere.Legacy;
+
+internal sealed class VSWhereLegacyFixture : VSWhereFixture<VSWhereLegacySettings>
 {
-    internal sealed class VSWhereLegacyFixture : VSWhereFixture<VSWhereLegacySettings>
+    protected override void RunTool()
     {
-        protected override void RunTool()
-        {
-            var tool = new VSWhereLegacy(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Legacy(Settings);
-        }
+        var tool = new VSWhereLegacy(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Legacy(Settings);
     }
 }

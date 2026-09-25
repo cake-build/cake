@@ -11,146 +11,145 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.XBuild
+namespace Cake.Common.Tools.XBuild;
+
+/// <summary>
+/// The XBuild runner.
+/// </summary>
+public sealed class XBuildRunner : Tool<XBuildSettings>
 {
+    private readonly ICakeEnvironment _environment;
+    private readonly IFileSystem _fileSystem;
+
     /// <summary>
-    /// The XBuild runner.
+    /// Initializes a new instance of the <see cref="XBuildRunner"/> class.
     /// </summary>
-    public sealed class XBuildRunner : Tool<XBuildSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="runner">The runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public XBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner, IToolLocator tools)
+        : base(fileSystem, environment, runner, tools)
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly IFileSystem _fileSystem;
+        _fileSystem = fileSystem;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XBuildRunner"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="runner">The runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public XBuildRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner runner, IToolLocator tools)
-            : base(fileSystem, environment, runner, tools)
+    /// <summary>
+    /// Runs XBuild with the specified settings.
+    /// </summary>
+    /// <param name="solution">The solution to build.</param>
+    /// <param name="settings">The settings.</param>
+    public void Run(FilePath solution, XBuildSettings settings)
+    {
+        Run(settings, GetArguments(solution, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(FilePath solution, XBuildSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        // Set the verbosity.
+        builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", GetVerbosityName(settings.Verbosity)));
+
+        // Got a specific configuration in mind?
+        if (!string.IsNullOrWhiteSpace(settings.Configuration))
         {
-            _fileSystem = fileSystem;
-            _environment = environment;
+            // Add the configuration as a property.
+            var configuration = settings.Configuration;
+            builder.Append(string.Concat("/p:\"Configuration\"=", configuration.Quote()));
         }
 
-        /// <summary>
-        /// Runs XBuild with the specified settings.
-        /// </summary>
-        /// <param name="solution">The solution to build.</param>
-        /// <param name="settings">The settings.</param>
-        public void Run(FilePath solution, XBuildSettings settings)
+        // Got any properties?
+        if (settings.Properties.Count > 0)
         {
-            Run(settings, GetArguments(solution, settings));
-        }
-
-        private ProcessArgumentBuilder GetArguments(FilePath solution, XBuildSettings settings)
-        {
-            var builder = new ProcessArgumentBuilder();
-
-            // Set the verbosity.
-            builder.Append(string.Format(CultureInfo.InvariantCulture, "/v:{0}", GetVerbosityName(settings.Verbosity)));
-
-            // Got a specific configuration in mind?
-            if (!string.IsNullOrWhiteSpace(settings.Configuration))
+            foreach (var property in GetPropertyArguments(settings.Properties))
             {
-                // Add the configuration as a property.
-                var configuration = settings.Configuration;
-                builder.Append(string.Concat("/p:\"Configuration\"=", configuration.Quote()));
-            }
-
-            // Got any properties?
-            if (settings.Properties.Count > 0)
-            {
-                foreach (var property in GetPropertyArguments(settings.Properties))
-                {
-                    builder.Append(property);
-                }
-            }
-
-            // Got any targets?
-            if (settings.Targets.Count > 0)
-            {
-                var targets = string.Join(';', settings.Targets);
-                builder.Append(string.Concat("/t:", targets));
-            }
-            else
-            {
-                // Use default target.
-                builder.Append("/t:Build");
-            }
-
-            // Add the solution as the last parameter.
-            builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
-
-            return builder;
-        }
-
-        private static string GetVerbosityName(Verbosity verbosity)
-        {
-            switch (verbosity)
-            {
-                case Verbosity.Quiet:
-                    return "quiet";
-                case Verbosity.Minimal:
-                    return "minimal";
-                case Verbosity.Normal:
-                    return "normal";
-                case Verbosity.Verbose:
-                    return "detailed";
-                case Verbosity.Diagnostic:
-                    return "diagnostic";
-            }
-            throw new CakeException("Encountered unknown XBuild build log verbosity.");
-        }
-
-        private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
-        {
-            foreach (var (key, values) in properties)
-            {
-                foreach (var propertyValue in values)
-                {
-                    yield return string.Concat("/p:", key.Quote(), "=", propertyValue.Quote());
-                }
+                builder.Append(property);
             }
         }
 
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
+        // Got any targets?
+        if (settings.Targets.Count > 0)
         {
-            return "XBuild";
+            var targets = string.Join(';', settings.Targets);
+            builder.Append(string.Concat("/t:", targets));
+        }
+        else
+        {
+            // Use default target.
+            builder.Append("/t:Build");
         }
 
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
+        // Add the solution as the last parameter.
+        builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
+
+        return builder;
+    }
+
+    private static string GetVerbosityName(Verbosity verbosity)
+    {
+        switch (verbosity)
         {
-            return new[] { "xbuild", "xbuild.exe" };
+            case Verbosity.Quiet:
+                return "quiet";
+            case Verbosity.Minimal:
+                return "minimal";
+            case Verbosity.Normal:
+                return "normal";
+            case Verbosity.Verbose:
+                return "detailed";
+            case Verbosity.Diagnostic:
+                return "diagnostic";
         }
+        throw new CakeException("Encountered unknown XBuild build log verbosity.");
+    }
 
-        /// <summary>
-        /// Gets alternative file paths which the tool may exist in.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The default tool path.</returns>
-        protected override IEnumerable<FilePath> GetAlternativeToolPaths(XBuildSettings settings)
+    private static IEnumerable<string> GetPropertyArguments(IDictionary<string, IList<string>> properties)
+    {
+        foreach (var (key, values) in properties)
         {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            var path = XBuildResolver.GetXBuildPath(_fileSystem, _environment, settings.ToolVersion);
-
-            if (path != null)
+            foreach (var propertyValue in values)
             {
-                return new[] { path };
+                yield return string.Concat("/p:", key.Quote(), "=", propertyValue.Quote());
             }
-
-            return Enumerable.Empty<FilePath>();
         }
+    }
+
+    /// <summary>
+    /// Gets the name of the tool.
+    /// </summary>
+    /// <returns>The name of the tool.</returns>
+    protected override string GetToolName()
+    {
+        return "XBuild";
+    }
+
+    /// <summary>
+    /// Gets the possible names of the tool executable.
+    /// </summary>
+    /// <returns>The tool executable name.</returns>
+    protected override IEnumerable<string> GetToolExecutableNames()
+    {
+        return new[] { "xbuild", "xbuild.exe" };
+    }
+
+    /// <summary>
+    /// Gets alternative file paths which the tool may exist in.
+    /// </summary>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The default tool path.</returns>
+    protected override IEnumerable<FilePath> GetAlternativeToolPaths(XBuildSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        var path = XBuildResolver.GetXBuildPath(_fileSystem, _environment, settings.ToolVersion);
+
+        if (path != null)
+        {
+            return new[] { path };
+        }
+
+        return [];
     }
 }

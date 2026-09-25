@@ -2,80 +2,78 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.Package.Search;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Package.Search
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Package.Search;
+
+internal class DotNetPackageSearcherFixture : DotNetFixture<DotNetPackageSearchSettings>
 {
-    internal class DotNetPackageSearcherFixture : DotNetFixture<DotNetPackageSearchSettings>
+    public string SearchTerm { get; set; }
+
+    public IEnumerable<DotNetPackageSearchItem> Result { get; private set; }
+
+    protected override void RunTool()
     {
-        public string SearchTerm { get; set; }
+        var tool = new DotNetPackageSearcher(FileSystem, Environment, ProcessRunner, Tools);
+        Result = tool.Search(SearchTerm, Settings);
+    }
 
-        public IEnumerable<DotNetPackageSearchItem> Result { get; private set; }
-
-        protected override void RunTool()
+    internal void GivenNormalPackageResult()
+    {
+        ProcessRunner.Process.SetStandardOutput(new string[]
         {
-            var tool = new DotNetPackageSearcher(FileSystem, Environment, ProcessRunner, Tools);
-            Result = tool.Search(SearchTerm, Settings);
-        }
+            "{",
+            "  \"version\": 2,",
+            "  \"problems\": [],",
+            "  \"searchResult\": [",
+            "    {",
+            "      \"sourceName\": \"nuget.org\",",
+            "      \"packages\": [",
+            "        {",
+            "          \"id\": \"Cake\",",
+            "          \"latestVersion\": \"0.22.2\"",
+            "        },",
+            "        {",
+            "          \"id\": \"Cake.Core\",",
+            "          \"latestVersion\": \"0.22.2\"",
+            "        },",
+            "        {",
+            "          \"id\": \"Cake.CoreCLR\",",
+            "          \"latestVersion\": \"0.22.2\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  ]",
+            "}",
+        });
+    }
 
-        internal void GivenNormalPackageResult()
+    /// <summary>
+    /// Sets standard output to exact-match format (uses "version" instead of "latestVersion" per package).
+    /// </summary>
+    internal void GivenExactMatchPackageResult()
+    {
+        ProcessRunner.Process.SetStandardOutput(new string[]
         {
-            ProcessRunner.Process.SetStandardOutput(new string[]
-            {
-                "{",
-                "  \"version\": 2,",
-                "  \"problems\": [],",
-                "  \"searchResult\": [",
-                "    {",
-                "      \"sourceName\": \"nuget.org\",",
-                "      \"packages\": [",
-                "        {",
-                "          \"id\": \"Cake\",",
-                "          \"latestVersion\": \"0.22.2\"",
-                "        },",
-                "        {",
-                "          \"id\": \"Cake.Core\",",
-                "          \"latestVersion\": \"0.22.2\"",
-                "        },",
-                "        {",
-                "          \"id\": \"Cake.CoreCLR\",",
-                "          \"latestVersion\": \"0.22.2\"",
-                "        }",
-                "      ]",
-                "    }",
-                "  ]",
-                "}",
-            });
-        }
-
-        /// <summary>
-        /// Sets standard output to exact-match format (uses "version" instead of "latestVersion" per package).
-        /// </summary>
-        internal void GivenExactMatchPackageResult()
-        {
-            ProcessRunner.Process.SetStandardOutput(new string[]
-            {
-                "{",
-                "  \"version\": 2,",
-                "  \"problems\": [],",
-                "  \"searchResult\": [",
-                "    {",
-                "      \"sourceName\": \"nuget.org\",",
-                "      \"packages\": [",
-                "        {",
-                "          \"id\": \"Refit.Newtonsoft.Json\",",
-                "          \"version\": \"7.0.0\"",
-                "        },",
-                "        {",
-                "          \"id\": \"Refit.Newtonsoft.Json\",",
-                "          \"version\": \"6.3.0\"",
-                "        }",
-                "      ]",
-                "    }",
-                "  ]",
-                "}",
-            });
-        }
+            "{",
+            "  \"version\": 2,",
+            "  \"problems\": [],",
+            "  \"searchResult\": [",
+            "    {",
+            "      \"sourceName\": \"nuget.org\",",
+            "      \"packages\": [",
+            "        {",
+            "          \"id\": \"Refit.Newtonsoft.Json\",",
+            "          \"version\": \"7.0.0\"",
+            "        },",
+            "        {",
+            "          \"id\": \"Refit.Newtonsoft.Json\",",
+            "          \"version\": \"6.3.0\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  ]",
+            "}",
+        });
     }
 }

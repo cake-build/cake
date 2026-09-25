@@ -9,31 +9,30 @@ using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Build
+namespace Cake.Common.Tests.Fixtures.Build;
+
+internal sealed class GitHubActionsFixture
 {
-    internal sealed class GitHubActionsFixture
+    public ICakeEnvironment Environment { get; }
+    public IFileSystem FileSystem { get; }
+    public FakeBuildSystemServiceMessageWriter Writer { get; }
+
+    public GitHubActionsFixture()
     {
-        public ICakeEnvironment Environment { get; }
-        public IFileSystem FileSystem { get; }
-        public FakeBuildSystemServiceMessageWriter Writer { get; }
+        Environment = Substitute.For<ICakeEnvironment>();
+        Environment.GetEnvironmentVariable("GITHUB_ACTIONS").Returns((string)null);
+        Environment.WorkingDirectory.Returns("/home/cake");
+        FileSystem = new FakeFileSystem(Environment);
+        Writer = new FakeBuildSystemServiceMessageWriter();
+    }
 
-        public GitHubActionsFixture()
-        {
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.GetEnvironmentVariable("GITHUB_ACTIONS").Returns((string)null);
-            Environment.WorkingDirectory.Returns("/home/cake");
-            FileSystem = new FakeFileSystem(Environment);
-            Writer = new FakeBuildSystemServiceMessageWriter();
-        }
+    public void IsRunningOnGitHubActions()
+    {
+        Environment.GetEnvironmentVariable("GITHUB_ACTIONS").Returns("true");
+    }
 
-        public void IsRunningOnGitHubActions()
-        {
-            Environment.GetEnvironmentVariable("GITHUB_ACTIONS").Returns("true");
-        }
-
-        public GitHubActionsProvider CreateGitHubActionsService()
-        {
-            return new GitHubActionsProvider(Environment, FileSystem, Writer);
-        }
+    public GitHubActionsProvider CreateGitHubActionsService()
+    {
+        return new GitHubActionsProvider(Environment, FileSystem, Writer);
     }
 }

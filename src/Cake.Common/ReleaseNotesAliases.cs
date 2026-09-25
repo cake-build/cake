@@ -11,87 +11,86 @@ using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 
-namespace Cake.Common
+namespace Cake.Common;
+
+/// <summary>
+/// Contains functionality related to release notes.
+/// </summary>
+[CakeAliasCategory("Release Notes")]
+
+public static class ReleaseNotesAliases
 {
-    /// <summary>
-    /// Contains functionality related to release notes.
-    /// </summary>
-    [CakeAliasCategory("Release Notes")]
+    private static readonly ReleaseNotesParser _parser;
 
-    public static class ReleaseNotesAliases
+    static ReleaseNotesAliases()
     {
-        private static readonly ReleaseNotesParser _parser;
+        _parser = new ReleaseNotesParser();
+    }
 
-        static ReleaseNotesAliases()
+    /// <summary>
+    /// Parses all release notes.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="filePath">The file path.</param>
+    /// <returns>All release notes.</returns>
+    /// <example>
+    /// <code>
+    /// var releaseNotes = ParseAllReleaseNotes("./ReleaseNotes.md");
+    /// foreach (var releaseNote in releaseNotes)
+    /// {
+    ///     Information("Version: {0}", releaseNote.Version);
+    ///     foreach (var note in releaseNote.Notes)
+    ///     {
+    ///         Information("\t{0}", note);
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    public static IReadOnlyList<ReleaseNotes> ParseAllReleaseNotes(this ICakeContext context, FilePath filePath)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(filePath);
+
+        if (filePath.IsRelative)
         {
-            _parser = new ReleaseNotesParser();
+            filePath = filePath.MakeAbsolute(context.Environment);
         }
 
-        /// <summary>
-        /// Parses all release notes.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="filePath">The file path.</param>
-        /// <returns>All release notes.</returns>
-        /// <example>
-        /// <code>
-        /// var releaseNotes = ParseAllReleaseNotes("./ReleaseNotes.md");
-        /// foreach (var releaseNote in releaseNotes)
-        /// {
-        ///     Information("Version: {0}", releaseNote.Version);
-        ///     foreach (var note in releaseNote.Notes)
-        ///     {
-        ///         Information("\t{0}", note);
-        ///     }
-        /// }
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        public static IReadOnlyList<ReleaseNotes> ParseAllReleaseNotes(this ICakeContext context, FilePath filePath)
+        // Get the release notes file.
+        var file = context.FileSystem.GetFile(filePath);
+        if (!file.Exists)
         {
-            ArgumentNullException.ThrowIfNull(context);
-            ArgumentNullException.ThrowIfNull(filePath);
-
-            if (filePath.IsRelative)
-            {
-                filePath = filePath.MakeAbsolute(context.Environment);
-            }
-
-            // Get the release notes file.
-            var file = context.FileSystem.GetFile(filePath);
-            if (!file.Exists)
-            {
-                const string format = "Release notes file '{0}' does not exist.";
-                var message = string.Format(CultureInfo.InvariantCulture, format, filePath.FullPath);
-                throw new CakeException(message);
-            }
-
-            using (var reader = new StreamReader(file.OpenRead()))
-            {
-                return _parser.Parse(reader.ReadToEnd());
-            }
+            const string format = "Release notes file '{0}' does not exist.";
+            var message = string.Format(CultureInfo.InvariantCulture, format, filePath.FullPath);
+            throw new CakeException(message);
         }
 
-        /// <summary>
-        /// Parses the latest release notes.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="filePath">The file path.</param>
-        /// <returns>The latest release notes.</returns>
-        /// <example>
-        /// <code>
-        /// var releaseNote = ParseReleaseNotes("./ReleaseNotes.md");
-        /// Information("Version: {0}", releaseNote.Version);
-        /// foreach (var note in releaseNote.Notes)
-        /// {
-        ///     Information("\t{0}", note);
-        /// }
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        public static ReleaseNotes ParseReleaseNotes(this ICakeContext context, FilePath filePath)
+        using (var reader = new StreamReader(file.OpenRead()))
         {
-            return ParseAllReleaseNotes(context, filePath).First();
+            return _parser.Parse(reader.ReadToEnd());
         }
+    }
+
+    /// <summary>
+    /// Parses the latest release notes.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="filePath">The file path.</param>
+    /// <returns>The latest release notes.</returns>
+    /// <example>
+    /// <code>
+    /// var releaseNote = ParseReleaseNotes("./ReleaseNotes.md");
+    /// Information("Version: {0}", releaseNote.Version);
+    /// foreach (var note in releaseNote.Notes)
+    /// {
+    ///     Information("\t{0}", note);
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    public static ReleaseNotes ParseReleaseNotes(this ICakeContext context, FilePath filePath)
+    {
+        return ParseAllReleaseNotes(context, filePath).First();
     }
 }

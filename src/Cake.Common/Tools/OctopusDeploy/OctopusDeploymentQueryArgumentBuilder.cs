@@ -5,41 +5,40 @@
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.OctopusDeploy
+namespace Cake.Common.Tools.OctopusDeploy;
+
+internal class OctopusDeploymentQueryArgumentBuilder : OctopusDeployArgumentBuilder<OctopusDeploymentQuerySettings>
 {
-    internal class OctopusDeploymentQueryArgumentBuilder : OctopusDeployArgumentBuilder<OctopusDeploymentQuerySettings>
+    public OctopusDeploymentQueryArgumentBuilder(string server, string apiKey, ICakeEnvironment environment, OctopusDeploymentQuerySettings settings) : base(server, apiKey, environment, settings)
     {
-        public OctopusDeploymentQueryArgumentBuilder(string server, string apiKey, ICakeEnvironment environment, OctopusDeploymentQuerySettings settings) : base(server, apiKey, environment, settings)
+    }
+
+    public ProcessArgumentBuilder Get()
+    {
+        AppendPackageArguments();
+        AppendCommonArguments();
+        return Builder;
+    }
+
+    private void AppendPackageArguments()
+    {
+        Builder.Append("list-deployments");
+
+        if (!string.IsNullOrEmpty(Settings.EnvironmentName))
         {
+            Builder.Append("--environment \"{0}\"", Settings.EnvironmentName);
         }
 
-        public ProcessArgumentBuilder Get()
+        if (!string.IsNullOrEmpty(Settings.ProjectName))
         {
-            AppendPackageArguments();
-            AppendCommonArguments();
-            return Builder;
+            Builder.Append("--project \"{0}\"", Settings.ProjectName);
         }
 
-        private void AppendPackageArguments()
+        if (!string.IsNullOrEmpty(Settings.TenantName))
         {
-            Builder.Append("list-deployments");
-
-            if (!string.IsNullOrEmpty(Settings.EnvironmentName))
-            {
-                Builder.Append("--environment \"{0}\"", Settings.EnvironmentName);
-            }
-
-            if (!string.IsNullOrEmpty(Settings.ProjectName))
-            {
-                Builder.Append("--project \"{0}\"", Settings.ProjectName);
-            }
-
-            if (!string.IsNullOrEmpty(Settings.TenantName))
-            {
-                Builder.Append("--tenant \"{0}\"", Settings.TenantName);
-            }
-
-            Builder.Append("--number {0}", Settings.Count);
+            Builder.Append("--tenant \"{0}\"", Settings.TenantName);
         }
+
+        Builder.Append("--number {0}", Settings.Count);
     }
 }

@@ -4,23 +4,21 @@
 
 using Cake.Common.Tools.DotNet.Tool;
 using Cake.Core.IO;
-using Cake.Testing;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Tool
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Tool;
+
+internal sealed class DotNetToolFixture : DotNetFixture<DotNetToolSettings>
 {
-    internal sealed class DotNetToolFixture : DotNetFixture<DotNetToolSettings>
+    public FilePath ProjectPath { get; set; }
+
+    public string Command { get; set; }
+
+    public ProcessArgumentBuilder Arguments { get; set; }
+
+    protected override void RunTool()
     {
-        public FilePath ProjectPath { get; set; }
+        var tool = new DotNetToolRunner(FileSystem, Environment, ProcessRunner, Tools);
 
-        public string Command { get; set; }
-
-        public ProcessArgumentBuilder Arguments { get; set; }
-
-        protected override void RunTool()
-        {
-            var tool = new DotNetToolRunner(FileSystem, Environment, ProcessRunner, Tools);
-
-            tool.Execute(ProjectPath, Command, Arguments, Settings);
-        }
+        tool.Execute(ProjectPath, Command, Arguments, Settings);
     }
 }

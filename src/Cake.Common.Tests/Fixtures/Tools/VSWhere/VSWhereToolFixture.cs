@@ -6,34 +6,33 @@ using Cake.Common.Tools.VSWhere;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tests.Fixtures.Tools.VSWhere
+namespace Cake.Common.Tests.Fixtures.Tools.VSWhere;
+
+using System.Linq;
+using Cake.Core;
+
+internal class VSWhereToolFixture : VSWhereFixture<ToolSettings>
 {
-    using System.Linq;
-    using Cake.Core;
-
-    internal class VSWhereToolFixture : VSWhereFixture<ToolSettings>
+    internal VSWhereToolFixture(bool is64BitOperativeSystem)
+        : base(is64BitOperativeSystem)
     {
-        internal VSWhereToolFixture(bool is64BitOperativeSystem)
-            : base(is64BitOperativeSystem)
+    }
+
+    protected override void RunTool()
+    {
+        var tool = new VSWhereTool(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Run(Settings);
+    }
+
+    private sealed class VSWhereTool : VSWhereTool<ToolSettings>
+    {
+        public VSWhereTool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolLocator toolLocator)
+            : base(fileSystem, environment, processRunner, toolLocator)
         {
         }
-
-        protected override void RunTool()
+        public DirectoryPath Run(ToolSettings settings)
         {
-            var tool = new VSWhereTool(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Run(Settings);
-        }
-
-        private sealed class VSWhereTool : VSWhereTool<ToolSettings>
-        {
-            public VSWhereTool(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolLocator toolLocator)
-                : base(fileSystem, environment, processRunner, toolLocator)
-            {
-            }
-            public DirectoryPath Run(ToolSettings settings)
-            {
-                return RunVSWhere(settings, new ProcessArgumentBuilder()).FirstOrDefault();
-            }
+            return RunVSWhere(settings, new ProcessArgumentBuilder()).FirstOrDefault();
         }
     }
 }

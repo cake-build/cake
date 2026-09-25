@@ -5,16 +5,15 @@
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Testing;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Restore
-{
-    internal sealed class DotNetRestorerFixture : DotNetFixture<DotNetRestoreSettings>
-    {
-        public string Root { get; set; }
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Restore;
 
-        protected override void RunTool()
-        {
-            var tool = new DotNetRestorer(FileSystem, Environment, ProcessRunner, Tools, new FakeLog());
-            tool.Restore(Root, Settings);
-        }
+internal sealed class DotNetRestorerFixture : DotNetFixture<DotNetRestoreSettings>
+{
+    public string Root { get; set; }
+
+    protected override void RunTool()
+    {
+        var tool = new DotNetRestorer(FileSystem, Environment, ProcessRunner, Tools, new FakeLog());
+        tool.Restore(Root, Settings);
     }
 }

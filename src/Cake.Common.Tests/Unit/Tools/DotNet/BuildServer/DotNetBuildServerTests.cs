@@ -3,106 +3,102 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Tools.DotNet.Build;
-using Cake.Common.Tools.DotNet;
-using Cake.Common.Tools.DotNet.BuildServer;
 using Cake.Testing;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.DotNet.BuildServer
+namespace Cake.Common.Tests.Unit.Tools.DotNet.BuildServer;
+
+public sealed class DotNetBuildServerTests
 {
-    public sealed class DotNetBuildServerTests
+    public sealed class TheShutdownMethod
     {
-        public sealed class TheShutdownMethod
+        [Fact]
+        public void Should_Throw_If_Settings_Are_Null()
         {
-            [Fact]
-            public void Should_Throw_If_Settings_Are_Null()
-            {
-                // Given
-                var fixture = new DotNetBuildServerFixture();
-                fixture.Settings = null;
-                fixture.GivenDefaultToolDoNotExist();
+            // Given
+            var fixture = new DotNetBuildServerFixture();
+            fixture.Settings = null;
+            fixture.GivenDefaultToolDoNotExist();
 
-                // When
-                var result = Record.Exception(() => fixture.Run());
+            // When
+            var result = Record.Exception(() => fixture.Run());
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "settings");
-            }
+            // Then
+            AssertEx.IsArgumentNullException(result, "settings");
+        }
 
-            [Fact]
-            public void Should_Throw_If_Process_Was_Not_Started()
-            {
-                // Given
-                var fixture = new DotNetBuildServerFixture();
-                fixture.GivenProcessCannotStart();
+        [Fact]
+        public void Should_Throw_If_Process_Was_Not_Started()
+        {
+            // Given
+            var fixture = new DotNetBuildServerFixture();
+            fixture.GivenProcessCannotStart();
 
-                // When
-                var result = Record.Exception(() => fixture.Run());
+            // When
+            var result = Record.Exception(() => fixture.Run());
 
-                // Then
-                AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
-            }
+            // Then
+            AssertEx.IsCakeException(result, ".NET CLI: Process was not started.");
+        }
 
-            [Fact]
-            public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
-            {
-                // Given
-                var fixture = new DotNetBuildServerFixture();
-                fixture.GivenProcessExitsWithCode(1);
+        [Fact]
+        public void Should_Throw_If_Process_Has_A_Non_Zero_Exit_Code()
+        {
+            // Given
+            var fixture = new DotNetBuildServerFixture();
+            fixture.GivenProcessExitsWithCode(1);
 
-                // When
-                var result = Record.Exception(() => fixture.Run());
+            // When
+            var result = Record.Exception(() => fixture.Run());
 
-                // Then
-                AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
-            }
+            // Then
+            AssertEx.IsCakeException(result, ".NET CLI: Process returned an error (exit code 1).");
+        }
 
-            [Fact]
-            public void Should_Add_Mandatory_Arguments()
-            {
-                // Given
-                var fixture = new DotNetBuildServerFixture();
+        [Fact]
+        public void Should_Add_Mandatory_Arguments()
+        {
+            // Given
+            var fixture = new DotNetBuildServerFixture();
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("build-server shutdown", result.Args);
-            }
+            // Then
+            Assert.Equal("build-server shutdown", result.Args);
+        }
 
-            [Theory]
-            [InlineData(true, null, null, "build-server shutdown --msbuild")]
-            [InlineData(null, true, null, "build-server shutdown --razor")]
-            [InlineData(null, null, true, "build-server shutdown --vbcscompiler")]
-            [InlineData(true, true, true, "build-server shutdown --msbuild --razor --vbcscompiler")]
-            public void Should_Add_Settings_Arguments(bool? msBuild, bool? razor, bool? vbcscompiler, string expected)
-            {
-                // Given
-                var fixture = new DotNetBuildServerFixture();
-                fixture.Settings.MSBuild = msBuild;
-                fixture.Settings.Razor = razor;
-                fixture.Settings.VBCSCompiler = vbcscompiler;
+        [Theory]
+        [InlineData(true, null, null, "build-server shutdown --msbuild")]
+        [InlineData(null, true, null, "build-server shutdown --razor")]
+        [InlineData(null, null, true, "build-server shutdown --vbcscompiler")]
+        [InlineData(true, true, true, "build-server shutdown --msbuild --razor --vbcscompiler")]
+        public void Should_Add_Settings_Arguments(bool? msBuild, bool? razor, bool? vbcscompiler, string expected)
+        {
+            // Given
+            var fixture = new DotNetBuildServerFixture();
+            fixture.Settings.MSBuild = msBuild;
+            fixture.Settings.Razor = razor;
+            fixture.Settings.VBCSCompiler = vbcscompiler;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal(expected, result.Args);
-            }
+            // Then
+            Assert.Equal(expected, result.Args);
+        }
 
-            [Fact]
-            public void Should_Add_Host_Arguments()
-            {
-                // Given
-                var fixture = new DotNetBuildServerFixture();
-                fixture.Settings.DiagnosticOutput = true;
+        [Fact]
+        public void Should_Add_Host_Arguments()
+        {
+            // Given
+            var fixture = new DotNetBuildServerFixture();
+            fixture.Settings.DiagnosticOutput = true;
 
-                // When
-                var result = fixture.Run();
+            // When
+            var result = fixture.Run();
 
-                // Then
-                Assert.Equal("--diagnostics build-server shutdown", result.Args);
-            }
+            // Then
+            Assert.Equal("--diagnostics build-server shutdown", result.Args);
         }
     }
 }

@@ -8,51 +8,50 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Spectre.Console.Cli;
 
-namespace Cake.Frosting.Internal
+namespace Cake.Frosting.Internal;
+
+internal sealed class DefaultCommandSettings : CommandSettings
 {
-    internal sealed class DefaultCommandSettings : CommandSettings
-    {
-        [CommandOption("--target|-t|--Target <TARGET>")]
-        [DefaultValue("Default")]
-        [Description("Target task to invoke.")]
-        public string[] Targets { get; set; }
+    [CommandOption("--target|-t|--Target <TARGET>")]
+    [DefaultValue("Default")]
+    [Description("Target task to invoke.")]
+    public string[] Targets { get; set; }
 
-        [CommandOption("--working|-w <PATH>")]
-        [TypeConverter(typeof(Cli.DirectoryPathConverter))]
-        [Description("Sets the working directory")]
-        public DirectoryPath WorkingDirectory { get; set; }
+    [CommandOption("--working|-w <PATH>")]
+    [TypeConverter(typeof(Cli.DirectoryPathConverter))]
+    [Description("Sets the working directory")]
+    public DirectoryPath WorkingDirectory { get; set; }
 
-        [CommandOption("--verbosity|-v <VERBOSITY>")]
-        [Description("Specifies the amount of information to be displayed.\n(Quiet, Minimal, Normal, Verbose, Diagnostic).\nWhen omitted, taken from configuration (defaults to Normal).")]
-        [TypeConverter(typeof(VerbosityConverter))]
-        public Verbosity? Verbosity { get; set; }
+    [CommandOption("--verbosity|-v <VERBOSITY>")]
+    [Description("Specifies the amount of information to be displayed.\n(Quiet, Minimal, Normal, Verbose, Diagnostic).\nWhen omitted, taken from configuration (defaults to Normal).")]
+    [TypeConverter(typeof(VerbosityConverter))]
+    public Verbosity? Verbosity { get; set; }
 
-        [CommandOption("--description|--descriptions|--showdescription|--showdescriptions")]
-        [Description("Shows description for each task.")]
-        public bool Description { get; set; }
+    [CommandOption("--description|--descriptions|--showdescription|--showdescriptions")]
+    [Description("Shows description for each task.")]
+    public bool Description { get; set; }
 
-        [CommandOption("--tree|--showtree")]
-        [Description("Shows the task dependency tree.")]
-        public bool Tree { get; set; }
+    [CommandOption("--tree|--showtree")]
+    [Description("Shows the task dependency tree.")]
+    public bool Tree { get; set; }
 
-        [CommandOption("--dryrun|--noop|--whatif")]
-        [Description("Performs a dry run.")]
-        public bool DryRun { get; set; }
+    [CommandOption("--dryrun|--noop|--whatif")]
+    [Description("Performs a dry run.")]
+    public bool DryRun { get; set; }
 
-        [CommandOption("--exclusive|-e")]
-        [Description("Executes the target task without any dependencies.")]
-        public bool Exclusive { get; set; }
+    [CommandOption("--exclusive|-e")]
+    [Description("Executes the target task without any dependencies.")]
+    public bool Exclusive { get; set; }
 
-        [CommandOption("--version|--ver")]
-        [Description("Displays version information.")]
-        public bool Version { get; set; }
+    [CommandOption("--version|--ver")]
+    [Description("Displays version information.")]
+    public bool Version { get; set; }
 
-        [CommandOption("--info")]
-        [Description("Displays additional information about Cake.")]
-        public bool Info { get; set; }
+    [CommandOption("--info")]
+    [Description("Displays additional information about Cake.")]
+    public bool Info { get; set; }
 
-        [CommandOption("--no-report")]
-        [Description("Prevent the display of the summary report at the end of Cake Execution.")]
-        public bool NoReport { get; set; }
-    }
+    [CommandOption("--no-report")]
+    [Description("Prevent the display of the summary report at the end of Cake Execution.")]
+    public bool NoReport { get; set; }
 }

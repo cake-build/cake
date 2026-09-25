@@ -5,21 +5,20 @@
 using System;
 using Cake.Core;
 
-namespace Cake.Testing.Xunit
+namespace Cake.Testing.Xunit;
+
+/// <summary>
+/// Marks a test method as a theory that should only run on Windows platforms.
+/// </summary>
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+public sealed class WindowsTheoryAttribute : PlatformRestrictedTheoryAttribute
 {
     /// <summary>
-    /// Marks a test method as a theory that should only run on Windows platforms.
+    /// Initializes a new instance of the <see cref="WindowsTheoryAttribute"/> class.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public sealed class WindowsTheoryAttribute : PlatformRestrictedTheoryAttribute
+    /// <param name="reason">The reason why the test is skipped on non-Windows platforms.</param>
+    public WindowsTheoryAttribute(string reason = null)
+        : base(PlatformFamily.Windows, false, reason)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WindowsTheoryAttribute"/> class.
-        /// </summary>
-        /// <param name="reason">The reason why the test is skipped on non-Windows platforms.</param>
-        public WindowsTheoryAttribute(string reason = null)
-            : base(PlatformFamily.Windows, false, reason)
-        {
-        }
     }
 }

@@ -4,56 +4,54 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using NuGet.Configuration;
 
-namespace Cake.NuGet.Tests.Stubs
+namespace Cake.NuGet.Tests.Stubs;
+
+internal sealed class FakeNuGetSettings : ISettings
 {
-    internal sealed class FakeNuGetSettings : ISettings
+    public event EventHandler SettingsChanged;
+
+    private IDictionary<string, FakeNuGetSettingSection> _settings;
+
+    public FakeNuGetSettings()
     {
-        public event EventHandler SettingsChanged;
+        _settings = new Dictionary<string, FakeNuGetSettingSection>(StringComparer.OrdinalIgnoreCase);
+    }
 
-        private IDictionary<string, FakeNuGetSettingSection> _settings;
-
-        public FakeNuGetSettings()
+    public void AddOrUpdate(string sectionName, SettingItem item)
+    {
+        if (!_settings.TryGetValue(sectionName, out var section))
         {
-            _settings = new Dictionary<string, FakeNuGetSettingSection>(StringComparer.OrdinalIgnoreCase);
+            section = new FakeNuGetSettingSection(sectionName, null, []);
+            _settings[sectionName] = section;
         }
 
-        public void AddOrUpdate(string sectionName, SettingItem item)
-        {
-            if (!_settings.TryGetValue(sectionName, out var section))
-            {
-                section = new FakeNuGetSettingSection(sectionName, null, Enumerable.Empty<SettingItem>());
-                _settings[sectionName] = section;
-            }
+        section.AddItem(item);
 
-            section.AddItem(item);
+        SettingsChanged?.Invoke(this, new EventArgs());
+    }
 
-            SettingsChanged?.Invoke(this, new EventArgs());
-        }
+    public IList<string> GetConfigFilePaths()
+    {
+        return Array.Empty<string>();
+    }
 
-        public IList<string> GetConfigFilePaths()
-        {
-            return Array.Empty<string>();
-        }
+    public IList<string> GetConfigRoots()
+    {
+        return Array.Empty<string>();
+    }
 
-        public IList<string> GetConfigRoots()
-        {
-            return Array.Empty<string>();
-        }
+    public SettingSection GetSection(string sectionName)
+    {
+        return _settings.TryGetValue(sectionName, out var value) ? value : null;
+    }
 
-        public SettingSection GetSection(string sectionName)
-        {
-            return _settings.TryGetValue(sectionName, out var value) ? value : null;
-        }
+    public void Remove(string sectionName, SettingItem item)
+    {
+    }
 
-        public void Remove(string sectionName, SettingItem item)
-        {
-        }
-
-        public void SaveToDisk()
-        {
-        }
+    public void SaveToDisk()
+    {
     }
 }

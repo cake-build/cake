@@ -7,57 +7,56 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.IO;
 
-namespace Cake.Core.Tooling
+namespace Cake.Core.Tooling;
+
+/// <summary>
+/// The tool repository.
+/// </summary>
+public sealed class ToolRepository : IToolRepository
 {
+    private readonly ICakeEnvironment _environment;
+    private readonly Dictionary<string, List<FilePath>> _paths;
+    private readonly PathComparer _comparer;
+
     /// <summary>
-    /// The tool repository.
+    /// Initializes a new instance of the <see cref="ToolRepository"/> class.
     /// </summary>
-    public sealed class ToolRepository : IToolRepository
+    /// <param name="environment">The environment.</param>
+    public ToolRepository(ICakeEnvironment environment)
     {
-        private readonly ICakeEnvironment _environment;
-        private readonly Dictionary<string, List<FilePath>> _paths;
-        private readonly PathComparer _comparer;
+        _environment = environment;
+        _paths = new Dictionary<string, List<FilePath>>(StringComparer.OrdinalIgnoreCase);
+        _comparer = new PathComparer(environment);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ToolRepository"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public ToolRepository(ICakeEnvironment environment)
+    /// <inheritdoc/>
+    public void Register(FilePath path)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+
+        path = path.MakeAbsolute(_environment);
+
+        var filename = path.GetFilename();
+
+        if (!_paths.ContainsKey(filename.FullPath))
         {
-            _environment = environment;
-            _paths = new Dictionary<string, List<FilePath>>(StringComparer.OrdinalIgnoreCase);
-            _comparer = new PathComparer(environment);
+            _paths.Add(filename.FullPath, new List<FilePath>());
         }
 
-        /// <inheritdoc/>
-        public void Register(FilePath path)
+        if (!_paths[filename.FullPath].Contains(path, _comparer))
         {
-            ArgumentNullException.ThrowIfNull(path);
+            _paths[filename.FullPath].Add(path);
+        }
+    }
 
-            path = path.MakeAbsolute(_environment);
-
-            var filename = path.GetFilename();
-
-            if (!_paths.ContainsKey(filename.FullPath))
-            {
-                _paths.Add(filename.FullPath, new List<FilePath>());
-            }
-
-            if (!_paths[filename.FullPath].Contains(path, _comparer))
-            {
-                _paths[filename.FullPath].Add(path);
-            }
+    /// <inheritdoc/>
+    public IEnumerable<FilePath> Resolve(string tool)
+    {
+        if (_paths.TryGetValue(tool, out var paths))
+        {
+            return paths;
         }
 
-        /// <inheritdoc/>
-        public IEnumerable<FilePath> Resolve(string tool)
-        {
-            if (_paths.TryGetValue(tool, out var paths))
-            {
-                return paths;
-            }
-
-            return Enumerable.Empty<FilePath>();
-        }
+        return [];
     }
 }

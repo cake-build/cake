@@ -12,93 +12,93 @@ using System.Xml.Linq;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common.Solution.Project.XmlDoc
+namespace Cake.Common.Solution.Project.XmlDoc;
+
+/// <summary>
+/// The MSBuild Xml documentation example code parser.
+/// </summary>
+public sealed class XmlDocExampleCodeParser
 {
+    private readonly IFileSystem _fileSystem;
+    private readonly IGlobber _globber;
+    private readonly ICakeLog _log;
+
     /// <summary>
-    /// The MSBuild Xml documentation example code parser.
+    /// Initializes a new instance of the <see cref="XmlDocExampleCodeParser"/> class.
     /// </summary>
-    public sealed class XmlDocExampleCodeParser
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="globber">The globber.</param>
+    /// <param name="log">The log.</param>
+    public XmlDocExampleCodeParser(IFileSystem fileSystem, IGlobber globber, ICakeLog log)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly IGlobber _globber;
-        private readonly ICakeLog _log;
+        ArgumentNullException.ThrowIfNull(fileSystem);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlDocExampleCodeParser"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="globber">The globber.</param>
-        /// <param name="log">The log.</param>
-        public XmlDocExampleCodeParser(IFileSystem fileSystem, IGlobber globber, ICakeLog log)
+        ArgumentNullException.ThrowIfNull(globber);
+
+        _fileSystem = fileSystem;
+        _globber = globber;
+        _log = log;
+    }
+
+    /// <summary>
+    /// Parses Xml documentation example code from given path.
+    /// </summary>
+    /// <param name="xmlFilePath">Path to the file to parse.</param>
+    /// <returns>Parsed Example Code.</returns>
+    [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+    public IEnumerable<XmlDocExampleCode> Parse(FilePath xmlFilePath)
+    {
+        if (xmlFilePath == null)
         {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-
-            ArgumentNullException.ThrowIfNull(globber);
-
-            _fileSystem = fileSystem;
-            _globber = globber;
-            _log = log;
+            throw new ArgumentNullException(nameof(xmlFilePath), "Invalid xml file path supplied.");
         }
 
-        /// <summary>
-        /// Parses Xml documentation example code from given path.
-        /// </summary>
-        /// <param name="xmlFilePath">Path to the file to parse.</param>
-        /// <returns>Parsed Example Code.</returns>
-        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public IEnumerable<XmlDocExampleCode> Parse(FilePath xmlFilePath)
+        var xmlFile = _fileSystem.GetFile(xmlFilePath);
+        if (!xmlFile.Exists)
         {
-            if (xmlFilePath == null)
-            {
-                throw new ArgumentNullException(nameof(xmlFilePath), "Invalid xml file path supplied.");
-            }
-
-            var xmlFile = _fileSystem.GetFile(xmlFilePath);
-            if (!xmlFile.Exists)
-            {
-                throw new FileNotFoundException("Supplied xml file not found.", xmlFilePath.FullPath);
-            }
-
-            using (var xmlStream = xmlFile.OpenRead())
-            {
-                using (var xmlReader = XmlReader.Create(xmlStream))
-                {
-                    return (
-                        from doc in XDocument.Load(xmlReader).Elements("doc")
-                        from members in doc.Elements("members")
-                        from member in members.Elements("member")
-                        from example in member.Elements("example")
-                        from code in example.Elements("code")
-                        let cleanedCode = string.Join("\r\n",
-                            code.Value.Split('\r', '\n')
-                                .Where(line => !string.IsNullOrWhiteSpace(line)))
-                        select new XmlDocExampleCode(
-                                member.Attributes("name").Select(name => name.Value).FirstOrDefault(),
-                                cleanedCode)).ToArray();
-                }
-            }
+            throw new FileNotFoundException("Supplied xml file not found.", xmlFilePath.FullPath);
         }
 
-        /// <summary>
-        /// Parses Xml documentation example code from file(s) using given pattern.
-        /// </summary>
-        /// <param name="pattern">The globber file pattern.</param>
-        /// <returns>Parsed Example Code.</returns>
-        public IEnumerable<XmlDocExampleCode> ParseFiles(GlobPattern pattern)
+        using (var xmlStream = xmlFile.OpenRead())
         {
-            if (string.IsNullOrWhiteSpace(pattern?.Pattern))
+            using (var xmlReader = XmlReader.Create(xmlStream))
             {
-                throw new ArgumentNullException(nameof(pattern), "Invalid pattern supplied.");
+                return (
+                    from doc in XDocument.Load(xmlReader).Elements("doc")
+                    from members in doc.Elements("members")
+                    from member in members.Elements("member")
+                    from example in member.Elements("example")
+                    from code in example.Elements("code")
+                    let cleanedCode = string.Join("\r\n",
+                        code.Value.Split('\r', '\n')
+                            .Where(line => !string.IsNullOrWhiteSpace(line)))
+                    select new XmlDocExampleCode(
+                            member.Attributes("name").Select(name => name.Value).FirstOrDefault(),
+                            cleanedCode)).ToArray();
             }
-
-            var files = _globber.GetFiles(pattern).ToArray();
-            if (files.Length == 0)
-            {
-                _log.Verbose("The provided pattern did not match any files.");
-                return Enumerable.Empty<XmlDocExampleCode>();
-            }
-
-            return files.SelectMany(Parse);
         }
+    }
+
+    /// <summary>
+    /// Parses Xml documentation example code from file(s) using given pattern.
+    /// </summary>
+    /// <param name="pattern">The globber file pattern.</param>
+    /// <returns>Parsed Example Code.</returns>
+    public IEnumerable<XmlDocExampleCode> ParseFiles(GlobPattern pattern)
+    {
+        if (string.IsNullOrWhiteSpace(pattern?.Pattern))
+        {
+            throw new ArgumentNullException(nameof(pattern), "Invalid pattern supplied.");
+        }
+
+        var files = _globber.GetFiles(pattern).ToArray();
+        if (files.Length == 0)
+        {
+            _log.Verbose("The provided pattern did not match any files.");
+
+            return [];
+        }
+
+        return files.SelectMany(Parse);
     }
 }

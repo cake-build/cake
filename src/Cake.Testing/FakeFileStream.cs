@@ -5,114 +5,113 @@
 using System;
 using System.IO;
 
-namespace Cake.Testing
+namespace Cake.Testing;
+
+internal sealed class FakeFileStream : Stream
 {
-    internal sealed class FakeFileStream : Stream
+    private readonly FakeFile _file;
+    private long _position;
+
+    public override bool CanRead => true;
+
+    public override bool CanSeek => true;
+
+    public override bool CanWrite => true;
+
+    public FakeFileStream(FakeFile file)
     {
-        private readonly FakeFile _file;
-        private long _position;
+        _file = file;
+        _position = 0;
+    }
 
-        public override bool CanRead => true;
+    public override void Flush()
+    {
+    }
 
-        public override bool CanSeek => true;
-
-        public override bool CanWrite => true;
-
-        public FakeFileStream(FakeFile file)
-        {
-            _file = file;
-            _position = 0;
-        }
-
-        public override void Flush()
-        {
-        }
-
-        public override long Length
-        {
-            get
-            {
-                lock (_file.ContentLock)
-                {
-                    return _file.ContentLength;
-                }
-            }
-        }
-
-        public override long Position
-        {
-            get { return _position; }
-            set { Seek(value, SeekOrigin.Begin); }
-        }
-
-        public override int Read(byte[] buffer, int offset, int count)
+    public override long Length
+    {
+        get
         {
             lock (_file.ContentLock)
             {
-                var end = _position + count;
-                var fileSize = _file.ContentLength;
-                var maxLengthToRead = end > fileSize ? fileSize - _position : count;
-                Buffer.BlockCopy(_file.Content, (int)_position, buffer, offset, (int)maxLengthToRead);
-                _position += maxLengthToRead;
-                return (int)maxLengthToRead;
+                return _file.ContentLength;
             }
         }
+    }
 
-        public override long Seek(long offset, SeekOrigin origin)
+    public override long Position
+    {
+        get { return _position; }
+        set { Seek(value, SeekOrigin.Begin); }
+    }
+
+    public override int Read(byte[] buffer, int offset, int count)
+    {
+        lock (_file.ContentLock)
         {
-            if (origin == SeekOrigin.Begin)
-            {
-                return MoveTo(offset);
-            }
-            if (origin == SeekOrigin.Current)
-            {
-                return MoveTo(_position + offset);
-            }
-            if (origin == SeekOrigin.End)
-            {
-                return MoveTo(_file.ContentLength - offset);
-            }
-            throw new NotSupportedException();
+            var end = _position + count;
+            var fileSize = _file.ContentLength;
+            var maxLengthToRead = end > fileSize ? fileSize - _position : count;
+            Buffer.BlockCopy(_file.Content, (int)_position, buffer, offset, (int)maxLengthToRead);
+            _position += maxLengthToRead;
+            return (int)maxLengthToRead;
         }
+    }
 
-        public override void SetLength(long value)
+    public override long Seek(long offset, SeekOrigin origin)
+    {
+        if (origin == SeekOrigin.Begin)
         {
-            lock (_file.ContentLock)
-            {
-                _file.Resize(value);
-            }
+            return MoveTo(offset);
         }
-
-        public override void Write(byte[] buffer, int offset, int count)
+        if (origin == SeekOrigin.Current)
         {
-            lock (_file.ContentLock)
-            {
-                var fileSize = _file.ContentLength;
-                var endOfWrite = _position + count;
-                if (endOfWrite > fileSize)
-                {
-                    _file.Resize(endOfWrite);
-                }
-                Buffer.BlockCopy(buffer, offset, _file.Content, (int)_position, count);
-                _position = _position + count;
-            }
+            return MoveTo(_position + offset);
         }
-
-        private long MoveTo(long offset)
+        if (origin == SeekOrigin.End)
         {
-            lock (_file.ContentLock)
+            return MoveTo(_file.ContentLength - offset);
+        }
+        throw new NotSupportedException();
+    }
+
+    public override void SetLength(long value)
+    {
+        lock (_file.ContentLock)
+        {
+            _file.Resize(value);
+        }
+    }
+
+    public override void Write(byte[] buffer, int offset, int count)
+    {
+        lock (_file.ContentLock)
+        {
+            var fileSize = _file.ContentLength;
+            var endOfWrite = _position + count;
+            if (endOfWrite > fileSize)
             {
-                if (offset < 0)
-                {
-                    throw new InvalidOperationException();
-                }
-                if (offset > _file.ContentLength)
-                {
-                    _file.Resize(offset);
-                }
-                _position = offset;
-                return offset;
+                _file.Resize(endOfWrite);
             }
+            Buffer.BlockCopy(buffer, offset, _file.Content, (int)_position, count);
+            _position = _position + count;
+        }
+    }
+
+    private long MoveTo(long offset)
+    {
+        lock (_file.ContentLock)
+        {
+            if (offset < 0)
+            {
+                throw new InvalidOperationException();
+            }
+            if (offset > _file.ContentLength)
+            {
+                _file.Resize(offset);
+            }
+            _position = offset;
+            return offset;
         }
     }
 }

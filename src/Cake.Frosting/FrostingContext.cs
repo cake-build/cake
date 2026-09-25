@@ -4,22 +4,21 @@
 
 using Cake.Core;
 
-namespace Cake.Frosting
+namespace Cake.Frosting;
+
+/// <summary>
+/// Default implementation of the build context.
+/// </summary>
+/// <seealso cref="CakeContextAdapter" />
+/// <seealso cref="IFrostingContext" />
+public class FrostingContext : CakeContextAdapter, IFrostingContext
 {
     /// <summary>
-    /// Default implementation of the build context.
+    /// Initializes a new instance of the <see cref="FrostingContext"/> class.
     /// </summary>
-    /// <seealso cref="CakeContextAdapter" />
-    /// <seealso cref="IFrostingContext" />
-    public class FrostingContext : CakeContextAdapter, IFrostingContext
+    /// <param name="context">The Cake context.</param>
+    public FrostingContext(ICakeContext context)
+        : base(context)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FrostingContext"/> class.
-        /// </summary>
-        /// <param name="context">The Cake context.</param>
-        public FrostingContext(ICakeContext context)
-            : base(context)
-        {
-        }
     }
 }

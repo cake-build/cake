@@ -1,7 +1,6 @@
-namespace Cake.Tests.Fixtures
+namespace Cake.Tests.Fixtures;
+
+public sealed class ProgramFixtureResult
 {
-    public sealed class ProgramFixtureResult
-    {
-        public int ExitCode { get; set; }
-    }
+    public int ExitCode { get; set; }
 }

@@ -3,73 +3,72 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools
+namespace Cake.Common.Tools;
+
+internal static class VisualStudio
 {
-    internal static class VisualStudio
+    internal static class Versions
     {
-        internal static class Versions
+        internal static ICollection<string> TenToFourteen { get; } = new[] { "14.0", "12.0", "11.0", "10.0" };
+
+        internal static ICollection<string> TwentySeventeenAndLater { get; } = new[]
         {
-            internal static ICollection<string> TenToFourteen { get; } = new[] { "14.0", "12.0", "11.0", "10.0" };
+            "2022",
+            "2019",
+            "2017"
+        };
+    }
 
-            internal static ICollection<string> TwentySeventeenAndLater { get; } = new[]
-            {
-                "2022",
-                "2019",
-                "2017"
-            };
-        }
-
-        internal static class Editions
+    internal static class Editions
+    {
+        internal static ICollection<string> Preview { get; } = new[]
         {
-            internal static ICollection<string> Preview { get; } = new[]
-            {
-                "Preview",
-                "Insiders"
-            };
+            "Preview",
+            "Insiders"
+        };
 
-            internal static ICollection<string> Stable { get; } = new[]
-            {
-                "Enterprise",
-                "Professional",
-                "Community",
-                "BuildTools"
-            };
-
-            internal static ICollection<string> All { get; } = Preview
-                .Concat(Stable)
-                .ToArray();
-        }
-
-        internal static FilePath GetYearAndEditionToolPath(ICakeEnvironment environment, string year, string edition, FilePath relativeFile)
+        internal static ICollection<string> Stable { get; } = new[]
         {
-            var root = GetYearAndEditionRootPath(environment, year, edition);
-            return root.CombineWithFilePath(relativeFile);
-        }
+            "Enterprise",
+            "Professional",
+            "Community",
+            "BuildTools"
+        };
 
-        internal static DirectoryPath GetYearAndEditionRootPath(ICakeEnvironment environment, string year, string edition)
+        internal static ICollection<string> All { get; } = Preview
+            .Concat(Stable)
+            .ToArray();
+    }
+
+    internal static FilePath GetYearAndEditionToolPath(ICakeEnvironment environment, string year, string edition, FilePath relativeFile)
+    {
+        var root = GetYearAndEditionRootPath(environment, year, edition);
+        return root.CombineWithFilePath(relativeFile);
+    }
+
+    internal static DirectoryPath GetYearAndEditionRootPath(ICakeEnvironment environment, string year, string edition)
+    {
+        var programFiles = (year, edition) switch
         {
-            var programFiles = (year, edition) switch
-            {
-                ("18", "BuildTools") => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
-                ("18", _) => environment.GetSpecialPath(SpecialPath.ProgramFiles),
-                ("2022", "BuildTools") => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
-                ("2022", _) => environment.GetSpecialPath(SpecialPath.ProgramFiles),
-                (_, _) => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
-            };
+            ("18", "BuildTools") => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
+            ("18", _) => environment.GetSpecialPath(SpecialPath.ProgramFiles),
+            ("2022", "BuildTools") => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
+            ("2022", _) => environment.GetSpecialPath(SpecialPath.ProgramFiles),
+            (_, _) => environment.GetSpecialPath(SpecialPath.ProgramFilesX86),
+        };
 
-            return programFiles.Combine($"Microsoft Visual Studio/{year}/{edition}");
-        }
+        return programFiles.Combine($"Microsoft Visual Studio/{year}/{edition}");
+    }
 
-        internal static FilePath GetVersionNumberToolPath(ICakeEnvironment environment, string version, FilePath relativeFile)
-        {
-            var root = GetVersionNumberRootPath(environment, version);
-            return root.CombineWithFilePath(relativeFile);
-        }
+    internal static FilePath GetVersionNumberToolPath(ICakeEnvironment environment, string version, FilePath relativeFile)
+    {
+        var root = GetVersionNumberRootPath(environment, version);
+        return root.CombineWithFilePath(relativeFile);
+    }
 
-        internal static DirectoryPath GetVersionNumberRootPath(ICakeEnvironment environment, string version)
-        {
-            var programFiles = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
-            return programFiles.Combine($"Microsoft Visual Studio {version}");
-        }
+    internal static DirectoryPath GetVersionNumberRootPath(ICakeEnvironment environment, string version)
+    {
+        var programFiles = environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
+        return programFiles.Combine($"Microsoft Visual Studio {version}");
     }
 }

@@ -3,90 +3,88 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.Bitrise.Data
+namespace Cake.Common.Tests.Unit.Build.Bitrise.Data;
+
+public sealed class BitriseRepositoryInfoTests
 {
-    public sealed class BitriseRepositoryInfoTests
+    public sealed class TheGitRepositoryUrlProperty
     {
-        public sealed class TheGitRepositoryUrlProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BitriseInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new BitriseInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.GitRepositoryUrl;
+            // When
+            var result = info.GitRepositoryUrl;
 
-                // Then
-                Assert.Equal("git@github.com:/cake-build/cake.git", result);
-            }
+            // Then
+            Assert.Equal("git@github.com:/cake-build/cake.git", result);
         }
+    }
 
-        public sealed class TheGitBranchProperty
+    public sealed class TheGitBranchProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BitriseInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new BitriseInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.GitBranch;
+            // When
+            var result = info.GitBranch;
 
-                // Then
-                Assert.Equal("cake-branch", result);
-            }
+            // Then
+            Assert.Equal("cake-branch", result);
         }
+    }
 
-        public sealed class TheGitTagProperty
+    public sealed class TheGitTagProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BitriseInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new BitriseInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.GitTag;
+            // When
+            var result = info.GitTag;
 
-                // Then
-                Assert.Equal("v0.0.1", result);
-            }
+            // Then
+            Assert.Equal("v0.0.1", result);
         }
+    }
 
-        public sealed class TheGitCommitProperty
+    public sealed class TheGitCommitProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BitriseInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new BitriseInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.GitCommit;
+            // When
+            var result = info.GitCommit;
 
-                // Then
-                Assert.Equal("63dd7b", result);
-            }
+            // Then
+            Assert.Equal("63dd7b", result);
         }
+    }
 
-        public sealed class ThePullRequestProperty
+    public sealed class ThePullRequestProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new BitriseInfoFixture().CreateRepositoryInfo();
+            // Given
+            var info = new BitriseInfoFixture().CreateRepositoryInfo();
 
-                // When
-                var result = info.PullRequest;
+            // When
+            var result = info.PullRequest;
 
-                // Then
-                Assert.Equal("1", result);
-            }
+            // Then
+            Assert.Equal("1", result);
         }
     }
 }

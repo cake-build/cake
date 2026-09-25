@@ -4,16 +4,15 @@
 
 using Cake.Common.Tools.DotNet.NuGet.Source;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Source
-{
-    internal sealed class DotNetNuGetListSourceFixture : DotNetNuGetSourcerFixture
-    {
-        public string Format { get; set; }
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.NuGet.Source;
 
-        protected override void RunTool()
-        {
-            var tool = new DotNetNuGetSourcer(FileSystem, Environment, ProcessRunner, Tools);
-            tool.ListSource(Format, Settings);
-        }
+internal sealed class DotNetNuGetListSourceFixture : DotNetNuGetSourcerFixture
+{
+    public string Format { get; set; }
+
+    protected override void RunTool()
+    {
+        var tool = new DotNetNuGetSourcer(FileSystem, Environment, ProcessRunner, Tools);
+        tool.ListSource(Format, Settings);
     }
 }

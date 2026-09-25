@@ -15,217 +15,216 @@ using Cake.Core.Packaging;
 using IFileSystem = Cake.Core.IO.IFileSystem;
 using PackageReference = Cake.Core.Packaging.PackageReference;
 
-namespace Cake.NuGet
+namespace Cake.NuGet;
+
+internal sealed class OutOfProcessInstaller
 {
-    internal sealed class OutOfProcessInstaller
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+    private readonly IProcessRunner _processRunner;
+    private readonly INuGetToolResolver _toolResolver;
+    private readonly INuGetContentResolver _contentResolver;
+    private readonly ICakeLog _log;
+
+    private readonly ICakeConfiguration _config;
+
+    public OutOfProcessInstaller(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        INuGetToolResolver toolResolver,
+        INuGetContentResolver contentResolver,
+        ICakeLog log,
+        ICakeConfiguration config)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly IProcessRunner _processRunner;
-        private readonly INuGetToolResolver _toolResolver;
-        private readonly INuGetContentResolver _contentResolver;
-        private readonly ICakeLog _log;
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+        _processRunner = processRunner ?? throw new ArgumentNullException(nameof(processRunner));
+        _toolResolver = toolResolver ?? throw new ArgumentNullException(nameof(toolResolver));
+        _contentResolver = contentResolver ?? throw new ArgumentNullException(nameof(contentResolver));
+        _log = log ?? throw new ArgumentNullException(nameof(log));
+        _config = config ?? throw new ArgumentNullException(nameof(config));
+    }
 
-        private readonly ICakeConfiguration _config;
+    public bool CanInstall(PackageReference package, PackageType type)
+    {
+        ArgumentNullException.ThrowIfNull(package);
+        return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
+    }
 
-        public OutOfProcessInstaller(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            INuGetToolResolver toolResolver,
-            INuGetContentResolver contentResolver,
-            ICakeLog log,
-            ICakeConfiguration config)
+    public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
+    {
+        ArgumentNullException.ThrowIfNull(package);
+        ArgumentNullException.ThrowIfNull(path);
+
+        // Create the addin directory if it doesn't exist.
+        path = GetPackagePath(path.MakeAbsolute(_environment), package);
+        var root = _fileSystem.GetDirectory(path);
+        var createdDirectory = false;
+        if (!root.Exists)
         {
-            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            _processRunner = processRunner ?? throw new ArgumentNullException(nameof(processRunner));
-            _toolResolver = toolResolver ?? throw new ArgumentNullException(nameof(toolResolver));
-            _contentResolver = contentResolver ?? throw new ArgumentNullException(nameof(contentResolver));
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _config = config ?? throw new ArgumentNullException(nameof(config));
+            _log.Debug("Creating package directory {0}...", path);
+            root.Create();
+            createdDirectory = true;
         }
 
-        public bool CanInstall(PackageReference package, PackageType type)
+        // Package already exist?
+        var packagePath = GetPackagePath(root, package.Package);
+        if (packagePath != null)
         {
-            ArgumentNullException.ThrowIfNull(package);
-            return package.Scheme.Equals("nuget", StringComparison.OrdinalIgnoreCase);
+            // Fetch available content from disc.
+            var content = _contentResolver.GetFiles(packagePath, package, type);
+            if (content.Any())
+            {
+                _log.Debug("Package {0} has already been installed.", package.Package);
+                return content;
+            }
         }
 
-        public IReadOnlyCollection<IFile> Install(PackageReference package, PackageType type, DirectoryPath path)
+        // Install the package.
+        if (!InstallPackage(package, path))
         {
-            ArgumentNullException.ThrowIfNull(package);
-            ArgumentNullException.ThrowIfNull(path);
-
-            // Create the addin directory if it doesn't exist.
-            path = GetPackagePath(path.MakeAbsolute(_environment), package);
-            var root = _fileSystem.GetDirectory(path);
-            var createdDirectory = false;
-            if (!root.Exists)
+            _log.Warning("An error occurred while installing package {0}.", package.Package);
+            if (createdDirectory)
             {
-                _log.Debug("Creating package directory {0}...", path);
-                root.Create();
-                createdDirectory = true;
+                _log.Debug("Deleting package directory {0}...", path);
+                root.Delete(true);
+                return Array.Empty<IFile>();
             }
-
-            // Package already exist?
-            var packagePath = GetPackagePath(root, package.Package);
-            if (packagePath != null)
-            {
-                // Fetch available content from disc.
-                var content = _contentResolver.GetFiles(packagePath, package, type);
-                if (content.Any())
-                {
-                    _log.Debug("Package {0} has already been installed.", package.Package);
-                    return content;
-                }
-            }
-
-            // Install the package.
-            if (!InstallPackage(package, path))
-            {
-                _log.Warning("An error occurred while installing package {0}.", package.Package);
-                if (createdDirectory)
-                {
-                    _log.Debug("Deleting package directory {0}...", path);
-                    root.Delete(true);
-                    return Array.Empty<IFile>();
-                }
-            }
-
-            // Try locating the install folder again.
-            packagePath = GetPackagePath(root, package.Package);
-
-            // Get the files.
-            var result = _contentResolver.GetFiles(packagePath, package, type);
-            if (result.Count == 0)
-            {
-                if (type == PackageType.Addin)
-                {
-                    var framework = _environment.Runtime.BuiltFramework;
-                    _log.Warning("Could not find any assemblies compatible with {0}.", framework.FullName);
-                }
-                else if (type == PackageType.Tool)
-                {
-                    const string format = "Could not find any relevant files for tool '{0}'. Perhaps you need an include parameter?";
-                    _log.Warning(format, package.Package);
-                }
-            }
-
-            return result;
         }
 
-        private static DirectoryPath GetPackagePath(IDirectory root, string package)
-        {
-            var directories = root.GetDirectories("*", SearchScope.Current).ToArray();
-            return directories.FirstOrDefault(p => p.Path.GetDirectoryName().Equals(package, StringComparison.OrdinalIgnoreCase))?.Path;
-        }
+        // Try locating the install folder again.
+        packagePath = GetPackagePath(root, package.Package);
 
-        private static DirectoryPath GetPackagePath(DirectoryPath root, PackageReference package)
+        // Get the files.
+        var result = _contentResolver.GetFiles(packagePath, package, type);
+        if (result.Count == 0)
         {
-            if (package.Parameters.TryGetValue("version", out var versions))
+            if (type == PackageType.Addin)
             {
-                var version = versions.First();
-                return root.Combine($"{package.Package}.{version}".ToLowerInvariant());
+                var framework = _environment.Runtime.BuiltFramework;
+                _log.Warning("Could not find any assemblies compatible with {0}.", framework.FullName);
             }
-            return root.Combine(package.Package.ToLowerInvariant());
-        }
-
-        private bool InstallPackage(PackageReference package, DirectoryPath path)
-        {
-            _log.Debug("Installing NuGet package {0}...", package.Package);
-
-            var nugetPath = GetNuGetPath();
-            var process = _processRunner.Start(nugetPath, new ProcessSettings
+            else if (type == PackageType.Tool)
             {
-                Arguments = GetArguments(package, path, _config),
-                RedirectStandardOutput = true,
-                Silent = _log.Verbosity < Verbosity.Diagnostic
-            });
-            process.WaitForExit();
-
-            var exitCode = process.GetExitCode();
-            if (exitCode != 0)
-            {
-                _log.Warning("NuGet exited with {0}", exitCode);
-                var output = string.Join(Environment.NewLine, process.GetStandardOutput());
-                _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
-                return false;
+                const string format = "Could not find any relevant files for tool '{0}'. Perhaps you need an include parameter?";
+                _log.Warning(format, package.Package);
             }
-
-            return true;
         }
 
-        private FilePath GetNuGetPath()
+        return result;
+    }
+
+    private static DirectoryPath GetPackagePath(IDirectory root, string package)
+    {
+        var directories = root.GetDirectories("*", SearchScope.Current).ToArray();
+        return directories.FirstOrDefault(p => p.Path.GetDirectoryName().Equals(package, StringComparison.OrdinalIgnoreCase))?.Path;
+    }
+
+    private static DirectoryPath GetPackagePath(DirectoryPath root, PackageReference package)
+    {
+        if (package.Parameters.TryGetValue("version", out var versions))
         {
-            var nugetPath = _toolResolver.ResolvePath();
-            if (nugetPath == null)
-            {
-                throw new CakeException("Failed to find nuget.exe.");
-            }
-            return nugetPath;
+            var version = versions.First();
+            return root.Combine($"{package.Package}.{version}".ToLowerInvariant());
+        }
+        return root.Combine(package.Package.ToLowerInvariant());
+    }
+
+    private bool InstallPackage(PackageReference package, DirectoryPath path)
+    {
+        _log.Debug("Installing NuGet package {0}...", package.Package);
+
+        var nugetPath = GetNuGetPath();
+        var process = _processRunner.Start(nugetPath, new ProcessSettings
+        {
+            Arguments = GetArguments(package, path, _config),
+            RedirectStandardOutput = true,
+            Silent = _log.Verbosity < Verbosity.Diagnostic
+        });
+        process.WaitForExit();
+
+        var exitCode = process.GetExitCode();
+        if (exitCode != 0)
+        {
+            _log.Warning("NuGet exited with {0}", exitCode);
+            var output = string.Join(Environment.NewLine, process.GetStandardOutput());
+            _log.Verbose(Verbosity.Diagnostic, "Output:\r\n{0}", output);
+            return false;
         }
 
-        private static ProcessArgumentBuilder GetArguments(
-            PackageReference definition,
-            DirectoryPath installationRoot, ICakeConfiguration config)
+        return true;
+    }
+
+    private FilePath GetNuGetPath()
+    {
+        var nugetPath = _toolResolver.ResolvePath();
+        if (nugetPath == null)
         {
-            var arguments = new ProcessArgumentBuilder();
+            throw new CakeException("Failed to find nuget.exe.");
+        }
+        return nugetPath;
+    }
 
-            arguments.Append("install");
-            arguments.AppendQuoted(definition.Package);
+    private static ProcessArgumentBuilder GetArguments(
+        PackageReference definition,
+        DirectoryPath installationRoot, ICakeConfiguration config)
+    {
+        var arguments = new ProcessArgumentBuilder();
 
-            // Output directory
-            arguments.Append("-OutputDirectory");
-            arguments.AppendQuoted(installationRoot.FullPath);
+        arguments.Append("install");
+        arguments.AppendQuoted(definition.Package);
 
-            // if an absolute uri is specified for source, use this
-            // otherwise check config for customise package source/s
-            if (definition.Address != null)
+        // Output directory
+        arguments.Append("-OutputDirectory");
+        arguments.AppendQuoted(installationRoot.FullPath);
+
+        // if an absolute uri is specified for source, use this
+        // otherwise check config for customise package source/s
+        if (definition.Address != null)
+        {
+            arguments.Append("-Source");
+            arguments.AppendQuoted(definition.Address.AbsoluteUri);
+        }
+        else
+        {
+            var nugetSource = config.GetValue(Constants.NuGet.Source);
+            if (!string.IsNullOrWhiteSpace(nugetSource))
             {
                 arguments.Append("-Source");
-                arguments.AppendQuoted(definition.Address.AbsoluteUri);
+                arguments.AppendQuoted(nugetSource);
             }
-            else
-            {
-                var nugetSource = config.GetValue(Constants.NuGet.Source);
-                if (!string.IsNullOrWhiteSpace(nugetSource))
-                {
-                    arguments.Append("-Source");
-                    arguments.AppendQuoted(nugetSource);
-                }
-            }
-
-            // Config
-            var nugetConfig = config.GetValue(Constants.NuGet.ConfigFile);
-            if (!string.IsNullOrWhiteSpace(nugetConfig))
-            {
-                arguments.Append("-ConfigFile");
-                arguments.AppendQuoted(nugetConfig);
-            }
-
-            // Version
-            if (definition.Parameters.TryGetValue("version", out var version))
-            {
-                arguments.Append("-Version");
-                arguments.AppendQuoted(version.First());
-            }
-
-            // Prerelease
-            if (definition.Parameters.ContainsKey("prerelease"))
-            {
-                arguments.Append("-Prerelease");
-            }
-
-            // NoCache
-            if (definition.Parameters.ContainsKey("nocache"))
-            {
-                arguments.Append("-NoCache");
-            }
-
-            arguments.Append("-ExcludeVersion");
-            arguments.Append("-NonInteractive");
-            return arguments;
         }
+
+        // Config
+        var nugetConfig = config.GetValue(Constants.NuGet.ConfigFile);
+        if (!string.IsNullOrWhiteSpace(nugetConfig))
+        {
+            arguments.Append("-ConfigFile");
+            arguments.AppendQuoted(nugetConfig);
+        }
+
+        // Version
+        if (definition.Parameters.TryGetValue("version", out var version))
+        {
+            arguments.Append("-Version");
+            arguments.AppendQuoted(version.First());
+        }
+
+        // Prerelease
+        if (definition.Parameters.ContainsKey("prerelease"))
+        {
+            arguments.Append("-Prerelease");
+        }
+
+        // NoCache
+        if (definition.Parameters.ContainsKey("nocache"))
+        {
+            arguments.Append("-NoCache");
+        }
+
+        arguments.Append("-ExcludeVersion");
+        arguments.Append("-NonInteractive");
+        return arguments;
     }
 }

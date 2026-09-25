@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.IO
+namespace Cake.Common.IO;
+
+/// <summary>
+/// Contains settings used by <c>EnsureDirectoryDoesNotExistSettings</c>.
+/// </summary>
+public class EnsureDirectoryDoesNotExistSettings : DeleteDirectorySettings
 {
-    /// <summary>
-    /// Contains settings used by <c>EnsureDirectoryDoesNotExistSettings</c>.
-    /// </summary>
-    public class EnsureDirectoryDoesNotExistSettings : DeleteDirectorySettings
-    {
-    }
 }

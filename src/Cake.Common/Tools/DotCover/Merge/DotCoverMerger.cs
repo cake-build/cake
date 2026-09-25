@@ -9,77 +9,76 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotCover.Merge
+namespace Cake.Common.Tools.DotCover.Merge;
+
+/// <summary>
+/// DotCover Merge merger.
+/// </summary>
+public sealed class DotCoverMerger : DotCoverTool<DotCoverMergeSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// DotCover Merge merger.
+    /// Initializes a new instance of the <see cref="DotCoverMerger" /> class.
     /// </summary>
-    public sealed class DotCoverMerger : DotCoverTool<DotCoverMergeSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotCoverMerger(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotCoverMerger" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public DotCoverMerger(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Runs DotCover Merge with the specified settings.
+    /// </summary>
+    /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
+    /// <param name="outputFile">The merged output file.</param>
+    /// <param name="settings">The settings.</param>
+    public void Merge(
+        IEnumerable<FilePath> sourceFiles,
+        FilePath outputFile,
+        DotCoverMergeSettings settings)
+    {
+        if (sourceFiles == null || !sourceFiles.Any())
         {
-            _environment = environment;
+            throw new ArgumentNullException("sourceFiles");
         }
+        ArgumentNullException.ThrowIfNull(outputFile);
+        ArgumentNullException.ThrowIfNull(settings);
 
-        /// <summary>
-        /// Runs DotCover Merge with the specified settings.
-        /// </summary>
-        /// <param name="sourceFiles">The list of DotCover coverage snapshot files.</param>
-        /// <param name="outputFile">The merged output file.</param>
-        /// <param name="settings">The settings.</param>
-        public void Merge(
-            IEnumerable<FilePath> sourceFiles,
-            FilePath outputFile,
-            DotCoverMergeSettings settings)
-        {
-            if (sourceFiles == null || !sourceFiles.Any())
-            {
-                throw new ArgumentNullException("sourceFiles");
-            }
-            ArgumentNullException.ThrowIfNull(outputFile);
-            ArgumentNullException.ThrowIfNull(settings);
+        // Run the tool.
+        Run(settings, GetArguments(sourceFiles, outputFile, settings));
+    }
 
-            // Run the tool.
-            Run(settings, GetArguments(sourceFiles, outputFile, settings));
-        }
+    private ProcessArgumentBuilder GetArguments(
+        IEnumerable<FilePath> sourceFiles,
+        FilePath outputFile,
+        DotCoverMergeSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
 
-        private ProcessArgumentBuilder GetArguments(
-            IEnumerable<FilePath> sourceFiles,
-            FilePath outputFile,
-            DotCoverMergeSettings settings)
-        {
-            var builder = new ProcessArgumentBuilder();
+        builder.Append("Merge");
 
-            builder.Append("Merge");
+        // Set configuration file if exists.
+        GetConfigurationFileArgument(settings).CopyTo(builder);
 
-            // Set configuration file if exists.
-            GetConfigurationFileArgument(settings).CopyTo(builder);
+        // Set the Source files.
+        var source = string.Join(';', sourceFiles.Select(s => s.MakeAbsolute(_environment).FullPath));
+        builder.AppendSwitch("/Source", "=", source.Quote());
 
-            // Set the Source files.
-            var source = string.Join(';', sourceFiles.Select(s => s.MakeAbsolute(_environment).FullPath));
-            builder.AppendSwitch("/Source", "=", source.Quote());
+        // Set the Output file.
+        outputFile = outputFile.MakeAbsolute(_environment);
+        builder.AppendSwitch("/Output", "=", outputFile.FullPath.Quote());
 
-            // Set the Output file.
-            outputFile = outputFile.MakeAbsolute(_environment);
-            builder.AppendSwitch("/Output", "=", outputFile.FullPath.Quote());
+        // Get Global settings
+        GetArguments(settings).CopyTo(builder);
 
-            // Get Global settings
-            GetArguments(settings).CopyTo(builder);
-
-            return builder;
-        }
+        return builder;
     }
 }

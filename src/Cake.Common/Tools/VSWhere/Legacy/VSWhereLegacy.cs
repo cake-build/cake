@@ -7,51 +7,50 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.VSWhere.Legacy
+namespace Cake.Common.Tools.VSWhere.Legacy;
+
+/// <summary>
+/// The VSWhere tool that finds Visual Studio products.
+/// </summary>
+public sealed class VSWhereLegacy : VSWhereTool<VSWhereLegacySettings>
 {
     /// <summary>
-    /// The VSWhere tool that finds Visual Studio products.
+    /// Initializes a new instance of the <see cref="VSWhereLegacy"/> class.
     /// </summary>
-    public sealed class VSWhereLegacy : VSWhereTool<VSWhereLegacySettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="toolLocator">The tool locator.</param>
+    public VSWhereLegacy(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
+        IToolLocator toolLocator) : base(fileSystem, environment, processRunner, toolLocator)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VSWhereLegacy"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="toolLocator">The tool locator.</param>
-        public VSWhereLegacy(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner,
-            IToolLocator toolLocator) : base(fileSystem, environment, processRunner, toolLocator)
+    }
+
+    /// <summary>
+    /// Also searches Visual Studio 2015 and older products. Information is limited.
+    /// </summary>
+    /// <param name="settings">The settings.</param>
+    /// <returns>Installation paths for all instances.</returns>
+    public DirectoryPathCollection Legacy(VSWhereLegacySettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        return RunVSWhere(settings, GetArguments(settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(VSWhereLegacySettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("-legacy");
+
+        if (settings.Latest)
         {
+            builder.Append("-latest");
         }
 
-        /// <summary>
-        /// Also searches Visual Studio 2015 and older products. Information is limited.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>Installation paths for all instances.</returns>
-        public DirectoryPathCollection Legacy(VSWhereLegacySettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(settings);
+        AddCommonArguments(settings, builder);
 
-            return RunVSWhere(settings, GetArguments(settings));
-        }
-
-        private ProcessArgumentBuilder GetArguments(VSWhereLegacySettings settings)
-        {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("-legacy");
-
-            if (settings.Latest)
-            {
-                builder.Append("-latest");
-            }
-
-            AddCommonArguments(settings, builder);
-
-            return builder;
-        }
+        return builder;
     }
 }

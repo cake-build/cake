@@ -4,19 +4,18 @@
 
 using Cake.Common.Tools.VSWhere.Product;
 
-namespace Cake.Common.Tests.Fixtures.Tools.VSWhere.Product
-{
-    internal sealed class VSWhereProductFixture : VSWhereFixture<VSWhereProductSettings>
-    {
-        public VSWhereProductFixture()
-        {
-            Settings.Products = "Microsoft.VisualStudio.Product.BuildTools";
-        }
+namespace Cake.Common.Tests.Fixtures.Tools.VSWhere.Product;
 
-        protected override void RunTool()
-        {
-            var tool = new VSWhereProduct(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Products(Settings);
-        }
+internal sealed class VSWhereProductFixture : VSWhereFixture<VSWhereProductSettings>
+{
+    public VSWhereProductFixture()
+    {
+        Settings.Products = "Microsoft.VisualStudio.Product.BuildTools";
+    }
+
+    protected override void RunTool()
+    {
+        var tool = new VSWhereProduct(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Products(Settings);
     }
 }

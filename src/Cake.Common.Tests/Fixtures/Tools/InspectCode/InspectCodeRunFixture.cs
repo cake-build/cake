@@ -10,27 +10,26 @@ using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Tools.InspectCode
+namespace Cake.Common.Tests.Fixtures.Tools.InspectCode;
+
+internal sealed class InspectCodeRunFixture : InspectCodeFixture
 {
-    internal sealed class InspectCodeRunFixture : InspectCodeFixture
+    public ICakeLog Log { get; set; }
+    public FilePath Solution { get; set; }
+
+    public InspectCodeRunFixture(bool useX86 = false) : base(useX86)
     {
-        public ICakeLog Log { get; set; }
-        public FilePath Solution { get; set; }
+        Solution = new FilePath("./Test.sln");
 
-        public InspectCodeRunFixture(bool useX86 = false) : base(useX86)
-        {
-            Solution = new FilePath("./Test.sln");
+        Log = Substitute.For<ICakeLog>();
 
-            Log = Substitute.For<ICakeLog>();
+        FileSystem.CreateFile("build/inspect_code.xml").SetContent(Resources.InspectCodeReportNoViolations.NormalizeLineEndings());
+        FileSystem.CreateFile("build/violations.xml").SetContent(Resources.InspectCodeReportWithViolations.NormalizeLineEndings());
+    }
 
-            FileSystem.CreateFile("build/inspect_code.xml").SetContent(Resources.InspectCodeReportNoViolations.NormalizeLineEndings());
-            FileSystem.CreateFile("build/violations.xml").SetContent(Resources.InspectCodeReportWithViolations.NormalizeLineEndings());
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new InspectCodeRunner(FileSystem, Environment, ProcessRunner, Tools, Log);
-            tool.Run(Solution, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new InspectCodeRunner(FileSystem, Environment, ProcessRunner, Tools, Log);
+        tool.Run(Solution, Settings);
     }
 }

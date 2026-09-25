@@ -3,58 +3,56 @@
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tests.Fixtures.Build;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.TeamCity.Data
+namespace Cake.Common.Tests.Unit.Build.TeamCity.Data;
+
+public sealed class TeamCityEnvironmentInfoTests
 {
-    public sealed class TeamCityEnvironmentInfoTests
+    public sealed class TheProjectProperty
     {
-        public sealed class TheProjectProperty
+        [Fact]
+        public void Should_Not_Be_Null()
         {
-            [Fact]
-            public void Should_Not_Be_Null()
-            {
-                // Given
-                var info = new TeamCityInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new TeamCityInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Project;
+            // When
+            var result = info.Project;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
         }
+    }
 
-        public sealed class TheBuildProperty
+    public sealed class TheBuildProperty
+    {
+        [Fact]
+        public void Should_Not_Be_Null()
         {
-            [Fact]
-            public void Should_Not_Be_Null()
-            {
-                // Given
-                var info = new TeamCityInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new TeamCityInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Build;
+            // When
+            var result = info.Build;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
         }
+    }
 
-        public sealed class ThePullRequestProperty
+    public sealed class ThePullRequestProperty
+    {
+        [Fact]
+        public void Should_Not_Be_Null()
         {
-            [Fact]
-            public void Should_Not_Be_Null()
-            {
-                // Given
-                var info = new TeamCityInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new TeamCityInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.PullRequest;
+            // When
+            var result = info.PullRequest;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
         }
     }
 }

@@ -4,44 +4,43 @@
 
 using Cake.Common.Tools.GitReleaseManager.Create;
 
-namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager
+namespace Cake.Common.Tests.Fixtures.Tools.GitReleaseManager;
+
+internal sealed class GitReleaseManagerCreatorFixture : GitReleaseManagerFixture<GitReleaseManagerCreateSettings>
 {
-    internal sealed class GitReleaseManagerCreatorFixture : GitReleaseManagerFixture<GitReleaseManagerCreateSettings>
+    private bool _useToken = false;
+
+    public string UserName { get; set; }
+    public string Password { get; set; }
+    public string Token { get; set; }
+    public string Owner { get; set; }
+    public string Repository { get; set; }
+
+    public GitReleaseManagerCreatorFixture()
     {
-        private bool _useToken = false;
+        UserName = "bob";
+        Password = "password";
+        Token = "token";
+        Owner = "repoOwner";
+        Repository = "repo";
+    }
 
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string Token { get; set; }
-        public string Owner { get; set; }
-        public string Repository { get; set; }
+    public void UseToken()
+    {
+        _useToken = true;
+    }
 
-        public GitReleaseManagerCreatorFixture()
+    protected override void RunTool()
+    {
+        var tool = new GitReleaseManagerCreator(FileSystem, Environment, ProcessRunner, Tools);
+
+        if (_useToken)
         {
-            UserName = "bob";
-            Password = "password";
-            Token = "token";
-            Owner = "repoOwner";
-            Repository = "repo";
+            tool.Create(Token, Owner, Repository, Settings);
         }
-
-        public void UseToken()
+        else
         {
-            _useToken = true;
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new GitReleaseManagerCreator(FileSystem, Environment, ProcessRunner, Tools);
-
-            if (_useToken)
-            {
-                tool.Create(Token, Owner, Repository, Settings);
-            }
-            else
-            {
-                tool.Create(UserName, Password, Owner, Repository, Settings);
-            }
+            tool.Create(UserName, Password, Owner, Repository, Settings);
         }
     }
 }

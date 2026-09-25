@@ -6,67 +6,66 @@ using System;
 using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Contains extension methods for <see cref="System.String"/>.
+/// </summary>
+public static class StringExtensions
 {
     /// <summary>
-    /// Contains extension methods for <see cref="System.String"/>.
+    /// Quotes the specified <see cref="System.String"/> as a process argument literal.
+    /// Trailing backslashes and embedded quotes are escaped so a standard Windows
+    /// argv parser recovers the original value.
     /// </summary>
-    public static class StringExtensions
+    /// <param name="value">The literal string to quote. Already-quoted tokens are left unchanged.</param>
+    /// <returns>A quoted string.</returns>
+    public static string Quote(this string value)
     {
-        /// <summary>
-        /// Quotes the specified <see cref="System.String"/> as a process argument literal.
-        /// Trailing backslashes and embedded quotes are escaped so a standard Windows
-        /// argv parser recovers the original value.
-        /// </summary>
-        /// <param name="value">The literal string to quote. Already-quoted tokens are left unchanged.</param>
-        /// <returns>A quoted string.</returns>
-        public static string Quote(this string value)
+        if (ProcessArgumentEscaper.IsQuoted(value))
         {
-            if (ProcessArgumentEscaper.IsQuoted(value))
-            {
-                return value;
-            }
-
-            return ProcessArgumentEscaper.Escape(value, alwaysQuote: true);
+            return value;
         }
 
-        /// <summary>
-        /// Unquotes a process argument token produced by <see cref="Quote"/> /
-        /// <see cref="ProcessArgumentEscaper.Escape"/>.
-        /// Trailing backslashes and embedded quotes are unescaped; this is not a naive trim of <c>"</c>.
-        /// </summary>
-        /// <param name="value">The string to unquote.</param>
-        /// <returns>The literal argument value.</returns>
-        public static string UnQuote(this string value)
-        {
-            return ProcessArgumentEscaper.Unquote(value);
-        }
+        return ProcessArgumentEscaper.Escape(value, alwaysQuote: true);
+    }
 
-        /// <summary>
-        /// Splits the <see cref="String"/> into lines.
-        /// </summary>
-        /// <param name="content">The string to split.</param>
-        /// <returns>The lines making up the provided string.</returns>
-        public static string[] SplitLines(this string content)
-        {
-            content = NormalizeLineEndings(content);
-            return content.Split(new[] { "\r\n" }, StringSplitOptions.None);
-        }
+    /// <summary>
+    /// Unquotes a process argument token produced by <see cref="Quote"/> /
+    /// <see cref="ProcessArgumentEscaper.Escape"/>.
+    /// Trailing backslashes and embedded quotes are unescaped; this is not a naive trim of <c>"</c>.
+    /// </summary>
+    /// <param name="value">The string to unquote.</param>
+    /// <returns>The literal argument value.</returns>
+    public static string UnQuote(this string value)
+    {
+        return ProcessArgumentEscaper.Unquote(value);
+    }
 
-        /// <summary>
-        /// Normalizes the line endings in a <see cref="String"/>.
-        /// </summary>
-        /// <param name="value">The string to normalize line endings in.</param>
-        /// <returns>A <see cref="String"/> with normalized line endings.</returns>
-        public static string NormalizeLineEndings(this string value)
+    /// <summary>
+    /// Splits the <see cref="String"/> into lines.
+    /// </summary>
+    /// <param name="content">The string to split.</param>
+    /// <returns>The lines making up the provided string.</returns>
+    public static string[] SplitLines(this string content)
+    {
+        content = NormalizeLineEndings(content);
+        return content.Split(["\r\n"], StringSplitOptions.None);
+    }
+
+    /// <summary>
+    /// Normalizes the line endings in a <see cref="String"/>.
+    /// </summary>
+    /// <param name="value">The string to normalize line endings in.</param>
+    /// <returns>A <see cref="String"/> with normalized line endings.</returns>
+    public static string NormalizeLineEndings(this string value)
+    {
+        if (value != null)
         {
-            if (value != null)
-            {
-                value = value.Replace("\r\n", "\n");
-                value = value.Replace("\r", string.Empty);
-                return value.Replace("\n", "\r\n");
-            }
-            return string.Empty;
+            value = value.Replace("\r\n", "\n");
+            value = value.Replace("\r", string.Empty);
+            return value.Replace("\n", "\r\n");
         }
+        return string.Empty;
     }
 }

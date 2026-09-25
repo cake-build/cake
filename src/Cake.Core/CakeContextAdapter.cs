@@ -8,60 +8,59 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Adapter to ensure correct conversion of Cake Context in derived classes.
+/// </summary>
+public abstract class CakeContextAdapter : ICakeContext
 {
+    private readonly ICakeContext _context;
+
     /// <summary>
-    /// Adapter to ensure correct conversion of Cake Context in derived classes.
+    /// Initializes a new instance of the <see cref="CakeContextAdapter"/> class.
     /// </summary>
-    public abstract class CakeContextAdapter : ICakeContext
+    /// <param name="context">The Cake Context.</param>
+    protected CakeContextAdapter(ICakeContext context)
     {
-        private readonly ICakeContext _context;
+        ArgumentNullException.ThrowIfNull(context);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeContextAdapter"/> class.
-        /// </summary>
-        /// <param name="context">The Cake Context.</param>
-        protected CakeContextAdapter(ICakeContext context)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-
-            _context = context;
-        }
-
-        /// <inheritdoc/>
-        public virtual IFileSystem FileSystem => _context.FileSystem;
-
-        /// <inheritdoc/>
-        public virtual ICakeEnvironment Environment => _context.Environment;
-
-        /// <inheritdoc/>
-        public virtual IGlobber Globber => _context.Globber;
-
-        /// <inheritdoc/>
-        public virtual ICakeLog Log => _context.Log;
-
-        /// <inheritdoc/>
-        public virtual ICakeArguments Arguments => _context.Arguments;
-
-        /// <inheritdoc/>
-        public virtual IProcessRunner ProcessRunner => _context.ProcessRunner;
-
-        /// <inheritdoc/>
-        public virtual IRegistry Registry => _context.Registry;
-
-        /// <inheritdoc/>
-        public virtual IToolLocator Tools => _context.Tools;
-
-        /// <inheritdoc/>
-        public virtual ICakeDataResolver Data => _context.Data;
-
-        /// <inheritdoc/>
-        public virtual ICakeConfiguration Configuration => _context.Configuration;
-
-        /// <inheritdoc/>
-        public virtual IToolInstaller ToolInstaller => _context.ToolInstaller;
-
-        /// <inheritdoc/>
-        public virtual IServiceProvider ServiceProvider => _context.ServiceProvider;
+        _context = context;
     }
+
+    /// <inheritdoc/>
+    public virtual IFileSystem FileSystem => _context.FileSystem;
+
+    /// <inheritdoc/>
+    public virtual ICakeEnvironment Environment => _context.Environment;
+
+    /// <inheritdoc/>
+    public virtual IGlobber Globber => _context.Globber;
+
+    /// <inheritdoc/>
+    public virtual ICakeLog Log => _context.Log;
+
+    /// <inheritdoc/>
+    public virtual ICakeArguments Arguments => _context.Arguments;
+
+    /// <inheritdoc/>
+    public virtual IProcessRunner ProcessRunner => _context.ProcessRunner;
+
+    /// <inheritdoc/>
+    public virtual IRegistry Registry => _context.Registry;
+
+    /// <inheritdoc/>
+    public virtual IToolLocator Tools => _context.Tools;
+
+    /// <inheritdoc/>
+    public virtual ICakeDataResolver Data => _context.Data;
+
+    /// <inheritdoc/>
+    public virtual ICakeConfiguration Configuration => _context.Configuration;
+
+    /// <inheritdoc/>
+    public virtual IToolInstaller ToolInstaller => _context.ToolInstaller;
+
+    /// <inheritdoc/>
+    public virtual IServiceProvider ServiceProvider => _context.ServiceProvider;
 }

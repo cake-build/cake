@@ -5,37 +5,36 @@
 using Cake.Core;
 using Cake.Core.Annotations;
 
-namespace Cake.Common
+namespace Cake.Common;
+
+/// <summary>
+/// Contains functionality related to arguments.
+/// </summary>
+[CakeAliasCategory("Dry Run")]
+public static class DryRunAliases
 {
     /// <summary>
-    /// Contains functionality related to arguments.
+    /// Determines whether or not the current script execution is a dry run.
     /// </summary>
-    [CakeAliasCategory("Dry Run")]
-    public static class DryRunAliases
+    /// <param name="context">The context.</param>
+    /// <returns>Whether or not the current script execution is a dry run.</returns>
+    /// <example>
+    /// <code>
+    /// Setup(context =>
+    /// {
+    ///     if (!context.IsDryRun())
+    ///     {
+    ///         // Do things that you don't want to
+    ///         // do during a dry run.
+    ///     }
+    /// });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    public static bool IsDryRun(this ICakeContext context)
     {
-        /// <summary>
-        /// Determines whether or not the current script execution is a dry run.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns>Whether or not the current script execution is a dry run.</returns>
-        /// <example>
-        /// <code>
-        /// Setup(context =>
-        /// {
-        ///     if (!context.IsDryRun())
-        ///     {
-        ///         // Do things that you don't want to
-        ///         // do during a dry run.
-        ///     }
-        /// });
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        public static bool IsDryRun(this ICakeContext context)
-        {
-            return (context.Argument<bool?>("dryrun", false) ?? true)
-                || (context.Argument<bool?>("noop", false) ?? true)
-                || (context.Argument<bool?>("whatif", false) ?? true);
-        }
+        return (context.Argument<bool?>("dryrun", false) ?? true)
+            || (context.Argument<bool?>("noop", false) ?? true)
+            || (context.Argument<bool?>("whatif", false) ?? true);
     }
 }

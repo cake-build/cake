@@ -2,1140 +2,1137 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Linq;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core.IO;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.DotNet.MSBuild
+namespace Cake.Common.Tests.Unit.Tools.DotNet.MSBuild;
+
+public sealed class DotNetMSBuildSettingsExtensionsTests
 {
-    public sealed class DotNetMSBuildSettingsExtensionsTests
+    public sealed class TheWithTargetMethod
     {
-        public sealed class TheWithTargetMethod
+        [Fact]
+        public void Should_Add_Target_To_Configuration()
         {
-            [Fact]
-            public void Should_Add_Target_To_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.WithTarget("Target");
+            // When
+            settings.WithTarget("Target");
 
-                // Then
-                Assert.True(settings.Targets.Contains("Target"));
-            }
-
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-
-                // When
-                var result = settings.WithTarget("Target");
-
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.Targets.Contains("Target"));
         }
 
-        public sealed class TheWithPropertyMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Add_Property_To_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.WithProperty("PropertyName", "Value");
+            // When
+            var result = settings.WithTarget("Target");
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey("PropertyName"));
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheWithPropertyMethod
+    {
+        [Fact]
+        public void Should_Add_Property_To_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.WithProperty("PropertyName", "Value");
+            // When
+            settings.WithProperty("PropertyName", "Value");
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.Properties.ContainsKey("PropertyName"));
         }
 
-        public sealed class TheDetailedSummaryMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Set_Detailed_Summary()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.ShowDetailedSummary();
+            // When
+            var result = settings.WithProperty("PropertyName", "Value");
 
-                // Then
-                Assert.True(settings.DetailedSummary);
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheDetailedSummaryMethod
+    {
+        [Fact]
+        public void Should_Set_Detailed_Summary()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.ShowDetailedSummary();
+            // When
+            settings.ShowDetailedSummary();
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.DetailedSummary);
         }
 
-        public sealed class TheWithIgnoredProjectExtensionMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Add_Ignored_Extension_To_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.WithIgnoredProjectExtension(".sln");
+            // When
+            var result = settings.ShowDetailedSummary();
 
-                // Then
-                Assert.True(settings.IgnoreProjectExtensions.Contains(".sln"));
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheWithIgnoredProjectExtensionMethod
+    {
+        [Fact]
+        public void Should_Add_Ignored_Extension_To_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.WithIgnoredProjectExtension(".sln");
+            // When
+            settings.WithIgnoredProjectExtension(".sln");
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.IgnoreProjectExtensions.Contains(".sln"));
         }
 
-        public sealed class TheSetMaxCpuCountMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Set_MaxCpuCount()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.SetMaxCpuCount(4);
+            // When
+            var result = settings.WithIgnoredProjectExtension(".sln");
 
-                // Then
-                Assert.Equal(4, settings.MaxCpuCount);
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Set_MaxCpuCount_To_Zero_If_Negative_Value()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheSetMaxCpuCountMethod
+    {
+        [Fact]
+        public void Should_Set_MaxCpuCount()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.SetMaxCpuCount(-1);
+            // When
+            settings.SetMaxCpuCount(4);
 
-                // Then
-                Assert.Equal(0, settings.MaxCpuCount);
-            }
-
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-
-                // When
-                var result = settings.SetMaxCpuCount(4);
-
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.Equal(4, settings.MaxCpuCount);
         }
 
-        public sealed class TheExcludeAutoResponseFilesMethod
+        [Fact]
+        public void Should_Set_MaxCpuCount_To_Zero_If_Negative_Value()
         {
-            [Fact]
-            public void Should_Set_Exclude_Auto_Response_Files()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.ExcludeAutoResponseFiles();
+            // When
+            settings.SetMaxCpuCount(-1);
 
-                // Then
-                Assert.True(settings.ExcludeAutoResponseFiles);
-            }
-
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-
-                // When
-                var result = settings.ExcludeAutoResponseFiles();
-
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.Equal(0, settings.MaxCpuCount);
         }
 
-        public sealed class TheHideLogoMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Set_No_Logo()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.HideLogo();
+            // When
+            var result = settings.SetMaxCpuCount(4);
 
-                // Then
-                Assert.True(settings.NoLogo);
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheExcludeAutoResponseFilesMethod
+    {
+        [Fact]
+        public void Should_Set_Exclude_Auto_Response_Files()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.HideLogo();
+            // When
+            settings.ExcludeAutoResponseFiles();
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.ExcludeAutoResponseFiles);
         }
 
-        public sealed class TheSetContinuousIntegrationBuildMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Theory]
-            [InlineData(null)]
-            [InlineData(true)]
-            [InlineData(false)]
-            public void Should_Set_ContinuousIntegrationBuild(bool? continuousIntegrationBuild)
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.SetContinuousIntegrationBuild(continuousIntegrationBuild);
+            // When
+            var result = settings.ExcludeAutoResponseFiles();
 
-                // Then
-                Assert.Equal(continuousIntegrationBuild, settings.ContinuousIntegrationBuild);
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheHideLogoMethod
+    {
+        [Fact]
+        public void Should_Set_No_Logo()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.SetContinuousIntegrationBuild();
+            // When
+            settings.HideLogo();
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.NoLogo);
         }
 
-        public sealed class TheUseToolVersionMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Set_Tool_Version()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.UseToolVersion(MSBuildVersion.MSBuild35);
+            // When
+            var result = settings.HideLogo();
 
-                // Then
-                Assert.Equal(MSBuildVersion.MSBuild35, settings.ToolVersion);
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheSetContinuousIntegrationBuildMethod
+    {
+        [Theory]
+        [InlineData(null)]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Should_Set_ContinuousIntegrationBuild(bool? continuousIntegrationBuild)
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.UseToolVersion(MSBuildVersion.MSBuild35);
+            // When
+            settings.SetContinuousIntegrationBuild(continuousIntegrationBuild);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.Equal(continuousIntegrationBuild, settings.ContinuousIntegrationBuild);
         }
 
-        public sealed class TheValidateProjectFileMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Set_Validate_Project_File()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.ValidateProjectFile();
+            // When
+            var result = settings.SetContinuousIntegrationBuild();
 
-                // Then
-                Assert.True(settings.ValidateProjectFile);
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheUseToolVersionMethod
+    {
+        [Fact]
+        public void Should_Set_Tool_Version()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.ValidateProjectFile();
+            // When
+            settings.UseToolVersion(MSBuildVersion.MSBuild35);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.Equal(MSBuildVersion.MSBuild35, settings.ToolVersion);
         }
 
-        public sealed class TheWithResponseFileMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Add_Response_File_To_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                var filePath = FilePath.FromString(".sln");
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.WithResponseFile(filePath);
+            // When
+            var result = settings.UseToolVersion(MSBuildVersion.MSBuild35);
 
-                // Then
-                Assert.True(settings.ResponseFiles.Contains(filePath));
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheValidateProjectFileMethod
+    {
+        [Fact]
+        public void Should_Set_Validate_Project_File()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.WithResponseFile(".sln");
+            // When
+            settings.ValidateProjectFile();
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.ValidateProjectFile);
         }
 
-        public sealed class TheUseDistributedFileLoggerMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Set_Distributed_File_Logger()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.UseDistributedFileLogger();
+            // When
+            var result = settings.ValidateProjectFile();
 
-                // Then
-                Assert.True(settings.DistributedFileLogger);
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheWithResponseFileMethod
+    {
+        [Fact]
+        public void Should_Add_Response_File_To_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            var filePath = FilePath.FromString(".sln");
 
-                // When
-                var result = settings.UseDistributedFileLogger();
+            // When
+            settings.WithResponseFile(filePath);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.ResponseFiles.Contains(filePath));
         }
 
-        public sealed class TheWithDistributedLoggerMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Add_Distributed_Logger_To_Configuration()
+            // Given
+            var settings = new DotNetMSBuildSettings();
+
+            // When
+            var result = settings.WithResponseFile(".sln");
+
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
+
+    public sealed class TheUseDistributedFileLoggerMethod
+    {
+        [Fact]
+        public void Should_Set_Distributed_File_Logger()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+
+            // When
+            settings.UseDistributedFileLogger();
+
+            // Then
+            Assert.True(settings.DistributedFileLogger);
+        }
+
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+
+            // When
+            var result = settings.UseDistributedFileLogger();
+
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
+
+    public sealed class TheWithDistributedLoggerMethod
+    {
+        [Fact]
+        public void Should_Add_Distributed_Logger_To_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            var distributedLogger = new MSBuildDistributedLogger
             {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                var distributedLogger = new MSBuildDistributedLogger
+                CentralLogger = new MSBuildLogger
                 {
-                    CentralLogger = new MSBuildLogger
-                    {
-                        Assembly = "LoggerAssembly1",
-                        Class = "LoggerClass1",
-                        Parameters = "LoggerParameters1"
-                    },
-                    ForwardingLogger = new MSBuildLogger
-                    {
-                        Assembly = "LoggerAssembly2",
-                        Class = "LoggerClass2",
-                        Parameters = "LoggerParameters2"
-                    }
-                };
-
-                // When
-                settings.WithDistributedLogger(distributedLogger);
-
-                // Then
-                Assert.True(settings.DistributedLoggers.Contains(distributedLogger));
-            }
-
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-
-                // When
-                var result = settings.WithDistributedLogger(new MSBuildDistributedLogger());
-
-                // Then
-                Assert.Equal(settings, result);
-            }
-        }
-
-        public sealed class TheSetConsoleLoggerSettingsMethod
-        {
-            [Fact]
-            public void Should_Set_Console_Logger_Settings()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                var consoleLoggerParameters = new MSBuildLoggerSettings
+                    Assembly = "LoggerAssembly1",
+                    Class = "LoggerClass1",
+                    Parameters = "LoggerParameters1"
+                },
+                ForwardingLogger = new MSBuildLogger
                 {
-                    PerformanceSummary = true,
-                    ConsoleColorType = MSBuildConsoleColorType.ForceAnsi
-                };
+                    Assembly = "LoggerAssembly2",
+                    Class = "LoggerClass2",
+                    Parameters = "LoggerParameters2"
+                }
+            };
 
-                // When
-                settings.SetConsoleLoggerSettings(consoleLoggerParameters);
+            // When
+            settings.WithDistributedLogger(distributedLogger);
 
-                // Then
-                Assert.Same(consoleLoggerParameters, settings.ConsoleLoggerSettings);
-            }
-
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-
-                // When
-                var result = settings.SetConsoleLoggerSettings(new MSBuildLoggerSettings());
-
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.DistributedLoggers.Contains(distributedLogger));
         }
 
-        public sealed class TheAddFileLoggerMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Add_Logger()
+            // Given
+            var settings = new DotNetMSBuildSettings();
+
+            // When
+            var result = settings.WithDistributedLogger(new MSBuildDistributedLogger());
+
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
+
+    public sealed class TheSetConsoleLoggerSettingsMethod
+    {
+        [Fact]
+        public void Should_Set_Console_Logger_Settings()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            var consoleLoggerParameters = new MSBuildLoggerSettings
             {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                var fileLogger = new MSBuildFileLoggerSettings();
-                var fileLogger2 = new MSBuildFileLoggerSettings() { LogFile = "A" };
+                PerformanceSummary = true,
+                ConsoleColorType = MSBuildConsoleColorType.ForceAnsi
+            };
 
-                // When
-                settings.AddFileLogger(fileLogger);
-                settings.AddFileLogger(fileLogger2);
+            // When
+            settings.SetConsoleLoggerSettings(consoleLoggerParameters);
 
-                // Then
-                var loggers = settings.FileLoggers.ToArray();
-                Assert.Equal(2, loggers.Length);
-                Assert.Equal(fileLogger, loggers[0]);
-                Assert.Equal(fileLogger2, loggers[1]);
-                Assert.Equal("A", loggers[1].LogFile);
-            }
-
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-
-                // When
-                var result = settings.AddFileLogger(new MSBuildFileLoggerSettings());
-                var result1 = settings.AddFileLogger();
-
-                // Then
-                Assert.Equal(settings, result);
-                Assert.Equal(settings, result1);
-            }
+            // Then
+            Assert.Same(consoleLoggerParameters, settings.ConsoleLoggerSettings);
         }
 
-        public sealed class TheEnableBinaryLoggerMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Enable_BinaryLogger()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.EnableBinaryLogger();
+            // When
+            var result = settings.SetConsoleLoggerSettings(new MSBuildLoggerSettings());
 
-                // Then
-                Assert.NotNull(settings.BinaryLogger);
-                Assert.True(settings.BinaryLogger.Enabled);
-                Assert.Null(settings.BinaryLogger.FileName);
-                Assert.Equal(MSBuildBinaryLoggerImports.Unspecified, settings.BinaryLogger.Imports);
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheAddFileLoggerMethod
+    {
+        [Fact]
+        public void Should_Add_Logger()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            var fileLogger = new MSBuildFileLoggerSettings();
+            var fileLogger2 = new MSBuildFileLoggerSettings() { LogFile = "A" };
 
-                // When
-                var result = settings.EnableBinaryLogger();
+            // When
+            settings.AddFileLogger(fileLogger);
+            settings.AddFileLogger(fileLogger2);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            var loggers = settings.FileLoggers.ToArray();
+            Assert.Equal(2, loggers.Length);
+            Assert.Equal(fileLogger, loggers[0]);
+            Assert.Equal(fileLogger2, loggers[1]);
+            Assert.Equal("A", loggers[1].LogFile);
         }
 
-        public sealed class TheWithLoggerMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Add_Logger()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.WithLogger("LoggerAssembly1", "LoggerClass1", "LoggerParameters1");
-                settings.WithLogger("LoggerAssembly2", "LoggerClass2", "LoggerParameters2");
+            // When
+            var result = settings.AddFileLogger(new MSBuildFileLoggerSettings());
+            var result1 = settings.AddFileLogger();
 
-                // Then
-                var loggers = settings.Loggers.ToArray();
-                Assert.Equal(2, loggers.Length);
-                Assert.Equal("LoggerAssembly1", loggers[0].Assembly);
-                Assert.Equal("LoggerClass1", loggers[0].Class);
-                Assert.Equal("LoggerParameters1", loggers[0].Parameters);
-                Assert.Equal("LoggerAssembly2", loggers[1].Assembly);
-                Assert.Equal("LoggerClass2", loggers[1].Class);
-                Assert.Equal("LoggerParameters2", loggers[1].Parameters);
-            }
+            // Then
+            Assert.Equal(settings, result);
+            Assert.Equal(settings, result1);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheEnableBinaryLoggerMethod
+    {
+        [Fact]
+        public void Should_Enable_BinaryLogger()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.WithLogger("Logger");
+            // When
+            settings.EnableBinaryLogger();
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.NotNull(settings.BinaryLogger);
+            Assert.True(settings.BinaryLogger.Enabled);
+            Assert.Null(settings.BinaryLogger.FileName);
+            Assert.Equal(MSBuildBinaryLoggerImports.Unspecified, settings.BinaryLogger.Imports);
         }
 
-        public sealed class TheDisableConsoleLoggerMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Set_Disable_Console_Logger()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.DisableConsoleLogger();
+            // When
+            var result = settings.EnableBinaryLogger();
 
-                // Then
-                Assert.True(settings.DisableConsoleLogger);
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheWithLoggerMethod
+    {
+        [Fact]
+        public void Should_Add_Logger()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.DisableConsoleLogger();
+            // When
+            settings.WithLogger("LoggerAssembly1", "LoggerClass1", "LoggerParameters1");
+            settings.WithLogger("LoggerAssembly2", "LoggerClass2", "LoggerParameters2");
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            var loggers = settings.Loggers.ToArray();
+            Assert.Equal(2, loggers.Length);
+            Assert.Equal("LoggerAssembly1", loggers[0].Assembly);
+            Assert.Equal("LoggerClass1", loggers[0].Class);
+            Assert.Equal("LoggerParameters1", loggers[0].Parameters);
+            Assert.Equal("LoggerAssembly2", loggers[1].Assembly);
+            Assert.Equal("LoggerClass2", loggers[1].Class);
+            Assert.Equal("LoggerParameters2", loggers[1].Parameters);
         }
 
-        public sealed class TheSetWarningCodeAsErrorMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Add_Warning_Code_To_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.SetWarningCodeAsError("ERR1");
+            // When
+            var result = settings.WithLogger("Logger");
 
-                // Then
-                Assert.True(settings.WarningCodesAsError.Contains("ERR1"));
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheDisableConsoleLoggerMethod
+    {
+        [Fact]
+        public void Should_Set_Disable_Console_Logger()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.SetWarningCodeAsError("ERR1");
+            // When
+            settings.DisableConsoleLogger();
 
-                // Then
-                Assert.Equal(settings, result);
-            }
-
-            [Theory]
-            [InlineData(null)]
-            [InlineData("")]
-            [InlineData("          ")]
-            public void Should_Throw_Exception_If_Null_Or_Whitespace(string warningCode)
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-
-                // When
-                var result = Record.Exception(() => settings.SetWarningCodeAsError(warningCode));
-
-                // Then
-                AssertEx.IsArgumentException(result, "warningCode", "Warning code cannot be null or empty");
-            }
+            // Then
+            Assert.True(settings.DisableConsoleLogger);
         }
 
-        public sealed class TheSetWarningCodeAsMessageMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Add_Warning_Code_To_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.SetWarningCodeAsMessage("ERR1");
+            // When
+            var result = settings.DisableConsoleLogger();
 
-                // Then
-                Assert.True(settings.WarningCodesAsMessage.Contains("ERR1"));
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheSetWarningCodeAsErrorMethod
+    {
+        [Fact]
+        public void Should_Add_Warning_Code_To_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.SetWarningCodeAsMessage("ERR1");
+            // When
+            settings.SetWarningCodeAsError("ERR1");
 
-                // Then
-                Assert.Equal(settings, result);
-            }
-
-            [Theory]
-            [InlineData(null)]
-            [InlineData("")]
-            [InlineData("          ")]
-            public void Should_Throw_Exception_If_Null_Or_Whitespace(string warningCode)
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-
-                // When
-                var result = Record.Exception(() => settings.SetWarningCodeAsMessage(warningCode));
-
-                // Then
-                AssertEx.IsArgumentException(result, "warningCode", "Warning code cannot be null or empty");
-            }
+            // Then
+            Assert.True(settings.WarningCodesAsError.Contains("ERR1"));
         }
 
-        public sealed class TheTreatAllWarningsAsMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Theory]
-            [InlineData(MSBuildTreatAllWarningsAs.Message)]
-            [InlineData(MSBuildTreatAllWarningsAs.Error)]
-            public void Should_Set_Warning_Code_Behaviour(MSBuildTreatAllWarningsAs treatAllAs)
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.TreatAllWarningsAs(treatAllAs);
+            // When
+            var result = settings.SetWarningCodeAsError("ERR1");
 
-                // Then
-                Assert.Equal(treatAllAs, settings.TreatAllWarningsAs);
-            }
-
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-
-                // When
-                var result = settings.TreatAllWarningsAs(MSBuildTreatAllWarningsAs.Error);
-
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.Equal(settings, result);
         }
 
-        public sealed class TheNodeReuseMethod
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("          ")]
+        public void Should_Throw_Exception_If_Null_Or_Whitespace(string warningCode)
         {
-            [Theory]
-            [InlineData(true)]
-            [InlineData(false)]
-            public void Should_Set_Node_Reuse(bool reuse)
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.SetNodeReuse(reuse);
+            // When
+            var result = Record.Exception(() => settings.SetWarningCodeAsError(warningCode));
 
-                // Then
-                Assert.Equal(reuse, settings.NodeReuse);
-            }
+            // Then
+            AssertEx.IsArgumentException(result, "warningCode", "Warning code cannot be null or empty");
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheSetWarningCodeAsMessageMethod
+    {
+        [Fact]
+        public void Should_Add_Warning_Code_To_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                var result = settings.SetNodeReuse(true);
+            // When
+            settings.SetWarningCodeAsMessage("ERR1");
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.WarningCodesAsMessage.Contains("ERR1"));
         }
 
-        public sealed class TheSetConfigurationMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            private const string Configuration = "TheConfiguration";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "Configuration";
+            // When
+            var result = settings.SetWarningCodeAsMessage("ERR1");
 
-                // When
-                settings.SetConfiguration(Configuration);
-
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(Configuration, settings.Properties[key].FirstOrDefault());
-            }
-
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-
-                // When
-                var result = settings.SetConfiguration(Configuration);
-
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.Equal(settings, result);
         }
 
-        public sealed class TheSetVersionMethod
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("          ")]
+        public void Should_Throw_Exception_If_Null_Or_Whitespace(string warningCode)
         {
-            private const string Version = "1.0.0-test";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_Version()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "Version";
+            // When
+            var result = Record.Exception(() => settings.SetWarningCodeAsMessage(warningCode));
 
-                // When
-                settings.SetVersion(Version);
+            // Then
+            AssertEx.IsArgumentException(result, "warningCode", "Warning code cannot be null or empty");
+        }
+    }
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(Version, settings.Properties[key].FirstOrDefault());
-                Assert.Equal(Version, settings.Version);
-            }
+    public sealed class TheTreatAllWarningsAsMethod
+    {
+        [Theory]
+        [InlineData(MSBuildTreatAllWarningsAs.Message)]
+        [InlineData(MSBuildTreatAllWarningsAs.Error)]
+        public void Should_Set_Warning_Code_Behaviour(MSBuildTreatAllWarningsAs treatAllAs)
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // When
+            settings.TreatAllWarningsAs(treatAllAs);
 
-                // When
-                var result = settings.SetVersion(Version);
-
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.Equal(treatAllAs, settings.TreatAllWarningsAs);
         }
 
-        public sealed class TheSetFileVersionMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            private const string FileVersion = "1.0.0-test";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_FileVersion()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "FileVersion";
+            // When
+            var result = settings.TreatAllWarningsAs(MSBuildTreatAllWarningsAs.Error);
 
-                // When
-                settings.SetFileVersion(FileVersion);
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(FileVersion, settings.Properties[key].FirstOrDefault());
-            }
+    public sealed class TheNodeReuseMethod
+    {
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Should_Set_Node_Reuse(bool reuse)
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // When
+            settings.SetNodeReuse(reuse);
 
-                // When
-                var result = settings.SetFileVersion(FileVersion);
-
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.Equal(reuse, settings.NodeReuse);
         }
 
-        public sealed class TheSetAssemblyVersionMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            private const string AssemblyVersion = "1.0.0.0";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_AssemblyVersion()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "AssemblyVersion";
+            // When
+            var result = settings.SetNodeReuse(true);
 
-                // When
-                settings.SetAssemblyVersion(AssemblyVersion);
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(AssemblyVersion, settings.Properties[key].FirstOrDefault());
-            }
+    public sealed class TheSetConfigurationMethod
+    {
+        private const string Configuration = "TheConfiguration";
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+        [Fact]
+        public void Should_Set_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "Configuration";
 
-                // When
-                var result = settings.SetAssemblyVersion(AssemblyVersion);
+            // When
+            settings.SetConfiguration(Configuration);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(Configuration, settings.Properties[key].FirstOrDefault());
         }
 
-        public sealed class TheSetInformationalVersionMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            private const string InformationalVersion = "1.0.0-test";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_InformationalVersion()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "InformationalVersion";
+            // When
+            var result = settings.SetConfiguration(Configuration);
 
-                // When
-                settings.SetInformationalVersion(InformationalVersion);
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(InformationalVersion, settings.Properties[key].FirstOrDefault());
-            }
+    public sealed class TheSetVersionMethod
+    {
+        private const string Version = "1.0.0-test";
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+        [Fact]
+        public void Should_Set_Version()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "Version";
 
-                // When
-                var result = settings.SetInformationalVersion(InformationalVersion);
+            // When
+            settings.SetVersion(Version);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(Version, settings.Properties[key].FirstOrDefault());
+            Assert.Equal(Version, settings.Version);
         }
 
-        public sealed class TheSetPackageVersionMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            private const string PackageVersion = "1.0.0-test";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_PackageVersion()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "PackageVersion";
+            // When
+            var result = settings.SetVersion(Version);
 
-                // When
-                settings.SetPackageVersion(PackageVersion);
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(PackageVersion, settings.Properties[key].FirstOrDefault());
-            }
+    public sealed class TheSetFileVersionMethod
+    {
+        private const string FileVersion = "1.0.0-test";
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+        [Fact]
+        public void Should_Set_FileVersion()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "FileVersion";
 
-                // When
-                var result = settings.SetPackageVersion(PackageVersion);
+            // When
+            settings.SetFileVersion(FileVersion);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(FileVersion, settings.Properties[key].FirstOrDefault());
         }
 
-        public sealed class TheSetPackageReleaseNotesMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            private const string PackageReleaseNotes = "https://";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_PackageReleaseNotes()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "PackageReleaseNotes";
+            // When
+            var result = settings.SetFileVersion(FileVersion);
 
-                // When
-                settings.SetPackageReleaseNotes(PackageReleaseNotes);
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(PackageReleaseNotes, settings.Properties[key].FirstOrDefault());
-            }
+    public sealed class TheSetAssemblyVersionMethod
+    {
+        private const string AssemblyVersion = "1.0.0.0";
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+        [Fact]
+        public void Should_Set_AssemblyVersion()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "AssemblyVersion";
 
-                // When
-                var result = settings.SetPackageReleaseNotes(PackageReleaseNotes);
+            // When
+            settings.SetAssemblyVersion(AssemblyVersion);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(AssemblyVersion, settings.Properties[key].FirstOrDefault());
         }
 
-        public sealed class TheSuppressVersionRecommendedFormatWarningMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            [Fact]
-            public void Should_Set_NoWarn7035()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "nowarn";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-                // When
-                settings.SuppressVersionRecommendedFormatWarning();
+            // When
+            var result = settings.SetAssemblyVersion(AssemblyVersion);
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal("7035", settings.Properties[key].FirstOrDefault());
-            }
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+    public sealed class TheSetInformationalVersionMethod
+    {
+        private const string InformationalVersion = "1.0.0-test";
 
-                // When
-                var result = settings.SuppressVersionRecommendedFormatWarning();
+        [Fact]
+        public void Should_Set_InformationalVersion()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "InformationalVersion";
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // When
+            settings.SetInformationalVersion(InformationalVersion);
+
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(InformationalVersion, settings.Properties[key].FirstOrDefault());
         }
 
-        public sealed class TheSetVersionPrefixMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            private const string VersionPrefix = "1.0.0";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_Version_Prefix()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "VersionPrefix";
+            // When
+            var result = settings.SetInformationalVersion(InformationalVersion);
 
-                // When
-                settings.SetVersionPrefix(VersionPrefix);
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(VersionPrefix, settings.Properties[key].FirstOrDefault());
-            }
+    public sealed class TheSetPackageVersionMethod
+    {
+        private const string PackageVersion = "1.0.0-test";
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+        [Fact]
+        public void Should_Set_PackageVersion()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "PackageVersion";
 
-                // When
-                var result = settings.SetVersionPrefix(VersionPrefix);
+            // When
+            settings.SetPackageVersion(PackageVersion);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(PackageVersion, settings.Properties[key].FirstOrDefault());
         }
 
-        public sealed class TheSetVersionSuffixMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            private const string VersionSuffix = "test";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_Version_Suffix()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "VersionSuffix";
+            // When
+            var result = settings.SetPackageVersion(PackageVersion);
 
-                // When
-                settings.SetVersionSuffix(VersionSuffix);
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(VersionSuffix, settings.Properties[key].FirstOrDefault());
-            }
+    public sealed class TheSetPackageReleaseNotesMethod
+    {
+        private const string PackageReleaseNotes = "https://";
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+        [Fact]
+        public void Should_Set_PackageReleaseNotes()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "PackageReleaseNotes";
 
-                // When
-                var result = settings.SetVersionSuffix(VersionSuffix);
+            // When
+            settings.SetPackageReleaseNotes(PackageReleaseNotes);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(PackageReleaseNotes, settings.Properties[key].FirstOrDefault());
         }
 
-        public sealed class TheSetTargetFrameworkMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            private const string TargetFramework = "netstandard2.0";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_Target_Framework()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "TargetFrameworks";
+            // When
+            var result = settings.SetPackageReleaseNotes(PackageReleaseNotes);
 
-                // When
-                settings.SetTargetFramework(TargetFramework);
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(TargetFramework, settings.Properties[key].FirstOrDefault());
-            }
+    public sealed class TheSuppressVersionRecommendedFormatWarningMethod
+    {
+        [Fact]
+        public void Should_Set_NoWarn7035()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "nowarn";
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+            // When
+            settings.SuppressVersionRecommendedFormatWarning();
 
-                // When
-                var result = settings.SetTargetFramework(TargetFramework);
-
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal("7035", settings.Properties[key].FirstOrDefault());
         }
 
-        public sealed class TheSetRuntimeMethod
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
         {
-            private const string Runtime = "ubuntu.16.10-x64";
+            // Given
+            var settings = new DotNetMSBuildSettings();
 
-            [Fact]
-            public void Should_Set_Runtime()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
-                const string key = "RuntimeIdentifiers";
+            // When
+            var result = settings.SuppressVersionRecommendedFormatWarning();
 
-                // When
-                settings.SetRuntime(Runtime);
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
 
-                // Then
-                Assert.True(settings.Properties.ContainsKey(key));
-                Assert.Equal(Runtime, settings.Properties[key].FirstOrDefault());
-            }
+    public sealed class TheSetVersionPrefixMethod
+    {
+        private const string VersionPrefix = "1.0.0";
 
-            [Fact]
-            public void Should_Return_The_Same_Configuration()
-            {
-                // Given
-                var settings = new DotNetMSBuildSettings();
+        [Fact]
+        public void Should_Set_Version_Prefix()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "VersionPrefix";
 
-                // When
-                var result = settings.SetRuntime(Runtime);
+            // When
+            settings.SetVersionPrefix(VersionPrefix);
 
-                // Then
-                Assert.Equal(settings, result);
-            }
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(VersionPrefix, settings.Properties[key].FirstOrDefault());
+        }
+
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+
+            // When
+            var result = settings.SetVersionPrefix(VersionPrefix);
+
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
+
+    public sealed class TheSetVersionSuffixMethod
+    {
+        private const string VersionSuffix = "test";
+
+        [Fact]
+        public void Should_Set_Version_Suffix()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "VersionSuffix";
+
+            // When
+            settings.SetVersionSuffix(VersionSuffix);
+
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(VersionSuffix, settings.Properties[key].FirstOrDefault());
+        }
+
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+
+            // When
+            var result = settings.SetVersionSuffix(VersionSuffix);
+
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
+
+    public sealed class TheSetTargetFrameworkMethod
+    {
+        private const string TargetFramework = "netstandard2.0";
+
+        [Fact]
+        public void Should_Set_Target_Framework()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "TargetFrameworks";
+
+            // When
+            settings.SetTargetFramework(TargetFramework);
+
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(TargetFramework, settings.Properties[key].FirstOrDefault());
+        }
+
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+
+            // When
+            var result = settings.SetTargetFramework(TargetFramework);
+
+            // Then
+            Assert.Equal(settings, result);
+        }
+    }
+
+    public sealed class TheSetRuntimeMethod
+    {
+        private const string Runtime = "ubuntu.16.10-x64";
+
+        [Fact]
+        public void Should_Set_Runtime()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+            const string key = "RuntimeIdentifiers";
+
+            // When
+            settings.SetRuntime(Runtime);
+
+            // Then
+            Assert.True(settings.Properties.ContainsKey(key));
+            Assert.Equal(Runtime, settings.Properties[key].FirstOrDefault());
+        }
+
+        [Fact]
+        public void Should_Return_The_Same_Configuration()
+        {
+            // Given
+            var settings = new DotNetMSBuildSettings();
+
+            // When
+            var result = settings.SetRuntime(Runtime);
+
+            // Then
+            Assert.Equal(settings, result);
         }
     }
 }

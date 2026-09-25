@@ -5,21 +5,20 @@
 using Cake.Common.Tools.OctopusDeploy;
 using Cake.Testing.Fixtures;
 
-namespace Cake.Common.Tests.Fixtures.Tools
+namespace Cake.Common.Tests.Fixtures.Tools;
+
+internal sealed class OctopusDeployPackerFixture : ToolFixture<OctopusPackSettings>
 {
-    internal sealed class OctopusDeployPackerFixture : ToolFixture<OctopusPackSettings>
+    public string Id { get; set; }
+
+    public OctopusDeployPackerFixture()
+        : base("Octo.exe")
     {
-        public string Id { get; set; }
+    }
 
-        public OctopusDeployPackerFixture()
-            : base("Octo.exe")
-        {
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new OctopusDeployPacker(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Pack(Id, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new OctopusDeployPacker(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Pack(Id, Settings);
     }
 }

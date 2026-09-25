@@ -8,96 +8,95 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common.IO
+namespace Cake.Common.IO;
+
+internal static class DirectoryCleaner
 {
-    internal static class DirectoryCleaner
+    public static void Clean(ICakeContext context, DirectoryPath path)
     {
-        public static void Clean(ICakeContext context, DirectoryPath path)
+        Clean(context, path, null, null);
+    }
+
+    public static void Clean(ICakeContext context, DirectoryPath path, CleanDirectorySettings settings)
+    {
+        Clean(context, path, null, settings);
+    }
+
+    public static void Clean(ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate)
+    {
+        Clean(context, path, predicate, null);
+    }
+
+    public static void Clean(ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate, CleanDirectorySettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(path);
+
+        if (path.IsRelative)
         {
-            Clean(context, path, null, null);
+            path = path.MakeAbsolute(context.Environment);
         }
 
-        public static void Clean(ICakeContext context, DirectoryPath path, CleanDirectorySettings settings)
+        // Get the root directory.
+        var root = context.FileSystem.GetDirectory(path);
+        if (!root.Exists)
         {
-            Clean(context, path, null, settings);
+            context.Log.Verbose("Creating directory {0}", path);
+            root.Create();
+            return;
         }
 
-        public static void Clean(ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate)
-        {
-            Clean(context, path, predicate, null);
-        }
+        context.Log.Verbose("Cleaning directory {0}", path);
+        predicate = predicate ?? (info => true);
+        settings = settings ?? new CleanDirectorySettings();
+        CleanDirectory(root, predicate, 0, settings);
+    }
 
-        public static void Clean(ICakeContext context, DirectoryPath path, Func<IFileSystemInfo, bool> predicate, CleanDirectorySettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-            ArgumentNullException.ThrowIfNull(path);
+    private static bool CleanDirectory(IDirectory root, Func<IFileSystemInfo, bool> predicate, int level, CleanDirectorySettings settings)
+    {
+        var shouldDeleteRoot = predicate(root);
 
-            if (path.IsRelative)
+        // Delete all child directories.
+        var directories = root.GetDirectories("*", SearchScope.Current);
+        foreach (var directory in directories)
+        {
+            if (!CleanDirectory(directory, predicate, level + 1, settings))
             {
-                path = path.MakeAbsolute(context.Environment);
+                // Since the child directory reported it shouldn't be
+                // removed, we should not remove the current directory either.
+                shouldDeleteRoot = false;
             }
-
-            // Get the root directory.
-            var root = context.FileSystem.GetDirectory(path);
-            if (!root.Exists)
-            {
-                context.Log.Verbose("Creating directory {0}", path);
-                root.Create();
-                return;
-            }
-
-            context.Log.Verbose("Cleaning directory {0}", path);
-            predicate = predicate ?? (info => true);
-            settings = settings ?? new CleanDirectorySettings();
-            CleanDirectory(root, predicate, 0, settings);
         }
 
-        private static bool CleanDirectory(IDirectory root, Func<IFileSystemInfo, bool> predicate, int level, CleanDirectorySettings settings)
+        // Delete all files in the directory.
+        var files = root.GetFiles("*", SearchScope.Current);
+        foreach (var file in files)
         {
-            var shouldDeleteRoot = predicate(root);
-
-            // Delete all child directories.
-            var directories = root.GetDirectories("*", SearchScope.Current);
-            foreach (var directory in directories)
+            if (predicate(file))
             {
-                if (!CleanDirectory(directory, predicate, level + 1, settings))
+                if (settings.Force)
                 {
-                    // Since the child directory reported it shouldn't be
-                    // removed, we should not remove the current directory either.
-                    shouldDeleteRoot = false;
+                    // Remove the ReadOnly attribute on file (if set)
+                    file.Attributes &= ~FileAttributes.ReadOnly;
                 }
-            }
 
-            // Delete all files in the directory.
-            var files = root.GetFiles("*", SearchScope.Current);
-            foreach (var file in files)
+                file.Delete();
+            }
+            else
             {
-                if (predicate(file))
-                {
-                    if (settings.Force)
-                    {
-                        // Remove the ReadOnly attribute on file (if set)
-                        file.Attributes &= ~FileAttributes.ReadOnly;
-                    }
-
-                    file.Delete();
-                }
-                else
-                {
-                    shouldDeleteRoot = false;
-                }
+                shouldDeleteRoot = false;
             }
-
-            // Should we delete current directory?
-            // Make sure it's not the initial directory.
-            if (shouldDeleteRoot && level > 0)
-            {
-                root.Delete(false);
-                return true;
-            }
-
-            // We did not delete this directory.
-            return false;
         }
+
+        // Should we delete current directory?
+        // Make sure it's not the initial directory.
+        if (shouldDeleteRoot && level > 0)
+        {
+            root.Delete(false);
+            return true;
+        }
+
+        // We did not delete this directory.
+        return false;
     }
 }

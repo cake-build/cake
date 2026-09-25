@@ -4,21 +4,20 @@
 
 using Cake.Common.Tools.Chocolatey.New;
 
-namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.New
+namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.New;
+
+internal sealed class ChocolateyNewFixture : ChocolateyFixture<ChocolateyNewSettings>
 {
-    internal sealed class ChocolateyNewFixture : ChocolateyFixture<ChocolateyNewSettings>
+    public string PackageId { get; set; }
+
+    public ChocolateyNewFixture()
     {
-        public string PackageId { get; set; }
+        PackageId = "MyPackage";
+    }
 
-        public ChocolateyNewFixture()
-        {
-            PackageId = "MyPackage";
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new ChocolateyScaffolder(FileSystem, Environment, ProcessRunner, Tools, Resolver);
-            tool.CreatePackage(PackageId, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new ChocolateyScaffolder(FileSystem, Environment, ProcessRunner, Tools, Resolver);
+        tool.CreatePackage(PackageId, Settings);
     }
 }

@@ -9,78 +9,77 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Text;
 
-namespace Cake.Common.Text
+namespace Cake.Common.Text;
+
+/// <summary>
+/// Provides functionality to perform simple text transformations
+/// from a Cake build script and save them to disc.
+/// </summary>
+/// <typeparam name="TTemplate">The text transformation template.</typeparam>
+public sealed class TextTransformation<TTemplate>
+    where TTemplate : class, ITextTransformationTemplate
 {
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// Provides functionality to perform simple text transformations
-    /// from a Cake build script and save them to disc.
+    /// Gets the text transformation template.
     /// </summary>
-    /// <typeparam name="TTemplate">The text transformation template.</typeparam>
-    public sealed class TextTransformation<TTemplate>
-        where TTemplate : class, ITextTransformationTemplate
+    /// <value>The text transformation template.</value>
+    public TTemplate Template { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextTransformation{TTemplate}"/> class.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="template">The text template.</param>
+    public TextTransformation(IFileSystem fileSystem,
+        ICakeEnvironment environment, TTemplate template)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
+        ArgumentNullException.ThrowIfNull(template);
+        _fileSystem = fileSystem;
+        _environment = environment;
+        Template = template;
+    }
 
-        /// <summary>
-        /// Gets the text transformation template.
-        /// </summary>
-        /// <value>The text transformation template.</value>
-        public TTemplate Template { get; }
+    /// <summary>
+    /// Saves the text transformation to a file.
+    /// </summary>
+    /// <param name="path">The <see cref="FilePath"/> to save the text transformation to.</param>
+    public void Save(FilePath path)
+    {
+        Save(path, new UTF8Encoding(false));
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextTransformation{TTemplate}"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="template">The text template.</param>
-        public TextTransformation(IFileSystem fileSystem,
-            ICakeEnvironment environment, TTemplate template)
+    /// <summary>
+    /// Saves the text transformation to a file.
+    /// </summary>
+    /// <param name="path">The <see cref="FilePath"/> to save the text transformation to.</param>
+    /// <param name="encoding">The text encoding.</param>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Stream writer leaves stream open.")]
+    public void Save(FilePath path, Encoding encoding)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+
+        // Make the path absolute if necessary.
+        path = path.IsRelative ? path.MakeAbsolute(_environment) : path;
+
+        // Render the content to the file.
+        var file = _fileSystem.GetFile(path);
+        using (var stream = file.OpenWrite())
+        using (var writer = new StreamWriter(stream, encoding, 1024, true))
         {
-            ArgumentNullException.ThrowIfNull(template);
-            _fileSystem = fileSystem;
-            _environment = environment;
-            Template = template;
+            writer.Write(Template.Render());
         }
+    }
 
-        /// <summary>
-        /// Saves the text transformation to a file.
-        /// </summary>
-        /// <param name="path">The <see cref="FilePath"/> to save the text transformation to.</param>
-        public void Save(FilePath path)
-        {
-            Save(path, new UTF8Encoding(false));
-        }
-
-        /// <summary>
-        /// Saves the text transformation to a file.
-        /// </summary>
-        /// <param name="path">The <see cref="FilePath"/> to save the text transformation to.</param>
-        /// <param name="encoding">The text encoding.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Stream writer leaves stream open.")]
-        public void Save(FilePath path, Encoding encoding)
-        {
-            ArgumentNullException.ThrowIfNull(path);
-
-            // Make the path absolute if necessary.
-            path = path.IsRelative ? path.MakeAbsolute(_environment) : path;
-
-            // Render the content to the file.
-            var file = _fileSystem.GetFile(path);
-            using (var stream = file.OpenWrite())
-            using (var writer = new StreamWriter(stream, encoding, 1024, true))
-            {
-                writer.Write(Template.Render());
-            }
-        }
-
-        /// <summary>
-        /// Returns a string containing the rendered template.
-        /// </summary>
-        /// <returns>A string containing the rendered template.</returns>
-        public override string ToString()
-        {
-            return Template.Render();
-        }
+    /// <summary>
+    /// Returns a string containing the rendered template.
+    /// </summary>
+    /// <returns>A string containing the rendered template.</returns>
+    public override string ToString()
+    {
+        return Template.Render();
     }
 }

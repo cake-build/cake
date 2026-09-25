@@ -5,23 +5,22 @@
 using System.Collections.Generic;
 using NuGet.Configuration;
 
-namespace Cake.NuGet.Tests.Stubs
+namespace Cake.NuGet.Tests.Stubs;
+
+internal sealed class FakeNuGetSettingSection : SettingSection
 {
-    internal sealed class FakeNuGetSettingSection : SettingSection
+    public FakeNuGetSettingSection(string name, IReadOnlyDictionary<string, string> attributes, IEnumerable<SettingItem> children)
+        : base(name, attributes, children)
     {
-        public FakeNuGetSettingSection(string name, IReadOnlyDictionary<string, string> attributes, IEnumerable<SettingItem> children)
-            : base(name, attributes, children)
-        {
-        }
+    }
 
-        public void AddItem(SettingItem item)
-        {
-            Children.Add(item);
-        }
+    public void AddItem(SettingItem item)
+    {
+        Children.Add(item);
+    }
 
-        public override SettingBase Clone()
-        {
-            return new FakeNuGetSettingSection(ElementName, MutableAttributes, Items);
-        }
+    public override SettingBase Clone()
+    {
+        return new FakeNuGetSettingSection(ElementName, MutableAttributes, Items);
     }
 }

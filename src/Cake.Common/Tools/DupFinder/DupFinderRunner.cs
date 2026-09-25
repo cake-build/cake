@@ -12,238 +12,237 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DupFinder
+namespace Cake.Common.Tools.DupFinder;
+
+/// <summary>
+/// DupFinder runner.
+/// </summary>
+public sealed class DupFinderRunner : Tool<DupFinderSettings>
 {
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+    private readonly ICakeLog _log;
+
     /// <summary>
-    /// DupFinder runner.
+    /// Initializes a new instance of the <see cref="DupFinderRunner"/> class.
     /// </summary>
-    public sealed class DupFinderRunner : Tool<DupFinderSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="log">The logger.</param>
+    public DupFinderRunner(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        ICakeLog log) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
+        _fileSystem = fileSystem;
+        _environment = environment;
+        _log = log;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DupFinderRunner"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="log">The logger.</param>
-        public DupFinderRunner(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            ICakeLog log) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Analyses the specified files using the specified settings.
+    /// </summary>
+    /// <param name="filePaths">The file paths.</param>
+    /// <param name="settings">The settings.</param>
+    public void Run(IEnumerable<FilePath> filePaths, DupFinderSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        ArgumentNullException.ThrowIfNull(filePaths);
+
+        Run(settings, GetArgument(settings, filePaths));
+
+        if (settings.SkipOutputAnalysis ||
+            settings.OutputFile == null)
         {
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _log = log;
+            return;
         }
 
-        /// <summary>
-        /// Analyses the specified files using the specified settings.
-        /// </summary>
-        /// <param name="filePaths">The file paths.</param>
-        /// <param name="settings">The settings.</param>
-        public void Run(IEnumerable<FilePath> filePaths, DupFinderSettings settings)
+        AnalyzeResultsFile(settings.OutputFile, settings.ThrowExceptionOnFindingDuplicates);
+    }
+
+    /// <summary>
+    /// Runs ReSharper's DupFinder using the provided config file.
+    /// </summary>
+    /// <param name="configFile">The config file.</param>
+    public void RunFromConfig(FilePath configFile)
+    {
+        ArgumentNullException.ThrowIfNull(configFile);
+
+        Run(new DupFinderSettings(), GetConfigArgument(configFile));
+    }
+
+    private ProcessArgumentBuilder GetConfigArgument(FilePath configFile)
+    {
+        var builder = new ProcessArgumentBuilder();
+        builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/config={0}",
+            configFile.MakeAbsolute(_environment).FullPath));
+
+        return builder;
+    }
+
+    private ProcessArgumentBuilder GetArgument(DupFinderSettings settings, IEnumerable<FilePath> files)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        if (settings.Debug)
         {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            ArgumentNullException.ThrowIfNull(filePaths);
-
-            Run(settings, GetArgument(settings, filePaths));
-
-            if (settings.SkipOutputAnalysis ||
-                settings.OutputFile == null)
-            {
-                return;
-            }
-
-            AnalyzeResultsFile(settings.OutputFile, settings.ThrowExceptionOnFindingDuplicates);
+            builder.Append("/debug");
         }
 
-        /// <summary>
-        /// Runs ReSharper's DupFinder using the provided config file.
-        /// </summary>
-        /// <param name="configFile">The config file.</param>
-        public void RunFromConfig(FilePath configFile)
+        if (settings.DiscardCost != null)
         {
-            ArgumentNullException.ThrowIfNull(configFile);
-
-            Run(new DupFinderSettings(), GetConfigArgument(configFile));
+            builder.Append(string.Format(CultureInfo.InvariantCulture, "/discard-cost={0}", settings.DiscardCost));
         }
 
-        private ProcessArgumentBuilder GetConfigArgument(FilePath configFile)
+        if (settings.DiscardFieldsName)
         {
-            var builder = new ProcessArgumentBuilder();
-            builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/config={0}",
-                configFile.MakeAbsolute(_environment).FullPath));
-
-            return builder;
+            builder.Append("/discard-fields");
         }
 
-        private ProcessArgumentBuilder GetArgument(DupFinderSettings settings, IEnumerable<FilePath> files)
+        if (settings.DiscardLiterals)
         {
-            var builder = new ProcessArgumentBuilder();
+            builder.Append("/discard-literals");
+        }
 
-            if (settings.Debug)
+        if (settings.DiscardLocalVariablesName)
+        {
+            builder.Append("/discard-local-vars");
+        }
+
+        if (settings.DiscardTypes)
+        {
+            builder.Append("/discard-types");
+        }
+
+        if (settings.IdlePriority)
+        {
+            builder.Append("/idle-priority");
+        }
+
+        if (settings.ExcludeFilesByStartingCommentSubstring != null &&
+            settings.ExcludeFilesByStartingCommentSubstring.Any())
+        {
+            var joined = string.Join(";", settings.ExcludeFilesByStartingCommentSubstring);
+            builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/exclude-by-comment={0}", joined));
+        }
+
+        if (settings.ExcludeCodeRegionsByNameSubstring != null && settings.ExcludeCodeRegionsByNameSubstring.Any())
+        {
+            var joined = string.Join(";", settings.ExcludeCodeRegionsByNameSubstring);
+            builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/exclude-code-regions={0}", joined));
+        }
+
+        if (settings.ExcludePattern != null && settings.ExcludePattern.Any())
+        {
+            var joined = string.Join(";", settings.ExcludePattern);
+            builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/exclude={0}", joined));
+        }
+
+        if (settings.MsBuildProperties != null)
+        {
+            foreach (var property in settings.MsBuildProperties)
             {
-                builder.Append("/debug");
+                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/properties:{0}={1}", property.Key,
+                    property.Value));
             }
+        }
 
-            if (settings.DiscardCost != null)
-            {
-                builder.Append(string.Format(CultureInfo.InvariantCulture, "/discard-cost={0}", settings.DiscardCost));
-            }
+        if (settings.NormalizeTypes)
+        {
+            builder.Append("/normalize-types");
+        }
 
-            if (settings.DiscardFieldsName)
-            {
-                builder.Append("/discard-fields");
-            }
+        if (settings.OutputFile != null)
+        {
+            builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/output={0}",
+                settings.OutputFile.MakeAbsolute(_environment).FullPath));
+        }
 
-            if (settings.DiscardLiterals)
-            {
-                builder.Append("/discard-literals");
-            }
+        if (settings.CachesHome != null)
+        {
+            builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/caches-home={0}",
+                settings.CachesHome.MakeAbsolute(_environment).FullPath));
+        }
 
-            if (settings.DiscardLocalVariablesName)
-            {
-                builder.Append("/discard-local-vars");
-            }
+        if (settings.ShowStats)
+        {
+            builder.Append("/show-stats");
+        }
 
-            if (settings.DiscardTypes)
-            {
-                builder.Append("/discard-types");
-            }
+        if (settings.ShowText)
+        {
+            builder.Append("/show-text");
+        }
 
-            if (settings.IdlePriority)
-            {
-                builder.Append("/idle-priority");
-            }
+        foreach (var file in files)
+        {
+            builder.AppendQuoted(file.MakeAbsolute(_environment).FullPath);
+        }
 
-            if (settings.ExcludeFilesByStartingCommentSubstring != null &&
-                settings.ExcludeFilesByStartingCommentSubstring.Any())
-            {
-                var joined = string.Join(";", settings.ExcludeFilesByStartingCommentSubstring);
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/exclude-by-comment={0}", joined));
-            }
+        return builder;
+    }
 
-            if (settings.ExcludeCodeRegionsByNameSubstring != null && settings.ExcludeCodeRegionsByNameSubstring.Any())
-            {
-                var joined = string.Join(";", settings.ExcludeCodeRegionsByNameSubstring);
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/exclude-code-regions={0}", joined));
-            }
+    // ReSharper disable once UnusedParameter.Local
+    private void AnalyzeResultsFile(FilePath resultsFilePath, bool throwOnDuplicates)
+    {
+        var anyFailures = false;
+        var resultsFile = _fileSystem.GetFile(resultsFilePath);
 
-            if (settings.ExcludePattern != null && settings.ExcludePattern.Any())
-            {
-                var joined = string.Join(";", settings.ExcludePattern);
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/exclude={0}", joined));
-            }
+        using (var stream = resultsFile.OpenRead())
+        {
+            var xmlDoc = XDocument.Load(stream);
+            var duplicates = xmlDoc.Descendants("Duplicate");
 
-            if (settings.MsBuildProperties != null)
+            foreach (var duplicate in duplicates)
             {
-                foreach (var property in settings.MsBuildProperties)
+                var cost = duplicate.Attribute("Cost") == null ? string.Empty : duplicate.Attribute("Cost").Value;
+
+                _log.Warning("Duplicate Located with a cost of {0}, across {1} Fragments", cost, duplicate.Descendants("Fragment").Count());
+
+                foreach (var fragment in duplicate.Descendants("Fragment"))
                 {
-                    builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/properties:{0}={1}", property.Key,
-                        property.Value));
-                }
-            }
+                    var fileNameNode = fragment.Descendants("FileName").FirstOrDefault();
+                    var lineRangeNode = fragment.Descendants("LineRange").FirstOrDefault();
 
-            if (settings.NormalizeTypes)
-            {
-                builder.Append("/normalize-types");
-            }
-
-            if (settings.OutputFile != null)
-            {
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/output={0}",
-                    settings.OutputFile.MakeAbsolute(_environment).FullPath));
-            }
-
-            if (settings.CachesHome != null)
-            {
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/caches-home={0}",
-                    settings.CachesHome.MakeAbsolute(_environment).FullPath));
-            }
-
-            if (settings.ShowStats)
-            {
-                builder.Append("/show-stats");
-            }
-
-            if (settings.ShowText)
-            {
-                builder.Append("/show-text");
-            }
-
-            foreach (var file in files)
-            {
-                builder.AppendQuoted(file.MakeAbsolute(_environment).FullPath);
-            }
-
-            return builder;
-        }
-
-        // ReSharper disable once UnusedParameter.Local
-        private void AnalyzeResultsFile(FilePath resultsFilePath, bool throwOnDuplicates)
-        {
-            var anyFailures = false;
-            var resultsFile = _fileSystem.GetFile(resultsFilePath);
-
-            using (var stream = resultsFile.OpenRead())
-            {
-                var xmlDoc = XDocument.Load(stream);
-                var duplicates = xmlDoc.Descendants("Duplicate");
-
-                foreach (var duplicate in duplicates)
-                {
-                    var cost = duplicate.Attribute("Cost") == null ? string.Empty : duplicate.Attribute("Cost").Value;
-
-                    _log.Warning("Duplicate Located with a cost of {0}, across {1} Fragments", cost, duplicate.Descendants("Fragment").Count());
-
-                    foreach (var fragment in duplicate.Descendants("Fragment"))
+                    if (fileNameNode != null && lineRangeNode != null)
                     {
-                        var fileNameNode = fragment.Descendants("FileName").FirstOrDefault();
-                        var lineRangeNode = fragment.Descendants("LineRange").FirstOrDefault();
+                        var start = lineRangeNode.Attribute("Start") == null ? string.Empty : lineRangeNode.Attribute("Start").Value;
+                        var end = lineRangeNode.Attribute("End") == null ? string.Empty : lineRangeNode.Attribute("End").Value;
 
-                        if (fileNameNode != null && lineRangeNode != null)
-                        {
-                            var start = lineRangeNode.Attribute("Start") == null ? string.Empty : lineRangeNode.Attribute("Start").Value;
-                            var end = lineRangeNode.Attribute("End") == null ? string.Empty : lineRangeNode.Attribute("End").Value;
-
-                            _log.Warning("File Name: {0} Line Numbers: {1} - {2}", fileNameNode.Value, start, end);
-                        }
+                        _log.Warning("File Name: {0} Line Numbers: {1} - {2}", fileNameNode.Value, start, end);
                     }
-
-                    anyFailures = true;
                 }
-            }
 
-            if (anyFailures && throwOnDuplicates)
-            {
-                throw new CakeException("Duplicates found in code base.");
+                anyFailures = true;
             }
         }
 
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
+        if (anyFailures && throwOnDuplicates)
         {
-            return "DupFinder";
+            throw new CakeException("Duplicates found in code base.");
         }
+    }
 
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
-        {
-            return new[] { "dupfinder.exe" };
-        }
+    /// <summary>
+    /// Gets the name of the tool.
+    /// </summary>
+    /// <returns>The name of the tool.</returns>
+    protected override string GetToolName()
+    {
+        return "DupFinder";
+    }
+
+    /// <summary>
+    /// Gets the possible names of the tool executable.
+    /// </summary>
+    /// <returns>The tool executable name.</returns>
+    protected override IEnumerable<string> GetToolExecutableNames()
+    {
+        return new[] { "dupfinder.exe" };
     }
 }

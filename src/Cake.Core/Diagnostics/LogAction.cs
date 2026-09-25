@@ -4,30 +4,29 @@
 
 using System;
 
-namespace Cake.Core.Diagnostics
-{
-    /// <summary>
-    /// Delegate representing lazy log action.
-    /// </summary>
-    /// <param name="actionEntry">Proxy to log.</param>
-    public delegate void LogAction(LogActionEntry actionEntry);
+namespace Cake.Core.Diagnostics;
 
-    /// <summary>
-    /// Delegate representing lazy log entry.
-    /// </summary>
-    /// <param name="format">A composite format string.</param>
-    /// <param name="args">An array of objects to write using format.</param>
-    public delegate void LogActionEntry(string format, params object[] args);
+/// <summary>
+/// Delegate representing lazy log action.
+/// </summary>
+/// <param name="actionEntry">Proxy to log.</param>
+public delegate void LogAction(LogActionEntry actionEntry);
 
-    /// <summary>
-    /// Delegate representing lazy formattable log action.
-    /// </summary>
-    /// <param name="actionEntry">Proxy to log.</param>
-    public delegate void FormattableLogAction(FormattableLogActionEntry actionEntry);
+/// <summary>
+/// Delegate representing lazy log entry.
+/// </summary>
+/// <param name="format">A composite format string.</param>
+/// <param name="args">An array of objects to write using format.</param>
+public delegate void LogActionEntry(string format, params object[] args);
 
-    /// <summary>
-    /// Delegate representing lazy formattable log entry.
-    /// </summary>
-    /// <param name="formattable">The string to be formatted.</param>
-    public delegate void FormattableLogActionEntry(FormattableString formattable);
-}
+/// <summary>
+/// Delegate representing lazy formattable log action.
+/// </summary>
+/// <param name="actionEntry">Proxy to log.</param>
+public delegate void FormattableLogAction(FormattableLogActionEntry actionEntry);
+
+/// <summary>
+/// Delegate representing lazy formattable log entry.
+/// </summary>
+/// <param name="formattable">The string to be formatted.</param>
+public delegate void FormattableLogActionEntry(FormattableString formattable);

@@ -4,52 +4,51 @@
 
 using Cake.Core;
 
-namespace Cake.Common.Build.TravisCI.Data
+namespace Cake.Common.Build.TravisCI.Data;
+
+/// <summary>
+/// Provides Travis CI repository information for the current build.
+/// </summary>
+public sealed class TravisCIRepositoryInfo : TravisCIInfo
 {
     /// <summary>
-    /// Provides Travis CI repository information for the current build.
+    /// Gets the commit that the current build is testing.
     /// </summary>
-    public sealed class TravisCIRepositoryInfo : TravisCIInfo
+    /// <value>
+    /// The commit.
+    /// </value>
+    public string Commit => GetEnvironmentString("TRAVIS_COMMIT");
+
+    /// <summary>
+    /// Gets the commit range for the current pull request.
+    /// </summary>
+    /// <value>
+    /// The commit range.
+    /// </value>
+    public string CommitRange => GetEnvironmentString("TRAVIS_COMMIT_RANGE");
+
+    /// <summary>
+    /// Gets the pull request.
+    /// </summary>
+    /// <value>
+    /// The pull request.
+    /// </value>
+    public string PullRequest => GetEnvironmentString("TRAVIS_PULL_REQUEST");
+
+    /// <summary>
+    /// Gets the slug of the repository currently being built.
+    /// </summary>
+    /// <value>
+    /// The slug.
+    /// </value>
+    public string Slug => GetEnvironmentString("TRAVIS_REPO_SLUG");
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TravisCIRepositoryInfo"/> class.
+    /// </summary>
+    /// <param name="environment">The environment.</param>
+    public TravisCIRepositoryInfo(ICakeEnvironment environment)
+        : base(environment)
     {
-        /// <summary>
-        /// Gets the commit that the current build is testing.
-        /// </summary>
-        /// <value>
-        /// The commit.
-        /// </value>
-        public string Commit => GetEnvironmentString("TRAVIS_COMMIT");
-
-        /// <summary>
-        /// Gets the commit range for the current pull request.
-        /// </summary>
-        /// <value>
-        /// The commit range.
-        /// </value>
-        public string CommitRange => GetEnvironmentString("TRAVIS_COMMIT_RANGE");
-
-        /// <summary>
-        /// Gets the pull request.
-        /// </summary>
-        /// <value>
-        /// The pull request.
-        /// </value>
-        public string PullRequest => GetEnvironmentString("TRAVIS_PULL_REQUEST");
-
-        /// <summary>
-        /// Gets the slug of the repository currently being built.
-        /// </summary>
-        /// <value>
-        /// The slug.
-        /// </value>
-        public string Slug => GetEnvironmentString("TRAVIS_REPO_SLUG");
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TravisCIRepositoryInfo"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        public TravisCIRepositoryInfo(ICakeEnvironment environment)
-            : base(environment)
-        {
-        }
     }
 }

@@ -9,217 +9,216 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.NUnit
+namespace Cake.Common.Tools.NUnit;
+
+/// <summary>
+/// The NUnit unit test runner.
+/// </summary>
+public sealed class NUnitRunner : Tool<NUnitSettings>
 {
+    private readonly ICakeEnvironment _environment;
+    private bool _x86;
+
     /// <summary>
-    /// The NUnit unit test runner.
+    /// Initializes a new instance of the <see cref="NUnitRunner"/> class.
     /// </summary>
-    public sealed class NUnitRunner : Tool<NUnitSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public NUnitRunner(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
-        private bool _x86;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NUnitRunner"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public NUnitRunner(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Runs the tests in the specified assemblies, using the specified settings.
+    /// </summary>
+    /// <param name="assemblyPaths">The assembly paths.</param>
+    /// <param name="settings">The settings.</param>
+    public void Run(IEnumerable<FilePath> assemblyPaths, NUnitSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(assemblyPaths);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        _x86 = settings.X86;
+
+        Run(settings, GetArguments(assemblyPaths, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, NUnitSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        // Add the assemblies to build.
+        foreach (var assemblyPath in assemblyPaths)
         {
-            _environment = environment;
+            builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
         }
 
-        /// <summary>
-        /// Runs the tests in the specified assemblies, using the specified settings.
-        /// </summary>
-        /// <param name="assemblyPaths">The assembly paths.</param>
-        /// <param name="settings">The settings.</param>
-        public void Run(IEnumerable<FilePath> assemblyPaths, NUnitSettings settings)
+        if (settings.Framework != null)
         {
-            ArgumentNullException.ThrowIfNull(assemblyPaths);
-            ArgumentNullException.ThrowIfNull(settings);
-
-            _x86 = settings.X86;
-
-            Run(settings, GetArguments(assemblyPaths, settings));
+            builder.AppendQuoted("-framework:" + settings.Framework);
         }
 
-        private ProcessArgumentBuilder GetArguments(IEnumerable<FilePath> assemblyPaths, NUnitSettings settings)
+        if (settings.Include != null)
         {
-            var builder = new ProcessArgumentBuilder();
-
-            // Add the assemblies to build.
-            foreach (var assemblyPath in assemblyPaths)
-            {
-                builder.AppendQuoted(assemblyPath.MakeAbsolute(_environment).FullPath);
-            }
-
-            if (settings.Framework != null)
-            {
-                builder.AppendQuoted("-framework:" + settings.Framework);
-            }
-
-            if (settings.Include != null)
-            {
-                builder.AppendQuoted("-include:" + settings.Include);
-            }
-
-            if (settings.Exclude != null)
-            {
-                builder.AppendQuoted("-exclude:" + settings.Exclude);
-            }
-
-            if (settings.Timeout.HasValue)
-            {
-                builder.Append("-timeout:" + settings.Timeout.Value);
-            }
-
-            // No shadow copy?
-            if (!settings.ShadowCopy)
-            {
-                builder.Append("-noshadow");
-            }
-
-            if (settings.NoLogo)
-            {
-                builder.Append("-nologo");
-            }
-
-            if (settings.NoThread)
-            {
-                builder.Append("-nothread");
-            }
-
-            if (settings.StopOnError)
-            {
-                builder.Append("-stoponerror");
-            }
-
-            if (settings.Trace != null)
-            {
-                builder.Append("-trace:" + settings.Trace);
-            }
-
-            if (settings.Labels)
-            {
-                builder.Append("-labels");
-            }
-
-            if (settings.OutputFile != null)
-            {
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "-output:{0}", settings.OutputFile.MakeAbsolute(_environment).FullPath));
-            }
-
-            if (settings.ErrorOutputFile != null)
-            {
-                builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "-err:{0}", settings.ErrorOutputFile.MakeAbsolute(_environment).FullPath));
-            }
-
-            if (settings.ResultsFile != null && settings.NoResults)
-            {
-                throw new ArgumentException(
-                    GetToolName() + ": You can't specify both a results file and set NoResults to true.");
-            }
-
-            if (settings.ResultsFile != null)
-            {
-                builder.AppendQuoted(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "-result:{0}", settings.ResultsFile.MakeAbsolute(_environment).FullPath));
-            }
-            else if (settings.NoResults)
-            {
-                builder.AppendQuoted("-noresult");
-            }
-
-            // don't include the default value
-            if (settings.Process != NUnitProcessOption.Single)
-            {
-                builder.AppendQuoted("-process:" + settings.Process);
-            }
-
-            if (settings.UseSingleThreadedApartment)
-            {
-                builder.AppendQuoted("-apartment:STA");
-            }
-
-            if (settings.AppDomainUsage != NUnitAppDomainUsage.Default)
-            {
-                builder.AppendQuoted("-domain:" + settings.AppDomainUsage);
-            }
-
-            return builder;
+            builder.AppendQuoted("-include:" + settings.Include);
         }
 
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
+        if (settings.Exclude != null)
         {
-            return "NUnit";
+            builder.AppendQuoted("-exclude:" + settings.Exclude);
         }
 
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
+        if (settings.Timeout.HasValue)
         {
-            if (!_x86)
-            {
-                return new[] { "nunit-console.exe" };
-            }
-
-            return new[] { "nunit-console-x86.exe" };
+            builder.Append("-timeout:" + settings.Timeout.Value);
         }
 
-        /// <summary>
-        /// Customized NUnit exit code handling.
-        /// Throws <see cref="CakeException"/> on non-zero exit code.
-        /// </summary>
-        /// <param name="exitCode">The process exit code.</param>
-        protected override void ProcessExitCode(int exitCode)
+        // No shadow copy?
+        if (!settings.ShadowCopy)
         {
-            string error;
-
-            if (exitCode <= 0)
-            {
-                switch (exitCode)
-                {
-                    case 0:
-                        return;
-                    case -1:
-                        error = "Invalid argument";
-                        break;
-                    case -2:
-                        error = "File not found";
-                        break;
-                    case -3:
-                        error = "Test fixture not found";
-                        break;
-                    case -100:
-                        error = "Unexpected error";
-                        break;
-                    default:
-                        error = "Unrecognised error";
-                        break;
-                }
-            }
-            else
-            {
-                error = string.Format(CultureInfo.InvariantCulture, "{0} test(s) failed", exitCode);
-            }
-
-            const string message = "{0}: {1} (exit code {2}).";
-            throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), error, exitCode));
+            builder.Append("-noshadow");
         }
+
+        if (settings.NoLogo)
+        {
+            builder.Append("-nologo");
+        }
+
+        if (settings.NoThread)
+        {
+            builder.Append("-nothread");
+        }
+
+        if (settings.StopOnError)
+        {
+            builder.Append("-stoponerror");
+        }
+
+        if (settings.Trace != null)
+        {
+            builder.Append("-trace:" + settings.Trace);
+        }
+
+        if (settings.Labels)
+        {
+            builder.Append("-labels");
+        }
+
+        if (settings.OutputFile != null)
+        {
+            builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "-output:{0}", settings.OutputFile.MakeAbsolute(_environment).FullPath));
+        }
+
+        if (settings.ErrorOutputFile != null)
+        {
+            builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "-err:{0}", settings.ErrorOutputFile.MakeAbsolute(_environment).FullPath));
+        }
+
+        if (settings.ResultsFile != null && settings.NoResults)
+        {
+            throw new ArgumentException(
+                GetToolName() + ": You can't specify both a results file and set NoResults to true.");
+        }
+
+        if (settings.ResultsFile != null)
+        {
+            builder.AppendQuoted(
+                string.Format(
+                    CultureInfo.InvariantCulture,
+                    "-result:{0}", settings.ResultsFile.MakeAbsolute(_environment).FullPath));
+        }
+        else if (settings.NoResults)
+        {
+            builder.AppendQuoted("-noresult");
+        }
+
+        // don't include the default value
+        if (settings.Process != NUnitProcessOption.Single)
+        {
+            builder.AppendQuoted("-process:" + settings.Process);
+        }
+
+        if (settings.UseSingleThreadedApartment)
+        {
+            builder.AppendQuoted("-apartment:STA");
+        }
+
+        if (settings.AppDomainUsage != NUnitAppDomainUsage.Default)
+        {
+            builder.AppendQuoted("-domain:" + settings.AppDomainUsage);
+        }
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Gets the name of the tool.
+    /// </summary>
+    /// <returns>The name of the tool.</returns>
+    protected override string GetToolName()
+    {
+        return "NUnit";
+    }
+
+    /// <summary>
+    /// Gets the possible names of the tool executable.
+    /// </summary>
+    /// <returns>The tool executable name.</returns>
+    protected override IEnumerable<string> GetToolExecutableNames()
+    {
+        if (!_x86)
+        {
+            return new[] { "nunit-console.exe" };
+        }
+
+        return new[] { "nunit-console-x86.exe" };
+    }
+
+    /// <summary>
+    /// Customized NUnit exit code handling.
+    /// Throws <see cref="CakeException"/> on non-zero exit code.
+    /// </summary>
+    /// <param name="exitCode">The process exit code.</param>
+    protected override void ProcessExitCode(int exitCode)
+    {
+        string error;
+
+        if (exitCode <= 0)
+        {
+            switch (exitCode)
+            {
+                case 0:
+                    return;
+                case -1:
+                    error = "Invalid argument";
+                    break;
+                case -2:
+                    error = "File not found";
+                    break;
+                case -3:
+                    error = "Test fixture not found";
+                    break;
+                case -100:
+                    error = "Unexpected error";
+                    break;
+                default:
+                    error = "Unrecognised error";
+                    break;
+            }
+        }
+        else
+        {
+            error = string.Format(CultureInfo.InvariantCulture, "{0} test(s) failed", exitCode);
+        }
+
+        const string message = "{0}: {1} (exit code {2}).";
+        throw new CakeException(string.Format(CultureInfo.InvariantCulture, message, GetToolName(), error, exitCode));
     }
 }

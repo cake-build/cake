@@ -4,76 +4,75 @@
 
 using System;
 
-namespace Cake.Common.Build.TravisCI
+namespace Cake.Common.Build.TravisCI;
+
+/// <summary>
+/// A set of extensions for allowing "using" with Travis CI "blocks".
+/// </summary>
+public static class TravisCIDisposableExtensions
 {
     /// <summary>
-    /// A set of extensions for allowing "using" with Travis CI "blocks".
+    /// Folds travis log output.
     /// </summary>
-    public static class TravisCIDisposableExtensions
+    /// <param name="travisCIProvider">The Travis CI provider.</param>
+    /// <param name="name">The name.</param>
+    /// <returns>An <see cref="IDisposable"/>.</returns>
+    /// <para>Via BuildSystem.</para>
+    /// <example>
+    /// <code>
+    /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
+    /// {
+    ///     using (BuildSystem.TravisCI.Fold("restore"))
+    ///     {
+    ///         Information("Restoring packages");
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
+    /// <para>Via TravisCI.</para>
+    /// <example>
+    /// <code>
+    /// if (TravisCI.IsRunningOnTravisCI)
+    /// {
+    ///     using (TravisCI.Fold("restore"))
+    ///     {
+    ///         Information("Restoring packages");
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
+    public static IDisposable Fold(this ITravisCIProvider travisCIProvider, string name)
     {
+        ArgumentNullException.ThrowIfNull(travisCIProvider);
+        travisCIProvider.WriteStartFold(name);
+        return new TravisCIActionDisposable(travisCIProvider, tci => tci.WriteEndFold(name));
+    }
+
+    /// <summary>
+    /// Disposable helper for writing Travis CI message blocks.
+    /// </summary>
+    internal sealed class TravisCIActionDisposable : IDisposable
+    {
+        private readonly Action<ITravisCIProvider> _disposeAction;
+        private readonly ITravisCIProvider _travisCiProvider;
+
         /// <summary>
-        /// Folds travis log output.
+        /// Initializes a new instance of the <see cref="TravisCIActionDisposable"/> class.
         /// </summary>
-        /// <param name="travisCIProvider">The Travis CI provider.</param>
-        /// <param name="name">The name.</param>
-        /// <returns>An <see cref="IDisposable"/>.</returns>
-        /// <para>Via BuildSystem.</para>
-        /// <example>
-        /// <code>
-        /// if (BuildSystem.TravisCI.IsRunningOnTravisCI)
-        /// {
-        ///     using (BuildSystem.TravisCI.Fold("restore"))
-        ///     {
-        ///         Information("Restoring packages");
-        ///     }
-        /// }
-        /// </code>
-        /// </example>
-        /// <para>Via TravisCI.</para>
-        /// <example>
-        /// <code>
-        /// if (TravisCI.IsRunningOnTravisCI)
-        /// {
-        ///     using (TravisCI.Fold("restore"))
-        ///     {
-        ///         Information("Restoring packages");
-        ///     }
-        /// }
-        /// </code>
-        /// </example>
-        public static IDisposable Fold(this ITravisCIProvider travisCIProvider, string name)
+        /// <param name="travisCiProvider">The Travis CI provider.</param>
+        /// <param name="disposeAction">The dispose action.</param>
+        public TravisCIActionDisposable(ITravisCIProvider travisCiProvider, Action<ITravisCIProvider> disposeAction)
         {
-            ArgumentNullException.ThrowIfNull(travisCIProvider);
-            travisCIProvider.WriteStartFold(name);
-            return new TravisCIActionDisposable(travisCIProvider, tci => tci.WriteEndFold(name));
+            _travisCiProvider = travisCiProvider;
+            _disposeAction = disposeAction;
         }
 
         /// <summary>
-        /// Disposable helper for writing Travis CI message blocks.
+        /// Writes the end block for this message block.
         /// </summary>
-        internal sealed class TravisCIActionDisposable : IDisposable
+        public void Dispose()
         {
-            private readonly Action<ITravisCIProvider> _disposeAction;
-            private readonly ITravisCIProvider _travisCiProvider;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="TravisCIActionDisposable"/> class.
-            /// </summary>
-            /// <param name="travisCiProvider">The Travis CI provider.</param>
-            /// <param name="disposeAction">The dispose action.</param>
-            public TravisCIActionDisposable(ITravisCIProvider travisCiProvider, Action<ITravisCIProvider> disposeAction)
-            {
-                _travisCiProvider = travisCiProvider;
-                _disposeAction = disposeAction;
-            }
-
-            /// <summary>
-            /// Writes the end block for this message block.
-            /// </summary>
-            public void Dispose()
-            {
-                _disposeAction(_travisCiProvider);
-            }
+            _disposeAction(_travisCiProvider);
         }
     }
 }

@@ -6,22 +6,21 @@ using System;
 using Cake.Core.Tests.Stubs;
 using Cake.Testing.Fixtures;
 
-namespace Cake.Core.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures;
+
+public sealed class DummyToolFixture : ToolFixture<DummySettings>
 {
-    public sealed class DummyToolFixture : ToolFixture<DummySettings>
+    public Action<int> ExitCodeValidation { get; set; }
+
+    public DummyToolFixture()
+        : base("dummy.exe")
     {
-        public Action<int> ExitCodeValidation { get; set; }
+        ExitCodeValidation = null;
+    }
 
-        public DummyToolFixture()
-            : base("dummy.exe")
-        {
-            ExitCodeValidation = null;
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new DummyTool(FileSystem, Environment, ProcessRunner, Tools, ExitCodeValidation);
-            tool.Run(Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new DummyTool(FileSystem, Environment, ProcessRunner, Tools, ExitCodeValidation);
+        tool.Run(Settings);
     }
 }

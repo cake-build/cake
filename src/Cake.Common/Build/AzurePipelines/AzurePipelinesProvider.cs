@@ -6,43 +6,42 @@ using System;
 using Cake.Common.Build.AzurePipelines.Data;
 using Cake.Core;
 
-namespace Cake.Common.Build.AzurePipelines
+namespace Cake.Common.Build.AzurePipelines;
+
+/// <summary>
+/// Responsible for communicating with Azure Pipelines.
+/// </summary>
+public sealed class AzurePipelinesProvider : IAzurePipelinesProvider
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// Responsible for communicating with Azure Pipelines.
+    /// Initializes a new instance of the <see cref="AzurePipelinesProvider"/> class.
     /// </summary>
-    public sealed class AzurePipelinesProvider : IAzurePipelinesProvider
+    /// <param name="environment">The environment.</param>
+    /// <param name="writer">The build system service message writer.</param>
+    public AzurePipelinesProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
     {
-        private readonly ICakeEnvironment _environment;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AzurePipelinesProvider"/> class.
-        /// </summary>
-        /// <param name="environment">The environment.</param>
-        /// <param name="writer">The build system service message writer.</param>
-        public AzurePipelinesProvider(ICakeEnvironment environment, IBuildSystemServiceMessageWriter writer)
-        {
-            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            Environment = new AzurePipelinesEnvironmentInfo(environment);
-            Commands = new AzurePipelinesCommands(environment, writer);
-        }
-
-        /// <inheritdoc/>
-        public bool IsRunningOnAzurePipelines
-            => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TF_BUILD"));
-
-        /// <inheritdoc/>
-        public AzurePipelinesEnvironmentInfo Environment { get; }
-
-        /// <inheritdoc/>
-        public IAzurePipelinesCommands Commands { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether the current build is running on a hosted build agent.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the current build is running on a hosted agent; otherwise, <c>false</c>.
-        /// </value>
-        private bool IsHostedAgent => Environment.Agent.IsHosted;
+        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+        Environment = new AzurePipelinesEnvironmentInfo(environment);
+        Commands = new AzurePipelinesCommands(environment, writer);
     }
+
+    /// <inheritdoc/>
+    public bool IsRunningOnAzurePipelines
+        => !string.IsNullOrWhiteSpace(_environment.GetEnvironmentVariable("TF_BUILD"));
+
+    /// <inheritdoc/>
+    public AzurePipelinesEnvironmentInfo Environment { get; }
+
+    /// <inheritdoc/>
+    public IAzurePipelinesCommands Commands { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether the current build is running on a hosted build agent.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if the current build is running on a hosted agent; otherwise, <c>false</c>.
+    /// </value>
+    private bool IsHostedAgent => Environment.Agent.IsHosted;
 }

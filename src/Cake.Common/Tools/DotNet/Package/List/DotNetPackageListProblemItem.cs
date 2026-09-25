@@ -4,29 +4,28 @@
 
 using System.Text.Json.Serialization;
 
-namespace Cake.Common.Tools.DotNet.Package.List
+namespace Cake.Common.Tools.DotNet.Package.List;
+
+/// <summary>
+/// The problem information.
+/// </summary>
+public sealed class DotNetPackageListProblemItem
 {
     /// <summary>
-    /// The problem information.
+    /// Gets the problem level.
     /// </summary>
-    public sealed class DotNetPackageListProblemItem
-    {
-        /// <summary>
-        /// Gets the problem level.
-        /// </summary>
-        [JsonInclude]
-        public DotNetPackageListProblemType? Level { get; private set; }
+    [JsonInclude]
+    public DotNetPackageListProblemType? Level { get; private set; }
 
-        /// <summary>
-        /// Gets the problem text.
-        /// </summary>
-        [JsonInclude]
-        public string Text { get; private set; }
+    /// <summary>
+    /// Gets the problem text.
+    /// </summary>
+    [JsonInclude]
+    public string Text { get; private set; }
 
-        /// <summary>
-        /// Gets the project path.
-        /// </summary>
-        [JsonInclude]
-        public string Project { get; private set; }
-    }
+    /// <summary>
+    /// Gets the project path.
+    /// </summary>
+    [JsonInclude]
+    public string Project { get; private set; }
 }

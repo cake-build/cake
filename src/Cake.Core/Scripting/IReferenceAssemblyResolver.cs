@@ -4,17 +4,16 @@
 
 using System.Reflection;
 
-namespace Cake.Core.Scripting
+namespace Cake.Core.Scripting;
+
+/// <summary>
+/// Represents a framework reference assembly resolver.
+/// </summary>
+public interface IReferenceAssemblyResolver
 {
     /// <summary>
-    /// Represents a framework reference assembly resolver.
+    /// Finds framwork reference assemblies.
     /// </summary>
-    public interface IReferenceAssemblyResolver
-    {
-        /// <summary>
-        /// Finds framwork reference assemblies.
-        /// </summary>
-        /// <returns>The resolved reference assemblies.</returns>
-        Assembly[] GetReferenceAssemblies();
-    }
+    /// <returns>The resolved reference assemblies.</returns>
+    Assembly[] GetReferenceAssemblies();
 }

@@ -4,177 +4,175 @@
 
 using Cake.Common.Tests.Fixtures.Build;
 using NSubstitute;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data
+namespace Cake.Common.Tests.Unit.Build.AppVeyor.Data;
+
+public sealed class AppVeyorEnvironmentInfoTests
 {
-    public sealed class AppVeyorEnvironmentInfoTests
+    public sealed class TheApiUrlProperty
     {
-        public sealed class TheApiUrlProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.ApiUrl;
+            // When
+            var result = info.ApiUrl;
 
-                // Then
-                Assert.Equal("http://localhost:1029/", result);
-            }
+            // Then
+            Assert.Equal("http://localhost:1029/", result);
         }
+    }
 
-        public sealed class TheConfigurationProperty
+    public sealed class TheConfigurationProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Configuration;
+            // When
+            var result = info.Configuration;
 
-                // Then
-                Assert.Equal("x86", result);
-            }
+            // Then
+            Assert.Equal("x86", result);
         }
+    }
 
-        public sealed class TheJobIdProperty
+    public sealed class TheJobIdProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.JobId;
+            // When
+            var result = info.JobId;
 
-                // Then
-                Assert.Equal("d6qpdshbol69ucbq", result);
-            }
+            // Then
+            Assert.Equal("d6qpdshbol69ucbq", result);
         }
+    }
 
-        public sealed class TheJobNameProperty
+    public sealed class TheJobNameProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.JobName;
+            // When
+            var result = info.JobName;
 
-                // Then
-                Assert.Equal("Job1", result);
-            }
+            // Then
+            Assert.Equal("Job1", result);
         }
+    }
 
-        public sealed class ThePlatformProperty
+    public sealed class ThePlatformProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Platform;
+            // When
+            var result = info.Platform;
 
-                // Then
-                Assert.Equal("Debug", result);
-            }
+            // Then
+            Assert.Equal("Debug", result);
         }
+    }
 
-        public sealed class TheScheduledBuildProperty
+    public sealed class TheScheduledBuildProperty
+    {
+        [Theory]
+        [InlineData("true", true)]
+        [InlineData("True", true)]
+        [InlineData("false", false)]
+        [InlineData("False", false)]
+        [InlineData("Yes", false)]
+        public void Should_Return_Correct_Value(string value, bool expected)
         {
-            [Theory]
-            [InlineData("true", true)]
-            [InlineData("True", true)]
-            [InlineData("false", false)]
-            [InlineData("False", false)]
-            [InlineData("Yes", false)]
-            public void Should_Return_Correct_Value(string value, bool expected)
-            {
-                // Given
-                var fixture = new AppVeyorInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("APPVEYOR_SCHEDULED_BUILD").Returns(value);
-                var info = fixture.CreateEnvironmentInfo();
+            // Given
+            var fixture = new AppVeyorInfoFixture();
+            fixture.Environment.GetEnvironmentVariable("APPVEYOR_SCHEDULED_BUILD").Returns(value);
+            var info = fixture.CreateEnvironmentInfo();
 
-                // When
-                var result = info.ScheduledBuild;
+            // When
+            var result = info.ScheduledBuild;
 
-                // Then
-                Assert.Equal(expected, result);
-            }
+            // Then
+            Assert.Equal(expected, result);
         }
+    }
 
-        public sealed class TheBuildProperty
+    public sealed class TheBuildProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Build;
+            // When
+            var result = info.Build;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
         }
+    }
 
-        public sealed class TheProjectProperty
+    public sealed class TheProjectProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Project;
+            // When
+            var result = info.Project;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
         }
+    }
 
-        public sealed class ThePullRequestProperty
+    public sealed class ThePullRequestProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.PullRequest;
+            // When
+            var result = info.PullRequest;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
         }
+    }
 
-        public sealed class TheRepositoryProperty
+    public sealed class TheRepositoryProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new AppVeyorInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Repository;
+            // When
+            var result = info.Repository;
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
         }
     }
 }

@@ -6,24 +6,23 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.OpenCover
+namespace Cake.Common.Tools.OpenCover;
+
+internal sealed class OpenCoverContext : CakeContextAdapter
 {
-    internal sealed class OpenCoverContext : CakeContextAdapter
+    private readonly OpenCoverProcessRunner _runner;
+
+    public override ICakeLog Log { get; }
+
+    public override IProcessRunner ProcessRunner => _runner;
+
+    public FilePath FilePath => _runner.FilePath;
+
+    public ProcessSettings Settings => _runner.ProcessSettings;
+
+    public OpenCoverContext(ICakeContext context) : base(context)
     {
-        private readonly OpenCoverProcessRunner _runner;
-
-        public override ICakeLog Log { get; }
-
-        public override IProcessRunner ProcessRunner => _runner;
-
-        public FilePath FilePath => _runner.FilePath;
-
-        public ProcessSettings Settings => _runner.ProcessSettings;
-
-        public OpenCoverContext(ICakeContext context) : base(context)
-        {
-            Log = new NullLog();
-            _runner = new OpenCoverProcessRunner();
-        }
+        Log = new NullLog();
+        _runner = new OpenCoverProcessRunner();
     }
 }

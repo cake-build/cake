@@ -4,16 +4,15 @@
 
 using Cake.Common.Tools.DotNet.Publish;
 
-namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Publish
-{
-    internal sealed class DotNetPublisherFixture : DotNetFixture<DotNetPublishSettings>
-    {
-        public string Project { get; set; }
+namespace Cake.Common.Tests.Fixtures.Tools.DotNet.Publish;
 
-        protected override void RunTool()
-        {
-            var tool = new DotNetPublisher(FileSystem, Environment, ProcessRunner, Tools);
-            tool.Publish(Project, Settings);
-        }
+internal sealed class DotNetPublisherFixture : DotNetFixture<DotNetPublishSettings>
+{
+    public string Project { get; set; }
+
+    protected override void RunTool()
+    {
+        var tool = new DotNetPublisher(FileSystem, Environment, ProcessRunner, Tools);
+        tool.Publish(Project, Settings);
     }
 }

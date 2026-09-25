@@ -6,83 +6,82 @@ using System;
 using System.Collections.Generic;
 using Cake.Core.Diagnostics.Formatting;
 
-namespace Cake.Core.Diagnostics
+namespace Cake.Core.Diagnostics;
+
+internal sealed class ConsoleRenderer : IConsoleRenderer
 {
-    internal sealed class ConsoleRenderer : IConsoleRenderer
+    private readonly IConsole _console;
+    private readonly IDictionary<LogLevel, ConsolePalette> _palette;
+
+    public ConsoleRenderer(IConsole console)
     {
-        private readonly IConsole _console;
-        private readonly IDictionary<LogLevel, ConsolePalette> _palette;
+        _console = console ?? throw new ArgumentNullException();
+        _palette = ConsolePalette.CreateLookup(_console);
+    }
 
-        public ConsoleRenderer(IConsole console)
+    public void Render(LogLevel level, string format, params object[] args)
+    {
+        try
         {
-            _console = console ?? throw new ArgumentNullException();
-            _palette = ConsolePalette.CreateLookup(_console);
-        }
+            var palette = _palette[level];
+            var tokens = FormatParser.Parse(format);
 
-        public void Render(LogLevel level, string format, params object[] args)
-        {
-            try
+            var colorize = !"{0}".Equals(format, StringComparison.OrdinalIgnoreCase);
+
+            foreach (var token in tokens)
             {
-                var palette = _palette[level];
-                var tokens = FormatParser.Parse(format);
+                SetPalette(token, palette, colorize);
 
-                var colorize = !"{0}".Equals(format, StringComparison.OrdinalIgnoreCase);
-
-                foreach (var token in tokens)
+                if (level > LogLevel.Error)
                 {
-                    SetPalette(token, palette, colorize);
-
-                    if (level > LogLevel.Error)
-                    {
-                        _console.Write("{0}", token.Render(args));
-                    }
-                    else
-                    {
-                        _console.WriteError("{0}", token.Render(args));
-                    }
+                    _console.Write("{0}", token.Render(args));
                 }
-            }
-            finally
-            {
-                _console.ResetColor();
-            }
-
-            // Append a new line
-            if (level > LogLevel.Error)
-            {
-                _console.WriteLine();
-            }
-            else
-            {
-                _console.WriteErrorLine();
+                else
+                {
+                    _console.WriteError("{0}", token.Render(args));
+                }
             }
         }
-
-        private void SetPalette(FormatToken token, ConsolePalette palette, bool colorize)
+        finally
         {
-            if (colorize && token is PropertyToken)
-            {
-                if (palette.ArgumentBackground != Constants.DefaultConsoleColor)
-                {
-                    _console.BackgroundColor = palette.ArgumentBackground;
-                }
+            _console.ResetColor();
+        }
 
-                if (palette.ArgumentForeground != Constants.DefaultConsoleColor)
-                {
-                    _console.ForegroundColor = palette.ArgumentForeground;
-                }
+        // Append a new line
+        if (level > LogLevel.Error)
+        {
+            _console.WriteLine();
+        }
+        else
+        {
+            _console.WriteErrorLine();
+        }
+    }
+
+    private void SetPalette(FormatToken token, ConsolePalette palette, bool colorize)
+    {
+        if (colorize && token is PropertyToken)
+        {
+            if (palette.ArgumentBackground != Constants.DefaultConsoleColor)
+            {
+                _console.BackgroundColor = palette.ArgumentBackground;
             }
-            else
-            {
-                if (palette.Background != Constants.DefaultConsoleColor)
-                {
-                    _console.BackgroundColor = palette.Background;
-                }
 
-                if (palette.Foreground != Constants.DefaultConsoleColor)
-                {
-                    _console.ForegroundColor = palette.Foreground;
-                }
+            if (palette.ArgumentForeground != Constants.DefaultConsoleColor)
+            {
+                _console.ForegroundColor = palette.ArgumentForeground;
+            }
+        }
+        else
+        {
+            if (palette.Background != Constants.DefaultConsoleColor)
+            {
+                _console.BackgroundColor = palette.Background;
+            }
+
+            if (palette.Foreground != Constants.DefaultConsoleColor)
+            {
+                _console.ForegroundColor = palette.Foreground;
             }
         }
     }

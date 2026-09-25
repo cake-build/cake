@@ -5,23 +5,22 @@
 using System;
 using Cake.Core.Scripting.Analysis;
 
-namespace Cake.Core.Scripting.Processors
+namespace Cake.Core.Scripting.Processors;
+
+internal sealed class DefineDirectiveProcessor : LineProcessor
 {
-    internal sealed class DefineDirectiveProcessor : LineProcessor
+    public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
     {
-        public override bool Process(IScriptAnalyzerContext context, string line, out string replacement)
+        ArgumentNullException.ThrowIfNull(context);
+
+        replacement = null;
+
+        if (!line.StartsWith("#define", StringComparison.Ordinal))
         {
-            ArgumentNullException.ThrowIfNull(context);
-
-            replacement = null;
-
-            if (!line.StartsWith("#define", StringComparison.Ordinal))
-            {
-                return false;
-            }
-
-            context.Current.Defines.Add(line);
-            return true;
+            return false;
         }
+
+        context.Current.Defines.Add(line);
+        return true;
     }
 }

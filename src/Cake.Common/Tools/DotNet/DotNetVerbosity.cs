@@ -2,36 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotNet
+namespace Cake.Common.Tools.DotNet;
+
+/// <summary>
+/// Contains the verbosity of logging to use.
+/// </summary>
+public enum DotNetVerbosity
 {
     /// <summary>
-    /// Contains the verbosity of logging to use.
+    /// Quiet level.
     /// </summary>
-    public enum DotNetVerbosity
-    {
-        /// <summary>
-        /// Quiet level.
-        /// </summary>
-        Quiet,
+    Quiet,
 
-        /// <summary>
-        /// Minimal level.
-        /// </summary>
-        Minimal,
+    /// <summary>
+    /// Minimal level.
+    /// </summary>
+    Minimal,
 
-        /// <summary>
-        /// Normal level.
-        /// </summary>
-        Normal,
+    /// <summary>
+    /// Normal level.
+    /// </summary>
+    Normal,
 
-        /// <summary>
-        /// Detailed level.
-        /// </summary>
-        Detailed,
+    /// <summary>
+    /// Detailed level.
+    /// </summary>
+    Detailed,
 
-        /// <summary>
-        /// Diagnostic level.
-        /// </summary>
-        Diagnostic,
-    }
+    /// <summary>
+    /// Diagnostic level.
+    /// </summary>
+    Diagnostic,
 }

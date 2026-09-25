@@ -2,21 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Tools.DotNet.Package.List
+namespace Cake.Common.Tools.DotNet.Package.List;
+
+/// <summary>
+/// The problem types.
+/// </summary>
+public enum DotNetPackageListProblemType
 {
     /// <summary>
-    /// The problem types.
+    /// Warning.
     /// </summary>
-    public enum DotNetPackageListProblemType
-    {
-        /// <summary>
-        /// Warning.
-        /// </summary>
-        Warning,
+    Warning,
 
-        /// <summary>
-        /// Error.
-        /// </summary>
-        Error
-    }
+    /// <summary>
+    /// Error.
+    /// </summary>
+    Error
 }

@@ -6,28 +6,27 @@ using System;
 using Cake.Core.Composition;
 using NSubstitute;
 
-namespace Cake.NuGet.Tests.Fixtures
+namespace Cake.NuGet.Tests.Fixtures;
+
+internal sealed class NuGetModuleFixture<T>
 {
-    internal sealed class NuGetModuleFixture<T>
+    public ICakeContainerRegistrar Registrar { get; }
+    public ICakeRegistrationBuilder Builder { get; }
+
+    public NuGetModuleFixture()
     {
-        public ICakeContainerRegistrar Registrar { get; }
-        public ICakeRegistrationBuilder Builder { get; }
+        Registrar = Substitute.For<ICakeContainerRegistrar>();
+        Builder = Substitute.For<ICakeRegistrationBuilder>();
 
-        public NuGetModuleFixture()
-        {
-            Registrar = Substitute.For<ICakeContainerRegistrar>();
-            Builder = Substitute.For<ICakeRegistrationBuilder>();
+        Registrar.RegisterType<T>().Returns(Builder);
+        Builder.As(Arg.Any<Type>()).Returns(Builder);
+        Builder.Singleton().Returns(Builder);
+        Builder.Transient().Returns(Builder);
+        Builder.AsSelf().Returns(Builder);
+    }
 
-            Registrar.RegisterType<T>().Returns(Builder);
-            Builder.As(Arg.Any<Type>()).Returns(Builder);
-            Builder.Singleton().Returns(Builder);
-            Builder.Transient().Returns(Builder);
-            Builder.AsSelf().Returns(Builder);
-        }
-
-        public NuGetModule CreateModule()
-        {
-            return new NuGetModule();
-        }
+    public NuGetModule CreateModule()
+    {
+        return new NuGetModule();
     }
 }

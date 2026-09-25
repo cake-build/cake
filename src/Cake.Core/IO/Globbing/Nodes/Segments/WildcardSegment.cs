@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Core.IO.Globbing.Nodes.Segments
-{
-    internal sealed class WildcardSegment : PathSegment
-    {
-        public override string Value => "*";
+namespace Cake.Core.IO.Globbing.Nodes.Segments;
 
-        public override string Regex => ".*";
-    }
+internal sealed class WildcardSegment : PathSegment
+{
+    public override string Value => "*";
+
+    public override string Regex => ".*";
 }

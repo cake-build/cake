@@ -4,21 +4,20 @@
 
 using Xunit;
 
-namespace Cake.Core.Tests.Unit
-{
-    public sealed class CakeEngineActionsTests
-    {
-        public sealed class TheConstructor
-        {
-            [Fact]
-            public void Should_Throw_If_Data_Service_Is_Null()
-            {
-                // Given, When
-                var result = Record.Exception(() => new CakeEngineActions(null));
+namespace Cake.Core.Tests.Unit;
 
-                // Then
-                AssertEx.IsArgumentNullException(result, "data");
-            }
+public sealed class CakeEngineActionsTests
+{
+    public sealed class TheConstructor
+    {
+        [Fact]
+        public void Should_Throw_If_Data_Service_Is_Null()
+        {
+            // Given, When
+            var result = Record.Exception(() => new CakeEngineActions(null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "data");
         }
     }
 }

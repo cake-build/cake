@@ -7,69 +7,68 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.Chocolatey.Config
+namespace Cake.Common.Tools.Chocolatey.Config;
+
+/// <summary>
+/// The Chocolatey configuration setter.
+/// </summary>
+public sealed class ChocolateyConfigSetter : ChocolateyTool<ChocolateyConfigSettings>
 {
     /// <summary>
-    /// The Chocolatey configuration setter.
+    /// Initializes a new instance of the <see cref="ChocolateyConfigSetter"/> class.
     /// </summary>
-    public sealed class ChocolateyConfigSetter : ChocolateyTool<ChocolateyConfigSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="resolver">The Chocolatey tool resolver.</param>
+    public ChocolateyConfigSetter(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChocolateyConfigSetter"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="resolver">The Chocolatey tool resolver.</param>
-        public ChocolateyConfigSetter(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            IChocolateyToolResolver resolver) : base(fileSystem, environment, processRunner, tools, resolver)
+    }
+
+    /// <summary>
+    /// Sets Chocolatey configuration parameters using the settings.
+    /// </summary>
+    /// <param name="name">The name of the config parameter.</param>
+    /// <param name="value">The value to assign to the parameter.</param>
+    /// <param name="settings">The settings.</param>
+    public void Set(string name, string value, ChocolateyConfigSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        if (string.IsNullOrWhiteSpace(name))
         {
+            throw new ArgumentNullException(nameof(name));
         }
 
-        /// <summary>
-        /// Sets Chocolatey configuration parameters using the settings.
-        /// </summary>
-        /// <param name="name">The name of the config parameter.</param>
-        /// <param name="value">The value to assign to the parameter.</param>
-        /// <param name="settings">The settings.</param>
-        public void Set(string name, string value, ChocolateyConfigSettings settings)
+        if (string.IsNullOrWhiteSpace(value))
         {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            Run(settings, GetArguments(name, value, settings));
+            throw new ArgumentNullException(nameof(value));
         }
 
-        private ProcessArgumentBuilder GetArguments(string name, string value, ChocolateyConfigSettings settings)
-        {
-            const string separator = "=";
-            var builder = new ProcessArgumentBuilder();
+        Run(settings, GetArguments(name, value, settings));
+    }
 
-            builder.Append("config");
-            builder.Append("set");
+    private ProcessArgumentBuilder GetArguments(string name, string value, ChocolateyConfigSettings settings)
+    {
+        const string separator = "=";
+        var builder = new ProcessArgumentBuilder();
 
-            builder.AppendSwitchQuoted("--name", separator, name);
+        builder.Append("config");
+        builder.Append("set");
 
-            builder.AppendSwitchQuoted("--value", separator, value);
+        builder.AppendSwitchQuoted("--name", separator, name);
 
-            // Add common arguments using the inherited method
-            AddGlobalArguments(settings, builder);
+        builder.AppendSwitchQuoted("--value", separator, value);
 
-            return builder;
-        }
+        // Add common arguments using the inherited method
+        AddGlobalArguments(settings, builder);
+
+        return builder;
     }
 }

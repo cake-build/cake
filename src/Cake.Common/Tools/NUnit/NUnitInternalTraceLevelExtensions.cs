@@ -4,32 +4,31 @@
 
 using System;
 
-namespace Cake.Common.Tools.NUnit
+namespace Cake.Common.Tools.NUnit;
+
+/// <summary>
+/// Contains extension methods for <see cref="NUnitInternalTraceLevel"/>.
+/// </summary>
+public static class NUnitInternalTraceLevelExtensions
 {
     /// <summary>
-    /// Contains extension methods for <see cref="NUnitInternalTraceLevel"/>.
+    /// Gets the LEVEL value for the --trace command line argument for the given <see cref="NUnitInternalTraceLevel"/>.
     /// </summary>
-    public static class NUnitInternalTraceLevelExtensions
+    /// <param name="level">The <see cref="NUnitInternalTraceLevel"/> value for which to get the <see cref="string"/> representation.</param>
+    /// <returns>Returns the appropriate <see cref="string"/> representation for the given <see cref="NUnitInternalTraceLevel"/> value.</returns>
+    public static string GetArgumentValue(this NUnitInternalTraceLevel level)
     {
-        /// <summary>
-        /// Gets the LEVEL value for the --trace command line argument for the given <see cref="NUnitInternalTraceLevel"/>.
-        /// </summary>
-        /// <param name="level">The <see cref="NUnitInternalTraceLevel"/> value for which to get the <see cref="string"/> representation.</param>
-        /// <returns>Returns the appropriate <see cref="string"/> representation for the given <see cref="NUnitInternalTraceLevel"/> value.</returns>
-        public static string GetArgumentValue(this NUnitInternalTraceLevel level)
+        string result;
+        switch (level)
         {
-            string result;
-            switch (level)
-            {
-                case NUnitInternalTraceLevel.Debug:
-                    result = "verbose";
-                    break;
-                default:
-                    result = Enum.GetName(level)?.ToLowerInvariant();
-                    break;
-            }
-
-            return result ?? throw new ArgumentOutOfRangeException(nameof(level), level, "Unexpected value was encountered.");
+            case NUnitInternalTraceLevel.Debug:
+                result = "verbose";
+                break;
+            default:
+                result = Enum.GetName(level)?.ToLowerInvariant();
+                break;
         }
+
+        return result ?? throw new ArgumentOutOfRangeException(nameof(level), level, "Unexpected value was encountered.");
     }
 }

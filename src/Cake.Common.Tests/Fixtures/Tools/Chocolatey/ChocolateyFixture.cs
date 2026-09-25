@@ -9,29 +9,28 @@ using Cake.Core.Tooling;
 using Cake.Testing.Fixtures;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey
+namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey;
+
+internal abstract class ChocolateyFixture<TSettings> : ChocolateyFixture<TSettings, ToolFixtureResult>
+    where TSettings : ToolSettings, new()
 {
-    internal abstract class ChocolateyFixture<TSettings> : ChocolateyFixture<TSettings, ToolFixtureResult>
-        where TSettings : ToolSettings, new()
+    protected override ToolFixtureResult CreateResult(FilePath path, ProcessSettings process)
     {
-        protected override ToolFixtureResult CreateResult(FilePath path, ProcessSettings process)
-        {
-            return new ToolFixtureResult(path, process);
-        }
+        return new ToolFixtureResult(path, process);
     }
+}
 
-    internal abstract class ChocolateyFixture<TSettings, TFixtureResult> : ToolFixture<TSettings, TFixtureResult>
-        where TSettings : ToolSettings, new()
-        where TFixtureResult : ToolFixtureResult
+internal abstract class ChocolateyFixture<TSettings, TFixtureResult> : ToolFixture<TSettings, TFixtureResult>
+    where TSettings : ToolSettings, new()
+    where TFixtureResult : ToolFixtureResult
+{
+    public IChocolateyToolResolver Resolver { get; set; }
+    public ICakeLog Log { get; set; }
+
+    protected ChocolateyFixture()
+        : base("choco.exe")
     {
-        public IChocolateyToolResolver Resolver { get; set; }
-        public ICakeLog Log { get; set; }
-
-        protected ChocolateyFixture()
-            : base("choco.exe")
-        {
-            Resolver = Substitute.For<IChocolateyToolResolver>();
-            Log = Substitute.For<ICakeLog>();
-        }
+        Resolver = Substitute.For<IChocolateyToolResolver>();
+        Log = Substitute.For<ICakeLog>();
     }
 }

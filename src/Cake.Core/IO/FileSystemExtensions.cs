@@ -4,53 +4,52 @@
 
 using System;
 
-namespace Cake.Core.IO
+namespace Cake.Core.IO;
+
+/// <summary>
+/// Contains extensions for <see cref="IFileSystem"/>.
+/// </summary>
+public static class FileSystemExtensions
 {
     /// <summary>
-    /// Contains extensions for <see cref="IFileSystem"/>.
+    /// Determines if a specified <see cref="FilePath"/> exist.
     /// </summary>
-    public static class FileSystemExtensions
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="path">The path.</param>
+    /// <returns>Whether or not the specified file exist.</returns>
+    /// <example>
+    /// <code>
+    /// if (context.FileSystem.Exist("./publish.enabled"))
+    /// {
+    ///     Information("Publish is enabled");
+    /// }
+    /// </code>
+    /// </example>
+    public static bool Exist(this IFileSystem fileSystem, FilePath path)
     {
-        /// <summary>
-        /// Determines if a specified <see cref="FilePath"/> exist.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="path">The path.</param>
-        /// <returns>Whether or not the specified file exist.</returns>
-        /// <example>
-        /// <code>
-        /// if (context.FileSystem.Exist("./publish.enabled"))
-        /// {
-        ///     Information("Publish is enabled");
-        /// }
-        /// </code>
-        /// </example>
-        public static bool Exist(this IFileSystem fileSystem, FilePath path)
-        {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            var file = fileSystem.GetFile(path);
-            return file != null && file.Exists;
-        }
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        var file = fileSystem.GetFile(path);
+        return file != null && file.Exists;
+    }
 
-        /// <summary>
-        /// Determines if a specified <see cref="DirectoryPath"/> exist.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="path">The path.</param>
-        /// <returns>Whether or not the specified directory exist.</returns>
-        /// <example>
-        /// <code>
-        /// if (context.FileSystem.Exist(new DirectoryPath("./artifacts")))
-        /// {
-        ///     Information("Artifacts directory exists");
-        /// }
-        /// </code>
-        /// </example>
-        public static bool Exist(this IFileSystem fileSystem, DirectoryPath path)
-        {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            var directory = fileSystem.GetDirectory(path);
-            return directory != null && directory.Exists;
-        }
+    /// <summary>
+    /// Determines if a specified <see cref="DirectoryPath"/> exist.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="path">The path.</param>
+    /// <returns>Whether or not the specified directory exist.</returns>
+    /// <example>
+    /// <code>
+    /// if (context.FileSystem.Exist(new DirectoryPath("./artifacts")))
+    /// {
+    ///     Information("Artifacts directory exists");
+    /// }
+    /// </code>
+    /// </example>
+    public static bool Exist(this IFileSystem fileSystem, DirectoryPath path)
+    {
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        var directory = fileSystem.GetDirectory(path);
+        return directory != null && directory.Exists;
     }
 }

@@ -4,18 +4,17 @@
 
 using System.Xml;
 
-namespace Cake.Common.Polyfill
-{
-    internal static class XmlWriterSettingsHelper
-    {
-        public static bool GetDoNotEscapeUriAttributes(XmlWriterSettings settings)
-        {
-            return settings.DoNotEscapeUriAttributes;
-        }
+namespace Cake.Common.Polyfill;
 
-        public static void SetDoNotEscapeUriAttributes(XmlWriterSettings settings, bool value)
-        {
-            settings.DoNotEscapeUriAttributes = value;
-        }
+internal static class XmlWriterSettingsHelper
+{
+    public static bool GetDoNotEscapeUriAttributes(XmlWriterSettings settings)
+    {
+        return settings.DoNotEscapeUriAttributes;
+    }
+
+    public static void SetDoNotEscapeUriAttributes(XmlWriterSettings settings, bool value)
+    {
+        settings.DoNotEscapeUriAttributes = value;
     }
 }

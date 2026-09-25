@@ -7,49 +7,48 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.OctopusDeploy
+namespace Cake.Common.Tools.OctopusDeploy;
+
+/// <summary>
+/// The Octopus Deploy release creator runner.
+/// </summary>
+public sealed class OctopusDeployReleaseCreator : OctopusDeployTool<CreateReleaseSettings>
 {
     /// <summary>
-    /// The Octopus Deploy release creator runner.
+    /// Initializes a new instance of the <see cref="OctopusDeployReleaseCreator"/> class.
     /// </summary>
-    public sealed class OctopusDeployReleaseCreator : OctopusDeployTool<CreateReleaseSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public OctopusDeployReleaseCreator(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools)
+        : base(fileSystem, environment, processRunner, tools)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OctopusDeployReleaseCreator"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public OctopusDeployReleaseCreator(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools)
-            : base(fileSystem, environment, processRunner, tools)
+    }
+
+    /// <summary>
+    /// Creates a release for the specified project in OctopusDeploy.
+    /// </summary>
+    /// <param name="projectName">The target project name.</param>
+    /// <param name="settings">The settings.</param>
+    public void CreateRelease(string projectName, CreateReleaseSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(projectName);
+        ArgumentNullException.ThrowIfNull(settings);
+        if (string.IsNullOrEmpty(settings.Server))
         {
+            throw new ArgumentException("No server specified.", nameof(settings));
+        }
+        if (string.IsNullOrEmpty(settings.ApiKey))
+        {
+            throw new ArgumentException("No API key specified.", nameof(settings));
         }
 
-        /// <summary>
-        /// Creates a release for the specified project in OctopusDeploy.
-        /// </summary>
-        /// <param name="projectName">The target project name.</param>
-        /// <param name="settings">The settings.</param>
-        public void CreateRelease(string projectName, CreateReleaseSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(projectName);
-            ArgumentNullException.ThrowIfNull(settings);
-            if (string.IsNullOrEmpty(settings.Server))
-            {
-                throw new ArgumentException("No server specified.", nameof(settings));
-            }
-            if (string.IsNullOrEmpty(settings.ApiKey))
-            {
-                throw new ArgumentException("No API key specified.", nameof(settings));
-            }
-
-            var argumentBuilder = new CreateReleaseArgumentBuilder(projectName, settings, Environment);
-            Run(settings, argumentBuilder.Get());
-        }
+        var argumentBuilder = new CreateReleaseArgumentBuilder(projectName, settings, Environment);
+        Run(settings, argumentBuilder.Get());
     }
 }

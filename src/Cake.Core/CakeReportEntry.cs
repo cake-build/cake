@@ -4,69 +4,68 @@
 
 using System;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Represents an entry in a <see cref="CakeReport"/>.
+/// </summary>
+public sealed class CakeReportEntry
 {
     /// <summary>
-    /// Represents an entry in a <see cref="CakeReport"/>.
+    /// Gets the task name.
     /// </summary>
-    public sealed class CakeReportEntry
+    /// <value>The name.</value>
+    public string TaskName { get; }
+
+    /// <summary>
+    /// Gets the message explaining why task was skipped.
+    /// </summary>
+    public string SkippedMessage { get; }
+
+    /// <summary>
+    /// Gets the task category.
+    /// </summary>
+    /// <value>The category.</value>
+    public CakeReportEntryCategory Category { get; }
+
+    /// <summary>
+    /// Gets the duration the task ran for.
+    /// </summary>
+    /// <value>The duration the task ran for.</value>
+    public TimeSpan Duration { get; }
+
+    /// <summary>
+    /// Gets the task execution status.
+    /// </summary>
+    /// <value>The execution status.</value>
+    public CakeTaskExecutionStatus ExecutionStatus { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakeReportEntry"/> class.
+    /// </summary>
+    /// <param name="taskName">The name of the task.</param>
+    /// <param name="skippedMessage">The message explaining why the task was skipped.</param>
+    /// <param name="category">The task category.</param>
+    /// <param name="duration">The duration.</param>
+    public CakeReportEntry(string taskName, string skippedMessage, CakeReportEntryCategory category, TimeSpan duration)
+        : this(taskName, skippedMessage, category, duration, CakeTaskExecutionStatus.Executed)
     {
-        /// <summary>
-        /// Gets the task name.
-        /// </summary>
-        /// <value>The name.</value>
-        public string TaskName { get; }
+    }
 
-        /// <summary>
-        /// Gets the message explaining why task was skipped.
-        /// </summary>
-        public string SkippedMessage { get; }
-
-        /// <summary>
-        /// Gets the task category.
-        /// </summary>
-        /// <value>The category.</value>
-        public CakeReportEntryCategory Category { get; }
-
-        /// <summary>
-        /// Gets the duration the task ran for.
-        /// </summary>
-        /// <value>The duration the task ran for.</value>
-        public TimeSpan Duration { get; }
-
-        /// <summary>
-        /// Gets the task execution status.
-        /// </summary>
-        /// <value>The execution status.</value>
-        public CakeTaskExecutionStatus ExecutionStatus { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeReportEntry"/> class.
-        /// </summary>
-        /// <param name="taskName">The name of the task.</param>
-        /// <param name="skippedMessage">The message explaining why the task was skipped.</param>
-        /// <param name="category">The task category.</param>
-        /// <param name="duration">The duration.</param>
-        public CakeReportEntry(string taskName, string skippedMessage, CakeReportEntryCategory category, TimeSpan duration)
-            : this(taskName, skippedMessage, category, duration, CakeTaskExecutionStatus.Executed)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeReportEntry"/> class.
-        /// </summary>
-        /// <param name="taskName">The name of the task.</param>
-        /// <param name="skippedMessage">The message explaining why the task was skipped.</param>
-        /// <param name="category">The task category.</param>
-        /// <param name="duration">The duration.</param>
-        /// <param name="executionStatus">The execution status.</param>
-        public CakeReportEntry(string taskName, string skippedMessage, CakeReportEntryCategory category, TimeSpan duration, CakeTaskExecutionStatus executionStatus)
-        {
-            TaskName = taskName;
-            SkippedMessage = skippedMessage;
-            Category = category;
-            Duration = duration;
-            ExecutionStatus = executionStatus;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakeReportEntry"/> class.
+    /// </summary>
+    /// <param name="taskName">The name of the task.</param>
+    /// <param name="skippedMessage">The message explaining why the task was skipped.</param>
+    /// <param name="category">The task category.</param>
+    /// <param name="duration">The duration.</param>
+    /// <param name="executionStatus">The execution status.</param>
+    public CakeReportEntry(string taskName, string skippedMessage, CakeReportEntryCategory category, TimeSpan duration, CakeTaskExecutionStatus executionStatus)
+    {
+        TaskName = taskName;
+        SkippedMessage = skippedMessage;
+        Category = category;
+        Duration = duration;
+        ExecutionStatus = executionStatus;
     }
 }

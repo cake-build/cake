@@ -7,358 +7,357 @@ using Cake.Core.IO;
 using Cake.Testing.Xunit;
 using Xunit;
 
-namespace Cake.Core.Tests.Unit.IO
+namespace Cake.Core.Tests.Unit.IO;
+
+public sealed class WindowsRegistryTests
 {
-    public sealed class WindowsRegistryTests
+    public sealed class TheCurrentUserProperty
     {
-        public sealed class TheCurrentUserProperty
+        [Fact]
+        public void Should_Not_Throw_When_Accessed()
         {
-            [Fact]
-            public void Should_Not_Throw_When_Accessed()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var result = Record.Exception(() => registry.CurrentUser);
+            // When
+            var result = Record.Exception(() => registry.CurrentUser);
 
-                // Then
-                Assert.Null(result);
-            }
-
-            [Fact]
-            public void Should_Return_A_Registry_Key()
-            {
-                // Given
-                var registry = new WindowsRegistry();
-
-                // When
-                var key = registry.CurrentUser;
-
-                // Then
-                Assert.NotNull(key);
-            }
+            // Then
+            Assert.Null(result);
         }
 
-        public sealed class TheLocalMachineProperty
+        [Fact]
+        public void Should_Return_A_Registry_Key()
         {
-            [Fact]
-            public void Should_Not_Throw_When_Accessed()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var result = Record.Exception(() => registry.LocalMachine);
+            // When
+            var key = registry.CurrentUser;
 
-                // Then
-                Assert.Null(result);
-            }
+            // Then
+            Assert.NotNull(key);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_A_Registry_Key()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+    public sealed class TheLocalMachineProperty
+    {
+        [Fact]
+        public void Should_Not_Throw_When_Accessed()
+        {
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var key = registry.LocalMachine;
+            // When
+            var result = Record.Exception(() => registry.LocalMachine);
 
-                // Then
-                Assert.NotNull(key);
-            }
+            // Then
+            Assert.Null(result);
         }
 
-        public sealed class TheClassesRootProperty
+        [Fact]
+        public void Should_Return_A_Registry_Key()
         {
-            [Fact]
-            public void Should_Not_Throw_When_Accessed()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var result = Record.Exception(() => registry.ClassesRoot);
+            // When
+            var key = registry.LocalMachine;
 
-                // Then
-                Assert.Null(result);
-            }
+            // Then
+            Assert.NotNull(key);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_A_Registry_Key()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+    public sealed class TheClassesRootProperty
+    {
+        [Fact]
+        public void Should_Not_Throw_When_Accessed()
+        {
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var key = registry.ClassesRoot;
+            // When
+            var result = Record.Exception(() => registry.ClassesRoot);
 
-                // Then
-                Assert.NotNull(key);
-            }
+            // Then
+            Assert.Null(result);
         }
 
-        public sealed class TheUsersProperty
+        [Fact]
+        public void Should_Return_A_Registry_Key()
         {
-            [Fact]
-            public void Should_Not_Throw_When_Accessed()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var result = Record.Exception(() => registry.Users);
+            // When
+            var key = registry.ClassesRoot;
 
-                // Then
-                Assert.Null(result);
-            }
+            // Then
+            Assert.NotNull(key);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_A_Registry_Key()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+    public sealed class TheUsersProperty
+    {
+        [Fact]
+        public void Should_Not_Throw_When_Accessed()
+        {
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var key = registry.Users;
+            // When
+            var result = Record.Exception(() => registry.Users);
 
-                // Then
-                Assert.NotNull(key);
-            }
+            // Then
+            Assert.Null(result);
         }
 
-        public sealed class ThePerformanceDataProperty
+        [Fact]
+        public void Should_Return_A_Registry_Key()
         {
-            [Fact]
-            public void Should_Not_Throw_When_Accessed()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var result = Record.Exception(() => registry.PerformanceData);
+            // When
+            var key = registry.Users;
 
-                // Then
-                Assert.Null(result);
-            }
+            // Then
+            Assert.NotNull(key);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_A_Registry_Key()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+    public sealed class ThePerformanceDataProperty
+    {
+        [Fact]
+        public void Should_Not_Throw_When_Accessed()
+        {
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var key = registry.PerformanceData;
+            // When
+            var result = Record.Exception(() => registry.PerformanceData);
 
-                // Then
-                Assert.NotNull(key);
-            }
+            // Then
+            Assert.Null(result);
         }
 
-        public sealed class TheCurrentConfigProperty
+        [Fact]
+        public void Should_Return_A_Registry_Key()
         {
-            [Fact]
-            public void Should_Not_Throw_When_Accessed()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var result = Record.Exception(() => registry.CurrentConfig);
+            // When
+            var key = registry.PerformanceData;
 
-                // Then
-                Assert.Null(result);
-            }
+            // Then
+            Assert.NotNull(key);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_A_Registry_Key()
-            {
-                // Given
-                var registry = new WindowsRegistry();
+    public sealed class TheCurrentConfigProperty
+    {
+        [Fact]
+        public void Should_Not_Throw_When_Accessed()
+        {
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                var key = registry.CurrentConfig;
+            // When
+            var result = Record.Exception(() => registry.CurrentConfig);
 
-                // Then
-                Assert.NotNull(key);
-            }
+            // Then
+            Assert.Null(result);
         }
 
-        public sealed class TheReflectiveWalkOfTheRegistry
+        [Fact]
+        public void Should_Return_A_Registry_Key()
         {
-            [Fact]
-            public void Should_Not_Throw_When_All_Registry_Properties_Are_Accessed_Via_Reflection()
-            {
-                // Given
-                var registry = new WindowsRegistry();
-                var properties = typeof(IRegistry).GetProperties();
+            // Given
+            var registry = new WindowsRegistry();
 
-                // When
-                foreach (var property in properties)
-                {
-                    object key = default;
-                    var exception = Record.Exception(() => key = property.GetValue(registry));
+            // When
+            var key = registry.CurrentConfig;
 
-                    // Then
-                    Assert.Null(exception);
-                    Assert.NotNull(key);
-                }
-            }
+            // Then
+            Assert.NotNull(key);
         }
+    }
 
-        public sealed class DeferredKeyCreation
+    public sealed class TheReflectiveWalkOfTheRegistry
+    {
+        [Fact]
+        public void Should_Not_Throw_When_All_Registry_Properties_Are_Accessed_Via_Reflection()
         {
-            [Fact]
-            public void Should_Not_Create_The_Underlying_Key_When_Disposed()
-            {
-                // Given
-                var count = 0;
-                var key = new WindowsRegistryKey(() =>
-                {
-                    count++;
-                    return null;
-                });
+            // Given
+            var registry = new WindowsRegistry();
+            var properties = typeof(IRegistry).GetProperties();
 
-                // When
-                var exception = Record.Exception(() => key.Dispose());
+            // When
+            foreach (var property in properties)
+            {
+                object key = default;
+                var exception = Record.Exception(() => key = property.GetValue(registry));
 
                 // Then
                 Assert.Null(exception);
-                Assert.Equal(0, count);
+                Assert.NotNull(key);
             }
+        }
+    }
 
-            [Fact]
-            public void Should_Create_The_Underlying_Key_Once_When_Used()
+    public sealed class DeferredKeyCreation
+    {
+        [Fact]
+        public void Should_Not_Create_The_Underlying_Key_When_Disposed()
+        {
+            // Given
+            var count = 0;
+            var key = new WindowsRegistryKey(() =>
             {
-                // Given
-                var count = 0;
-                var key = new WindowsRegistryKey(() =>
-                {
-                    count++;
-                    return null;
-                });
+                count++;
+                return null;
+            });
 
-                // When
-                var exception = Record.Exception(() => key.GetSubKeyNames());
-                var exception2 = Record.Exception(() => key.GetSubKeyNames());
+            // When
+            var exception = Record.Exception(() => key.Dispose());
 
-                // Then
-                Assert.NotNull(exception);
-                Assert.NotNull(exception2);
-                Assert.Equal(1, count);
-            }
+            // Then
+            Assert.Null(exception);
+            Assert.Equal(0, count);
+        }
 
-            [Fact]
-            public void Should_Propagate_Exception_From_The_Underlying_Key_Creation()
+        [Fact]
+        public void Should_Create_The_Underlying_Key_Once_When_Used()
+        {
+            // Given
+            var count = 0;
+            var key = new WindowsRegistryKey(() =>
             {
-                // Given
-                var key = new WindowsRegistryKey(() => throw new PlatformNotSupportedException());
+                count++;
+                return null;
+            });
 
-                // When
-                var result = Record.Exception(() => key.GetSubKeyNames());
+            // When
+            var exception = Record.Exception(() => key.GetSubKeyNames());
+            var exception2 = Record.Exception(() => key.GetSubKeyNames());
 
-                // Then
-                Assert.IsType<PlatformNotSupportedException>(result);
-            }
+            // Then
+            Assert.NotNull(exception);
+            Assert.NotNull(exception2);
+            Assert.Equal(1, count);
+        }
 
-            [Fact]
-            public void Should_Create_The_Underlying_Key_Once_When_OpenKey_Is_Used()
+        [Fact]
+        public void Should_Propagate_Exception_From_The_Underlying_Key_Creation()
+        {
+            // Given
+            var key = new WindowsRegistryKey(() => throw new PlatformNotSupportedException());
+
+            // When
+            var result = Record.Exception(() => key.GetSubKeyNames());
+
+            // Then
+            Assert.IsType<PlatformNotSupportedException>(result);
+        }
+
+        [Fact]
+        public void Should_Create_The_Underlying_Key_Once_When_OpenKey_Is_Used()
+        {
+            // Given
+            var count = 0;
+            var key = new WindowsRegistryKey(() =>
             {
-                // Given
-                var count = 0;
-                var key = new WindowsRegistryKey(() =>
-                {
-                    count++;
-                    return null;
-                });
+                count++;
+                return null;
+            });
 
-                // When
-                var exception = Record.Exception(() => key.OpenKey("Cake"));
-                var exception2 = Record.Exception(() => key.OpenKey("Cake"));
+            // When
+            var exception = Record.Exception(() => key.OpenKey("Cake"));
+            var exception2 = Record.Exception(() => key.OpenKey("Cake"));
 
-                // Then
-                Assert.NotNull(exception);
-                Assert.NotNull(exception2);
-                Assert.Equal(1, count);
-            }
+            // Then
+            Assert.NotNull(exception);
+            Assert.NotNull(exception2);
+            Assert.Equal(1, count);
+        }
 
-            [Fact]
-            public void Should_Create_The_Underlying_Key_Once_When_GetValue_Is_Used()
+        [Fact]
+        public void Should_Create_The_Underlying_Key_Once_When_GetValue_Is_Used()
+        {
+            // Given
+            var count = 0;
+            var key = new WindowsRegistryKey(() =>
             {
-                // Given
-                var count = 0;
-                var key = new WindowsRegistryKey(() =>
-                {
-                    count++;
-                    return null;
-                });
+                count++;
+                return null;
+            });
 
-                // When
-                var exception = Record.Exception(() => key.GetValue("Cake"));
-                var exception2 = Record.Exception(() => key.GetValue("Cake"));
+            // When
+            var exception = Record.Exception(() => key.GetValue("Cake"));
+            var exception2 = Record.Exception(() => key.GetValue("Cake"));
 
-                // Then
-                Assert.NotNull(exception);
-                Assert.NotNull(exception2);
-                Assert.Equal(1, count);
-            }
+            // Then
+            Assert.NotNull(exception);
+            Assert.NotNull(exception2);
+            Assert.Equal(1, count);
+        }
 
-            [NonWindowsFact]
-            public void Should_Throw_Platform_Not_Supported_Exception_When_Used_On_Non_Windows_Platform()
-            {
-                // Given
-                var registry = new WindowsRegistry();
-                var key = registry.CurrentUser;
+        [NonWindowsFact]
+        public void Should_Throw_Platform_Not_Supported_Exception_When_Used_On_Non_Windows_Platform()
+        {
+            // Given
+            var registry = new WindowsRegistry();
+            var key = registry.CurrentUser;
 
-                // When
-                var result = Record.Exception(() => key.GetSubKeyNames());
+            // When
+            var result = Record.Exception(() => key.GetSubKeyNames());
 
-                // Then
-                Assert.IsType<PlatformNotSupportedException>(result);
-            }
+            // Then
+            Assert.IsType<PlatformNotSupportedException>(result);
+        }
 
-            [NonWindowsFact]
-            public void Should_Throw_Platform_Not_Supported_Exception_When_OpenKey_Is_Used_On_Non_Windows_Platform()
-            {
-                // Given
-                var registry = new WindowsRegistry();
-                var key = registry.CurrentUser;
+        [NonWindowsFact]
+        public void Should_Throw_Platform_Not_Supported_Exception_When_OpenKey_Is_Used_On_Non_Windows_Platform()
+        {
+            // Given
+            var registry = new WindowsRegistry();
+            var key = registry.CurrentUser;
 
-                // When
-                var result = Record.Exception(() => key.OpenKey("Cake"));
+            // When
+            var result = Record.Exception(() => key.OpenKey("Cake"));
 
-                // Then
-                Assert.IsType<PlatformNotSupportedException>(result);
-            }
+            // Then
+            Assert.IsType<PlatformNotSupportedException>(result);
+        }
 
-            [NonWindowsFact]
-            public void Should_Throw_Platform_Not_Supported_Exception_When_GetValue_Is_Used_On_Non_Windows_Platform()
-            {
-                // Given
-                var registry = new WindowsRegistry();
-                var key = registry.CurrentUser;
+        [NonWindowsFact]
+        public void Should_Throw_Platform_Not_Supported_Exception_When_GetValue_Is_Used_On_Non_Windows_Platform()
+        {
+            // Given
+            var registry = new WindowsRegistry();
+            var key = registry.CurrentUser;
 
-                // When
-                var result = Record.Exception(() => key.GetValue("Cake"));
+            // When
+            var result = Record.Exception(() => key.GetValue("Cake"));
 
-                // Then
-                Assert.IsType<PlatformNotSupportedException>(result);
-            }
+            // Then
+            Assert.IsType<PlatformNotSupportedException>(result);
+        }
 
-            [WindowsFact]
-            public void Should_Return_Sub_Key_Names_When_Used_On_Windows_Platform()
-            {
-                // Given
-                var registry = new WindowsRegistry();
-                var key = registry.CurrentUser;
+        [WindowsFact]
+        public void Should_Return_Sub_Key_Names_When_Used_On_Windows_Platform()
+        {
+            // Given
+            var registry = new WindowsRegistry();
+            var key = registry.CurrentUser;
 
-                // When
-                var result = key.GetSubKeyNames();
+            // When
+            var result = key.GetSubKeyNames();
 
-                // Then
-                Assert.NotNull(result);
-            }
+            // Then
+            Assert.NotNull(result);
         }
     }
 }
