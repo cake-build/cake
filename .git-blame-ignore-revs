@@ -2,3 +2,6 @@
 #
 # (GH-5006) Replace StyleCop.Analyzers with native SDK analyzers.
 dd2a29ebeb42a233b6508df82ac1d9c993520444
+
+# (GH-5007) Finish StyleCop follow-ups for net10/net11
+b79584aaba64ae333083ae186d6d28c1d628a38c
