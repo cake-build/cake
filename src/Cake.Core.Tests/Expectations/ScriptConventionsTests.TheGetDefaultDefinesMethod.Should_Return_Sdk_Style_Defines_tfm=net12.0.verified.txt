@@ -1,0 +1,23 @@
+﻿[
+  #define CAKE,
+  #define CAKE_7,
+  #define CAKE_7_OR_GREATER,
+  #define NETCOREAPP,
+  #define NET12_0,
+  #define NET,
+  #define NETCOREAPP1_0_OR_GREATER,
+  #define NETCOREAPP1_1_OR_GREATER,
+  #define NETCOREAPP2_0_OR_GREATER,
+  #define NETCOREAPP2_1_OR_GREATER,
+  #define NETCOREAPP2_2_OR_GREATER,
+  #define NETCOREAPP3_0_OR_GREATER,
+  #define NETCOREAPP3_1_OR_GREATER,
+  #define NET5_0_OR_GREATER,
+  #define NET6_0_OR_GREATER,
+  #define NET7_0_OR_GREATER,
+  #define NET8_0_OR_GREATER,
+  #define NET9_0_OR_GREATER,
+  #define NET10_0_OR_GREATER,
+  #define NET11_0_OR_GREATER,
+  #define NET12_0_OR_GREATER
+]

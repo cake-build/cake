@@ -5,7 +5,6 @@
 using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
-using Cake.Common.Polyfill;
 
 namespace Cake.Common.Xml;
 
@@ -44,8 +43,8 @@ public sealed class XmlTransformationSettings
     /// </summary>
     public bool DoNotEscapeUriAttributes
     {
-        get { return XmlWriterSettingsHelper.GetDoNotEscapeUriAttributes(XmlWriterSettings); }
-        set { XmlWriterSettingsHelper.SetDoNotEscapeUriAttributes(XmlWriterSettings, value); }
+        get { return XmlWriterSettings.DoNotEscapeUriAttributes; }
+        set { XmlWriterSettings.DoNotEscapeUriAttributes = value; }
     }
 
     /// <summary>

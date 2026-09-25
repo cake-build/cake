@@ -21,6 +21,7 @@ public sealed class ScriptConventionsTests
         [Theory]
         [InlineData("net10.0")]
         [InlineData("net11.0")]
+        [InlineData("net12.0")]
         [InlineData("netstandard2.0")]
         public async Task Should_Return_Sdk_Style_Defines(string tfm)
         {
@@ -54,6 +55,7 @@ public sealed class ScriptConventionsTests
             {
                 "net10.0" => (".NETCoreApp,Version=v10.0", true),
                 "net11.0" => (".NETCoreApp,Version=v11.0", true),
+                "net12.0" => (".NETCoreApp,Version=v12.0", true),
                 "netstandard2.0" => (".NETStandard,Version=v2.0", true),
                 _ => throw new ArgumentOutOfRangeException(nameof(tfm), tfm, null)
             };
