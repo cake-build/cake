@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Text;
 using Cake.Core.IO;
 
 namespace Cake.Common.Security;
@@ -53,14 +52,6 @@ public sealed class FileHash
     /// <returns>A hexadecimal string representing the computed hash.</returns>
     public string ToHex()
     {
-        // Each byte becomes two characters. Prepare the StringBuilder accordingly.
-        var builder = new StringBuilder(_hash.Length * 2);
-
-        foreach (var b in _hash)
-        {
-            builder.AppendFormat("{0:x2}", b);
-        }
-
-        return builder.ToString();
+        return Convert.ToHexStringLower(_hash);
     }
 }

@@ -262,9 +262,8 @@ internal record GitHubActionsArtifactService(
     {
         var size = FileSystem.GetFile(tempArchivePath).Length;
         using var stream = FileSystem.GetFile(tempArchivePath).OpenRead();
-        using var sha256 = SHA256.Create();
-        var hashBytes = sha256.ComputeHash(stream);
-        var hash = Convert.ToHexString(hashBytes).ToLowerInvariant();
+        var hashBytes = SHA256.HashData(stream);
+        var hash = Convert.ToHexStringLower(hashBytes);
         return (size, hash);
     }
 

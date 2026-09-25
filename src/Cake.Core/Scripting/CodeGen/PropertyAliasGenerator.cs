@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
 using Cake.Core.Annotations;
 
@@ -17,8 +18,6 @@ namespace Cake.Core.Scripting.CodeGen;
 /// </summary>
 public static class PropertyAliasGenerator
 {
-    private static readonly System.Security.Cryptography.SHA256 SHA256 = System.Security.Cryptography.SHA256.Create();
-
     /// <summary>
     /// Generates a script property alias from the specified method.
     /// The provided method must be an extension method for <see cref="ICakeContext"/>
@@ -148,8 +147,7 @@ public static class PropertyAliasGenerator
         builder.AppendLine();
 
         hash = Convert.ToHexString(
-                SHA256
-                    .ComputeHash(Encoding.UTF8.GetBytes(builder.ToString(curPos, builder.Length - curPos))));
+            SHA256.HashData(Encoding.UTF8.GetBytes(builder.ToString(curPos, builder.Length - curPos))));
 
         return hash;
     }
