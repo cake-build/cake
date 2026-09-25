@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using Cake.Core.Annotations;
 
@@ -16,8 +17,6 @@ namespace Cake.Core.Scripting.CodeGen;
 /// </summary>
 public static class MethodAliasGenerator
 {
-    private static readonly System.Security.Cryptography.SHA256 _hasher = System.Security.Cryptography.SHA256.Create();
-
     /// <summary>
     /// Generates a script method alias from the specified method.
     /// The provided method must be an extension method for <see cref="ICakeContext"/>
@@ -69,8 +68,7 @@ public static class MethodAliasGenerator
             GenericParameterConstraintEmitter.BuildGenericConstraints(method, builder);
         }
 
-        hash = Convert.ToHexString(
-                _hasher.ComputeHash(Encoding.UTF8.GetBytes(builder.ToString())));
+        hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(builder.ToString())));
 
         builder.AppendLine();
 
