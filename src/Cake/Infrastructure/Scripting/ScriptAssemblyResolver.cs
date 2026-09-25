@@ -20,10 +20,8 @@ public sealed class ScriptAssemblyResolver : IDisposable
     private const string AssemblyResourcesExtension = ".resources";
     private static readonly Version VersionZero = new Version(0, 0, 0, 0);
 
-    private readonly ICakeEnvironment _environment;
     private readonly ICakeLog _log;
 
-    private readonly Lazy<bool> _shouldTryResolveNeutral;
     private readonly HashSet<string> _resolvedNames = new HashSet<string>();
 
     /// <summary>
@@ -33,10 +31,9 @@ public sealed class ScriptAssemblyResolver : IDisposable
     /// <param name="log">The log.</param>
     public ScriptAssemblyResolver(ICakeEnvironment environment, ICakeLog log)
     {
-        _environment = environment;
+        // Kept so the public constructor signature stays stable.
+        _ = environment;
         _log = log;
-
-        _shouldTryResolveNeutral = new Lazy<bool>(GetShouldTryResolveNeutral);
 
         AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
     }
@@ -107,26 +104,16 @@ public sealed class ScriptAssemblyResolver : IDisposable
             return assembly;
         }
 
-        if (_shouldTryResolveNeutral.Value)
+        // This occurs when current culture differs from assembly neutral culture
+        if (shortName.EndsWith(AssemblyResourcesExtension))
         {
-            // This occurs when current culture differs from assembly neutral culture
-            if (shortName.EndsWith(AssemblyResourcesExtension))
-            {
-                assemblyName.Name = shortName.Remove(shortName.Length - AssemblyResourcesExtension.Length);
+            assemblyName.Name = shortName.Remove(shortName.Length - AssemblyResourcesExtension.Length);
 
-                _log.Debug($"Trying to resolve assembly {shortName} as '{assemblyName.FullName}'...");
-                return AssemblyResolve(assemblyName);
-            }
+            _log.Debug($"Trying to resolve assembly {shortName} as '{assemblyName.FullName}'...");
+            return AssemblyResolve(assemblyName);
         }
 
         _log.Debug($"Assembly '{fullName}' not resolved");
         return null;
-    }
-
-    private bool GetShouldTryResolveNeutral()
-    {
-        // Since .NET Core 3.0
-        var runtimeVersionMajor = _environment.Runtime.BuiltFramework.Version.Major;
-        return runtimeVersionMajor >= 5 || (runtimeVersionMajor == 3 && _environment.Runtime.IsCoreClr);
     }
 }
