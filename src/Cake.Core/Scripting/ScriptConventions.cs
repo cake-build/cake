@@ -111,53 +111,18 @@ public sealed class ScriptConventions : IScriptConventions
 
     private string GetFrameworkDefine()
     {
-        switch (_runtime.BuiltFramework.FullName)
+        var framework = _runtime.BuiltFramework;
+        if (string.Equals(framework.Identifier, ".NETCoreApp", StringComparison.OrdinalIgnoreCase))
         {
-            case ".NETFramework,Version=v4.6.1":
-                return "NET461";
-
-            case ".NETCoreApp,Version=v2.0":
-                return "NETCOREAPP2_0";
-
-            case ".NETCoreApp,Version=v2.1":
-                return "NETCOREAPP2_1";
-
-            case ".NETCoreApp,Version=v2.2":
-                return "NETCOREAPP2_2";
-
-            case ".NETCoreApp,Version=v3.0":
-                return "NETCOREAPP3_0";
-
-            case ".NETCoreApp,Version=v3.1":
-                return "NETCOREAPP3_1";
-
-            case ".NETCoreApp,Version=v5.0":
-                return "NET5_0";
-
-            case ".NETCoreApp,Version=v6.0":
-                return "NET6_0";
-
-            case ".NETCoreApp,Version=v7.0":
-                return "NET7_0";
-
-            case ".NETCoreApp,Version=v8.0":
-                return "NET8_0";
-
-            case ".NETCoreApp,Version=v9.0":
-                return "NET9_0";
-
-            case ".NETCoreApp,Version=v10.0":
-                return "NET10_0";
-
-            case ".NETCoreApp,Version=v11.0":
-                return "NET11_0";
-
-            default:
-                Console.Error.WriteLine(_runtime.BuiltFramework.FullName);
-                Console.Error.Flush();
-
-                return "NETSTANDARD2_0";
+            return GetCoreAppDefine(framework.Version);
         }
+
+        if (string.Equals(framework.Identifier, ".NETStandard", StringComparison.OrdinalIgnoreCase))
+        {
+            return $"NETSTANDARD{framework.Version.Major}_{framework.Version.Minor}";
+        }
+
+        throw new InvalidOperationException($"Unknown built framework '{framework.FullName}'.");
     }
 
     private IEnumerable<string> GetImpliedFrameworkDefines()
@@ -181,6 +146,18 @@ public sealed class ScriptConventions : IScriptConventions
                 yield return $"#define {symbol}_OR_GREATER";
             }
         }
+
+        if (!CoreAppVersions.Any(entry => entry.Major == version.Major && entry.Minor == version.Minor))
+        {
+            yield return $"#define {GetCoreAppDefine(version)}_OR_GREATER";
+        }
+    }
+
+    private static string GetCoreAppDefine(Version version)
+    {
+        return version.Major >= 5
+            ? $"NET{version.Major}_{version.Minor}"
+            : $"NETCOREAPP{version.Major}_{version.Minor}";
     }
 
     private static readonly (string Symbol, int Major, int Minor)[] CoreAppVersions =

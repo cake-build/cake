@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Reflection;
+using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
@@ -12,7 +12,6 @@ namespace Cake.Core.Polyfill;
 internal static class EnvironmentHelper
 {
     private static readonly FrameworkName NetStandardFramework = new FrameworkName(".NETStandard,Version=v2.0");
-    private static bool? _isCoreClr;
     private static FrameworkName netCoreAppFramwork;
 
     public static bool Is64BitOperativeSystem()
@@ -69,12 +68,7 @@ internal static class EnvironmentHelper
 
     public static bool IsCoreClr()
     {
-        if (_isCoreClr == null)
-        {
-            _isCoreClr = Environment.Version.Major >= 5
-                         || RuntimeInformation.FrameworkDescription.StartsWith(".NET Core");
-        }
-        return _isCoreClr.Value;
+        return true;
     }
 
     public static bool IsWindows(PlatformFamily family)
@@ -111,11 +105,7 @@ internal static class EnvironmentHelper
 
     public static Runtime GetRuntime()
     {
-        if (IsCoreClr())
-        {
-            return Runtime.CoreClr;
-        }
-        return Runtime.Clr;
+        return Runtime.CoreClr;
     }
 
     public static FrameworkName GetBuiltFramework()
@@ -125,22 +115,82 @@ internal static class EnvironmentHelper
             return netCoreAppFramwork;
         }
 
-        var assembly = typeof(System.Runtime.GCSettings)?.GetTypeInfo()
-                        ?.Assembly;
+        if (TryCreateNetCoreAppFramework(Environment.Version) is { } fromEnvironment)
+        {
+            return netCoreAppFramwork = fromEnvironment;
+        }
 
-        var assemblyPath = assembly
-#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
-            ?.Location;
-#pragma warning restore IL3000 // Avoid accessing Assembly file path when publishing as a single file
+        if (TryParseFrameworkDescription(RuntimeInformation.FrameworkDescription) is { } fromDescription)
+        {
+            return netCoreAppFramwork = fromDescription;
+        }
 
+        var assembly = typeof(GCSettings).Assembly;
+        var assemblyPath = AssemblyPathResolver.GetAssemblyFilePath(assembly);
+        if (TryParseNetCoreAppFromPath(assemblyPath) is { } fromPath)
+        {
+            return netCoreAppFramwork = fromPath;
+        }
+
+        if (assembly?.GetName().Version is { } assemblyVersion)
+        {
+            return netCoreAppFramwork = new FrameworkName(".NETCoreApp", new Version(assemblyVersion.Major, assemblyVersion.Minor));
+        }
+
+        return netCoreAppFramwork = NetStandardFramework;
+    }
+
+    private static FrameworkName TryCreateNetCoreAppFramework(Version version)
+    {
+        if (version is null || version.Major < 5)
+        {
+            return null;
+        }
+
+        return new FrameworkName(".NETCoreApp", new Version(version.Major, version.Minor));
+    }
+
+    private static FrameworkName TryParseFrameworkDescription(string description)
+    {
+        if (string.IsNullOrEmpty(description) ||
+            description.StartsWith(".NET Framework", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        const string netCorePrefix = ".NET Core ";
+        const string netPrefix = ".NET ";
+
+        string versionPart;
+        if (description.StartsWith(netCorePrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            versionPart = description[netCorePrefix.Length..];
+        }
+        else if (description.StartsWith(netPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            versionPart = description[netPrefix.Length..];
+        }
+        else
+        {
+            return null;
+        }
+
+        var separator = versionPart.IndexOfAny([' ', '-']);
+        if (separator >= 0)
+        {
+            versionPart = versionPart[..separator];
+        }
+
+        return Version.TryParse(versionPart, out var version)
+            ? new FrameworkName(".NETCoreApp", new Version(version.Major, version.Minor))
+            : null;
+    }
+
+    private static FrameworkName TryParseNetCoreAppFromPath(string assemblyPath)
+    {
         if (string.IsNullOrEmpty(assemblyPath))
         {
-            if (assembly.GetName().Version is Version assemblyVersion)
-            {
-                return netCoreAppFramwork = new FrameworkName(".NETCoreApp", new Version(assemblyVersion.Major, assemblyVersion.Minor));
-            }
-
-            return netCoreAppFramwork = NetStandardFramework;
+            return null;
         }
 
         const string microsoftNetCoreApp = "Microsoft.NETCore.App";
@@ -151,11 +201,11 @@ internal static class EnvironmentHelper
 
         if (string.IsNullOrEmpty(netCoreAppVersion))
         {
-            return netCoreAppFramwork = NetStandardFramework;
+            return null;
         }
 
-        return netCoreAppFramwork = Version.TryParse(netCoreAppVersion, out var version)
-                                        ? new FrameworkName(".NETCoreApp", new Version(version.Major, version.Minor))
-                                        : NetStandardFramework;
+        return Version.TryParse(netCoreAppVersion, out var version)
+            ? new FrameworkName(".NETCoreApp", new Version(version.Major, version.Minor))
+            : null;
     }
 }
