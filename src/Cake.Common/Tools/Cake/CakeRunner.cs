@@ -26,20 +26,6 @@ public sealed class CakeRunner : Tool<CakeSettings>
     private readonly IFileSystem _fileSystem;
     private readonly IGlobber _globber;
     private readonly DotNetExecutor _coreExecutor;
-    private static readonly IEnumerable<FilePath> _executingAssemblyToolPaths;
-
-    /// <summary>
-    /// Initializes static members of the <see cref="CakeRunner"/> class.
-    /// </summary>
-    static CakeRunner()
-    {
-        var entryAssembly = AssemblyHelper.GetExecutingAssembly();
-        var executingAssemblyToolPath = ((FilePath)entryAssembly.Location).GetDirectory();
-        _executingAssemblyToolPaths = new[]
-        {
-            executingAssemblyToolPath.CombineWithFilePath("Cake.dll")
-        };
-    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CakeRunner"/> class.
@@ -194,21 +180,35 @@ public sealed class CakeRunner : Tool<CakeSettings>
     {
         const string homebrewCakePath = "/usr/local/Cellar/cake/";
 
+        var executingAssemblyToolPaths = GetExecutingAssemblyToolPaths();
+
         if (!_environment.Platform.IsUnix())
         {
-            return _executingAssemblyToolPaths;
+            return executingAssemblyToolPaths;
         }
 
         if (!_fileSystem.Exist(new DirectoryPath(homebrewCakePath)))
         {
-            return _executingAssemblyToolPaths;
+            return executingAssemblyToolPaths;
         }
 
         var files = _globber.GetFiles(homebrewCakePath + "**/Cake.exe");
 
         var filePaths = files as FilePath[] ?? [.. files];
         return filePaths.Length == 0
-            ? _executingAssemblyToolPaths
+            ? executingAssemblyToolPaths
             : filePaths.OrderByDescending(f => f.FullPath);
+    }
+
+    private IEnumerable<FilePath> GetExecutingAssemblyToolPaths()
+    {
+        var directory = AssemblyPathResolver.GetAssemblyDirectory(
+            AssemblyHelper.GetExecutingAssembly(),
+            _environment.ApplicationRoot);
+
+        return
+        [
+            directory.CombineWithFilePath("Cake.dll")
+        ];
     }
 }

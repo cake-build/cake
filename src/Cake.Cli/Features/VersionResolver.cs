@@ -3,7 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using Cake.Core.Polyfill;
 
 namespace Cake.Cli;
 
@@ -33,28 +35,48 @@ public sealed class VersionResolver : IVersionResolver
     /// <inheritdoc/>
     public string GetVersion()
     {
-        var assembly = Assembly.GetEntryAssembly();
-        var version = FileVersionInfo.GetVersionInfo(assembly.Location).Comments;
-
-        if (string.IsNullOrWhiteSpace(version))
+        var info = TryGetFileVersionInfo();
+        if (info != null)
         {
-            version = "Unknown";
+            return NonEmptyOrUnknown(info.Comments);
         }
 
-        return version;
+        return NonEmptyOrUnknown(GetInformationalVersion());
     }
 
     /// <inheritdoc/>
     public string GetProductVersion()
     {
-        var assembly = Assembly.GetEntryAssembly();
-        var version = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
-
-        if (string.IsNullOrWhiteSpace(version))
+        var info = TryGetFileVersionInfo();
+        if (info != null)
         {
-            version = "Unknown";
+            return NonEmptyOrUnknown(info.ProductVersion);
         }
 
-        return version;
+        return NonEmptyOrUnknown(GetInformationalVersion());
+    }
+
+    private static FileVersionInfo TryGetFileVersionInfo()
+    {
+        var assembly = Assembly.GetEntryAssembly();
+        var filePath = AssemblyPathResolver.GetAssemblyFilePath(assembly);
+        if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
+        {
+            return null;
+        }
+
+        return FileVersionInfo.GetVersionInfo(filePath);
+    }
+
+    private static string GetInformationalVersion()
+    {
+        return Assembly.GetEntryAssembly()?
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+            .InformationalVersion;
+    }
+
+    private static string NonEmptyOrUnknown(string version)
+    {
+        return string.IsNullOrWhiteSpace(version) ? "Unknown" : version;
     }
 }
