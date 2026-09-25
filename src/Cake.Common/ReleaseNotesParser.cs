@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Cake.Core;
 
 namespace Cake.Common;
@@ -14,14 +13,11 @@ namespace Cake.Common;
 /// </summary>
 public sealed class ReleaseNotesParser
 {
-    private readonly Regex _versionRegex;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ReleaseNotesParser"/> class.
     /// </summary>
     public ReleaseNotesParser()
     {
-        _versionRegex = new Regex(@"(?<Version>\d+(\s*\.\s*\d+){0,3})(?<Release>-[a-z][0-9a-z-]*)?");
     }
 
     /// <summary>

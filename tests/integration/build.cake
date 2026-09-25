@@ -57,7 +57,7 @@
 // ARGUMENTS
 //////////////////////////////////////////////////
 
-var target = Argument<string>("target", "Run-All-Tests");
+var targets = Arguments<string>("target", ["Run-All-Tests"]);
 
 //////////////////////////////////////////////////
 // TARGETS
@@ -129,4 +129,4 @@ Task("Run-All-Tests")
 
 //////////////////////////////////////////////////
 
-RunTarget(target);
+RunTargets(targets);
