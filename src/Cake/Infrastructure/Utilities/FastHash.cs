@@ -27,8 +27,7 @@ internal static class FastHash
 
             // Just finalize with empty bytes so we don't have to iterate over the enumerable multiple times
             sha512.TransformFinalBlock(Encoding.UTF8.GetBytes(string.Empty), 0, 0);
-            // Convert to hex string; This method is supposedly faster than the usual StringBuilder approach
-            return ConvertBits(sha512.Hash);
+            return Convert.ToHexString(sha512.Hash);
         }
     }
 
@@ -48,19 +47,7 @@ internal static class FastHash
 
             // Just finalize with empty bytes so we don't have to iterate over the enumerable multiple times
             sha512.TransformFinalBlock(Encoding.UTF8.GetBytes(string.Empty), 0, 0);
-            // Convert to hex string; This method is supposedly faster than the usual StringBuilder approach
-            return ConvertBits(sha512.Hash);
+            return Convert.ToHexString(sha512.Hash);
         }
-    }
-
-    private static string ConvertBits(byte[] hash)
-    {
-#if NETCOREAPP3_1
-        return BitConverter.ToString(hash)
-                // without dashes
-                .Replace("-", string.Empty);
-#else
-        return Convert.ToHexString(hash);
-#endif
     }
 }
