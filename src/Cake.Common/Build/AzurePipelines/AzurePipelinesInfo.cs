@@ -111,11 +111,11 @@ public abstract class AzurePipelinesInfo
     protected AzurePipelinesRepositoryType? GetRepositoryType(string variable)
     {
         var value = GetEnvironmentString(variable);
-        AzurePipelinesRepositoryType type;
-        if (Enum.TryParse(value, true, out type))
+        if (Enum.TryParse<AzurePipelinesRepositoryType>(value, true, out var type))
         {
             return type;
         }
+
         return null;
     }
 }

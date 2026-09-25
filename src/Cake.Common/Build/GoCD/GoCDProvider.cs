@@ -65,21 +65,25 @@ public sealed class GoCDProvider : IGoCDProvider
             Environment.Pipeline.Name).ToLowerInvariant());
 
         _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Getting [{0}]", url);
-        return Task.Run(async () =>
+        return GetHistoryAsync(username, password, url).GetAwaiter().GetResult();
+    }
+
+    private async Task<GoCDHistoryInfo> GetHistoryAsync(string username, string password, Uri url)
+    {
+        var encodedCredentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(
+            string.Format(CultureInfo.InvariantCulture, "{0}:{1}", username, password)));
+        using (var client = new HttpClient())
         {
-            var encodedCredentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(
-                string.Format(CultureInfo.InvariantCulture, "{0}:{1}", username, password)));
-            using (var client = new HttpClient())
+            client.DefaultRequestHeaders.Add(
+                "Authorization",
+                string.Format(CultureInfo.InvariantCulture, "Basic {0}", encodedCredentials));
+            using (var response = await client.GetAsync(url).ConfigureAwait(false))
             {
-                client.DefaultRequestHeaders.Add(
-                    "Authorization",
-                    string.Format(CultureInfo.InvariantCulture, "Basic {0}", encodedCredentials));
-                var response = await client.GetAsync(url);
-                var content = await response.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Server response [{0}:{1}]:\n\r{2}", response.StatusCode, response.ReasonPhrase, content);
 
                 return JsonSerializer.Deserialize(content, GoCDJsonContext.Default.GoCDHistoryInfo);
             }
-        }).GetAwaiter().GetResult();
+        }
     }
 }

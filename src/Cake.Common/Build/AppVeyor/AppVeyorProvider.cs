@@ -112,15 +112,19 @@ public sealed class AppVeyorProvider : IAppVeyorProvider
         var url = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}/api/testresults/{1}/{2}", baseUri, resultsType, Environment.JobId).ToLowerInvariant());
 
         _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Uploading [{0}] to [{1}]", path.FullPath, url);
-        Task.Run(async () =>
+        UploadTestResultsAsync(url, path).GetAwaiter().GetResult();
+    }
+
+    private async Task UploadTestResultsAsync(Uri url, FilePath path)
+    {
+        using (var client = new HttpClient())
         {
-            using (var client = new HttpClient())
+            using (var response = await client.UploadFileAsync(url, path.FullPath, "text/xml").ConfigureAwait(false))
             {
-                var response = await client.UploadFileAsync(url, path.FullPath, "text/xml");
-                var content = await response.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 _log.Write(Verbosity.Diagnostic, LogLevel.Verbose, "Server response [{0}:{1}]:\n\r{2}", response.StatusCode, response.ReasonPhrase, content);
             }
-        }).Wait();
+        }
     }
 
     /// <inheritdoc/>

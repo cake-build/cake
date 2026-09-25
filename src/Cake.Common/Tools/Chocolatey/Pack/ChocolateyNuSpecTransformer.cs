@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -15,7 +16,7 @@ internal static class ChocolateyNuSpecTransformer
 {
     private const string ChocolateyNuSpecXsd = "http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd";
 
-    private static readonly Dictionary<string, Func<ChocolateyPackSettings, string>> _mappings;
+    private static readonly FrozenDictionary<string, Func<ChocolateyPackSettings, string>> _mappings;
     private static readonly List<string> _cdataElements;
 
     static ChocolateyNuSpecTransformer()
@@ -41,7 +42,7 @@ internal static class ChocolateyNuSpecTransformer
             { "requireLicenseAcceptance", settings => ToString(settings.RequireLicenseAcceptance) },
             { "iconUrl", settings => ToString(settings.IconUrl) },
             { "releaseNotes", settings => ToMultiLineString(settings.ReleaseNotes) }
-        };
+        }.ToFrozenDictionary();
 
         _cdataElements = new List<string>
                             {
