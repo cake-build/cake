@@ -20,6 +20,7 @@ public sealed class MSBuildRunner : Tool<MSBuildSettings>
 {
     private readonly ICakeEnvironment _environment;
     private readonly IFileSystem _fileSystem;
+    private readonly IMSBuildInstallationLocator _installationLocator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MSBuildRunner"/> class.
@@ -32,10 +33,29 @@ public sealed class MSBuildRunner : Tool<MSBuildSettings>
         IFileSystem fileSystem,
         ICakeEnvironment environment,
         IProcessRunner runner,
-        IToolLocator tools) : base(fileSystem, environment, runner, tools)
+        IToolLocator tools)
+        : this(fileSystem, environment, runner, tools, new VSWhereMSBuildInstallationLocator(fileSystem, environment, runner, tools))
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MSBuildRunner"/> class.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="runner">The runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="installationLocator">The locator used when MSBuild isn't found in any of the well-known locations.</param>
+    internal MSBuildRunner(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner runner,
+        IToolLocator tools,
+        IMSBuildInstallationLocator installationLocator) : base(fileSystem, environment, runner, tools)
     {
         _fileSystem = fileSystem;
         _environment = environment;
+        _installationLocator = installationLocator;
     }
 
     /// <summary>
@@ -401,7 +421,7 @@ public sealed class MSBuildRunner : Tool<MSBuildSettings>
             }
         }
 
-        var path = MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, buildPlatform, settings);
+        var path = MSBuildResolver.GetMSBuildPath(_fileSystem, _environment, buildPlatform, settings, _installationLocator);
         if (path != null)
         {
             return new[] { path };

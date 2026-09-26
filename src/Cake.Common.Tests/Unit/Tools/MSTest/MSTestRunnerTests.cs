@@ -301,6 +301,8 @@ public sealed class MSTestRunnerTests
     [InlineData(SpecialPath.ProgramFiles, "2022", "Enterprise")]
     [InlineData(SpecialPath.ProgramFiles, "2022", "Professional")]
     [InlineData(SpecialPath.ProgramFiles, "2022", "Community")]
+    [InlineData(SpecialPath.ProgramFilesX86, "2022", "BuildTools")]
+    [InlineData(SpecialPath.ProgramFiles, "2022", "BuildTools")]
     public void Should_Use_Tool_Path_For_YearAndEdition_Versions(SpecialPath programFiles, string year, string edition)
     {
         // Given

@@ -105,6 +105,7 @@ public sealed class VSTestRunnerTests
     [InlineData("/ProgramFiles/Microsoft Visual Studio/2022/Professional/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
     [InlineData("/ProgramFiles/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
     [InlineData("/ProgramFilesX86/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
+    [InlineData("/ProgramFiles/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/CommonExtensions/Microsoft/TestWindow/vstest.console.exe")]
     public void Should_Use_Available_Tool_Path(string existingToolPath)
     {
         // Given
