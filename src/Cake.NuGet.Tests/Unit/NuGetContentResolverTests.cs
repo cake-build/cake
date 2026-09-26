@@ -2,7 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Cake.Core.Diagnostics;
 using Cake.Core.Polyfill;
 using Cake.NuGet.Tests.Fixtures;
@@ -332,12 +335,16 @@ public sealed class NuGetContentResolverTests
             Assert.Empty(result);
         }
 
+        [Fact]
         public void Should_Return_Runtimes_Assemblies_If_CoreCLR()
         {
             // Given
             var framework = ".NETCoreApp,Version=v2.0";
             var runtime = Runtime.CoreClr;
-            var fixture = new NuGetAddinContentResolverFixture(framework, runtime);
+            var fixture = new NuGetAddinContentResolverFixture(framework, runtime)
+            {
+                RuntimeIdentifier = "linux-x64"
+            };
 
             fixture.CreateCLRAssembly("/Working/runtimes/win/lib/netstandard1.6/file.dll");
             fixture.CreateCLRAssembly("/Working/runtimes/unix/lib/netstandard1.6/file.dll");
@@ -349,14 +356,19 @@ public sealed class NuGetContentResolverTests
 
             // Then
             Assert.Single(result);
+            Assert.Equal("/Working/runtimes/unix/lib/netstandard1.6/file.dll", result.Single().Path.FullPath);
         }
 
+        [Fact]
         public void Should_Return_Native_Runtimes_Assemblies_If_CoreCLR()
         {
             // Given
             var framework = ".NETCoreApp,Version=v2.0";
             var runtime = Runtime.CoreClr;
-            var fixture = new NuGetAddinContentResolverFixture(framework, runtime);
+            var fixture = new NuGetAddinContentResolverFixture(framework, runtime)
+            {
+                RuntimeIdentifier = "linux-x64"
+            };
 
             fixture.CreateCLRAssembly("/Working/runtimes/win/native/file.dll");
             fixture.CreateCLRAssembly("/Working/runtimes/linux/native/file.so");
@@ -367,6 +379,119 @@ public sealed class NuGetContentResolverTests
 
             // Then
             Assert.Single(result);
+            Assert.Equal("/Working/runtimes/linux/native/file.so", result.Single().Path.FullPath);
+        }
+
+        [Fact]
+        public void Should_Prefer_Portable_Linux_Rid_Over_Version_Specific_Rid()
+        {
+            var fixture = new NuGetAddinContentResolverFixture(".NETCoreApp,Version=v8.0", Runtime.CoreClr)
+            {
+                RuntimeIdentifier = "linux-x64"
+            };
+
+            fixture.CreateCLRAssembly("/Working/runtimes/linux-x64/native/file.so");
+            fixture.CreateCLRAssembly("/Working/runtimes/ubuntu.16.04-x64/native/ubuntu.so");
+            fixture.CreateCLRAssembly("/Working/runtimes/win-x64/native/file.dll");
+
+            var result = fixture.GetFiles();
+
+            Assert.Single(result);
+            Assert.Equal("/Working/runtimes/linux-x64/native/file.so", result.Single().Path.FullPath);
+        }
+
+        [Fact]
+        public void Should_Fall_Back_To_Linux_And_Ignore_Musl()
+        {
+            var fixture = new NuGetAddinContentResolverFixture(".NETCoreApp,Version=v8.0", Runtime.CoreClr)
+            {
+                RuntimeIdentifier = "linux-x64"
+            };
+
+            fixture.CreateCLRAssembly("/Working/runtimes/linux/native/file.so");
+            fixture.CreateCLRAssembly("/Working/runtimes/linux-musl-x64/native/musl.so");
+
+            var result = fixture.GetFiles();
+
+            Assert.Single(result);
+            Assert.Equal("/Working/runtimes/linux/native/file.so", result.Single().Path.FullPath);
+        }
+
+        [Fact]
+        public void Should_Prefer_Portable_Win_Rid_Over_Win10()
+        {
+            var fixture = new NuGetAddinContentResolverFixture(".NETCoreApp,Version=v8.0", Runtime.CoreClr)
+            {
+                RuntimeIdentifier = "win-x64"
+            };
+
+            fixture.CreateCLRAssembly("/Working/runtimes/win-x64/native/file.dll");
+            fixture.CreateCLRAssembly("/Working/runtimes/win10-x64/native/legacy.dll");
+
+            var result = fixture.GetFiles();
+
+            Assert.Single(result);
+            Assert.Equal("/Working/runtimes/win-x64/native/file.dll", result.Single().Path.FullPath);
+        }
+
+        [Fact]
+        public void Should_Prefer_Osx_Arm64_Then_Fall_Back_To_Osx()
+        {
+            var exact = new NuGetAddinContentResolverFixture(".NETCoreApp,Version=v8.0", Runtime.CoreClr)
+            {
+                RuntimeIdentifier = "osx-arm64"
+            };
+            exact.CreateCLRAssembly("/Working/runtimes/osx-arm64/native/file.dylib");
+            exact.CreateCLRAssembly("/Working/runtimes/osx/native/generic.dylib");
+
+            var exactResult = exact.GetFiles();
+            Assert.Single(exactResult);
+            Assert.Equal("/Working/runtimes/osx-arm64/native/file.dylib", exactResult.Single().Path.FullPath);
+
+            var fallback = new NuGetAddinContentResolverFixture(".NETCoreApp,Version=v8.0", Runtime.CoreClr)
+            {
+                RuntimeIdentifier = "osx-arm64"
+            };
+            fallback.CreateCLRAssembly("/Working/runtimes/osx/native/generic.dylib");
+
+            var fallbackResult = fallback.GetFiles();
+            Assert.Single(fallbackResult);
+            Assert.Equal("/Working/runtimes/osx/native/generic.dylib", fallbackResult.Single().Path.FullPath);
+        }
+
+        [Fact]
+        public void Embedded_Portable_Rid_Graph_Contains_Portable_Rids_Only()
+        {
+            var assembly = typeof(NuGetContentResolver).Assembly;
+            var resourceName = $"{assembly.GetName().Name}.PortableRuntimeIdentifierGraph.json";
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            Assert.NotNull(stream);
+            using var reader = new StreamReader(stream);
+            var json = reader.ReadToEnd();
+
+            Assert.Contains("\"linux-x64\"", json, StringComparison.Ordinal);
+            Assert.Contains("\"win-arm64\"", json, StringComparison.Ordinal);
+            Assert.DoesNotContain("ubuntu.16.04-x64", json, StringComparison.Ordinal);
+            Assert.DoesNotContain("win10-x64", json, StringComparison.Ordinal);
+        }
+
+        [Fact]
+        public void Host_RuntimeIdentifier_Is_Portable_And_Selects_Matching_Folder()
+        {
+            var rid = RuntimeInformation.RuntimeIdentifier;
+            Assert.DoesNotContain("ubuntu.", rid, StringComparison.Ordinal);
+            Assert.DoesNotContain("win10-", rid, StringComparison.Ordinal);
+            Assert.DoesNotContain("osx.10.", rid, StringComparison.Ordinal);
+
+            var fixture = new NuGetAddinContentResolverFixture(".NETCoreApp,Version=v8.0", Runtime.CoreClr);
+            fixture.CreateCLRAssembly($"/Working/runtimes/{rid}/lib/net8.0/file.dll");
+            fixture.CreateCLRAssembly("/Working/runtimes/win10-x64/lib/net8.0/legacy.dll");
+            fixture.CreateCLRAssembly("/Working/runtimes/ubuntu.16.04-x64/lib/net8.0/ubuntu.dll");
+
+            var result = fixture.GetFiles();
+
+            Assert.Single(result);
+            Assert.Equal($"/Working/runtimes/{rid}/lib/net8.0/file.dll", result.Single().Path.FullPath);
         }
     }
 }

@@ -17,10 +17,12 @@ internal abstract class NuGetContentResolverFixture
     public FakeEnvironment Environment { get; set; }
     public Globber Globber { get; set; }
     public FakeLog Log { get; set; }
+    public FakeConfiguration Configuration { get; set; }
 
     public DirectoryPath Path { get; set; }
     public PackageType PackageType { get; set; }
     public PackageReference Package { get; set; }
+    public string RuntimeIdentifier { get; set; }
 
     protected NuGetContentResolverFixture(string framework, Runtime runtime)
     {
@@ -32,6 +34,7 @@ internal abstract class NuGetContentResolverFixture
         FileSystem = new FakeFileSystem(Environment);
         Globber = new Globber(FileSystem, Environment);
         Log = new FakeLog();
+        Configuration = new FakeConfiguration();
 
         Path = "/Working";
         PackageType = PackageType.Addin;
@@ -50,7 +53,10 @@ internal abstract class NuGetContentResolverFixture
 
     public IReadOnlyCollection<IFile> GetFiles()
     {
-        var resolver = new NuGetContentResolver(FileSystem, Environment, Globber, Log);
+        var resolver = new NuGetContentResolver(FileSystem, Environment, Globber, Log, Configuration)
+        {
+            RuntimeIdentifierOverride = RuntimeIdentifier
+        };
         return resolver.GetFiles(Path, Package, PackageType);
     }
 
