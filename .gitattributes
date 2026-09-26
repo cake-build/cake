@@ -3,6 +3,9 @@
 ###############################################################################
 * text=auto
 *.sh text eol=lf
+global.json text eol=lf
+src/Cake.NuGet/PortableRuntimeIdentifierGraph.json text eol=lf
+src/Cake.NuGet/PortableRuntimeIdentifierGraph.stamp text eol=lf
 
 ###############################################################################
 # Set default behavior for command prompt diff.

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
+using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Packaging;
@@ -22,26 +23,48 @@ internal sealed class NuGetContentResolver : INuGetContentResolver
     private readonly ICakeEnvironment _environment;
     private readonly IGlobber _globber;
     private readonly ICakeLog _log;
+    private readonly ICakeConfiguration _configuration;
+    private readonly Lazy<RuntimeGraph> _runtimeGraph;
 
-    private static readonly Lazy<RuntimeGraph> RuntimeGraph = new Lazy<RuntimeGraph>(() =>
-    {
-        var assembly = typeof(NuGetContentResolver).Assembly;
-        using (var stream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.runtime.json"))
-        {
-            return JsonRuntimeFormat.ReadRuntimeGraph(stream);
-        }
-    });
+    internal string RuntimeIdentifierOverride { get; set; }
 
     public NuGetContentResolver(
         IFileSystem fileSystem,
         ICakeEnvironment environment,
         IGlobber globber,
-        ICakeLog log)
+        ICakeLog log,
+        ICakeConfiguration configuration)
     {
         _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         _globber = globber ?? throw new ArgumentNullException(nameof(globber));
         _log = log ?? throw new ArgumentNullException(nameof(log));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _runtimeGraph = new Lazy<RuntimeGraph>(LoadRuntimeGraph);
+    }
+
+    private RuntimeGraph LoadRuntimeGraph()
+    {
+        if (_configuration.GetBoolValue(Constants.NuGet.UseLegacyRidGraph))
+        {
+            var location = typeof(NuGetContentResolver).Assembly.Location;
+            if (!string.IsNullOrEmpty(location))
+            {
+                var sidecar = _fileSystem.GetFile(
+                    new FilePath(location).GetDirectory().CombineWithFilePath("runtime.json"));
+                if (sidecar.Exists)
+                {
+                    using var fileStream = sidecar.OpenRead();
+                    return JsonRuntimeFormat.ReadRuntimeGraph(fileStream);
+                }
+            }
+        }
+
+        var assembly = typeof(NuGetContentResolver).Assembly;
+        var resourceName = $"{assembly.GetName().Name}.PortableRuntimeIdentifierGraph.json";
+        using var stream = assembly.GetManifestResourceStream(resourceName)
+            ?? throw new InvalidOperationException($"Missing embedded RID graph '{resourceName}'.");
+        return JsonRuntimeFormat.ReadRuntimeGraph(stream);
     }
 
     public IReadOnlyCollection<IFile> GetFiles(DirectoryPath path, PackageReference package, PackageType type)
@@ -73,7 +96,7 @@ internal sealed class NuGetContentResolver : INuGetContentResolver
 
         // Get current runtime identifier.
         var rid = _environment.Runtime.IsCoreClr
-            ? System.Runtime.InteropServices.RuntimeInformation.RuntimeIdentifier
+            ? RuntimeIdentifierOverride ?? System.Runtime.InteropServices.RuntimeInformation.RuntimeIdentifier
             : null;
 
         // Get all candidate files.
@@ -87,7 +110,7 @@ internal sealed class NuGetContentResolver : INuGetContentResolver
             _log.Debug("Assemblies not found at {0}.", path);
         }
 
-        var conventions = new ManagedCodeConventions(RuntimeGraph.Value);
+        var conventions = new ManagedCodeConventions(_runtimeGraph.Value);
         var collection = new ContentItemCollection();
         collection.Load(assemblies.Keys);
         var criteria = conventions.Criteria.ForFrameworkAndRuntime(tfm, rid);

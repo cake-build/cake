@@ -32,6 +32,16 @@ internal static class Constants
         /// The config key name for non-interactive mode.
         /// </summary>
         public const string NonInteractive = "NuGet_NonInteractive";
+
+        /// <summary>
+        /// When <c>false</c> (default), #addin/#module asset selection uses the embedded
+        /// portable RID graph (win-x64, linux-x64, osx-arm64, …). Version-specific folders
+        /// such as win10-x64 or ubuntu.16.04-x64 are not compatible with the host RID.
+        /// When <c>true</c>, if a Microsoft.NETCore.Platforms-style runtime.json sits next
+        /// to Cake.NuGet.dll it is used instead, so those version-specific RIDs can still
+        /// match. If the sidecar file is missing, the portable graph is used.
+        /// </summary>
+        public const string UseLegacyRidGraph = "NuGet_UseLegacyRidGraph";
     }
 
     public static class Paths

@@ -9,6 +9,7 @@
 // Load other scripts.
 #load "./build/parameters.cake"
 #load "./build/verify.cake"
+#load "./build/portable-rid-graph.cake"
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -90,6 +91,9 @@ Teardown<BuildParameters>((context, parameters) =>
 // TASKS
 //////////////////////////////////////////////////////////////////////
 
+Task("Update-Portable-Rid-Graph")
+    .Does(static context => UpdatePortableRidGraph(context));
+
 Task("Clean")
     .Does<BuildParameters>((context, parameters) =>
 {
@@ -112,6 +116,7 @@ Task("Restore-NuGet-Packages")
 
 Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("Update-Portable-Rid-Graph")
     .Does<BuildParameters>((context, parameters) =>
 {
     // Build the solution.
