@@ -80,6 +80,26 @@ public static class FileExtensions
     }
 
     /// <summary>
+    /// Opens the file for appending.
+    /// The file is created if it does not exist.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <returns>A <see cref="Stream"/> to the file.</returns>
+    /// <example>
+    /// <code>
+    /// var file = context.FileSystem.GetFile("./artifacts/log.txt");
+    /// using (var stream = file.OpenAppend())
+    /// {
+    /// }
+    /// </code>
+    /// </example>
+    public static Stream OpenAppend(this IFile file)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+        return file.Open(FileMode.Append, FileAccess.Write, FileShare.Read);
+    }
+
+    /// <summary>
     /// Enumerates line in file.
     /// </summary>
     /// <param name="file">The file to be read from.</param>

@@ -133,6 +133,32 @@ public sealed class FileExtensionsTests
         }
     }
 
+    public sealed class TheOpenAppendMethod
+    {
+        [Fact]
+        public void Should_Throw_If_File_Is_Null()
+        {
+            // Given, When
+            var result = Record.Exception(() => FileExtensions.OpenAppend(null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "file");
+        }
+
+        [Fact]
+        public void Should_Open_Stream_With_Expected_FileMode_And_FileAccess()
+        {
+            // Given
+            var file = Substitute.For<IFile>();
+
+            // When
+            file.OpenAppend();
+
+            // Then
+            file.Received(1).Open(FileMode.Append, FileAccess.Write, FileShare.Read);
+        }
+    }
+
     public sealed class TheReadLinesMethod
     {
         [Fact]
