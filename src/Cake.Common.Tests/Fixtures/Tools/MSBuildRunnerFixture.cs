@@ -15,6 +15,7 @@ internal sealed class MSBuildRunnerFixture : ToolFixture<MSBuildSettings>
     public HashSet<FilePath> KnownMSBuildPaths { get; }
     public FilePath Solution { get; set; }
     public Action<IEnumerable<string>> StandardOutputAction { get; set; }
+    public FakeMSBuildInstallationLocator InstallationLocator { get; } = new FakeMSBuildInstallationLocator();
 
     public MSBuildRunnerFixture(bool is64BitOperativeSystem, PlatformFamily platformFamily)
         : base("MSBuild.exe")
@@ -82,9 +83,24 @@ internal sealed class MSBuildRunnerFixture : ToolFixture<MSBuildSettings>
         FileSystem.GetDirectory("/Program").Delete(true);
     }
 
+    public void GivenOnlyBuildToolsInstalledAt(SpecialPath programFiles, string year)
+    {
+        GivenMSBuildIsNotInstalled();
+
+        var binPath = Environment.GetSpecialPath(programFiles).Combine($"Microsoft Visual Studio/{year}/BuildTools/MSBuild/Current/Bin");
+        FileSystem.CreateFile(binPath.CombineWithFilePath("MSBuild.exe"));
+        FileSystem.CreateFile(binPath.CombineWithFilePath("amd64/MSBuild.exe"));
+    }
+
+    public void GivenMSBuildInstalledAt(DirectoryPath binPath)
+    {
+        FileSystem.CreateFile(binPath.CombineWithFilePath("MSBuild.exe"));
+        FileSystem.CreateFile(binPath.CombineWithFilePath("amd64/MSBuild.exe"));
+    }
+
     protected override void RunTool()
     {
-        var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner, Tools);
+        var runner = new MSBuildRunner(FileSystem, Environment, ProcessRunner, Tools, InstallationLocator);
         runner.Run(Solution, Settings, StandardOutputAction);
     }
 }

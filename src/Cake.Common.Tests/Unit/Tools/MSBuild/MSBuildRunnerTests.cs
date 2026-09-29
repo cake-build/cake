@@ -6,6 +6,7 @@ using Cake.Common.Tests.Fixtures.Tools;
 using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Core.IO;
 using Cake.Testing;
 
 #pragma warning disable xUnit1025 // InlineData should be unique within the Theory it belongs to
@@ -714,6 +715,283 @@ public sealed class MSBuildRunnerTests
 
             // Then
             AssertEx.IsCakeException(result, "MSBuild: Could not locate executable.");
+        }
+
+        [Theory]
+        [InlineData(MSBuildToolVersion.VS2022, "2022", PlatformTarget.x64, false, "MSBuild/Current/Bin/amd64/MSBuild.exe")]
+        [InlineData(MSBuildToolVersion.VS2022, "2022", PlatformTarget.x86, true, "MSBuild/Current/Bin/MSBuild.exe")]
+        [InlineData(MSBuildToolVersion.VS2022, "2022", PlatformTarget.MSIL, true, "MSBuild/Current/Bin/amd64/MSBuild.exe")]
+        [InlineData(MSBuildToolVersion.VS2022, "2022", PlatformTarget.MSIL, false, "MSBuild/Current/Bin/MSBuild.exe")]
+        [InlineData(MSBuildToolVersion.VS2026, "18", PlatformTarget.x64, false, "MSBuild/Current/Bin/amd64/MSBuild.exe")]
+        [InlineData(MSBuildToolVersion.VS2026, "18", PlatformTarget.MSIL, false, "MSBuild/Current/Bin/MSBuild.exe")]
+        [InlineData(MSBuildToolVersion.Default, "2022", PlatformTarget.x64, false, "MSBuild/Current/Bin/amd64/MSBuild.exe")]
+        [InlineData(MSBuildToolVersion.Default, "18", PlatformTarget.x64, false, "MSBuild/Current/Bin/amd64/MSBuild.exe")]
+        public void Should_Find_Build_Tools_Installed_In_Program_Files(MSBuildToolVersion version, string year, PlatformTarget target, bool is64BitOperativeSystem, string expectedRelativePath)
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(is64BitOperativeSystem, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = version;
+            fixture.Settings.PlatformTarget = target;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenOnlyBuildToolsInstalledAt(SpecialPath.ProgramFiles, year);
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal($"/Program/Microsoft Visual Studio/{year}/BuildTools/{expectedRelativePath}", result.Path.FullPath);
+            Assert.Empty(fixture.InstallationLocator.Calls);
+        }
+
+        [Theory]
+        [InlineData(MSBuildToolVersion.VS2022, "2022")]
+        [InlineData(MSBuildToolVersion.VS2026, "18")]
+        [InlineData(MSBuildToolVersion.Default, "2022")]
+        public void Should_Find_Build_Tools_Installed_In_Program_Files_X86(MSBuildToolVersion version, string year)
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = version;
+            fixture.Settings.PlatformTarget = PlatformTarget.x64;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenOnlyBuildToolsInstalledAt(SpecialPath.ProgramFilesX86, year);
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal($"/Program86/Microsoft Visual Studio/{year}/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe", result.Path.FullPath);
+        }
+
+        [Fact]
+        public void Should_Prefer_Build_Tools_In_Program_Files_X86_If_Installed_In_Both_Locations()
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = MSBuildToolVersion.VS2022;
+            fixture.Settings.PlatformTarget = PlatformTarget.x64;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenOnlyBuildToolsInstalledAt(SpecialPath.ProgramFiles, "2022");
+            fixture.GivenMSBuildInstalledAt("/Program86/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("/Program86/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe", result.Path.FullPath);
+        }
+
+        [Fact]
+        public void Should_Skip_Bin_Directory_In_Program_Files_X86_Without_MSBuild_For_Platform()
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = MSBuildToolVersion.VS2022;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenOnlyBuildToolsInstalledAt(SpecialPath.ProgramFiles, "2022");
+            fixture.FileSystem.CreateDirectory("/Program86/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("/Program/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe", result.Path.FullPath);
+            Assert.Empty(fixture.InstallationLocator.Calls);
+        }
+
+        [Fact]
+        public void Should_Not_Use_Installation_Locator_If_MSBuild_Is_Found_In_Known_Location()
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = MSBuildToolVersion.VS2022;
+            fixture.InstallationLocator.InstallationPath = "/CustomVS/BuildTools";
+            fixture.GivenMSBuildInstalledAt("/CustomVS/BuildTools/MSBuild/Current/Bin");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("/Program/Microsoft Visual Studio/2022/Enterprise/MSBuild/Current/Bin/amd64/MSBuild.exe", result.Path.FullPath);
+            Assert.Empty(fixture.InstallationLocator.Calls);
+        }
+
+        [Theory]
+        [InlineData(PlatformTarget.x64, "/CustomVS/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe")]
+        [InlineData(PlatformTarget.x86, "/CustomVS/BuildTools/MSBuild/Current/Bin/MSBuild.exe")]
+        public void Should_Use_Installation_Locator_If_MSBuild_Is_Not_Found_In_Known_Locations(PlatformTarget target, string expected)
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = MSBuildToolVersion.VS2022;
+            fixture.Settings.PlatformTarget = target;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenMSBuildIsNotInstalled();
+            fixture.InstallationLocator.InstallationPath = "/CustomVS/BuildTools";
+            fixture.GivenMSBuildInstalledAt("/CustomVS/BuildTools/MSBuild/Current/Bin");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal(expected, result.Path.FullPath);
+        }
+
+        [Theory]
+        [InlineData(MSBuildToolVersion.VS2026, "[18.0,19.0)")]
+        [InlineData(MSBuildToolVersion.VS2022, "[17.0,18.0)")]
+        [InlineData(MSBuildToolVersion.VS2019, "[16.0,17.0)")]
+        [InlineData(MSBuildToolVersion.VS2017, "[15.0,16.0)")]
+        [InlineData(MSBuildToolVersion.Default, null)]
+        public void Should_Pass_Version_Range_To_Installation_Locator(MSBuildToolVersion version, string expectedVersionRange)
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = version;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenMSBuildIsNotInstalled();
+
+            // When
+            Record.Exception(() => fixture.Run());
+
+            // Then
+            var call = Assert.Single(fixture.InstallationLocator.Calls);
+            Assert.Equal(expectedVersionRange, call.VersionRange);
+            Assert.False(call.IncludePrerelease);
+        }
+
+        [Fact]
+        public void Should_Pass_Include_Prerelease_To_Installation_Locator_If_Preview_Is_Allowed()
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = MSBuildToolVersion.VS2022;
+            fixture.Settings.AllowPreviewVersion = true;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenMSBuildIsNotInstalled();
+
+            // When
+            Record.Exception(() => fixture.Run());
+
+            // Then
+            var call = Assert.Single(fixture.InstallationLocator.Calls);
+            Assert.True(call.IncludePrerelease);
+        }
+
+        [Theory]
+        [InlineData(MSBuildToolVersion.VS2017)]
+        [InlineData(MSBuildToolVersion.Default)]
+        public void Should_Use_VS2017_Bin_Path_For_Located_VS2017_Installation(MSBuildToolVersion version)
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = version;
+            fixture.Settings.PlatformTarget = PlatformTarget.x64;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenMSBuildIsNotInstalled();
+            fixture.InstallationLocator.InstallationPath = "/CustomVS/2017";
+            fixture.GivenMSBuildInstalledAt("/CustomVS/2017/MSBuild/15.0/Bin");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("/CustomVS/2017/MSBuild/15.0/Bin/amd64/MSBuild.exe", result.Path.FullPath);
+        }
+
+        [Fact]
+        public void Should_Prefer_Located_Installation_Over_Framework_MSBuild_If_Tool_Version_Is_Set_To_Default()
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = MSBuildToolVersion.Default;
+            fixture.Settings.PlatformTarget = PlatformTarget.x64;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenMSBuildIsNotInstalled();
+            fixture.FileSystem.CreateFile("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe");
+            fixture.InstallationLocator.InstallationPath = "/CustomVS/BuildTools";
+            fixture.GivenMSBuildInstalledAt("/CustomVS/BuildTools/MSBuild/Current/Bin");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("/CustomVS/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe", result.Path.FullPath);
+        }
+
+        [Fact]
+        public void Should_Use_Located_X86_MSBuild_Over_Framework_MSBuild_If_Amd64_MSBuild_Is_Missing()
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = MSBuildToolVersion.Default;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenMSBuildIsNotInstalled();
+            fixture.FileSystem.CreateFile("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe");
+            fixture.InstallationLocator.InstallationPath = "/CustomVS/BuildTools";
+            fixture.FileSystem.CreateFile("/CustomVS/BuildTools/MSBuild/Current/Bin/MSBuild.exe");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("/CustomVS/BuildTools/MSBuild/Current/Bin/MSBuild.exe", result.Path.FullPath);
+        }
+
+        [Fact]
+        public void Should_Fall_Back_To_Framework_MSBuild_If_Installation_Locator_Finds_Nothing()
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = MSBuildToolVersion.Default;
+            fixture.Settings.PlatformTarget = PlatformTarget.x64;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenMSBuildIsNotInstalled();
+            fixture.FileSystem.CreateFile("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe", result.Path.FullPath);
+            Assert.Single(fixture.InstallationLocator.Calls);
+        }
+
+        [Fact]
+        public void Should_Throw_If_Located_Installation_Does_Not_Contain_MSBuild()
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = MSBuildToolVersion.VS2022;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenMSBuildIsNotInstalled();
+            fixture.InstallationLocator.InstallationPath = "/CustomVS/BuildTools";
+
+            // When
+            var result = Record.Exception(() => fixture.Run());
+
+            // Then
+            AssertEx.IsCakeException(result, "MSBuild: Could not locate executable.");
+        }
+
+        [Theory]
+        [InlineData(MSBuildToolVersion.VS2015)]
+        [InlineData(MSBuildToolVersion.VS2013)]
+        [InlineData(MSBuildToolVersion.NET40)]
+        public void Should_Not_Use_Installation_Locator_For_Legacy_Versions(MSBuildToolVersion version)
+        {
+            // Given
+            var fixture = new MSBuildRunnerFixture(true, PlatformFamily.Windows);
+            fixture.Settings.ToolVersion = version;
+            fixture.GivenDefaultToolDoNotExist();
+            fixture.GivenMSBuildIsNotInstalled();
+            fixture.InstallationLocator.InstallationPath = "/CustomVS/BuildTools";
+
+            // When
+            Record.Exception(() => fixture.Run());
+
+            // Then
+            Assert.Empty(fixture.InstallationLocator.Calls);
         }
 
         [Fact]

@@ -116,10 +116,12 @@ public sealed class MSTestRunner : Tool<MSTestSettings>
                          ? VisualStudio.Editions.All
                          : VisualStudio.Editions.Stable)
             {
-                var path = VisualStudio.GetYearAndEditionToolPath(_environment, year, edition, vsRootRelativeToolPath);
-                if (_fileSystem.Exist(path))
+                foreach (var path in VisualStudio.GetYearAndEditionToolPaths(_environment, year, edition, vsRootRelativeToolPath))
                 {
-                    yield return path;
+                    if (_fileSystem.Exist(path))
+                    {
+                        yield return path;
+                    }
                 }
             }
         }

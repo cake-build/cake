@@ -40,10 +40,22 @@ internal static class VisualStudio
             .ToArray();
     }
 
-    internal static FilePath GetYearAndEditionToolPath(ICakeEnvironment environment, string year, string edition, FilePath relativeFile)
+    internal static IEnumerable<FilePath> GetYearAndEditionToolPaths(ICakeEnvironment environment, string year, string edition, FilePath relativeFile)
     {
-        var root = GetYearAndEditionRootPath(environment, year, edition);
-        return root.CombineWithFilePath(relativeFile);
+        return GetYearAndEditionRootPaths(environment, year, edition)
+            .Select(root => root.CombineWithFilePath(relativeFile));
+    }
+
+    internal static IEnumerable<DirectoryPath> GetYearAndEditionRootPaths(ICakeEnvironment environment, string year, string edition)
+    {
+        // Build Tools for VS 2022 and later can be installed in either Program Files (x86) or Program Files.
+        // Program Files (x86) is checked first to keep resolving the same instance as before when both exist.
+        yield return GetYearAndEditionRootPath(environment, year, edition);
+
+        if ((year == "2022" || year == "18") && edition == "BuildTools")
+        {
+            yield return environment.GetSpecialPath(SpecialPath.ProgramFiles).Combine($"Microsoft Visual Studio/{year}/{edition}");
+        }
     }
 
     internal static DirectoryPath GetYearAndEditionRootPath(ICakeEnvironment environment, string year, string edition)
