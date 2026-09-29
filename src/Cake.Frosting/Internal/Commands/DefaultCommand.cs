@@ -25,7 +25,7 @@ internal sealed class DefaultCommand : Command<DefaultCommandSettings>
         _services = services ?? throw new ArgumentNullException(nameof(services));
     }
 
-    protected override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         // Register arguments
         var arguments = CreateCakeArguments(context.Remaining, settings);
