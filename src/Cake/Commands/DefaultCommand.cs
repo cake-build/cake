@@ -58,7 +58,7 @@ public sealed class DefaultCommand : Command<DefaultCommandSettings>
     /// <param name="settings">The command settings.</param>
     /// <param name="cancellationToken">The cancellation token to monitor for cancel requests.</param>
     /// <returns>The exit code.</returns>
-    protected override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, DefaultCommandSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         try
         {
