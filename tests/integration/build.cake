@@ -36,6 +36,7 @@
 #load "./Cake.Core/Diagnostics/ICakeLog.cake"
 #load "./Cake.Core/IConsole.cake"
 #load "./Cake.Core/IO/Path.cake"
+#load "./Cake.Core/IO/FileContent.cake"
 #load "./Cake.Core/IO/ProcessArgumentBuilder.cake"
 #load "./Cake.Core/Scripting/AddinDirective.cake"
 #load "./Cake.Core/Scripting/ModuleDirective.cake"
@@ -71,6 +72,7 @@ Task("Cake.Core")
     .IsDependentOn("Cake.Core.Diagnostics")
     .IsDependentOn("Cake.Core.IConsole")
     .IsDependentOn("Cake.Core.IO.Path")
+    .IsDependentOn("Cake.Core.IO.FileContent")
     .IsDependentOn("Cake.Core.IO.ProcessArgumentBuilder")
     .IsDependentOn("Cake.Core.Scripting.AddinDirective")
     .IsDependentOn("Cake.Core.Scripting.ModuleDirective")
