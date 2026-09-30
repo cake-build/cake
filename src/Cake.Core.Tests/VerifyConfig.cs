@@ -1,23 +1,29 @@
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using VerifyTests;
-using VerifyTests.DiffPlex;
 using static VerifyXunit.Verifier;
 
 namespace Cake.Core.Tests;
 
 public static class VerifyConfig
 {
+    private static bool _initialized;
+
     [ModuleInitializer]
     public static void Init()
     {
-        EmptyFiles.FileExtensions.AddTextExtension(Extensions.Cake);
-
-        if (!VerifyDiffPlex.Initialized)
+        // The runtime invokes this module initializer, and Cake.Common.Tests calls
+        // it again so that assembly is loaded before any Verify run.
+        if (_initialized)
         {
-            VerifyDiffPlex.Initialize(OutputType.Compact);
-            DerivePathInfo(Expectations.Initialize);
+            return;
         }
+
+        _initialized = true;
+
+        EmptyFiles.FileExtensions.AddTextExtension(Extensions.Cake);
+        VerifierSettings.UseTextDiffFormat(DiffEngine.TextDiffFormat.Compact);
+        DerivePathInfo(Expectations.Initialize);
     }
 
     public static class Extensions
