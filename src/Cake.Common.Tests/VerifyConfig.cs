@@ -1,6 +1,5 @@
 using System.Runtime.CompilerServices;
 using Argon;
-using VerifyTests.DiffPlex;
 
 namespace Cake.Common.Tests;
 
@@ -9,13 +8,11 @@ public static class VerifyConfig
     [ModuleInitializer]
     public static void Init()
     {
-        EmptyFiles.FileExtensions.AddTextExtension("cake");
+        // Load Cake.Core.Tests now. On net11 its module initializer otherwise
+        // runs on first use, which can be after Verify has already started.
+        Cake.Core.Tests.VerifyConfig.Init();
 
-        if (!VerifyDiffPlex.Initialized)
-        {
-            VerifyDiffPlex.Initialize(OutputType.Compact);
-            DerivePathInfo(Expectations.Initialize);
-        }
+        EmptyFiles.FileExtensions.AddTextExtension("cake");
 
         VerifierSettings.DontScrubDateTimes();
         VerifierSettings.DontIgnoreEmptyCollections();

@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using VerifyTests.DiffPlex;
 
 namespace Cake.Cli.Tests;
 
@@ -14,10 +13,7 @@ public static class VerifyConfig
     [ModuleInitializer]
     public static void Init()
     {
-        if (!VerifyDiffPlex.Initialized)
-        {
-            VerifyDiffPlex.Initialize(OutputType.Compact);
-            DerivePathInfo(Expectations.Initialize);
-        }
+        VerifierSettings.UseTextDiffFormat(DiffEngine.TextDiffFormat.Compact);
+        DerivePathInfo(Expectations.Initialize);
     }
 }
