@@ -63,5 +63,57 @@ public sealed class ProcessSettingsTests
 
             Assert.Equal(expected, settings.Timeout);
         }
+
+#if NET11_0_OR_GREATER
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void Should_Return_Settings_With_Correct_KillOnParentExit(bool value, bool expected)
+        {
+            var settings = new ProcessSettings().SetKillOnParentExit(value);
+
+            Assert.Equal(expected, settings.KillOnParentExit);
+        }
+
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void Should_Return_Settings_With_Correct_StartDetached(bool value, bool expected)
+        {
+            var settings = new ProcessSettings().SetStartDetached(value);
+
+            Assert.Equal(expected, settings.StartDetached);
+        }
+
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void Should_Return_Settings_With_Correct_RestrictInheritedHandles(bool value, bool expected)
+        {
+            var settings = new ProcessSettings().SetRestrictInheritedHandles(value);
+
+            Assert.Equal(expected, settings.RestrictInheritedHandles);
+        }
+
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void Should_Return_Settings_With_Correct_DiscardStandardOutput(bool value, bool expected)
+        {
+            var settings = new ProcessSettings().SetDiscardStandardOutput(value);
+
+            Assert.Equal(expected, settings.DiscardStandardOutput);
+        }
+
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void Should_Return_Settings_With_Correct_DiscardStandardError(bool value, bool expected)
+        {
+            var settings = new ProcessSettings().SetDiscardStandardError(value);
+
+            Assert.Equal(expected, settings.DiscardStandardError);
+        }
+#endif
     }
 }

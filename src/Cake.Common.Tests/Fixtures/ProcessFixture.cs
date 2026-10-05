@@ -54,4 +54,16 @@ internal sealed class ProcessFixture
     {
         return Context.StartAndReturnProcess(filename, settings);
     }
+
+#if NET11_0_OR_GREATER
+    public int StartAndForget(string filename)
+    {
+        return Context.StartProcessAndForget(filename);
+    }
+
+    public int StartAndForget(string filename, ProcessSettings settings)
+    {
+        return Context.StartProcessAndForget(filename, settings);
+    }
+#endif
 }

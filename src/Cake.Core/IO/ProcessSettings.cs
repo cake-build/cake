@@ -80,4 +80,101 @@ public sealed class ProcessSettings
     /// </code>
     /// </example>
     public IDictionary<string, string> EnvironmentVariables { get; set; }
+
+#if NET11_0_OR_GREATER
+    /// <summary>
+    /// Gets or sets a value indicating whether the child process is terminated when Cake exits.
+    /// Supported on Windows, Linux, and Android. Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version",
+    ///         KillOnParentExit = true
+    ///     });
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public bool KillOnParentExit { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the process is started detached from Cake.
+    /// Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version",
+    ///         StartDetached = true
+    ///     });
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public bool StartDetached { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether only standard handles are inherited by the child process.
+    /// Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version",
+    ///         RestrictInheritedHandles = true
+    ///     });
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public bool RestrictInheritedHandles { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether standard output is discarded.
+    /// Cannot be combined with <see cref="RedirectStandardOutput"/>. Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version",
+    ///         DiscardStandardOutput = true
+    ///     });
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public bool DiscardStandardOutput { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether standard error is discarded.
+    /// Cannot be combined with <see cref="RedirectStandardError"/>. Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version",
+    ///         DiscardStandardError = true
+    ///     });
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public bool DiscardStandardError { get; set; }
+#endif
 }

@@ -283,4 +283,97 @@ public static class ProcessAliases
     {
         return StartAndReturnProcess(context, fileName, new ProcessSettings());
     }
+
+#if NET11_0_OR_GREATER
+    /// <summary>
+    /// Starts the process specified by the filename and releases all associated resources immediately.
+    /// Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="fileName">The file name.</param>
+    /// <returns>The process identifier.</returns>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var processId = StartProcessAndForget(fileName, "--version");
+    /// Information("Process ID: {0}", processId);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    public static int StartProcessAndForget(this ICakeContext context, FilePath fileName)
+    {
+        return StartProcessAndForget(context, fileName, new ProcessSettings());
+    }
+
+    /// <summary>
+    /// Starts the process specified by the filename and arguments and releases all associated resources immediately.
+    /// Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="fileName">Name of the file.</param>
+    /// <param name="processArguments">The arguments used in the process settings.</param>
+    /// <returns>The process identifier.</returns>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var processId = StartProcessAndForget(fileName, "--version");
+    /// Information("Process ID: {0}", processId);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    public static int StartProcessAndForget(this ICakeContext context, FilePath fileName, ProcessArgumentBuilder processArguments)
+    {
+        return StartProcessAndForget(context, fileName, new ProcessSettings { Arguments = processArguments });
+    }
+
+    /// <summary>
+    /// Starts the process specified by the filename and settings and releases all associated resources immediately.
+    /// Available when targeting .NET 11 or greater. Redirected or discarded standard streams are not supported.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="fileName">Name of the file.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The process identifier.</returns>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var processId = StartProcessAndForget(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version"
+    ///     });
+    /// Information("Process ID: {0}", processId);
+    /// </code>
+    /// </example>
+    /// <exception cref="ArgumentNullException"><paramref name="context"/>, <paramref name="fileName"/>, or <paramref name="settings"/> is null.</exception>
+    [CakeMethodAlias]
+    public static int StartProcessAndForget(this ICakeContext context, FilePath fileName, ProcessSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(fileName);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        if (settings.RedirectStandardOutput || settings.RedirectStandardError ||
+            settings.DiscardStandardOutput || settings.DiscardStandardError)
+        {
+            throw new ArgumentException("StartProcessAndForget cannot redirect or discard standard streams.", nameof(settings));
+        }
+
+        if (!settings.NoWorkingDirectory)
+        {
+            var workingDirectory = settings.WorkingDirectory ?? context.Environment.WorkingDirectory;
+            settings.WorkingDirectory = workingDirectory.MakeAbsolute(context.Environment);
+        }
+
+        if (context.ProcessRunner is not ProcessRunner processRunner)
+        {
+            throw new NotSupportedException("Starting a process without keeping a process handle is not supported by this process runner.");
+        }
+
+        return processRunner.StartAndForget(fileName, settings);
+    }
+#endif
 }
