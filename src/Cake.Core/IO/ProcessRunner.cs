@@ -4,6 +4,9 @@
 
 using System;
 using System.Diagnostics;
+#if NET11_0_OR_GREATER
+using Microsoft.Win32.SafeHandles;
+#endif
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Polyfill;
@@ -66,7 +69,7 @@ public sealed class ProcessRunner : IProcessRunner
 
         process.Exited += (_, __) => consoleMode.Reset();
 
-        process.Start();
+        StartProcess(process, settings);
 
         var processWrapper = new ProcessWrapper(process, _log, filterUnsafe, settings.RedirectedStandardOutputHandler,
             filterUnsafe, settings.RedirectedStandardErrorHandler);
@@ -82,6 +85,29 @@ public sealed class ProcessRunner : IProcessRunner
 
         return processWrapper;
     }
+
+#if NET11_0_OR_GREATER
+    /// <summary>
+    /// Starts a process and releases all associated resources immediately.
+    /// </summary>
+    /// <param name="filePath">The file name such as an application or document with which to start the process.</param>
+    /// <param name="settings">The information about the process to start.</param>
+    /// <returns>The process identifier.</returns>
+    public int StartAndForget(FilePath filePath, ProcessSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(filePath);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        if (settings.RedirectStandardOutput || settings.RedirectStandardError ||
+            settings.DiscardStandardOutput || settings.DiscardStandardError)
+        {
+            throw new ArgumentException("StartProcessAndForget cannot redirect or discard standard streams.", nameof(settings));
+        }
+
+        var info = GetProcessStartInfo(filePath, settings, out _);
+        return Process.StartAndForget(info);
+    }
+#endif
 
     internal ProcessStartInfo GetProcessStartInfo(FilePath filePath, ProcessSettings settings, out Func<string, string> filterUnsafe)
     {
@@ -151,8 +177,84 @@ public sealed class ProcessRunner : IProcessRunner
             }
         }
 
+#if NET11_0_OR_GREATER
+        ApplyNet11ProcessStartInfo(info, settings);
+#endif
+
         return info;
     }
+
+    private static void StartProcess(Process process, ProcessSettings settings)
+    {
+#if NET11_0_OR_GREATER
+        SafeFileHandle standardOutputHandle = null;
+        SafeFileHandle standardErrorHandle = null;
+        try
+        {
+            if (settings.DiscardStandardOutput)
+            {
+                standardOutputHandle = System.IO.File.OpenNullHandle();
+                process.StartInfo.StandardOutputHandle = standardOutputHandle;
+            }
+            if (settings.DiscardStandardError)
+            {
+                standardErrorHandle = System.IO.File.OpenNullHandle();
+                process.StartInfo.StandardErrorHandle = standardErrorHandle;
+            }
+
+            process.Start();
+        }
+        finally
+        {
+            standardOutputHandle?.Dispose();
+            standardErrorHandle?.Dispose();
+        }
+#else
+        process.Start();
+#endif
+    }
+
+#if NET11_0_OR_GREATER
+    private static void ApplyNet11ProcessStartInfo(ProcessStartInfo info, ProcessSettings settings)
+    {
+        if (settings.KillOnParentExit && settings.StartDetached)
+        {
+            throw new ArgumentException("KillOnParentExit cannot be used together with StartDetached.", nameof(settings));
+        }
+        if (settings.DiscardStandardOutput && settings.RedirectStandardOutput)
+        {
+            throw new ArgumentException("DiscardStandardOutput cannot be used together with RedirectStandardOutput.", nameof(settings));
+        }
+        if (settings.DiscardStandardError && settings.RedirectStandardError)
+        {
+            throw new ArgumentException("DiscardStandardError cannot be used together with RedirectStandardError.", nameof(settings));
+        }
+        if (settings.KillOnParentExit)
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                info.KillOnParentExit = true;
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                info.KillOnParentExit = true;
+            }
+            else if (OperatingSystem.IsAndroid())
+            {
+                info.KillOnParentExit = true;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException("KillOnParentExit is only supported on Windows, Linux, and Android.");
+            }
+        }
+        info.StartDetached = settings.StartDetached;
+        if (settings.RestrictInheritedHandles)
+        {
+            info.InheritedHandles = [];
+        }
+    }
+#endif
 
     private static void SubscribeStandardError(Process process, ProcessWrapper processWrapper)
     {

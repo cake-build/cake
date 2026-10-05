@@ -491,4 +491,107 @@ public sealed class ProcessAliasesTests
             }
         }
     }
+
+#if NET11_0_OR_GREATER
+    public sealed class TheStartProcessAndForgetMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Context_Is_Null()
+        {
+            // Given
+            const string fileName = "git";
+
+            // When
+            var result = Record.Exception(() =>
+                ProcessAliases.StartProcessAndForget(null, fileName));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "context");
+        }
+
+        [Fact]
+        public void Should_Throw_If_Filename_Is_Null()
+        {
+            // Given
+            var context = Substitute.For<ICakeContext>();
+
+            // When
+            var result = Record.Exception(() =>
+                context.StartProcessAndForget(null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "fileName");
+        }
+
+        [Fact]
+        public void Should_Throw_If_Settings_Are_Null()
+        {
+            // Given
+            var context = Substitute.For<ICakeContext>();
+            const string fileName = "git";
+
+            // When
+            var result = Record.Exception(() =>
+                context.StartProcessAndForget(fileName, (ProcessSettings)null));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "settings");
+        }
+
+        [Fact]
+        public void Should_Throw_If_Standard_Output_Is_Redirected()
+        {
+            // Given
+            var fixture = new ProcessFixture();
+            var settings = new ProcessSettings { RedirectStandardOutput = true };
+
+            // When
+            var result = Record.Exception(() => fixture.StartAndForget("hello.exe", settings));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+        }
+
+        [Fact]
+        public void Should_Throw_If_Standard_Error_Is_Redirected()
+        {
+            // Given
+            var fixture = new ProcessFixture();
+            var settings = new ProcessSettings { RedirectStandardError = true };
+
+            // When
+            var result = Record.Exception(() => fixture.StartAndForget("hello.exe", settings));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+        }
+
+        [Fact]
+        public void Should_Throw_If_Standard_Output_Is_Discarded()
+        {
+            // Given
+            var fixture = new ProcessFixture();
+            var settings = new ProcessSettings { DiscardStandardOutput = true };
+
+            // When
+            var result = Record.Exception(() => fixture.StartAndForget("hello.exe", settings));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+        }
+
+        [Fact]
+        public void Should_Throw_If_Process_Runner_Does_Not_Support_StartAndForget()
+        {
+            // Given
+            var fixture = new ProcessFixture();
+
+            // When
+            var result = Record.Exception(() => fixture.StartAndForget("hello.exe"));
+
+            // Then
+            Assert.IsType<NotSupportedException>(result);
+        }
+    }
+#endif
 }

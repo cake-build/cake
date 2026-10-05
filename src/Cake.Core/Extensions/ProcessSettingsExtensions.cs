@@ -117,4 +117,76 @@ public static class ProcessSettingsExtensions
         settings.Timeout = timeout;
         return settings;
     }
+
+#if NET11_0_OR_GREATER
+    /// <summary>
+    /// Sets a value indicating whether the child process is terminated when Cake exits.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="killOnParentExit">true to terminate the child when Cake exits; otherwise, false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetKillOnParentExit(this ProcessSettings settings, bool killOnParentExit)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.KillOnParentExit = killOnParentExit;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a value indicating whether the process is started detached from Cake.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="startDetached">true to start the process detached; otherwise, false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetStartDetached(this ProcessSettings settings, bool startDetached)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.StartDetached = startDetached;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a value indicating whether only standard handles are inherited by the child process.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="restrictInheritedHandles">true to inherit only standard handles; otherwise, false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetRestrictInheritedHandles(this ProcessSettings settings, bool restrictInheritedHandles)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.RestrictInheritedHandles = restrictInheritedHandles;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a value indicating whether standard output is discarded.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="discard">true to discard standard output; otherwise, false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetDiscardStandardOutput(this ProcessSettings settings, bool discard)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.DiscardStandardOutput = discard;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a value indicating whether standard error is discarded.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="discard">true to discard standard error; otherwise, false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetDiscardStandardError(this ProcessSettings settings, bool discard)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.DiscardStandardError = discard;
+        return settings;
+    }
+#endif
 }

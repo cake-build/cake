@@ -24,11 +24,15 @@ tasks:
       fetch-full-depth: true
       preserve-git-dir: true
 
-  - key: install-dotnet
-    use: code
-    call: dotnet/install 1.0.0
+  - key: install-dotnet-10
+    call: dotnet/install 1.1.0
     with:
       dotnet-channels: '["10.0"]'
+
+  - key: install-dotnet
+    use: [code, install-dotnet-10]
+    call: dotnet/install 1.1.0
+    with:
       global-json-file: global.json
     filter:
       - global.json

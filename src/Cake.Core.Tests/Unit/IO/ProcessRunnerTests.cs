@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core.Diagnostics;
 using Cake.Core.Tests.Fixtures;
 using NSubstitute;
@@ -220,5 +221,172 @@ public sealed class ProcessRunnerTests
                 .Received(1)
                 .Write(Verbosity.Diagnostic, LogLevel.Verbose, "{0} is a .NET Framework executable, you might need to install Mono for it to execute successfully.", "/Program Files/Cake.exe");
         }
+
+#if NET11_0_OR_GREATER
+        [Fact]
+        public void Should_Leave_Net11_Process_Start_Info_Unset_By_Default()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+
+            // When
+            var result = fixture.GetProcessStartInfo();
+
+            // Then
+            Assert.False(result.StartDetached);
+            Assert.Null(result.InheritedHandles);
+            if (OperatingSystem.IsWindows())
+            {
+                Assert.False(result.KillOnParentExit);
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                Assert.False(result.KillOnParentExit);
+            }
+            else if (OperatingSystem.IsAndroid())
+            {
+                Assert.False(result.KillOnParentExit);
+            }
+        }
+
+        [Fact]
+        public void Should_Apply_StartDetached()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+            fixture.ProcessSettings.StartDetached = true;
+
+            // When
+            var result = fixture.GetProcessStartInfo();
+
+            // Then
+            Assert.True(result.StartDetached);
+        }
+
+        [Fact]
+        public void Should_Apply_RestrictInheritedHandles()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+            fixture.ProcessSettings.RestrictInheritedHandles = true;
+
+            // When
+            var result = fixture.GetProcessStartInfo();
+
+            // Then
+            Assert.NotNull(result.InheritedHandles);
+            Assert.Empty(result.InheritedHandles);
+        }
+
+        [Fact]
+        public void Should_Apply_Or_Reject_KillOnParentExit()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+            fixture.ProcessSettings.KillOnParentExit = true;
+
+            // When
+            var result = Record.Exception(() => fixture.GetProcessStartInfo());
+
+            // Then
+            if (OperatingSystem.IsWindows())
+            {
+                Assert.Null(result);
+                Assert.True(fixture.GetProcessStartInfo().KillOnParentExit);
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                Assert.Null(result);
+                Assert.True(fixture.GetProcessStartInfo().KillOnParentExit);
+            }
+            else if (OperatingSystem.IsAndroid())
+            {
+                Assert.Null(result);
+                Assert.True(fixture.GetProcessStartInfo().KillOnParentExit);
+            }
+            else
+            {
+                Assert.IsType<PlatformNotSupportedException>(result);
+            }
+        }
+
+        [Fact]
+        public void Should_Throw_If_KillOnParentExit_Is_Combined_With_StartDetached()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+            fixture.ProcessSettings.KillOnParentExit = true;
+            fixture.ProcessSettings.StartDetached = true;
+
+            // When
+            var result = Record.Exception(() => fixture.GetProcessStartInfo());
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+        }
+
+        [Fact]
+        public void Should_Throw_If_DiscardStandardOutput_Is_Combined_With_RedirectStandardOutput()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+            fixture.ProcessSettings.DiscardStandardOutput = true;
+            fixture.ProcessSettings.RedirectStandardOutput = true;
+
+            // When
+            var result = Record.Exception(() => fixture.GetProcessStartInfo());
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+        }
+
+        [Fact]
+        public void Should_Throw_If_DiscardStandardError_Is_Combined_With_RedirectStandardError()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+            fixture.ProcessSettings.DiscardStandardError = true;
+            fixture.ProcessSettings.RedirectStandardError = true;
+
+            // When
+            var result = Record.Exception(() => fixture.GetProcessStartInfo());
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+        }
+#endif
     }
+
+#if NET11_0_OR_GREATER
+    public sealed class TheStartAndForgetMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Output_Is_Redirected()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+            fixture.ProcessSettings.RedirectStandardOutput = true;
+
+            // When
+            var result = Record.Exception(() => fixture.CreateProcessRunner().StartAndForget(fixture.ProcessFilePath, fixture.ProcessSettings));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+        }
+
+        [Fact]
+        public void Should_Throw_If_Error_Is_Redirected()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+            fixture.ProcessSettings.RedirectStandardError = true;
+
+            // When
+            var result = Record.Exception(() => fixture.CreateProcessRunner().StartAndForget(fixture.ProcessFilePath, fixture.ProcessSettings));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+        }
+    }
+#endif
 }
