@@ -109,6 +109,7 @@ public sealed class ProcessRunnerTests
         {
             // Given
             var fixture = new ProcessRunnerFixture(windows: false);
+            fixture.GivenConfigNoMonoCoersion();
 
             // When
             var result = fixture.GetProcessStartInfo();
@@ -161,11 +162,11 @@ public sealed class ProcessRunnerTests
                 .Verbose(Verbosity.Diagnostic, "Executing: {0}", "\"/Program Files/Cake.exe\" [REDACTED]");
         }
 
-        public void Should_Coerse_Mono_On_Unix_And_CoreClr()
+        [Fact]
+        public void Should_Coerse_Mono_On_Unix()
         {
             // Given
             var fixture = new ProcessRunnerFixture(windows: false);
-            fixture.GivenIsCoreClr();
 
             // When
             var result = fixture.GetProcessStartInfo();
@@ -178,11 +179,11 @@ public sealed class ProcessRunnerTests
                 .Write(Verbosity.Diagnostic, LogLevel.Verbose, "{0} is a .NET Framework executable, will try execute using Mono.", "/Program Files/Cake.exe");
         }
 
-        public void Should_Not_Coerse_Mono_On_Windows_And_CoreClr()
+        [Fact]
+        public void Should_Not_Coerse_Mono_On_Windows()
         {
             // Given
             var fixture = new ProcessRunnerFixture(windows: true);
-            fixture.GivenIsCoreClr();
 
             // When
             var result = fixture.GetProcessStartInfo();
@@ -191,11 +192,11 @@ public sealed class ProcessRunnerTests
             Assert.Equal("\"/Program Files/Cake.exe\"", result.FileName);
         }
 
-        public void Should_Not_Coerse_Mono_On_Unix_And_CoreClr_With_Config_NoMonoCoersion()
+        [Fact]
+        public void Should_Not_Coerse_Mono_On_Unix_With_Config_NoMonoCoersion()
         {
             // Given
             var fixture = new ProcessRunnerFixture(windows: false);
-            fixture.GivenIsCoreClr();
             fixture.GivenConfigNoMonoCoersion();
 
             // When
@@ -205,11 +206,11 @@ public sealed class ProcessRunnerTests
             Assert.Equal("/Program Files/Cake.exe", result.FileName);
         }
 
-        public void Should_Not_Coerse_Mono_On_Unix_And_CoreClr_If_Mono_Not_Resolved()
+        [Fact]
+        public void Should_Not_Coerse_Mono_On_Unix_If_Mono_Not_Resolved()
         {
             // Given
             var fixture = new ProcessRunnerFixture(windows: false);
-            fixture.GivenIsCoreClr();
             fixture.GivenMonoNotResolved();
 
             // When

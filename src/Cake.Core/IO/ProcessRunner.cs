@@ -120,7 +120,6 @@ public sealed class ProcessRunner : IProcessRunner
 
         if (!_noMonoCoersion &&
             _environment.Platform.IsUnix() &&
-            _environment.Runtime.IsCoreClr &&
             fileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) &&
             _fileSystem.GetFile(fileName).IsClrAssembly())
         {
