@@ -29,8 +29,29 @@ Task("Cake.Core.CakeEnvironment.AssemblyLocationFallbacks")
     Assert.False(string.IsNullOrWhiteSpace(Environment.ProcessPath));
 });
 
+Task("Cake.Core.CakeEnvironment.SpecialPath")
+    .Does(context =>
+{
+    var userProfile = context.Environment.GetSpecialPath(SpecialPath.UserProfile);
+    Assert.Equal(context.Environment.UserHomeDirectory.FullPath, userProfile.FullPath);
+
+    if (!context.Environment.Platform.IsUnix())
+    {
+        return;
+    }
+
+    var home = context.Environment.GetEnvironmentVariable("HOME");
+    var expectedHome = !string.IsNullOrEmpty(home) ? home : userProfile.FullPath;
+
+    Assert.Equal("/usr/bin", context.Environment.GetSpecialPath(SpecialPath.ProgramFiles).FullPath);
+    Assert.Equal("/usr/bin", context.Environment.GetSpecialPath(SpecialPath.ProgramFilesX86).FullPath);
+    Assert.Equal(expectedHome, context.Environment.GetSpecialPath(SpecialPath.ApplicationData).FullPath);
+    Assert.Equal(expectedHome, context.Environment.GetSpecialPath(SpecialPath.LocalApplicationData).FullPath);
+});
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.CakeEnvironment")
     .IsDependentOn("Cake.Core.CakeEnvironment.ApplicationRoot.ValidRootedPath")
-    .IsDependentOn("Cake.Core.CakeEnvironment.AssemblyLocationFallbacks");
+    .IsDependentOn("Cake.Core.CakeEnvironment.AssemblyLocationFallbacks")
+    .IsDependentOn("Cake.Core.CakeEnvironment.SpecialPath");
