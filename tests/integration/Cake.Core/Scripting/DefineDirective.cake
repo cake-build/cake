@@ -29,13 +29,7 @@ Task("Cake.Core.Scripting.DefineDirective.NotDefined")
 Task("Cake.Core.Scripting.DefineDirective.Runtime")
     .Does(context =>
 {
-#if NETFRAMEWORK
-                Assert.Equal(".NETFramework,Version=v4.6.1",
-#elif !NETCOREAPP
-                Assert.Equal(".NETStandard,Version=v2.0",
-#else
-                Assert.Equal(".NETCoreApp,Version=v" +
-#endif
+    Assert.Equal(".NETCoreApp,Version=v" +
 #if NETCOREAPP2_0
                     "2.0",
 #elif NETCOREAPP2_1

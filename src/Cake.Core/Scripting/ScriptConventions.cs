@@ -103,7 +103,7 @@ public sealed class ScriptConventions : IScriptConventions
             defines.Add($"#define CAKE_{major}_OR_GREATER");
         }
 
-        defines.Add(_runtime.IsCoreClr ? "#define NETCOREAPP" : "#define NETFRAMEWORK");
+        defines.Add("#define NETCOREAPP");
         defines.Add($"#define {GetFrameworkDefine()}");
         defines.AddRange(GetImpliedFrameworkDefines());
         return defines;

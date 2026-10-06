@@ -51,12 +51,12 @@ public sealed class ScriptConventionsTests
 
         private static ScriptConventions CreateConventions(string tfm, int cakeMajor = 7)
         {
-            var (frameworkName, isCoreClr) = tfm switch
+            var frameworkName = tfm switch
             {
-                "net10.0" => (".NETCoreApp,Version=v10.0", true),
-                "net11.0" => (".NETCoreApp,Version=v11.0", true),
-                "net12.0" => (".NETCoreApp,Version=v12.0", true),
-                "netstandard2.0" => (".NETStandard,Version=v2.0", true),
+                "net10.0" => ".NETCoreApp,Version=v10.0",
+                "net11.0" => ".NETCoreApp,Version=v11.0",
+                "net12.0" => ".NETCoreApp,Version=v12.0",
+                "netstandard2.0" => ".NETStandard,Version=v2.0",
                 _ => throw new ArgumentOutOfRangeException(nameof(tfm), tfm, null)
             };
 
@@ -65,8 +65,7 @@ public sealed class ScriptConventionsTests
             var runtime = new FakeRuntime
             {
                 BuiltFramework = new FrameworkName(frameworkName),
-                CakeVersion = new Version(cakeMajor, 0, 0),
-                IsCoreClr = isCoreClr
+                CakeVersion = new Version(cakeMajor, 0, 0)
             };
 
             return new ScriptConventions(
