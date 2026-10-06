@@ -7,7 +7,6 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
-using Cake.Common.Polyfill;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -214,6 +213,8 @@ public static class XmlTransformation
             throw new ArgumentNullException(nameof(result), "Null result supplied.");
         }
 
-        XmlTransformationHelper.Transform(xsl, arguments, xml, result);
+        var xslTransform = new XslCompiledTransform();
+        xslTransform.Load(xsl);
+        xslTransform.Transform(xml, arguments, result);
     }
 }

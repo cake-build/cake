@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Reflection;
 using System.Runtime.Versioning;
 using Cake.Core.Polyfill;
 
@@ -30,7 +31,7 @@ public sealed class CakeRuntime : ICakeRuntime
     {
         BuiltFramework = EnvironmentHelper.GetBuiltFramework();
         Runtime = EnvironmentHelper.GetRuntime();
-        CakeVersion = AssemblyHelper.GetExecutingAssembly().GetName().Version;
+        CakeVersion = Assembly.GetExecutingAssembly().GetName().Version;
         IsCoreClr = EnvironmentHelper.IsCoreClr();
     }
 }

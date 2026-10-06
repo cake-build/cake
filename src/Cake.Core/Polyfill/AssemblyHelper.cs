@@ -12,11 +12,6 @@ namespace Cake.Core.Polyfill;
 
 internal static class AssemblyHelper
 {
-    public static Assembly GetExecutingAssembly()
-    {
-        return Assembly.GetExecutingAssembly();
-    }
-
     public static Assembly LoadAssembly(AssemblyName assemblyName)
     {
         ArgumentNullException.ThrowIfNull(assemblyName);
