@@ -32,16 +32,43 @@ internal static class SpecialPathHelper
         throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, format, path));
     }
 
+    internal static string GetUnixFolder(SpecialPath path, string home)
+    {
+        switch (path)
+        {
+            case SpecialPath.ProgramFiles:
+            case SpecialPath.ProgramFilesX86:
+                return "/usr/bin";
+            case SpecialPath.ApplicationData:
+            case SpecialPath.LocalApplicationData:
+                return string.IsNullOrEmpty(home) ? null : home;
+            default:
+                return null;
+        }
+    }
+
     private static string GetXPlatFolderPath(ICakePlatform platform, SpecialPath path)
     {
         if (platform.IsUnix())
         {
-            return Native.Unix.GetFolder(path);
+            return GetUnixFolder(path, GetUnixHome());
         }
         else if (platform.Family == PlatformFamily.Windows)
         {
             return Native.Windows.GetFolder(path);
         }
         throw new PlatformNotSupportedException();
+    }
+
+    private static string GetUnixHome()
+    {
+        var home = Environment.GetEnvironmentVariable("HOME");
+        if (!string.IsNullOrEmpty(home))
+        {
+            return home;
+        }
+
+        home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        return string.IsNullOrEmpty(home) ? null : home;
     }
 }
