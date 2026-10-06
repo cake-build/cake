@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Cake.Common.Tools.DotNet.Execute;
 using Cake.Core;
@@ -203,7 +204,7 @@ public sealed class CakeRunner : Tool<CakeSettings>
     private IEnumerable<FilePath> GetExecutingAssemblyToolPaths()
     {
         var directory = AssemblyPathResolver.GetAssemblyDirectory(
-            AssemblyHelper.GetExecutingAssembly(),
+            Assembly.GetExecutingAssembly(),
             _environment.ApplicationRoot);
 
         return
