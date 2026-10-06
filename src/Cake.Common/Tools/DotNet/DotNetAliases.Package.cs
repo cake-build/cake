@@ -8,6 +8,7 @@ using Cake.Common.Tools.DotNet.Package.Add;
 using Cake.Common.Tools.DotNet.Package.List;
 using Cake.Common.Tools.DotNet.Package.Remove;
 using Cake.Common.Tools.DotNet.Package.Search;
+using Cake.Common.Tools.DotNet.Package.Update;
 using Cake.Core;
 using Cake.Core.Annotations;
 
@@ -180,6 +181,211 @@ public static partial class DotNetAliases
         settings ??= new DotNetPackageRemoveSettings();
         var remover = new DotNetPackageRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
         remover.Remove(packageName, project, settings);
+    }
+
+    /// <summary>
+    /// Updates referenced packages in a project.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <example>
+    /// <code>
+    /// DotNetUpdatePackage();
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Update")]
+    public static void DotNetUpdatePackage(this ICakeContext context)
+    {
+        context.DotNetUpdatePackage((IEnumerable<string>)null, null, null);
+    }
+
+    /// <summary>
+    /// Updates referenced packages in a project.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// DotNetUpdatePackage(new DotNetPackageUpdateSettings {
+    ///     Project = "./src/App.csproj",
+    ///     Vulnerable = true
+    /// });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Update")]
+    public static void DotNetUpdatePackage(this ICakeContext context, DotNetPackageUpdateSettings settings)
+    {
+        context.DotNetUpdatePackage((IEnumerable<string>)null, null, settings);
+    }
+
+    /// <summary>
+    /// Updates a package reference in a project.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packageName">The package to update.</param>
+    /// <example>
+    /// <code>
+    /// DotNetUpdatePackage("Newtonsoft.Json");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Update")]
+    public static void DotNetUpdatePackage(this ICakeContext context, string packageName)
+    {
+        context.DotNetUpdatePackage(packageName, null, null);
+    }
+
+    /// <summary>
+    /// Updates a package reference in a project.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packageName">The package to update.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// DotNetUpdatePackage("Newtonsoft.Json", new DotNetPackageUpdateSettings {
+    ///     Vulnerable = true
+    /// });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Update")]
+    public static void DotNetUpdatePackage(this ICakeContext context, string packageName, DotNetPackageUpdateSettings settings)
+    {
+        context.DotNetUpdatePackage(packageName, null, settings);
+    }
+
+    /// <summary>
+    /// Updates a package reference in a project.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packageName">The package to update.</param>
+    /// <param name="project">The target project file or directory.</param>
+    /// <example>
+    /// <code>
+    /// DotNetUpdatePackage("Newtonsoft.Json", "ToDo.csproj");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Update")]
+    public static void DotNetUpdatePackage(this ICakeContext context, string packageName, string project)
+    {
+        context.DotNetUpdatePackage(packageName, project, null);
+    }
+
+    /// <summary>
+    /// Updates a package reference in a project.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packageName">The package to update.</param>
+    /// <param name="project">The target project file or directory.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// DotNetUpdatePackage("Newtonsoft.Json", "ToDo.csproj", new DotNetPackageUpdateSettings {
+    ///     Interactive = true
+    /// });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Update")]
+    public static void DotNetUpdatePackage(this ICakeContext context, string packageName, string project, DotNetPackageUpdateSettings settings)
+    {
+        IEnumerable<string> packages = string.IsNullOrWhiteSpace(packageName) ? null : [packageName];
+        context.DotNetUpdatePackage(packages, project, settings);
+    }
+
+    /// <summary>
+    /// Updates package references in a project.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packages">The packages to update.</param>
+    /// <example>
+    /// <code>
+    /// DotNetUpdatePackage(new[] { "Contoso.Utilities", "Fabrikam.WebApi@1.2.3" });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Update")]
+    public static void DotNetUpdatePackage(this ICakeContext context, IEnumerable<string> packages)
+    {
+        context.DotNetUpdatePackage(packages, null, null);
+    }
+
+    /// <summary>
+    /// Updates package references in a project.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packages">The packages to update.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// DotNetUpdatePackage(new[] { "Contoso.Utilities", "Fabrikam.WebApi@1.2.3" }, new DotNetPackageUpdateSettings {
+    ///     Vulnerable = true
+    /// });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Update")]
+    public static void DotNetUpdatePackage(this ICakeContext context, IEnumerable<string> packages, DotNetPackageUpdateSettings settings)
+    {
+        context.DotNetUpdatePackage(packages, null, settings);
+    }
+
+    /// <summary>
+    /// Updates package references in a project.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packages">The packages to update.</param>
+    /// <param name="project">The target project file or directory.</param>
+    /// <example>
+    /// <code>
+    /// DotNetUpdatePackage(new[] { "Contoso.Utilities", "Fabrikam.WebApi@1.2.3" }, "ToDo.csproj");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Update")]
+    public static void DotNetUpdatePackage(this ICakeContext context, IEnumerable<string> packages, string project)
+    {
+        context.DotNetUpdatePackage(packages, project, null);
+    }
+
+    /// <summary>
+    /// Updates package references in a project.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packages">The packages to update.</param>
+    /// <param name="project">The target project file or directory.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// DotNetUpdatePackage(
+    ///     new[] { "Contoso.Utilities", "Fabrikam.WebApi@1.2.3" },
+    ///     "ToDo.csproj",
+    ///     new DotNetPackageUpdateSettings { Interactive = true });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Update")]
+    public static void DotNetUpdatePackage(this ICakeContext context, IEnumerable<string> packages, string project, DotNetPackageUpdateSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        settings ??= new DotNetPackageUpdateSettings();
+
+        var updater = new DotNetPackageUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        updater.Update(packages, project, settings);
     }
 
     /// <summary>

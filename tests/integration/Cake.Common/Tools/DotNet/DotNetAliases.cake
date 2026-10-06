@@ -211,6 +211,54 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     Assert.Equal(package, value);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var sourcePath = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/hwapp");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetUpdate");
+    EnsureDirectoryExist(path.Combine("../").Collapse());
+    if (DirectoryExists(path))
+    {
+        DeleteDirectory(path, new DeleteDirectorySettings { Recursive = true, Force = true });
+    }
+    CopyDirectory(sourcePath, path);
+    var project = path.CombineWithFilePath("hwapp.csproj");
+    var package = "Cake.Core";
+
+    DotNetAddPackage(package, project.FullPath, new DotNetPackageAddSettings
+    {
+        Version = "4.0.0"
+    });
+
+    // When
+    DotNetUpdatePackage(package, project.FullPath);
+
+    // Then
+    var version = XmlPeek(
+        project.FullPath,
+        $"/Project/ItemGroup/PackageReference[@Include='{package}']/@Version"
+    );
+    Assert.NotNull(version);
+    Assert.NotEqual("4.0.0", version);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage.Vulnerable")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage")
+    .Does(() =>
+{
+    // Given
+    var project = Paths.Temp.CombineWithFilePath("./Cake.Common/Tools/DotNet/DotNetUpdate/hwapp.csproj");
+
+    // When / Then: command succeeds even when no advisory applies
+    DotNetUpdatePackage(new DotNetPackageUpdateSettings
+    {
+        Project = project,
+        Vulnerable = true
+    });
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
     .Does(() =>
@@ -696,6 +744,8 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetToolInstallListRunUninstallLocalToolManifest")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetToolInstallListRunUninstallToolPath")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage.Vulnerable")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListReference")
