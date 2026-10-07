@@ -401,6 +401,57 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnMigrate")
     Assert.True(FileExists(path.CombineWithFilePath("hwapp.slnx")));
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetProjectConvert");
+    var output = path.Combine("cake");
+    EnsureDirectoryExist(path);
+    var file = path.CombineWithFilePath("cake.cs");
+    System.IO.File.WriteAllText(
+        file.FullPath,
+        """
+        #:sdk Cake.Sdk@6.3.0
+
+        Information("Hello world!");
+        """);
+
+    // When
+    DotNetProjectConvert(file, new DotNetProjectConvertSettings { Output = output });
+
+    // Then
+    var project = GetFiles($"{output.FullPath}/**/*.csproj").FirstOrDefault();
+    Assert.NotNull(project);
+    var sdk = XmlPeek(project.FullPath, "/Project/@Sdk");
+    Assert.StartsWith("Cake.Sdk", sdk);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert.DryRun")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetProjectConvertDryRun");
+    var output = path.Combine("cake");
+    EnsureDirectoryExist(path);
+    var file = path.CombineWithFilePath("cake.cs");
+    System.IO.File.WriteAllText(
+        file.FullPath,
+        """
+        #:sdk Cake.Sdk@6.3.0
+
+        Information("Hello world!");
+        """);
+
+    // When
+    DotNetProjectConvert(file, new DotNetProjectConvertSettings { Output = output, DryRun = true });
+
+    // Then
+    Assert.Empty(GetFiles($"{output.FullPath}/**/*.csproj"));
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnRemove")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
     .Does(() =>
@@ -789,6 +840,8 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnAdd")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnList")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnMigrate")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert.DryRun")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnRemove")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRepair")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRestore")
