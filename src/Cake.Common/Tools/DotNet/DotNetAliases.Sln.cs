@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.Sln.Add;
 using Cake.Common.Tools.DotNet.Sln.List;
+using Cake.Common.Tools.DotNet.Sln.Migrate;
 using Cake.Common.Tools.DotNet.Sln.Remove;
 using Cake.Core;
 using Cake.Core.Annotations;
@@ -267,5 +268,66 @@ public static partial class DotNetAliases
 
         var remover = new DotNetSlnRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
         remover.Remove(solution, projectPath, settings);
+    }
+
+    /// <summary>
+    /// Generates a .slnx file from a .sln file in the current directory.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <example>
+    /// <code>
+    /// DotNetSlnMigrate();
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Migrate")]
+    public static void DotNetSlnMigrate(this ICakeContext context)
+    {
+        context.DotNetSlnMigrate(null, null);
+    }
+
+    /// <summary>
+    /// Generates a .slnx file from the specified .sln file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="solution">The .sln file to migrate. If unspecified, the command searches the current directory.</param>
+    /// <example>
+    /// <code>
+    /// DotNetSlnMigrate("app.sln");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Migrate")]
+    public static void DotNetSlnMigrate(this ICakeContext context, FilePath solution)
+    {
+        context.DotNetSlnMigrate(solution, null);
+    }
+
+    /// <summary>
+    /// Generates a .slnx file from the specified .sln file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="solution">The .sln file to migrate. If unspecified, the command searches the current directory.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// DotNetSlnMigrate("app.sln", new DotNetSlnMigrateSettings {
+    ///     Verbosity = DotNetVerbosity.Diagnostic
+    /// });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Migrate")]
+    public static void DotNetSlnMigrate(this ICakeContext context, FilePath solution, DotNetSlnMigrateSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        settings ??= new DotNetSlnMigrateSettings();
+
+        var migrator = new DotNetSlnMigrator(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        migrator.Migrate(solution, settings);
     }
 }
