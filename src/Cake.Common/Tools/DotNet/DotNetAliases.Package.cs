@@ -5,12 +5,14 @@
 using System;
 using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.Package.Add;
+using Cake.Common.Tools.DotNet.Package.Download;
 using Cake.Common.Tools.DotNet.Package.List;
 using Cake.Common.Tools.DotNet.Package.Remove;
 using Cake.Common.Tools.DotNet.Package.Search;
 using Cake.Common.Tools.DotNet.Package.Update;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet;
 
@@ -386,6 +388,111 @@ public static partial class DotNetAliases
 
         var updater = new DotNetPackageUpdater(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
         updater.Update(packages, project, settings);
+    }
+
+    /// <summary>
+    /// Downloads a NuGet package to disk without changing project references.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="package">The package to download. A package id or <c>id@version</c>.</param>
+    /// <example>
+    /// <code>
+    /// DotNetDownloadPackage("Newtonsoft.Json@13.0.3");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Download")]
+    public static void DotNetDownloadPackage(this ICakeContext context, string package)
+    {
+        context.DotNetDownloadPackage(package, (DotNetPackageDownloadSettings)null);
+    }
+
+    /// <summary>
+    /// Downloads a NuGet package to the specified directory without changing project references.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="package">The package to download. A package id or <c>id@version</c>.</param>
+    /// <param name="output">The directory to download the package to.</param>
+    /// <example>
+    /// <code>
+    /// DotNetDownloadPackage("Newtonsoft.Json@13.0.3", "./packages");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Download")]
+    public static void DotNetDownloadPackage(this ICakeContext context, string package, DirectoryPath output)
+    {
+        context.DotNetDownloadPackage(package, new DotNetPackageDownloadSettings { Output = output });
+    }
+
+    /// <summary>
+    /// Downloads a NuGet package to disk without changing project references.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="package">The package to download. A package id or <c>id@version</c>.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// DotNetDownloadPackage("Newtonsoft.Json@13.0.3", new DotNetPackageDownloadSettings {
+    ///     Output = "./packages",
+    ///     Prerelease = true
+    /// });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Download")]
+    public static void DotNetDownloadPackage(this ICakeContext context, string package, DotNetPackageDownloadSettings settings)
+    {
+        IEnumerable<string> packages = string.IsNullOrWhiteSpace(package) ? null : [package];
+        context.DotNetDownloadPackage(packages, settings);
+    }
+
+    /// <summary>
+    /// Downloads NuGet packages to the specified directory without changing project references.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packages">The packages to download. Each value is a package id or <c>id@version</c>.</param>
+    /// <param name="output">The directory to download the packages to.</param>
+    /// <example>
+    /// <code>
+    /// DotNetDownloadPackage(new[] { "Newtonsoft.Json@13.0.3", "Cake.Core" }, "./packages");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Download")]
+    public static void DotNetDownloadPackage(this ICakeContext context, IEnumerable<string> packages, DirectoryPath output)
+    {
+        context.DotNetDownloadPackage(packages, new DotNetPackageDownloadSettings { Output = output });
+    }
+
+    /// <summary>
+    /// Downloads NuGet packages to disk without changing project references.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packages">The packages to download. Each value is a package id or <c>id@version</c>.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// DotNetDownloadPackage(
+    ///     new[] { "Newtonsoft.Json@13.0.3", "Cake.Core" },
+    ///     new DotNetPackageDownloadSettings { Output = "./packages" });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Package")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Package.Download")]
+    public static void DotNetDownloadPackage(this ICakeContext context, IEnumerable<string> packages, DotNetPackageDownloadSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        settings ??= new DotNetPackageDownloadSettings();
+
+        var downloader = new DotNetPackageDownloader(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        downloader.Download(packages, settings);
     }
 
     /// <summary>

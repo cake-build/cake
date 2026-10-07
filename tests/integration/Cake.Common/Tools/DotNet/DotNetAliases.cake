@@ -244,6 +244,21 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage")
     Assert.NotEqual("4.0.0", version);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetDownloadPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var output = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetDownload");
+    EnsureDirectoryExist(output);
+
+    // When
+    DotNetDownloadPackage("Newtonsoft.Json@13.0.3", output);
+
+    // Then: package download extracts into {id}/{version}/ (not a nupkg at the output root)
+    Assert.True(DirectoryExists(output.Combine("newtonsoft.json").Combine("13.0.3")));
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage.Vulnerable")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage")
     .Does(() =>
@@ -746,6 +761,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage.Vulnerable")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetDownloadPackage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListReference")
