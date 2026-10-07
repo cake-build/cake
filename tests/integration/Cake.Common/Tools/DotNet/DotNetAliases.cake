@@ -383,6 +383,24 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnList")
     Assert.Contains(result, item => item == project);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnMigrate")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var source = Paths.Temp.CombineWithFilePath("./Cake.Common/Tools/DotNet/hwapp.sln");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetSlnMigrate");
+    EnsureDirectoryExist(path);
+    var solution = path.CombineWithFilePath("hwapp.sln");
+    CopyFile(source, solution);
+
+    // When
+    DotNetSlnMigrate(solution);
+
+    // Then
+    Assert.True(FileExists(path.CombineWithFilePath("hwapp.slnx")));
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnRemove")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
     .Does(() =>
@@ -770,6 +788,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSDKCheck")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnAdd")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnList")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnMigrate")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnRemove")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRepair")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRestore")
