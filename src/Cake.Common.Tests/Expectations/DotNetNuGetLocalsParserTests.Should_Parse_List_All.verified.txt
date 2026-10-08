@@ -1,0 +1,6 @@
+﻿{
+  HttpCache: C:/Users/username/AppData/Local/NuGet/v3-cache,
+  GlobalPackages: C:/Users/username/.nuget/packages,
+  Temp: C:/Users/username/AppData/Local/Temp/NuGetScratch,
+  PluginsCache: C:/Users/username/AppData/Local/NuGet/plugins-cache
+}
