@@ -104,6 +104,7 @@ public sealed class DotNetFormatTests
             fixture.Settings.Verbosity = Common.Tools.DotNet.DotNetVerbosity.Diagnostic;
             fixture.Settings.BinaryLog = "./temp/b.log";
             fixture.Settings.Report = "./temp/report.json";
+            fixture.Settings.Framework = "net10.0";
             fixture.Root = "./src/project";
 
             // When
@@ -111,7 +112,7 @@ public sealed class DotNetFormatTests
 
             // Then
             var expected = "format \"./src/project\" --diagnostics CS123 CA555 --severity warn --no-restore --verify-no-changes --include ./src/ ./tests/ --exclude ./src/submodule-a/ --include-generated";
-            expected += " --binarylog \"/Working/temp/b.log\" --report \"/Working/temp/report.json\" --verbosity diagnostic";
+            expected += " --binarylog \"/Working/temp/b.log\" --report \"/Working/temp/report.json\" --framework net10.0 --verbosity diagnostic";
             Assert.Equal(expected, result.Args);
         }
 
