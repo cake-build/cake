@@ -118,6 +118,72 @@ public class DotNetTestSettings : DotNetSettings
     public DotNetMSBuildSettings MSBuildSettings { get; set; }
 
     /// <summary>
+    /// Gets or sets the complete-run timeout passed as <c>--timeout</c>.
+    /// </summary>
+    /// <remarks>
+    /// Use a positive number and unit, such as <c>500ms</c>, <c>90s</c>, <c>10m</c>, <c>2h</c>, or <c>1d</c>.
+    /// A timed-out run exits with code 3.
+    /// Requires .NET 11 Preview 7 or newer and MTP 2.4 or later.
+    /// </remarks>
+    public string Timeout { get; set; }
+
+    /// <summary>
+    /// Gets or sets the maximum number of failed tests passed as <c>--maximum-failed-tests</c>.
+    /// </summary>
+    /// <remarks>
+    /// Stops the complete run after it reaches this number of failed, errored, timed-out, or canceled tests.
+    /// The run exits with code 13.
+    /// Requires .NET 11 Preview 7 or newer and MTP 2.4 or later.
+    /// </remarks>
+    public int? MaximumFailedTests { get; set; }
+
+    /// <summary>
+    /// Gets or sets the artifacts path.
+    /// </summary>
+    /// <remarks>
+    /// Requires .NET 11 SDK or newer.
+    /// </remarks>
+    public DirectoryPath ArtifactsPath { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to ignore project-to-project references and only build the specified root project.
+    /// </summary>
+    /// <remarks>
+    /// Requires .NET 11 SDK or newer.
+    /// </remarks>
+    public bool NoDependencies { get; set; }
+
+    /// <summary>
+    /// Gets or sets file-globbing patterns passed as <c>--test-modules</c>.
+    /// </summary>
+    /// <remarks>
+    /// Only tests in matching modules run. Prefix a pattern with <c>!</c> to exclude matches.
+    /// Multiple patterns are joined with semicolons. Whitespace around each pattern is ignored.
+    /// Because this option does not evaluate projects, use it to run already-built test applications
+    /// when project restore state is not available.
+    /// Requires .NET 11 Preview 6 or newer for exclusion prefixes.
+    /// </remarks>
+    public ICollection<string> TestModules { get; set; } = new List<string>();
+
+    /// <summary>
+    /// Gets or sets application environment variables passed as <c>--environment KEY=VALUE</c>.
+    /// </summary>
+    /// <remarks>
+    /// These are not process environment variables. Use <c>ToolSettings.EnvironmentVariables</c> for that.
+    /// Requires .NET 11 SDK or newer.
+    /// </remarks>
+    public IDictionary<string, string> ApplicationEnvironment { get; set; } = new Dictionary<string, string>();
+
+    /// <summary>
+    /// Gets or sets the Microsoft Testing Platform configuration file.
+    /// </summary>
+    /// <remarks>
+    /// Maps to <c>--config-file</c>, not <see cref="Settings"/> / <c>--settings</c>.
+    /// Requires .NET 11 SDK or newer.
+    /// </remarks>
+    public FilePath ConfigFile { get; set; }
+
+    /// <summary>
     /// Gets or sets the path type for the test command.
     /// When set to <see cref="DotNetTestPathType.Auto"/>, the path type will be automatically detected based on the file extension.
     /// When set to <see cref="DotNetTestPathType.Project"/>, the path will be treated as a project file.

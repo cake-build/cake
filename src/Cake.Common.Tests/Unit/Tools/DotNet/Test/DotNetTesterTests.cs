@@ -139,12 +139,20 @@ public sealed class DotNetTesterTests
             fixture.Settings.Runtime = "win-x64";
             fixture.Settings.Blame = true;
             fixture.Settings.Sources = new[] { "https://api.nuget.org/v3/index.json" };
+            fixture.Settings.Timeout = "90s";
+            fixture.Settings.MaximumFailedTests = 3;
+            fixture.Settings.ArtifactsPath = "./mtp-artifacts";
+            fixture.Settings.NoDependencies = true;
+            fixture.Settings.TestModules.Add("**/bin/**/Debug/net10.0/tests.dll");
+            fixture.Settings.TestModules.Add("!**/obj/**");
+            fixture.Settings.ApplicationEnvironment.Add("DOTNET_ENVIRONMENT", "Test");
+            fixture.Settings.ConfigFile = "./testconfig.json";
 
             // When
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"html;LogFileName=/Working/logfile.html\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --collect \"XPlat Code Coverage\" --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --nologo --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64 --source \"https://api.nuget.org/v3/index.json\" --blame", result.Args);
+            Assert.Equal("test --settings \"/Working/demo.runsettings\" --filter \"Priority = 1\" --test-adapter-path \"/Working/custom-test-adapter\" --logger \"html;LogFileName=/Working/logfile.html\" --output \"/Working/artifacts\" --framework dnxcore50 --configuration Release --collect \"XPlat Code Coverage\" --diag \"/Working/artifacts/logging/diagnostics.txt\" --no-build --no-restore --nologo --results-directory \"/Working/tests\" --logger trx;LogFileName=\"/Working/tests/TestResults.xml\" --runtime win-x64 --source \"https://api.nuget.org/v3/index.json\" --blame --timeout \"90s\" --maximum-failed-tests 3 --artifacts-path \"/Working/mtp-artifacts\" --no-dependencies --test-modules \"**/bin/**/Debug/net10.0/tests.dll;!**/obj/**\" --environment \"DOTNET_ENVIRONMENT=Test\" --config-file \"/Working/testconfig.json\"", result.Args);
         }
 
         [Fact]

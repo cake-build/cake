@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -192,6 +193,76 @@ public sealed class DotNetTester : DotNetTool<DotNetTestSettings>
         if (settings.MSBuildSettings != null)
         {
             builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
+        }
+
+        // Timeout
+        if (!string.IsNullOrWhiteSpace(settings.Timeout))
+        {
+            builder.Append("--timeout");
+            builder.AppendQuoted(settings.Timeout);
+        }
+
+        // Maximum failed tests
+        if (settings.MaximumFailedTests.HasValue)
+        {
+            builder.Append("--maximum-failed-tests");
+            builder.Append(settings.MaximumFailedTests.Value.ToString());
+        }
+
+        // Artifacts path
+        if (settings.ArtifactsPath != null)
+        {
+            builder.Append("--artifacts-path");
+            builder.AppendQuoted(settings.ArtifactsPath.MakeAbsolute(_environment).FullPath);
+        }
+
+        // No dependencies
+        if (settings.NoDependencies)
+        {
+            builder.Append("--no-dependencies");
+        }
+
+        // Test modules
+        if (settings.TestModules != null)
+        {
+            var patterns = new List<string>();
+            foreach (var module in settings.TestModules)
+            {
+                if (string.IsNullOrWhiteSpace(module))
+                {
+                    continue;
+                }
+
+                patterns.Add(module.Trim());
+            }
+
+            if (patterns.Count > 0)
+            {
+                builder.Append("--test-modules");
+                builder.AppendQuoted(string.Join(';', patterns));
+            }
+        }
+
+        // Application environment
+        if (settings.ApplicationEnvironment != null)
+        {
+            foreach (var pair in settings.ApplicationEnvironment)
+            {
+                if (string.IsNullOrWhiteSpace(pair.Key))
+                {
+                    continue;
+                }
+
+                builder.Append("--environment");
+                builder.AppendQuoted(string.Concat(pair.Key, "=", pair.Value));
+            }
+        }
+
+        // Config file
+        if (settings.ConfigFile != null)
+        {
+            builder.Append("--config-file");
+            builder.AppendQuoted(settings.ConfigFile.MakeAbsolute(_environment).FullPath);
         }
 
         if (!arguments.IsNullOrEmpty())
