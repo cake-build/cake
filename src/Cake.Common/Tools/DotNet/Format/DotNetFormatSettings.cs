@@ -59,4 +59,12 @@ public class DotNetFormatSettings : DotNetSettings
     /// Gets or sets a path to a JSON report.
     /// </summary>
     public FilePath Report { get; set; }
+
+    /// <summary>
+    /// Gets or sets the target framework to format.
+    /// </summary>
+    /// <remarks>
+    /// Requires .NET 11 SDK or newer.
+    /// </remarks>
+    public string Framework { get; set; }
 }

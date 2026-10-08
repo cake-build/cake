@@ -121,6 +121,13 @@ public sealed class DotNetFormatter : DotNetTool<DotNetFormatSettings>
             builder.AppendSwitchQuoted($"--report", settings.Report.MakeAbsolute(_environment).FullPath);
         }
 
+        // Framework
+        if (!string.IsNullOrEmpty(settings.Framework))
+        {
+            builder.Append("--framework");
+            builder.Append(settings.Framework);
+        }
+
         return builder;
     }
 
