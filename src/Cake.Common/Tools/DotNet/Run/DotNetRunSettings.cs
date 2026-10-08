@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Core.IO;
 
 namespace Cake.Common.Tools.DotNet.Run;
 
@@ -51,4 +52,45 @@ public class DotNetRunSettings : DotNetSettings
     /// Gets or sets additional arguments to be passed to MSBuild.
     /// </summary>
     public DotNetMSBuildSettings MSBuildSettings { get; set; }
+
+    /// <summary>
+    /// Gets or sets application environment variables passed as <c>--environment KEY=VALUE</c>.
+    /// </summary>
+    /// <remarks>
+    /// These are not process environment variables. Use <c>ToolSettings.EnvironmentVariables</c> for that.
+    /// Requires .NET 11 SDK or newer.
+    /// </remarks>
+    public IDictionary<string, string> ApplicationEnvironment { get; set; } = new Dictionary<string, string>();
+
+    /// <summary>
+    /// Gets or sets the file to run.
+    /// </summary>
+    /// <remarks>
+    /// Requires .NET 11 SDK or newer.
+    /// </remarks>
+    public FilePath File { get; set; }
+
+    /// <summary>
+    /// Gets or sets the target device.
+    /// </summary>
+    /// <remarks>
+    /// Requires .NET 11 SDK or newer.
+    /// </remarks>
+    public string Device { get; set; }
+
+    /// <summary>
+    /// Gets or sets the artifacts path.
+    /// </summary>
+    /// <remarks>
+    /// Requires .NET 11 SDK or newer.
+    /// </remarks>
+    public DirectoryPath ArtifactsPath { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to skip the local cache.
+    /// </summary>
+    /// <remarks>
+    /// Requires .NET 11 SDK or newer.
+    /// </remarks>
+    public bool NoCache { get; set; }
 }

@@ -4,6 +4,7 @@
 
 using Cake.Common.Tests.Fixtures.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet;
+using Cake.Core.IO;
 using Cake.Testing;
 
 namespace Cake.Common.Tests.Unit.Tools.DotNet.Run;
@@ -95,12 +96,18 @@ public sealed class DotNetRunnerTests
             fixture.Settings.Runtime = "win7-x86";
             fixture.Settings.Sources = new[] { "https://api.nuget.org/v3/index.json" };
             fixture.Settings.RollForward = DotNetRollForward.Major;
+            fixture.Settings.ApplicationEnvironment.Add("ASPNETCORE_ENVIRONMENT", "Development");
+            fixture.Settings.ApplicationEnvironment.Add("DOTNET_ENVIRONMENT", "Staging");
+            fixture.Settings.File = "./app.cs";
+            fixture.Settings.Device = "iPhone";
+            fixture.Settings.ArtifactsPath = "./artifacts";
+            fixture.Settings.NoCache = true;
 
             // When
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("run --framework dnxcore50 --configuration Release --runtime win7-x86 --source \"https://api.nuget.org/v3/index.json\" --roll-forward Major", result.Args);
+            Assert.Equal("run --framework dnxcore50 --configuration Release --runtime win7-x86 --source \"https://api.nuget.org/v3/index.json\" --roll-forward Major --environment \"ASPNETCORE_ENVIRONMENT=Development\" --environment \"DOTNET_ENVIRONMENT=Staging\" --file \"/Working/app.cs\" --device \"iPhone\" --artifacts-path \"/Working/artifacts\" --no-cache", result.Args);
         }
 
         [Fact]

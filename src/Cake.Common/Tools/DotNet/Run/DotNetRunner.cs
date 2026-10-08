@@ -115,6 +115,48 @@ public sealed class DotNetRunner : DotNetTool<DotNetRunSettings>
             builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
         }
 
+        // Application environment
+        if (settings.ApplicationEnvironment != null)
+        {
+            foreach (var pair in settings.ApplicationEnvironment)
+            {
+                if (string.IsNullOrWhiteSpace(pair.Key))
+                {
+                    continue;
+                }
+
+                builder.Append("--environment");
+                builder.AppendQuoted(string.Concat(pair.Key, "=", pair.Value));
+            }
+        }
+
+        // File
+        if (settings.File != null)
+        {
+            builder.Append("--file");
+            builder.AppendQuoted(settings.File.MakeAbsolute(_environment).FullPath);
+        }
+
+        // Device
+        if (!string.IsNullOrEmpty(settings.Device))
+        {
+            builder.Append("--device");
+            builder.AppendQuoted(settings.Device);
+        }
+
+        // Artifacts path
+        if (settings.ArtifactsPath != null)
+        {
+            builder.Append("--artifacts-path");
+            builder.AppendQuoted(settings.ArtifactsPath.MakeAbsolute(_environment).FullPath);
+        }
+
+        // No cache
+        if (settings.NoCache)
+        {
+            builder.Append("--no-cache");
+        }
+
         // Arguments
         if (!arguments.IsNullOrEmpty())
         {
