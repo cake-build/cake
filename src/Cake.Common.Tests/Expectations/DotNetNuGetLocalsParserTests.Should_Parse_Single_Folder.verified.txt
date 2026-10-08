@@ -1,0 +1,6 @@
+﻿{
+  HttpCache: C:/Users/username/AppData/Local/NuGet/v3-cache,
+  GlobalPackages: null,
+  Temp: null,
+  PluginsCache: null
+}

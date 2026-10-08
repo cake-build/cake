@@ -4,6 +4,7 @@
 
 using System;
 using Cake.Common.Tools.DotNet.NuGet.Delete;
+using Cake.Common.Tools.DotNet.NuGet.Locals;
 using Cake.Common.Tools.DotNet.NuGet.Push;
 using Cake.Common.Tools.DotNet.NuGet.Source;
 using Cake.Common.Tools.DotNet.NuGet.Why;
@@ -575,5 +576,103 @@ public static partial class DotNetAliases
 
         var whyer = new DotNetNuGetWhyer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
         return whyer.Why(project, package, settings);
+    }
+
+    /// <summary>
+    /// Lists local NuGet cache folders.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="folder">The local folder to list.</param>
+    /// <returns>The parsed local folder paths.</returns>
+    /// <example>
+    /// <code>
+    /// var result = DotNetNuGetLocalsList(DotNetNuGetLocalsFolder.All);
+    /// Information(result.GlobalPackages);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Locals")]
+    public static DotNetNuGetLocalsListResult DotNetNuGetLocalsList(this ICakeContext context, DotNetNuGetLocalsFolder folder)
+    {
+        return context.DotNetNuGetLocalsList(folder, null);
+    }
+
+    /// <summary>
+    /// Lists local NuGet cache folders.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="folder">The local folder to list.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The parsed local folder paths.</returns>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetLocalsSettings
+    /// {
+    ///     ForceEnglishOutput = true
+    /// };
+    ///
+    /// var result = DotNetNuGetLocalsList(DotNetNuGetLocalsFolder.HttpCache, settings);
+    /// Information(result.HttpCache);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Locals")]
+    public static DotNetNuGetLocalsListResult DotNetNuGetLocalsList(this ICakeContext context, DotNetNuGetLocalsFolder folder, DotNetNuGetLocalsSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        settings ??= new DotNetNuGetLocalsSettings();
+
+        var localser = new DotNetNuGetLocalser(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        return localser.List(folder, settings);
+    }
+
+    /// <summary>
+    /// Clears local NuGet cache folders.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="folder">The local folder to clear.</param>
+    /// <example>
+    /// <code>
+    /// DotNetNuGetLocalsClear(DotNetNuGetLocalsFolder.Temp);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Locals")]
+    public static void DotNetNuGetLocalsClear(this ICakeContext context, DotNetNuGetLocalsFolder folder)
+    {
+        context.DotNetNuGetLocalsClear(folder, null);
+    }
+
+    /// <summary>
+    /// Clears local NuGet cache folders.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="folder">The local folder to clear.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetLocalsSettings
+    /// {
+    ///     ForceEnglishOutput = true
+    /// };
+    ///
+    /// DotNetNuGetLocalsClear(DotNetNuGetLocalsFolder.Temp, settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Locals")]
+    public static void DotNetNuGetLocalsClear(this ICakeContext context, DotNetNuGetLocalsFolder folder, DotNetNuGetLocalsSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        settings ??= new DotNetNuGetLocalsSettings();
+
+        var localser = new DotNetNuGetLocalser(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        localser.Clear(folder, settings);
     }
 }

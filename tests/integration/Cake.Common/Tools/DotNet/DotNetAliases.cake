@@ -448,6 +448,28 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetWhy")
     }
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetLocalsList")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // When
+    var result = DotNetNuGetLocalsList(DotNetNuGetLocalsFolder.All);
+
+    // Then
+    Assert.False(string.IsNullOrWhiteSpace(result.HttpCache?.FullPath), nameof(result.HttpCache));
+    Assert.False(string.IsNullOrWhiteSpace(result.GlobalPackages?.FullPath), nameof(result.GlobalPackages));
+    Assert.False(string.IsNullOrWhiteSpace(result.Temp?.FullPath), nameof(result.Temp));
+    Assert.False(string.IsNullOrWhiteSpace(result.PluginsCache?.FullPath), nameof(result.PluginsCache));
+    Assert.True(DirectoryExists(result.GlobalPackages), result.GlobalPackages.FullPath);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetLocalsClear")
+    .Does(() =>
+{
+    // When
+    DotNetNuGetLocalsClear(DotNetNuGetLocalsFolder.Temp);
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
     .Does(() =>
@@ -888,6 +910,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnList")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnMigrate")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetWhy")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetLocalsList")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert.DryRun")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnRemove")
