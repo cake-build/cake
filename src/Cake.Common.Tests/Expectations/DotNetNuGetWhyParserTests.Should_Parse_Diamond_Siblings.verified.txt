@@ -1,0 +1,41 @@
+{
+  Projects: [
+    {
+      Name: App,
+      Package: System.Text.Json,
+      Graphs: [
+        {
+          Framework: net8.0,
+          Dependencies: [
+            {
+              Id: PackageA,
+              Version: 1.0.0,
+              VersionConstraint: >= 1.0.0,
+              Dependencies: [
+                {
+                  Id: System.Text.Json,
+                  Version: 8.0.0,
+                  VersionConstraint: = 8.0.0,
+                  Dependencies: []
+                }
+              ]
+            },
+            {
+              Id: PackageB,
+              Version: 2.0.0,
+              VersionConstraint: >= 2.0.0,
+              Dependencies: [
+                {
+                  Id: System.Text.Json,
+                  Version: 8.0.0,
+                  VersionConstraint: = 8.0.0,
+                  Dependencies: []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

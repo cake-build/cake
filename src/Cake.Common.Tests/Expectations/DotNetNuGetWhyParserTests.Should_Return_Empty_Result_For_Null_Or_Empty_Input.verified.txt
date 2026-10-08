@@ -1,0 +1,8 @@
+{
+  Null: {
+    Projects: []
+  },
+  Empty: {
+    Projects: []
+  }
+}

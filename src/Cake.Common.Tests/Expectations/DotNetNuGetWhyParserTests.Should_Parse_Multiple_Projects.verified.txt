@@ -1,0 +1,26 @@
+{
+  Projects: [
+    {
+      Name: A,
+      Package: Newtonsoft.Json,
+      Graphs: [
+        {
+          Framework: net10.0,
+          Dependencies: [
+            {
+              Id: Newtonsoft.Json,
+              Version: 13.0.3,
+              VersionConstraint: >= 13.0.3,
+              Dependencies: []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      Name: B,
+      Package: Newtonsoft.Json,
+      Graphs: []
+    }
+  ]
+}
