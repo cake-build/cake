@@ -6,6 +6,7 @@ using System;
 using Cake.Common.Tools.DotNet.NuGet.Delete;
 using Cake.Common.Tools.DotNet.NuGet.Push;
 using Cake.Common.Tools.DotNet.NuGet.Source;
+using Cake.Common.Tools.DotNet.NuGet.Why;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -459,5 +460,120 @@ public static partial class DotNetAliases
 
         var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
         sourcer.UpdateSource(name, settings);
+    }
+
+    /// <summary>
+    /// Shows why a package is in the restore graph.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="package">The package identifier.</param>
+    /// <returns>The parsed dependency graphs.</returns>
+    /// <example>
+    /// <code>
+    /// var result = DotNetNuGetWhy("Newtonsoft.Json");
+    /// foreach (var project in result.Projects)
+    /// {
+    ///     foreach (var graph in project.Graphs)
+    ///     {
+    ///         Information(graph.Framework);
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Why")]
+    public static DotNetNuGetWhyResult DotNetNuGetWhy(this ICakeContext context, string package)
+    {
+        return context.DotNetNuGetWhy(null, package, null);
+    }
+
+    /// <summary>
+    /// Shows why a package is in the restore graph.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="package">The package identifier.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The parsed dependency graphs.</returns>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetWhySettings
+    /// {
+    ///     Project = "./src/App/App.csproj",
+    ///     Frameworks = { "net10.0" }
+    /// };
+    ///
+    /// var result = DotNetNuGetWhy("Newtonsoft.Json", settings);
+    /// foreach (var project in result.Projects)
+    /// {
+    ///     Information(project.Name);
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Why")]
+    public static DotNetNuGetWhyResult DotNetNuGetWhy(this ICakeContext context, string package, DotNetNuGetWhySettings settings)
+    {
+        return context.DotNetNuGetWhy(null, package, settings);
+    }
+
+    /// <summary>
+    /// Shows why a package is in the restore graph.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="project">The project or solution file to operate on.</param>
+    /// <param name="package">The package identifier.</param>
+    /// <returns>The parsed dependency graphs.</returns>
+    /// <example>
+    /// <code>
+    /// var result = DotNetNuGetWhy("./hwapp.tests/hwapp.tests.csproj", "xunit.v3.extensibility.core");
+    /// foreach (var graph in result.Projects[0].Graphs)
+    /// {
+    ///     Information(graph.Framework);
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Why")]
+    public static DotNetNuGetWhyResult DotNetNuGetWhy(this ICakeContext context, string project, string package)
+    {
+        return context.DotNetNuGetWhy(project, package, null);
+    }
+
+    /// <summary>
+    /// Shows why a package is in the restore graph.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="project">The project or solution file to operate on.</param>
+    /// <param name="package">The package identifier.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The parsed dependency graphs.</returns>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetWhySettings
+    /// {
+    ///     Frameworks = { "net10.0" }
+    /// };
+    ///
+    /// var result = DotNetNuGetWhy("./hwapp.tests/hwapp.tests.csproj", "xunit.v3.extensibility.core", settings);
+    /// foreach (var projectResult in result.Projects)
+    /// {
+    ///     Information(projectResult.Name);
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Why")]
+    public static DotNetNuGetWhyResult DotNetNuGetWhy(this ICakeContext context, string project, string package, DotNetNuGetWhySettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        settings ??= new DotNetNuGetWhySettings();
+
+        var whyer = new DotNetNuGetWhyer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        return whyer.Why(project, package, settings);
     }
 }

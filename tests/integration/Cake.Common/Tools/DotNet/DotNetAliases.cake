@@ -401,6 +401,53 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnMigrate")
     Assert.True(FileExists(path.CombineWithFilePath("hwapp.slnx")));
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetWhy")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var source = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetNuGetWhy");
+    EnsureDirectoryExist(path.Combine("../").Collapse());
+    if (DirectoryExists(path))
+    {
+        DeleteDirectory(path, new DeleteDirectorySettings { Recursive = true, Force = true });
+    }
+    CopyDirectory(source.Combine("hwapp.tests"), path.Combine("hwapp.tests"));
+    CopyDirectory(source.Combine("hwapp.common"), path.Combine("hwapp.common"));
+    var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
+    var package = "xunit.v3.extensibility.core";
+
+    DotNetRestore(project.FullPath);
+
+    // When
+    var result = DotNetNuGetWhy(project.FullPath, package);
+
+    // Then
+    Assert.NotEmpty(result.Projects);
+    var whyProject = result.Projects.First();
+    Assert.Equal("hwapp.tests", whyProject.Name);
+    Assert.Equal(package, whyProject.Package);
+    Assert.Contains(whyProject.Graphs, graph => graph.Framework == "net10.0");
+    Assert.True(
+        ContainsPackage(whyProject.Graphs.SelectMany(graph => graph.Dependencies), package),
+        "Expected parsed nuget why graph to contain " + package);
+
+    static bool ContainsPackage(IEnumerable<DotNetNuGetWhyPackage> nodes, string packageId)
+    {
+        foreach (var node in nodes)
+        {
+            if (string.Equals(node.Id, packageId, StringComparison.OrdinalIgnoreCase) ||
+                ContainsPackage(node.Dependencies, packageId))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
     .Does(() =>
@@ -840,6 +887,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnAdd")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnList")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnMigrate")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetWhy")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert.DryRun")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnRemove")
