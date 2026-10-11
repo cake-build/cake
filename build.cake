@@ -95,6 +95,7 @@ Task("Update-Portable-Rid-Graph")
     .Does(static context => UpdatePortableRidGraph(context));
 
 Task("Clean")
+    .IsDependentOn("NuGet-Login")
     .Does<BuildParameters>((context, parameters) =>
 {
     CleanDirectories("./src/**/bin/" + parameters.Configuration);
@@ -296,18 +297,24 @@ Task("Publish-AzureDevOps")
     Information("Publish-AzureDevOps Task failed, but continuing with next Task...");
 });
 
+Task("NuGet-Login")
+    .WithCriteria<BuildParameters>(static (_, parameters) => parameters.ShouldPublish)
+    .Does<BuildParameters>(static async (context, parameters) =>
+    {
+        ArgumentException.ThrowIfNullOrEmpty(parameters.NuGetApiUser);
+
+        context.Information("Logging in to NuGet...");
+        parameters.NuGetApiKey = await context.GitHubActions().Commands.NuGetLogin(parameters.NuGetApiUser);
+        ArgumentException.ThrowIfNullOrEmpty(parameters.NuGetApiKey);
+    });
+
 Task("Publish-NuGet")
     .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Package")
+    .IsDependentOn("NuGet-Login")
     .WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublish)
     .Does<BuildParameters>((context, parameters) =>
 {
-    // Resolve the API key.
-    var apiKey = EnvironmentVariable("NUGET_API_KEY");
-    if (string.IsNullOrEmpty(apiKey)) {
-        throw new InvalidOperationException("Could not resolve NuGet API key.");
-    }
-
     // Resolve the API url.
     var apiUrl = EnvironmentVariable("NUGET_API_URL");
     if (string.IsNullOrEmpty(apiUrl)) {
@@ -318,7 +325,7 @@ Task("Publish-NuGet")
     {
         // Push the package.
         var settings = new DotNetNuGetPushSettings {
-            ApiKey = apiKey,
+            ApiKey = parameters.NuGetApiKey,
             Source = apiUrl
         };
 
