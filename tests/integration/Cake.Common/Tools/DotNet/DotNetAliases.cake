@@ -482,7 +482,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert")
     System.IO.File.WriteAllText(
         file.FullPath,
         """
-        #:sdk Cake.Sdk@6.3.0
+        #:sdk Cake.Sdk
 
         Information("Hello world!");
         """);
@@ -509,7 +509,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert.DryRun")
     System.IO.File.WriteAllText(
         file.FullPath,
         """
-        #:sdk Cake.Sdk@6.3.0
+        #:sdk Cake.Sdk
 
         Information("Hello world!");
         """);
@@ -870,6 +870,114 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRun")
     DotNetRun(project.FullPath);
 });
 
+string cakeSdkVersion;
+
+string GetCakeSdkVersion()
+{
+    if (cakeSdkVersion is not null)
+    {
+        return cakeSdkVersion;
+    }
+
+    var globalJson = Paths.TestRoot.CombineWithFilePath("../../global.json");
+    using var document = System.Text.Json.JsonDocument.Parse(System.IO.File.ReadAllText(globalJson.FullPath));
+    cakeSdkVersion = document.RootElement.GetProperty("msbuild-sdks").GetProperty("Cake.Sdk").GetString();
+    return cakeSdkVersion;
+}
+
+string CreateDotNetRunCodeScript(string expectedName, string expectedEnvironment)
+{
+    // stdin virtual projects live under the temp runfile cache, so they cannot
+    // see repo-root global.json. Pin Cake.Sdk from that file in one place.
+    var cakeSdkVersion = GetCakeSdkVersion();
+    return 
+        $$"""
+        #:sdk Cake.Sdk@{{cakeSdkVersion}}
+
+        var name = Argument<string>("name", "unset");
+        var environment = EnvironmentVariable("CAKE_DOTNET_RUN_CODE");
+        Information("name={0}", name);
+        Information("CAKE_DOTNET_RUN_CODE={0}", environment ?? "<null>");
+        if (name != "{{expectedName}}")
+        {
+            throw new Exception($"Expected name '{{expectedName}}' but was '{name}'");
+        }
+        if ((environment ?? "") != "{{expectedEnvironment}}")
+        {
+            throw new Exception($"Expected CAKE_DOTNET_RUN_CODE '{{expectedEnvironment}}' but was '{environment}'");
+        }
+        System.IO.File.WriteAllText("dotnet-run-code.marker", "ok");
+        """;
+}
+
+void AssertDotNetRunCodeMarker(DirectoryPath workingDirectory)
+{
+    var marker = workingDirectory.CombineWithFilePath("dotnet-run-code.marker");
+    Assert.True(FileExists(marker), "Path:" + marker.FullPath);
+    DeleteFile(marker);
+}
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Code")
+    .Does(() =>
+{
+    DotNetRunCode(CreateDotNetRunCodeScript("unset", ""));
+    AssertDotNetRunCodeMarker(Context.Environment.WorkingDirectory);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Arguments")
+    .Does(() =>
+{
+    DotNetRunCode(CreateDotNetRunCodeScript("from-argument", ""), "--name=from-argument");
+    AssertDotNetRunCodeMarker(Context.Environment.WorkingDirectory);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Settings")
+    .Does(() =>
+{
+    var workingDirectory = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetRunCode/Settings");
+    EnsureDirectoryExist(workingDirectory);
+
+    DotNetRunCode(
+        CreateDotNetRunCodeScript("unset", "from-environment"),
+        new DotNetRunSettings
+        {
+            WorkingDirectory = workingDirectory,
+            EnvironmentVariables = new Dictionary<string, string>
+            {
+                ["CAKE_DOTNET_RUN_CODE"] = "from-environment"
+            }
+        });
+
+    AssertDotNetRunCodeMarker(workingDirectory);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.ArgumentsAndSettings")
+    .Does(() =>
+{
+    var workingDirectory = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetRunCode/ArgumentsAndSettings");
+    EnsureDirectoryExist(workingDirectory);
+
+    DotNetRunCode(
+        CreateDotNetRunCodeScript("from-argument", "from-environment"),
+        "--name=from-argument",
+        new DotNetRunSettings
+        {
+            WorkingDirectory = workingDirectory,
+            EnvironmentVariables = new Dictionary<string, string>
+            {
+                ["CAKE_DOTNET_RUN_CODE"] = "from-environment"
+            }
+        });
+
+    AssertDotNetRunCodeMarker(workingDirectory);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Code")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Arguments")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Settings")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.ArgumentsAndSettings");
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetDelete")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetPush")
     .Does(() =>
@@ -933,6 +1041,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetPush")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRun")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetDelete")
     .Does(() =>
 {

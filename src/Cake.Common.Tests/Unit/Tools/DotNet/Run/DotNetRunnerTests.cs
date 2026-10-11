@@ -4,6 +4,7 @@
 
 using Cake.Common.Tests.Fixtures.Tools.DotNet.Run;
 using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Run;
 using Cake.Core.IO;
 using Cake.Testing;
 
@@ -142,6 +143,121 @@ public sealed class DotNetRunnerTests
 
             // Then
             Assert.Equal(expected, result.Args);
+        }
+    }
+
+    public sealed class TheRunCodeMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Settings_Are_Null()
+        {
+            // Given
+            var fixture = new DotNetRunnerFixture();
+            fixture.Code = "Console.WriteLine();";
+            fixture.Settings = null;
+            fixture.GivenDefaultToolDoNotExist();
+
+            // When
+            var result = Record.Exception(() => fixture.Run());
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "settings");
+        }
+
+        [Fact]
+        public void Should_Throw_If_Code_Is_Null()
+        {
+            // Given
+            var fixture = new DotNetRunnerFixture();
+            var tool = new DotNetRunner(
+                fixture.FileSystem, fixture.Environment, fixture.ProcessRunner, fixture.Tools);
+
+            // When
+            var result = Record.Exception(() => tool.RunCode((string)null, null, fixture.Settings));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "text");
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void Should_Throw_If_Code_Is_Empty_Or_White_Space(string code)
+        {
+            // Given
+            var fixture = new DotNetRunnerFixture();
+            var tool = new DotNetRunner(
+                fixture.FileSystem, fixture.Environment, fixture.ProcessRunner, fixture.Tools);
+
+            // When
+            var result = Record.Exception(() => tool.RunCode(code, null, fixture.Settings));
+
+            // Then
+            AssertEx.IsArgumentException(result, "code", "Code cannot be empty.");
+        }
+
+        [Fact]
+        public void Should_Throw_If_File_Is_Set()
+        {
+            // Given
+            var fixture = new DotNetRunnerFixture();
+            fixture.Code = "Console.WriteLine();";
+            fixture.Settings.File = "./app.cs";
+
+            // When
+            var result = Record.Exception(() => fixture.Run());
+
+            // Then
+            AssertEx.IsArgumentException(result, "settings", "File cannot be used together with stdin code.");
+        }
+
+        [Fact]
+        public void Should_Add_Stdin_Argument()
+        {
+            // Given
+            var fixture = new DotNetRunnerFixture();
+            fixture.Code = "Console.WriteLine();";
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("run -", result.Args);
+            Assert.Equal((ProcessStandardInput)"Console.WriteLine();", result.Process.StandardInput);
+            Assert.Equal("/Working", result.Process.WorkingDirectory.FullPath);
+        }
+
+        [Fact]
+        public void Should_Add_Settings_And_Application_Arguments()
+        {
+            // Given
+            var fixture = new DotNetRunnerFixture();
+            fixture.Code = "Console.WriteLine();";
+            fixture.Arguments = "--name=World";
+            fixture.Settings.Framework = "net10.0";
+            fixture.Settings.Configuration = "Release";
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("run --framework net10.0 --configuration Release - -- --name=World", result.Args);
+            Assert.Equal((ProcessStandardInput)"Console.WriteLine();", result.Process.StandardInput);
+        }
+
+        [Fact]
+        public void Should_Use_Explicit_Working_Directory()
+        {
+            // Given
+            var fixture = new DotNetRunnerFixture();
+            fixture.Code = "Console.WriteLine();";
+            fixture.Settings.WorkingDirectory = "./temp";
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("/Working/temp", result.Process.WorkingDirectory.FullPath);
         }
     }
 }
