@@ -53,6 +53,35 @@ public sealed class ProcessSettings
     public Func<string, string> RedirectedStandardOutputHandler { get; set; }
 
     /// <summary>
+    /// Gets or sets the payload written to the process standard input.
+    /// </summary>
+    /// <value>
+    /// The standard input payload. <c>null</c> leaves standard input unredirected.
+    /// Accepts a string, a UTF-8 literal (<c>"""..."""u8</c>), a byte array, or <see cref="ReadOnlyMemory{T}"/> of <see cref="byte"/>.
+    /// </value>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// IEnumerable&lt;string&gt; redirectedStandardOutput;
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "run -",
+    ///         StandardInput = 
+    ///             """
+    ///             Console.Write("Hello from stdin");
+    ///             """,
+    ///         RedirectStandardOutput = true
+    ///     },
+    ///     out redirectedStandardOutput);
+    /// Information("Output: {0}", string.Concat(redirectedStandardOutput));
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public ProcessStandardInput? StandardInput { get; set; }
+
+    /// <summary>
     /// Gets or sets optional timeout, in milliseconds, to wait for the associated process to exit. The maximum is the largest possible value of a 32-bit integer, which represents infinity to the operating system.
     /// </summary>
     public int? Timeout { get; set; }

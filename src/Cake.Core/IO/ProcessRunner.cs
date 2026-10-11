@@ -83,6 +83,8 @@ public sealed class ProcessRunner : IProcessRunner
             SubscribeStandardError(process, processWrapper);
         }
 
+        WriteStandardInput(process, settings);
+
         return processWrapper;
     }
 
@@ -99,7 +101,8 @@ public sealed class ProcessRunner : IProcessRunner
         ArgumentNullException.ThrowIfNull(settings);
 
         if (settings.RedirectStandardOutput || settings.RedirectStandardError ||
-            settings.DiscardStandardOutput || settings.DiscardStandardError)
+            settings.DiscardStandardOutput || settings.DiscardStandardError ||
+            settings.StandardInput != null)
         {
             throw new ArgumentException("StartProcessAndForget cannot redirect or discard standard streams.", nameof(settings));
         }
@@ -155,7 +158,8 @@ public sealed class ProcessRunner : IProcessRunner
             Arguments = arguments.Render(),
             UseShellExecute = false,
             RedirectStandardError = settings.RedirectStandardError,
-            RedirectStandardOutput = settings.RedirectStandardOutput
+            RedirectStandardOutput = settings.RedirectStandardOutput,
+            RedirectStandardInput = settings.StandardInput != null
         };
 
         // Allow working directory?
@@ -254,6 +258,29 @@ public sealed class ProcessRunner : IProcessRunner
         }
     }
 #endif
+
+    private static void WriteStandardInput(Process process, ProcessSettings settings)
+    {
+        if (settings.StandardInput is null)
+        {
+            return;
+        }
+
+        try
+        {
+            process.StandardInput.BaseStream.Write(settings.StandardInput.Value.Span);
+            process.StandardInput.Dispose();
+        }
+        catch
+        {
+            if (!process.HasExited)
+            {
+                process.Kill();
+            }
+
+            throw;
+        }
+    }
 
     private static void SubscribeStandardError(Process process, ProcessWrapper processWrapper)
     {

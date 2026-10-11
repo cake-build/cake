@@ -581,6 +581,20 @@ public sealed class ProcessAliasesTests
         }
 
         [Fact]
+        public void Should_Throw_If_Standard_Input_Is_Set()
+        {
+            // Given
+            var fixture = new ProcessFixture();
+            var settings = new ProcessSettings { StandardInput = "Console.WriteLine();" };
+
+            // When
+            var result = Record.Exception(() => fixture.StartAndForget("hello.exe", settings));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+        }
+
+        [Fact]
         public void Should_Throw_If_Process_Runner_Does_Not_Support_StartAndForget()
         {
             // Given

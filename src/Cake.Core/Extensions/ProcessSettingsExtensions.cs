@@ -105,6 +105,62 @@ public static class ProcessSettingsExtensions
     }
 
     /// <summary>
+    /// Sets the text written to the process standard input.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="standardInput">The standard input text. <c>null</c> leaves standard input unredirected.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetStandardInput(this ProcessSettings settings, string standardInput)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.StandardInput = standardInput is null ? (ProcessStandardInput?)null : standardInput;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets the bytes written to the process standard input.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="standardInput">The standard input bytes.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetStandardInput(this ProcessSettings settings, ReadOnlySpan<byte> standardInput)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.StandardInput = standardInput;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets the bytes written to the process standard input.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="standardInput">The standard input bytes.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetStandardInput(this ProcessSettings settings, ReadOnlyMemory<byte> standardInput)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.StandardInput = standardInput;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets the bytes written to the process standard input.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="standardInput">The standard input bytes. <c>null</c> leaves standard input unredirected.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetStandardInput(this ProcessSettings settings, byte[] standardInput)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.StandardInput = standardInput is null ? (ProcessStandardInput?)null : standardInput;
+        return settings;
+    }
+
+    /// <summary>
     /// Sets the optional timeout for process execution.
     /// </summary>
     /// <param name="settings">The process settings.</param>
