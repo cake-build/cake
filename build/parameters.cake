@@ -32,6 +32,8 @@ public class BuildParameters
     public DotNetMSBuildSettings MSBuildSettings { get; }
     public CodeSigningCredentials CodeSigning { get; }
     public CommandSettings SignCommandSettings { get; }
+    public string NuGetApiUser { get; }
+    public string NuGetApiKey { get; set; }
 
     public bool ShouldPublish
     {
@@ -150,6 +152,14 @@ public class BuildParameters
                                     context.EnvironmentVariable("SIGNING_TEST"),
                                     "True"
                                 );
+
+        var nugetApiUser = context.EnvironmentVariable("NUGET_USER");
+        if (string.IsNullOrWhiteSpace(nugetApiUser))
+        {
+            nugetApiUser = context.EnvironmentVariable("NUGET_USERNAME");
+        }
+        NuGetApiUser = nugetApiUser;
+        NuGetApiKey = context.EnvironmentVariable("NUGET_API_KEY");
     }
 
     private static bool IsBuildTagged(BuildSystem buildSystem)
