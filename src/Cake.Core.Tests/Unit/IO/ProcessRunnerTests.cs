@@ -356,6 +356,33 @@ public sealed class ProcessRunnerTests
             Assert.IsType<ArgumentException>(result);
         }
 #endif
+
+        [Fact]
+        public void Should_Not_Redirect_Standard_Input_When_Unset()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+
+            // When
+            var result = fixture.GetProcessStartInfo();
+
+            // Then
+            Assert.False(result.RedirectStandardInput);
+        }
+
+        [Fact]
+        public void Should_Redirect_Standard_Input_When_Set()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+            fixture.ProcessSettings.StandardInput = "Console.WriteLine();";
+
+            // When
+            var result = fixture.GetProcessStartInfo();
+
+            // Then
+            Assert.True(result.RedirectStandardInput);
+        }
     }
 
 #if NET11_0_OR_GREATER
@@ -381,6 +408,20 @@ public sealed class ProcessRunnerTests
             // Given
             var fixture = new ProcessRunnerFixture();
             fixture.ProcessSettings.RedirectStandardError = true;
+
+            // When
+            var result = Record.Exception(() => fixture.CreateProcessRunner().StartAndForget(fixture.ProcessFilePath, fixture.ProcessSettings));
+
+            // Then
+            Assert.IsType<ArgumentException>(result);
+        }
+
+        [Fact]
+        public void Should_Throw_If_Standard_Input_Is_Set()
+        {
+            // Given
+            var fixture = new ProcessRunnerFixture();
+            fixture.ProcessSettings.StandardInput = "Console.WriteLine();";
 
             // When
             var result = Record.Exception(() => fixture.CreateProcessRunner().StartAndForget(fixture.ProcessFilePath, fixture.ProcessSettings));

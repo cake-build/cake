@@ -54,6 +54,48 @@ public sealed class ProcessSettingsTests
         }
 
         [Theory]
+        [InlineData("Console.WriteLine();", "Console.WriteLine();")]
+        [InlineData("", "")]
+        public void Should_Return_Settings_With_Correct_StandardInput(string value, string expected)
+        {
+            var settings = new ProcessSettings().SetStandardInput(value);
+
+            Assert.Equal((ProcessStandardInput)expected, settings.StandardInput);
+        }
+
+        [Fact]
+        public void Should_Return_Settings_With_Null_StandardInput()
+        {
+            var settings = new ProcessSettings().SetStandardInput((string)null);
+
+            Assert.Null(settings.StandardInput);
+        }
+
+        [Fact]
+        public void Should_Return_Settings_With_Utf8_Literal_StandardInput()
+        {
+            var settings = new ProcessSettings
+            {
+                StandardInput = """
+                    Hello
+                    """u8
+            };
+
+            Assert.Equal((ProcessStandardInput)"""
+                Hello
+                """u8, settings.StandardInput);
+        }
+
+        [Fact]
+        public void Should_Return_Settings_With_Binary_StandardInput()
+        {
+            var payload = new byte[] { 0x00, 0x01, 0xFF };
+            var settings = new ProcessSettings().SetStandardInput(payload);
+
+            Assert.Equal((ProcessStandardInput)payload, settings.StandardInput);
+        }
+
+        [Theory]
         [InlineData(0, 0)]
         [InlineData(5000, 5000)]
         [InlineData(15000, 15000)]

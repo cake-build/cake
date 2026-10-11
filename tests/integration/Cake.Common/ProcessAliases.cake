@@ -41,6 +41,32 @@ Task("Cake.Common.ProcessAliases.StartProcess.Output")
     Assert.Equal(version, string.Concat(redirectedStandardOutput));
 });
 
+Task("Cake.Common.ProcessAliases.StartProcess.StandardInput")
+    .Does(() =>
+{
+    // Given
+    var fileName = Context.Tools.Resolve("dotnet.exe")
+                    ?? Context.Tools.Resolve("dotnet");
+
+    // When
+    IEnumerable<string> redirectedStandardOutput;
+    var result = StartProcess(
+                     fileName,
+                     new ProcessSettings {
+                         Arguments = "run -",
+                         StandardInput =
+                            """
+                            Console.Write("Hello from stdin");
+                            """,
+                         RedirectStandardOutput = true
+                     },
+                     out redirectedStandardOutput);
+
+    // Then
+    Assert.Equal(0, result);
+    Assert.Contains("Hello from stdin", string.Concat(redirectedStandardOutput));
+});
+
 #if NET11_0_OR_GREATER
 Task("Cake.Common.ProcessAliases.StartProcessAndForget")
     .Does(() =>
@@ -96,6 +122,7 @@ Task("Cake.Common.ProcessAliases.StartProcess.Net11Settings")
 Task("Cake.Common.ProcessAliases")
     .IsDependentOn("Cake.Common.ProcessAliases.StartProcess")
     .IsDependentOn("Cake.Common.ProcessAliases.StartProcess.Output")
+    .IsDependentOn("Cake.Common.ProcessAliases.StartProcess.StandardInput")
 #if NET11_0_OR_GREATER
     .IsDependentOn("Cake.Common.ProcessAliases.StartProcessAndForget")
     .IsDependentOn("Cake.Common.ProcessAliases.StartProcess.Net11Settings")

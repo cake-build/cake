@@ -357,7 +357,8 @@ public static class ProcessAliases
         ArgumentNullException.ThrowIfNull(settings);
 
         if (settings.RedirectStandardOutput || settings.RedirectStandardError ||
-            settings.DiscardStandardOutput || settings.DiscardStandardError)
+            settings.DiscardStandardOutput || settings.DiscardStandardError ||
+            settings.StandardInput != null)
         {
             throw new ArgumentException("StartProcessAndForget cannot redirect or discard standard streams.", nameof(settings));
         }
