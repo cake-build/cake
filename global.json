@@ -8,5 +8,8 @@
     },
     "test": {
         "runner": "Microsoft.Testing.Platform"
+    },
+    "msbuild-sdks": {
+        "Cake.Sdk": "6.3.0"
     }
 }

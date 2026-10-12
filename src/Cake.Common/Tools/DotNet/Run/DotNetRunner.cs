@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Text;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -46,14 +47,37 @@ public sealed class DotNetRunner : DotNetTool<DotNetRunSettings>
         RunCommand(settings, GetArguments(project, arguments, settings));
     }
 
-    private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetRunSettings settings)
+    /// <summary>
+    /// Runs C# source from standard input using the specified arguments and settings.
+    /// </summary>
+    /// <param name="code">The C# source. Accepts a string or a UTF-8 literal.</param>
+    /// <param name="arguments">The arguments.</param>
+    /// <param name="settings">The settings.</param>
+    public void RunCode(ProcessStandardInput code, ProcessArgumentBuilder arguments, DotNetRunSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        if (code.Memory.IsEmpty || string.IsNullOrWhiteSpace(Encoding.UTF8.GetString(code.Span)))
+        {
+            throw new ArgumentException("Code cannot be empty.", nameof(code));
+        }
+
+        if (settings.File != null)
+        {
+            throw new ArgumentException("File cannot be used together with stdin code.", nameof(settings));
+        }
+
+        RunCommand(settings, GetArguments(null, arguments, settings, stdin: true), new ProcessSettings { StandardInput = code });
+    }
+
+    private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetRunSettings settings, bool stdin = false)
     {
         var builder = CreateArgumentBuilder(settings);
 
         builder.Append("run");
 
         // Specific path?
-        if (project != null)
+        if (!stdin && project != null)
         {
             builder.Append("--project");
             builder.AppendQuoted(project);
@@ -155,6 +179,11 @@ public sealed class DotNetRunner : DotNetTool<DotNetRunSettings>
         if (settings.NoCache)
         {
             builder.Append("--no-cache");
+        }
+
+        if (stdin)
+        {
+            builder.Append("-");
         }
 
         // Arguments

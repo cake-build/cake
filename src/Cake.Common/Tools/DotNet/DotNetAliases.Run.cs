@@ -132,4 +132,134 @@ public static partial class DotNetAliases
     {
         context.DotNetRun(project, null, settings);
     }
+
+    /// <summary>
+    /// Run C# source from standard input.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="code">The C# source. Accepts a string or a UTF-8 literal.</param>
+    /// <example>
+    /// <code>
+    /// DotNetRunCode(
+    ///     """
+    ///     #:sdk Cake.Sdk@7.0.0
+    ///
+    ///     Information("Hello world!");
+    ///     """);
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// Requires the .NET 10 SDK or later.
+    /// </remarks>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Run")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Run")]
+    public static void DotNetRunCode(this ICakeContext context, ProcessStandardInput code)
+    {
+        context.DotNetRunCode(code, null, null);
+    }
+
+    /// <summary>
+    /// Run C# source from standard input with arguments.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="code">The C# source. Accepts a string or a UTF-8 literal.</param>
+    /// <param name="arguments">The arguments.</param>
+    /// <example>
+    /// <code>
+    /// DotNetRunCode(
+    ///     """
+    ///     #:sdk Cake.Sdk@7.0.0
+    ///
+    ///     Information("Hello {0}!", Argument&lt;string&gt;("name"));
+    ///     """,
+    ///     "--name=World");
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// Requires the .NET 10 SDK or later.
+    /// </remarks>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Run")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Run")]
+    public static void DotNetRunCode(this ICakeContext context, ProcessStandardInput code, ProcessArgumentBuilder arguments)
+    {
+        context.DotNetRunCode(code, arguments, null);
+    }
+
+    /// <summary>
+    /// Run C# source from standard input with settings.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="code">The C# source. Accepts a string or a UTF-8 literal.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetRunSettings
+    /// {
+    ///     Configuration = "Release"
+    /// };
+    ///
+    /// DotNetRunCode(
+    ///     """
+    ///     #:sdk Cake.Sdk@7.0.0
+    ///
+    ///     Information("Hello world!");
+    ///     """,
+    ///     settings);
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// Requires the .NET 10 SDK or later.
+    /// </remarks>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Run")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Run")]
+    public static void DotNetRunCode(this ICakeContext context, ProcessStandardInput code, DotNetRunSettings settings)
+    {
+        context.DotNetRunCode(code, null, settings);
+    }
+
+    /// <summary>
+    /// Run C# source from standard input with arguments and settings.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="code">The C# source. Accepts a string or a UTF-8 literal.</param>
+    /// <param name="arguments">The arguments.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetRunSettings
+    /// {
+    ///     Configuration = "Release"
+    /// };
+    ///
+    /// DotNetRunCode(
+    ///     """
+    ///     #:sdk Cake.Sdk@7.0.0
+    ///
+    ///     Information("Hello {0}!", Argument&lt;string&gt;("name"));
+    ///     """,
+    ///     "--name=World",
+    ///     settings);
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// Requires the .NET 10 SDK or later.
+    /// </remarks>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Run")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Run")]
+    public static void DotNetRunCode(this ICakeContext context, ProcessStandardInput code, ProcessArgumentBuilder arguments, DotNetRunSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        if (settings is null)
+        {
+            settings = new DotNetRunSettings();
+        }
+
+        var runner = new DotNetRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        runner.RunCode(code, arguments, settings);
+    }
 }

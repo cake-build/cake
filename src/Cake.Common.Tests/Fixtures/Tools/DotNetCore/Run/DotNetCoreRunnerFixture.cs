@@ -11,11 +11,19 @@ internal sealed class DotNetRunnerFixture : DotNetFixture<DotNetRunSettings>
 {
     public string Project { get; set; }
 
+    public string Code { get; set; }
+
     public ProcessArgumentBuilder Arguments { get; set; }
 
     protected override void RunTool()
     {
         var tool = new DotNetRunner(FileSystem, Environment, ProcessRunner, Tools);
+        if (Code != null)
+        {
+            tool.RunCode(Code, Arguments, Settings);
+            return;
+        }
+
         tool.Run(Project, Arguments, Settings);
     }
 }
