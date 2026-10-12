@@ -2320,6 +2320,171 @@ public sealed class CakeTaskBuilderExtensionsTests
         }
     }
 
+    public sealed class TheDoesForEachMethodThatIsAsynchronous
+    {
+        private static async IAsyncEnumerable<int> AsyncItems()
+        {
+            foreach (var item in new[] { 1, 2, 3 })
+            {
+                await Task.Yield();
+                yield return item;
+            }
+        }
+
+        [Fact]
+        public void Should_Throw_If_Builder_Is_Null_For_Async_Items()
+        {
+            var result = Record.Exception(() =>
+                CakeTaskBuilderExtensions.DoesForEach(null, new[] { 1, 2, 3 }, (Func<int, ICakeContext, Task>)((item, ctx) => Task.CompletedTask)));
+
+            AssertEx.IsArgumentNullException(result, "builder");
+        }
+
+        [Fact]
+        public void Should_Throw_If_Func_Is_Null_For_Async_Items()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder(task);
+
+            var result = Record.Exception(() =>
+                CakeTaskBuilderExtensions.DoesForEach(builder, new[] { 1, 2, 3 }, (Func<int, ICakeContext, Task>)null));
+
+            AssertEx.IsArgumentNullException(result, "action");
+        }
+
+        [Fact]
+        public void Should_Add_Actions_Foreach_Item()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder(task);
+
+            builder.DoesForEach(new[] { "a", "b", "c" }, async item => { await Task.Yield(); });
+
+            Assert.Equal(3, builder.Target.Actions.Count);
+        }
+
+        [Fact]
+        public async Task Should_Add_Actions_To_Task_After_Execution_For_Deferred_Async_Func()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder(task);
+            var context = new CakeContextFixture().CreateContext();
+
+            builder.DoesForEach(ctx => new[] { 1, 2, 3 }, async (item, ctx) => { await Task.Yield(); });
+
+            Assert.Empty(builder.Target.Actions);
+            Assert.Single(builder.Target.DelayedActions);
+
+            await builder.Target.Execute(context);
+
+            Assert.Empty(builder.Target.DelayedActions);
+            Assert.Equal(3, builder.Target.Actions.Count);
+        }
+
+        [Fact]
+        public async Task Should_Throw_On_First_Failed_Async_Action()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder(task);
+            var context = new CakeContextFixture().CreateContext();
+
+            builder.DoesForEach(new[] { 1, 2, 3 }, async item =>
+            {
+                await Task.Yield();
+                throw new NotImplementedException();
+            });
+            var result = await Record.ExceptionAsync(() => builder.Target.Execute(context));
+
+            Assert.IsType<NotImplementedException>(result);
+        }
+
+        [Fact]
+        public async Task Should_Add_Actions_To_Task_After_Execution_For_AsyncEnumerable()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder(task);
+            var context = new CakeContextFixture().CreateContext();
+
+            builder.DoesForEach(AsyncItems(), async item => { await Task.Yield(); });
+
+            Assert.Empty(builder.Target.Actions);
+            Assert.Single(builder.Target.DelayedActions);
+
+            await builder.Target.Execute(context);
+
+            Assert.Empty(builder.Target.DelayedActions);
+            Assert.Equal(3, builder.Target.Actions.Count);
+        }
+
+        [Fact]
+        public async Task Should_Add_One_Action_Per_AsyncEnumerable_Item_With_Sync_Action()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder(task);
+            var context = new CakeContextFixture().CreateContext();
+            var count = 0;
+
+            builder.DoesForEach(AsyncItems(), item => { count++; });
+            builder.DeferOnError();
+
+            await builder.Target.Execute(context);
+
+            Assert.Equal(3, count);
+            Assert.Equal(3, builder.Target.Actions.Count);
+        }
+
+        [Fact]
+        public async Task Should_Throw_On_First_Failed_AsyncEnumerable_Action()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder(task);
+            var context = new CakeContextFixture().CreateContext();
+
+            builder.DoesForEach(AsyncItems(), async item =>
+            {
+                await Task.Yield();
+                throw new NotImplementedException();
+            });
+            var result = await Record.ExceptionAsync(() => builder.Target.Execute(context));
+
+            Assert.IsType<NotImplementedException>(result);
+        }
+
+        [Fact]
+        public async Task Should_Aggregate_AsyncEnumerable_Exceptions_When_DeferOnError()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder(task);
+            var context = new CakeContextFixture().CreateContext();
+
+            builder.DoesForEach(AsyncItems(), item => throw new NotImplementedException());
+            builder.DeferOnError();
+            var result = await Record.ExceptionAsync(() => builder.Target.Execute(context));
+
+            Assert.IsType<AggregateException>(result);
+            Assert.Equal(3, ((AggregateException)result).InnerExceptions.Count);
+        }
+
+        [Fact]
+        public async Task Should_Support_Data_And_Context_Async_Wrappers()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder(task);
+            var context = new CakeContextFixture().CreateContext();
+            var seen = 0;
+
+            builder.DoesForEach<string, int>(new[] { 1, 2 }, async (data, item, ctx) =>
+            {
+                await Task.Yield();
+                seen++;
+            });
+
+            await builder.Target.Execute(context);
+
+            Assert.Equal(2, seen);
+        }
+    }
+
     public sealed class TheDeferOnErrorMethod
     {
         [Fact]

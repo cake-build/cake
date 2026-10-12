@@ -815,6 +815,47 @@ public sealed class CakeTaskBuilderOfTExtensionsTests
         }
     }
 
+    public sealed class TheDoesForEachMethodThatIsAsynchronous
+    {
+        private static async IAsyncEnumerable<int> AsyncItems()
+        {
+            foreach (var item in new[] { 1, 2, 3 })
+            {
+                await Task.Yield();
+                yield return item;
+            }
+        }
+
+        [Fact]
+        public void Should_Add_Async_Actions_Foreach_Item()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder<string>(task);
+
+            builder.DoesForEach(new[] { 1, 2, 3 }, async (data, item, ctx) => { await Task.Yield(); });
+
+            Assert.Equal(3, builder.Target.Actions.Count);
+        }
+
+        [Fact]
+        public async Task Should_Add_Actions_To_Task_After_Execution_For_AsyncEnumerable()
+        {
+            var task = new CakeTask("task");
+            var builder = new CakeTaskBuilder<string>(task);
+            var context = new CakeContextFixture().CreateContext();
+
+            builder.DoesForEach(AsyncItems(), async (data, item, ctx) => { await Task.Yield(); });
+
+            Assert.Empty(builder.Target.Actions);
+            Assert.Single(builder.Target.DelayedActions);
+
+            await builder.Target.Execute(context);
+
+            Assert.Empty(builder.Target.DelayedActions);
+            Assert.Equal(3, builder.Target.Actions.Count);
+        }
+    }
+
     public sealed class TheDeferOnErrorMethod
     {
         [Fact]

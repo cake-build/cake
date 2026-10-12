@@ -240,6 +240,32 @@ public static class CakeTaskExtensions
     {
         ArgumentNullException.ThrowIfNull(action);
 
+        task.DelayedActions.Enqueue(context =>
+        {
+            action(context);
+            return Task.CompletedTask;
+        });
+    }
+
+    /// <summary>
+    /// Adds the asynchronous action to the task's delayed actions.
+    /// </summary>
+    /// <param name="task">The task.</param>
+    /// <param name="action">The action.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// task.AddDelayedAction(async context =>
+    /// {
+    ///     await System.Threading.Tasks.Task.Delay(100);
+    ///     context.Log.Information("Expanding items");
+    /// });
+    /// </code>
+    /// </example>
+    public static void AddDelayedAction(this CakeTask task, Func<ICakeContext, Task> action)
+    {
+        ArgumentNullException.ThrowIfNull(action);
+
         task.DelayedActions.Enqueue(action);
     }
 

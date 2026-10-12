@@ -64,7 +64,7 @@ public sealed class CakeTask : ICakeTaskInfo
     /// Gets the task's actions that are run at execution time to additionally populate <see cref="Actions"/>.
     /// </summary>
     /// <value>The task's delayed actions actions.</value>
-    public Queue<Action<ICakeContext>> DelayedActions { get; }
+    public Queue<Func<ICakeContext, Task>> DelayedActions { get; }
 
     /// <summary>
     /// Gets or sets a value indicating whether gets the task's state if it will defer exceptions until the end of the task.
@@ -92,7 +92,7 @@ public sealed class CakeTask : ICakeTaskInfo
         Dependees = new List<CakeTaskDependency>();
         Criterias = new List<CakeTaskCriteria>();
         Actions = new List<Func<ICakeContext, Task>>();
-        DelayedActions = new Queue<Action<ICakeContext>>();
+        DelayedActions = new Queue<Func<ICakeContext, Task>>();
     }
 
     /// <summary>
@@ -105,7 +105,7 @@ public sealed class CakeTask : ICakeTaskInfo
         while (DelayedActions.Count > 0)
         {
             var delayedDelegate = DelayedActions.Dequeue();
-            delayedDelegate(context);
+            await delayedDelegate(context).ConfigureAwait(false);
         }
 
         var exceptions = new List<Exception>();
