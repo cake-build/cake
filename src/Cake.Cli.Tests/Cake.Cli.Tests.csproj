@@ -2,7 +2,6 @@
   <PropertyGroup>
     <AssemblyName>Cake.Cli.Tests</AssemblyName>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <IsCakeTestProject>true</IsCakeTestProject>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <!-- Import shared functionality -->
@@ -16,7 +15,6 @@
   </ItemGroup>
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Spectre.Verify.Extensions" />
     <PackageReference Include="Spectre.Console.Testing" />
@@ -24,10 +22,6 @@
     <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
     <PackageReference Include="Verify.XunitV3" />
     <PackageReference Include="xunit.v3.mtp-v2" />
-    <PackageReference Include="xunit.runner.visualstudio">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="coverlet.MTP">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

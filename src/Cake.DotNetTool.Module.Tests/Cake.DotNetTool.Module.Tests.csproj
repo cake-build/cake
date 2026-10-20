@@ -3,7 +3,6 @@
   <PropertyGroup>
     <AssemblyName>Cake.DotNetTool.Module.Tests</AssemblyName>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <IsCakeTestProject>true</IsCakeTestProject>
   </PropertyGroup>
   <!-- Import shared functionality -->
   <Import Project="..\Shared.msbuild" />
@@ -16,15 +15,10 @@
   </ItemGroup>
   <!-- Global packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
     <PackageReference Include="Verify.XunitV3" />
     <PackageReference Include="xunit.v3.mtp-v2" />
-    <PackageReference Include="xunit.runner.visualstudio">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="Castle.Core" />
     <PackageReference Include="coverlet.MTP">
