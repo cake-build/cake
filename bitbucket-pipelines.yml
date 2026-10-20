@@ -7,4 +7,5 @@ pipelines:
   default:
     - step:
         script:
+          - export CAKE_INSTALL_SUPPORTED_SDKS=true
           - ./build.sh --target="Run-Unit-Tests"
