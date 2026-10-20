@@ -8,6 +8,8 @@ when:
 steps:
   - name: build
     image: mcr.microsoft.com/dotnet/sdk:10.0
+    environment:
+      CAKE_INSTALL_SUPPORTED_SDKS: "true"
     commands:
       - git fetch --unshallow || true
       - ./build.sh --target="Run-Integration-Tests"
