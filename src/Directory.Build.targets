@@ -1,5 +1,5 @@
 <Project>
-  <!-- IsCakeTestProject / IsPackable are set in the csproj after Directory.Build.props. -->
+  <!-- IsPackable is set in the csproj after Directory.Build.props. -->
   <PropertyGroup Condition="'$(IsCakeTestProject)' == 'true' Or '$(IsPackable)' == 'false'">
     <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
   </PropertyGroup>
