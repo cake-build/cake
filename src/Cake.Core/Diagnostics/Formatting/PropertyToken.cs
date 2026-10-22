@@ -13,10 +13,13 @@ internal sealed class PropertyToken : FormatToken
 
     public int Position { get; }
 
-    public PropertyToken(int position, string format)
+    public int? Alignment { get; }
+
+    public PropertyToken(int position, string format, int? alignment = null)
     {
         Position = position;
         Format = format;
+        Alignment = alignment;
     }
 
     public override string Render(object[] args)
@@ -27,14 +30,15 @@ internal sealed class PropertyToken : FormatToken
         }
 
         var value = args[Position];
-        if (!string.IsNullOrWhiteSpace(Format))
+        var result = !string.IsNullOrWhiteSpace(Format) && value is IFormattable formattable
+            ? formattable.ToString(Format, CultureInfo.InvariantCulture)
+            : value == null ? "[NULL]" : value.ToString();
+
+        return Alignment switch
         {
-            var formattable = value as IFormattable;
-            if (formattable != null)
-            {
-                return formattable.ToString(Format, CultureInfo.InvariantCulture);
-            }
-        }
-        return value == null ? "[NULL]" : value.ToString();
+            > 0 => result.PadLeft(Alignment.Value),
+            < 0 => result.PadRight(-Alignment.Value),
+            _ => result
+        };
     }
 }

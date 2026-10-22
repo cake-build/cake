@@ -275,5 +275,70 @@ public partial class LogExtensionsTests
                 Assert.Equal(ExpectedMessage, log.Message);
             }
         }
+
+        public class TheOverloadResolution
+        {
+            public static TheoryData<LogLevel, Verbosity, Action<ICakeLog, string>> InterpolatedStringCalls => new()
+            {
+                { LogLevel.Error, Verbosity.Quiet, (log, name) => log.Error($"Hello {name}") },
+                { LogLevel.Warning, Verbosity.Minimal, (log, name) => log.Warning($"Hello {name}") },
+                { LogLevel.Information, Verbosity.Normal, (log, name) => log.Information($"Hello {name}") },
+                { LogLevel.Verbose, Verbosity.Verbose, (log, name) => log.Verbose($"Hello {name}") },
+                { LogLevel.Debug, Verbosity.Diagnostic, (log, name) => log.Debug($"Hello {name}") },
+                { LogLevel.Error, Verbosity.Diagnostic, (log, name) => log.Error(Verbosity.Diagnostic, $"Hello {name}") },
+                { LogLevel.Warning, Verbosity.Diagnostic, (log, name) => log.Warning(Verbosity.Diagnostic, $"Hello {name}") },
+                { LogLevel.Information, Verbosity.Diagnostic, (log, name) => log.Information(Verbosity.Diagnostic, $"Hello {name}") },
+                { LogLevel.Verbose, Verbosity.Diagnostic, (log, name) => log.Verbose(Verbosity.Diagnostic, $"Hello {name}") },
+                { LogLevel.Debug, Verbosity.Quiet, (log, name) => log.Debug(Verbosity.Quiet, $"Hello {name}") },
+            };
+
+            [Theory]
+            [MemberData(nameof(InterpolatedStringCalls))]
+            public void Should_Prefer_Formattable_String_Overload_For_Interpolated_String(LogLevel expectedLevel, Verbosity expectedVerbosity, Action<ICakeLog, string> logCall)
+            {
+                // Given
+                var log = new TestLog();
+
+                // When
+                logCall(log, "{World}");
+
+                // Then
+                Assert.Equal(expectedLevel, log.Level);
+                Assert.Equal(expectedVerbosity, log.Verbosity);
+                Assert.Equal("Hello {0}", log.Format);
+                Assert.Equal(["{World}"], log.Args);
+                Assert.Equal("Hello {World}", log.Message);
+            }
+
+            [Fact]
+            public void Should_Use_String_Overload_For_Composite_Format_String()
+            {
+                // Given
+                var log = new TestLog();
+
+                // When
+                log.Information("Hello {0}", "World");
+
+                // Then
+                Assert.Equal("Hello {0}", log.Format);
+                Assert.Equal(["World"], log.Args);
+                Assert.Equal(ExpectedMessage, log.Message);
+            }
+
+            [Fact]
+            public void Should_Use_String_Overload_For_String_Variable()
+            {
+                // Given
+                var log = new TestLog();
+                var message = $"Hello {"{World}"}";
+
+                // When
+                log.Information(message);
+
+                // Then
+                Assert.Equal("{0}", log.Format);
+                Assert.Equal(["Hello {World}"], log.Args);
+            }
+        }
     }
 }

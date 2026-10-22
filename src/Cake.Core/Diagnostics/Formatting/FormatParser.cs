@@ -74,30 +74,35 @@ internal static class FormatParser
             {
                 reader.Read();
 
+                // Format item syntax: {index[,alignment][:format]}
                 var accumulated = builder.ToString();
-                var parts = accumulated.Split([':'], StringSplitOptions.None);
-                if (parts.Length > 1)
+                string format = null;
+                var formatSeparator = accumulated.IndexOf(':');
+                if (formatSeparator >= 0)
                 {
-                    var name = parts[0];
-                    var format = string.Concat(parts.Skip(1));
-                    var positional = IsNumeric(name);
-                    if (!positional)
+                    format = accumulated[(formatSeparator + 1)..];
+                    accumulated = accumulated[..formatSeparator];
+                }
+
+                int? alignment = null;
+                var alignmentSeparator = accumulated.IndexOf(',');
+                if (alignmentSeparator >= 0)
+                {
+                    if (!int.TryParse(accumulated[(alignmentSeparator + 1)..], NumberStyles.AllowLeadingSign | NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite, CultureInfo.InvariantCulture, out var parsedAlignment))
                     {
                         throw new FormatException("Input string was not in a correct format.");
                     }
-                    var position = int.Parse(name, CultureInfo.InvariantCulture);
-                    return new PropertyToken(position, format);
+                    alignment = parsedAlignment;
+                    accumulated = accumulated[..alignmentSeparator];
                 }
-                else
+
+                var name = accumulated.Trim();
+                if (!IsNumeric(name))
                 {
-                    var positional = IsNumeric(accumulated);
-                    if (!positional)
-                    {
-                        throw new FormatException("Input string was not in a correct format.");
-                    }
-                    var position = int.Parse(accumulated, CultureInfo.InvariantCulture);
-                    return new PropertyToken(position, null);
+                    throw new FormatException("Input string was not in a correct format.");
                 }
+                var position = int.Parse(name, CultureInfo.InvariantCulture);
+                return new PropertyToken(position, format, alignment);
             }
             builder.Append((char)reader.Read());
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
@@ -19,6 +20,7 @@ public static partial class LoggingAliases
     /// </example>
     [CakeMethodAlias]
     [CakeAliasCategory("Error")]
+    [OverloadResolutionPriority(1)]
     public static void Error(this ICakeContext context, FormattableString formattable)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -37,6 +39,7 @@ public static partial class LoggingAliases
     /// </example>
     [CakeMethodAlias]
     [CakeAliasCategory("Warning")]
+    [OverloadResolutionPriority(1)]
     public static void Warning(this ICakeContext context, FormattableString formattable)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -55,6 +58,7 @@ public static partial class LoggingAliases
     /// </example>
     [CakeMethodAlias]
     [CakeAliasCategory("Information")]
+    [OverloadResolutionPriority(1)]
     public static void Information(this ICakeContext context, FormattableString formattable)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -73,6 +77,7 @@ public static partial class LoggingAliases
     /// </example>
     [CakeMethodAlias]
     [CakeAliasCategory("Verbose")]
+    [OverloadResolutionPriority(1)]
     public static void Verbose(this ICakeContext context, FormattableString formattable)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -91,6 +96,7 @@ public static partial class LoggingAliases
     /// </example>
     [CakeMethodAlias]
     [CakeAliasCategory("Debug")]
+    [OverloadResolutionPriority(1)]
     public static void Debug(this ICakeContext context, FormattableString formattable)
     {
         ArgumentNullException.ThrowIfNull(context);

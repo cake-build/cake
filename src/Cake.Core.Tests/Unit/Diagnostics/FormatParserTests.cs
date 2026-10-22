@@ -30,9 +30,8 @@ public class FormatParserTests
             var result = FormatParser.Parse("Hello World!").ToArray();
 
             // Then
-            Assert.Single(result);
-            Assert.IsType<LiteralToken>(result[0]);
-            Assert.Equal("Hello World!", ((LiteralToken)result[0]).Text);
+            var token = Assert.IsType<LiteralToken>(Assert.Single(result));
+            Assert.Equal("Hello World!", token.Text);
         }
 
         [Fact]
@@ -42,9 +41,8 @@ public class FormatParserTests
             var result = FormatParser.Parse("{0}").ToArray();
 
             // Then
-            Assert.Single(result);
-            Assert.IsType<PropertyToken>(result[0]);
-            Assert.Equal(0, ((PropertyToken)result[0]).Position);
+            var token = Assert.IsType<PropertyToken>(Assert.Single(result));
+            Assert.Equal(0, token.Position);
         }
 
         [Fact]
@@ -54,9 +52,8 @@ public class FormatParserTests
             var result = FormatParser.Parse("{{}}").ToArray();
 
             // Then
-            Assert.Single(result);
-            Assert.IsType<LiteralToken>(result[0]);
-            Assert.Equal("{}", ((LiteralToken)result[0]).Text);
+            var token = Assert.IsType<LiteralToken>(Assert.Single(result));
+            Assert.Equal("{}", token.Text);
         }
 
         [Fact]
@@ -67,12 +64,12 @@ public class FormatParserTests
 
             // Then
             Assert.Equal(2, result.Length);
-            Assert.IsType<LiteralToken>(result[0]);
-            Assert.Equal("{} ", ((LiteralToken)result[0]).Text);
+            var token0 = Assert.IsType<LiteralToken>(result[0]);
+            Assert.Equal("{} ", token0.Text);
 
-            Assert.IsType<PropertyToken>(result[1]);
-            Assert.Equal(0, ((PropertyToken)result[1]).Position);
-            Assert.Equal(null, ((PropertyToken)result[1]).Format);
+            var token1 = Assert.IsType<PropertyToken>(result[1]);
+            Assert.Equal(0, token1.Position);
+            Assert.Null(token1.Format);
         }
 
         [Fact]
@@ -83,12 +80,12 @@ public class FormatParserTests
 
             // Then
             Assert.Equal(2, result.Length);
-            Assert.IsType<LiteralToken>(result[0]);
-            Assert.Equal("{ test ", ((LiteralToken)result[0]).Text);
+            var token0 = Assert.IsType<LiteralToken>(result[0]);
+            Assert.Equal("{ test ", token0.Text);
 
-            Assert.IsType<PropertyToken>(result[1]);
-            Assert.Equal(0, ((PropertyToken)result[1]).Position);
-            Assert.Equal(null, ((PropertyToken)result[1]).Format);
+            var token1 = Assert.IsType<PropertyToken>(result[1]);
+            Assert.Equal(0, token1.Position);
+            Assert.Null(token1.Format);
         }
 
         [Fact]
@@ -99,12 +96,12 @@ public class FormatParserTests
 
             // Then
             Assert.Equal(2, result.Length);
-            Assert.IsType<LiteralToken>(result[0]);
-            Assert.Equal("{{ test ", ((LiteralToken)result[0]).Text);
+            var token0 = Assert.IsType<LiteralToken>(result[0]);
+            Assert.Equal("{{ test ", token0.Text);
 
-            Assert.IsType<PropertyToken>(result[1]);
-            Assert.Equal(0, ((PropertyToken)result[1]).Position);
-            Assert.Equal(null, ((PropertyToken)result[1]).Format);
+            var token1 = Assert.IsType<PropertyToken>(result[1]);
+            Assert.Equal(0, token1.Position);
+            Assert.Null(token1.Format);
         }
 
         [Fact]
@@ -115,15 +112,15 @@ public class FormatParserTests
 
             // Then
             Assert.Equal(3, result.Length);
-            Assert.IsType<LiteralToken>(result[0]);
-            Assert.Equal("test ", ((LiteralToken)result[0]).Text);
+            var token0 = Assert.IsType<LiteralToken>(result[0]);
+            Assert.Equal("test ", token0.Text);
 
-            Assert.IsType<PropertyToken>(result[1]);
-            Assert.Equal(0, ((PropertyToken)result[1]).Position);
-            Assert.Equal("d", ((PropertyToken)result[1]).Format);
+            var token1 = Assert.IsType<PropertyToken>(result[1]);
+            Assert.Equal(0, token1.Position);
+            Assert.Equal("d", token1.Format);
 
-            Assert.IsType<LiteralToken>(result[2]);
-            Assert.Equal(" }", ((LiteralToken)result[2]).Text);
+            var token2 = Assert.IsType<LiteralToken>(result[2]);
+            Assert.Equal(" }", token2.Text);
         }
 
         [Fact]
@@ -133,9 +130,8 @@ public class FormatParserTests
             var result = FormatParser.Parse("{{0}}").ToArray();
 
             // Then
-            Assert.Single(result);
-            Assert.IsType<LiteralToken>(result[0]);
-            Assert.Equal("{0}", ((LiteralToken)result[0]).Text);
+            var token = Assert.IsType<LiteralToken>(Assert.Single(result));
+            Assert.Equal("{0}", token.Text);
         }
 
         [Fact]
@@ -145,10 +141,53 @@ public class FormatParserTests
             var result = FormatParser.Parse("{0:yyyy-MM-dd}").ToArray();
 
             // Then
-            Assert.Single(result);
-            Assert.IsType<PropertyToken>(result[0]);
-            Assert.Equal(0, ((PropertyToken)result[0]).Position);
-            Assert.Equal("yyyy-MM-dd", ((PropertyToken)result[0]).Format);
+            var token = Assert.IsType<PropertyToken>(Assert.Single(result));
+            Assert.Equal(0, token.Position);
+            Assert.Equal("yyyy-MM-dd", token.Format);
+        }
+
+        [Fact]
+        public void Should_Preserve_Colons_In_Format_For_Property_With_Format()
+        {
+            // Given, When
+            var result = FormatParser.Parse("{0:HH:mm:ss}").ToArray();
+
+            // Then
+            var token = Assert.IsType<PropertyToken>(Assert.Single(result));
+            Assert.Equal(0, token.Position);
+            Assert.Equal("HH:mm:ss", token.Format);
+        }
+
+        [Theory]
+        [InlineData("{0,10}", 10, null)]
+        [InlineData("{0,-5}", -5, null)]
+        [InlineData("{0, 5}", 5, null)]
+        [InlineData("{0,-5:N2}", -5, "N2")]
+        [InlineData("{0,8:HH:mm}", 8, "HH:mm")]
+        public void Should_Return_Property_Token_With_Alignment_For_Property_With_Alignment(string format, int expectedAlignment, string expectedFormat)
+        {
+            // Given, When
+            var result = FormatParser.Parse(format).ToArray();
+
+            // Then
+            var token = Assert.IsType<PropertyToken>(Assert.Single(result));
+            Assert.Equal(0, token.Position);
+            Assert.Equal(expectedAlignment, token.Alignment);
+            Assert.Equal(expectedFormat, token.Format);
+        }
+
+        [Theory]
+        [InlineData("{0,}")]
+        [InlineData("{0,abc}")]
+        [InlineData("{Hello,5}")]
+        public void Should_Throw_If_A_Format_Item_Has_Invalid_Alignment_Or_Position(string format)
+        {
+            // Given, When
+            var result = Record.Exception(() => FormatParser.Parse(format).ToArray());
+
+            // Then
+            Assert.IsType<FormatException>(result);
+            Assert.Equal("Input string was not in a correct format.", result?.Message);
         }
 
         [Fact]
@@ -193,17 +232,20 @@ public class FormatParserTests
             // Then
             Assert.Equal(5, result.Length);
 
-            Assert.IsType<LiteralToken>(result[0]);
+            var token0 = Assert.IsType<LiteralToken>(result[0]);
+            Assert.Equal("Hello ", token0.Text);
 
-            Assert.IsType<PropertyToken>(result[1]);
-            Assert.Equal(0, ((PropertyToken)result[1]).Position);
+            var token1 = Assert.IsType<PropertyToken>(result[1]);
+            Assert.Equal(0, token1.Position);
 
-            Assert.IsType<LiteralToken>(result[2]);
+            var token2 = Assert.IsType<LiteralToken>(result[2]);
+            Assert.Equal("! My name is ", token2.Text);
 
-            Assert.IsType<PropertyToken>(result[3]);
-            Assert.Equal(1, ((PropertyToken)result[3]).Position);
+            var token3 = Assert.IsType<PropertyToken>(result[3]);
+            Assert.Equal(1, token3.Position);
 
-            Assert.IsType<LiteralToken>(result[4]);
+            var token4 = Assert.IsType<LiteralToken>(result[4]);
+            Assert.Equal("!", token4.Text);
         }
     }
 }

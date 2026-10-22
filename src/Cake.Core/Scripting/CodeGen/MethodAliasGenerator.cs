@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using Cake.Core.Annotations;
@@ -69,6 +70,17 @@ public static class MethodAliasGenerator
         }
 
         hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(builder.ToString())));
+
+        // Overload resolution priority isn't part of the signature, so it's excluded from the hash.
+        var priority = method.GetCustomAttribute<OverloadResolutionPriorityAttribute>();
+        if (priority != null && priority.Priority != 0)
+        {
+            builder.Insert(0, string.Format(
+                CultureInfo.InvariantCulture,
+                "[System.Runtime.CompilerServices.OverloadResolutionPriority({0})]{1}",
+                priority.Priority,
+                Environment.NewLine));
+        }
 
         builder.AppendLine();
 

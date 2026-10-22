@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Cake.Core.Diagnostics;
 
@@ -29,6 +30,7 @@ public static partial class LogExtensions
     /// </summary>
     /// <param name="log">The log.</param>
     /// <param name="formattable">The string to be formatted.</param>
+    [OverloadResolutionPriority(1)]
     public static void Error(this ICakeLog log, FormattableString formattable)
     {
         Error(log, Verbosity.Quiet, formattable);
@@ -40,6 +42,7 @@ public static partial class LogExtensions
     /// <param name="log">The log.</param>
     /// <param name="verbosity">The verbosity.</param>
     /// <param name="formattable">The string to be formatted.</param>
+    [OverloadResolutionPriority(1)]
     public static void Error(this ICakeLog log, Verbosity verbosity, FormattableString formattable)
     {
         log?.Write(verbosity, LogLevel.Error, formattable);
@@ -73,6 +76,7 @@ public static partial class LogExtensions
     /// </summary>
     /// <param name="log">The log.</param>
     /// <param name="formattable">The string to be formatted.</param>
+    [OverloadResolutionPriority(1)]
     public static void Warning(this ICakeLog log, FormattableString formattable)
     {
         Warning(log, Verbosity.Minimal, formattable);
@@ -84,6 +88,7 @@ public static partial class LogExtensions
     /// <param name="log">The log.</param>
     /// <param name="verbosity">The verbosity.</param>
     /// <param name="formattable">The string to be formatted.</param>
+    [OverloadResolutionPriority(1)]
     public static void Warning(this ICakeLog log, Verbosity verbosity, FormattableString formattable)
     {
         log?.Write(verbosity, LogLevel.Warning, formattable);
@@ -117,6 +122,7 @@ public static partial class LogExtensions
     /// </summary>
     /// <param name="log">The log.</param>
     /// <param name="formattable">The string to be formatted.</param>
+    [OverloadResolutionPriority(1)]
     public static void Information(this ICakeLog log, FormattableString formattable)
     {
         Information(log, Verbosity.Normal, formattable);
@@ -128,6 +134,7 @@ public static partial class LogExtensions
     /// <param name="log">The log.</param>
     /// <param name="verbosity">The verbosity.</param>
     /// <param name="formattable">The string to be formatted.</param>
+    [OverloadResolutionPriority(1)]
     public static void Information(this ICakeLog log, Verbosity verbosity, FormattableString formattable)
     {
         log?.Write(verbosity, LogLevel.Information, formattable);
@@ -161,6 +168,7 @@ public static partial class LogExtensions
     /// </summary>
     /// <param name="log">The log.</param>
     /// <param name="formattable">The string to be formatted.</param>
+    [OverloadResolutionPriority(1)]
     public static void Verbose(this ICakeLog log, FormattableString formattable)
     {
         Verbose(log, Verbosity.Verbose, formattable);
@@ -172,6 +180,7 @@ public static partial class LogExtensions
     /// <param name="log">The log.</param>
     /// <param name="verbosity">The verbosity.</param>
     /// <param name="formattable">The string to be formatted.</param>
+    [OverloadResolutionPriority(1)]
     public static void Verbose(this ICakeLog log, Verbosity verbosity, FormattableString formattable)
     {
         log?.Write(verbosity, LogLevel.Verbose, formattable);
@@ -205,6 +214,7 @@ public static partial class LogExtensions
     /// </summary>
     /// <param name="log">The log.</param>
     /// <param name="formattable">The string to be formatted.</param>
+    [OverloadResolutionPriority(1)]
     public static void Debug(this ICakeLog log, FormattableString formattable)
     {
         Debug(log, Verbosity.Diagnostic, formattable);
@@ -216,6 +226,7 @@ public static partial class LogExtensions
     /// <param name="log">The log.</param>
     /// <param name="verbosity">The verbosity.</param>
     /// <param name="formattable">The string to be formatted.</param>
+    [OverloadResolutionPriority(1)]
     public static void Debug(this ICakeLog log, Verbosity verbosity, FormattableString formattable)
     {
         log?.Write(verbosity, LogLevel.Debug, formattable);
