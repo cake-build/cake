@@ -17,10 +17,16 @@ public partial class LogExtensionsTests
 
         public string Message { get; private set; }
 
+        public string Format { get; private set; }
+
+        public object[] Args { get; private set; }
+
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
             Verbosity = verbosity;
             Level = level;
+            Format = format;
+            Args = args;
             Message = string.Format(format, args);
         }
     }

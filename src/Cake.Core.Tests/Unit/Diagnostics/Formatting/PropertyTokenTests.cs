@@ -47,5 +47,36 @@ public sealed class PropertyTokenTests
             // Then
             Assert.Equal("d6ed7358-ef96-45bf-9245-864025de28fa", result);
         }
+
+        [Theory]
+        [InlineData(5, null, "   42")]
+        [InlineData(-5, null, "42   ")]
+        [InlineData(1, null, "42")]
+        [InlineData(8, "N2", "   42.00")]
+        [InlineData(-8, "N2", "42.00   ")]
+        public void Should_Align_Argument_According_To_Alignment(int alignment, string format, string expected)
+        {
+            // Given
+            var token = new PropertyToken(0, format, alignment);
+
+            // When
+            var result = token.Render([42]);
+
+            // Then
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void Should_Align_Null_Argument()
+        {
+            // Given
+            var token = new PropertyToken(0, null, 8);
+
+            // When
+            var result = token.Render([null]);
+
+            // Then
+            Assert.Equal("  [NULL]", result);
+        }
     }
 }

@@ -2,8 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Linq;
 using System.Threading.Tasks;
 using Cake.Core.Scripting.CodeGen;
+using Cake.Core.Tests.Data;
 using Cake.Core.Tests.Fixtures;
 using Xunit;
 using static Cake.Core.Tests.VerifyConfig;
@@ -118,6 +120,37 @@ public sealed class MethodAliasGeneratorTests
             // Then
             return VerifyCake(result)
                 .UseParameters(name);
+        }
+
+        [Theory]
+        [InlineData("OverloadResolutionPriority_Positive")]
+        [InlineData("OverloadResolutionPriority_Negative")]
+        [InlineData("OverloadResolutionPriority_Default")]
+        public Task Should_Return_Correct_Generated_Code_For_Overload_Resolution_Priority_Methods(string name)
+        {
+            // Given / When
+            var result = _fixture.Generate(name);
+
+            // Then
+            return VerifyCake(result)
+                .UseParameters(name);
+        }
+
+        [Fact]
+        public void Should_Not_Include_Overload_Resolution_Priority_In_Signature_Hash()
+        {
+            // Given
+            var prioritized = typeof(MethodAliasGeneratorData).GetMethods()
+                .Single(x => x.Name == "OverloadResolutionPriority_Positive");
+            var unprioritized = typeof(MethodAliasGeneratorUnprioritizedData).GetMethods()
+                .Single(x => x.Name == "OverloadResolutionPriority_Positive");
+
+            // When
+            MethodAliasGenerator.Generate(prioritized, out var prioritizedHash);
+            MethodAliasGenerator.Generate(unprioritized, out var unprioritizedHash);
+
+            // Then
+            Assert.Equal(unprioritizedHash, prioritizedHash);
         }
     }
 }

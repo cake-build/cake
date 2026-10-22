@@ -147,6 +147,27 @@ internal static class MethodAliasGeneratorData
     }
 
     [CakeMethodAlias]
+    [OverloadResolutionPriority(1)]
+    public static void OverloadResolutionPriority_Positive(this ICakeContext context, FormattableString value)
+    {
+        throw new NotImplementedException();
+    }
+
+    [CakeMethodAlias]
+    [OverloadResolutionPriority(-1)]
+    public static void OverloadResolutionPriority_Negative(this ICakeContext context, string value)
+    {
+        throw new NotImplementedException();
+    }
+
+    [CakeMethodAlias]
+    [OverloadResolutionPriority(0)]
+    public static void OverloadResolutionPriority_Default(this ICakeContext context, string value)
+    {
+        throw new NotImplementedException();
+    }
+
+    [CakeMethodAlias]
     public static void NonGeneric_ExtensionMethodWithOptionalObjectParameter(this ICakeContext context, int value, object option = null)
     {
         throw new NotImplementedException();
@@ -425,6 +446,15 @@ internal static class MethodAliasGeneratorData
 #nullable enable
     public static void Generic_ExtensionMethodWithUnconstrainedTypeParameterArgument<TTest>(this ICakeContext context, IList<TTest> values)
 #nullable disable
+    {
+        throw new NotImplementedException();
+    }
+}
+
+internal static class MethodAliasGeneratorUnprioritizedData
+{
+    [CakeMethodAlias]
+    public static void OverloadResolutionPriority_Positive(this ICakeContext context, FormattableString value)
     {
         throw new NotImplementedException();
     }
