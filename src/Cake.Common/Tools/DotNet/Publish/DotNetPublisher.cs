@@ -3,7 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
@@ -262,11 +265,19 @@ public sealed class DotNetPublisher : DotNetTool<DotNetPublishSettings>
             }
         }
 
-        // Os
-        if (!string.IsNullOrEmpty(settings.OS))
+        // Os, container OS takes precedence
+        var os = settings.Container?.OS?.Value is { Length: > 0 } containerOS ? containerOS : settings.OS;
+        if (!string.IsNullOrEmpty(os))
         {
             builder.Append("--os");
-            builder.Append(settings.OS);
+            builder.Append(os);
+        }
+
+        // Arch
+        if (settings.Container?.Arch?.Value is { Length: > 0 } arch)
+        {
+            builder.Append("--arch");
+            builder.Append(arch);
         }
 
         if (settings.MSBuildSettings != null)
@@ -274,6 +285,75 @@ public sealed class DotNetPublisher : DotNetTool<DotNetPublishSettings>
             builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
         }
 
+        // Container, appended last so it takes precedence over MSBuild settings
+        if (settings.Container != null)
+        {
+            AppendContainerSettings(builder, settings.Container);
+        }
+
         return builder;
     }
+
+    private void AppendContainerSettings(ProcessArgumentBuilder builder, DotNetPublishContainerSettings container)
+    {
+        if (!string.IsNullOrEmpty(container.ImageTag) && container.ImageTags?.Count > 0)
+        {
+            throw new ArgumentException(
+                $"Both {nameof(DotNetPublishContainerSettings.ImageTag)} and {nameof(DotNetPublishContainerSettings.ImageTags)} were provided, but only one or the other is allowed.",
+                nameof(container));
+        }
+
+        builder.Append("-t:PublishContainer");
+
+        AppendContainerProperty(builder, "ContainerBaseImage", container.BaseImage);
+        AppendContainerProperty(builder, "ContainerFamily", container.Family);
+        AppendContainerProperty(builder, "ContainerRegistry", container.Registry);
+        AppendContainerProperty(builder, "ContainerRepository", container.Repository);
+        AppendContainerProperty(builder, "ContainerImageTag", container.ImageTag);
+        AppendContainerListProperty(builder, "ContainerImageTags", container.ImageTags);
+        AppendContainerProperty(builder, "ContainerUser", container.User);
+        AppendContainerProperty(builder, "ContainerWorkingDirectory", container.WorkingDirectory);
+        AppendContainerProperty(builder, "ContainerArchiveOutputPath", container.ArchiveOutputPath?.MakeAbsolute(_environment).FullPath);
+        AppendContainerProperty(builder, "LocalRegistry", container.LocalRegistry?.Value);
+        AppendContainerProperty(builder, "ContainerRuntimeIdentifier", container.RuntimeIdentifier);
+        AppendContainerListProperty(builder, "ContainerRuntimeIdentifiers", container.RuntimeIdentifiers);
+        AppendContainerProperty(builder, "ContainerImageFormat", container.ImageFormat?.ToString());
+        AppendContainerProperty(builder, "ContainerAppCommandInstruction", container.AppCommandInstruction?.ToString());
+        AppendContainerProperty(builder, "ContainerGenerateLabels", container.GenerateLabels);
+        AppendContainerProperty(builder, "ContainerPublishInParallel", container.PublishInParallel);
+        AppendContainerProperty(builder, "ContainerPushNoCache", container.PushNoCache);
+    }
+
+    private static void AppendContainerProperty(ProcessArgumentBuilder builder, string name, bool? value)
+    {
+        if (value.HasValue)
+        {
+            AppendContainerProperty(builder, name, value.Value ? "true" : "false");
+        }
+    }
+
+    private static void AppendContainerProperty(ProcessArgumentBuilder builder, string name, string value)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            builder.Append($"-p:{name}={EscapeContainerPropertyValue(name, value)}");
+        }
+    }
+
+    private static void AppendContainerListProperty(ProcessArgumentBuilder builder, string name, ICollection<string> values)
+    {
+        var escapedValues = values?
+            .Where(value => !string.IsNullOrEmpty(value))
+            .Select(value => EscapeContainerPropertyValue(name, value))
+            .ToArray();
+
+        if (escapedValues is { Length: > 0 })
+        {
+            // Semicolon separated lists need to reach MSBuild quoted, as an unquoted semicolon separates properties
+            builder.Append($"-p:{name}=\\\"{string.Join(';', escapedValues)}\\\"");
+        }
+    }
+
+    private static string EscapeContainerPropertyValue(string name, string value)
+        => new KeyValuePair<string, ICollection<string>>(name, [value]).BuildMSBuildPropertyParameterString();
 }

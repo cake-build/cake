@@ -4,6 +4,8 @@
 
 using Cake.Common.Tests.Fixtures.Tools.DotNet.Publish;
 using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNet.Publish;
 using Cake.Testing;
 
 namespace Cake.Common.Tests.Unit.Tools.DotNet.Publish;
@@ -302,5 +304,179 @@ public sealed class DotNetPublisherTests
             // Then
             Assert.Equal("publish --os linux", result.Args);
         }
-    }
+
+        [Fact]
+        public void Should_Add_PublishContainer_Target_When_Container_Is_Set()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.Container = new DotNetPublishContainerSettings();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("publish -t:PublishContainer", result.Args);
+        }
+
+        [Fact]
+        public void Should_Add_All_Container_Settings()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.Container = new DotNetPublishContainerSettings
+            {
+                BaseImage = "mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot",
+                Family = "noble-chiseled",
+                Registry = "ghcr.io",
+                Repository = "devlead/cake-sdk",
+                ImageTag = "latest",
+                User = "root",
+                WorkingDirectory = "/app/",
+                ArchiveOutputPath = "./artifacts/Cake.Sdk.tar.gz",
+                LocalRegistry = DotNetContainerLocalRegistry.Docker,
+                RuntimeIdentifier = "linux-x64",
+                RuntimeIdentifiers = ["linux-x64", "linux-arm64"],
+                ImageFormat = DotNetContainerImageFormat.OCI,
+                AppCommandInstruction = DotNetContainerAppCommandInstruction.Entrypoint,
+                GenerateLabels = false,
+                PublishInParallel = true,
+                PushNoCache = true,
+                OS = DotNetContainerOS.Linux,
+                Arch = DotNetContainerArchitecture.X64
+            };
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal(
+                "publish --os linux --arch x64 -t:PublishContainer" +
+                " -p:ContainerBaseImage=mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot" +
+                " -p:ContainerFamily=noble-chiseled" +
+                " -p:ContainerRegistry=ghcr.io" +
+                " -p:ContainerRepository=devlead/cake-sdk" +
+                " -p:ContainerImageTag=latest" +
+                " -p:ContainerUser=root" +
+                " -p:ContainerWorkingDirectory=/app/" +
+                " -p:ContainerArchiveOutputPath=/Working/artifacts/Cake.Sdk.tar.gz" +
+                " -p:LocalRegistry=Docker" +
+                " -p:ContainerRuntimeIdentifier=linux-x64" +
+                " -p:ContainerRuntimeIdentifiers=\\\"linux-x64;linux-arm64\\\"" +
+                " -p:ContainerImageFormat=OCI" +
+                " -p:ContainerAppCommandInstruction=Entrypoint" +
+                " -p:ContainerGenerateLabels=false" +
+                " -p:ContainerPublishInParallel=true" +
+                " -p:ContainerPushNoCache=true",
+                result.Args);
+        }
+
+        [Fact]
+        public void Should_Quote_Container_Image_Tags()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.Container = new DotNetPublishContainerSettings
+            {
+                ImageTags = ["1.0.0", "latest"]
+            };
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("publish -t:PublishContainer -p:ContainerImageTags=\\\"1.0.0;latest\\\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Escape_Container_Property_Values()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.Container = new DotNetPublishContainerSettings
+            {
+                ArchiveOutputPath = "/Working/my artifacts/image.tar.gz",
+                ImageTags = ["a;b", "c"]
+            };
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("publish -t:PublishContainer -p:ContainerImageTags=\\\"a%3Bb;c\\\" -p:ContainerArchiveOutputPath=/Working/my%20artifacts/image.tar.gz", result.Args);
+        }
+
+        [Fact]
+        public void Should_Throw_If_Both_Container_Image_Tag_And_Image_Tags_Are_Set()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.Container = new DotNetPublishContainerSettings
+            {
+                ImageTag = "latest",
+                ImageTags = ["1.0.0"]
+            };
+
+            // When
+            var result = Record.Exception(() => fixture.Run());
+
+            // Then
+            AssertEx.IsArgumentException(result, "container", "Both ImageTag and ImageTags were provided, but only one or the other is allowed.");
+        }
+
+        [Fact]
+        public void Should_Use_Container_OS_Over_Settings_OS()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.OS = "win";
+            fixture.Settings.Container = new DotNetPublishContainerSettings
+            {
+                OS = DotNetContainerOS.Linux
+            };
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("publish --os linux -t:PublishContainer", result.Args);
+        }
+
+        [Fact]
+        public void Should_Use_Settings_OS_When_Container_OS_Is_Not_Set()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.OS = "linux";
+            fixture.Settings.Container = new DotNetPublishContainerSettings
+            {
+                Arch = DotNetContainerArchitecture.Arm64
+            };
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("publish --os linux --arch arm64 -t:PublishContainer", result.Args);
+        }
+
+        [Fact]
+        public void Should_Append_Container_Settings_After_MSBuild_Settings()
+        {
+            // Given
+            var fixture = new DotNetPublisherFixture();
+            fixture.Settings.MSBuildSettings = new DotNetMSBuildSettings()
+                .WithProperty("ContainerUser", "app");
+            fixture.Settings.Container = new DotNetPublishContainerSettings
+            {
+                User = "root"
+            };
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("publish /property:ContainerUser=app -t:PublishContainer -p:ContainerUser=root", result.Args);
+        }
+}
 }

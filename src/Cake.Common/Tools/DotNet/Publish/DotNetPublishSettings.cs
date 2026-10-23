@@ -184,4 +184,25 @@ public class DotNetPublishSettings : DotNetSettings
     /// Gets or sets additional arguments to be passed to MSBuild.
     /// </summary>
     public DotNetMSBuildSettings MSBuildSettings { get; set; }
+
+    /// <summary>
+    /// Gets or sets the container settings.
+    /// When set, the project is published as a container image using the <c>PublishContainer</c> target,
+    /// and the container properties take precedence over the same properties set via <see cref="MSBuildSettings"/>.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// DotNetPublish("./src/hwapp/hwapp.csproj", new DotNetPublishSettings
+    /// {
+    ///     Container = new DotNetPublishContainerSettings
+    ///     {
+    ///         BaseImage = "mcr.microsoft.com/dotnet/runtime:10.0",
+    ///         User = "root",
+    ///         OS = DotNetContainerOS.Linux,
+    ///         Arch = DotNetContainerArchitecture.X64
+    ///     }
+    /// }.WithContainerLocalRegistry(DotNetContainerLocalRegistry.Podman, "cake-it-hwapp", "test"));
+    /// </code>
+    /// </example>
+    public DotNetPublishContainerSettings Container { get; set; }
 }
