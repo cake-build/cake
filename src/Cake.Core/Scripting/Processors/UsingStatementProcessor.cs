@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Linq;
 using Cake.Core.Scripting.Analysis;
 
 namespace Cake.Core.Scripting.Processors;
@@ -44,11 +43,26 @@ internal sealed class UsingStatementProcessor : LineProcessor
             return false;
         }
 
-        // Using alias directive?
-        if (tokens.Any(t => t == "="))
+        // Using declaration with implicit type (i.e. using var x = ...)?
+        if (tokens[1].Equals("var", StringComparison.Ordinal))
         {
-            context.Current.UsingAliases.Add(string.Join(" ", tokens));
-            return true;
+            return false;
+        }
+
+        // Using alias directive (using Identifier = Name;)?
+        if (line.Contains('='))
+        {
+            if (tokens.Length >= 4
+                && tokens[2].Equals("=", StringComparison.Ordinal)
+                && StripComment(line).EndsWith(';'))
+            {
+                context.Current.UsingAliases.Add(string.Join(" ", tokens));
+                return true;
+            }
+
+            // Using declaration with explicit type (i.e. using Foo x = ...)
+            // or spanning multiple lines.
+            return false;
         }
 
         // Using static directive?
@@ -58,8 +72,23 @@ internal sealed class UsingStatementProcessor : LineProcessor
             return true;
         }
 
-        // Namespace
-        context.Current.Namespaces.Add(@namespace);
-        return true;
+        // Using namespace directive (using Name;)?
+        if (tokens.Length == 2
+            || tokens[1].EndsWith(';')
+            || tokens[2].StartsWith(';')
+            || tokens[2].StartsWith("//", StringComparison.Ordinal))
+        {
+            context.Current.Namespaces.Add(@namespace);
+            return true;
+        }
+
+        // Something else, i.e. a using declaration spanning multiple lines.
+        return false;
+    }
+
+    private static string StripComment(string line)
+    {
+        var index = line.IndexOf("//", StringComparison.Ordinal);
+        return (index < 0 ? line : line[..index]).TrimEnd();
     }
 }
