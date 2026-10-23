@@ -414,6 +414,74 @@ public sealed class ScriptAnalyzerTests
             Assert.Equal("using static System.Math;", result.Script.UsingStaticDirectives.ElementAt(0));
         }
 
+        [Theory]
+        [InlineData("using var x = new Foo();")]
+        [InlineData("    using var x = new Foo();")]
+        [InlineData("using var x = y;")]
+        [InlineData("    using var x = y;")]
+        [InlineData("using var x = cond\n    ? a\n    : b;")]
+        [InlineData("    using var x = cond\n        ? a\n        : (System.IO.Stream)b;")]
+        [InlineData("using var x =\n    new Foo();")]
+        [InlineData("    using var x =\n        y;")]
+        [InlineData("using Foo x = y;")]
+        [InlineData("    using System.IO.Stream x = cond\n        ? a\n        : b;")]
+        [InlineData("await using var x = y;")]
+        [InlineData("    await using var x = cond\n        ? a\n        : b;")]
+        [InlineData("using (var x = new Foo())\n{\n}")]
+        [InlineData("    using (var x = cond\n        ? a\n        : b)\n    {\n    }")]
+        [InlineData("Task(\"A\").Does(() => {\n    using var x = cond\n        ? a\n        : b;\n});")]
+        [InlineData("using var x\n    = y;")]
+        [InlineData("using System.IO.Stream x\n    = y;")]
+        public void Should_Keep_Using_Statements_And_Declarations(string script)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.GivenScriptExist("/Working/script.cake", script);
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Empty(result.Script.UsingAliases);
+            Assert.Empty(result.Script.UsingStaticDirectives);
+            Assert.Empty(result.Script.Namespaces);
+            Assert.Equal(script.Split('\n'), result.Lines.Skip(1));
+        }
+
+        [Theory]
+        [InlineData("using Core = Cake.Core;")]
+        [InlineData("using Core = global::Cake.Core;")]
+        [InlineData("using StringList = System.Collections.Generic.List<string>;")]
+        [InlineData("using Core = Cake.Core; // comment")]
+        public void Should_Process_Using_Alias_Directive_Variants(string script)
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.GivenScriptExist("/Working/script.cake", script);
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Equal(script, Assert.Single(result.Script.UsingAliases));
+            Assert.Empty(result.Script.Namespaces);
+        }
+
+        [Fact]
+        public void Should_Process_Indented_Using_Alias_Directive()
+        {
+            // Given
+            var fixture = new ScriptAnalyzerFixture();
+            fixture.GivenScriptExist("/Working/script.cake", "    using Core = Cake.Core;");
+
+            // When
+            var result = fixture.Analyze("/Working/script.cake");
+
+            // Then
+            Assert.Equal("using Core = Cake.Core;", Assert.Single(result.Script.UsingAliases));
+            Assert.Empty(result.Script.Namespaces);
+        }
+
         [Fact]
         public void Should_Process_Define_Directives()
         {
