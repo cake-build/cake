@@ -54,6 +54,25 @@ public static partial class DotNetAliases
     ///
     /// DotNetPublish("./src/*", settings);
     /// </code>
+    /// <para>Publish as a container image, to an archive, a local registry or a registry.</para>
+    /// <code>
+    /// DotNetPublish("./src/hwapp/hwapp.csproj", new DotNetPublishSettings
+    /// {
+    ///     Container = new DotNetPublishContainerSettings
+    ///     {
+    ///         Repository = "cake-it-hwapp",
+    ///         ImageTags = ["1.0.0", "latest"],
+    ///         OS = DotNetContainerOS.Linux,
+    ///         Arch = DotNetContainerArchitecture.X64
+    ///     }
+    /// }.WithContainerArchive("./artifacts/hwapp.tar.gz"));
+    ///
+    /// DotNetPublish("./src/hwapp/hwapp.csproj", new DotNetPublishSettings()
+    ///     .WithContainerLocalRegistry(DotNetContainerLocalRegistry.Podman, "cake-it-hwapp", "test"));
+    ///
+    /// DotNetPublish("./src/hwapp/hwapp.csproj", new DotNetPublishSettings()
+    ///     .WithContainerRegistry("localhost:5000", "cake-it/hwapp", "test"));
+    /// </code>
     /// </example>
     [CakeMethodAlias]
     [CakeAliasCategory("Publish")]

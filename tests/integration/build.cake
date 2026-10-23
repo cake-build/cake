@@ -30,6 +30,7 @@
 #load "./Cake.Common/Tools/Cake/CakeAliases.cake"
 #load "./Cake.Common/Tools/Command/CommandAliases.cake"
 #load "./Cake.Common/Tools/DotNet/DotNetAliases.cake"
+#load "./Cake.Common/Tools/DotNet/DotNetAliases.Container.cake"
 #load "./Cake.Common/Tools/GitVersion/GitVersionAliases.cake"
 #load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
 #load "./Cake.Common/Tools/Chocolatey/ChocolateyAliases.cake"
