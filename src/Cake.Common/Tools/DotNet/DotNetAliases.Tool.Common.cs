@@ -133,7 +133,7 @@ public static partial class DotNetAliases
         AppendRestoreSettings(builder, settings.DisableParallel, settings.IgnoreFailedSources, settings.NoHttpCache, settings.Interactive);
         AppendSwitch(builder, "--allow-downgrade", settings.AllowDowngrade);
         AppendString(builder, "--arch", settings.Architecture);
-        AppendSwitch(builder, "--create-manifest-if-needed", settings.CreateManifestIfNeeded);
+        builder.AppendSwitch("--create-manifest-if-needed", settings.CreateManifestIfNeeded);
         AppendSwitch(builder, "--allow-roll-forward", settings.AllowRollForward);
     }
 

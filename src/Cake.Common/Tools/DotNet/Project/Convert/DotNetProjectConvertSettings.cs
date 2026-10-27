@@ -29,8 +29,9 @@ public sealed class DotNetProjectConvertSettings : DotNetSettings
     /// <summary>
     /// Gets or sets a value indicating whether to allow the command to stop and wait for user input or action.
     /// For example, to complete authentication.
+    /// When <c>null</c>, the .NET CLI default is used.
     /// </summary>
-    public bool Interactive { get; set; }
+    public bool? Interactive { get; set; }
 
     /// <summary>
     /// Gets or sets the output directory for the converted project.

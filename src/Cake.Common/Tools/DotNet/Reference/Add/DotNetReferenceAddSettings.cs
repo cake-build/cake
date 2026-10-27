@@ -17,6 +17,7 @@ public sealed class DotNetReferenceAddSettings : DotNetSettings
     /// <summary>
     /// Gets or sets a value indicating whether to allow the command to stop and wait for user input or action.
     /// For example, to complete authentication. Available since .NET Core 3.0 SDK.
+    /// When <c>null</c>, the .NET CLI default is used.
     /// </summary>
-    public bool Interactive { get; set; }
+    public bool? Interactive { get; set; }
 }

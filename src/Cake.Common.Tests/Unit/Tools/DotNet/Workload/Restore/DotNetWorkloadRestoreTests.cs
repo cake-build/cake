@@ -110,8 +110,23 @@ public sealed class DotNetWorkloadRestoreTests
             var result = fixture.Run();
 
             // Then
-            var expected = "workload restore \"./src/*\" --configfile \"/Working/nuget.config\" --disable-parallel --ignore-failed-sources --include-previews --interactive --no-cache --skip-manifest-update --source \"http://www.nuget.org/api/v2/package\" --source \"http://www.symbolserver.org/\" --temp-dir \"/Working/src/project\" --verbosity diagnostic";
+            var expected = "workload restore \"./src/*\" --configfile \"/Working/nuget.config\" --disable-parallel --ignore-failed-sources --include-previews --interactive true --no-cache --skip-manifest-update --source \"http://www.nuget.org/api/v2/package\" --source \"http://www.symbolserver.org/\" --temp-dir \"/Working/src/project\" --verbosity diagnostic";
             Assert.Equal(expected, result.Args);
+        }
+
+        [Fact]
+        public void Should_Add_Interactive_False()
+        {
+            // Given
+            var fixture = new DotNetWorkloadRestorerFixture();
+            fixture.Project = "./src/*";
+            fixture.Settings.Interactive = false;
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("workload restore \"./src/*\" --interactive false", result.Args);
         }
 
         [Theory]

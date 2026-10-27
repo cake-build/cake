@@ -121,9 +121,24 @@ public sealed class DotNetWorkloadInstallTests
             var result = fixture.Run();
 
             // Then
-            var expected = "workload install maui --configfile \"/Working/nuget.config\" --disable-parallel --ignore-failed-sources --include-previews --interactive --no-cache --skip-manifest-update";
+            var expected = "workload install maui --configfile \"/Working/nuget.config\" --disable-parallel --ignore-failed-sources --include-previews --interactive true --no-cache --skip-manifest-update";
             expected += " --source \"http://www.nuget.org/api/v2/package\" --source \"http://www.symbolserver.org/\" --temp-dir \"/Working/src/project\" --verbosity diagnostic";
             Assert.Equal(expected, result.Args);
+        }
+
+        [Fact]
+        public void Should_Add_Interactive_False()
+        {
+            // Given
+            var fixture = new DotNetWorkloadInstallerFixture();
+            fixture.WorkloadIds = new string[] { "maui" };
+            fixture.Settings.Interactive = false;
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("workload install maui --interactive false", result.Args);
         }
     }
 }

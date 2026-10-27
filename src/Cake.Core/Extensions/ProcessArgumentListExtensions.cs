@@ -622,6 +622,45 @@ public static class ProcessArgumentListExtensions
     }
 
     /// <summary>
+    /// Appends the specified switch with an explicit <c>true</c> or <c>false</c> value to the argument builder.
+    /// Nothing is appended when <paramref name="value"/> is <c>null</c>.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="switch">The switch preceding the value.</param>
+    /// <param name="value">The value to be appended.</param>
+    /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// var args = new ProcessArgumentBuilder()
+    ///     .Append("restore")
+    ///     .AppendSwitch("--interactive", false);
+    /// </code>
+    /// </example>
+    public static ProcessArgumentBuilder AppendSwitch(this ProcessArgumentBuilder builder, string @switch, bool? value)
+    {
+        return AppendSwitch(builder, @switch, " ", value);
+    }
+
+    /// <summary>
+    /// Appends the specified switch with an explicit <c>true</c> or <c>false</c> value to the argument builder.
+    /// Nothing is appended when <paramref name="value"/> is <c>null</c>.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="switch">The switch preceding the value.</param>
+    /// <param name="separator">The separator between the switch and value.</param>
+    /// <param name="value">The value to be appended.</param>
+    /// <returns>The same <see cref="ProcessArgumentBuilder"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessArgumentBuilder AppendSwitch(this ProcessArgumentBuilder builder, string @switch, string separator, bool? value)
+    {
+        if (value.HasValue)
+        {
+            AppendSwitch(builder, @switch, separator, value.Value ? "true" : "false");
+        }
+
+        return builder;
+    }
+
+    /// <summary>
     /// Prepend the specified switch to the argument builder.
     /// </summary>
     /// <param name="builder">The builder.</param>

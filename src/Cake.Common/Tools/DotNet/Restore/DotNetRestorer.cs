@@ -122,10 +122,7 @@ public sealed class DotNetRestorer : DotNetTool<DotNetRestoreSettings>
         }
 
         // Interactive
-        if (settings.Interactive)
-        {
-            builder.Append("--interactive");
-        }
+        builder.AppendSwitch("--interactive", settings.Interactive);
 
         // Use lock file
         if (settings.UseLockFile)

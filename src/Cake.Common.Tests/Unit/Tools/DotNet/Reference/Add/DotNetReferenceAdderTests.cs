@@ -149,8 +149,24 @@ public sealed class DotNetReferenceAdderTests
             var result = fixture.Run();
 
             // Then
-            var expected = "add \"ToDo.csproj\" reference \"/Working/lib1.csproj\" --framework net10.0 --interactive --verbosity diagnostic";
+            var expected = "add \"ToDo.csproj\" reference \"/Working/lib1.csproj\" --framework net10.0 --interactive true --verbosity diagnostic";
             Assert.Equal(expected, result.Args);
+        }
+
+        [Fact]
+        public void Should_Add_Interactive_False()
+        {
+            // Given
+            var fixture = new DotNetReferenceAdderFixture();
+            fixture.ProjectReferences = new[] { (FilePath)"./lib1.csproj" };
+            fixture.Project = "ToDo.csproj";
+            fixture.Settings.Interactive = false;
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("add \"ToDo.csproj\" reference \"/Working/lib1.csproj\" --interactive false", result.Args);
         }
     }
 }

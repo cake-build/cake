@@ -100,7 +100,22 @@ public sealed class DotNetProjectConverterTests
             var result = fixture.Run();
 
             // Then
-            Assert.Equal("project convert \"/Working/cake.cs\" --delete-source --dry-run --force --interactive --output \"/Working/cake\" --verbosity diagnostic", result.Args);
+            Assert.Equal("project convert \"/Working/cake.cs\" --delete-source --dry-run --force --interactive true --output \"/Working/cake\" --verbosity diagnostic", result.Args);
+        }
+
+        [Fact]
+        public void Should_Add_Interactive_False()
+        {
+            // Given
+            var fixture = new DotNetProjectConverterFixture();
+            fixture.File = "cake.cs";
+            fixture.Settings.Interactive = false;
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("project convert \"/Working/cake.cs\" --interactive false", result.Args);
         }
     }
 }

@@ -77,10 +77,7 @@ public sealed class DotNetReferenceAdder : DotNetTool<DotNetReferenceAddSettings
         }
 
         // Interactive
-        if (settings.Interactive)
-        {
-            builder.Append("--interactive");
-        }
+        builder.AppendSwitch("--interactive", settings.Interactive);
 
         return builder;
     }

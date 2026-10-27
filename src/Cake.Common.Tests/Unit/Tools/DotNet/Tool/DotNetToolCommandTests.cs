@@ -120,6 +120,28 @@ public sealed class DotNetToolCommandTests
             Assert.Equal($"\"tool\" install dotnetsay {expectedScopeArgument}", result.Args);
         }
 
+        [Theory]
+        [InlineData(true, "\"tool\" install dotnetsay --global --create-manifest-if-needed true")]
+        [InlineData(false, "\"tool\" install dotnetsay --global --create-manifest-if-needed false")]
+        [InlineData(null, "\"tool\" install dotnetsay --global")]
+        public void DotNetToolInstall_WithCreateManifestIfNeeded_RendersExplicitValue(bool? createManifestIfNeeded, string expected)
+        {
+            // Given
+            var fixture = new DotNetToolCommandFixture
+            {
+                Invocation = DotNetToolCommandInvocation.InstallFull,
+                CommandArgument = "dotnetsay"
+            };
+            fixture.InstallSettings.InstallationScope = DotNetToolInstallationScope.Global;
+            fixture.InstallSettings.CreateManifestIfNeeded = createManifestIfNeeded;
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal(expected, result.Args);
+        }
+
         [Fact]
         public void DotNetToolExecute_WithDefaultSettings_RendersExpectedCommand()
         {
@@ -283,7 +305,7 @@ public sealed class DotNetToolCommandTests
             var result = fixture.Run();
 
             // Then
-            var expected = "\"tool\" install dotnetsay --tool-path \"/Working/tools\" --version \"1.2.3\" --configfile \"/Working/nuget.config\" --source \"https://example.com/source\" --add-source \"https://example.com/add-source\" --prerelease --tool-manifest \"/Working/.config/dotnet-tools.json\" --framework \"net10.0\" --disable-parallel --ignore-failed-sources --no-http-cache --interactive --allow-downgrade --arch \"x64\" --create-manifest-if-needed --allow-roll-forward";
+            var expected = "\"tool\" install dotnetsay --tool-path \"/Working/tools\" --version \"1.2.3\" --configfile \"/Working/nuget.config\" --source \"https://example.com/source\" --add-source \"https://example.com/add-source\" --prerelease --tool-manifest \"/Working/.config/dotnet-tools.json\" --framework \"net10.0\" --disable-parallel --ignore-failed-sources --no-http-cache --interactive --allow-downgrade --arch \"x64\" --create-manifest-if-needed true --allow-roll-forward";
             Assert.Equal(expected, result.Args);
         }
 
