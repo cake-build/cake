@@ -36,12 +36,12 @@
     <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.5.1" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net11.0'">
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0-rc.2.26504.105" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0-rc.3.26522.148" />
     <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="11.0.0-rc.2.26504.105" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
     <!-- Pin nuget transitive packages vulnerability issues NuGet.Packaging -->
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
   </ItemGroup>
