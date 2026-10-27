@@ -184,8 +184,9 @@ public sealed class DotNetToolInstallSettings : DotNetToolSettings
 
     /// <summary>
     /// Gets or sets a value indicating whether to create a tool manifest if one is not found.
+    /// When <c>null</c>, the .NET CLI default is used.
     /// </summary>
-    public bool CreateManifestIfNeeded { get; set; }
+    public bool? CreateManifestIfNeeded { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to allow a .NET tool to roll forward to newer versions of the .NET runtime.

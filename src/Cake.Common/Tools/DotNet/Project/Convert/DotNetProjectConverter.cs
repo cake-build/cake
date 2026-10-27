@@ -68,10 +68,7 @@ public sealed class DotNetProjectConverter : DotNetTool<DotNetProjectConvertSett
             builder.Append("--force");
         }
 
-        if (settings.Interactive)
-        {
-            builder.Append("--interactive");
-        }
+        builder.AppendSwitch("--interactive", settings.Interactive);
 
         if (settings.Output != null)
         {

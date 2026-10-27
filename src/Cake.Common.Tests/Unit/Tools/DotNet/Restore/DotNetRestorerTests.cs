@@ -144,18 +144,21 @@ public sealed class DotNetRestorerTests
             Assert.Equal("--diagnostics restore", result.Args);
         }
 
-        [Fact]
-        public void Should_Add_Interactive()
+        [Theory]
+        [InlineData(true, "restore --interactive true")]
+        [InlineData(false, "restore --interactive false")]
+        [InlineData(null, "restore")]
+        public void Should_Add_Interactive(bool? interactive, string expected)
         {
             // Given
             var fixture = new DotNetRestorerFixture();
-            fixture.Settings.Interactive = true;
+            fixture.Settings.Interactive = interactive;
 
             // When
             var result = fixture.Run();
 
             // Then
-            Assert.Equal($@"restore --interactive", result.Args);
+            Assert.Equal(expected, result.Args);
         }
 
         [Fact]

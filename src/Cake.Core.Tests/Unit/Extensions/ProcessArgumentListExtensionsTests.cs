@@ -407,6 +407,37 @@ public class ProcessArgumentListExtensionsTests
         }
     }
 
+    public class TheAppendSwitchBooleanMethods
+    {
+        [Theory]
+        [InlineData(true, "restore --interactive true")]
+        [InlineData(false, "restore --interactive false")]
+        [InlineData(null, "restore")]
+        public void ShouldAppendSwitchWithExplicitValue(bool? value, string expected)
+        {
+            var result = new ProcessArgumentBuilder()
+                .Append("restore")
+                .AppendSwitch("--interactive", value)
+                .RenderSafe();
+
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(true, "restore --interactive=true")]
+        [InlineData(false, "restore --interactive=false")]
+        [InlineData(null, "restore")]
+        public void ShouldAppendSwitchWithExplicitValueAndSeparator(bool? value, string expected)
+        {
+            var result = new ProcessArgumentBuilder()
+                .Append("restore")
+                .AppendSwitch("--interactive", "=", value)
+                .RenderSafe();
+
+            Assert.Equal(expected, result);
+        }
+    }
+
     public class TheInsertSwitchMethods
     {
         [Fact]

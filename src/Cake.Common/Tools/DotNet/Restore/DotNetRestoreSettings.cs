@@ -63,11 +63,12 @@ public class DotNetRestoreSettings : DotNetSettings
 
     /// <summary>
     /// Gets or sets a value indicating whether to stop and wait for user input or action (for example to complete authentication).
+    /// When <c>null</c>, the .NET CLI default is used.
     /// </summary>
     /// <remarks>
     /// Supported by .NET SDK version 2.1.400 and above.
     /// </remarks>
-    public bool Interactive { get; set; }
+    public bool? Interactive { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether to enable project lock file to be generated and used with restore.

@@ -83,10 +83,7 @@ public sealed class DotNetWorkloadRestorer : DotNetTool<DotNetWorkloadRestoreSet
         }
 
         // Interactive
-        if (settings.Interactive)
-        {
-            builder.Append("--interactive");
-        }
+        builder.AppendSwitch("--interactive", settings.Interactive);
 
         // No Cache
         if (settings.NoCache)
