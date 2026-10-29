@@ -103,5 +103,3 @@ public static class DotCoverCoverSettingsExtensions
         return settings;
     }
 }
-
-}

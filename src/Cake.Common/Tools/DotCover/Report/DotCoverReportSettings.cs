@@ -42,5 +42,3 @@ public sealed class DotCoverReportSettings : DotCoverSettings
     /// </summary>
     public DotCoverReportScope? XmlReportCoveringTestsScope { get; set; }
 }
-
-}
