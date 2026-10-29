@@ -174,6 +174,41 @@ public sealed class DotCoverReporterTests
                          "--xml-report-covering-tests-scope \"" + reportScopeString + "\"", result.Args);
         }
 
+        [Theory]
+        [InlineData(DotCoverReportType.HTML)]
+        [InlineData(DotCoverReportType.DetailedXML)]
+        [InlineData(DotCoverReportType.NDependXML)]
+        public void Should_Throw_If_New_Syntax_With_Legacy_Report_Types(DotCoverReportType reportType)
+        {
+            // Given
+            var fixture = new DotCoverReporterFixture();
+            fixture.Settings.XmlReportOutput = new FilePath("/Working/coverage.json");
+            fixture.Settings.ReportType = reportType;
+
+            // When
+            var result = Record.Exception(fixture.Run);
+
+            // Then
+            AssertEx.IsExceptionWithMessage<InvalidOperationException>(result, $"Unsupported report type {reportType}.");
+        }
+
+        [Fact]
+        public void Setting_OutputFile_Should_Not_Overwrite_XmlReportOutput()
+        {
+            // Given
+            var fixture = new DotCoverReporterFixture();
+            fixture.OutputFile = new FilePath("/Working/OutputFile");
+            fixture.Settings.XmlReportOutput = new FilePath("/Working/coverage.json");
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("report " +
+                         "--snapshot-source \"/Working/result.dcvr\" " +
+                         "--xml-report-output \"/Working/coverage.json\"", result.Args);
+        }
+
         #endregion
 
         #region Legacy Parameter Syntax

@@ -174,7 +174,7 @@ public static class DotCoverAliases
     /// <code>
     /// DotCoverReport(new FilePath("./result.dcvr"),
     ///   new DotCoverReportSettings {
-    ///     ReportType = DotCoverReportType.Xml
+    ///     ReportType = DotCoverReportType.XML
     ///   });
     /// </code>
     /// </example>
@@ -314,6 +314,9 @@ public static class DotCoverAliases
     ///   new DotCoverMergeSettings());
     /// </code>
     /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Merge")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotCover.Merge")]
     public static void DotCoverMerge(
         this ICakeContext context,
         IEnumerable<FilePath> sourceFiles,

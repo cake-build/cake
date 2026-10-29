@@ -11,7 +11,6 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
-using Xunit;
 using LogLevel = Cake.Core.Diagnostics.LogLevel;
 using Verbosity = Cake.Core.Diagnostics.Verbosity;
 

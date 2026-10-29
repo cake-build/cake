@@ -115,8 +115,7 @@ public sealed class DotCoverMerger : DotCoverTool<DotCoverMergeSettings>
         // Set the Temporary directory.
         if (settings.TemporaryDirectory != null)
         {
-            settings.TemporaryDirectory = settings.TemporaryDirectory.MakeAbsolute(_environment);
-            builder.AppendSwitch("--temporary-directory", settings.TemporaryDirectory.FullPath.Quote());
+            builder.AppendSwitch("--temporary-directory", settings.TemporaryDirectory.MakeAbsolute(_environment).FullPath.Quote());
         }
     }
 

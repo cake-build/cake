@@ -40,9 +40,9 @@ public sealed class DotCoverAnalyser : DotCoverCoverageTool<DotCoverAnalyseSetti
     /// <param name="outputPath">The output file path.</param>
     /// <param name="settings">The settings.</param>
     public void Analyse(ICakeContext context,
-        Action<ICakeContext> action,
-        FilePath outputPath,
-        DotCoverAnalyseSettings settings)
+                        Action<ICakeContext> action,
+                        FilePath outputPath,
+                        DotCoverAnalyseSettings settings)
     {
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(action);
@@ -82,8 +82,12 @@ public sealed class DotCoverAnalyser : DotCoverCoverageTool<DotCoverAnalyseSetti
         // Get Coverage arguments
         GetCoverageArguments(settings).CopyTo(builder);
 
-        // Get base arguments
-        GetArguments(settings).CopyTo(builder);
+        // analyse only supports the legacy command line.
+        if (settings.LogFile != null)
+        {
+            var logFilePath = settings.LogFile.MakeAbsolute(_environment);
+            builder.AppendSwitch("/LogFile", "=", logFilePath.FullPath.Quote());
+        }
 
         return builder;
     }

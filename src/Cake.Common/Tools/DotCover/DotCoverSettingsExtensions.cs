@@ -27,4 +27,18 @@ public static class DotCoverSettingsExtensions
         settings.ConfigFile = configFile;
         return settings;
     }
+
+    /// <summary>
+    /// Configures whether to use legacy command syntax.
+    /// </summary>
+    /// <param name="settings">The settings.</param>
+    /// <param name="useLegacySyntax">Whether to use legacy syntax. Default is false (new syntax).</param>
+    /// <returns>The same <see cref="DotCoverCoverSettings"/> instance so that multiple calls can be chained.</returns>
+    public static T WithLegacySyntax<T>(this T settings, bool useLegacySyntax = true)
+        where T : DotCoverSettings
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+        settings.UseLegacySyntax = useLegacySyntax;
+        return settings;
+    }
 }

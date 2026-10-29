@@ -51,21 +51,9 @@ public sealed class DotCoverReporter : DotCoverTool<DotCoverReportSettings>
             ArgumentNullException.ThrowIfNull(outputFile);
         }
 
-        if (!settings.UseLegacySyntax && outputFile != null)
+        if (settings is { UseLegacySyntax: false, ReportType: not DotCoverReportType.XML and not DotCoverReportType.JSON })
         {
-            // map outputFile to new syntax parameters. Otherwise input is ignored
-            switch (settings.ReportType)
-            {
-                case DotCoverReportType.XML:
-                    settings.XmlReportOutput = outputFile;
-                    break;
-                case DotCoverReportType.JSON:
-                    settings.JsonReportOutput = outputFile;
-                    break;
-                default:
-                    settings.XmlReportOutput = outputFile;
-                    break;
-            }
+            throw new InvalidOperationException($"Unsupported report type {settings.ReportType}.");
         }
 
         // Run the tool.
@@ -105,7 +93,7 @@ public sealed class DotCoverReporter : DotCoverTool<DotCoverReportSettings>
         }
         else
         {
-            GenerateArguments(sourceFile, settings, builder);
+            GenerateArguments(sourceFile, settings, builder, outputFile);
         }
 
         // Get Global settings
@@ -114,15 +102,17 @@ public sealed class DotCoverReporter : DotCoverTool<DotCoverReportSettings>
         return builder;
     }
 
-    private void GenerateArguments(FilePath sourceFile, DotCoverReportSettings settings, ProcessArgumentBuilder builder)
+    private void GenerateArguments(FilePath sourceFile, DotCoverReportSettings settings, ProcessArgumentBuilder builder, FilePath outputFile = null)
     {
         // Set the Source file.
         builder.AppendSwitch("--snapshot-source", sourceFile.MakeAbsolute(_environment).FullPath.Quote());
 
         // Set Json report output
-        if (settings.JsonReportOutput != null)
+        var jsonOutput = settings.JsonReportOutput
+                         ?? (settings.ReportType == DotCoverReportType.JSON ? outputFile : null);
+        if (jsonOutput != null)
         {
-            builder.AppendSwitch("--json-report-output", settings.JsonReportOutput.MakeAbsolute(_environment).FullPath.Quote());
+            builder.AppendSwitch("--json-report-output", jsonOutput.MakeAbsolute(_environment).FullPath.Quote());
         }
 
         // Set test scope, ignore default value
@@ -132,9 +122,11 @@ public sealed class DotCoverReporter : DotCoverTool<DotCoverReportSettings>
         }
 
         // Set Xml report output
-        if (settings.XmlReportOutput != null)
+        var xmlOutput = settings.XmlReportOutput
+                        ?? (settings.ReportType == DotCoverReportType.XML ? outputFile : null);
+        if (xmlOutput != null)
         {
-            builder.AppendSwitch("--xml-report-output", settings.XmlReportOutput.MakeAbsolute(_environment).FullPath.Quote());
+            builder.AppendSwitch("--xml-report-output", xmlOutput.MakeAbsolute(_environment).FullPath.Quote());
         }
 
         // Set test scope, ignore default value
