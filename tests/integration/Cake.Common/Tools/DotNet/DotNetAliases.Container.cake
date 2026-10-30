@@ -4,6 +4,7 @@
 // Opt-in container publishing tests, not part of Run-All-Tests as they require a container engine.
 // Run one or more scenarios, i.e.
 // --integration-tests-target="Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.Archive"
+// --integration-tests-target="Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.Archive.BaseImage"
 // --integration-tests-target="Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.LocalRegistry.Podman"
 // --integration-tests-target="Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.Registry"
 
@@ -30,6 +31,31 @@ DotNetPublishSettings GetContainerTestPublishSettings()
 
 string[] GetContainerToolExecutableNames(string toolName)
     => [toolName, $"{toolName}.exe"];
+
+string ReadContainerArchiveText(FilePath archive, Func<System.Formats.Tar.TarEntry, bool> predicate)
+{
+    // The SDK writes an uncompressed tar regardless of extension, so only decompress when gzip magic bytes are present
+    var text = new System.Text.StringBuilder();
+    using var archiveStream = System.IO.File.OpenRead(archive.FullPath);
+    var isGzip = archiveStream.ReadByte() == 0x1f & archiveStream.ReadByte() == 0x8b;
+    archiveStream.Position = 0;
+
+    using var tarStream = isGzip
+        ? new System.IO.Compression.GZipStream(archiveStream, System.IO.Compression.CompressionMode.Decompress, leaveOpen: true)
+        : (System.IO.Stream)archiveStream;
+    using var tarReader = new System.Formats.Tar.TarReader(tarStream, leaveOpen: true);
+
+    while (tarReader.GetNextEntry() is { } entry)
+    {
+        if (predicate(entry) && entry.DataStream is { } dataStream)
+        {
+            using var reader = new System.IO.StreamReader(dataStream);
+            text.AppendLine(reader.ReadToEnd());
+        }
+    }
+
+    return text.ToString();
+}
 
 void PublishAndRunLocalRegistryContainer(DotNetContainerLocalRegistry localRegistry, string toolName)
 {
@@ -77,32 +103,34 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.Archive")
     // Then
     Assert.True(System.IO.File.Exists(archive.FullPath), "Path:" + archive.FullPath);
 
-    // The SDK writes an uncompressed tar regardless of extension, so only decompress when gzip magic bytes are present
-    var manifests = new System.Text.StringBuilder();
-    using (var archiveStream = System.IO.File.OpenRead(archive.FullPath))
-    {
-        var isGzip = archiveStream.ReadByte() == 0x1f & archiveStream.ReadByte() == 0x8b;
-        archiveStream.Position = 0;
-
-        using var tarStream = isGzip
-            ? new System.IO.Compression.GZipStream(archiveStream, System.IO.Compression.CompressionMode.Decompress, leaveOpen: true)
-            : (System.IO.Stream)archiveStream;
-        using var tarReader = new System.Formats.Tar.TarReader(tarStream, leaveOpen: true);
-
-        while (tarReader.GetNextEntry() is { } entry)
-        {
-            if (entry.Name.TrimStart('.', '/') is "manifest.json" or "index.json" && entry.DataStream is { } dataStream)
-            {
-                using var reader = new System.IO.StreamReader(dataStream);
-                manifests.AppendLine(reader.ReadToEnd());
-            }
-        }
-    }
-
-    var manifest = manifests.ToString();
+    var manifest = ReadContainerArchiveText(archive, entry => entry.Name.TrimStart('.', '/') is "manifest.json" or "index.json");
     Information("Archive manifest: {0}", manifest);
     Assert.Contains($"{ContainerTestRepository}:1.0.0", manifest);
     Assert.Contains($"{ContainerTestRepository}:latest", manifest);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.Archive.BaseImage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    const string baseImage = "mcr.microsoft.com/dotnet/runtime:10.0";
+    var project = GetContainerTestProject();
+    var archive = Paths.Temp.CombineWithFilePath("./Cake.Common/Tools/DotNet/DotNetPublishContainer/hwapp-baseimage.tar.gz");
+
+    // When
+    DotNetPublish(
+        project.FullPath,
+        GetContainerTestPublishSettings()
+            .WithContainerBaseImage(baseImage)
+            .WithContainerArchive(archive));
+
+    // Then
+    Assert.True(System.IO.File.Exists(archive.FullPath), "Path:" + archive.FullPath);
+
+    // The image config carries the SDK generated org.opencontainers.image.base.name label, layers are skipped by size
+    var config = ReadContainerArchiveText(archive, entry => entry.Length < 64 * 1024 && entry.EntryType is System.Formats.Tar.TarEntryType.RegularFile or System.Formats.Tar.TarEntryType.V7RegularFile);
+    Assert.Contains($"\"org.opencontainers.image.base.name\":\"{baseImage}\"", config);
 });
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.LocalRegistry.Docker")
@@ -176,6 +204,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.Registry")
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.Archive")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.Archive.BaseImage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.LocalRegistry.Docker")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.LocalRegistry.Podman")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetPublishContainer.LocalRegistry.Wslc")

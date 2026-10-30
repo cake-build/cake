@@ -59,6 +59,25 @@ public sealed class DotNetPublishSettingsExtensionsTests
         }
 
         [Fact]
+        public void Should_Set_Base_Image_If_Specified()
+        {
+            // Given
+            var settings = new DotNetPublishSettings
+            {
+                Container = new DotNetPublishContainerSettings
+                {
+                    BaseImage = "mcr.microsoft.com/dotnet/runtime:10.0"
+                }
+            };
+
+            // When
+            settings.WithContainerArchive("./image.tar.gz", "mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot");
+
+            // Then
+            Assert.Equal("mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot", settings.Container.BaseImage);
+        }
+
+        [Fact]
         public void Should_Return_The_Same_Settings()
         {
             // Given
@@ -162,6 +181,45 @@ public sealed class DotNetPublishSettingsExtensionsTests
         }
 
         [Fact]
+        public void Should_Set_Base_Image_If_Specified()
+        {
+            // Given
+            var settings = new DotNetPublishSettings
+            {
+                Container = new DotNetPublishContainerSettings
+                {
+                    BaseImage = "mcr.microsoft.com/dotnet/runtime:10.0"
+                }
+            };
+
+            // When
+            settings.WithContainerLocalRegistry(DotNetContainerLocalRegistry.Docker, "cake-sdk", "test", "mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot");
+
+            // Then
+            Assert.Equal("mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot", settings.Container.BaseImage);
+            Assert.Equal("test", settings.Container.ImageTag);
+        }
+
+        [Fact]
+        public void Should_Keep_Base_Image_If_Base_Image_Is_Not_Set()
+        {
+            // Given
+            var settings = new DotNetPublishSettings
+            {
+                Container = new DotNetPublishContainerSettings
+                {
+                    BaseImage = "mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot"
+                }
+            };
+
+            // When
+            settings.WithContainerLocalRegistry(DotNetContainerLocalRegistry.Docker, "cake-sdk");
+
+            // Then
+            Assert.Equal("mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot", settings.Container.BaseImage);
+        }
+
+        [Fact]
         public void Should_Return_The_Same_Settings()
         {
             // Given
@@ -230,6 +288,26 @@ public sealed class DotNetPublishSettingsExtensionsTests
         }
 
         [Fact]
+        public void Should_Set_Base_Image_If_Specified()
+        {
+            // Given
+            var settings = new DotNetPublishSettings
+            {
+                Container = new DotNetPublishContainerSettings
+                {
+                    BaseImage = "mcr.microsoft.com/dotnet/runtime:10.0"
+                }
+            };
+
+            // When
+            settings.WithContainerRegistry("ghcr.io", "devlead/cake-sdk", baseImage: "mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot");
+
+            // Then
+            Assert.Equal("mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot", settings.Container.BaseImage);
+            Assert.Null(settings.Container.ImageTag);
+        }
+
+        [Fact]
         public void Should_Return_The_Same_Settings()
         {
             // Given
@@ -237,6 +315,84 @@ public sealed class DotNetPublishSettingsExtensionsTests
 
             // When
             var result = settings.WithContainerRegistry("ghcr.io", "devlead/cake-sdk");
+
+            // Then
+            Assert.Same(settings, result);
+        }
+    }
+
+    public sealed class TheWithContainerBaseImageMethod
+    {
+        [Fact]
+        public void Should_Throw_If_Settings_Are_Null()
+        {
+            // Given, When
+            var result = Record.Exception(() => DotNetPublishSettingsExtensions.WithContainerBaseImage(null, "mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot"));
+
+            // Then
+            AssertEx.IsArgumentNullException(result, "settings");
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(" ")]
+        public void Should_Throw_If_Base_Image_Is_Null_Or_Whitespace(string baseImage)
+        {
+            // Given
+            var settings = new DotNetPublishSettings();
+
+            // When
+            var result = Record.Exception(() => settings.WithContainerBaseImage(baseImage));
+
+            // Then
+            Assert.IsAssignableFrom<ArgumentException>(result);
+            Assert.Equal("baseImage", ((ArgumentException)result).ParamName);
+        }
+
+        [Fact]
+        public void Should_Set_Base_Image_And_Keep_Other_Settings()
+        {
+            // Given
+            var settings = new DotNetPublishSettings
+            {
+                Container = new DotNetPublishContainerSettings
+                {
+                    BaseImage = "mcr.microsoft.com/dotnet/runtime:10.0",
+                    Registry = "ghcr.io",
+                    Repository = "devlead/cake-sdk"
+                }
+            };
+
+            // When
+            settings.WithContainerBaseImage("mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot");
+
+            // Then
+            Assert.Equal("mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot", settings.Container.BaseImage);
+            Assert.Equal("ghcr.io", settings.Container.Registry);
+            Assert.Equal("devlead/cake-sdk", settings.Container.Repository);
+        }
+
+        [Fact]
+        public void Should_Create_Container_Settings_If_Not_Set()
+        {
+            // Given
+            var settings = new DotNetPublishSettings();
+
+            // When
+            settings.WithContainerBaseImage("mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot");
+
+            // Then
+            Assert.Equal("mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot", settings.Container.BaseImage);
+        }
+
+        [Fact]
+        public void Should_Return_The_Same_Settings()
+        {
+            // Given
+            var settings = new DotNetPublishSettings();
+
+            // When
+            var result = settings.WithContainerBaseImage("mcr.microsoft.com/dotnet/sdk:11.0-resolute-aot");
 
             // Then
             Assert.Same(settings, result);
