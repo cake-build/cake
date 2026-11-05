@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Scripting;
+using Spectre.Console;
 
 namespace Cake.Cli;
 
@@ -15,8 +16,7 @@ namespace Cake.Cli;
 /// </summary>
 public class DescriptionScriptHost : ScriptHost
 {
-    private readonly IConsole _console;
-    private readonly Dictionary<string, string> _descriptions;
+    private readonly IAnsiConsole _console;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DescriptionScriptHost"/> class.
@@ -24,11 +24,11 @@ public class DescriptionScriptHost : ScriptHost
     /// <param name="engine">The engine.</param>
     /// <param name="context">The context.</param>
     /// <param name="console">The console.</param>
-    public DescriptionScriptHost(ICakeEngine engine, ICakeContext context, IConsole console)
+    public DescriptionScriptHost(ICakeEngine engine, ICakeContext context, IAnsiConsole console)
         : base(engine, context)
     {
-        _console = console ?? throw new ArgumentNullException(nameof(console));
-        _descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        ArgumentNullException.ThrowIfNull(console);
+        _console = console;
     }
 
     /// <inheritdoc/>
@@ -49,27 +49,22 @@ public class DescriptionScriptHost : ScriptHost
 
     private void PrintTaskDescriptions()
     {
-        var maxTaskNameLength = 29;
+        var rowStyle = new Style(ConsoleColor.White);
+
+        var table = new Table().Border(TableBorder.SimpleHeavy);
+        table.Width(100);
+        table.BorderStyle(Style.Plain.Foreground(ConsoleColor.Green));
+
+        table.AddColumn(new TableColumn(new Text("Task", rowStyle)).PadRight(10));
+        table.AddColumn(new TableColumn(new Text("Description", rowStyle)));
 
         foreach (var task in Tasks)
         {
-            if (task.Name.Length > maxTaskNameLength)
-            {
-                maxTaskNameLength = task.Name.Length;
-            }
-
-            _descriptions.Add(task.Name, task.Description);
+            table.AddRow(
+                new Markup(task.Name.EscapeMarkup(), rowStyle),
+                new Markup((task.Description ?? string.Empty).EscapeMarkup(), rowStyle));
         }
 
-        maxTaskNameLength++;
-        string lineFormat = "{0,-" + maxTaskNameLength + "}{1}";
-
-        _console.WriteLine();
-        _console.WriteLine(lineFormat, "Task", "Description");
-        _console.WriteLine(new String('=', maxTaskNameLength + 50));
-        foreach (var (key, value) in _descriptions)
-        {
-            _console.WriteLine(lineFormat, key, value);
-        }
+        _console.Write(table);
     }
 }
