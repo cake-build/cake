@@ -15,4 +15,8 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
+  <!-- Runtime async IL requires the .NET 11 runtime. Keep the net10.0 build on compiler state machines. -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net11.0'">
+    <Features>$(Features);runtime-async=on</Features>
+  </PropertyGroup>
 </Project>
