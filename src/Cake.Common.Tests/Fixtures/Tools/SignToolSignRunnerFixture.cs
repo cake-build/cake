@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,32 +9,32 @@ using Cake.Testing;
 using Cake.Testing.Fixtures;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Tools
+namespace Cake.Common.Tests.Fixtures.Tools;
+
+internal sealed class SignToolSignRunnerFixture : ToolFixture<SignToolSignSettings>
 {
-    internal sealed class SignToolSignRunnerFixture : ToolFixture<SignToolSignSettings>
+    public ISignToolResolver Resolver { get; set; }
+    public IFile CertificateFile { get; set; }
+
+    public FilePath[] AssemblyPaths { get; set; }
+
+    public SignToolSignRunnerFixture()
+        : base("signtool.exe")
     {
-        public ISignToolResolver Resolver { get; set; }
-        public IFile CertificateFile { get; set; }
+        Settings.CertPath = "./cert.pfx";
+        Settings.Password = "secret";
 
-        public FilePath[] AssemblyPaths { get; set; }
 
-        public SignToolSignRunnerFixture()
-            : base("signtool.exe")
-        {
-            Settings.CertPath = "./cert.pfx";
-            Settings.Password = "secret";
+        AssemblyPaths = [new FilePath("./a.dll")];
+        FileSystem.CreateFile("/Working/a.dll");
+        FileSystem.CreateFile("/Working/cert.pfx");
 
-            AssemblyPaths = new[] { new FilePath("./a.dll") };
-            FileSystem.CreateFile("/Working/a.dll");
-            FileSystem.CreateFile("/Working/cert.pfx");
+        Resolver = Substitute.For<ISignToolResolver>();
+    }
 
-            Resolver = Substitute.For<ISignToolResolver>();
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new SignToolSignRunner(FileSystem, Environment, ProcessRunner, Tools, null, Resolver);
-            tool.Run(AssemblyPaths, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new SignToolSignRunner(FileSystem, Environment, ProcessRunner, Tools, null, Resolver);
+        tool.Run(AssemblyPaths, Settings);
     }
 }

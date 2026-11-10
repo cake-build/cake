@@ -1,36 +1,35 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.NuGet.Sources;
 
-namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Sources
+namespace Cake.Common.Tests.Fixtures.Tools.NuGet.Sources;
+
+internal abstract class NuGetSourcesFixture : NuGetFixture<NuGetSourcesSettings>
 {
-    internal abstract class NuGetSourcesFixture : NuGetFixture<NuGetSourcesSettings>
+    public string Name { get; set; }
+    public string Source { get; set; }
+
+    protected NuGetSourcesFixture()
     {
-        public string Name { get; set; }
-        public string Source { get; set; }
+        Name = "name";
+        Source = "source";
+    }
 
-        protected NuGetSourcesFixture()
+    public void GivenExistingSource()
+    {
+        ProcessRunner.Process.SetStandardOutput(new[]
         {
-            Name = "name";
-            Source = "source";
-        }
+            "  1.  https://www.nuget.org/api/v2/ [Enabled]",
+            "      https://www.nuget.org/api/v2/",
+            $"  2.  {Name} [Enabled]",
+            $"      {Source}"
+        });
+    }
 
-        public void GivenExistingSource()
-        {
-            ProcessRunner.Process.SetStandardOutput(new[]
-            {
-                "  1.  https://www.nuget.org/api/v2/ [Enabled]",
-                "      https://www.nuget.org/api/v2/",
-                $"  2.  {Name} [Enabled]",
-                $"      {Source}"
-            });
-        }
-
-        public void GivenSourceAlreadyHasBeenAdded()
-        {
-            ProcessRunner.Process.SetStandardOutput(new[] { Source });
-        }
+    public void GivenSourceAlreadyHasBeenAdded()
+    {
+        ProcessRunner.Process.SetStandardOutput(new[] { Source });
     }
 }

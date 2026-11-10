@@ -53,7 +53,8 @@ var logObjectMethods = new [] {
 };
 
 var loggingAliasesTask = Task("Cake.Common.Diagnostics.LoggingAliases")
-                            .IsDependentOn("Cake.Common.Diagnostics.LoggingAliases.GetCallerInfo");
+                            .IsDependentOn("Cake.Common.Diagnostics.LoggingAliases.GetCallerInfo")
+                            .IsDependentOn("Cake.Common.Diagnostics.LoggingAliases.InterpolatedString");
 
 Array.ForEach(
     verbosities,
@@ -179,17 +180,63 @@ Array.ForEach(
                         ))
 );
 
+Task("Cake.Common.Diagnostics.LoggingAliases.InterpolatedString.OverloadResolution")
+    .Does(() =>
+{
+    // Given
+    var name = "World";
+    var expressions = new System.Linq.Expressions.Expression<Action>[] {
+        () => Error($"Hello {name}"),
+        () => Warning($"Hello {name}"),
+        () => Information($"Hello {name}"),
+        () => Verbose($"Hello {name}"),
+        () => Debug($"Hello {name}")
+    };
+
+    foreach (var expression in expressions)
+    {
+        // When
+        var method = ((System.Linq.Expressions.MethodCallExpression)expression.Body).Method;
+
+        // Then
+        Assert.Equal(typeof(FormattableString), method.GetParameters().Single().ParameterType);
+        Assert.Equal(1, method.GetCustomAttributes(typeof(System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute), false)
+                            .Cast<System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute>()
+                            .Single()
+                            .Priority);
+    }
+});
+
+Task("Cake.Common.Diagnostics.LoggingAliases.InterpolatedString")
+    .IsDependentOn("Cake.Common.Diagnostics.LoggingAliases.InterpolatedString.OverloadResolution")
+    .Does(() =>
+{
+    // Given
+    var now = DateTime.Now;
+    var value = 42.5m;
+    var braces = "{Not a format item}";
+    object nothing = null;
+
+    using (Context.WithVerbosity(Verbosity.Diagnostic))
+    {
+        // When, Then
+        Error($"Cake.Common.Diagnostics.LoggingAliases.InterpolatedString.Error {now:HH:mm:ss} [{value,8:N2}] [{value,-8}] {braces} {{literal}} {nothing}");
+        Warning($"Cake.Common.Diagnostics.LoggingAliases.InterpolatedString.Warning {now:HH:mm:ss} [{value,8:N2}] [{value,-8}] {braces} {{literal}} {nothing}");
+        Information($"Cake.Common.Diagnostics.LoggingAliases.InterpolatedString.Information {now:HH:mm:ss} [{value,8:N2}] [{value,-8}] {braces} {{literal}} {nothing}");
+        Verbose($"Cake.Common.Diagnostics.LoggingAliases.InterpolatedString.Verbose {now:HH:mm:ss} [{value,8:N2}] [{value,-8}] {braces} {{literal}} {nothing}");
+        Debug($"Cake.Common.Diagnostics.LoggingAliases.InterpolatedString.Debug {now:HH:mm:ss} [{value,8:N2}] [{value,-8}] {braces} {{literal}} {nothing}");
+    }
+});
+
 Task("Cake.Common.Diagnostics.LoggingAliases.GetCallerInfo")
     .Does( ()=> {
-    // Given
-    ScriptCallerInfo callerInfoDSL;
-    ScriptCallerInfo callerInfo;
+        // Given
 
-    // When
-    CallerInfoTest(out callerInfoDSL, out callerInfo);
+        // When
+        CallerInfoTest(out ScriptCallerInfo callerInfoDSL, out ScriptCallerInfo callerInfo);
 
-    // Then
-    Assert.Equal(callerInfo.MemberName, callerInfoDSL.MemberName);
+        // Then
+        Assert.Equal(callerInfo.MemberName, callerInfoDSL.MemberName);
     Assert.Equal(callerInfo.SourceFilePath.FullPath, callerInfoDSL.SourceFilePath.FullPath);
     Assert.Equal(callerInfo.SourceLineNumber, callerInfoDSL.SourceLineNumber);
 });

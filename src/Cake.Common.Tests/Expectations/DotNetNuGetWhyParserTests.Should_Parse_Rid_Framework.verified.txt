@@ -1,0 +1,32 @@
+{
+  Projects: [
+    {
+      Name: App,
+      Package: Runtime.Win,
+      Graphs: [
+        {
+          Framework: net9.0/win-x64,
+          Dependencies: [
+            {
+              Id: Runtime.Win,
+              Version: 1.0.0,
+              VersionConstraint: >= 1.0.0,
+              Dependencies: []
+            }
+          ]
+        },
+        {
+          Framework: net9.0,
+          Dependencies: [
+            {
+              Id: Runtime.Win,
+              Version: 1.0.0,
+              VersionConstraint: >= 1.0.0,
+              Dependencies: []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

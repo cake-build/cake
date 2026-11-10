@@ -4,193 +4,190 @@
 
 using Cake.Common.Build.WoodpeckerCI.Data;
 using Cake.Common.Tests.Fixtures.Build;
-using Cake.Core.IO;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.WoodpeckerCI.Data
+namespace Cake.Common.Tests.Unit.Build.WoodpeckerCI.Data;
+
+public sealed class WoodpeckerCIEnvironmentInfoTests
 {
-    public sealed class WoodpeckerCIEnvironmentInfoTests
+    public sealed class TheCIProperty
     {
-        public sealed class TheCIProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.CI;
+            // When
+            var result = info.CI;
 
-                // Then
-                Assert.Equal("woodpecker", result);
-            }
+            // Then
+            Assert.Equal("woodpecker", result);
+        }
+    }
+
+    public sealed class TheWorkspaceProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_DirectoryPath_For_Valid_Path()
+        {
+            // Given
+            var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+
+            // When
+            var result = info.Workspace;
+
+            // Then
+            Assert.NotNull(result);
+            Assert.Equal("/woodpecker/src/git.example.com/john-doe/my-repo", result.FullPath);
         }
 
-        public sealed class TheWorkspaceProperty
+        [Fact]
+        public void Should_Return_Null_For_Empty_Path()
         {
-            [Fact]
-            public void Should_Return_Correct_DirectoryPath_For_Valid_Path()
-            {
-                // Given
-                var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var fixture = new WoodpeckerCIInfoFixture();
+            fixture.SetEnvironmentVariable("CI_WORKSPACE", "");
+            var info = fixture.CreateEnvironmentInfo();
 
-                // When
-                var result = info.Workspace;
+            // When
+            var result = info.Workspace;
 
-                // Then
-                Assert.NotNull(result);
-                Assert.Equal("/woodpecker/src/git.example.com/john-doe/my-repo", result.FullPath);
-            }
-
-            [Fact]
-            public void Should_Return_Null_For_Empty_Path()
-            {
-                // Given
-                var fixture = new WoodpeckerCIInfoFixture();
-                fixture.SetEnvironmentVariable("CI_WORKSPACE", "");
-                var info = fixture.CreateEnvironmentInfo();
-
-                // When
-                var result = info.Workspace;
-
-                // Then
-                Assert.Null(result);
-            }
-
-            [Fact]
-            public void Should_Return_Null_For_Missing_Path()
-            {
-                // Given
-                var fixture = new WoodpeckerCIInfoFixture();
-                fixture.SetEnvironmentVariable("CI_WORKSPACE", null);
-                var info = fixture.CreateEnvironmentInfo();
-
-                // When
-                var result = info.Workspace;
-
-                // Then
-                Assert.Null(result);
-            }
+            // Then
+            Assert.Null(result);
         }
 
-        public sealed class TheRepositoryProperty
+        [Fact]
+        public void Should_Return_Null_For_Missing_Path()
         {
-            [Fact]
-            public void Should_Return_Repository_Info()
-            {
-                // Given
-                var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var fixture = new WoodpeckerCIInfoFixture();
+            fixture.SetEnvironmentVariable("CI_WORKSPACE", null);
+            var info = fixture.CreateEnvironmentInfo();
 
-                // When
-                var result = info.Repository;
+            // When
+            var result = info.Workspace;
 
-                // Then
-                Assert.NotNull(result);
-                Assert.Equal("john-doe/my-repo", result.Repo);
-            }
+            // Then
+            Assert.Null(result);
         }
+    }
 
-        public sealed class TheCommitProperty
+    public sealed class TheRepositoryProperty
+    {
+        [Fact]
+        public void Should_Return_Repository_Info()
         {
-            [Fact]
-            public void Should_Return_Commit_Info()
-            {
-                // Given
-                var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Commit;
+            // When
+            var result = info.Repository;
 
-                // Then
-                Assert.NotNull(result);
-                Assert.Equal("eba09b46064473a1d345da7abf28b477468e8dbd", result.Sha);
-            }
+            // Then
+            Assert.NotNull(result);
+            Assert.Equal("john-doe/my-repo", result.Repo);
         }
+    }
 
-        public sealed class ThePipelineProperty
+    public sealed class TheCommitProperty
+    {
+        [Fact]
+        public void Should_Return_Commit_Info()
         {
-            [Fact]
-            public void Should_Return_Pipeline_Info()
-            {
-                // Given
-                var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Pipeline;
+            // When
+            var result = info.Commit;
 
-                // Then
-                Assert.NotNull(result);
-                Assert.Equal(8, result.Number);
-            }
+            // Then
+            Assert.NotNull(result);
+            Assert.Equal("eba09b46064473a1d345da7abf28b477468e8dbd", result.Sha);
         }
+    }
 
-        public sealed class TheWorkflowProperty
+    public sealed class ThePipelineProperty
+    {
+        [Fact]
+        public void Should_Return_Pipeline_Info()
         {
-            [Fact]
-            public void Should_Return_Workflow_Info()
-            {
-                // Given
-                var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Workflow;
+            // When
+            var result = info.Pipeline;
 
-                // Then
-                Assert.NotNull(result);
-                Assert.Equal("release", result.Name);
-            }
+            // Then
+            Assert.NotNull(result);
+            Assert.Equal(8, result.Number);
         }
+    }
 
-        public sealed class TheStepProperty
+    public sealed class TheWorkflowProperty
+    {
+        [Fact]
+        public void Should_Return_Workflow_Info()
         {
-            [Fact]
-            public void Should_Return_Step_Info()
-            {
-                // Given
-                var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Step;
+            // When
+            var result = info.Workflow;
 
-                // Then
-                Assert.NotNull(result);
-                Assert.Equal("build package", result.Name);
-            }
+            // Then
+            Assert.NotNull(result);
+            Assert.Equal("release", result.Name);
         }
+    }
 
-        public sealed class TheSystemProperty
+    public sealed class TheStepProperty
+    {
+        [Fact]
+        public void Should_Return_Step_Info()
         {
-            [Fact]
-            public void Should_Return_System_Info()
-            {
-                // Given
-                var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.System;
+            // When
+            var result = info.Step;
 
-                // Then
-                Assert.NotNull(result);
-                Assert.Equal("woodpecker", result.Name);
-            }
+            // Then
+            Assert.NotNull(result);
+            Assert.Equal("build package", result.Name);
         }
+    }
 
-        public sealed class TheForgeProperty
+    public sealed class TheSystemProperty
+    {
+        [Fact]
+        public void Should_Return_System_Info()
         {
-            [Fact]
-            public void Should_Return_Forge_Info()
-            {
-                // Given
-                var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+            // Given
+            var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
 
-                // When
-                var result = info.Forge;
+            // When
+            var result = info.System;
 
-                // Then
-                Assert.NotNull(result);
-                Assert.Equal(WoodpeckerCIForgeType.GitHub, result.Type);
-            }
+            // Then
+            Assert.NotNull(result);
+            Assert.Equal("woodpecker", result.Name);
+        }
+    }
+
+    public sealed class TheForgeProperty
+    {
+        [Fact]
+        public void Should_Return_Forge_Info()
+        {
+            // Given
+            var info = new WoodpeckerCIInfoFixture().CreateEnvironmentInfo();
+
+            // When
+            var result = info.Forge;
+
+            // Then
+            Assert.NotNull(result);
+            Assert.Equal(WoodpeckerCIForgeType.GitHub, result.Type);
         }
     }
 }

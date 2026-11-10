@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -7,50 +7,50 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.IO.Globbing;
 
-namespace Cake.Core.IO
+namespace Cake.Core.IO;
+
+/// <summary>
+/// The file system globber.
+/// </summary>
+public sealed class Globber : IGlobber
 {
+    private readonly GlobParser _parser;
+    private readonly GlobVisitor _visitor;
+    private readonly PathComparer _comparer;
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// The file system globber.
+    /// Initializes a new instance of the <see cref="Globber"/> class.
     /// </summary>
-    public sealed class Globber : IGlobber
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    public Globber(IFileSystem fileSystem, ICakeEnvironment environment)
     {
-        private readonly GlobParser _parser;
-        private readonly GlobVisitor _visitor;
-        private readonly PathComparer _comparer;
-        private readonly ICakeEnvironment _environment;
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        ArgumentNullException.ThrowIfNull(environment);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Globber"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        public Globber(IFileSystem fileSystem, ICakeEnvironment environment)
+        _environment = environment;
+        _parser = new GlobParser(environment);
+        _visitor = new GlobVisitor(fileSystem, environment);
+        _comparer = new PathComparer(environment.Platform.IsUnix());
+    }
+
+    /// <inheritdoc/>
+    public IEnumerable<Path> Match(GlobPattern pattern, GlobberSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(pattern);
+        if (string.IsNullOrWhiteSpace(pattern?.Pattern))
         {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            ArgumentNullException.ThrowIfNull(environment);
 
-            _environment = environment;
-            _parser = new GlobParser(environment);
-            _visitor = new GlobVisitor(fileSystem, environment);
-            _comparer = new PathComparer(environment.Platform.IsUnix());
+            return [];
         }
 
-        /// <inheritdoc/>
-        public IEnumerable<Path> Match(GlobPattern pattern, GlobberSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(pattern);
-            if (string.IsNullOrWhiteSpace(pattern?.Pattern))
-            {
-                return Enumerable.Empty<Path>();
-            }
+        // Parse the pattern into an AST.
+        var root = _parser.Parse(pattern, settings);
 
-            // Parse the pattern into an AST.
-            var root = _parser.Parse(pattern, settings);
-
-            // Visit all nodes in the parsed patterns and filter the result.
-            return _visitor.Walk(root, settings)
-                .Select(x => x.Path)
-                .Distinct(_comparer);
-        }
+        // Visit all nodes in the parsed patterns and filter the result.
+        return _visitor.Walk(root, settings)
+            .Select(x => x.Path)
+            .Distinct(_comparer);
     }
 }

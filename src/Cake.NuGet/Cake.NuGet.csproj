@@ -4,7 +4,6 @@
     <OutputType>Library</OutputType>
     <PlatformTarget>AnyCpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);NU1605</NoWarn>
   </PropertyGroup>
   <!-- Package specific metadata -->
   <PropertyGroup>
@@ -32,12 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.Platforms" GeneratePathProperty="true">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-    <EmbeddedResource Include="$(PkgMicrosoft_NETCore_Platforms)\runtime.json">
-      <Link>runtime.json</Link>
-    </EmbeddedResource>
+    <!-- Refreshed by build.cake Update-Portable-Rid-Graph when global.json changes. -->
+    <EmbeddedResource Include="PortableRuntimeIdentifierGraph.json" />
   </ItemGroup>
 
 </Project>

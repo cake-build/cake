@@ -7,67 +7,66 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotNet.Tool
+namespace Cake.Common.Tools.DotNet.Tool;
+
+/// <summary>
+/// .NET Extensibility Commands Runner.
+/// </summary>
+public sealed class DotNetToolRunner : DotNetTool<DotNetSettings>
 {
     /// <summary>
-    /// .NET Extensibility Commands Runner.
+    /// Initializes a new instance of the <see cref="DotNetToolRunner" /> class.
     /// </summary>
-    public sealed class DotNetToolRunner : DotNetTool<DotNetSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotNetToolRunner(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetToolRunner" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public DotNetToolRunner(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    }
+
+    /// <summary>
+    /// Execute an assembly using arguments and settings.
+    /// </summary>
+    /// <param name="projectPath">The target project path.</param>
+    /// <param name="command">The command to execute.</param>
+    /// <param name="arguments">The arguments.</param>
+    /// <param name="settings">The settings.</param>
+    public void Execute(FilePath projectPath, string command, ProcessArgumentBuilder arguments, DotNetToolSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(command))
         {
+            throw new ArgumentNullException(nameof(command));
         }
 
-        /// <summary>
-        /// Execute an assembly using arguments and settings.
-        /// </summary>
-        /// <param name="projectPath">The target project path.</param>
-        /// <param name="command">The command to execute.</param>
-        /// <param name="arguments">The arguments.</param>
-        /// <param name="settings">The settings.</param>
-        public void Execute(FilePath projectPath, string command, ProcessArgumentBuilder arguments, DotNetToolSettings settings)
+        ArgumentNullException.ThrowIfNull(settings);
+
+        var processSettings = new ProcessSettings
         {
-            if (string.IsNullOrWhiteSpace(command))
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
+            WorkingDirectory = settings.WorkingDirectory ?? projectPath?.GetDirectory()
+        };
 
-            ArgumentNullException.ThrowIfNull(settings);
+        RunCommand(settings, GetArguments(command, arguments, settings), processSettings);
+    }
 
-            var processSettings = new ProcessSettings
-            {
-                WorkingDirectory = settings.WorkingDirectory ?? projectPath?.GetDirectory()
-            };
+    private ProcessArgumentBuilder GetArguments(string command, ProcessArgumentBuilder arguments, DotNetToolSettings settings)
+    {
+        var builder = CreateArgumentBuilder(settings);
 
-            RunCommand(settings, GetArguments(command, arguments, settings), processSettings);
+        // Appending quoted to cater for scenarios where the command passed is not a .NET CLI command,
+        // but the path of an application to run that contains whitespace
+        builder.AppendQuoted(command);
+
+        // Arguments
+        if (!arguments.IsNullOrEmpty())
+        {
+            arguments.CopyTo(builder);
         }
 
-        private ProcessArgumentBuilder GetArguments(string command, ProcessArgumentBuilder arguments, DotNetToolSettings settings)
-        {
-            var builder = CreateArgumentBuilder(settings);
-
-            // Appending quoted to cater for scenarios where the command passed is not a .NET CLI command,
-            // but the path of an application to run that contains whitespace
-            builder.AppendQuoted(command);
-
-            // Arguments
-            if (!arguments.IsNullOrEmpty())
-            {
-                arguments.CopyTo(builder);
-            }
-
-            return builder;
-        }
+        return builder;
     }
 }

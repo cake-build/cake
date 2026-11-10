@@ -4,51 +4,49 @@
 
 using Cake.Common.Build.Rwx.Commands;
 using Cake.Core;
-using Cake.Core.IO;
 using Cake.Testing;
 using NSubstitute;
 
-namespace Cake.Common.Tests.Fixtures.Build
+namespace Cake.Common.Tests.Fixtures.Build;
+
+internal sealed class RwxCommandsFixture
 {
-    internal sealed class RwxCommandsFixture
+    public RwxInfoFixture InfoFixture { get; }
+
+    public ICakeEnvironment Environment => InfoFixture.Environment;
+
+    public FakeFileSystem FileSystem { get; }
+
+    public RwxCommandsFixture()
     {
-        public RwxInfoFixture InfoFixture { get; }
+        InfoFixture = new RwxInfoFixture();
+        Environment.WorkingDirectory.Returns("/work");
+        FileSystem = new FakeFileSystem(Environment);
+        FileSystem.CreateDirectory("/rwx/values");
+        FileSystem.CreateDirectory("/rwx/artifacts");
+        FileSystem.CreateDirectory("/rwx/env");
+    }
 
-        public ICakeEnvironment Environment => InfoFixture.Environment;
+    public RwxCommands CreateRwxCommands()
+    {
+        return new RwxCommands(Environment, FileSystem, InfoFixture.CreateEnvironmentInfo());
+    }
 
-        public FakeFileSystem FileSystem { get; }
+    public RwxCommandsFixture WithNoRwxValues()
+    {
+        Environment.GetEnvironmentVariable("RWX_VALUES").Returns(null as string);
+        return this;
+    }
 
-        public RwxCommandsFixture()
-        {
-            InfoFixture = new RwxInfoFixture();
-            Environment.WorkingDirectory.Returns("/work");
-            FileSystem = new FakeFileSystem(Environment);
-            FileSystem.CreateDirectory("/rwx/values");
-            FileSystem.CreateDirectory("/rwx/artifacts");
-            FileSystem.CreateDirectory("/rwx/env");
-        }
+    public RwxCommandsFixture WithNoRwxArtifacts()
+    {
+        Environment.GetEnvironmentVariable("RWX_ARTIFACTS").Returns(null as string);
+        return this;
+    }
 
-        public RwxCommands CreateRwxCommands()
-        {
-            return new RwxCommands(Environment, FileSystem, InfoFixture.CreateEnvironmentInfo());
-        }
-
-        public RwxCommandsFixture WithNoRwxValues()
-        {
-            Environment.GetEnvironmentVariable("RWX_VALUES").Returns(null as string);
-            return this;
-        }
-
-        public RwxCommandsFixture WithNoRwxArtifacts()
-        {
-            Environment.GetEnvironmentVariable("RWX_ARTIFACTS").Returns(null as string);
-            return this;
-        }
-
-        public RwxCommandsFixture WithNoRwxEnv()
-        {
-            Environment.GetEnvironmentVariable("RWX_ENV").Returns(null as string);
-            return this;
-        }
+    public RwxCommandsFixture WithNoRwxEnv()
+    {
+        Environment.GetEnvironmentVariable("RWX_ENV").Returns(null as string);
+        return this;
     }
 }

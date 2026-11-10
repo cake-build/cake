@@ -7,30 +7,29 @@ using Cake.Core.IO;
 using Cake.Testing;
 using Cake.Testing.Fixtures;
 
-namespace Cake.Common.Tests.Fixtures.Tools
+namespace Cake.Common.Tests.Fixtures.Tools;
+
+/// <summary>
+/// Runs the Cake tool through the .NET host, which is what happens when the
+/// resolved tool path is Cake.dll instead of a Cake executable.
+/// </summary>
+internal sealed class CakeRunnerCoreFixture : ToolFixture<CakeSettings>
 {
-    /// <summary>
-    /// Runs the Cake tool through the .NET host, which is what happens when the
-    /// resolved tool path is Cake.dll instead of a Cake executable.
-    /// </summary>
-    internal sealed class CakeRunnerCoreFixture : ToolFixture<CakeSettings>
+    public FilePath ScriptPath { get; set; }
+
+    public CakeRunnerCoreFixture()
+        : base("dotnet.exe")
     {
-        public FilePath ScriptPath { get; set; }
+        ScriptPath = new FilePath("./build.cake");
+        FileSystem.CreateFile(ScriptPath.MakeAbsolute(Environment));
 
-        public CakeRunnerCoreFixture()
-            : base("dotnet.exe")
-        {
-            ScriptPath = new FilePath("./build.cake");
-            FileSystem.CreateFile(ScriptPath.MakeAbsolute(Environment));
+        Settings.ToolPath = new FilePath("./tools/Cake.dll");
+        this.GivenSettingsToolPathExist();
+    }
 
-            Settings.ToolPath = new FilePath("./tools/Cake.dll");
-            this.GivenSettingsToolPathExist();
-        }
-
-        protected override void RunTool()
-        {
-            var runner = new CakeRunner(FileSystem, Environment, Globber, ProcessRunner, Tools);
-            runner.ExecuteScript(ScriptPath, Settings);
-        }
+    protected override void RunTool()
+    {
+        var runner = new CakeRunner(FileSystem, Environment, Globber, ProcessRunner, Tools);
+        runner.ExecuteScript(ScriptPath, Settings);
     }
 }

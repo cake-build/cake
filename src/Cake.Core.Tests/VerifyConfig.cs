@@ -1,35 +1,40 @@
-﻿using System.Diagnostics.Contracts;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 using VerifyTests;
-using VerifyTests.DiffPlex;
 using static VerifyXunit.Verifier;
 
-namespace Cake.Core.Tests
+namespace Cake.Core.Tests;
+
+public static class VerifyConfig
 {
-    public static class VerifyConfig
+    private static bool _initialized;
+
+    [ModuleInitializer]
+    public static void Init()
     {
-        [ModuleInitializer]
-        public static void Init()
+        // The runtime invokes this module initializer, and Cake.Common.Tests calls
+        // it again so that assembly is loaded before any Verify run.
+        if (_initialized)
         {
-            EmptyFiles.FileExtensions.AddTextExtension(Extensions.Cake);
-
-            if (!VerifyDiffPlex.Initialized)
-            {
-                VerifyDiffPlex.Initialize(OutputType.Compact);
-                DerivePathInfo(Expectations.Initialize);
-            }
+            return;
         }
 
-        public static class Extensions
-        {
-            public const string Cake = "cake";
-        }
+        _initialized = true;
 
-        [Pure]
-        public static SettingsTask VerifyCake(
-                string target,
-                VerifySettings settings = null,
-                [CallerFilePath] string sourceFile = "")
-            => Verify(target, Extensions.Cake, settings, sourceFile);
+        EmptyFiles.FileExtensions.AddTextExtension(Extensions.Cake);
+        VerifierSettings.UseTextDiffFormat(DiffEngine.TextDiffFormat.Compact);
+        DerivePathInfo(Expectations.Initialize);
     }
+
+    public static class Extensions
+    {
+        public const string Cake = "cake";
+    }
+
+    [Pure]
+    public static SettingsTask VerifyCake(
+            string target,
+            VerifySettings settings = null,
+            [CallerFilePath] string sourceFile = "")
+        => Verify(target, Extensions.Cake, settings, sourceFile);
 }

@@ -29,13 +29,7 @@ Task("Cake.Core.Scripting.DefineDirective.NotDefined")
 Task("Cake.Core.Scripting.DefineDirective.Runtime")
     .Does(context =>
 {
-#if NETFRAMEWORK
-                Assert.Equal(".NETFramework,Version=v4.6.1",
-#elif !NETCOREAPP
-                Assert.Equal(".NETStandard,Version=v2.0",
-#else
-                Assert.Equal(".NETCoreApp,Version=v" +
-#endif
+    Assert.Equal(".NETCoreApp,Version=v" +
 #if NETCOREAPP2_0
                     "2.0",
 #elif NETCOREAPP2_1
@@ -58,6 +52,8 @@ Task("Cake.Core.Scripting.DefineDirective.Runtime")
                     "9.0",
 #elif NET10_0
                     "10.0",
+#elif NET11_0
+                    "11.0",
 #endif
                     context.Environment.Runtime.BuiltFramework.FullName);
 });
@@ -72,8 +68,25 @@ Task("Cake.Core.Scripting.DefineDirective.Cake")
     cake = false;
 #endif
     Assert.True(cake);
+
+    bool cake7;
+#if (CAKE_7)
+    cake7 = true;
+#else
+    cake7 = false;
+#endif
+    Assert.True(cake7);
+
+    bool cake7OrGreater;
+#if (CAKE_7_OR_GREATER)
+    cake7OrGreater = true;
+#else
+    cake7OrGreater = false;
+#endif
+    Assert.True(cake7OrGreater);
 });
 
+#if NET5_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#9")
     .Does(() =>
 {
@@ -83,7 +96,9 @@ Task("Cake.Core.Scripting.DefineDirective.C#9")
 });
 
 public record CSharpNine(bool IsNine);
+#endif
 
+#if NET6_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#10")
     .Does(() =>
 {
@@ -97,8 +112,9 @@ Task("Cake.Core.Scripting.DefineDirective.C#10")
     // Then
     Assert.Equal("Hello world!", helloWorld);
 });
+#endif
 
-
+#if NET7_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#11")
     .Does(() =>
 {
@@ -112,7 +128,9 @@ Task("Cake.Core.Scripting.DefineDirective.C#11")
     Some have "quoted text" in them.
     """;
 });
+#endif
 
+#if NET8_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#12")
     .Does(() =>
 {
@@ -122,8 +140,9 @@ Task("Cake.Core.Scripting.DefineDirective.C#12")
     int[] row2 = [7, 8, 9];
     int[] single = [..row0, ..row1, ..row2];
 });
+#endif
 
-#if NET9_0
+#if NET9_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#13")
     .Does(() =>
 {
@@ -140,7 +159,7 @@ Task("Cake.Core.Scripting.DefineDirective.C#13")
 });
 #endif
 
-#if NET10_0
+#if NET10_0_OR_GREATER
 Task("Cake.Core.Scripting.DefineDirective.C#14")
     .Does(() =>
 {
@@ -156,18 +175,54 @@ Task("Cake.Core.Scripting.DefineDirective.C#14")
 });
 #endif
 
+#if NET11_0_OR_GREATER
+Task("Cake.Core.Scripting.DefineDirective.C#15")
+    .Does(() =>
+{
+    // Given - Test C# 15 labeled break
+    var n = 0;
+
+    // When
+    outer: for (var i = 0; i < 3; i++)
+    {
+        for (var j = 0; j < 3; j++)
+        {
+            n++;
+            if (j == 1)
+            {
+                break outer;
+            }
+        }
+    }
+
+    // Then
+    Assert.Equal(2, n);
+});
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 Task("Cake.Core.Scripting.DefineDirective")
+#if NET5_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#9")
+#endif
+#if NET6_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#10")
+#endif
+#if NET7_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#11")
+#endif
+#if NET8_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#12")
-#if NET9_0
+#endif
+#if NET9_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#13")
 #endif
-#if NET10_0
+#if NET10_0_OR_GREATER
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#14")
+#endif
+#if NET11_0_OR_GREATER
+    .IsDependentOn("Cake.Core.Scripting.DefineDirective.C#15")
 #endif
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.Defined")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective.NotDefined")

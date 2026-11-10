@@ -1,0 +1,7 @@
+﻿                                                                                
+  Task                                      Description                         
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Build                                     Builds the solution                 
+  Clean                                                                         
+  Task[with]markup                          Handles [brackets]                  
+                                                                                

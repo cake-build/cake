@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -24,6 +24,8 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Cake")]
 [assembly: InternalsVisibleTo("Cake.Tool")]
 [assembly: InternalsVisibleTo("Cake.Common")]
+[assembly: InternalsVisibleTo("Cake.Cli")]
+[assembly: InternalsVisibleTo("Cake.Cli.Tests")]
 [assembly: InternalsVisibleTo("Cake.Core.Tests")]
 [assembly: InternalsVisibleTo("Cake.Testing.Xunit")]
 [assembly: InternalsVisibleTo("Cake.Testing.Xunit.v3")]

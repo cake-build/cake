@@ -1,84 +1,209 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
 using System.Collections.Generic;
 
-namespace Cake.Core.IO
+namespace Cake.Core.IO;
+
+/// <summary>
+/// Specifies a set of values that are used to start a process.
+/// </summary>
+public sealed class ProcessSettings
 {
     /// <summary>
-    /// Specifies a set of values that are used to start a process.
+    /// Gets or sets the set of command-line arguments to use when starting the application.
     /// </summary>
-    public sealed class ProcessSettings
-    {
-        /// <summary>
-        /// Gets or sets the set of command-line arguments to use when starting the application.
-        /// </summary>
-        /// <value>The set of command-line arguments to use when starting the application.</value>
-        public ProcessArgumentBuilder Arguments { get; set; }
+    /// <value>The set of command-line arguments to use when starting the application.</value>
+    public ProcessArgumentBuilder Arguments { get; set; }
 
-        /// <summary>
-        /// Gets or sets the working directory for the process to be started.
-        /// </summary>
-        /// <value>The working directory for the process to be started.</value>
-        public DirectoryPath WorkingDirectory { get; set; }
+    /// <summary>
+    /// Gets or sets the working directory for the process to be started.
+    /// </summary>
+    /// <value>The working directory for the process to be started.</value>
+    public DirectoryPath WorkingDirectory { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not to opt out of using
-        /// an explicit working directory for the process.
-        /// </summary>
-        public bool NoWorkingDirectory { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to opt out of using
+    /// an explicit working directory for the process.
+    /// </summary>
+    public bool NoWorkingDirectory { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the error output of an application is written to the standard error stream.
-        /// </summary>
-        /// <value>true if error output should be redirected; false if error output should be written to the standard error stream. The default is false.</value>
-        public bool RedirectStandardError { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether the error output of an application is written to the standard error stream.
+    /// </summary>
+    /// <value>true if error output should be redirected; false if error output should be written to the standard error stream. The default is false.</value>
+    public bool RedirectStandardError { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the output of an application is written to the standard output stream.
-        /// </summary>
-        /// <value>true if output should be redirected; false if output should be written to the standard output stream. The default is false.</value>
-        public bool RedirectStandardOutput { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether the output of an application is written to the standard output stream.
+    /// </summary>
+    /// <value>true if output should be redirected; false if output should be written to the standard output stream. The default is false.</value>
+    public bool RedirectStandardOutput { get; set; }
 
-        /// <summary>
-        /// Gets or sets a function that intercepts the error output before being redirected. Use in conjunction with <see cref="RedirectStandardError"/>.
-        /// </summary>
-        public Func<string, string> RedirectedStandardErrorHandler { get; set; }
+    /// <summary>
+    /// Gets or sets a function that intercepts the error output before being redirected. Use in conjunction with <see cref="RedirectStandardError"/>.
+    /// </summary>
+    public Func<string, string> RedirectedStandardErrorHandler { get; set; }
 
-        /// <summary>
-        /// Gets or sets a function that intercepts the standard output before being redirected. Use in conjunction with <see cref="RedirectStandardOutput"/>.
-        /// </summary>
-        public Func<string, string> RedirectedStandardOutputHandler { get; set; }
+    /// <summary>
+    /// Gets or sets a function that intercepts the standard output before being redirected. Use in conjunction with <see cref="RedirectStandardOutput"/>.
+    /// </summary>
+    public Func<string, string> RedirectedStandardOutputHandler { get; set; }
 
-        /// <summary>
-        /// Gets or sets optional timeout, in milliseconds, to wait for the associated process to exit. The maximum is the largest possible value of a 32-bit integer, which represents infinity to the operating system.
-        /// </summary>
-        public int? Timeout { get; set; }
+    /// <summary>
+    /// Gets or sets the payload written to the process standard input.
+    /// </summary>
+    /// <value>
+    /// The standard input payload. <c>null</c> leaves standard input unredirected.
+    /// Accepts a string, a UTF-8 literal (<c>"""..."""u8</c>), a byte array, or <see cref="ReadOnlyMemory{T}"/> of <see cref="byte"/>.
+    /// </value>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// IEnumerable&lt;string&gt; redirectedStandardOutput;
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "run -",
+    ///         StandardInput = 
+    ///             """
+    ///             Console.Write("Hello from stdin");
+    ///             """,
+    ///         RedirectStandardOutput = true
+    ///     },
+    ///     out redirectedStandardOutput);
+    /// Information("Output: {0}", string.Concat(redirectedStandardOutput));
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public ProcessStandardInput? StandardInput { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether process output will be suppressed.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if process output will be suppressed; otherwise, <c>false</c>.
-        /// </value>
-        public bool Silent { get; set; }
+    /// <summary>
+    /// Gets or sets optional timeout, in milliseconds, to wait for the associated process to exit. The maximum is the largest possible value of a 32-bit integer, which represents infinity to the operating system.
+    /// </summary>
+    public int? Timeout { get; set; }
 
-        /// <summary>
-        /// Gets or sets search paths for files, directories for temporary files, application-specific options, and other similar information.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// StartProcess("cmd", new ProcessSettings{
-        ///         Arguments = "/c set",
-        ///         EnvironmentVariables = new Dictionary&lt;string, string&gt;{
-        ///             { "CI", "True" },
-        ///             { "TEMP", MakeAbsolute(Directory("./Temp")).FullPath }
-        ///         }
-        ///     });
-        /// </code>
-        /// </example>
-        public IDictionary<string, string> EnvironmentVariables { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets a value indicating whether process output will be suppressed.
+    /// </summary>
+    /// <value>
+    ///   <c>true</c> if process output will be suppressed; otherwise, <c>false</c>.
+    /// </value>
+    public bool Silent { get; set; }
+
+    /// <summary>
+    /// Gets or sets search paths for files, directories for temporary files, application-specific options, and other similar information.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// StartProcess("cmd", new ProcessSettings{
+    ///         Arguments = "/c set",
+    ///         EnvironmentVariables = new Dictionary&lt;string, string&gt;{
+    ///             { "CI", "True" },
+    ///             { "TEMP", MakeAbsolute(Directory("./Temp")).FullPath }
+    ///         }
+    ///     });
+    /// </code>
+    /// </example>
+    public IDictionary<string, string> EnvironmentVariables { get; set; }
+
+#if NET11_0_OR_GREATER
+    /// <summary>
+    /// Gets or sets a value indicating whether the child process is terminated when Cake exits.
+    /// Supported on Windows, Linux, and Android. Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version",
+    ///         KillOnParentExit = true
+    ///     });
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public bool KillOnParentExit { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the process is started detached from Cake.
+    /// Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version",
+    ///         StartDetached = true
+    ///     });
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public bool StartDetached { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether only standard handles are inherited by the child process.
+    /// Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version",
+    ///         RestrictInheritedHandles = true
+    ///     });
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public bool RestrictInheritedHandles { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether standard output is discarded.
+    /// Cannot be combined with <see cref="RedirectStandardOutput"/>. Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version",
+    ///         DiscardStandardOutput = true
+    ///     });
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public bool DiscardStandardOutput { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether standard error is discarded.
+    /// Cannot be combined with <see cref="RedirectStandardError"/>. Available when targeting .NET 11 or greater.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var fileName = Context.Tools.Resolve("dotnet.exe")
+    ///                 ?? Context.Tools.Resolve("dotnet");
+    /// var exitCode = StartProcess(
+    ///     fileName,
+    ///     new ProcessSettings {
+    ///         Arguments = "--version",
+    ///         DiscardStandardError = true
+    ///     });
+    /// Information("Exit code: {0}", exitCode);
+    /// </code>
+    /// </example>
+    public bool DiscardStandardError { get; set; }
+#endif
 }

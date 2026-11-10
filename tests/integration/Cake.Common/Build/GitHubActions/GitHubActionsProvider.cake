@@ -201,6 +201,65 @@ Task("Cake.Common.Build.GitHubActionsProvider.Commands.NuGetLogin")
         }
 });
 
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.AzureLogin")
+    .WithCriteria<GitHubActionsData>((context, data) => data.HasAzureLoginCredentials)
+    .Does<GitHubActionsData>(async data => {
+        // When (workload identity: OIDC from ACTIONS_ID_TOKEN_REQUEST_* → Azure AD access token)
+        var accessToken = await GitHubActions.Commands.AzureLogin(data.AzureTenantId, data.AzureClientId);
+
+        // Then
+        Assert.True(!string.IsNullOrWhiteSpace(accessToken));
+
+        using var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Accept.Add(
+            new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        httpClient.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+        const string managementSubscriptionsUrl =
+            "https://management.azure.com/subscriptions?api-version=2020-01-01";
+        using var response = await httpClient.GetAsync(managementSubscriptionsUrl);
+        var body = await response.Content.ReadAsStringAsync();
+
+        Assert.True(
+            response.IsSuccessStatusCode,
+            $"ARM subscriptions request failed ({(int)response.StatusCode} {response.StatusCode}): {body}");
+});
+
+Task("Cake.Common.Build.GitHubActionsProvider.Commands.AzurePrepareWorkloadIdentity")
+    .WithCriteria<GitHubActionsData>((context, data) => data.HasAzureLoginCredentials)
+    .Does<GitHubActionsData>(async data => {
+        // Given
+        var inventoryPath = Paths.Temp.Combine("./Cake.Common.Build.GitHubActionsProvider.Commands.AzurePrepareWorkloadIdentity");
+        EnsureDirectoryExists(inventoryPath);
+
+        // When
+        var workload = await GitHubActions.Commands.AzurePrepareWorkloadIdentity(data.AzureTenantId, data.AzureClientId);
+
+        Assert.Equal(data.AzureTenantId, workload.TenantId);
+        Assert.Equal(data.AzureClientId, workload.ClientId);
+
+        InstallTool("dotnet:?package=ARI&version=2026.9.9.1110");
+        Command(
+            new CommandSettings {
+                ToolName = "ari",
+                ToolExecutableNames = ["ari", "ari.exe"],
+                WorkingDirectory = inventoryPath,
+                EnvironmentVariables = {
+                    { "AZURE_TENANT_ID", workload.TenantId },
+                    { "AZURE_CLIENT_ID", workload.ClientId },
+                    { "AZURE_FEDERATED_TOKEN_FILE", workload.FederatedTokenFile.FullPath }
+                }
+            },
+            new ProcessArgumentBuilder()
+                .Append("inventory")
+                .AppendQuotedSecret(workload.TenantId)
+                .AppendQuoted(inventoryPath.FullPath)
+                .Append("--skip-tenant-overview")
+                .Append("--include-site-application-settings")
+        );
+});
+
 Task("Cake.Common.Build.GitHubActionsProvider.Environment.Runner.Architecture")
     .Does(() => {
         // Given / When
@@ -254,7 +313,9 @@ if (GitHubActions.Environment.Runtime.IsRuntimeAvailable)
         DirectoryArtifactName = $"Directory_{GitHubActions.Environment.Runner.ImageOS ?? GitHubActions.Environment.Runner.OS}_{GitHubActions.Environment.Runner.Architecture}_{Context.Environment.Runtime.BuiltFramework.Identifier}_{Context.Environment.Runtime.BuiltFramework.Version}",
         NuGetUserName = EnvironmentVariable("CAKE_INTEGRATIONTEST_NUGET_USERNAME") ?? string.Empty,
         NuGetPackageId = EnvironmentVariable("CAKE_INTEGRATIONTEST_NUGET_PACKAGE_ID") ?? string.Empty,
-        NuGetPackageVersion = EnvironmentVariable("CAKE_INTEGRATIONTEST_NUGET_PACKAGE_VERSION") ?? string.Empty
+        NuGetPackageVersion = EnvironmentVariable("CAKE_INTEGRATIONTEST_NUGET_PACKAGE_VERSION") ?? string.Empty,
+        AzureTenantId = EnvironmentVariable("CAKE_INTEGRATIONTEST_AZURE_TENANT_ID") ?? string.Empty,
+        AzureClientId = EnvironmentVariable("CAKE_INTEGRATIONTEST_AZURE_CLIENT_ID") ?? string.Empty
     });
 
     gitHubActionsProviderTask
@@ -262,7 +323,9 @@ if (GitHubActions.Environment.Runtime.IsRuntimeAvailable)
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.UploadArtifact.Directory")
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact")
         .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.DownloadArtifact.PreviousJob")
-        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.NuGetLogin");
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.NuGetLogin")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.AzureLogin")
+        .IsDependentOn("Cake.Common.Build.GitHubActionsProvider.Commands.AzurePrepareWorkloadIdentity");
 }
 
 public class GitHubActionsData
@@ -273,6 +336,10 @@ public class GitHubActionsData
     public string NuGetUserName { get; set; }
     public string NuGetPackageId { get; set; }
     public string NuGetPackageVersion { get; set; }
+    public string AzureTenantId { get; set; }
+    public string AzureClientId { get; set; }
+    public bool HasAzureLoginCredentials =>
+        !string.IsNullOrWhiteSpace(AzureTenantId) && !string.IsNullOrWhiteSpace(AzureClientId);
 }
 
 /// <summary>

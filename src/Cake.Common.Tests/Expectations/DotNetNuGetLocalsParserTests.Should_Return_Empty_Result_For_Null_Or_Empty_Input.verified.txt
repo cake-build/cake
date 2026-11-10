@@ -1,0 +1,14 @@
+﻿{
+  Null: {
+    HttpCache: null,
+    GlobalPackages: null,
+    Temp: null,
+    PluginsCache: null
+  },
+  Empty: {
+    HttpCache: null,
+    GlobalPackages: null,
+    Temp: null,
+    PluginsCache: null
+  }
+}

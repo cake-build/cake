@@ -16,6 +16,7 @@
 #load "./Cake.Common/IO/FileAsync.cake"
 #load "./Cake.Common/IO/GlobbingAliases.cake"
 #load "./Cake.Common/IO/ZipAliases.cake"
+#load "./Cake.Common/IO/TarAliases.cake"
 #load "./Cake.Common/ProcessAliases.cake"
 #load "./Cake.Common/ReleaseNotesAliases.cake"
 #load "./Cake.Common/Security/SecurityAliases.cake"
@@ -24,16 +25,23 @@
 #load "./Cake.Common/Solution/Project/Properties/AssemblyInfoAliases.cake"
 #load "./Cake.Common/Solution/Project/XmlDoc/XmlDocAliases.cake"
 #load "./Cake.Common/Text/TextTransformationAliases.cake"
+#load "./Cake.Common/Tools/ToolAliases.cake"
+#load "./Cake.Common/ServiceProviderAliases.cake"
 #load "./Cake.Common/Tools/Cake/CakeAliases.cake"
 #load "./Cake.Common/Tools/Command/CommandAliases.cake"
 #load "./Cake.Common/Tools/DotNet/DotNetAliases.cake"
+#load "./Cake.Common/Tools/DotNet/DotNetAliases.Container.cake"
 #load "./Cake.Common/Tools/GitVersion/GitVersionAliases.cake"
 #load "./Cake.Common/Tools/NuGet/NuGetAliases.cake"
 #load "./Cake.Common/Tools/Chocolatey/ChocolateyAliases.cake"
 #load "./Cake.Common/Tools/TextTransform/TextTransformAliases.cake"
 #load "./Cake.Core/Diagnostics/ICakeLog.cake"
+#load "./Cake.Core/IConsole.cake"
 #load "./Cake.Core/IO/Path.cake"
+#load "./Cake.Core/IO/FileContent.cake"
+#load "./Cake.Core/IO/ProcessArgumentBuilder.cake"
 #load "./Cake.Core/Scripting/AddinDirective.cake"
+#load "./Cake.Core/Scripting/ModuleDirective.cake"
 #load "./Cake.Core/Scripting/DefineDirective.cake"
 #load "./Cake.Core/Scripting/Dynamic.cake"
 #load "./Cake.Core/Scripting/HttpClient.cake"
@@ -43,6 +51,7 @@
 #load "./Cake.Core/Scripting/SpectreConsole.cake"
 #load "./Cake.Core/Tooling/ToolLocator.cake"
 #load "./Cake.Core/CakeAliases.cake"
+#load "./Cake.Core/CakeTaskBuilder.cake"
 #load "./Cake.Core/CakeEnvironment.cake"
 #load "./Cake.DotNetTool.Module/Cake.DotNetTool.Module.cake"
 #load "./Cake.NuGet/InProcessInstaller.cake"
@@ -51,7 +60,7 @@
 // ARGUMENTS
 //////////////////////////////////////////////////
 
-var target = Argument<string>("target", "Run-All-Tests");
+var targets = Arguments<string>("target", ["Run-All-Tests"]);
 
 //////////////////////////////////////////////////
 // TARGETS
@@ -63,8 +72,12 @@ Task("Cake")
 Task("Cake.Core")
     .IsDependentOn("Cake.Core.CakeEnvironment")
     .IsDependentOn("Cake.Core.Diagnostics")
+    .IsDependentOn("Cake.Core.IConsole")
     .IsDependentOn("Cake.Core.IO.Path")
+    .IsDependentOn("Cake.Core.IO.FileContent")
+    .IsDependentOn("Cake.Core.IO.ProcessArgumentBuilder")
     .IsDependentOn("Cake.Core.Scripting.AddinDirective")
+    .IsDependentOn("Cake.Core.Scripting.ModuleDirective")
     .IsDependentOn("Cake.Core.Scripting.DefineDirective")
     .IsDependentOn("Cake.Core.Scripting.Dynamic")
     .IsDependentOn("Cake.Core.Scripting.HttpClient")
@@ -73,7 +86,8 @@ Task("Cake.Core")
     .IsDependentOn("Cake.Core.Scripting.UsingDirective")
     .IsDependentOn("Cake.Core.Scripting.Spectre.Console")
     .IsDependentOn("Cake.Core.Tooling.ToolLocator")
-    .IsDependentOn("Cake.Core.CakeAliases");
+    .IsDependentOn("Cake.Core.CakeAliases")
+    .IsDependentOn("Cake.Core.CakeTaskBuilder");
 
 Task("Cake.Common")
     .IsDependentOn("Cake.Common.ArgumentAliases")
@@ -85,6 +99,7 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.IO.FileAsync")
     .IsDependentOn("Cake.Common.IO.GlobbingAliases")
     .IsDependentOn("Cake.Common.IO.ZipAliases")
+    .IsDependentOn("Cake.Common.IO.TarAliases")
     .IsDependentOn("Cake.Common.ProcessAliases")
     .IsDependentOn("Cake.Common.ReleaseNotesAliases")
     .IsDependentOn("Cake.Common.Security.SecurityAliases")
@@ -93,6 +108,8 @@ Task("Cake.Common")
     .IsDependentOn("Cake.Common.Solution.Project.Properties.AssemblyInfoAliases")
     .IsDependentOn("Cake.Common.Solution.Project.XmlDoc.XmlDocAliases")
     .IsDependentOn("Cake.Common.Text.TextTransformationAliases")
+    .IsDependentOn("Cake.Common.Tools.ToolAliases")
+    .IsDependentOn("Cake.Common.ServiceProviderAliases")
     .IsDependentOn("Cake.Common.Tools.Cake.CakeAliases")
     .IsDependentOn("Cake.Common.Tools.Command.CommandAliases")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases")
@@ -117,4 +134,4 @@ Task("Run-All-Tests")
 
 //////////////////////////////////////////////////
 
-RunTarget(target);
+RunTargets(targets);

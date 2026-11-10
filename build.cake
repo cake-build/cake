@@ -8,6 +8,8 @@
 
 // Load other scripts.
 #load "./build/parameters.cake"
+#load "./build/verify.cake"
+#load "./build/portable-rid-graph.cake"
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -89,7 +91,11 @@ Teardown<BuildParameters>((context, parameters) =>
 // TASKS
 //////////////////////////////////////////////////////////////////////
 
+Task("Update-Portable-Rid-Graph")
+    .Does(static context => UpdatePortableRidGraph(context));
+
 Task("Clean")
+    .IsDependentOn("NuGet-Login")
     .Does<BuildParameters>((context, parameters) =>
 {
     CleanDirectories("./src/**/bin/" + parameters.Configuration);
@@ -111,6 +117,7 @@ Task("Restore-NuGet-Packages")
 
 Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("Update-Portable-Rid-Graph")
     .Does<BuildParameters>((context, parameters) =>
 {
     // Build the solution.
@@ -129,7 +136,7 @@ Task("Run-Unit-Tests")
         () => GetFiles("./src/**/*.Tests.csproj"),
         (parameters, project, context) =>
 {
-    foreach (var framework in new[] { "net8.0", "net9.0", "net10.0" })
+    foreach (var framework in new[] { "net10.0", "net11.0" })
     {
         var trxFileName = $"{project.GetFilenameWithoutExtension()}_{framework}_TestResults.trx";
 
@@ -146,6 +153,17 @@ Task("Run-Unit-Tests")
                 .Append("--report-trx-filename")
                 .AppendQuoted(trxFileName)
         });
+    }
+})
+.ReportError(async exception =>
+{
+    try
+    {
+        await UploadVerifyReceivedFiles(Context, Context.Data.Get<BuildParameters>());
+    }
+    catch (Exception uploadException)
+    {
+        Error("Failed to upload Verify received files: {0}", uploadException.Message);
     }
 });
 
@@ -279,18 +297,24 @@ Task("Publish-AzureDevOps")
     Information("Publish-AzureDevOps Task failed, but continuing with next Task...");
 });
 
+Task("NuGet-Login")
+    .WithCriteria<BuildParameters>(static (_, parameters) => parameters.ShouldPublish)
+    .Does<BuildParameters>(static async (context, parameters) =>
+    {
+        ArgumentException.ThrowIfNullOrEmpty(parameters.NuGetApiUser);
+
+        context.Information("Logging in to NuGet...");
+        parameters.NuGetApiKey = await context.GitHubActions().Commands.NuGetLogin(parameters.NuGetApiUser);
+        ArgumentException.ThrowIfNullOrEmpty(parameters.NuGetApiKey);
+    });
+
 Task("Publish-NuGet")
     .IsDependentOn("Sign-Binaries")
     .IsDependentOn("Package")
+    .IsDependentOn("NuGet-Login")
     .WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublish)
     .Does<BuildParameters>((context, parameters) =>
 {
-    // Resolve the API key.
-    var apiKey = EnvironmentVariable("NUGET_API_KEY");
-    if (string.IsNullOrEmpty(apiKey)) {
-        throw new InvalidOperationException("Could not resolve NuGet API key.");
-    }
-
     // Resolve the API url.
     var apiUrl = EnvironmentVariable("NUGET_API_URL");
     if (string.IsNullOrEmpty(apiUrl)) {
@@ -301,7 +325,7 @@ Task("Publish-NuGet")
     {
         // Push the package.
         var settings = new DotNetNuGetPushSettings {
-            ApiKey = apiKey,
+            ApiKey = parameters.NuGetApiKey,
             Source = apiUrl
         };
 
@@ -351,6 +375,9 @@ Task("Prepare-Integration-Tests")
 });
 
 Task("Frosting-Integration-Tests")
+    .WithCriteria(
+        () => !HasArgument("integration-tests-target"),
+        "Frosting suite when integration-tests-target is omitted or includes Run-All-Tests")
     .DeferOnError()
     .DoesForEach<BuildParameters, (string Framework, FilePath Project)>(
         (parameters, context) => {
@@ -384,18 +411,33 @@ Task("Frosting-Integration-Tests")
     {
         Information("Testing: {0}", test.Framework);
 
-        void RunFrosting(ProcessArgumentBuilder arguments, Dictionary<string, string> environmentVariables)
+        void RunFrosting(ProcessArgumentBuilder arguments, Dictionary<string, string> environmentVariables, int? expectedExitCode = null)
         {
-            DotNetRun(test.Project.FullPath,
-                arguments,
-                new DotNetRunSettings
+            int? exitCode = null;
+            var settings = new DotNetRunSettings
+            {
+                Configuration = parameters.Configuration,
+                Framework = test.Framework,
+                NoRestore = true,
+                NoBuild = true,
+                EnvironmentVariables = environmentVariables
+            };
+
+            if (expectedExitCode is not null)
+            {
+                settings.HandleExitCode = code =>
                 {
-                    Configuration = parameters.Configuration,
-                    Framework = test.Framework,
-                    NoRestore = true,
-                    NoBuild = true,
-                    EnvironmentVariables = environmentVariables
-                });
+                    exitCode = code;
+                    return true;
+                };
+            }
+
+            DotNetRun(test.Project.FullPath, arguments, settings);
+
+            if (expectedExitCode is int expected && exitCode != expected)
+            {
+                throw new Exception($"Expected Frosting exit code {expected}, got {exitCode}.");
+            }
         }
 
         var baseEnvironment = new Dictionary<string, string>
@@ -438,6 +480,13 @@ Task("Frosting-Integration-Tests")
             {
                 ["CAKE_SETTINGS_VERBOSITY"] = "Diagnostic"
             });
+
+        RunFrosting(
+            new ProcessArgumentBuilder()
+                .AppendSwitchQuoted("--target", "=", "foobar")
+                .AppendSwitchQuoted("--verbosity", "=", Argument("integration-tests-verbosity", defaultVerbosity)),
+            baseEnvironment,
+            expectedExitCode: 1);
     }
     catch(Exception ex)
     {
@@ -457,9 +506,8 @@ Task("Run-Integration-Tests")
         parameters => {
             string defaultVerbosity = EnvironmentVariable("RUNNER_DEBUG", "0") == "1" ? "diagnostic" : "quiet";
             return [
-                (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net8.0/**/Cake.dll").Single(), defaultVerbosity),
-                (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net9.0/**/Cake.dll").Single(), defaultVerbosity),
-                (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net10.0/**/Cake.dll").Single(), defaultVerbosity)
+                (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net10.0/**/Cake.dll").Single(), defaultVerbosity),
+                (GetFiles($"{parameters.Paths.Directories.IntegrationTestsBinTool.FullPath}/**/net11.0/**/Cake.dll").Single(), defaultVerbosity)
             ];
         },
         (parameters, test, context) =>
@@ -476,8 +524,9 @@ Task("Run-Integration-Tests")
                     ["MyEnvironmentVariable"] = "Hello World",
                     ["CAKE_INTEGRATION_TEST_ROOT"] = "../.."
                 },
-                ArgumentCustomization = args => args
-                    .AppendSwitchQuoted("--target", " ", Argument("integration-tests-target", "Run-All-Tests"))
+                ArgumentCustomization = args =>
+                    Arguments<string>("integration-tests-target", ["Run-All-Tests"])
+                        .Aggregate(args, (builder, target) => builder.AppendSwitchQuoted("--target", " ", target))
                     .AppendSwitchQuoted("--verbosity", " ", Argument("integration-tests-verbosity", verbosity))
                     .AppendSwitchQuoted("--platform", " ", parameters.IsRunningOnWindows ? "windows" : "posix")
                     .AppendSwitchQuoted("--customarg", " ", "hello")

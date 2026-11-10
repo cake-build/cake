@@ -1,5 +1,5 @@
 workflow: GitFlow/v1
-next-version: 6.0.0
+next-version: 7.0.0
 branches:
   main:
     label: beta

@@ -1,46 +1,50 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 using NSubstitute;
 
-namespace Cake.Core.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures;
+
+public sealed class CakeContextFixture
 {
-    public sealed class CakeContextFixture
+    public IFileSystem FileSystem { get; set; }
+    public ICakeEnvironment Environment { get; set; }
+    public IGlobber Globber { get; set; }
+    public ICakeLog Log { get; set; }
+    public ICakeArguments Arguments { get; set; }
+    public IProcessRunner ProcessRunner { get; set; }
+    public IRegistry Registry { get; set; }
+    public IToolLocator Tools { get; set; }
+    public ICakeDataService Data { get; set; }
+    public ICakeConfiguration Configuration { get; set; }
+    public IToolInstaller ToolInstaller { get; set; }
+    public IServiceProvider ServiceProvider { get; set; }
+
+    public CakeContextFixture()
     {
-        public IFileSystem FileSystem { get; set; }
-        public ICakeEnvironment Environment { get; set; }
-        public IGlobber Globber { get; set; }
-        public ICakeLog Log { get; set; }
-        public ICakeArguments Arguments { get; set; }
-        public IProcessRunner ProcessRunner { get; set; }
-        public IRegistry Registry { get; set; }
-        public IToolLocator Tools { get; set; }
-        public ICakeDataService Data { get; set; }
-        public ICakeConfiguration Configuration { get; set; }
+        FileSystem = Substitute.For<IFileSystem>();
+        Environment = Substitute.For<ICakeEnvironment>();
+        Globber = Substitute.For<IGlobber>();
+        Log = Substitute.For<ICakeLog>();
+        Arguments = Substitute.For<ICakeArguments>();
+        ProcessRunner = Substitute.For<IProcessRunner>();
+        Registry = Substitute.For<IRegistry>();
+        Tools = Substitute.For<IToolLocator>();
+        Data = Substitute.For<ICakeDataService>();
+        Configuration = Substitute.For<ICakeConfiguration>();
+        ToolInstaller = Substitute.For<IToolInstaller>();
+        ServiceProvider = Substitute.For<IServiceProvider>();
+    }
 
-        public CakeContextFixture()
-        {
-            FileSystem = Substitute.For<IFileSystem>();
-            Environment = Substitute.For<ICakeEnvironment>();
-            Globber = Substitute.For<IGlobber>();
-            Log = Substitute.For<ICakeLog>();
-            Arguments = Substitute.For<ICakeArguments>();
-            ProcessRunner = Substitute.For<IProcessRunner>();
-            Registry = Substitute.For<IRegistry>();
-            Tools = Substitute.For<IToolLocator>();
-            Data = Substitute.For<ICakeDataService>();
-            Configuration = Substitute.For<ICakeConfiguration>();
-        }
-
-        public CakeContext CreateContext()
-        {
-            return new CakeContext(FileSystem, Environment, Globber,
-                Log, Arguments, ProcessRunner, Registry, Tools, Data, Configuration);
-        }
+    public CakeContext CreateContext()
+    {
+        return new CakeContext(FileSystem, Environment, Globber,
+            Log, Arguments, ProcessRunner, Registry, Tools, Data, Configuration, ToolInstaller, ServiceProvider);
     }
 }

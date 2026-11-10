@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,134 +8,134 @@ using System.Globalization;
 using System.Linq;
 using Cake.Core;
 
-namespace Cake.Common.Solution.Project.Properties
+namespace Cake.Common.Solution.Project.Properties;
+
+internal sealed class AssemblyInfoCreatorData
 {
-    internal sealed class AssemblyInfoCreatorData
+    private readonly Dictionary<string, string> _dictionary;
+    private readonly Dictionary<string, string> _customAttributes;
+    private readonly Dictionary<string, string> _metadatattributes;
+    private readonly HashSet<string> _namespaces;
+    private readonly HashSet<string> _internalVisibleTo;
+    private readonly HashSet<string> _supportedOSPlatform;
+    private readonly string _trueStringValue;
+    private readonly string _falseStringValue;
+
+    public IDictionary<string, string> Attributes => _dictionary;
+
+    public IDictionary<string, string> CustomAttributes => _customAttributes;
+
+    public IDictionary<string, string> MetadataAttributes => _metadatattributes;
+
+    public ISet<string> Namespaces => _namespaces;
+
+    public ISet<string> InternalVisibleTo => _internalVisibleTo;
+
+    public ISet<string> SupportedOSPlatform => _supportedOSPlatform;
+
+    public AssemblyInfoCreatorData(AssemblyInfoSettings settings, bool isVisualBasicAssemblyInfoFile)
     {
-        private readonly Dictionary<string, string> _dictionary;
-        private readonly Dictionary<string, string> _customAttributes;
-        private readonly Dictionary<string, string> _metadatattributes;
-        private readonly HashSet<string> _namespaces;
-        private readonly HashSet<string> _internalVisibleTo;
-        private readonly HashSet<string> _supportedOSPlatform;
-        private readonly string _trueStringValue;
-        private readonly string _falseStringValue;
+        _dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        _customAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        _metadatattributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        _namespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        _internalVisibleTo = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        _supportedOSPlatform = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        public IDictionary<string, string> Attributes => _dictionary;
+        _falseStringValue = isVisualBasicAssemblyInfoFile ? "False" : "false";
+        _trueStringValue = isVisualBasicAssemblyInfoFile ? "True" : "true";
 
-        public IDictionary<string, string> CustomAttributes => _customAttributes;
+        // Add attributes.
+        AddAttribute("AssemblyTitle", "System.Reflection", settings.Title);
+        AddAttribute("AssemblyDescription", "System.Reflection", settings.Description);
+        AddAttribute("AssemblyCompany", "System.Reflection", settings.Company);
+        AddAttribute("AssemblyProduct", "System.Reflection", settings.Product);
+        AddAttribute("AssemblyVersion", "System.Reflection", settings.Version);
+        AddAttribute("AssemblyFileVersion", "System.Reflection", settings.FileVersion);
+        AddAttribute("AssemblyInformationalVersion", "System.Reflection", settings.InformationalVersion);
+        AddAttribute("AssemblyCopyright", "System.Reflection", settings.Copyright);
+        AddAttribute("AssemblyTrademark", "System.Reflection", settings.Trademark);
+        AddAttribute("AssemblyConfiguration", "System.Reflection", settings.Configuration);
+        AddAttribute("Guid", "System.Runtime.InteropServices", settings.Guid);
+        AddAttribute("ComVisible", "System.Runtime.InteropServices", settings.ComVisible);
+        AddAttribute("CLSCompliant", "System", settings.CLSCompliant);
 
-        public IDictionary<string, string> MetadataAttributes => _metadatattributes;
-
-        public ISet<string> Namespaces => _namespaces;
-
-        public ISet<string> InternalVisibleTo => _internalVisibleTo;
-
-        public ISet<string> SupportedOSPlatform => _supportedOSPlatform;
-
-        public AssemblyInfoCreatorData(AssemblyInfoSettings settings, bool isVisualBasicAssemblyInfoFile)
+        // Add assemblies that internals are visible to.
+        if (settings.InternalsVisibleTo != null)
         {
-            _dictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            _customAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            _metadatattributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            _namespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            _internalVisibleTo = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            _supportedOSPlatform = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-            _falseStringValue = isVisualBasicAssemblyInfoFile ? "False" : "false";
-            _trueStringValue = isVisualBasicAssemblyInfoFile ? "True" : "true";
-
-            // Add attributes.
-            AddAttribute("AssemblyTitle", "System.Reflection", settings.Title);
-            AddAttribute("AssemblyDescription", "System.Reflection", settings.Description);
-            AddAttribute("AssemblyCompany", "System.Reflection", settings.Company);
-            AddAttribute("AssemblyProduct", "System.Reflection", settings.Product);
-            AddAttribute("AssemblyVersion", "System.Reflection", settings.Version);
-            AddAttribute("AssemblyFileVersion", "System.Reflection", settings.FileVersion);
-            AddAttribute("AssemblyInformationalVersion", "System.Reflection", settings.InformationalVersion);
-            AddAttribute("AssemblyCopyright", "System.Reflection", settings.Copyright);
-            AddAttribute("AssemblyTrademark", "System.Reflection", settings.Trademark);
-            AddAttribute("AssemblyConfiguration", "System.Reflection", settings.Configuration);
-            AddAttribute("Guid", "System.Runtime.InteropServices", settings.Guid);
-            AddAttribute("ComVisible", "System.Runtime.InteropServices", settings.ComVisible);
-            AddAttribute("CLSCompliant", "System", settings.CLSCompliant);
-
-            // Add assemblies that internals are visible to.
-            if (settings.InternalsVisibleTo != null)
+            foreach (var item in settings.InternalsVisibleTo.Where(item => item != null))
             {
-                foreach (var item in settings.InternalsVisibleTo.Where(item => item != null))
-                {
-                    _internalVisibleTo.Add(string.Concat("InternalsVisibleTo(\"", item.UnQuote(), "\")"));
-                }
-                if (_internalVisibleTo.Count > 0)
-                {
-                    _namespaces.Add("System.Runtime.CompilerServices");
-                }
+                _internalVisibleTo.Add(string.Concat("InternalsVisibleTo(\"", item.UnQuote(), "\")"));
             }
-            if (settings.SupportedOSPlatform != null)
+            if (_internalVisibleTo.Count > 0)
             {
-                foreach (var item in settings.SupportedOSPlatform.Where(item => item != null))
-                {
-                    _supportedOSPlatform.Add(string.Concat("SupportedOSPlatform(\"", item.UnQuote(), "\")"));
-                }
-
-                if (_supportedOSPlatform.Count > 0)
-                {
-                    _namespaces.Add("System.Runtime.Versioning");
-                }
-            }
-            if (settings.CustomAttributes != null)
-            {
-                foreach (var item in settings.CustomAttributes.Where(item => item != null))
-                {
-                    AddCustomAttribute(item.Name, item.NameSpace, item.Value, item.UseRawValue);
-                }
-            }
-            if (settings.MetaDataAttributes != null)
-            {
-                foreach (var item in settings.MetaDataAttributes.Where(item => item != null))
-                {
-                    AddMetadataAttribute(item.NameSpace, item.Key, item.Value);
-                }
+                _namespaces.Add("System.Runtime.CompilerServices");
             }
         }
-
-        private void AddAttribute(string name, string @namespace, bool? value)
+        if (settings.SupportedOSPlatform != null)
         {
-            if (value != null)
+            foreach (var item in settings.SupportedOSPlatform.Where(item => item != null))
             {
-                AddAttributeCore(Attributes, name, @namespace, value.Value ? _trueStringValue : _falseStringValue);
+                _supportedOSPlatform.Add(string.Concat("SupportedOSPlatform(\"", item.UnQuote(), "\")"));
+            }
+
+            if (_supportedOSPlatform.Count > 0)
+            {
+                _namespaces.Add("System.Runtime.Versioning");
             }
         }
-
-        private void AddAttribute(string name, string @namespace, string value)
+        if (settings.CustomAttributes != null)
         {
-            if (value != null)
+            foreach (var item in settings.CustomAttributes.Where(item => item != null))
             {
-                AddAttributeCore(Attributes, name, @namespace, string.Concat("\"", value, "\""));
+                AddCustomAttribute(item.Name, item.NameSpace, item.Value, item.UseRawValue);
             }
         }
-
-        private void AddCustomAttribute(string name, string @namespace, object value, bool isRawValue)
+        if (settings.MetaDataAttributes != null)
         {
-            var attributeValue = AttributeValueToString(value, isRawValue);
-
-            AddAttributeCore(CustomAttributes, name, @namespace, attributeValue);
-        }
-
-        private string AttributeValueToString(object value, bool isRawValue)
-        {
-            switch (value)
+            foreach (var item in settings.MetaDataAttributes.Where(item => item != null))
             {
-                case null:
+                AddMetadataAttribute(item.NameSpace, item.Key, item.Value);
+            }
+        }
+    }
+
+    private void AddAttribute(string name, string @namespace, bool? value)
+    {
+        if (value != null)
+        {
+            AddAttributeCore(Attributes, name, @namespace, value.Value ? _trueStringValue : _falseStringValue);
+        }
+    }
+
+    private void AddAttribute(string name, string @namespace, string value)
+    {
+        if (value != null)
+        {
+            AddAttributeCore(Attributes, name, @namespace, string.Concat("\"", value, "\""));
+        }
+    }
+
+    private void AddCustomAttribute(string name, string @namespace, object value, bool isRawValue)
+    {
+        var attributeValue = AttributeValueToString(value, isRawValue);
+
+        AddAttributeCore(CustomAttributes, name, @namespace, attributeValue);
+    }
+
+    private string AttributeValueToString(object value, bool isRawValue)
+    {
+        switch (value)
+        {
+            case null:
                 {
                     return string.Empty;
                 }
-                case bool boolValue:
+            case bool boolValue:
                 {
                     return boolValue ? _trueStringValue : _falseStringValue;
                 }
-                case string stringValue:
+            case string stringValue:
                 {
                     return stringValue == string.Empty
                         ? string.Empty
@@ -143,32 +143,31 @@ namespace Cake.Common.Solution.Project.Properties
                             ? stringValue
                             : string.Concat("\"", stringValue.Replace("\"", "\\\""), "\"");
                 }
-                default:
+            default:
                 {
                     return Convert.ToString(value, CultureInfo.InvariantCulture);
                 }
-            }
         }
+    }
 
-        private void AddMetadataAttribute(string @namespace, string key, string value)
+    private void AddMetadataAttribute(string @namespace, string key, string value)
+    {
+        if (key != null && value != null)
         {
-            if (key != null && value != null)
-            {
-                AddAttributeCore(MetadataAttributes, string.Concat("\"", key, "\""), @namespace, string.Concat("\"", value, "\""));
-            }
+            AddAttributeCore(MetadataAttributes, string.Concat("\"", key, "\""), @namespace, string.Concat("\"", value, "\""));
         }
+    }
 
-        private void AddAttributeCore(IDictionary<string, string> dict, string name, string @namespace, string value)
+    private void AddAttributeCore(IDictionary<string, string> dict, string name, string @namespace, string value)
+    {
+        if (dict.ContainsKey(name))
         {
-            if (dict.ContainsKey(name))
-            {
-                dict[name] = value;
-            }
-            else
-            {
-                dict.Add(name, value);
-            }
-            Namespaces.Add(@namespace);
+            dict[name] = value;
         }
+        else
+        {
+            dict.Add(name, value);
+        }
+        Namespaces.Add(@namespace);
     }
 }

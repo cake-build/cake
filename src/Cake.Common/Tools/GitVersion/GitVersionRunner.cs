@@ -12,271 +12,270 @@ using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.GitVersion
+namespace Cake.Common.Tools.GitVersion;
+
+/// <summary>
+/// The GitVersion runner.
+/// </summary>
+public sealed class GitVersionRunner : Tool<GitVersionSettings>
 {
+    private readonly ICakeLog _log;
+
     /// <summary>
-    /// The GitVersion runner.
+    /// Initializes a new instance of the <see cref="GitVersionRunner"/> class.
     /// </summary>
-    public sealed class GitVersionRunner : Tool<GitVersionSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="log">The log.</param>
+    public GitVersionRunner(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools,
+        ICakeLog log) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeLog _log;
+        _log = log;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GitVersionRunner"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="log">The log.</param>
-        public GitVersionRunner(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools,
-            ICakeLog log) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Runs GitVersion and processes the results.
+    /// </summary>
+    /// <param name="settings">The settings.</param>
+    /// <returns>A task with the GitVersion results.</returns>
+    public GitVersion Run(GitVersionSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        if (settings.OutputType != GitVersionOutput.BuildServer)
         {
-            _log = log;
-        }
-
-        /// <summary>
-        /// Runs GitVersion and processes the results.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns>A task with the GitVersion results.</returns>
-        public GitVersion Run(GitVersionSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            if (settings.OutputType != GitVersionOutput.BuildServer)
+            var output = string.Empty;
+            Run(settings, GetArguments(settings), new ProcessSettings { RedirectStandardOutput = true }, process =>
             {
-                var output = string.Empty;
-                Run(settings, GetArguments(settings), new ProcessSettings { RedirectStandardOutput = true }, process =>
+                output = string.Join('\n', process.GetStandardOutput());
+                if (_log.Verbosity < Verbosity.Diagnostic)
                 {
-                    output = string.Join('\n', process.GetStandardOutput());
-                    if (_log.Verbosity < Verbosity.Diagnostic)
+                    var errors = Regex.Matches(output, @"( *ERROR:? [^\n]*)\n([^\n]*)").Cast<Match>()
+                        .SelectMany(match => new[] { match.Groups[1].Value, match.Groups[2].Value });
+                    foreach (var error in errors)
                     {
-                        var errors = Regex.Matches(output, @"( *ERROR:? [^\n]*)\n([^\n]*)").Cast<Match>()
-                            .SelectMany(match => new[] { match.Groups[1].Value, match.Groups[2].Value });
-                        foreach (var error in errors)
-                        {
-                            _log.Error(error);
-                        }
+                        _log.Error(error);
                     }
-                });
+                }
+            });
 
-                var result = JsonSerializer.Deserialize(output, GitVersionJsonContext.DefaultWithConverter.GitVersionInternal)?.GitVersion;
-                GitVersionLegacyCompat.PopulateLegacyProperties(result);
-                return result;
-            }
-
-            Run(settings, GetArguments(settings));
-
-            return new GitVersion();
+            var result = JsonSerializer.Deserialize(output, GitVersionJsonContext.DefaultWithConverter.GitVersionInternal)?.GitVersion;
+            GitVersionLegacyCompat.PopulateLegacyProperties(result);
+            return result;
         }
 
-        private ProcessArgumentBuilder GetArguments(GitVersionSettings settings)
+        Run(settings, GetArguments(settings));
+
+        return new GitVersion();
+    }
+
+    private ProcessArgumentBuilder GetArguments(GitVersionSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        if (settings.OutputType.HasValue)
         {
-            var builder = new ProcessArgumentBuilder();
+            builder.Append("-output");
 
-            if (settings.OutputType.HasValue)
+            switch (settings.OutputType.Value)
             {
-                builder.Append("-output");
+                case GitVersionOutput.Json:
+                    builder.Append("json");
+                    break;
+                case GitVersionOutput.BuildServer:
+                    builder.Append("buildserver");
+                    break;
+                case GitVersionOutput.File:
+                    builder.Append("file");
 
-                switch (settings.OutputType.Value)
-                {
-                    case GitVersionOutput.Json:
-                        builder.Append("json");
-                        break;
-                    case GitVersionOutput.BuildServer:
-                        builder.Append("buildserver");
-                        break;
-                    case GitVersionOutput.File:
-                        builder.Append("file");
+                    if (settings.OutputFile != null)
+                    {
+                        builder.Append("-outputfile");
+                        builder.AppendQuoted(settings.OutputFile.FullPath);
+                    }
 
-                        if (settings.OutputFile != null)
-                        {
-                            builder.Append("-outputfile");
-                            builder.AppendQuoted(settings.OutputFile.FullPath);
-                        }
-
-                        break;
-                }
+                    break;
             }
+        }
 
-            if (!string.IsNullOrWhiteSpace(settings.ShowVariable))
+        if (!string.IsNullOrWhiteSpace(settings.ShowVariable))
+        {
+            builder.Append("-showvariable");
+            builder.Append(settings.ShowVariable);
+        }
+
+        if (!string.IsNullOrWhiteSpace(settings.UserName))
+        {
+            builder.Append("-u");
+            builder.AppendQuoted(settings.UserName);
+
+            builder.Append("-p");
+            builder.AppendQuotedSecret(settings.Password);
+        }
+
+        if (settings.UpdateAssemblyInfo)
+        {
+            builder.Append("-updateassemblyinfo");
+
+            if (settings.UpdateAssemblyInfoFilePath != null)
             {
-                builder.Append("-showvariable");
-                builder.Append(settings.ShowVariable);
+                builder.AppendQuoted(settings.UpdateAssemblyInfoFilePath.FullPath);
             }
+        }
 
-            if (!string.IsNullOrWhiteSpace(settings.UserName))
+        if (settings.RepositoryPath != null)
+        {
+            builder.Append("-targetpath");
+            builder.AppendQuoted(settings.RepositoryPath.FullPath);
+        }
+        else if (!string.IsNullOrWhiteSpace(settings.Url))
+        {
+            builder.Append("-url");
+            builder.AppendQuoted(settings.Url);
+
+            if (!string.IsNullOrWhiteSpace(settings.Branch))
             {
-                builder.Append("-u");
-                builder.AppendQuoted(settings.UserName);
-
-                builder.Append("-p");
-                builder.AppendQuotedSecret(settings.Password);
-            }
-
-            if (settings.UpdateAssemblyInfo)
-            {
-                builder.Append("-updateassemblyinfo");
-
-                if (settings.UpdateAssemblyInfoFilePath != null)
-                {
-                    builder.AppendQuoted(settings.UpdateAssemblyInfoFilePath.FullPath);
-                }
-            }
-
-            if (settings.RepositoryPath != null)
-            {
-                builder.Append("-targetpath");
-                builder.AppendQuoted(settings.RepositoryPath.FullPath);
-            }
-            else if (!string.IsNullOrWhiteSpace(settings.Url))
-            {
-                builder.Append("-url");
-                builder.AppendQuoted(settings.Url);
-
-                if (!string.IsNullOrWhiteSpace(settings.Branch))
-                {
-                    builder.Append("-b");
-                    builder.Append(settings.Branch);
-                }
-                else
-                {
-                    _log.Warning("If you leave the branch name for GitVersion unset, it will fallback to the default branch for the repository.");
-                }
-
-                if (!string.IsNullOrWhiteSpace(settings.Commit))
-                {
-                    builder.Append("-c");
-                    builder.AppendQuoted(settings.Commit);
-                }
-
-                if (settings.DynamicRepositoryPath != null)
-                {
-                    builder.Append("-dynamicRepoLocation");
-                    builder.AppendQuoted(settings.DynamicRepositoryPath.FullPath);
-                }
-            }
-
-            if (settings.LogFilePath != null)
-            {
-                builder.Append("-l");
-                builder.AppendQuoted(settings.LogFilePath.FullPath);
-            }
-
-            if (settings.ConfigFile != null)
-            {
-                builder.Append("-config");
-                builder.AppendQuoted(settings.ConfigFile.FullPath);
-            }
-
-            if (settings.NoFetch)
-            {
-                builder.Append("-nofetch");
-            }
-
-            if (settings.NoCache)
-            {
-                builder.Append("-nocache");
-            }
-
-            if (settings.NoNormalize)
-            {
-                builder.Append("-nonormalize");
-            }
-
-            if (settings.Diag)
-            {
-                builder.Append("-diag");
-            }
-
-            if (settings.UpdateProjectFiles)
-            {
-                builder.Append("-updateprojectfiles");
-            }
-
-            if (settings.EnsureAssemblyInfo)
-            {
-                builder.Append("-ensureassemblyinfo");
-            }
-
-            if (settings.UpdateWixVersionFile)
-            {
-                builder.Append("-updatewixversionfile");
-            }
-
-            if (settings.Verbosity.HasValue)
-            {
-                switch (settings.Verbosity.Value)
-                {
-                    case GitVersionVerbosity.Quiet:
-                        builder.Append("-verbosity");
-                        builder.Append(nameof(Verbosity.Quiet));
-                        break;
-                    case GitVersionVerbosity.Diagnostic:
-                        builder.Append("-verbosity");
-                        builder.Append(nameof(Verbosity.Diagnostic));
-                        break;
-                    case GitVersionVerbosity.Verbose:
-                        builder.Append("-verbosity");
-                        builder.Append(nameof(Verbosity.Verbose));
-                        break;
-                    case GitVersionVerbosity.Normal:
-                        builder.Append("-verbosity");
-                        builder.Append(nameof(Verbosity.Normal));
-                        break;
-                    case GitVersionVerbosity.Minimal:
-                        builder.Append("-verbosity");
-                        builder.Append(nameof(Verbosity.Minimal));
-                        break;
-                }
+                builder.Append("-b");
+                builder.Append(settings.Branch);
             }
             else
             {
-                switch (_log.Verbosity)
-                {
-                    case Verbosity.Quiet:
-                        builder.Append("-verbosity");
-                        builder.Append(nameof(Verbosity.Quiet));
-                        break;
-                    case Verbosity.Diagnostic:
-                        builder.Append("-verbosity");
-                        builder.Append(nameof(Verbosity.Diagnostic));
-                        break;
-                    case Verbosity.Verbose:
-                        builder.Append("-verbosity");
-                        builder.Append(nameof(Verbosity.Verbose));
-                        break;
-                    case Verbosity.Minimal:
-                        builder.Append("-verbosity");
-                        builder.Append(nameof(Verbosity.Minimal));
-                        break;
-                }
+                _log.Warning("If you leave the branch name for GitVersion unset, it will fallback to the default branch for the repository.");
             }
 
-            return builder;
+            if (!string.IsNullOrWhiteSpace(settings.Commit))
+            {
+                builder.Append("-c");
+                builder.AppendQuoted(settings.Commit);
+            }
+
+            if (settings.DynamicRepositoryPath != null)
+            {
+                builder.Append("-dynamicRepoLocation");
+                builder.AppendQuoted(settings.DynamicRepositoryPath.FullPath);
+            }
         }
 
-        /// <summary>
-        /// Gets the name of the tool.
-        /// </summary>
-        /// <returns>The name of the tool.</returns>
-        protected override string GetToolName()
+        if (settings.LogFilePath != null)
         {
-            return "GitVersion";
+            builder.Append("-l");
+            builder.AppendQuoted(settings.LogFilePath.FullPath);
         }
 
-        /// <summary>
-        /// Gets the possible names of the tool executable.
-        /// </summary>
-        /// <returns>The tool executable name.</returns>
-        protected override IEnumerable<string> GetToolExecutableNames()
+        if (settings.ConfigFile != null)
         {
-            return new[] { "GitVersion.exe", "dotnet-gitversion", "dotnet-gitversion.exe" };
+            builder.Append("-config");
+            builder.AppendQuoted(settings.ConfigFile.FullPath);
         }
+
+        if (settings.NoFetch)
+        {
+            builder.Append("-nofetch");
+        }
+
+        if (settings.NoCache)
+        {
+            builder.Append("-nocache");
+        }
+
+        if (settings.NoNormalize)
+        {
+            builder.Append("-nonormalize");
+        }
+
+        if (settings.Diag)
+        {
+            builder.Append("-diag");
+        }
+
+        if (settings.UpdateProjectFiles)
+        {
+            builder.Append("-updateprojectfiles");
+        }
+
+        if (settings.EnsureAssemblyInfo)
+        {
+            builder.Append("-ensureassemblyinfo");
+        }
+
+        if (settings.UpdateWixVersionFile)
+        {
+            builder.Append("-updatewixversionfile");
+        }
+
+        if (settings.Verbosity.HasValue)
+        {
+            switch (settings.Verbosity.Value)
+            {
+                case GitVersionVerbosity.Quiet:
+                    builder.Append("-verbosity");
+                    builder.Append(nameof(Verbosity.Quiet));
+                    break;
+                case GitVersionVerbosity.Diagnostic:
+                    builder.Append("-verbosity");
+                    builder.Append(nameof(Verbosity.Diagnostic));
+                    break;
+                case GitVersionVerbosity.Verbose:
+                    builder.Append("-verbosity");
+                    builder.Append(nameof(Verbosity.Verbose));
+                    break;
+                case GitVersionVerbosity.Normal:
+                    builder.Append("-verbosity");
+                    builder.Append(nameof(Verbosity.Normal));
+                    break;
+                case GitVersionVerbosity.Minimal:
+                    builder.Append("-verbosity");
+                    builder.Append(nameof(Verbosity.Minimal));
+                    break;
+            }
+        }
+        else
+        {
+            switch (_log.Verbosity)
+            {
+                case Verbosity.Quiet:
+                    builder.Append("-verbosity");
+                    builder.Append(nameof(Verbosity.Quiet));
+                    break;
+                case Verbosity.Diagnostic:
+                    builder.Append("-verbosity");
+                    builder.Append(nameof(Verbosity.Diagnostic));
+                    break;
+                case Verbosity.Verbose:
+                    builder.Append("-verbosity");
+                    builder.Append(nameof(Verbosity.Verbose));
+                    break;
+                case Verbosity.Minimal:
+                    builder.Append("-verbosity");
+                    builder.Append(nameof(Verbosity.Minimal));
+                    break;
+            }
+        }
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Gets the name of the tool.
+    /// </summary>
+    /// <returns>The name of the tool.</returns>
+    protected override string GetToolName()
+    {
+        return "GitVersion";
+    }
+
+    /// <summary>
+    /// Gets the possible names of the tool executable.
+    /// </summary>
+    /// <returns>The tool executable name.</returns>
+    protected override IEnumerable<string> GetToolExecutableNames()
+    {
+        return new[] { "GitVersion.exe", "dotnet-gitversion", "dotnet-gitversion.exe" };
     }
 }

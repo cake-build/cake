@@ -1,128 +1,198 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Text;
 using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.DotNet.Run
+namespace Cake.Common.Tools.DotNet.Run;
+
+/// <summary>
+/// .NET project runner.
+/// </summary>
+public sealed class DotNetRunner : DotNetTool<DotNetRunSettings>
 {
+    private readonly ICakeEnvironment _environment;
+
     /// <summary>
-    /// .NET project runner.
+    /// Initializes a new instance of the <see cref="DotNetRunner" /> class.
     /// </summary>
-    public sealed class DotNetRunner : DotNetTool<DotNetRunSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotNetRunner(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        private readonly ICakeEnvironment _environment;
+        _environment = environment;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DotNetRunner" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public DotNetRunner(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    /// <summary>
+    /// Runs the project using the specified path with arguments and settings.
+    /// </summary>
+    /// <param name="project">The target project path.</param>
+    /// <param name="arguments">The arguments.</param>
+    /// <param name="settings">The settings.</param>
+    public void Run(string project, ProcessArgumentBuilder arguments, DotNetRunSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        RunCommand(settings, GetArguments(project, arguments, settings));
+    }
+
+    /// <summary>
+    /// Runs C# source from standard input using the specified arguments and settings.
+    /// </summary>
+    /// <param name="code">The C# source. Accepts a string or a UTF-8 literal.</param>
+    /// <param name="arguments">The arguments.</param>
+    /// <param name="settings">The settings.</param>
+    public void RunCode(ProcessStandardInput code, ProcessArgumentBuilder arguments, DotNetRunSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        if (code.Memory.IsEmpty || string.IsNullOrWhiteSpace(Encoding.UTF8.GetString(code.Span)))
         {
-            _environment = environment;
+            throw new ArgumentException("Code cannot be empty.", nameof(code));
         }
 
-        /// <summary>
-        /// Runs the project using the specified path with arguments and settings.
-        /// </summary>
-        /// <param name="project">The target project path.</param>
-        /// <param name="arguments">The arguments.</param>
-        /// <param name="settings">The settings.</param>
-        public void Run(string project, ProcessArgumentBuilder arguments, DotNetRunSettings settings)
+        if (settings.File != null)
         {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            RunCommand(settings, GetArguments(project, arguments, settings));
+            throw new ArgumentException("File cannot be used together with stdin code.", nameof(settings));
         }
 
-        private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetRunSettings settings)
+        RunCommand(settings, GetArguments(null, arguments, settings, stdin: true), new ProcessSettings { StandardInput = code });
+    }
+
+    private ProcessArgumentBuilder GetArguments(string project, ProcessArgumentBuilder arguments, DotNetRunSettings settings, bool stdin = false)
+    {
+        var builder = CreateArgumentBuilder(settings);
+
+        builder.Append("run");
+
+        // Specific path?
+        if (!stdin && project != null)
         {
-            var builder = CreateArgumentBuilder(settings);
+            builder.Append("--project");
+            builder.AppendQuoted(project);
+        }
 
-            builder.Append("run");
+        // Framework
+        if (!string.IsNullOrEmpty(settings.Framework))
+        {
+            builder.Append("--framework");
+            builder.Append(settings.Framework);
+        }
 
-            // Specific path?
-            if (project != null)
+        // Configuration
+        if (!string.IsNullOrEmpty(settings.Configuration))
+        {
+            builder.Append("--configuration");
+            builder.Append(settings.Configuration);
+        }
+
+        // No Restore
+        if (settings.NoRestore)
+        {
+            builder.Append("--no-restore");
+        }
+
+        // No Build
+        if (settings.NoBuild)
+        {
+            builder.Append("--no-build");
+        }
+
+        // Runtime
+        if (!string.IsNullOrEmpty(settings.Runtime))
+        {
+            builder.Append("--runtime");
+            builder.Append(settings.Runtime);
+        }
+
+        // Sources
+        if (settings.Sources != null)
+        {
+            foreach (var source in settings.Sources)
             {
-                builder.Append("--project");
-                builder.AppendQuoted(project);
+                builder.Append("--source");
+                builder.AppendQuoted(source);
             }
+        }
 
-            // Framework
-            if (!string.IsNullOrEmpty(settings.Framework))
-            {
-                builder.Append("--framework");
-                builder.Append(settings.Framework);
-            }
+        // Roll Forward Policy
+        if (!(settings.RollForward is null))
+        {
+            builder.Append("--roll-forward");
+            builder.Append(settings.RollForward.Value.ToString("F"));
+        }
 
-            // Configuration
-            if (!string.IsNullOrEmpty(settings.Configuration))
-            {
-                builder.Append("--configuration");
-                builder.Append(settings.Configuration);
-            }
+        // MSBuild Settings
+        if (settings.MSBuildSettings != null)
+        {
+            builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
+        }
 
-            // No Restore
-            if (settings.NoRestore)
+        // Application environment
+        if (settings.ApplicationEnvironment != null)
+        {
+            foreach (var pair in settings.ApplicationEnvironment)
             {
-                builder.Append("--no-restore");
-            }
-
-            // No Build
-            if (settings.NoBuild)
-            {
-                builder.Append("--no-build");
-            }
-
-            // Runtime
-            if (!string.IsNullOrEmpty(settings.Runtime))
-            {
-                builder.Append("--runtime");
-                builder.Append(settings.Runtime);
-            }
-
-            // Sources
-            if (settings.Sources != null)
-            {
-                foreach (var source in settings.Sources)
+                if (string.IsNullOrWhiteSpace(pair.Key))
                 {
-                    builder.Append("--source");
-                    builder.AppendQuoted(source);
+                    continue;
                 }
-            }
 
-            // Roll Forward Policy
-            if (!(settings.RollForward is null))
-            {
-                builder.Append("--roll-forward");
-                builder.Append(settings.RollForward.Value.ToString("F"));
+                builder.Append("--environment");
+                builder.AppendQuoted(string.Concat(pair.Key, "=", pair.Value));
             }
-
-            // MSBuild Settings
-            if (settings.MSBuildSettings != null)
-            {
-                builder.AppendMSBuildSettings(settings.MSBuildSettings, _environment);
-            }
-
-            // Arguments
-            if (!arguments.IsNullOrEmpty())
-            {
-                builder.Append("--");
-                arguments.CopyTo(builder);
-            }
-
-            return builder;
         }
+
+        // File
+        if (settings.File != null)
+        {
+            builder.Append("--file");
+            builder.AppendQuoted(settings.File.MakeAbsolute(_environment).FullPath);
+        }
+
+        // Device
+        if (!string.IsNullOrEmpty(settings.Device))
+        {
+            builder.Append("--device");
+            builder.AppendQuoted(settings.Device);
+        }
+
+        // Artifacts path
+        if (settings.ArtifactsPath != null)
+        {
+            builder.Append("--artifacts-path");
+            builder.AppendQuoted(settings.ArtifactsPath.MakeAbsolute(_environment).FullPath);
+        }
+
+        // No cache
+        if (settings.NoCache)
+        {
+            builder.Append("--no-cache");
+        }
+
+        if (stdin)
+        {
+            builder.Append("-");
+        }
+
+        // Arguments
+        if (!arguments.IsNullOrEmpty())
+        {
+            builder.Append("--");
+            arguments.CopyTo(builder);
+        }
+
+        return builder;
     }
 }

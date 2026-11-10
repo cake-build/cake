@@ -1,0 +1,48 @@
+{
+  Projects: [
+    {
+      Name: hwapp.tests,
+      Package: xunit.v3.extensibility.core,
+      Graphs: [
+        {
+          Framework: net10.0,
+          Dependencies: [
+            {
+              Id: xunit.v3.mtp-v2,
+              Version: 3.2.2,
+              VersionConstraint: >= 3.2.2,
+              Dependencies: [
+                {
+                  Id: xunit.v3.core.mtp-v2,
+                  Version: 3.2.2,
+                  VersionConstraint: = 3.2.2,
+                  Dependencies: [
+                    {
+                      Id: xunit.v3.extensibility.core,
+                      Version: 3.2.2,
+                      VersionConstraint: = 3.2.2,
+                      Dependencies: []
+                    },
+                    {
+                      Id: xunit.v3.runner.inproc.console,
+                      Version: 3.2.2,
+                      VersionConstraint: = 3.2.2,
+                      Dependencies: [
+                        {
+                          Id: xunit.v3.extensibility.core,
+                          Version: 3.2.2,
+                          VersionConstraint: = 3.2.2,
+                          Dependencies: []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

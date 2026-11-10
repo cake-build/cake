@@ -4,18 +4,17 @@
 
 using Cake.Common.Tools.Chocolatey.Export;
 
-namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Export
-{
-    internal sealed class ChocolateyExportFixture : ChocolateyFixture<ChocolateyExportSettings>
-    {
-        public ChocolateyExportFixture()
-        {
-        }
+namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Export;
 
-        protected override void RunTool()
-        {
-            var tool = new ChocolateyExporter(FileSystem, Environment, ProcessRunner, Tools, Resolver);
-            tool.Export(Settings);
-        }
+internal sealed class ChocolateyExportFixture : ChocolateyFixture<ChocolateyExportSettings>
+{
+    public ChocolateyExportFixture()
+    {
+    }
+
+    protected override void RunTool()
+    {
+        var tool = new ChocolateyExporter(FileSystem, Environment, ProcessRunner, Tools, Resolver);
+        tool.Export(Settings);
     }
 }

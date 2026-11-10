@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -6,267 +6,328 @@ using System;
 using System.Collections.Generic;
 using Cake.Common.Tools.DotNet.Sln.Add;
 using Cake.Common.Tools.DotNet.Sln.List;
+using Cake.Common.Tools.DotNet.Sln.Migrate;
 using Cake.Common.Tools.DotNet.Sln.Remove;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.DotNet
+namespace Cake.Common.Tools.DotNet;
+
+/// <summary>
+/// <para>Contains functionality related to <see href="https://github.com/dotnet/cli">.NET CLI</see>.</para>
+/// <para>
+/// In order to use the commands for this alias, the .NET CLI tools will need to be installed on the machine where
+/// the Cake script is being executed.  See this <see href="https://www.microsoft.com/net/core">page</see> for information
+/// on how to install.
+/// </para>
+/// </summary>
+public static partial class DotNetAliases
 {
     /// <summary>
-    /// <para>Contains functionality related to <see href="https://github.com/dotnet/cli">.NET CLI</see>.</para>
-    /// <para>
-    /// In order to use the commands for this alias, the .NET CLI tools will need to be installed on the machine where
-    /// the Cake script is being executed.  See this <see href="https://www.microsoft.com/net/core">page</see> for information
-    /// on how to install.
-    /// </para>
+    /// Lists all projects in a solution file.
     /// </summary>
-    public static partial class DotNetAliases
+    /// <param name="context">The context.</param>
+    /// <returns>The list of projects.</returns>
+    /// <example>
+    /// <code>
+    /// var projects = DotNetSlnList();
+    ///
+    /// foreach (var project in projects)
+    /// {
+    ///      Information(project);
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.List")]
+    public static IEnumerable<string> DotNetSlnList(this ICakeContext context)
     {
-        /// <summary>
-        /// Lists all projects in a solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns>The list of projects.</returns>
-        /// <example>
-        /// <code>
-        /// var projects = DotNetSlnList();
-        ///
-        /// foreach (var project in projects)
-        /// {
-        ///      Information(project);
-        /// }
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Sln")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.List")]
-        public static IEnumerable<string> DotNetSlnList(this ICakeContext context)
+        return context.DotNetSlnList(null);
+    }
+
+    /// <summary>
+    /// Lists all projects in a solution file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="solution">The solution file to use. If this argument is omitted, the command searches the current directory for one. If it finds no solution file or multiple solution files, the command fails.</param>
+    /// <returns>The list of projects.</returns>
+    /// <example>
+    /// <code>
+    /// var projects = DotNetSlnList("./app/app.sln");
+    ///
+    /// foreach (var project in projects)
+    /// {
+    ///      Information(project);
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.List")]
+    public static IEnumerable<string> DotNetSlnList(this ICakeContext context, FilePath solution)
+    {
+        return context.DotNetSlnList(solution, null);
+    }
+
+    /// <summary>
+    /// Lists all projects in a solution file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="solution">The solution file to use. If this argument is omitted, the command searches the current directory for one. If it finds no solution file or multiple solution files, the command fails.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The list of projects.</returns>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetSlnListSettings
+    /// {
+    ///     Verbosity = DotNetVerbosity.Diagnostic
+    /// };
+    ///
+    /// var projects = DotNetSlnList("./app/app.sln");
+    ///
+    /// foreach (var project in projects)
+    /// {
+    ///      Information(project);
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.List")]
+    public static IEnumerable<string> DotNetSlnList(this ICakeContext context, FilePath solution, DotNetSlnListSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        settings ??= new DotNetSlnListSettings();
+
+        var lister = new DotNetSlnLister(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        return lister.List(solution, settings);
+    }
+
+    /// <summary>
+    /// Adds one or more projects to the solution file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="projectPath">The path to the project or projects to add to the solution. Glob patterns are supported on Unix/Linux-based systems.</param>
+    /// <example>
+    /// <code>
+    /// DotNetSlnAdd(GetFiles("./*.csproj"));
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Add")]
+    public static void DotNetSlnAdd(this ICakeContext context, IEnumerable<FilePath> projectPath)
+    {
+        context.DotNetSlnAdd(null, projectPath);
+    }
+
+    /// <summary>
+    /// Adds one or more projects to the solution file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
+    /// <param name="projectPath">The path to the project or projects to add to the solution. Glob patterns are supported on Unix/Linux-based systems.</param>
+    /// <example>
+    /// <code>
+    /// DotNetSlnAdd("app.sln", GetFiles("./*.csproj"));
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Add")]
+    public static void DotNetSlnAdd(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath)
+    {
+        context.DotNetSlnAdd(solution, projectPath, null);
+    }
+
+    /// <summary>
+    /// Adds one or more projects to the solution file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="projectPath">The path to the project or projects to add to the solution. Glob patterns are supported on Unix/Linux-based systems.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetSlnAddSettings
+    /// {
+    ///     SolutionFolder = "libs/math"
+    /// };
+    ///
+    /// DotNetSlnAdd(GetFiles("./*.csproj"), settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Add")]
+    public static void DotNetSlnAdd(this ICakeContext context, IEnumerable<FilePath> projectPath, DotNetSlnAddSettings settings)
+    {
+        context.DotNetSlnAdd(null, projectPath, settings);
+    }
+
+    /// <summary>
+    /// Adds one or more projects to the solution file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
+    /// <param name="projectPath">The path to the project or projects to add to the solution. Glob patterns are supported on Unix/Linux-based systems.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetSlnAddSettings
+    /// {
+    ///     SolutionFolder = "libs/math"
+    /// };
+    ///
+    /// DotNetSlnAdd("app.sln", GetFiles("./*.csproj"), settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Add")]
+    public static void DotNetSlnAdd(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnAddSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        if (settings is null)
         {
-            return context.DotNetSlnList(null);
+            settings = new DotNetSlnAddSettings();
         }
 
-        /// <summary>
-        /// Lists all projects in a solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="solution">The solution file to use. If this argument is omitted, the command searches the current directory for one. If it finds no solution file or multiple solution files, the command fails.</param>
-        /// <returns>The list of projects.</returns>
-        /// <example>
-        /// <code>
-        /// var projects = DotNetSlnList("./app/app.sln");
-        ///
-        /// foreach (var project in projects)
-        /// {
-        ///      Information(project);
-        /// }
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Sln")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.List")]
-        public static IEnumerable<string> DotNetSlnList(this ICakeContext context, FilePath solution)
+        var adder = new DotNetSlnAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        adder.Add(solution, projectPath, settings);
+    }
+
+    /// <summary>
+    /// Removes a project or multiple projects from the solution file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
+    /// <example>
+    /// <code>
+    /// DotNetSlnRemove(GetFiles("./*.csproj"));
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
+    public static void DotNetSlnRemove(this ICakeContext context, IEnumerable<FilePath> projectPath)
+    {
+        context.DotNetSlnRemove(null, projectPath);
+    }
+
+    /// <summary>
+    /// Removes a project or multiple projects from the solution file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
+    /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
+    /// <example>
+    /// <code>
+    /// DotNetSlnRemove("app.sln", GetFiles("./*.csproj"));
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
+    public static void DotNetSlnRemove(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath)
+    {
+        context.DotNetSlnRemove(solution, projectPath, null);
+    }
+
+    /// <summary>
+    /// Removes a project or multiple projects from the solution file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
+    /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetSlnRemoveSettings
+    /// {
+    ///     Verbosity = DotNetVerbosity.Diagnostic
+    /// };
+    ///
+    /// DotNetSlnRemove("app.sln", GetFiles("./*.csproj"), settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
+    public static void DotNetSlnRemove(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnRemoveSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        if (settings is null)
         {
-            return context.DotNetSlnList(solution, null);
+            settings = new DotNetSlnRemoveSettings();
         }
 
-        /// <summary>
-        /// Lists all projects in a solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="solution">The solution file to use. If this argument is omitted, the command searches the current directory for one. If it finds no solution file or multiple solution files, the command fails.</param>
-        /// <param name="settings">The settings.</param>
-        /// <returns>The list of projects.</returns>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetSlnListSettings
-        /// {
-        ///     Verbosity = DotNetVerbosity.Diagnostic
-        /// };
-        ///
-        /// var projects = DotNetSlnList("./app/app.sln");
-        ///
-        /// foreach (var project in projects)
-        /// {
-        ///      Information(project);
-        /// }
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Sln")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.List")]
-        public static IEnumerable<string> DotNetSlnList(this ICakeContext context, FilePath solution, DotNetSlnListSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+        var remover = new DotNetSlnRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        remover.Remove(solution, projectPath, settings);
+    }
 
-            settings ??= new DotNetSlnListSettings();
+    /// <summary>
+    /// Generates a .slnx file from a .sln file in the current directory.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <example>
+    /// <code>
+    /// DotNetSlnMigrate();
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Migrate")]
+    public static void DotNetSlnMigrate(this ICakeContext context)
+    {
+        context.DotNetSlnMigrate(null, null);
+    }
 
-            var lister = new DotNetSlnLister(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            return lister.List(solution, settings);
-        }
+    /// <summary>
+    /// Generates a .slnx file from the specified .sln file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="solution">The .sln file to migrate. If unspecified, the command searches the current directory.</param>
+    /// <example>
+    /// <code>
+    /// DotNetSlnMigrate("app.sln");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Migrate")]
+    public static void DotNetSlnMigrate(this ICakeContext context, FilePath solution)
+    {
+        context.DotNetSlnMigrate(solution, null);
+    }
 
-        /// <summary>
-        /// Adds one or more projects to the solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="projectPath">The path to the project or projects to add to the solution. Glob patterns are supported on Unix/Linux-based systems.</param>
-        /// <example>
-        /// <code>
-        /// DotNetSlnAdd(GetFiles("./*.csproj"));
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Sln")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Add")]
-        public static void DotNetSlnAdd(this ICakeContext context, IEnumerable<FilePath> projectPath)
-        {
-            context.DotNetSlnAdd(null, projectPath);
-        }
+    /// <summary>
+    /// Generates a .slnx file from the specified .sln file.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="solution">The .sln file to migrate. If unspecified, the command searches the current directory.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// DotNetSlnMigrate("app.sln", new DotNetSlnMigrateSettings {
+    ///     Verbosity = DotNetVerbosity.Diagnostic
+    /// });
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("Sln")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Migrate")]
+    public static void DotNetSlnMigrate(this ICakeContext context, FilePath solution, DotNetSlnMigrateSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-        /// <summary>
-        /// Adds one or more projects to the solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
-        /// <param name="projectPath">The path to the project or projects to add to the solution. Glob patterns are supported on Unix/Linux-based systems.</param>
-        /// <example>
-        /// <code>
-        /// DotNetSlnAdd("app.sln", GetFiles("./*.csproj"));
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Sln")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Add")]
-        public static void DotNetSlnAdd(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath)
-        {
-            context.DotNetSlnAdd(solution, projectPath, null);
-        }
+        settings ??= new DotNetSlnMigrateSettings();
 
-        /// <summary>
-        /// Adds one or more projects to the solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="projectPath">The path to the project or projects to add to the solution. Glob patterns are supported on Unix/Linux-based systems.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetSlnAddSettings
-        /// {
-        ///     SolutionFolder = "libs/math"
-        /// };
-        ///
-        /// DotNetSlnAdd(GetFiles("./*.csproj"), settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Sln")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Add")]
-        public static void DotNetSlnAdd(this ICakeContext context, IEnumerable<FilePath> projectPath, DotNetSlnAddSettings settings)
-        {
-            context.DotNetSlnAdd(null, projectPath, settings);
-        }
-
-        /// <summary>
-        /// Adds one or more projects to the solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
-        /// <param name="projectPath">The path to the project or projects to add to the solution. Glob patterns are supported on Unix/Linux-based systems.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetSlnAddSettings
-        /// {
-        ///     SolutionFolder = "libs/math"
-        /// };
-        ///
-        /// DotNetSlnAdd("app.sln", GetFiles("./*.csproj"), settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Sln")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Add")]
-        public static void DotNetSlnAdd(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnAddSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-
-            if (settings is null)
-            {
-                settings = new DotNetSlnAddSettings();
-            }
-
-            var adder = new DotNetSlnAdder(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            adder.Add(solution, projectPath, settings);
-        }
-
-        /// <summary>
-        /// Removes a project or multiple projects from the solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
-        /// <example>
-        /// <code>
-        /// DotNetSlnRemove(GetFiles("./*.csproj"));
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Sln")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
-        public static void DotNetSlnRemove(this ICakeContext context, IEnumerable<FilePath> projectPath)
-        {
-            context.DotNetSlnRemove(null, projectPath);
-        }
-
-        /// <summary>
-        /// Removes a project or multiple projects from the solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
-        /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
-        /// <example>
-        /// <code>
-        /// DotNetSlnRemove("app.sln", GetFiles("./*.csproj"));
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Sln")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
-        public static void DotNetSlnRemove(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath)
-        {
-            context.DotNetSlnRemove(solution, projectPath, null);
-        }
-
-        /// <summary>
-        /// Removes a project or multiple projects from the solution file.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="solution">The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.</param>
-        /// <param name="projectPath">The path to the project or projects to remove from the solution.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetSlnRemoveSettings
-        /// {
-        ///     Verbosity = DotNetVerbosity.Diagnostic
-        /// };
-        ///
-        /// DotNetSlnRemove("app.sln", GetFiles("./*.csproj"), settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("Sln")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.Sln.Remove")]
-        public static void DotNetSlnRemove(this ICakeContext context, FilePath solution, IEnumerable<FilePath> projectPath, DotNetSlnRemoveSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
-
-            if (settings is null)
-            {
-                settings = new DotNetSlnRemoveSettings();
-            }
-
-            var remover = new DotNetSlnRemover(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            remover.Remove(solution, projectPath, settings);
-        }
+        var migrator = new DotNetSlnMigrator(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        migrator.Migrate(solution, settings);
     }
 }

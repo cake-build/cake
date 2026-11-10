@@ -4,164 +4,162 @@
 
 using Cake.Common.Tests.Fixtures.Build;
 using NSubstitute;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Build.Rwx.Data
+namespace Cake.Common.Tests.Unit.Build.Rwx.Data;
+
+public sealed class RwxRuntimeInfoTests
 {
-    public sealed class RwxRuntimeInfoTests
+    public sealed class TheValuesPathProperty
     {
-        public sealed class TheValuesPathProperty
+        [Fact]
+        public void Should_Return_Correct_Value()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateRuntimeInfo();
+            // Given
+            var info = new RwxInfoFixture().CreateRuntimeInfo();
 
-                // When
-                var result = info.ValuesPath;
+            // When
+            var result = info.ValuesPath;
 
-                // Then
-                Assert.Equal("/rwx/values", result.FullPath);
-            }
-
-            [Fact]
-            public void Should_Return_Null_When_Env_Var_Missing()
-            {
-                // Given
-                var fixture = new RwxInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("RWX_VALUES").Returns(null as string);
-                var info = fixture.CreateRuntimeInfo();
-
-                // When
-                var result = info.ValuesPath;
-
-                // Then
-                Assert.Null(result);
-            }
+            // Then
+            Assert.Equal("/rwx/values", result.FullPath);
         }
 
-        public sealed class TheArtifactsPathProperty
+        [Fact]
+        public void Should_Return_Null_When_Env_Var_Missing()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateRuntimeInfo();
+            // Given
+            var fixture = new RwxInfoFixture();
+            fixture.Environment.GetEnvironmentVariable("RWX_VALUES").Returns(null as string);
+            var info = fixture.CreateRuntimeInfo();
 
-                // When
-                var result = info.ArtifactsPath;
+            // When
+            var result = info.ValuesPath;
 
-                // Then
-                Assert.Equal("/rwx/artifacts", result.FullPath);
-            }
+            // Then
+            Assert.Null(result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_Null_When_Env_Var_Missing()
-            {
-                // Given
-                var fixture = new RwxInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("RWX_ARTIFACTS").Returns(null as string);
-                var info = fixture.CreateRuntimeInfo();
+    public sealed class TheArtifactsPathProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
+        {
+            // Given
+            var info = new RwxInfoFixture().CreateRuntimeInfo();
 
-                // When
-                var result = info.ArtifactsPath;
+            // When
+            var result = info.ArtifactsPath;
 
-                // Then
-                Assert.Null(result);
-            }
+            // Then
+            Assert.Equal("/rwx/artifacts", result.FullPath);
         }
 
-        public sealed class TheEnvPathProperty
+        [Fact]
+        public void Should_Return_Null_When_Env_Var_Missing()
         {
-            [Fact]
-            public void Should_Return_Correct_Value()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateRuntimeInfo();
+            // Given
+            var fixture = new RwxInfoFixture();
+            fixture.Environment.GetEnvironmentVariable("RWX_ARTIFACTS").Returns(null as string);
+            var info = fixture.CreateRuntimeInfo();
 
-                // When
-                var result = info.EnvPath;
+            // When
+            var result = info.ArtifactsPath;
 
-                // Then
-                Assert.Equal("/rwx/env", result.FullPath);
-            }
+            // Then
+            Assert.Null(result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_Null_When_Env_Var_Missing()
-            {
-                // Given
-                var fixture = new RwxInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("RWX_ENV").Returns(null as string);
-                var info = fixture.CreateRuntimeInfo();
+    public sealed class TheEnvPathProperty
+    {
+        [Fact]
+        public void Should_Return_Correct_Value()
+        {
+            // Given
+            var info = new RwxInfoFixture().CreateRuntimeInfo();
 
-                // When
-                var result = info.EnvPath;
+            // When
+            var result = info.EnvPath;
 
-                // Then
-                Assert.Null(result);
-            }
+            // Then
+            Assert.Equal("/rwx/env", result.FullPath);
         }
 
-        public sealed class TheIsRuntimeAvailableProperty
+        [Fact]
+        public void Should_Return_Null_When_Env_Var_Missing()
         {
-            [Fact]
-            public void Should_Return_True_When_All_Env_Vars_Set()
-            {
-                // Given
-                var info = new RwxInfoFixture().CreateRuntimeInfo();
+            // Given
+            var fixture = new RwxInfoFixture();
+            fixture.Environment.GetEnvironmentVariable("RWX_ENV").Returns(null as string);
+            var info = fixture.CreateRuntimeInfo();
 
-                // When
-                var result = info.IsRuntimeAvailable;
+            // When
+            var result = info.EnvPath;
 
-                // Then
-                Assert.True(result);
-            }
+            // Then
+            Assert.Null(result);
+        }
+    }
 
-            [Fact]
-            public void Should_Return_False_When_Values_Missing()
-            {
-                // Given
-                var fixture = new RwxInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("RWX_VALUES").Returns(null as string);
-                var info = fixture.CreateRuntimeInfo();
+    public sealed class TheIsRuntimeAvailableProperty
+    {
+        [Fact]
+        public void Should_Return_True_When_All_Env_Vars_Set()
+        {
+            // Given
+            var info = new RwxInfoFixture().CreateRuntimeInfo();
 
-                // When
-                var result = info.IsRuntimeAvailable;
+            // When
+            var result = info.IsRuntimeAvailable;
 
-                // Then
-                Assert.False(result);
-            }
+            // Then
+            Assert.True(result);
+        }
 
-            [Fact]
-            public void Should_Return_False_When_Artifacts_Missing()
-            {
-                // Given
-                var fixture = new RwxInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("RWX_ARTIFACTS").Returns(null as string);
-                var info = fixture.CreateRuntimeInfo();
+        [Fact]
+        public void Should_Return_False_When_Values_Missing()
+        {
+            // Given
+            var fixture = new RwxInfoFixture();
+            fixture.Environment.GetEnvironmentVariable("RWX_VALUES").Returns(null as string);
+            var info = fixture.CreateRuntimeInfo();
 
-                // When
-                var result = info.IsRuntimeAvailable;
+            // When
+            var result = info.IsRuntimeAvailable;
 
-                // Then
-                Assert.False(result);
-            }
+            // Then
+            Assert.False(result);
+        }
 
-            [Fact]
-            public void Should_Return_False_When_Env_Missing()
-            {
-                // Given
-                var fixture = new RwxInfoFixture();
-                fixture.Environment.GetEnvironmentVariable("RWX_ENV").Returns(null as string);
-                var info = fixture.CreateRuntimeInfo();
+        [Fact]
+        public void Should_Return_False_When_Artifacts_Missing()
+        {
+            // Given
+            var fixture = new RwxInfoFixture();
+            fixture.Environment.GetEnvironmentVariable("RWX_ARTIFACTS").Returns(null as string);
+            var info = fixture.CreateRuntimeInfo();
 
-                // When
-                var result = info.IsRuntimeAvailable;
+            // When
+            var result = info.IsRuntimeAvailable;
 
-                // Then
-                Assert.False(result);
-            }
+            // Then
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Should_Return_False_When_Env_Missing()
+        {
+            // Given
+            var fixture = new RwxInfoFixture();
+            fixture.Environment.GetEnvironmentVariable("RWX_ENV").Returns(null as string);
+            var info = fixture.CreateRuntimeInfo();
+
+            // When
+            var result = info.IsRuntimeAvailable;
+
+            // Then
+            Assert.False(result);
         }
     }
 }

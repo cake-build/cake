@@ -8,88 +8,87 @@ using System.Linq;
 using Cake.Core.IO;
 using Cake.Core.Polyfill;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <inheritdoc/>
+public sealed class CakeEnvironment : ICakeEnvironment
 {
     /// <inheritdoc/>
-    public sealed class CakeEnvironment : ICakeEnvironment
+    public DirectoryPath WorkingDirectory
     {
-        /// <inheritdoc/>
-        public DirectoryPath WorkingDirectory
-        {
-            get { return System.IO.Directory.GetCurrentDirectory(); }
-            set { SetWorkingDirectory(value); }
-        }
+        get { return System.IO.Directory.GetCurrentDirectory(); }
+        set { SetWorkingDirectory(value); }
+    }
 
-        /// <inheritdoc/>
-        public DirectoryPath UserHomeDirectory { get; }
+    /// <inheritdoc/>
+    public DirectoryPath UserHomeDirectory { get; }
 
-        /// <inheritdoc/>
-        public DirectoryPath ApplicationRoot { get; }
+    /// <inheritdoc/>
+    public DirectoryPath ApplicationRoot { get; }
 
-        /// <inheritdoc/>
-        public ICakePlatform Platform { get; }
+    /// <inheritdoc/>
+    public ICakePlatform Platform { get; }
 
-        /// <inheritdoc/>
-        public ICakeRuntime Runtime { get; }
+    /// <inheritdoc/>
+    public ICakeRuntime Runtime { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakeEnvironment" /> class.
-        /// </summary>
-        /// <param name="platform">The platform.</param>
-        /// <param name="runtime">The runtime.</param>
-        public CakeEnvironment(ICakePlatform platform, ICakeRuntime runtime)
-        {
-            Platform = platform;
-            Runtime = runtime;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakeEnvironment" /> class.
+    /// </summary>
+    /// <param name="platform">The platform.</param>
+    /// <param name="runtime">The runtime.</param>
+    public CakeEnvironment(ICakePlatform platform, ICakeRuntime runtime)
+    {
+        Platform = platform;
+        Runtime = runtime;
 
-            // Get the application root.
-            ApplicationRoot = new DirectoryPath(AppContext.BaseDirectory);
+        // Get the application root.
+        ApplicationRoot = new DirectoryPath(AppContext.BaseDirectory);
 
-            // Get the working directory.
-            WorkingDirectory = new DirectoryPath(System.IO.Directory.GetCurrentDirectory());
+        // Get the working directory.
+        WorkingDirectory = new DirectoryPath(System.IO.Directory.GetCurrentDirectory());
 
-            // Get the Home directory.
-            UserHomeDirectory = GetSpecialPath(SpecialPath.UserProfile);
-        }
+        // Get the Home directory.
+        UserHomeDirectory = GetSpecialPath(SpecialPath.UserProfile);
+    }
 
-        /// <inheritdoc/>
-        public DirectoryPath GetSpecialPath(SpecialPath path)
-        {
-            return SpecialPathHelper.GetFolderPath(Platform, path);
-        }
+    /// <inheritdoc/>
+    public DirectoryPath GetSpecialPath(SpecialPath path)
+    {
+        return SpecialPathHelper.GetFolderPath(Platform, path);
+    }
 
-        /// <inheritdoc/>
-        public string GetEnvironmentVariable(string variable)
-        {
-            return Environment.GetEnvironmentVariable(variable);
-        }
+    /// <inheritdoc/>
+    public string GetEnvironmentVariable(string variable)
+    {
+        return Environment.GetEnvironmentVariable(variable);
+    }
 
-        /// <inheritdoc/>
-        public IDictionary<string, string> GetEnvironmentVariables()
-        {
-            return Environment.GetEnvironmentVariables()
-                .Cast<System.Collections.DictionaryEntry>()
-                .Aggregate(
-                    new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase),
-                    (dictionary, entry) =>
+    /// <inheritdoc/>
+    public IDictionary<string, string> GetEnvironmentVariables()
+    {
+        return Environment.GetEnvironmentVariables()
+            .Cast<System.Collections.DictionaryEntry>()
+            .Aggregate(
+                new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase),
+                (dictionary, entry) =>
+                {
+                    var key = (string)entry.Key;
+                    if (!dictionary.TryGetValue(key, out _))
                     {
-                        var key = (string)entry.Key;
-                        if (!dictionary.TryGetValue(key, out _))
-                        {
-                            dictionary.Add(key, entry.Value as string);
-                        }
-                        return dictionary;
-                    },
-                    dictionary => dictionary);
-        }
+                        dictionary.Add(key, entry.Value as string);
+                    }
+                    return dictionary;
+                },
+                dictionary => dictionary);
+    }
 
-        private static void SetWorkingDirectory(DirectoryPath path)
+    private static void SetWorkingDirectory(DirectoryPath path)
+    {
+        if (path.IsRelative)
         {
-            if (path.IsRelative)
-            {
-                throw new CakeException("Working directory can not be set to a relative path.");
-            }
-            System.IO.Directory.SetCurrentDirectory(path.FullPath);
+            throw new CakeException("Working directory can not be set to a relative path.");
         }
+        System.IO.Directory.SetCurrentDirectory(path.FullPath);
     }
 }

@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,148 +8,152 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace Cake.Core.Diagnostics.Formatting
+namespace Cake.Core.Diagnostics.Formatting;
+
+internal static class FormatParser
 {
-    internal static class FormatParser
+    public static IEnumerable<FormatToken> Parse(string format)
     {
-        public static IEnumerable<FormatToken> Parse(string format)
+        var reader = new CharReader(format);
+        while (true)
         {
-            var reader = new CharReader(format);
-            while (true)
+            if (!PeakTwo(reader, out var character, out var next))
             {
-                if (!PeakTwo(reader, out var character, out var next))
-                {
-                    break;
-                }
+                break;
+            }
 
-                if (character == '{' && next != '{')
-                {
-                    yield return ParseProperty(reader);
-                }
-                else
-                {
-                    yield return ParseText(reader);
-                }
+            if (character == '{' && next != '{')
+            {
+                yield return ParseProperty(reader);
+            }
+            else
+            {
+                yield return ParseText(reader);
             }
         }
+    }
 
-        private static bool PeakTwo(CharReader reader, out char character, out char next)
+    private static bool PeakTwo(CharReader reader, out char character, out char next)
+    {
+        var peek = reader.Peek(2).ToArray();
+        if (peek.Length == 0)
         {
-            var peek = reader.Peek(2).ToArray();
-            if (peek.Length == 0)
-            {
-                character = default;
-                next = default;
-                return false;
-            }
-
-            character = peek[0];
-            next = (peek.Length == 2) ? peek[1] : default;
-            return true;
+            character = default;
+            next = default;
+            return false;
         }
 
-        private static FormatToken ParseProperty(CharReader reader)
+        character = peek[0];
+        next = (peek.Length == 2) ? peek[1] : default;
+        return true;
+    }
+
+    private static FormatToken ParseProperty(CharReader reader)
+    {
+        reader.Read(); // Consume
+        if (reader.Peek() == -1)
         {
-            reader.Read(); // Consume
-            if (reader.Peek() == -1)
+            return new LiteralToken("{");
+        }
+        if ((char)reader.Peek() == '{')
+        {
+            reader.Read();
+            return new LiteralToken("{");
+        }
+        var builder = new StringBuilder();
+        while (true)
+        {
+            var current = reader.Peek();
+            if (current == -1)
             {
-                return new LiteralToken("{");
+                break;
             }
-            if ((char)reader.Peek() == '{')
+
+            var character = (char)current;
+            if (character == '}')
             {
                 reader.Read();
-                return new LiteralToken("{");
+
+                // Format item syntax: {index[,alignment][:format]}
+                var accumulated = builder.ToString();
+                string format = null;
+                var formatSeparator = accumulated.IndexOf(':');
+                if (formatSeparator >= 0)
+                {
+                    format = accumulated[(formatSeparator + 1)..];
+                    accumulated = accumulated[..formatSeparator];
+                }
+
+                int? alignment = null;
+                var alignmentSeparator = accumulated.IndexOf(',');
+                if (alignmentSeparator >= 0)
+                {
+                    if (!int.TryParse(accumulated[(alignmentSeparator + 1)..], NumberStyles.AllowLeadingSign | NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite, CultureInfo.InvariantCulture, out var parsedAlignment))
+                    {
+                        throw new FormatException("Input string was not in a correct format.");
+                    }
+                    alignment = parsedAlignment;
+                    accumulated = accumulated[..alignmentSeparator];
+                }
+
+                var name = accumulated.Trim();
+                if (!IsNumeric(name))
+                {
+                    throw new FormatException("Input string was not in a correct format.");
+                }
+                var position = int.Parse(name, CultureInfo.InvariantCulture);
+                return new PropertyToken(position, format, alignment);
             }
-            var builder = new StringBuilder();
-            while (true)
+            builder.Append((char)reader.Read());
+        }
+        return new LiteralToken(builder.ToString());
+    }
+
+    private static FormatToken ParseText(CharReader reader)
+    {
+        var builder = new StringBuilder();
+        while (true)
+        {
+            if (!PeakTwo(reader, out var character, out var next))
             {
-                var current = reader.Peek();
-                if (current == -1)
+                break;
+            }
+
+            if (character == '{')
+            {
+                if (next != '{')
                 {
                     break;
                 }
 
-                var character = (char)current;
-                if (character == '}')
-                {
-                    reader.Read();
-
-                    var accumulated = builder.ToString();
-                    var parts = accumulated.Split(new[] { ':' }, StringSplitOptions.None);
-                    if (parts.Length > 1)
-                    {
-                        var name = parts[0];
-                        var format = string.Concat(parts.Skip(1));
-                        var positional = IsNumeric(name);
-                        if (!positional)
-                        {
-                            throw new FormatException("Input string was not in a correct format.");
-                        }
-                        var position = int.Parse(name, CultureInfo.InvariantCulture);
-                        return new PropertyToken(position, format);
-                    }
-                    else
-                    {
-                        var positional = IsNumeric(accumulated);
-                        if (!positional)
-                        {
-                            throw new FormatException("Input string was not in a correct format.");
-                        }
-                        var position = int.Parse(accumulated, CultureInfo.InvariantCulture);
-                        return new PropertyToken(position, null);
-                    }
-                }
-                builder.Append((char)reader.Read());
+                // escaped curly sequence, consume the first character,
+                // let the iteration/append continue below.
+                reader.Read();
             }
-            return new LiteralToken(builder.ToString());
-        }
-
-        private static FormatToken ParseText(CharReader reader)
-        {
-            var builder = new StringBuilder();
-            while (true)
+            else if (character == '}' && next == '}')
             {
-                if (!PeakTwo(reader, out var character, out var next))
-                {
-                    break;
-                }
-
-                if (character == '{')
-                {
-                    if (next != '{')
-                    {
-                        break;
-                    }
-
-                    // escaped curly sequence, consume the first character,
-                    // let the iteration/append continue below.
-                    reader.Read();
-                }
-                else if (character == '}' && next == '}')
-                {
-                    // escaped curly sequence, consume the first character,
-                    // let the iteration/append continue below.
-                    reader.Read();
-                }
-                builder.Append((char)reader.Read());
+                // escaped curly sequence, consume the first character,
+                // let the iteration/append continue below.
+                reader.Read();
             }
-            return new LiteralToken(builder.ToString());
+            builder.Append((char)reader.Read());
         }
+        return new LiteralToken(builder.ToString());
+    }
 
-        private static bool IsNumeric(string value)
+    private static bool IsNumeric(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
         {
-            if (string.IsNullOrWhiteSpace(value))
+            return false;
+        }
+        foreach (var character in value)
+        {
+            if (!char.IsDigit(character))
             {
                 return false;
             }
-            foreach (var character in value)
-            {
-                if (!char.IsDigit(character))
-                {
-                    return false;
-                }
-            }
-            return true;
         }
+        return true;
     }
 }

@@ -1,24 +1,23 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.Chocolatey.Pin;
 
-namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Pin
+namespace Cake.Common.Tests.Fixtures.Tools.Chocolatey.Pin;
+
+internal sealed class ChocolateyPinnerFixture : ChocolateyFixture<ChocolateyPinSettings>
 {
-    internal sealed class ChocolateyPinnerFixture : ChocolateyFixture<ChocolateyPinSettings>
+    public string Name { get; set; }
+
+    public ChocolateyPinnerFixture()
     {
-        public string Name { get; set; }
+        Name = "Cake";
+    }
 
-        public ChocolateyPinnerFixture()
-        {
-            Name = "Cake";
-        }
-
-        protected override void RunTool()
-        {
-            var tool = new ChocolateyPinner(FileSystem, Environment, ProcessRunner, Tools, Resolver);
-            tool.Pin(Name, Settings);
-        }
+    protected override void RunTool()
+    {
+        var tool = new ChocolateyPinner(FileSystem, Environment, ProcessRunner, Tools, Resolver);
+        tool.Pin(Name, Settings);
     }
 }

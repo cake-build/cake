@@ -1,0 +1,4 @@
+﻿[
+  /test/build,
+  /test/file1.txt
+]

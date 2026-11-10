@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -6,116 +6,243 @@ using System;
 using Cake.Core.IO;
 
 // ReSharper disable once CheckNamespace
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <summary>
+/// Contains extension methods for <see cref="ProcessSettings" />.
+/// </summary>
+public static class ProcessSettingsExtensions
 {
     /// <summary>
-    /// Contains extension methods for <see cref="ProcessSettings" />.
+    /// Sets the arguments for the process.
     /// </summary>
-    public static class ProcessSettingsExtensions
+    /// <param name="settings">The settings.</param>
+    /// <param name="arguments">The action used to set arguments.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings WithArguments(this ProcessSettings settings, Action<ProcessArgumentBuilder> arguments)
     {
-        /// <summary>
-        /// Sets the arguments for the process.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <param name="arguments">The action used to set arguments.</param>
-        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessSettings WithArguments(this ProcessSettings settings, Action<ProcessArgumentBuilder> arguments)
+        ArgumentNullException.ThrowIfNull(settings);
+        ArgumentNullException.ThrowIfNull(arguments);
+
+        if (settings.Arguments == null)
         {
-            ArgumentNullException.ThrowIfNull(settings);
-            ArgumentNullException.ThrowIfNull(arguments);
-
-            if (settings.Arguments == null)
-            {
-                settings.Arguments = new ProcessArgumentBuilder();
-            }
-
-            arguments(settings.Arguments);
-            return settings;
+            settings.Arguments = new ProcessArgumentBuilder();
         }
 
-        /// <summary>
-        /// Sets the working directory for the process to be started.
-        /// </summary>
-        /// <param name="settings">The process settings.</param>
-        /// <param name="path">The working directory for the process to be started.</param>
-        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessSettings UseWorkingDirectory(this ProcessSettings settings, DirectoryPath path)
-        {
-            ArgumentNullException.ThrowIfNull(settings);
-            ArgumentNullException.ThrowIfNull(path);
-
-            settings.WorkingDirectory = path;
-            return settings;
-        }
-
-        /// <summary>
-        /// Sets a function that intercepts the standard output before being redirected. Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/>.
-        /// </summary>
-        /// <param name="settings">The process settings.</param>
-        /// <param name="handler">The standard output handler.</param>
-        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessSettings SetRedirectedStandardOutputHandler(this ProcessSettings settings, Func<string, string> handler)
-        {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            settings.RedirectedStandardOutputHandler = handler;
-            return settings;
-        }
-
-        /// <summary>
-        /// Sets a function that intercepts the standard error before being redirected. Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/>.
-        /// </summary>
-        /// <param name="settings">The process settings.</param>
-        /// <param name="handler">The standard error handler.</param>
-        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessSettings SetRedirectedStandardErrorHandler(this ProcessSettings settings, Func<string, string> handler)
-        {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            settings.RedirectedStandardErrorHandler = handler;
-            return settings;
-        }
-
-        /// <summary>
-        /// Sets a value indicating whether the output of an application is written to the standard output stream.
-        /// </summary>
-        /// <param name="settings">The process settings.</param>
-        /// <param name="redirect">true if output should be redirected; false if output should be written to the standard output stream. The default is false.</param>
-        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessSettings SetRedirectStandardOutput(this ProcessSettings settings, bool redirect)
-        {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            settings.RedirectStandardOutput = redirect;
-            return settings;
-        }
-
-        /// <summary>
-        /// Sets a value indicating whether the standard error of an application is written to the standard error stream.
-        /// </summary>
-        /// <param name="settings">The process settings.</param>
-        /// <param name="redirect">true if error output should be redirected; false if error output should be written to the standard error stream. The default is false.</param>
-        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessSettings SetRedirectStandardError(this ProcessSettings settings, bool redirect)
-        {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            settings.RedirectStandardError = redirect;
-            return settings;
-        }
-
-        /// <summary>
-        /// Sets the optional timeout for process execution.
-        /// </summary>
-        /// <param name="settings">The process settings.</param>
-        /// <param name="timeout">The timeout duration.</param>
-        /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
-        public static ProcessSettings SetTimeout(this ProcessSettings settings, int timeout)
-        {
-            ArgumentNullException.ThrowIfNull(settings);
-
-            settings.Timeout = timeout;
-            return settings;
-        }
+        arguments(settings.Arguments);
+        return settings;
     }
+
+    /// <summary>
+    /// Sets the working directory for the process to be started.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="path">The working directory for the process to be started.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings UseWorkingDirectory(this ProcessSettings settings, DirectoryPath path)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+        ArgumentNullException.ThrowIfNull(path);
+
+        settings.WorkingDirectory = path;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a function that intercepts the standard output before being redirected. Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/>.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="handler">The standard output handler.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetRedirectedStandardOutputHandler(this ProcessSettings settings, Func<string, string> handler)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.RedirectedStandardOutputHandler = handler;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a function that intercepts the standard error before being redirected. Use in conjunction with <see cref="ProcessSettings.RedirectStandardOutput"/>.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="handler">The standard error handler.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetRedirectedStandardErrorHandler(this ProcessSettings settings, Func<string, string> handler)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.RedirectedStandardErrorHandler = handler;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a value indicating whether the output of an application is written to the standard output stream.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="redirect">true if output should be redirected; false if output should be written to the standard output stream. The default is false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetRedirectStandardOutput(this ProcessSettings settings, bool redirect)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.RedirectStandardOutput = redirect;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a value indicating whether the standard error of an application is written to the standard error stream.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="redirect">true if error output should be redirected; false if error output should be written to the standard error stream. The default is false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetRedirectStandardError(this ProcessSettings settings, bool redirect)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.RedirectStandardError = redirect;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets the text written to the process standard input.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="standardInput">The standard input text. <c>null</c> leaves standard input unredirected.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetStandardInput(this ProcessSettings settings, string standardInput)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.StandardInput = standardInput is null ? (ProcessStandardInput?)null : standardInput;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets the bytes written to the process standard input.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="standardInput">The standard input bytes.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetStandardInput(this ProcessSettings settings, ReadOnlySpan<byte> standardInput)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.StandardInput = standardInput;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets the bytes written to the process standard input.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="standardInput">The standard input bytes.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetStandardInput(this ProcessSettings settings, ReadOnlyMemory<byte> standardInput)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.StandardInput = standardInput;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets the bytes written to the process standard input.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="standardInput">The standard input bytes. <c>null</c> leaves standard input unredirected.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetStandardInput(this ProcessSettings settings, byte[] standardInput)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.StandardInput = standardInput is null ? (ProcessStandardInput?)null : standardInput;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets the optional timeout for process execution.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="timeout">The timeout duration.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetTimeout(this ProcessSettings settings, int timeout)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.Timeout = timeout;
+        return settings;
+    }
+
+#if NET11_0_OR_GREATER
+    /// <summary>
+    /// Sets a value indicating whether the child process is terminated when Cake exits.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="killOnParentExit">true to terminate the child when Cake exits; otherwise, false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetKillOnParentExit(this ProcessSettings settings, bool killOnParentExit)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.KillOnParentExit = killOnParentExit;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a value indicating whether the process is started detached from Cake.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="startDetached">true to start the process detached; otherwise, false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetStartDetached(this ProcessSettings settings, bool startDetached)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.StartDetached = startDetached;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a value indicating whether only standard handles are inherited by the child process.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="restrictInheritedHandles">true to inherit only standard handles; otherwise, false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetRestrictInheritedHandles(this ProcessSettings settings, bool restrictInheritedHandles)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.RestrictInheritedHandles = restrictInheritedHandles;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a value indicating whether standard output is discarded.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="discard">true to discard standard output; otherwise, false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetDiscardStandardOutput(this ProcessSettings settings, bool discard)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.DiscardStandardOutput = discard;
+        return settings;
+    }
+
+    /// <summary>
+    /// Sets a value indicating whether standard error is discarded.
+    /// </summary>
+    /// <param name="settings">The process settings.</param>
+    /// <param name="discard">true to discard standard error; otherwise, false.</param>
+    /// <returns>The same <see cref="ProcessSettings"/> instance so that multiple calls can be chained.</returns>
+    public static ProcessSettings SetDiscardStandardError(this ProcessSettings settings, bool discard)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        settings.DiscardStandardError = discard;
+        return settings;
+    }
+#endif
 }

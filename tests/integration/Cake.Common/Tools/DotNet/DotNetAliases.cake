@@ -211,6 +211,69 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
     Assert.Equal(package, value);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var sourcePath = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/hwapp");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetUpdate");
+    EnsureDirectoryExist(path.Combine("../").Collapse());
+    if (DirectoryExists(path))
+    {
+        DeleteDirectory(path, new DeleteDirectorySettings { Recursive = true, Force = true });
+    }
+    CopyDirectory(sourcePath, path);
+    var project = path.CombineWithFilePath("hwapp.csproj");
+    var package = "Cake.Core";
+
+    DotNetAddPackage(package, project.FullPath, new DotNetPackageAddSettings
+    {
+        Version = "4.0.0"
+    });
+
+    // When
+    DotNetUpdatePackage(package, project.FullPath);
+
+    // Then
+    var version = XmlPeek(
+        project.FullPath,
+        $"/Project/ItemGroup/PackageReference[@Include='{package}']/@Version"
+    );
+    Assert.NotNull(version);
+    Assert.NotEqual("4.0.0", version);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetDownloadPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var output = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetDownload");
+    EnsureDirectoryExist(output);
+
+    // When
+    DotNetDownloadPackage("Newtonsoft.Json@13.0.3", output);
+
+    // Then: package download extracts into {id}/{version}/ (not a nupkg at the output root)
+    Assert.True(DirectoryExists(output.Combine("newtonsoft.json").Combine("13.0.3")));
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage.Vulnerable")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage")
+    .Does(() =>
+{
+    // Given
+    var project = Paths.Temp.CombineWithFilePath("./Cake.Common/Tools/DotNet/DotNetUpdate/hwapp.csproj");
+
+    // When / Then: command succeeds even when no advisory applies
+    DotNetUpdatePackage(new DotNetPackageUpdateSettings
+    {
+        Project = project,
+        Vulnerable = true
+    });
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
     .Does(() =>
@@ -320,6 +383,144 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnList")
     Assert.Contains(result, item => item == project);
 });
 
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnMigrate")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var source = Paths.Temp.CombineWithFilePath("./Cake.Common/Tools/DotNet/hwapp.sln");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetSlnMigrate");
+    EnsureDirectoryExist(path);
+    var solution = path.CombineWithFilePath("hwapp.sln");
+    CopyFile(source, solution);
+
+    // When
+    DotNetSlnMigrate(solution);
+
+    // Then
+    Assert.True(FileExists(path.CombineWithFilePath("hwapp.slnx")));
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetWhy")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var source = Paths.Temp.Combine("./Cake.Common/Tools/DotNet");
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetNuGetWhy");
+    EnsureDirectoryExist(path.Combine("../").Collapse());
+    if (DirectoryExists(path))
+    {
+        DeleteDirectory(path, new DeleteDirectorySettings { Recursive = true, Force = true });
+    }
+    CopyDirectory(source.Combine("hwapp.tests"), path.Combine("hwapp.tests"));
+    CopyDirectory(source.Combine("hwapp.common"), path.Combine("hwapp.common"));
+    var project = path.CombineWithFilePath("hwapp.tests/hwapp.tests.csproj");
+    var package = "xunit.v3.extensibility.core";
+
+    DotNetRestore(project.FullPath);
+
+    // When
+    var result = DotNetNuGetWhy(project.FullPath, package);
+
+    // Then
+    Assert.NotEmpty(result.Projects);
+    var whyProject = result.Projects.First();
+    Assert.Equal("hwapp.tests", whyProject.Name);
+    Assert.Equal(package, whyProject.Package);
+    Assert.Contains(whyProject.Graphs, graph => graph.Framework == "net10.0");
+    Assert.True(
+        ContainsPackage(whyProject.Graphs.SelectMany(graph => graph.Dependencies), package),
+        "Expected parsed nuget why graph to contain " + package);
+
+    static bool ContainsPackage(IEnumerable<DotNetNuGetWhyPackage> nodes, string packageId)
+    {
+        foreach (var node in nodes)
+        {
+            if (string.Equals(node.Id, packageId, StringComparison.OrdinalIgnoreCase) ||
+                ContainsPackage(node.Dependencies, packageId))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetLocalsList")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // When
+    var result = DotNetNuGetLocalsList(DotNetNuGetLocalsFolder.All);
+
+    // Then
+    Assert.False(string.IsNullOrWhiteSpace(result.HttpCache?.FullPath), nameof(result.HttpCache));
+    Assert.False(string.IsNullOrWhiteSpace(result.GlobalPackages?.FullPath), nameof(result.GlobalPackages));
+    Assert.False(string.IsNullOrWhiteSpace(result.Temp?.FullPath), nameof(result.Temp));
+    Assert.False(string.IsNullOrWhiteSpace(result.PluginsCache?.FullPath), nameof(result.PluginsCache));
+    Assert.True(DirectoryExists(result.GlobalPackages), result.GlobalPackages.FullPath);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetLocalsClear")
+    .Does(() =>
+{
+    // When
+    DotNetNuGetLocalsClear(DotNetNuGetLocalsFolder.Temp);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetProjectConvert");
+    var output = path.Combine("cake");
+    EnsureDirectoryExist(path);
+    var file = path.CombineWithFilePath("cake.cs");
+    System.IO.File.WriteAllText(
+        file.FullPath,
+        """
+        #:sdk Cake.Sdk
+
+        Information("Hello world!");
+        """);
+
+    // When
+    DotNetProjectConvert(file, new DotNetProjectConvertSettings { Output = output });
+
+    // Then
+    var project = GetFiles($"{output.FullPath}/**/*.csproj").FirstOrDefault();
+    Assert.NotNull(project);
+    var sdk = XmlPeek(project.FullPath, "/Project/@Sdk");
+    Assert.StartsWith("Cake.Sdk", sdk);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert.DryRun")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .Does(() =>
+{
+    // Given
+    var path = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetProjectConvertDryRun");
+    var output = path.Combine("cake");
+    EnsureDirectoryExist(path);
+    var file = path.CombineWithFilePath("cake.cs");
+    System.IO.File.WriteAllText(
+        file.FullPath,
+        """
+        #:sdk Cake.Sdk
+
+        Information("Hello world!");
+        """);
+
+    // When
+    DotNetProjectConvert(file, new DotNetProjectConvertSettings { Output = output, DryRun = true });
+
+    // Then
+    Assert.Empty(GetFiles($"{output.FullPath}/**/*.csproj"));
+});
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnRemove")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
     .Does(() =>
@@ -343,6 +544,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRepair")
 
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRestore")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.Setup")
+    .OnError(exception => { Console.WriteLine(exception); })
     .Does(() =>
 {
     // Given
@@ -669,6 +871,114 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRun")
     DotNetRun(project.FullPath);
 });
 
+string cakeSdkVersion;
+
+string GetCakeSdkVersion()
+{
+    if (cakeSdkVersion is not null)
+    {
+        return cakeSdkVersion;
+    }
+
+    var globalJson = Paths.TestRoot.CombineWithFilePath("../../global.json");
+    using var document = System.Text.Json.JsonDocument.Parse(System.IO.File.ReadAllText(globalJson.FullPath));
+    cakeSdkVersion = document.RootElement.GetProperty("msbuild-sdks").GetProperty("Cake.Sdk").GetString();
+    return cakeSdkVersion;
+}
+
+string CreateDotNetRunCodeScript(string expectedName, string expectedEnvironment)
+{
+    // stdin virtual projects live under the temp runfile cache, so they cannot
+    // see repo-root global.json. Pin Cake.Sdk from that file in one place.
+    var cakeSdkVersion = GetCakeSdkVersion();
+    return 
+        $$"""
+        #:sdk Cake.Sdk@{{cakeSdkVersion}}
+
+        var name = Argument<string>("name", "unset");
+        var environment = EnvironmentVariable("CAKE_DOTNET_RUN_CODE");
+        Information("name={0}", name);
+        Information("CAKE_DOTNET_RUN_CODE={0}", environment ?? "<null>");
+        if (name != "{{expectedName}}")
+        {
+            throw new Exception($"Expected name '{{expectedName}}' but was '{name}'");
+        }
+        if ((environment ?? "") != "{{expectedEnvironment}}")
+        {
+            throw new Exception($"Expected CAKE_DOTNET_RUN_CODE '{{expectedEnvironment}}' but was '{environment}'");
+        }
+        System.IO.File.WriteAllText("dotnet-run-code.marker", "ok");
+        """;
+}
+
+void AssertDotNetRunCodeMarker(DirectoryPath workingDirectory)
+{
+    var marker = workingDirectory.CombineWithFilePath("dotnet-run-code.marker");
+    Assert.True(FileExists(marker), "Path:" + marker.FullPath);
+    DeleteFile(marker);
+}
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Code")
+    .Does(() =>
+{
+    DotNetRunCode(CreateDotNetRunCodeScript("unset", ""));
+    AssertDotNetRunCodeMarker(Context.Environment.WorkingDirectory);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Arguments")
+    .Does(() =>
+{
+    DotNetRunCode(CreateDotNetRunCodeScript("from-argument", ""), "--name=from-argument");
+    AssertDotNetRunCodeMarker(Context.Environment.WorkingDirectory);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Settings")
+    .Does(() =>
+{
+    var workingDirectory = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetRunCode/Settings");
+    EnsureDirectoryExist(workingDirectory);
+
+    DotNetRunCode(
+        CreateDotNetRunCodeScript("unset", "from-environment"),
+        new DotNetRunSettings
+        {
+            WorkingDirectory = workingDirectory,
+            EnvironmentVariables = new Dictionary<string, string>
+            {
+                ["CAKE_DOTNET_RUN_CODE"] = "from-environment"
+            }
+        });
+
+    AssertDotNetRunCodeMarker(workingDirectory);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.ArgumentsAndSettings")
+    .Does(() =>
+{
+    var workingDirectory = Paths.Temp.Combine("./Cake.Common/Tools/DotNet/DotNetRunCode/ArgumentsAndSettings");
+    EnsureDirectoryExist(workingDirectory);
+
+    DotNetRunCode(
+        CreateDotNetRunCodeScript("from-argument", "from-environment"),
+        "--name=from-argument",
+        new DotNetRunSettings
+        {
+            WorkingDirectory = workingDirectory,
+            EnvironmentVariables = new Dictionary<string, string>
+            {
+                ["CAKE_DOTNET_RUN_CODE"] = "from-environment"
+            }
+        });
+
+    AssertDotNetRunCodeMarker(workingDirectory);
+});
+
+Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Code")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Arguments")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.Settings")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode.ArgumentsAndSettings");
+
 Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetDelete")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetPush")
     .Does(() =>
@@ -696,6 +1006,9 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetToolInstallListRunUninstallLocalToolManifest")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetToolInstallListRunUninstallToolPath")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddPackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetUpdatePackage.Vulnerable")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetDownloadPackage")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetAddReference")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetFormat")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetListReference")
@@ -704,6 +1017,11 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSDKCheck")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnAdd")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnList")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnMigrate")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetWhy")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetLocalsList")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetProjectConvert.DryRun")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetSlnRemove")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRepair")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetWorkloadRestore")
@@ -724,6 +1042,7 @@ Task("Cake.Common.Tools.DotNet.DotNetAliases.DotNetBuildServerShutdown")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetTest.Fail")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetPush")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRun")
+    .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetRunCode")
     .IsDependentOn("Cake.Common.Tools.DotNet.DotNetAliases.DotNetNuGetDelete")
     .Does(() =>
 {

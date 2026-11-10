@@ -4,172 +4,299 @@
 
 using System;
 using System.Diagnostics;
+#if NET11_0_OR_GREATER
+using Microsoft.Win32.SafeHandles;
+#endif
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Core.Polyfill;
 using Cake.Core.Tooling;
 
-namespace Cake.Core.IO
+namespace Cake.Core.IO;
+
+/// <summary>
+/// Responsible for starting processes.
+/// </summary>
+public sealed class ProcessRunner : IProcessRunner
 {
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+    private readonly ICakeLog _log;
+    private readonly IToolLocator _tools;
+    private readonly ICakeConfiguration _configuration;
+    private readonly bool _noMonoCoersion;
+    private readonly bool _showCommandLine;
+
     /// <summary>
-    /// Responsible for starting processes.
+    /// Initializes a new instance of the <see cref="ProcessRunner" /> class.
     /// </summary>
-    public sealed class ProcessRunner : IProcessRunner
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="log">The log.</param>
+    /// <param name="tools">The tool locator.</param>
+    /// <param name="configuration">The tool configuration.</param>
+    public ProcessRunner(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, IToolLocator tools, ICakeConfiguration configuration)
     {
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
-        private readonly IToolLocator _tools;
-        private readonly ICakeConfiguration _configuration;
-        private readonly bool _noMonoCoersion;
-        private readonly bool _showCommandLine;
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+        _log = log ?? throw new ArgumentNullException(nameof(log));
+        _tools = tools ?? throw new ArgumentNullException(nameof(tools));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProcessRunner" /> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="log">The log.</param>
-        /// <param name="tools">The tool locator.</param>
-        /// <param name="configuration">The tool configuration.</param>
-        public ProcessRunner(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log, IToolLocator tools, ICakeConfiguration configuration)
+        _noMonoCoersion = configuration.GetBoolValue(Constants.Settings.NoMonoCoersion);
+        _showCommandLine = configuration.GetBoolValue(Constants.Settings.ShowProcessCommandLine);
+    }
+
+    /// <inheritdoc/>
+    public IProcess Start(FilePath filePath, ProcessSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(filePath);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        ProcessStartInfo info = GetProcessStartInfo(filePath, settings, out Func<string, string> filterUnsafe);
+
+        // The process we are about to execute can modify the Console Mode and disable features such as ANSI support.
+        // We're capturing the current Console Mode (if any) here so that we can reset it to its original value later.
+        // See https://github.com/cake-build/cake/issues/3018 for an example.
+        var consoleMode = ConsoleMode.GetCurrent(_environment);
+
+        // Start and return the process.
+        var process = new Process
         {
-            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _tools = tools ?? throw new ArgumentNullException(nameof(tools));
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            StartInfo = info,
+            EnableRaisingEvents = true
+        };
 
-            _noMonoCoersion = configuration.GetBoolValue(Constants.Settings.NoMonoCoersion);
-            _showCommandLine = configuration.GetBoolValue(Constants.Settings.ShowProcessCommandLine);
+        process.Exited += (_, __) => consoleMode.Reset();
+
+        StartProcess(process, settings);
+
+        var processWrapper = new ProcessWrapper(process, _log, filterUnsafe, settings.RedirectedStandardOutputHandler,
+            filterUnsafe, settings.RedirectedStandardErrorHandler);
+
+        if (settings.RedirectStandardOutput)
+        {
+            SubscribeStandardOutput(process, processWrapper);
+        }
+        if (settings.RedirectStandardError)
+        {
+            SubscribeStandardError(process, processWrapper);
         }
 
-        /// <inheritdoc/>
-        public IProcess Start(FilePath filePath, ProcessSettings settings)
+        WriteStandardInput(process, settings);
+
+        return processWrapper;
+    }
+
+#if NET11_0_OR_GREATER
+    /// <summary>
+    /// Starts a process and releases all associated resources immediately.
+    /// </summary>
+    /// <param name="filePath">The file name such as an application or document with which to start the process.</param>
+    /// <param name="settings">The information about the process to start.</param>
+    /// <returns>The process identifier.</returns>
+    public int StartAndForget(FilePath filePath, ProcessSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(filePath);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        if (settings.RedirectStandardOutput || settings.RedirectStandardError ||
+            settings.DiscardStandardOutput || settings.DiscardStandardError ||
+            settings.StandardInput != null)
         {
-            ArgumentNullException.ThrowIfNull(filePath);
-            ArgumentNullException.ThrowIfNull(settings);
+            throw new ArgumentException("StartProcessAndForget cannot redirect or discard standard streams.", nameof(settings));
+        }
 
-            ProcessStartInfo info = GetProcessStartInfo(filePath, settings, out Func<string, string> filterUnsafe);
+        var info = GetProcessStartInfo(filePath, settings, out _);
+        return Process.StartAndForget(info);
+    }
+#endif
 
-            // The process we are about to execute can modify the Console Mode and disable features such as ANSI support.
-            // We're capturing the current Console Mode (if any) here so that we can reset it to its original value later.
-            // See https://github.com/cake-build/cake/issues/3018 for an example.
-            var consoleMode = ConsoleMode.GetCurrent(_environment);
+    internal ProcessStartInfo GetProcessStartInfo(FilePath filePath, ProcessSettings settings, out Func<string, string> filterUnsafe)
+    {
+        // Get the fileName
+        var fileName = _environment.Platform.IsUnix() ? filePath.FullPath : filePath.FullPath.Quote();
 
-            // Start and return the process.
-            var process = new Process
+        // Get the arguments.
+        var arguments = settings.Arguments ?? new ProcessArgumentBuilder();
+        filterUnsafe = arguments.FilterUnsafe;
+
+        if (!_noMonoCoersion &&
+            _environment.Platform.IsUnix() &&
+            fileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) &&
+            _fileSystem.GetFile(fileName).IsClrAssembly())
+        {
+            FilePath monoPath = _tools.Resolve("mono");
+            if (monoPath != null)
             {
-                StartInfo = info,
-                EnableRaisingEvents = true
-            };
+                if (!settings.Silent)
+                {
+                    _log.Verbose(Verbosity.Diagnostic, "{0} is a .NET Framework executable, will try execute using Mono.", fileName);
+                }
+                arguments.PrependQuoted(fileName);
+                fileName = monoPath.FullPath;
+            }
+            else
+            {
+                if (!settings.Silent)
+                {
+                    _log.Verbose(Verbosity.Diagnostic, "{0} is a .NET Framework executable, you might need to install Mono for it to execute successfully.", fileName);
+                }
+            }
+        }
 
-            process.Exited += (_, __) => consoleMode.Reset();
+        if (!settings.Silent)
+        {
+            // Log the filename and arguments.
+            var message = string.Concat(fileName, " ", arguments.RenderSafe().TrimEnd());
+            _log.Verbose(_showCommandLine ? _log.Verbosity : Verbosity.Diagnostic, "Executing: {0}", message);
+        }
+
+        // Create the process start info.
+        var info = new ProcessStartInfo(fileName)
+        {
+            Arguments = arguments.Render(),
+            UseShellExecute = false,
+            RedirectStandardError = settings.RedirectStandardError,
+            RedirectStandardOutput = settings.RedirectStandardOutput,
+            RedirectStandardInput = settings.StandardInput != null
+        };
+
+        // Allow working directory?
+        if (!settings.NoWorkingDirectory)
+        {
+            var workingDirectory = settings.WorkingDirectory ?? _environment.WorkingDirectory;
+            info.WorkingDirectory = workingDirectory.MakeAbsolute(_environment).FullPath;
+        }
+
+        // Add environment variables
+        ProcessHelper.SetEnvironmentVariable(info, "CAKE", "True");
+        ProcessHelper.SetEnvironmentVariable(info, "CAKE_VERSION", _environment.Runtime.CakeVersion.ToString(3));
+        if (settings.EnvironmentVariables != null)
+        {
+            foreach (var environmentVariable in settings.EnvironmentVariables)
+            {
+                ProcessHelper.SetEnvironmentVariable(info, environmentVariable.Key, environmentVariable.Value);
+            }
+        }
+
+#if NET11_0_OR_GREATER
+        ApplyNet11ProcessStartInfo(info, settings);
+#endif
+
+        return info;
+    }
+
+    private static void StartProcess(Process process, ProcessSettings settings)
+    {
+#if NET11_0_OR_GREATER
+        SafeFileHandle standardOutputHandle = null;
+        SafeFileHandle standardErrorHandle = null;
+        try
+        {
+            if (settings.DiscardStandardOutput)
+            {
+                standardOutputHandle = System.IO.File.OpenNullHandle();
+                process.StartInfo.StandardOutputHandle = standardOutputHandle;
+            }
+            if (settings.DiscardStandardError)
+            {
+                standardErrorHandle = System.IO.File.OpenNullHandle();
+                process.StartInfo.StandardErrorHandle = standardErrorHandle;
+            }
 
             process.Start();
-
-            var processWrapper = new ProcessWrapper(process, _log, filterUnsafe, settings.RedirectedStandardOutputHandler,
-                filterUnsafe, settings.RedirectedStandardErrorHandler);
-
-            if (settings.RedirectStandardOutput)
-            {
-                SubscribeStandardOutput(process, processWrapper);
-            }
-            if (settings.RedirectStandardError)
-            {
-                SubscribeStandardError(process, processWrapper);
-            }
-
-            return processWrapper;
         }
-
-        internal ProcessStartInfo GetProcessStartInfo(FilePath filePath, ProcessSettings settings, out Func<string, string> filterUnsafe)
+        finally
         {
-            // Get the fileName
-            var fileName = _environment.Platform.IsUnix() ? filePath.FullPath : filePath.FullPath.Quote();
-
-            // Get the arguments.
-            var arguments = settings.Arguments ?? new ProcessArgumentBuilder();
-            filterUnsafe = arguments.FilterUnsafe;
-
-            if (!_noMonoCoersion &&
-                _environment.Platform.IsUnix() &&
-                _environment.Runtime.IsCoreClr &&
-                fileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) &&
-                _fileSystem.GetFile(fileName).IsClrAssembly())
-            {
-                FilePath monoPath = _tools.Resolve("mono");
-                if (monoPath != null)
-                {
-                    if (!settings.Silent)
-                    {
-                        _log.Verbose(Verbosity.Diagnostic, "{0} is a .NET Framework executable, will try execute using Mono.", fileName);
-                    }
-                    arguments.PrependQuoted(fileName);
-                    fileName = monoPath.FullPath;
-                }
-                else
-                {
-                    if (!settings.Silent)
-                    {
-                        _log.Verbose(Verbosity.Diagnostic, "{0} is a .NET Framework executable, you might need to install Mono for it to execute successfully.", fileName);
-                    }
-                }
-            }
-
-            if (!settings.Silent)
-            {
-                // Log the filename and arguments.
-                var message = string.Concat(fileName, " ", arguments.RenderSafe().TrimEnd());
-                _log.Verbose(_showCommandLine ? _log.Verbosity : Verbosity.Diagnostic, "Executing: {0}", message);
-            }
-
-            // Create the process start info.
-            var info = new ProcessStartInfo(fileName)
-            {
-                Arguments = arguments.Render(),
-                UseShellExecute = false,
-                RedirectStandardError = settings.RedirectStandardError,
-                RedirectStandardOutput = settings.RedirectStandardOutput
-            };
-
-            // Allow working directory?
-            if (!settings.NoWorkingDirectory)
-            {
-                var workingDirectory = settings.WorkingDirectory ?? _environment.WorkingDirectory;
-                info.WorkingDirectory = workingDirectory.MakeAbsolute(_environment).FullPath;
-            }
-
-            // Add environment variables
-            ProcessHelper.SetEnvironmentVariable(info, "CAKE", "True");
-            ProcessHelper.SetEnvironmentVariable(info, "CAKE_VERSION", _environment.Runtime.CakeVersion.ToString(3));
-            if (settings.EnvironmentVariables != null)
-            {
-                foreach (var environmentVariable in settings.EnvironmentVariables)
-                {
-                    ProcessHelper.SetEnvironmentVariable(info, environmentVariable.Key, environmentVariable.Value);
-                }
-            }
-
-            return info;
+            standardOutputHandle?.Dispose();
+            standardErrorHandle?.Dispose();
         }
+#else
+        process.Start();
+#endif
+    }
 
-        private static void SubscribeStandardError(Process process, ProcessWrapper processWrapper)
+#if NET11_0_OR_GREATER
+    private static void ApplyNet11ProcessStartInfo(ProcessStartInfo info, ProcessSettings settings)
+    {
+        if (settings.KillOnParentExit && settings.StartDetached)
         {
-            process.ErrorDataReceived += (s, e) =>
+            throw new ArgumentException("KillOnParentExit cannot be used together with StartDetached.", nameof(settings));
+        }
+        if (settings.DiscardStandardOutput && settings.RedirectStandardOutput)
+        {
+            throw new ArgumentException("DiscardStandardOutput cannot be used together with RedirectStandardOutput.", nameof(settings));
+        }
+        if (settings.DiscardStandardError && settings.RedirectStandardError)
+        {
+            throw new ArgumentException("DiscardStandardError cannot be used together with RedirectStandardError.", nameof(settings));
+        }
+        if (settings.KillOnParentExit)
+        {
+            if (OperatingSystem.IsWindows())
             {
-                processWrapper.StandardErrorReceived(e.Data);
-            };
-            process.BeginErrorReadLine();
+                info.KillOnParentExit = true;
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                info.KillOnParentExit = true;
+            }
+            else if (OperatingSystem.IsAndroid())
+            {
+                info.KillOnParentExit = true;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException("KillOnParentExit is only supported on Windows, Linux, and Android.");
+            }
+        }
+        info.StartDetached = settings.StartDetached;
+        if (settings.RestrictInheritedHandles)
+        {
+            info.InheritedHandles = [];
+        }
+    }
+#endif
+
+    private static void WriteStandardInput(Process process, ProcessSettings settings)
+    {
+        if (settings.StandardInput is null)
+        {
+            return;
         }
 
-        private static void SubscribeStandardOutput(Process process, ProcessWrapper processWrapper)
+        try
         {
-            process.OutputDataReceived += (s, e) =>
-            {
-                processWrapper.StandardOutputReceived(e.Data);
-            };
-            process.BeginOutputReadLine();
+            process.StandardInput.BaseStream.Write(settings.StandardInput.Value.Span);
+            process.StandardInput.Dispose();
         }
+        catch
+        {
+            if (!process.HasExited)
+            {
+                process.Kill();
+            }
+
+            throw;
+        }
+    }
+
+    private static void SubscribeStandardError(Process process, ProcessWrapper processWrapper)
+    {
+        process.ErrorDataReceived += (s, e) =>
+        {
+            processWrapper.StandardErrorReceived(e.Data);
+        };
+        process.BeginErrorReadLine();
+    }
+
+    private static void SubscribeStandardOutput(Process process, ProcessWrapper processWrapper)
+    {
+        process.OutputDataReceived += (s, e) =>
+        {
+            processWrapper.StandardOutputReceived(e.Data);
+        };
+        process.BeginOutputReadLine();
     }
 }

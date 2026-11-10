@@ -24,8 +24,4 @@
   <ItemGroup>
     <Folder Include="Internal\Imported\" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
 </Project>

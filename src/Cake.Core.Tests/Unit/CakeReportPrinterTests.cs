@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -62,7 +62,8 @@ public class CakeReportPrinterTests
         var executionCategories = Enum
                                     .GetValues<CakeReportEntryCategory>()
                                     .OrderBy(
-                                        category => category switch {
+                                        category => category switch
+                                        {
                                             CakeReportEntryCategory.Setup => 0,
                                             CakeReportEntryCategory.Task => 1,
                                             CakeReportEntryCategory.Teardown => 9,
@@ -73,7 +74,8 @@ public class CakeReportPrinterTests
         var executionStatuses = Enum
                                     .GetValues<CakeTaskExecutionStatus>()
                                     .OrderBy(
-                                        status => status switch {
+                                        status => status switch
+                                        {
                                             CakeTaskExecutionStatus.Executed => 0,
                                             CakeTaskExecutionStatus.Skipped => 1,
                                             CakeTaskExecutionStatus.Failed => 2,

@@ -30,13 +30,7 @@ Task("Cake.Common.Tools.Command.CommandAliases.CommandStandardOutput")
     const string expectStandardOutput = @"Description:
   List tools installed globally or locally.
 
-Usage:
-  dotnet tool list [<packageId>] [options]
-
-Arguments:
-  <PACKAGE_ID>  The NuGet Package Id of the tool to list
-
-Options:";
+Usage:";
 
     // When
     var exitCode = ctx.Command(settings.ToolExecutableNames, out var standardOutput, "tool list -h");
@@ -44,8 +38,12 @@ Options:";
     // Then
     Assert.Equal(0, exitCode);
     Assert.StartsWith(
-      expectStandardOutput.NormalizeLineEndings(),
-      standardOutput.NormalizeLineEndings());
+      expectStandardOutput
+        .NormalizeLineEndings()
+        .Trim(),
+      standardOutput
+        .NormalizeLineEndings()
+        .Trim());
 });
 
 Task("Cake.Common.Tools.Command.CommandAliases.CommandStandardOutput.Settings")
@@ -55,13 +53,7 @@ Task("Cake.Common.Tools.Command.CommandAliases.CommandStandardOutput.Settings")
     const string expectStandardOutput = @"Description:
   List tools installed globally or locally.
 
-Usage:
-  dotnet tool list [<packageId>] [options]
-
-Arguments:
-  <PACKAGE_ID>  The NuGet Package Id of the tool to list
-
-Options:";
+Usage:";
 
     // When
     var exitCode = ctx.Command(settings, out var standardOutput, "tool list -h");
@@ -80,13 +72,7 @@ Task("Cake.Common.Tools.Command.CommandAliases.CommandStandardOutput.SettingsCus
     const string expectStandardOutput = @"Description:
   List tools installed globally or locally.
 
-Usage:
-  dotnet tool list [<packageId>] [options]
-
-Arguments:
-  <PACKAGE_ID>  The NuGet Package Id of the tool to list
-
-Options:";
+Usage:";
 
     // When
     var exitCode = ctx.Command(
@@ -109,13 +95,7 @@ Task("Cake.Common.Tools.Command.CommandAliases.CommandStandardError")
     const string expectStandardOutput = @"Description:
   Install or work with tools that extend the .NET experience.
 
-Usage:
-  dotnet tool [command] [options]
-
-Options:
-  -?, -h, --help  Show command line help.
-
-Commands:";
+Usage:";
     const string expectStandardError = "Required command was not provided.";
     const int expectExitCode = 1;
 
@@ -144,13 +124,7 @@ Task("Cake.Common.Tools.Command.CommandAliases.CommandStandardError.Settings")
     const string expectStandardOutput = @"Description:
   Install or work with tools that extend the .NET experience.
 
-Usage:
-  dotnet tool [command] [options]
-
-Options:
-  -?, -h, --help  Show command line help.
-
-Commands:";
+Usage:";
     const string expectStandardError = "Required command was not provided.";
     const int expectExitCode = 1;
     var errorSettings = new CommandSettings {

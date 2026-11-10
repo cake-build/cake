@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -7,26 +7,25 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common.IO
+namespace Cake.Common.IO;
+
+internal static class DirectoryCreator
 {
-    internal static class DirectoryCreator
+    public static void Create(ICakeContext context, DirectoryPath path)
     {
-        public static void Create(ICakeContext context, DirectoryPath path)
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(path);
+
+        if (path.IsRelative)
         {
-            ArgumentNullException.ThrowIfNull(context);
-            ArgumentNullException.ThrowIfNull(path);
+            path = path.MakeAbsolute(context.Environment);
+        }
 
-            if (path.IsRelative)
-            {
-                path = path.MakeAbsolute(context.Environment);
-            }
-
-            var directory = context.FileSystem.GetDirectory(path);
-            if (!directory.Exists)
-            {
-                context.Log.Verbose("Creating directory {0}", path);
-                directory.Create();
-            }
+        var directory = context.FileSystem.GetDirectory(path);
+        if (!directory.Exists)
+        {
+            context.Log.Verbose("Creating directory {0}", path);
+            directory.Create();
         }
     }
 }

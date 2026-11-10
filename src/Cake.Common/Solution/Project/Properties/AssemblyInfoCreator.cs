@@ -9,148 +9,147 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
-namespace Cake.Common.Solution.Project.Properties
+namespace Cake.Common.Solution.Project.Properties;
+
+/// <summary>
+/// The assembly info creator.
+/// </summary>
+public sealed class AssemblyInfoCreator
 {
+    private const string CSharpComment = "//";
+    private const string CSharpUsingFormat = "using {0};";
+    private const string CSharpAttributeFormat = "[assembly: {0}]";
+    private const string CSharpAttributeWithValueFormat = "[assembly: {0}({1})]";
+    private const string CSharpAttributeWithKeyValueFormat = "[assembly: {0}({1}, {2})]";
+    private const string VBComment = "'";
+    private const string VBUsingFormat = "Imports {0}";
+    private const string VBAttributeFormat = "<Assembly: {0}>";
+    private const string VBAttributeWithValueFormat = "<Assembly: {0}({1})>";
+    private const string VBAttributeWithKeyValueFormat = "<Assembly: {0}({1}, {2})>";
+
+    private readonly IFileSystem _fileSystem;
+    private readonly ICakeEnvironment _environment;
+    private readonly ICakeLog _log;
+
     /// <summary>
-    /// The assembly info creator.
+    /// Initializes a new instance of the <see cref="AssemblyInfoCreator"/> class.
     /// </summary>
-    public sealed class AssemblyInfoCreator
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="log">The log.</param>
+    public AssemblyInfoCreator(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
     {
-        private const string CSharpComment = "//";
-        private const string CSharpUsingFormat = "using {0};";
-        private const string CSharpAttributeFormat = "[assembly: {0}]";
-        private const string CSharpAttributeWithValueFormat = "[assembly: {0}({1})]";
-        private const string CSharpAttributeWithKeyValueFormat = "[assembly: {0}({1}, {2})]";
-        private const string VBComment = "'";
-        private const string VBUsingFormat = "Imports {0}";
-        private const string VBAttributeFormat = "<Assembly: {0}>";
-        private const string VBAttributeWithValueFormat = "<Assembly: {0}({1})>";
-        private const string VBAttributeWithKeyValueFormat = "<Assembly: {0}({1}, {2})>";
+        ArgumentNullException.ThrowIfNull(fileSystem);
+        ArgumentNullException.ThrowIfNull(environment);
+        ArgumentNullException.ThrowIfNull(log);
+        _fileSystem = fileSystem;
+        _environment = environment;
+        _log = log;
+    }
 
-        private readonly IFileSystem _fileSystem;
-        private readonly ICakeEnvironment _environment;
-        private readonly ICakeLog _log;
+    /// <summary>
+    /// Creates an assembly info file.
+    /// </summary>
+    /// <param name="outputPath">The output path.</param>
+    /// <param name="settings">The settings.</param>
+    /// <param name="attributeFormat">The attribute format.</param>
+    /// <param name="attributeWithValueFormat">The attribute with value format.</param>
+    /// <param name="attributeWithKeyValueFormat">The attribute with key value format.</param>
+    /// <param name="vbAttributeFormat">The VB attribute format.</param>
+    /// <param name="vbAttributeWithValueFormat">The VB attribute with value format.</param>
+    /// <param name="vbAttributeWithKeyValueFormat">The VB attribute with key value format.</param>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+    public void Create(FilePath outputPath, AssemblyInfoSettings settings,
+        string attributeFormat = CSharpAttributeFormat,
+        string attributeWithValueFormat = CSharpAttributeWithValueFormat,
+        string attributeWithKeyValueFormat = CSharpAttributeWithKeyValueFormat,
+        string vbAttributeFormat = VBAttributeFormat,
+        string vbAttributeWithValueFormat = VBAttributeWithValueFormat,
+        string vbAttributeWithKeyValueFormat = VBAttributeWithKeyValueFormat)
+    {
+        ArgumentNullException.ThrowIfNull(outputPath);
+        ArgumentNullException.ThrowIfNull(settings);
+        string comment = CSharpComment;
+        string usingFormat = CSharpUsingFormat;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssemblyInfoCreator"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="log">The log.</param>
-        public AssemblyInfoCreator(IFileSystem fileSystem, ICakeEnvironment environment, ICakeLog log)
+        var isVisualBasicAssemblyInfoFile = false;
+
+        if (outputPath.GetExtension() == ".vb")
         {
-            ArgumentNullException.ThrowIfNull(fileSystem);
-            ArgumentNullException.ThrowIfNull(environment);
-            ArgumentNullException.ThrowIfNull(log);
-            _fileSystem = fileSystem;
-            _environment = environment;
-            _log = log;
+            isVisualBasicAssemblyInfoFile = true;
+            comment = VBComment;
+            usingFormat = VBUsingFormat;
+            attributeFormat = vbAttributeFormat;
+            attributeWithValueFormat = vbAttributeWithValueFormat;
+            attributeWithKeyValueFormat = vbAttributeWithKeyValueFormat;
         }
 
-        /// <summary>
-        /// Creates an assembly info file.
-        /// </summary>
-        /// <param name="outputPath">The output path.</param>
-        /// <param name="settings">The settings.</param>
-        /// <param name="attributeFormat">The attribute format.</param>
-        /// <param name="attributeWithValueFormat">The attribute with value format.</param>
-        /// <param name="attributeWithKeyValueFormat">The attribute with key value format.</param>
-        /// <param name="vbAttributeFormat">The VB attribute format.</param>
-        /// <param name="vbAttributeWithValueFormat">The VB attribute with value format.</param>
-        /// <param name="vbAttributeWithKeyValueFormat">The VB attribute with key value format.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public void Create(FilePath outputPath, AssemblyInfoSettings settings,
-            string attributeFormat = CSharpAttributeFormat,
-            string attributeWithValueFormat = CSharpAttributeWithValueFormat,
-            string attributeWithKeyValueFormat = CSharpAttributeWithKeyValueFormat,
-            string vbAttributeFormat = VBAttributeFormat,
-            string vbAttributeWithValueFormat = VBAttributeWithValueFormat,
-            string vbAttributeWithKeyValueFormat = VBAttributeWithKeyValueFormat)
+        var data = new AssemblyInfoCreatorData(settings, isVisualBasicAssemblyInfoFile);
+
+        outputPath = outputPath.MakeAbsolute(_environment);
+        _log.Verbose("Creating assembly info file: {0}", outputPath);
+
+        using (var stream = _fileSystem.GetFile(outputPath).OpenWrite())
+        using (var writer = new StreamWriter(stream, System.Text.Encoding.UTF8))
         {
-            ArgumentNullException.ThrowIfNull(outputPath);
-            ArgumentNullException.ThrowIfNull(settings);
-            string comment = CSharpComment;
-            string usingFormat = CSharpUsingFormat;
+            writer.WriteLine(comment + "------------------------------------------------------------------------------");
+            writer.WriteLine(comment + " <auto-generated>");
+            writer.WriteLine(comment + "     This code was generated by Cake.");
+            writer.WriteLine(comment + " </auto-generated>");
+            writer.WriteLine(comment + "------------------------------------------------------------------------------");
 
-            var isVisualBasicAssemblyInfoFile = false;
-
-            if (outputPath.GetExtension() == ".vb")
+            if (data.Namespaces.Count > 0)
             {
-                isVisualBasicAssemblyInfoFile = true;
-                comment = VBComment;
-                usingFormat = VBUsingFormat;
-                attributeFormat = vbAttributeFormat;
-                attributeWithValueFormat = vbAttributeWithValueFormat;
-                attributeWithKeyValueFormat = vbAttributeWithKeyValueFormat;
+                var namespaces = data.Namespaces.Select(n => string.Format(usingFormat, n));
+                foreach (var @namespace in namespaces)
+                {
+                    writer.WriteLine(@namespace);
+                }
+                writer.WriteLine();
             }
 
-            var data = new AssemblyInfoCreatorData(settings, isVisualBasicAssemblyInfoFile);
-
-            outputPath = outputPath.MakeAbsolute(_environment);
-            _log.Verbose("Creating assembly info file: {0}", outputPath);
-
-            using (var stream = _fileSystem.GetFile(outputPath).OpenWrite())
-            using (var writer = new StreamWriter(stream, System.Text.Encoding.UTF8))
+            if (data.Attributes.Count > 0)
             {
-                writer.WriteLine(comment + "------------------------------------------------------------------------------");
-                writer.WriteLine(comment + " <auto-generated>");
-                writer.WriteLine(comment + "     This code was generated by Cake.");
-                writer.WriteLine(comment + " </auto-generated>");
-                writer.WriteLine(comment + "------------------------------------------------------------------------------");
-
-                if (data.Namespaces.Count > 0)
+                foreach (var attribute in data.Attributes)
                 {
-                    var namespaces = data.Namespaces.Select(n => string.Format(usingFormat, n));
-                    foreach (var @namespace in namespaces)
-                    {
-                        writer.WriteLine(@namespace);
-                    }
-                    writer.WriteLine();
+                    writer.WriteLine(string.Format(attributeWithValueFormat, attribute.Key, attribute.Value));
                 }
+                writer.WriteLine();
+            }
 
-                if (data.Attributes.Count > 0)
+            if (data.InternalVisibleTo.Count > 0)
+            {
+                foreach (var temp in data.InternalVisibleTo)
                 {
-                    foreach (var attribute in data.Attributes)
-                    {
-                        writer.WriteLine(string.Format(attributeWithValueFormat, attribute.Key, attribute.Value));
-                    }
-                    writer.WriteLine();
+                    writer.WriteLine(string.Format(attributeFormat, temp));
                 }
+                writer.WriteLine();
+            }
 
-                if (data.InternalVisibleTo.Count > 0)
+            if (data.SupportedOSPlatform.Count > 0)
+            {
+                foreach (var attribute in data.SupportedOSPlatform)
                 {
-                    foreach (var temp in data.InternalVisibleTo)
-                    {
-                        writer.WriteLine(string.Format(attributeFormat, temp));
-                    }
-                    writer.WriteLine();
+                    writer.WriteLine(string.Format(attributeFormat, attribute));
                 }
+            }
 
-                if (data.SupportedOSPlatform.Count > 0)
+            if (data.CustomAttributes.Count > 0)
+            {
+                writer.WriteLine(comment + " Custom Attributes");
+                foreach (var attribute in data.CustomAttributes)
                 {
-                    foreach (var attribute in data.SupportedOSPlatform)
-                    {
-                        writer.WriteLine(string.Format(attributeFormat, attribute));
-                    }
+                    writer.WriteLine(string.Format(attributeWithValueFormat, attribute.Key, attribute.Value));
                 }
+            }
 
-                if (data.CustomAttributes.Count > 0)
+            if (data.MetadataAttributes.Count > 0)
+            {
+                writer.WriteLine(comment + " Metadata Attributes");
+                var mdAttribute = new AssemblyInfoMetadataAttribute();
+                foreach (var attribute in data.MetadataAttributes)
                 {
-                    writer.WriteLine(comment + " Custom Attributes");
-                    foreach (var attribute in data.CustomAttributes)
-                    {
-                        writer.WriteLine(string.Format(attributeWithValueFormat, attribute.Key, attribute.Value));
-                    }
-                }
-
-                if (data.MetadataAttributes.Count > 0)
-                {
-                    writer.WriteLine(comment + " Metadata Attributes");
-                    var mdAttribute = new AssemblyInfoMetadataAttribute();
-                    foreach (var attribute in data.MetadataAttributes)
-                    {
-                        writer.WriteLine(string.Format(attributeWithKeyValueFormat, mdAttribute.Name, attribute.Key, attribute.Value));
-                    }
+                    writer.WriteLine(string.Format(attributeWithKeyValueFormat, mdAttribute.Name, attribute.Key, attribute.Value));
                 }
             }
         }

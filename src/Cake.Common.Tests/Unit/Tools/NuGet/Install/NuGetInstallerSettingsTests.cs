@@ -1,67 +1,53 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using Cake.Common.Tools.NuGet.Install;
-using Xunit;
 
-namespace Cake.Common.Tests.Unit.Tools.NuGet.Install
+namespace Cake.Common.Tests.Unit.Tools.NuGet.Install;
+
+public sealed class NuGetInstallSettingsTests
 {
-    public sealed class NuGetInstallSettingsTests
+    public sealed class TheConstructor
     {
-        public sealed class TheConstructor
+        [Fact]
+        public void Should_Set_NoHttpCache_To_False_By_Default()
         {
-            [Fact]
-            public void Should_Set_NoCache_To_False_By_Default()
-            {
-                // Given, When
-                var settings = new NuGetInstallSettings();
+            // Given, When
+            var settings = new NuGetInstallSettings();
 
-                // Then
-                #pragma warning disable CS0618
-                Assert.False(settings.NoCache);
-                #pragma warning restore CS0618
-            }
+            // Then
+            Assert.False(settings.NoHttpCache);
+        }
 
-            [Fact]
-            public void Should_Set_NoHttpCache_To_False_By_Default()
-            {
-                // Given, When
-                var settings = new NuGetInstallSettings();
+        [Fact]
+        public void Should_Set_RequireConsent_To_False_By_Default()
+        {
+            // Given, When
+            var settings = new NuGetInstallSettings();
 
-                // Then
-                Assert.False(settings.NoHttpCache);
-            }
+            // Then
+            Assert.False(settings.RequireConsent);
+        }
 
-            [Fact]
-            public void Should_Set_RequireConsent_To_False_By_Default()
-            {
-                // Given, When
-                var settings = new NuGetInstallSettings();
+        [Fact]
+        public void Should_Set_Prerelease_To_False_By_Default()
+        {
+            // Given, When
+            var settings = new NuGetInstallSettings();
 
-                // Then
-                Assert.False(settings.RequireConsent);
-            }
+            // Then
+            Assert.False(settings.Prerelease);
+        }
 
-            [Fact]
-            public void Should_Set_Prerelease_To_False_By_Default()
-            {
-                // Given, When
-                var settings = new NuGetInstallSettings();
+        [Fact]
+        public void Should_Set_ExcludeVersion_To_False_By_Default()
+        {
+            // Given, When
+            var settings = new NuGetInstallSettings();
 
-                // Then
-                Assert.False(settings.Prerelease);
-            }
-
-            [Fact]
-            public void Should_Set_ExcludeVersion_To_False_By_Default()
-            {
-                // Given, When
-                var settings = new NuGetInstallSettings();
-
-                // Then
-                Assert.False(settings.ExcludeVersion);
-            }
+            // Then
+            Assert.False(settings.ExcludeVersion);
         }
     }
 }

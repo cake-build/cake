@@ -4,24 +4,23 @@
 
 using Cake.Core.Polyfill;
 
-namespace Cake.Core
+namespace Cake.Core;
+
+/// <inheritdoc/>
+public sealed class CakePlatform : ICakePlatform
 {
     /// <inheritdoc/>
-    public sealed class CakePlatform : ICakePlatform
+    public PlatformFamily Family { get; }
+
+    /// <inheritdoc/>
+    public bool Is64Bit { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CakePlatform"/> class.
+    /// </summary>
+    public CakePlatform()
     {
-        /// <inheritdoc/>
-        public PlatformFamily Family { get; }
-
-        /// <inheritdoc/>
-        public bool Is64Bit { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CakePlatform"/> class.
-        /// </summary>
-        public CakePlatform()
-        {
-            Family = EnvironmentHelper.GetPlatformFamily();
-            Is64Bit = EnvironmentHelper.Is64BitOperativeSystem();
-        }
+        Family = EnvironmentHelper.GetPlatformFamily();
+        Is64Bit = EnvironmentHelper.Is64BitOperativeSystem();
     }
 }

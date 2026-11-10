@@ -1,464 +1,678 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
 using Cake.Common.Tools.DotNet.NuGet.Delete;
+using Cake.Common.Tools.DotNet.NuGet.Locals;
 using Cake.Common.Tools.DotNet.NuGet.Push;
 using Cake.Common.Tools.DotNet.NuGet.Source;
+using Cake.Common.Tools.DotNet.NuGet.Why;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
 
-namespace Cake.Common.Tools.DotNet
+namespace Cake.Common.Tools.DotNet;
+
+/// <summary>
+/// <para>Contains functionality related to <see href="https://github.com/dotnet/cli">.NET CLI</see>.</para>
+/// <para>
+/// In order to use the commands for this alias, the .NET CLI tools will need to be installed on the machine where
+/// the Cake script is being executed.  See this <see href="https://www.microsoft.com/net/core">page</see> for information
+/// on how to install.
+/// </para>
+/// </summary>
+public static partial class DotNetAliases
 {
     /// <summary>
-    /// <para>Contains functionality related to <see href="https://github.com/dotnet/cli">.NET CLI</see>.</para>
-    /// <para>
-    /// In order to use the commands for this alias, the .NET CLI tools will need to be installed on the machine where
-    /// the Cake script is being executed.  See this <see href="https://www.microsoft.com/net/core">page</see> for information
-    /// on how to install.
-    /// </para>
+    /// Delete a NuGet Package from a server.
     /// </summary>
-    public static partial class DotNetAliases
+    /// <param name="context">The context.</param>
+    /// <example>
+    /// <code>
+    /// DotNetNuGetDelete();
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
+    public static void DotNetNuGetDelete(this ICakeContext context)
     {
-        /// <summary>
-        /// Delete a NuGet Package from a server.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <example>
-        /// <code>
-        /// DotNetNuGetDelete();
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
-        public static void DotNetNuGetDelete(this ICakeContext context)
+        context.DotNetNuGetDelete(null, null, null);
+    }
+
+    /// <summary>
+    /// Deletes a package from nuget.org.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packageName">Name of package to delete.</param>
+    /// <example>
+    /// <code>
+    /// DotNetNuGetDelete("Microsoft.AspNetCore.Mvc");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
+    public static void DotNetNuGetDelete(this ICakeContext context, string packageName)
+    {
+        context.DotNetNuGetDelete(packageName, null, null);
+    }
+
+    /// <summary>
+    /// Deletes a specific version of a package from nuget.org.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packageName">Name of package to delete.</param>
+    /// <param name="packageVersion">Version of package to delete.</param>
+    /// <example>
+    /// <code>
+    /// DotNetRestore("Microsoft.AspNetCore.Mvc", "1.0");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
+    public static void DotNetNuGetDelete(this ICakeContext context, string packageName, string packageVersion)
+    {
+        context.DotNetNuGetDelete(packageName, packageVersion, null);
+    }
+
+    /// <summary>
+    /// Deletes a package from a server.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packageName">Name of package to delete.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetDeleteSettings
+    /// {
+    ///     Source = "https://www.example.com/nugetfeed",
+    ///     NonInteractive = true
+    /// };
+    ///
+    /// DotNetNuGetDelete("Microsoft.AspNetCore.Mvc", settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
+    public static void DotNetNuGetDelete(this ICakeContext context, string packageName, DotNetNuGetDeleteSettings settings)
+    {
+        context.DotNetNuGetDelete(packageName, null, settings);
+    }
+
+    /// <summary>
+    /// Deletes a package from a server using the specified settings.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetDeleteSettings
+    /// {
+    ///     Source = "https://www.example.com/nugetfeed",
+    ///     NonInteractive = true
+    /// };
+    ///
+    /// DotNetNuGetDelete(settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
+    public static void DotNetNuGetDelete(this ICakeContext context, DotNetNuGetDeleteSettings settings)
+    {
+        context.DotNetNuGetDelete(null, null, settings);
+    }
+
+    /// <summary>
+    /// Deletes a package from a server using the specified settings.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packageName">Name of package to delete.</param>
+    /// <param name="packageVersion">Version of package to delete.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetDeleteSettings
+    /// {
+    ///     Source = "https://www.example.com/nugetfeed",
+    ///     NonInteractive = true
+    /// };
+    ///
+    /// DotNetNuGetDelete("Microsoft.AspNetCore.Mvc", "1.0", settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
+    public static void DotNetNuGetDelete(this ICakeContext context, string packageName, string packageVersion, DotNetNuGetDeleteSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        if (settings is null)
         {
-            context.DotNetNuGetDelete(null, null, null);
+            settings = new DotNetNuGetDeleteSettings();
         }
 
-        /// <summary>
-        /// Deletes a package from nuget.org.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="packageName">Name of package to delete.</param>
-        /// <example>
-        /// <code>
-        /// DotNetNuGetDelete("Microsoft.AspNetCore.Mvc");
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
-        public static void DotNetNuGetDelete(this ICakeContext context, string packageName)
+        var nugetDeleter = new DotNetNuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        nugetDeleter.Delete(packageName, packageVersion, settings);
+    }
+
+    /// <summary>
+    /// Pushes one or more packages to a server.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packageFilePath"><see cref="FilePath"/> of the package to push.</param>
+    /// <example>
+    /// <code>
+    /// // With FilePath instance
+    /// var packageFilePath = GetFiles("*.nupkg").Single();
+    /// DotNetNuGetPush(packageFilePath);
+    /// // With string parameter
+    /// DotNetNuGetPush("foo*.nupkg");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Push")]
+    public static void DotNetNuGetPush(this ICakeContext context, FilePath packageFilePath)
+    {
+        context.DotNetNuGetPush(packageFilePath, null);
+    }
+
+    /// <summary>
+    /// Pushes one or more packages to a server using the specified settings.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="packageFilePath"><see cref="FilePath"/> of the package to push.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetPushSettings
+    /// {
+    ///     Source = "https://www.example.com/nugetfeed",
+    ///     ApiKey = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
+    /// };
+    /// // With FilePath instance
+    /// var packageFilePath = GetFiles("foo*.nupkg").Single();
+    /// DotNetNuGetPush(packageFilePath);
+    /// // With string parameter
+    /// DotNetNuGetPush("foo*.nupkg", settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Push")]
+    public static void DotNetNuGetPush(this ICakeContext context, FilePath packageFilePath, DotNetNuGetPushSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        if (settings is null)
         {
-            context.DotNetNuGetDelete(packageName, null, null);
+            settings = new DotNetNuGetPushSettings();
         }
 
-        /// <summary>
-        /// Deletes a specific version of a package from nuget.org.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="packageName">Name of package to delete.</param>
-        /// <param name="packageVersion">Version of package to delete.</param>
-        /// <example>
-        /// <code>
-        /// DotNetRestore("Microsoft.AspNetCore.Mvc", "1.0");
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
-        public static void DotNetNuGetDelete(this ICakeContext context, string packageName, string packageVersion)
-        {
-            context.DotNetNuGetDelete(packageName, packageVersion, null);
-        }
+        var restorer = new DotNetNuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        restorer.Push(packageFilePath?.FullPath, settings);
+    }
 
-        /// <summary>
-        /// Deletes a package from a server.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="packageName">Name of package to delete.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetNuGetDeleteSettings
-        /// {
-        ///     Source = "https://www.example.com/nugetfeed",
-        ///     NonInteractive = true
-        /// };
-        ///
-        /// DotNetNuGetDelete("Microsoft.AspNetCore.Mvc", settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
-        public static void DotNetNuGetDelete(this ICakeContext context, string packageName, DotNetNuGetDeleteSettings settings)
-        {
-            context.DotNetNuGetDelete(packageName, null, settings);
-        }
+    /// <summary>
+    /// Add the specified NuGet source.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="name">The name of the source.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetSourceSettings
+    /// {
+    ///     Source = "https://www.example.com/nugetfeed",
+    ///     UserName = "username",
+    ///     Password = "password",
+    ///     StorePasswordInClearText = true,
+    ///     ValidAuthenticationTypes = "basic,negotiate"
+    /// };
+    ///
+    /// DotNetNuGetAddSource("example", settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+    public static void DotNetNuGetAddSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-        /// <summary>
-        /// Deletes a package from a server using the specified settings.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetNuGetDeleteSettings
-        /// {
-        ///     Source = "https://www.example.com/nugetfeed",
-        ///     NonInteractive = true
-        /// };
-        ///
-        /// DotNetNuGetDelete(settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
-        public static void DotNetNuGetDelete(this ICakeContext context, DotNetNuGetDeleteSettings settings)
-        {
-            context.DotNetNuGetDelete(null, null, settings);
-        }
+        var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        sourcer.AddSource(name, settings);
+    }
 
-        /// <summary>
-        /// Deletes a package from a server using the specified settings.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="packageName">Name of package to delete.</param>
-        /// <param name="packageVersion">Version of package to delete.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetNuGetDeleteSettings
-        /// {
-        ///     Source = "https://www.example.com/nugetfeed",
-        ///     NonInteractive = true
-        /// };
-        ///
-        /// DotNetNuGetDelete("Microsoft.AspNetCore.Mvc", "1.0", settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Delete")]
-        public static void DotNetNuGetDelete(this ICakeContext context, string packageName, string packageVersion, DotNetNuGetDeleteSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Disable the specified NuGet source.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="name">The name of the source.</param>
+    /// <example>
+    /// <code>
+    /// DotNetNuGetDisableSource("example");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+    public static void DotNetNuGetDisableSource(this ICakeContext context, string name)
+    {
+        context.DotNetNuGetDisableSource(name, null);
+    }
 
-            if (settings is null)
-            {
-                settings = new DotNetNuGetDeleteSettings();
-            }
+    /// <summary>
+    /// Disable the specified NuGet source.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="name">The name of the source.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetSourceSettings
+    /// {
+    ///     ConfigFile = "NuGet.config"
+    /// };
+    ///
+    /// DotNetNuGetDisableSource("example", settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+    public static void DotNetNuGetDisableSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            var nugetDeleter = new DotNetNuGetDeleter(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            nugetDeleter.Delete(packageName, packageVersion, settings);
-        }
+        var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        sourcer.DisableSource(name, settings ?? new DotNetNuGetSourceSettings());
+    }
 
-        /// <summary>
-        /// Pushes one or more packages to a server.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="packageFilePath"><see cref="FilePath"/> of the package to push.</param>
-        /// <example>
-        /// <code>
-        /// // With FilePath instance
-        /// var packageFilePath = GetFiles("*.nupkg").Single();
-        /// DotNetNuGetPush(packageFilePath);
-        /// // With string parameter
-        /// DotNetNuGetPush("foo*.nupkg");
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Push")]
-        public static void DotNetNuGetPush(this ICakeContext context, FilePath packageFilePath)
-        {
-            context.DotNetNuGetPush(packageFilePath, null);
-        }
+    /// <summary>
+    /// Enable the specified NuGet source.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="name">The name of the source.</param>
+    /// <example>
+    /// <code>
+    /// DotNetNuGetEnableSource("example");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+    public static void DotNetNuGetEnableSource(this ICakeContext context, string name)
+    {
+        context.DotNetNuGetEnableSource(name, null);
+    }
 
-        /// <summary>
-        /// Pushes one or more packages to a server using the specified settings.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="packageFilePath"><see cref="FilePath"/> of the package to push.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetNuGetPushSettings
-        /// {
-        ///     Source = "https://www.example.com/nugetfeed",
-        ///     ApiKey = "4003d786-cc37-4004-bfdf-c4f3e8ef9b3a"
-        /// };
-        /// // With FilePath instance
-        /// var packageFilePath = GetFiles("foo*.nupkg").Single();
-        /// DotNetNuGetPush(packageFilePath);
-        /// // With string parameter
-        /// DotNetNuGetPush("foo*.nupkg", settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Push")]
-        public static void DotNetNuGetPush(this ICakeContext context, FilePath packageFilePath, DotNetNuGetPushSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Enable the specified NuGet source.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="name">The name of the source.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetSourceSettings
+    /// {
+    ///     ConfigFile = "NuGet.config"
+    /// };
+    ///
+    /// DotNetNuGetEnableSource("example", settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+    public static void DotNetNuGetEnableSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            if (settings is null)
-            {
-                settings = new DotNetNuGetPushSettings();
-            }
+        var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        sourcer.EnableSource(name, settings ?? new DotNetNuGetSourceSettings());
+    }
 
-            var restorer = new DotNetNuGetPusher(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            restorer.Push(packageFilePath?.FullPath, settings);
-        }
+    /// <summary>
+    /// Determines whether the specified NuGet source exists.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="name">The name of the source.</param>
+    /// <returns>Whether the specified NuGet source exists.</returns>
+    /// <example>
+    /// <code>
+    /// var exists = DotNetNuGetHasSource("example");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+    public static bool DotNetNuGetHasSource(this ICakeContext context, string name)
+    {
+        return context.DotNetNuGetHasSource(name, null);
+    }
 
-        /// <summary>
-        /// Add the specified NuGet source.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="name">The name of the source.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetNuGetSourceSettings
-        /// {
-        ///     Source = "https://www.example.com/nugetfeed",
-        ///     UserName = "username",
-        ///     Password = "password",
-        ///     StorePasswordInClearText = true,
-        ///     ValidAuthenticationTypes = "basic,negotiate"
-        /// };
-        ///
-        /// DotNetNuGetAddSource("example", settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
-        public static void DotNetNuGetAddSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Determines whether the specified NuGet source exists.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="name">The name of the source.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>Whether the specified NuGet source exists.</returns>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetSourceSettings
+    /// {
+    ///     ConfigFile = "NuGet.config"
+    /// };
+    ///
+    /// var exists = DotNetNuGetHasSource("example", settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+    public static bool DotNetNuGetHasSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.AddSource(name, settings);
-        }
+        var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        return sourcer.HasSource(name, settings ?? new DotNetNuGetSourceSettings());
+    }
 
-        /// <summary>
-        /// Disable the specified NuGet source.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="name">The name of the source.</param>
-        /// <example>
-        /// <code>
-        /// DotNetNuGetDisableSource("example");
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
-        public static void DotNetNuGetDisableSource(this ICakeContext context, string name)
-        {
-            context.DotNetNuGetDisableSource(name, null);
-        }
+    /// <summary>
+    /// Remove the specified NuGet source.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="name">The name of the source.</param>
+    /// <example>
+    /// <code>
+    /// DotNetNuGetRemoveSource("example");
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+    public static void DotNetNuGetRemoveSource(this ICakeContext context, string name)
+    {
+        context.DotNetNuGetRemoveSource(name, null);
+    }
 
-        /// <summary>
-        /// Disable the specified NuGet source.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="name">The name of the source.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetNuGetSourceSettings
-        /// {
-        ///     ConfigFile = "NuGet.config"
-        /// };
-        ///
-        /// DotNetNuGetDisableSource("example", settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
-        public static void DotNetNuGetDisableSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Remove the specified NuGet source.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="name">The name of the source.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetSourceSettings
+    /// {
+    ///     ConfigFile = "NuGet.config"
+    /// };
+    ///
+    /// DotNetNuGetRemoveSource("example", settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+    public static void DotNetNuGetRemoveSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.DisableSource(name, settings ?? new DotNetNuGetSourceSettings());
-        }
+        var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        sourcer.RemoveSource(name, settings ?? new DotNetNuGetSourceSettings());
+    }
 
-        /// <summary>
-        /// Enable the specified NuGet source.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="name">The name of the source.</param>
-        /// <example>
-        /// <code>
-        /// DotNetNuGetEnableSource("example");
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
-        public static void DotNetNuGetEnableSource(this ICakeContext context, string name)
-        {
-            context.DotNetNuGetEnableSource(name, null);
-        }
+    /// <summary>
+    /// Update the specified NuGet source.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="name">The name of the source.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetSourceSettings
+    /// {
+    ///     Source = "https://www.example.com/nugetfeed",
+    ///     UserName = "username",
+    ///     Password = "password",
+    ///     StorePasswordInClearText = true,
+    ///     ValidAuthenticationTypes = "basic,negotiate"
+    /// };
+    ///
+    /// DotNetNuGetUpdateSource("example", settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
+    public static void DotNetNuGetUpdateSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-        /// <summary>
-        /// Enable the specified NuGet source.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="name">The name of the source.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetNuGetSourceSettings
-        /// {
-        ///     ConfigFile = "NuGet.config"
-        /// };
-        ///
-        /// DotNetNuGetEnableSource("example", settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
-        public static void DotNetNuGetEnableSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+        var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        sourcer.UpdateSource(name, settings);
+    }
 
-            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.EnableSource(name, settings ?? new DotNetNuGetSourceSettings());
-        }
+    /// <summary>
+    /// Shows why a package is in the restore graph.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="package">The package identifier.</param>
+    /// <returns>The parsed dependency graphs.</returns>
+    /// <example>
+    /// <code>
+    /// var result = DotNetNuGetWhy("Newtonsoft.Json");
+    /// foreach (var project in result.Projects)
+    /// {
+    ///     foreach (var graph in project.Graphs)
+    ///     {
+    ///         Information(graph.Framework);
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Why")]
+    public static DotNetNuGetWhyResult DotNetNuGetWhy(this ICakeContext context, string package)
+    {
+        return context.DotNetNuGetWhy(null, package, null);
+    }
 
-        /// <summary>
-        /// Determines whether the specified NuGet source exists.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="name">The name of the source.</param>
-        /// <returns>Whether the specified NuGet source exists.</returns>
-        /// <example>
-        /// <code>
-        /// var exists = DotNetNuGetHasSource("example");
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
-        public static bool DotNetNuGetHasSource(this ICakeContext context, string name)
-        {
-            return context.DotNetNuGetHasSource(name, null);
-        }
+    /// <summary>
+    /// Shows why a package is in the restore graph.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="package">The package identifier.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The parsed dependency graphs.</returns>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetWhySettings
+    /// {
+    ///     Project = "./src/App/App.csproj",
+    ///     Frameworks = { "net10.0" }
+    /// };
+    ///
+    /// var result = DotNetNuGetWhy("Newtonsoft.Json", settings);
+    /// foreach (var project in result.Projects)
+    /// {
+    ///     Information(project.Name);
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Why")]
+    public static DotNetNuGetWhyResult DotNetNuGetWhy(this ICakeContext context, string package, DotNetNuGetWhySettings settings)
+    {
+        return context.DotNetNuGetWhy(null, package, settings);
+    }
 
-        /// <summary>
-        /// Determines whether the specified NuGet source exists.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="name">The name of the source.</param>
-        /// <param name="settings">The settings.</param>
-        /// <returns>Whether the specified NuGet source exists.</returns>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetNuGetSourceSettings
-        /// {
-        ///     ConfigFile = "NuGet.config"
-        /// };
-        ///
-        /// var exists = DotNetNuGetHasSource("example", settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
-        public static bool DotNetNuGetHasSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Shows why a package is in the restore graph.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="project">The project or solution file to operate on.</param>
+    /// <param name="package">The package identifier.</param>
+    /// <returns>The parsed dependency graphs.</returns>
+    /// <example>
+    /// <code>
+    /// var result = DotNetNuGetWhy("./hwapp.tests/hwapp.tests.csproj", "xunit.v3.extensibility.core");
+    /// foreach (var graph in result.Projects[0].Graphs)
+    /// {
+    ///     Information(graph.Framework);
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Why")]
+    public static DotNetNuGetWhyResult DotNetNuGetWhy(this ICakeContext context, string project, string package)
+    {
+        return context.DotNetNuGetWhy(project, package, null);
+    }
 
-            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            return sourcer.HasSource(name, settings ?? new DotNetNuGetSourceSettings());
-        }
+    /// <summary>
+    /// Shows why a package is in the restore graph.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="project">The project or solution file to operate on.</param>
+    /// <param name="package">The package identifier.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The parsed dependency graphs.</returns>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetWhySettings
+    /// {
+    ///     Frameworks = { "net10.0" }
+    /// };
+    ///
+    /// var result = DotNetNuGetWhy("./hwapp.tests/hwapp.tests.csproj", "xunit.v3.extensibility.core", settings);
+    /// foreach (var projectResult in result.Projects)
+    /// {
+    ///     Information(projectResult.Name);
+    /// }
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Why")]
+    public static DotNetNuGetWhyResult DotNetNuGetWhy(this ICakeContext context, string project, string package, DotNetNuGetWhySettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-        /// <summary>
-        /// Remove the specified NuGet source.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="name">The name of the source.</param>
-        /// <example>
-        /// <code>
-        /// DotNetNuGetRemoveSource("example");
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
-        public static void DotNetNuGetRemoveSource(this ICakeContext context, string name)
-        {
-            context.DotNetNuGetRemoveSource(name, null);
-        }
+        settings ??= new DotNetNuGetWhySettings();
 
-        /// <summary>
-        /// Remove the specified NuGet source.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="name">The name of the source.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetNuGetSourceSettings
-        /// {
-        ///     ConfigFile = "NuGet.config"
-        /// };
-        ///
-        /// DotNetNuGetRemoveSource("example", settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
-        public static void DotNetNuGetRemoveSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+        var whyer = new DotNetNuGetWhyer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        return whyer.Why(project, package, settings);
+    }
 
-            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.RemoveSource(name, settings ?? new DotNetNuGetSourceSettings());
-        }
+    /// <summary>
+    /// Lists local NuGet cache folders.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="folder">The local folder to list.</param>
+    /// <returns>The parsed local folder paths.</returns>
+    /// <example>
+    /// <code>
+    /// var result = DotNetNuGetLocalsList(DotNetNuGetLocalsFolder.All);
+    /// Information(result.GlobalPackages);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Locals")]
+    public static DotNetNuGetLocalsListResult DotNetNuGetLocalsList(this ICakeContext context, DotNetNuGetLocalsFolder folder)
+    {
+        return context.DotNetNuGetLocalsList(folder, null);
+    }
 
-        /// <summary>
-        /// Update the specified NuGet source.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="name">The name of the source.</param>
-        /// <param name="settings">The settings.</param>
-        /// <example>
-        /// <code>
-        /// var settings = new DotNetNuGetSourceSettings
-        /// {
-        ///     Source = "https://www.example.com/nugetfeed",
-        ///     UserName = "username",
-        ///     Password = "password",
-        ///     StorePasswordInClearText = true,
-        ///     ValidAuthenticationTypes = "basic,negotiate"
-        /// };
-        ///
-        /// DotNetNuGetUpdateSource("example", settings);
-        /// </code>
-        /// </example>
-        [CakeMethodAlias]
-        [CakeAliasCategory("NuGet")]
-        [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Source")]
-        public static void DotNetNuGetUpdateSource(this ICakeContext context, string name, DotNetNuGetSourceSettings settings)
-        {
-            ArgumentNullException.ThrowIfNull(context);
+    /// <summary>
+    /// Lists local NuGet cache folders.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="folder">The local folder to list.</param>
+    /// <param name="settings">The settings.</param>
+    /// <returns>The parsed local folder paths.</returns>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetLocalsSettings
+    /// {
+    ///     ForceEnglishOutput = true
+    /// };
+    ///
+    /// var result = DotNetNuGetLocalsList(DotNetNuGetLocalsFolder.HttpCache, settings);
+    /// Information(result.HttpCache);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Locals")]
+    public static DotNetNuGetLocalsListResult DotNetNuGetLocalsList(this ICakeContext context, DotNetNuGetLocalsFolder folder, DotNetNuGetLocalsSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
 
-            var sourcer = new DotNetNuGetSourcer(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            sourcer.UpdateSource(name, settings);
-        }
+        settings ??= new DotNetNuGetLocalsSettings();
+
+        var localser = new DotNetNuGetLocalser(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        return localser.List(folder, settings);
+    }
+
+    /// <summary>
+    /// Clears local NuGet cache folders.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="folder">The local folder to clear.</param>
+    /// <example>
+    /// <code>
+    /// DotNetNuGetLocalsClear(DotNetNuGetLocalsFolder.Temp);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Locals")]
+    public static void DotNetNuGetLocalsClear(this ICakeContext context, DotNetNuGetLocalsFolder folder)
+    {
+        context.DotNetNuGetLocalsClear(folder, null);
+    }
+
+    /// <summary>
+    /// Clears local NuGet cache folders.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="folder">The local folder to clear.</param>
+    /// <param name="settings">The settings.</param>
+    /// <example>
+    /// <code>
+    /// var settings = new DotNetNuGetLocalsSettings
+    /// {
+    ///     ForceEnglishOutput = true
+    /// };
+    ///
+    /// DotNetNuGetLocalsClear(DotNetNuGetLocalsFolder.Temp, settings);
+    /// </code>
+    /// </example>
+    [CakeMethodAlias]
+    [CakeAliasCategory("NuGet")]
+    [CakeNamespaceImport("Cake.Common.Tools.DotNet.NuGet.Locals")]
+    public static void DotNetNuGetLocalsClear(this ICakeContext context, DotNetNuGetLocalsFolder folder, DotNetNuGetLocalsSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        settings ??= new DotNetNuGetLocalsSettings();
+
+        var localser = new DotNetNuGetLocalser(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+        localser.Clear(folder, settings);
     }
 }

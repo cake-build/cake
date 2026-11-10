@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <IsCakeTestProject>true</IsCakeTestProject>
-  </PropertyGroup>
-
   <Import Project="$(MSBuildThisFileDirectory)..\Shared.msbuild" />
 
   <ItemGroup>
@@ -14,19 +10,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
     <PackageReference Include="Verify.XunitV3" />
     <PackageReference Include="xunit.v3.mtp-v2" />
-    <PackageReference Include="xunit.runner.visualstudio">
+    <PackageReference Include="coverlet.MTP">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="coverlet.collector">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="Castle.Core" />

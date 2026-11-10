@@ -1,4 +1,4 @@
-﻿using Cake.Core;
+using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing.Tests.Fixtures;
 
@@ -405,6 +405,23 @@ public partial class FakeFileSystemTests
                     directory,
                     result
                 });
+        }
+
+        [Theory]
+        [InlineData(PlatformFamily.Windows)]
+        [InlineData(PlatformFamily.Linux)]
+        [InlineData(PlatformFamily.OSX)]
+        [InlineData(PlatformFamily.FreeBSD)]
+        public async Task GetFileSystemInfos_Should_Return_Files_And_Directories(PlatformFamily platformFamily)
+        {
+            var fixture = FakeFileSystemFixture.Create(platformFamily);
+            IDirectory directory = fixture.FileSystem.GetDirectory(new DirectoryPath("/test"));
+
+            var result = directory.GetFileSystemInfos("*", SearchScope.Current)
+                .Select(entry => entry.Path.FullPath)
+                .ToList();
+
+            await Verify(result);
         }
     }
 }

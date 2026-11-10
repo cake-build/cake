@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -7,28 +7,27 @@ using Cake.Core.Configuration;
 using Cake.Core.IO;
 using Cake.Testing;
 
-namespace Cake.Core.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures;
+
+internal sealed class CakeConfigurationProviderFixture
 {
-    internal sealed class CakeConfigurationProviderFixture
+    public FakeFileSystem FileSystem { get; set; }
+    public FakeEnvironment Environment { get; set; }
+
+    public DirectoryPath Path { get; set; }
+    public IDictionary<string, string> Arguments { get; set; }
+
+    public CakeConfigurationProviderFixture()
     {
-        public FakeFileSystem FileSystem { get; set; }
-        public FakeEnvironment Environment { get; set; }
+        Environment = FakeEnvironment.CreateUnixEnvironment();
+        FileSystem = new FakeFileSystem(Environment);
+        Path = "./";
+        Arguments = new Dictionary<string, string>();
+    }
 
-        public DirectoryPath Path { get; set; }
-        public IDictionary<string, string> Arguments { get; set; }
-
-        public CakeConfigurationProviderFixture()
-        {
-            Environment = FakeEnvironment.CreateUnixEnvironment();
-            FileSystem = new FakeFileSystem(Environment);
-            Path = "./";
-            Arguments = new Dictionary<string, string>();
-        }
-
-        public ICakeConfiguration Create()
-        {
-            var provider = new CakeConfigurationProvider(FileSystem, Environment);
-            return provider.CreateConfiguration(Path, Arguments);
-        }
+    public ICakeConfiguration Create()
+    {
+        var provider = new CakeConfigurationProvider(FileSystem, Environment);
+        return provider.CreateConfiguration(Path, Arguments);
     }
 }

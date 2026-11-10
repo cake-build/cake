@@ -1,0 +1,62 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
+using Cake.Core;
+using Cake.Core.IO;
+using Cake.Core.Tooling;
+
+namespace Cake.Common.Tools.DotNet.Sln.Migrate;
+
+/// <summary>
+/// .NET solution migrator.
+/// </summary>
+public sealed class DotNetSlnMigrator : DotNetTool<DotNetSlnMigrateSettings>
+{
+    private readonly ICakeEnvironment _environment;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DotNetSlnMigrator" /> class.
+    /// </summary>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public DotNetSlnMigrator(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    {
+        _environment = environment;
+    }
+
+    /// <summary>
+    /// Generates a .slnx file from a .sln file.
+    /// </summary>
+    /// <param name="solution">The .sln file to migrate. If unspecified, the command searches the current directory.</param>
+    /// <param name="settings">The settings.</param>
+    public void Migrate(FilePath solution, DotNetSlnMigrateSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        RunCommand(settings, GetArguments(solution, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(FilePath solution, DotNetSlnMigrateSettings settings)
+    {
+        var builder = CreateArgumentBuilder(settings);
+
+        builder.Append("sln");
+
+        if (solution != null)
+        {
+            builder.AppendQuoted(solution.MakeAbsolute(_environment).FullPath);
+        }
+
+        builder.Append("migrate");
+
+        return builder;
+    }
+}

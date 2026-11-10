@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,60 +9,59 @@ using Cake.Core.IO;
 using Cake.Core.Scripting;
 using NSubstitute;
 
-namespace Cake.Core.Tests.Fixtures
+namespace Cake.Core.Tests.Fixtures;
+
+internal sealed class ScriptHostFixture
 {
-    internal sealed class ScriptHostFixture
+    public sealed class TestingScriptHost : ScriptHost
     {
-        public sealed class TestingScriptHost : ScriptHost
+        public TestingScriptHost(ICakeEngine engine, ICakeContext context)
+            : base(engine, context)
         {
-            public TestingScriptHost(ICakeEngine engine, ICakeContext context)
-                : base(engine, context)
-            {
-            }
-
-            public override Task<CakeReport> RunTargetAsync(string target)
-            {
-                return System.Threading.Tasks.Task.FromResult(new CakeReport());
-            }
-
-            /// <inheritdoc/>
-            public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
-            {
-                return System.Threading.Tasks.Task.FromResult(new CakeReport());
-            }
         }
 
-        public ICakeEngine Engine { get; set; }
-        public IFileSystem FileSystem { get; set; }
-        public ICakeEnvironment Environment { get; set; }
-        public ICakeLog Log { get; set; }
-        public IGlobber Globber { get; set; }
-        public ICakeArguments Arguments { get; set; }
-        public ICakeContext Context { get; set; }
-
-        public ScriptHostFixture()
+        public override Task<CakeReport> RunTargetAsync(string target)
         {
-            FileSystem = Substitute.For<IFileSystem>();
-            Environment = Substitute.For<ICakeEnvironment>();
-            Log = Substitute.For<ICakeLog>();
-            Globber = Substitute.For<IGlobber>();
-            Arguments = Substitute.For<ICakeArguments>();
-
-            Context = Substitute.For<ICakeContext>();
-            Context.Arguments.Returns(Arguments);
-            Context.Environment.Returns(Environment);
-            Context.FileSystem.Returns(FileSystem);
-            Context.Globber.Returns(Globber);
-            Context.Log.Returns(Log);
-
-            Engine = Substitute.For<ICakeEngine>();
-            Engine.RunTargetAsync(Context, Arg.Any<IExecutionStrategy>(), Arg.Any<ExecutionSettings>())
-                .Returns(new CakeReport());
+            return System.Threading.Tasks.Task.FromResult(new CakeReport());
         }
 
-        public ScriptHost CreateHost()
+        /// <inheritdoc/>
+        public override Task<CakeReport> RunTargetsAsync(IEnumerable<string> targets)
         {
-            return new TestingScriptHost(Engine, Context);
+            return System.Threading.Tasks.Task.FromResult(new CakeReport());
         }
+    }
+
+    public ICakeEngine Engine { get; set; }
+    public IFileSystem FileSystem { get; set; }
+    public ICakeEnvironment Environment { get; set; }
+    public ICakeLog Log { get; set; }
+    public IGlobber Globber { get; set; }
+    public ICakeArguments Arguments { get; set; }
+    public ICakeContext Context { get; set; }
+
+    public ScriptHostFixture()
+    {
+        FileSystem = Substitute.For<IFileSystem>();
+        Environment = Substitute.For<ICakeEnvironment>();
+        Log = Substitute.For<ICakeLog>();
+        Globber = Substitute.For<IGlobber>();
+        Arguments = Substitute.For<ICakeArguments>();
+
+        Context = Substitute.For<ICakeContext>();
+        Context.Arguments.Returns(Arguments);
+        Context.Environment.Returns(Environment);
+        Context.FileSystem.Returns(FileSystem);
+        Context.Globber.Returns(Globber);
+        Context.Log.Returns(Log);
+
+        Engine = Substitute.For<ICakeEngine>();
+        Engine.RunTargetAsync(Context, Arg.Any<IExecutionStrategy>(), Arg.Any<ExecutionSettings>())
+            .Returns(new CakeReport());
+    }
+
+    public ScriptHost CreateHost()
+    {
+        return new TestingScriptHost(Engine, Context);
     }
 }

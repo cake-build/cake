@@ -7,134 +7,133 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
-namespace Cake.Common.Tools.GitReleaseManager.Label
+namespace Cake.Common.Tools.GitReleaseManager.Label;
+
+/// <summary>
+/// The GitReleaseManager Label Creator used to delete and create labels.
+/// </summary>
+public sealed class GitReleaseManagerLabeller : GitReleaseManagerTool<GitReleaseManagerLabelSettings>
 {
     /// <summary>
-    /// The GitReleaseManager Label Creator used to delete and create labels.
+    /// Initializes a new instance of the <see cref="GitReleaseManagerLabeller"/> class.
     /// </summary>
-    public sealed class GitReleaseManagerLabeller : GitReleaseManagerTool<GitReleaseManagerLabelSettings>
+    /// <param name="fileSystem">The file system.</param>
+    /// <param name="environment">The environment.</param>
+    /// <param name="processRunner">The process runner.</param>
+    /// <param name="tools">The tool locator.</param>
+    public GitReleaseManagerLabeller(
+        IFileSystem fileSystem,
+        ICakeEnvironment environment,
+        IProcessRunner processRunner,
+        IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GitReleaseManagerLabeller"/> class.
-        /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        /// <param name="environment">The environment.</param>
-        /// <param name="processRunner">The process runner.</param>
-        /// <param name="tools">The tool locator.</param>
-        public GitReleaseManagerLabeller(
-            IFileSystem fileSystem,
-            ICakeEnvironment environment,
-            IProcessRunner processRunner,
-            IToolLocator tools) : base(fileSystem, environment, processRunner, tools)
+    }
+
+    /// <summary>
+    /// Deletes and creates labels using the specified and settings.
+    /// </summary>
+    /// <param name="userName">The user name.</param>
+    /// <param name="password">The password.</param>
+    /// <param name="owner">The owner.</param>
+    /// <param name="repository">The repository.</param>
+    /// <param name="settings">The settings.</param>
+    public void Label(string userName, string password, string owner, string repository, GitReleaseManagerLabelSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(userName))
         {
+            throw new ArgumentNullException(nameof(userName));
         }
 
-        /// <summary>
-        /// Deletes and creates labels using the specified and settings.
-        /// </summary>
-        /// <param name="userName">The user name.</param>
-        /// <param name="password">The password.</param>
-        /// <param name="owner">The owner.</param>
-        /// <param name="repository">The repository.</param>
-        /// <param name="settings">The settings.</param>
-        public void Label(string userName, string password, string owner, string repository, GitReleaseManagerLabelSettings settings)
+        if (string.IsNullOrWhiteSpace(password))
         {
-            if (string.IsNullOrWhiteSpace(userName))
-            {
-                throw new ArgumentNullException(nameof(userName));
-            }
-
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
-
-            if (string.IsNullOrWhiteSpace(owner))
-            {
-                throw new ArgumentNullException(nameof(owner));
-            }
-
-            if (string.IsNullOrWhiteSpace(repository))
-            {
-                throw new ArgumentNullException(nameof(repository));
-            }
-
-            ArgumentNullException.ThrowIfNull(settings);
-
-            Run(settings, GetArguments(userName, password, owner, repository, settings));
+            throw new ArgumentNullException(nameof(password));
         }
 
-        /// <summary>
-        /// Deletes and creates labels using the specified and settings.
-        /// </summary>
-        /// <param name="token">The token.</param>
-        /// <param name="owner">The owner.</param>
-        /// <param name="repository">The repository.</param>
-        /// <param name="settings">The settings.</param>
-        public void Label(string token, string owner, string repository, GitReleaseManagerLabelSettings settings)
+        if (string.IsNullOrWhiteSpace(owner))
         {
-            if (string.IsNullOrWhiteSpace(token))
-            {
-                throw new ArgumentNullException(nameof(token));
-            }
-
-            if (string.IsNullOrWhiteSpace(owner))
-            {
-                throw new ArgumentNullException(nameof(owner));
-            }
-
-            if (string.IsNullOrWhiteSpace(repository))
-            {
-                throw new ArgumentNullException(nameof(repository));
-            }
-
-            ArgumentNullException.ThrowIfNull(settings);
-
-            Run(settings, GetArguments(token, owner, repository, settings));
+            throw new ArgumentNullException(nameof(owner));
         }
 
-        private ProcessArgumentBuilder GetArguments(string userName, string password, string owner, string repository, GitReleaseManagerLabelSettings settings)
+        if (string.IsNullOrWhiteSpace(repository))
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("label");
-
-            builder.Append("-u");
-            builder.AppendQuoted(userName);
-
-            builder.Append("-p");
-            builder.AppendQuotedSecret(password);
-
-            ParseCommonArguments(builder, owner, repository);
-
-            AddBaseArguments(settings, builder);
-
-            return builder;
+            throw new ArgumentNullException(nameof(repository));
         }
 
-        private ProcessArgumentBuilder GetArguments(string token, string owner, string repository, GitReleaseManagerLabelSettings settings)
+        ArgumentNullException.ThrowIfNull(settings);
+
+        Run(settings, GetArguments(userName, password, owner, repository, settings));
+    }
+
+    /// <summary>
+    /// Deletes and creates labels using the specified and settings.
+    /// </summary>
+    /// <param name="token">The token.</param>
+    /// <param name="owner">The owner.</param>
+    /// <param name="repository">The repository.</param>
+    /// <param name="settings">The settings.</param>
+    public void Label(string token, string owner, string repository, GitReleaseManagerLabelSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(token))
         {
-            var builder = new ProcessArgumentBuilder();
-
-            builder.Append("label");
-
-            builder.Append("--token");
-            builder.AppendQuotedSecret(token);
-
-            ParseCommonArguments(builder, owner, repository);
-
-            AddBaseArguments(settings, builder);
-
-            return builder;
+            throw new ArgumentNullException(nameof(token));
         }
 
-        private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository)
+        if (string.IsNullOrWhiteSpace(owner))
         {
-            builder.Append("-o");
-            builder.AppendQuoted(owner);
-
-            builder.Append("-r");
-            builder.AppendQuoted(repository);
+            throw new ArgumentNullException(nameof(owner));
         }
+
+        if (string.IsNullOrWhiteSpace(repository))
+        {
+            throw new ArgumentNullException(nameof(repository));
+        }
+
+        ArgumentNullException.ThrowIfNull(settings);
+
+        Run(settings, GetArguments(token, owner, repository, settings));
+    }
+
+    private ProcessArgumentBuilder GetArguments(string userName, string password, string owner, string repository, GitReleaseManagerLabelSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("label");
+
+        builder.Append("-u");
+        builder.AppendQuoted(userName);
+
+        builder.Append("-p");
+        builder.AppendQuotedSecret(password);
+
+        ParseCommonArguments(builder, owner, repository);
+
+        AddBaseArguments(settings, builder);
+
+        return builder;
+    }
+
+    private ProcessArgumentBuilder GetArguments(string token, string owner, string repository, GitReleaseManagerLabelSettings settings)
+    {
+        var builder = new ProcessArgumentBuilder();
+
+        builder.Append("label");
+
+        builder.Append("--token");
+        builder.AppendQuotedSecret(token);
+
+        ParseCommonArguments(builder, owner, repository);
+
+        AddBaseArguments(settings, builder);
+
+        return builder;
+    }
+
+    private void ParseCommonArguments(ProcessArgumentBuilder builder, string owner, string repository)
+    {
+        builder.Append("-o");
+        builder.AppendQuoted(owner);
+
+        builder.Append("-r");
+        builder.AppendQuoted(repository);
     }
 }

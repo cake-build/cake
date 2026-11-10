@@ -2,26 +2,25 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Cake.Common.Build.AppVeyor
+namespace Cake.Common.Build.AppVeyor;
+
+/// <summary>
+/// AppVeyor AddMessage categories.
+/// </summary>
+public enum AppVeyorMessageCategoryType
 {
     /// <summary>
-    /// AppVeyor AddMessage categories.
+    /// Informational message
     /// </summary>
-    public enum AppVeyorMessageCategoryType
-    {
-        /// <summary>
-        /// Informational message
-        /// </summary>
-        Information,
+    Information,
 
-        /// <summary>
-        /// Warning message
-        /// </summary>
-        Warning,
+    /// <summary>
+    /// Warning message
+    /// </summary>
+    Warning,
 
-        /// <summary>
-        /// Error message
-        /// </summary>
-        Error
-    }
+    /// <summary>
+    /// Error message
+    /// </summary>
+    Error
 }
