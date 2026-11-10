@@ -1,3 +1,81 @@
+### New in 7.0.0 (Released 2026/11/10)
+
+* #5169 Make environment-defaulted DotNet switches tri-state to allow explicit opt-out.
+* #5079 Update Spectre.Console.Cli to 0.57.2.
+* #5060 Make unified dependency graph the default when running multiple targets.
+* #5003 Remove obsolete members / methods.
+* #5001 Update LatestPotentialBreakingChange to 7.0.0.
+* #4997 Remove Unsupported TFMS .NET 8 & 9 (net8.0 & net9.0).
+* #2835 Migrate Cake.Tool from Autofac to Microsoft.Extensions.DependencyInjection.
+* #5187 Update .NET SDK to 11.0.100.
+* #5159 Add container publishing support to DotNetPublish.
+* #5127 Add DotNetRunCode aliases for dotnet run -.
+* #5125 Add ProcessSettings.StandardInput for StartProcess.
+* #5115 Add .NET 11 DotNetRun settings (environment, file, device, artifacts-path, no-cache).
+* #5112 Add DotNetNuGetLocalsList and Clear aliases.
+* #5109 Add DotNetNuGetWhy aliases for package dependency graphs.
+* #5107 Add DotNetProjectConvert aliases for file-based apps.
+* #5105 Add DotNetSlnMigrate aliases for sln to slnx.
+* #5103 Add DotNetDownloadPackage aliases for dotnet package download.
+* #5089 Add DotNetUpdatePackage aliases for dotnet package update.
+* #5087 Add Tar and Untar aliases for creating and extracting tar archives.
+* #5085 Add opt-in .NET 11 Process API support to Cake.
+* #5081 Add IFile content read/write extensions aligned with System.IO.File.
+* #5070 Add GitHub Actions AzureLogin for OIDC.
+* #5066 Drop dead runtime checks and Task.Run wrappers.
+* #4999 C# 15 Scripting Support.
+* #4998 Add .NET 11 (net11.0) TFM.
+* #4660 Consider adding IFileSystemInfo returning APIs in addition to IFile and IDirectory.
+* #2471 Install a nuget tool on demand.
+* #1269 Request for Task.Tool("nuget:?package=etc") .
+* #5189 Update Basic.Reference.Assemblies.* to 1.8.15.
+* #5185 Update Microsoft.Extensions.DependencyInjection to 10.0.15 (net10.0) & 11.0.0 (net11.0).
+* #5183 Update System.Security.Cryptography.Pkcs to 10.0.15 (net10.0) & 11.0.0 (net11.0).
+* #5181 Update Basic.Reference.Assemblies.* to 1.8.14.
+* #5177 Enable .NET 11 runtime async for net11.0 builds.
+* #5175 Render --description task list as a Spectre.Console table.
+* #5173 Add base image support to DotNetPublish container settings extensions.
+* #5164 Update Basic.Reference.Assemblies.* to 1.8.13.
+* #5163 Update System.Security.Cryptography.Pkcs to 10.0.14 (net10.0) & 11.0.0-rc.3.26522.148 (net11.0).
+* #5162 Update Microsoft.Extensions.DependencyInjection to 10.0.14 (net10.0) & 11.0.0-rc.3.26522.148 (net11.0).
+* #5134 Update System.Security.Cryptography.Pkcs to 11.0.0-rc.2.26504.105 (net11.0).
+* #5133 Update Microsoft.Extensions.DependencyInjection to 11.0.0-rc.2.26504.105 (net11.0).
+* #5131 System.Security.Cryptography.Pkcs 10.0.12 has a known severity.
+* #5129 Add async DoesForEach and IAsyncEnumerable overloads.
+* #5119 Add .NET 11 DotNetTest MTP settings.
+* #5117 Add DotNetFormat Framework setting.
+* #5093 Drop leftover CoreCLR / NETFRAMEWORK host branches.
+* #5091 Remove Framework-era host fallbacks now that Cake targets net10/net11 only.
+* #5072 Stop embedding Microsoft.NETCore.Platforms; resolve #addin assets with the portable RID graph.
+* #5068 Freeze the NuGet deny list and drop unused Rider/xUnit leftovers.
+* #5064 Follow-up: FrozenDictionary and GeneratedRegex.
+* #5062 Modernize remaining CoreCLR polyfill internals.
+* #5058 Use Length and Frozen/GeneratedRegex for engine hygiene/perf.
+* #5056 Handle empty Assembly.Location in CakeRunner and VersionResolver.
+* #5054 Migrate GoCD history JSON to System.Text.Json.
+* #5052 Use SHA256.HashData instead of static shared HashAlgorithm instance.
+* #5050 Remove dead TFM conditionals after net10.0/net11.0 cut.
+* #5036 Update Basic.Reference.Assemblies.* to 1.8.12.
+* #5035 Update Microsoft.IdentityModel.JsonWebTokens to 8.23.0.
+* #5019 Add missing Azure Pipelines System.PullRequest predefined variables.
+* #4231 MsBuild Path for BuildTools is not recognized correctly.
+* #2413 TFBuildCommand PublishTestResults API Change.
+* #2373 Add method to ProcessArgumentBuilder class to insert argument at any location.
+* #1462 IsDependentOn with multiple tasks.
+* #1461 Non-formatting ICakeConsole.WriteLine overload.
+* #1367 A comment precisely constructed with a hyperlink immediately after the // on the same line as your #addin preprocessor directive when just using the Package Name causes nuget to fail to find the package.
+* #1272 Improper quoting of all command line arguments.
+* #5030 Add Cake DSL examples to ICakeContext, IFileSystem, ProcessArgumentBuilder, and ToolSettings.
+* #5028 Add Cake DSL examples to Task, Does, and CakeTaskBuilder.
+* #5026 Add a Cake DSL example to GetCallerInfo.
+* #5024 Add Cake DSL examples to BuildSystem and CI provider APIs.
+* #5157 Using declarations without parentheses on the first line are hoisted as using alias directives.
+* #5155 Interpolated strings bind to string log overloads instead of FormattableString overloads.
+* #5095 Fix Unix GetSpecialPath HOME and Program Files mapping.
+* #3830 [Cake.Frosting] has exit code -1 for any kind of error.
+* #3829 Error: Error getting value from 'CurrentUser' on 'Cake.Core.IO.WindowsRegistry'.
+* #2646 Incorrect translation of literal constants used as optional parameter values (when constants are defined in a separate file).
+
 ### New in 6.3.0 (Released 2026/09/14)
 
 * #4991 Add support for verbosity via configuration.

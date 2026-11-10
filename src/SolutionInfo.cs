@@ -12,5 +12,5 @@ using System.Reflection;
 [assembly: AssemblyProduct("Cake")]
 [assembly: AssemblyVersion("7.0.0.0")]
 [assembly: AssemblyFileVersion("7.0.0.0")]
-[assembly: AssemblyInformationalVersion("7.0.0-alpha.60+Branch.develop.Sha.e341865b36c31cffdc4fced66f9050b875355dc0")]
+[assembly: AssemblyInformationalVersion("7.0.0-beta.1+1946.Branch.release-7.0.0.Sha.ad487ea898235304d3b61ac574bd99d37b900a24")]
 [assembly: AssemblyCopyright("Copyright (c) .NET Foundation and Contributors")]
