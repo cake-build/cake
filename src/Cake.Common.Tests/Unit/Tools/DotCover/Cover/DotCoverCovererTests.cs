@@ -10,6 +10,9 @@ using Cake.Common.Tools.XUnit;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Testing;
+using NSubstitute;
+using LogLevel = Cake.Core.Diagnostics.LogLevel;
+using Verbosity = Cake.Core.Diagnostics.Verbosity;
 
 namespace Cake.Common.Tests.Unit.Tools.DotCover.Cover;
 
@@ -87,6 +90,8 @@ public sealed class DotCoverCovererTests
             AssertEx.IsCakeException(result, "No tool was started.");
         }
 
+        #region New Parameter Syntax
+
         [Fact]
         public void Should_Capture_Tool_And_Arguments_From_Action()
         {
@@ -145,61 +150,61 @@ public sealed class DotCoverCovererTests
         }
 
         [Fact]
-        public void Should_Append_Scope()
+        public void Should_Not_Append_Scope()
         {
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithScope("/Working/*.dll")
-                .WithScope("/Some/**/Other/*.dll");
+                   .WithScope("/Some/**/Other/*.dll");
 
             // When
             var result = fixture.Run();
 
             // Then
+            fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "Scope parameter is not supported in new DotCover format");
             Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                          "--target-arguments \"-argument\" " +
-                         "--snapshot-output \"/Working/result.dcvr\" " +
-                         "/Scope=\"/Working/*.dll;/Some/**/Other/*.dll\"", result.Args);
+                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
         }
 
         [Fact]
-        public void Should_Append_Filters()
+        public void Should_Not_Append_Filters()
         {
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithFilter("+:module=Test.*")
-                .WithFilter("-:myassembly");
+                   .WithFilter("-:myassembly");
 
             // When
             var result = fixture.Run();
 
             // Then
+            fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "Filters parameter is not supported in new DotCover format");
             Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                          "--target-arguments \"-argument\" " +
-                         "--snapshot-output \"/Working/result.dcvr\" " +
-                         "/Filters=\"+:module=Test.*;-:myassembly\"", result.Args);
+                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
         }
 
         [Fact]
-        public void Should_Append_AttributeFilters()
+        public void Should_Not_Append_AttributeFilters()
         {
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithAttributeFilter("filter1")
-                .WithAttributeFilter("filter2");
+                   .WithAttributeFilter("filter2");
 
             // When
             var result = fixture.Run();
 
             // Then
+            fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "AttributeFilters parameter is not supported in new DotCover format");
             Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                          "--target-arguments \"-argument\" " +
-                         "--snapshot-output \"/Working/result.dcvr\" " +
-                         "/AttributeFilters=\"filter1;filter2\"", result.Args);
+                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
         }
 
         [Fact]
-        public void Should_Append_DisableDefaultFilters()
+        public void Should_Not_Append_DisableDefaultFilters()
         {
             // Given
             var fixture = new DotCoverCovererFixture();
@@ -209,28 +214,28 @@ public sealed class DotCoverCovererTests
             var result = fixture.Run();
 
             // Then
+            fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "DisableDefaultFilters parameter is not supported in new DotCover format");
             Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                          "--target-arguments \"-argument\" " +
-                         "--snapshot-output \"/Working/result.dcvr\" " +
-                         "/DisableDefaultFilters", result.Args);
+                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
         }
 
         [Fact]
-        public void Should_Append_ProcessFilters()
+        public void Should_Not_Append_ProcessFilters()
         {
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithProcessFilter("+:test.exe")
-                .WithProcessFilter("-:sqlservr.exe");
+                   .WithProcessFilter("-:sqlservr.exe");
 
             // When
             var result = fixture.Run();
 
             // Then
+            fixture.Context.Log.Received(1).Write(Verbosity.Minimal, LogLevel.Warning, "{0}", "ProcessFilters parameter is not supported in new DotCover format");
             Assert.Equal("cover --target-executable \"/Working/tools/Test.exe\" " +
                          "--target-arguments \"-argument\" " +
-                         "--snapshot-output \"/Working/result.dcvr\" " +
-                         "/ProcessFilters=\"+:test.exe;-:sqlservr.exe\"", result.Args);
+                         "--snapshot-output \"/Working/result.dcvr\"", result.Args);
         }
 
         [Fact]
@@ -267,8 +272,8 @@ public sealed class DotCoverCovererTests
                     new ProcessSettings
                     {
                         Arguments = new ProcessArgumentBuilder()
-                            .AppendQuoted("/Working/A.dll")
-                            .AppendQuoted("/Working/B.dll")
+                                    .AppendQuoted("/Working/A.dll")
+                                    .AppendQuoted("/Working/B.dll")
                     });
             };
 
@@ -325,7 +330,7 @@ public sealed class DotCoverCovererTests
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithExcludeAssembly("*.Tests")
-                .WithExcludeAssembly("Test.*");
+                   .WithExcludeAssembly("Test.*");
 
             // When
             var result = fixture.Run();
@@ -343,7 +348,7 @@ public sealed class DotCoverCovererTests
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithExcludeAttribute("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute")
-                .WithExcludeAttribute("Custom.*Attribute");
+                   .WithExcludeAttribute("Custom.*Attribute");
 
             // When
             var result = fixture.Run();
@@ -361,7 +366,7 @@ public sealed class DotCoverCovererTests
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithExcludeProcess("test.exe")
-                .WithExcludeProcess("*.vshost.exe");
+                   .WithExcludeProcess("*.vshost.exe");
 
             // When
             var result = fixture.Run();
@@ -530,8 +535,8 @@ public sealed class DotCoverCovererTests
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithLegacySyntax()
-                .WithJsonReportOutput(new FilePath("/Working/report.json"))
-                .WithExcludeAssembly("*.Tests");
+                   .WithJsonReportOutput(new FilePath("/Working/report.json"))
+                   .WithExcludeAssembly("*.Tests");
 
             // When
             var result = fixture.Run();
@@ -550,7 +555,7 @@ public sealed class DotCoverCovererTests
             // Given
             var fixture = new DotCoverCovererFixture();
             fixture.Settings.WithJsonReportOutput(new FilePath("/Working/report.json"))
-                .WithExcludeAssembly("*.Tests");
+                   .WithExcludeAssembly("*.Tests");
 
             // When
             var result = fixture.Run();
@@ -560,5 +565,227 @@ public sealed class DotCoverCovererTests
             Assert.Contains("--exclude-assemblies \"*.Tests\"", result.Args);
             Assert.Contains("--snapshot-output", result.Args);
         }
+
+        #endregion
+
+        #region Legacy Parameter Syntax
+
+        [Fact]
+        public void Should_Capture_Tool_And_Arguments_From_Action_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.Settings.WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                         "/TargetArguments=\"-argument\" " +
+                         "/Output=\"/Working/result.dcvr\"", result.Args);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public void Should_Not_Capture_Arguments_From_Action_If_Excluded_LegacySyntax(string arguments)
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.Action = context =>
+            {
+                context.ProcessRunner.Start(
+                    new FilePath("/Working/tools/Test.exe"),
+                    new ProcessSettings()
+                    {
+                        Arguments = arguments
+                    });
+            };
+            fixture.Settings.WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                         "/Output=\"/Working/result.dcvr\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Append_TargetWorkingDir_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.Settings.TargetWorkingDir = new DirectoryPath("/Working");
+            fixture.Settings.WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                         "/TargetArguments=\"-argument\" " +
+                         "/Output=\"/Working/result.dcvr\" " +
+                         "/TargetWorkingDir=\"/Working\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Append_Scope_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.Settings.WithScope("/Working/*.dll")
+                   .WithScope("/Some/**/Other/*.dll")
+                   .WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                         "/TargetArguments=\"-argument\" " +
+                         "/Output=\"/Working/result.dcvr\" " +
+                         "/Scope=\"/Working/*.dll;/Some/**/Other/*.dll\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Append_Filters_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.Settings.WithFilter("+:module=Test.*")
+                   .WithFilter("-:myassembly")
+                   .WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                         "/TargetArguments=\"-argument\" " +
+                         "/Output=\"/Working/result.dcvr\" " +
+                         "/Filters=\"+:module=Test.*;-:myassembly\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Append_AttributeFilters_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.Settings.WithAttributeFilter("filter1")
+                   .WithAttributeFilter("filter2")
+                   .WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                         "/TargetArguments=\"-argument\" " +
+                         "/Output=\"/Working/result.dcvr\" " +
+                         "/AttributeFilters=\"filter1;filter2\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Append_DisableDefaultFilters_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.Settings.DisableDefaultFilters = true;
+            fixture.Settings.WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                         "/TargetArguments=\"-argument\" " +
+                         "/Output=\"/Working/result.dcvr\" " +
+                         "/DisableDefaultFilters", result.Args);
+        }
+
+        [Fact]
+        public void Should_Append_ProcessFilters_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.Settings.WithProcessFilter("+:test.exe")
+                   .WithProcessFilter("-:sqlservr.exe")
+                   .WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                         "/TargetArguments=\"-argument\" " +
+                         "/Output=\"/Working/result.dcvr\" " +
+                         "/ProcessFilters=\"+:test.exe;-:sqlservr.exe\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Capture_XUnit_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.FileSystem.CreateFile("/Working/tools/xunit.console.exe");
+            fixture.Action = context =>
+            {
+                context.XUnit2(
+                    new FilePath[] { "./Test.dll" },
+                    new XUnit2Settings { ShadowCopy = false });
+            };
+            fixture.Settings.WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover /TargetExecutable=\"/Working/tools/xunit.console.exe\" " +
+                         "/TargetArguments=\"\\\"/Working/Test.dll\\\" -noshadow\" " +
+                         "/Output=\"/Working/result.dcvr\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Capture_NUnit_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.FileSystem.CreateFile("/Working/tools/nunit-console.exe");
+            fixture.Action = context =>
+            {
+                context.NUnit(
+                    new FilePath[] { "./Test.dll" },
+                    new NUnitSettings { ShadowCopy = false });
+            };
+            fixture.Settings.WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover /TargetExecutable=\"/Working/tools/nunit-console.exe\" " +
+                         "/TargetArguments=\"\\\"/Working/Test.dll\\\" -noshadow\" " +
+                         "/Output=\"/Working/result.dcvr\"", result.Args);
+        }
+
+        [Fact]
+        public void Should_Append_ConfigurationFile_LegacySyntax()
+        {
+            // Given
+            var fixture = new DotCoverCovererFixture();
+            fixture.Settings.WithConfigFile(new FilePath("./config.xml")).WithLegacySyntax();
+
+            // When
+            var result = fixture.Run();
+
+            // Then
+            Assert.Equal("cover \"/Working/config.xml\" /TargetExecutable=\"/Working/tools/Test.exe\" " +
+                         "/TargetArguments=\"-argument\" " +
+                         "/Output=\"/Working/result.dcvr\"", result.Args);
+        }
+
+        #endregion
     }
 }

@@ -170,7 +170,7 @@ public sealed class DotCoverAnalyserTests
             // Given
             var fixture = new DotCoverAnalyserFixture();
             fixture.Settings.WithScope("/Working/*.dll")
-                .WithScope("/Some/**/Other/*.dll");
+                   .WithScope("/Some/**/Other/*.dll");
 
             // When
             var result = fixture.Run();
@@ -188,7 +188,7 @@ public sealed class DotCoverAnalyserTests
             // Given
             var fixture = new DotCoverAnalyserFixture();
             fixture.Settings.WithFilter("+:module=Test.*")
-                .WithFilter("-:myassembly");
+                   .WithFilter("-:myassembly");
 
             // When
             var result = fixture.Run();
@@ -206,7 +206,7 @@ public sealed class DotCoverAnalyserTests
             // Given
             var fixture = new DotCoverAnalyserFixture();
             fixture.Settings.WithAttributeFilter("filter1")
-                .WithAttributeFilter("filter2");
+                   .WithAttributeFilter("filter2");
 
             // When
             var result = fixture.Run();
@@ -286,8 +286,8 @@ public sealed class DotCoverAnalyserTests
                     new ProcessSettings
                     {
                         Arguments = new ProcessArgumentBuilder()
-                            .AppendQuoted("/Working/A.dll")
-                            .AppendQuoted("/Working/B.dll")
+                                    .AppendQuoted("/Working/A.dll")
+                                    .AppendQuoted("/Working/B.dll")
                     });
             };
 
